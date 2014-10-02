@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class BatchOntology extends BeanOntology {
 
@@ -38,7 +39,7 @@ public class BatchOntology extends BeanOntology {
             add(valuePackage);
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

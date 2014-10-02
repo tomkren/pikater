@@ -53,12 +53,12 @@ public class TypeRestriction implements IRestriction
 	@Override
 	public TypeRestriction clone()
 	{
-		List<ValueType> typesCopied = new ArrayList<ValueType>();
+		List<ValueType> clonedTypes = new ArrayList<ValueType>();
 		for(ValueType type : types)
 		{
-			typesCopied.add(type.clone());
+			clonedTypes.add(type.clone());
 		}
-		return new TypeRestriction(typesCopied);
+		return new TypeRestriction(clonedTypes);
 	}
 	@Override
 	public boolean isValid()

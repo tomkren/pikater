@@ -23,7 +23,8 @@ public class ResultFormatter<T> {
 	 * @throws NoResultException
 	 */
 	public T getSingleResult() throws NoResultException{
-		if(resList.size()>0){
+		if(!resList.isEmpty())
+		{
 			return resList.get(0);
 		}else{
 			throw new NoResultException();
@@ -36,7 +37,8 @@ public class ResultFormatter<T> {
 	 * @return the first result or null
 	 */
 	public T getSingleResultWithNull(){
-		if(resList.size()>0){
+		if(!resList.isEmpty())
+		{
 			return resList.get(0);
 		}else{
 			return null;

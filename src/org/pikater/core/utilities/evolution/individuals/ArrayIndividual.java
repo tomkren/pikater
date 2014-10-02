@@ -25,24 +25,14 @@ public abstract class ArrayIndividual extends Individual {
     public abstract void set(int n, IValueData o);
 
     /**
-     * Makes a deep copy of the individual.
-     * @return Deep copy of the individual.
-     */
-    @Override
-    public Object clone() {
-        try {
-            return super.clone();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
      * Returns the length of the individual.
      * @return The length of the individual.
      */
     public abstract int length();
     
+    @Override
+    public ArrayIndividual clone()
+    {
+    	return (ArrayIndividual) super.clone();
+    }
 }

@@ -60,14 +60,12 @@ public class RandomNumberGenerator {
         return rnd.nextGaussian();
     }
 
-    /**
-     * Sets a new seed for the random number generator.
+    /* write to static field from instance method
+     ** Sets a new seed for the random number generator.
      * @param seed The seed which shall be set.
-     */
-
     public void reseed(long seed) {
         rnd = new Random(seed);
-    }
+    } */
 
     public Random getRandom() {
         return rnd;

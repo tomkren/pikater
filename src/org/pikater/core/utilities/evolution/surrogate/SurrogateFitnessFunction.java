@@ -7,6 +7,8 @@ package org.pikater.core.utilities.evolution.surrogate;
 import org.pikater.core.utilities.evolution.FitnessFunction;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
+import org.pikater.shared.logging.core.ConsoleLogger;
+
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 
@@ -35,8 +37,8 @@ public class SurrogateFitnessFunction implements FitnessFunction {
         
         try {
             return surrogate.classifyInstance(in);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
         
         return 0.0;

@@ -3,9 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-
+import org.pikater.shared.util.collections.CollectionUtils;
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -82,14 +81,13 @@ public class Search extends DataProcessing implements IErrorProvider {
 		}
 	}
 	
-	public Search clone() {
-		
-		NewOptions optionsOnt = new NewOptions(this.options);
-		
-		Search search = new Search();
+	@Override
+	public Search clone()
+	{
+		Search search = (Search) super.clone();
 		search.setId(this.getId());
 		search.setAgentType(searchClass);
-		search.setOptions(optionsOnt.clone().getOptions());
+		search.setOptions(CollectionUtils.deepCopy(options));
 		return search;
 	}
 }

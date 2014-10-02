@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
+import org.pikater.core.agents.system.manager.ManagerAgentService;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ModelOntology;
@@ -27,11 +27,11 @@ public class LoadModelTester extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		log("doing request");
+		logInfo("doing request");
 		ManagerAgentService.loadAgent(this, 83554);
-		log("load returned");
+		logInfo("load returned");
 
-		log("LoadModelTester ending");
+		logInfo("LoadModelTester ending");
 		doDelete();
 	}
 }

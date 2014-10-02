@@ -86,6 +86,11 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             this.m = m;
             this.d = d;
         }
+        
+        private Agent_NMTopRecommender getOuterType()
+		{
+			return Agent_NMTopRecommender.this;
+		}
 
         @Override
         public int compareTo(MetadataDistancePair o) {
@@ -94,6 +99,32 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             }
             return o.getDistance() < this.getDistance() ? 1 : -1;
         }
+
+		@Override
+		public int hashCode()
+		{
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			long temp;
+			temp = Double.doubleToLongBits(d);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			result = prime * result + ((m == null) ? 0 : m.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			MetadataDistancePair other = (MetadataDistancePair) obj;
+			return compareTo(other) == 0;
+		}
     }
 
     @Override
@@ -135,13 +166,13 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         	Agent agent=new Agent();
 			agent.setType(Agent_Recommender.DEFAULT_AGENT.getName());
 			agent.setName(Agent_Recommender.DEFAULT_AGENT.getName());
-			logError("Not having enough agents to choose from. Using default agent: "+agent.getType());
+			logSevere("Not having enough agents to choose from. Using default agent: "+agent.getType());
 			return agent;
         }
 
         List<Agent> agents = new LinkedList<Agent>();
         for (int i = 0; i < M; i++) {
-            log(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
+            logInfo(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
             Agents agentsOnt = DataManagerService.getNBestAgents(this, distances.get(i).m.getInternalName(), N);
             
             if((agents!=null)&&(agentsOnt!=null)) {
@@ -166,14 +197,14 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         int maxCount = 0;
         String bestAgentType = null;
         for (String s : counts.keySet()) {
-            log(s + ": " + counts.get(s));
+            logInfo(s + ": " + counts.get(s));
             if (counts.get(s) > maxCount) {
                 maxCount = counts.get(s);
                 bestAgentType = s;
             }
         }
 
-        log("Best agent: " + bestAgentType);
+        logInfo("Best agent: " + bestAgentType);
 
         ArrayList<Agent> bestAgents = new ArrayList<Agent>();
 
@@ -295,7 +326,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                 	continue;
                 }
                 NewOption option0 = bestAgent.getOptionByName(optionI.getName());
-                newOpt.setValuesWrapper(option0.getValuesWrapper().clone());   
+                newOpt.setValuesWrapper(option0.getValuesWrapper().clone());
         	}
 
             options.add(newOpt);
@@ -328,42 +359,12 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         double dNumber_of_attributes = d(m1.getNumberOfAttributes(), m2.getNumberOfAttributes(), minAttributes, maxAttributes);
         double dNumber_of_instances = d(m1.getNumberOfInstances(), m2.getNumberOfInstances(), minInstances, maxInstances);
 
-        double distance = wAttribute_type * dAttribute_type
+        // return distance
+        return wAttribute_type * dAttribute_type
                 + wDefault_task * dDefault_task
                 + wMissing_values * dMissing_values
                 + wNumber_of_attributes * dNumber_of_attributes
                 + wNumber_of_instances * dNumber_of_instances;
-
-        return distance;
-    }
-
-    private double d(double v1, double v2, double min, double max) {
-        // map the value to the 0,1 interval; 0 - the same, 1 - the most
-        // different
-
-        return Math.abs(v1 - v2) / (max - min);
-    }
-
-    private int dCategory(String v1, String v2) {
-        // null considered another value
-        if (v1 == null) {
-            v1 = "null";
-        }
-        if (v2 == null) {
-            v2 = "null";
-        }
-
-        if (v1.equals(v2)) {
-            return 0;
-        }
-        return 1;
-    }
-
-    private int dBoolean(Boolean v1, Boolean v2) {
-        if (v1 == v2) {
-            return 0;
-        }
-        return 1;
     }
 
 	@Override

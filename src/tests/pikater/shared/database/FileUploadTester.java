@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.file.PrepareFileUpload;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -37,7 +38,7 @@ public class FileUploadTester extends PikaterAgent {
 		getContentManager().registerOntology(DataOntology.getInstance());
 
 		// dal by se taky najit v DF, kdybych nevedel, jak se jmenuje
-		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		AID receiver = new AID(CoreAgents.DATA_MANAGER.getName(), false);
 
 		PrepareFileUpload action = new PrepareFileUpload();
 		action.setHash("772c551b8486b932aed784a582b9c1b1");
@@ -48,29 +49,29 @@ public class FileUploadTester extends PikaterAgent {
 			request.setLanguage(getCodec().getName());
 			request.setOntology(DataOntology.getInstance().getName());
 			getContentManager().fillContent(request, new Action(receiver, action));
-			log("Sending test request to dataManager");
+			logInfo("Sending test request to dataManager");
 
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
 			if (reply == null)
-				logError("Reply not received.");
-			else
-				log("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
-
-			int port = Integer.parseInt(reply.getContent());
-			// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
-			DataTransferService.doClientFileTransfer("772c551b8486b932aed784a582b9c1b1_", "localhost", port);
+				logSevere("Reply not received.");
+			else {
+				logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+				int port = Integer.parseInt(reply.getContent());
+				// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
+				DataTransferService.doClientFileTransfer("772c551b8486b932aed784a582b9c1b1_", "localhost", port);
+			}
 		} catch (CodecException | OntologyException e) {
-			logError("Ontology/codec error occurred: " + e.getMessage(), e);
+			logException("Ontology/codec error occurred: " + e.getMessage(), e);
 			e.printStackTrace();
 		} catch (FIPAException e) {
-			logError("FIPA error occurred: " + e.getMessage(), e);
+			logException("FIPA error occurred: " + e.getMessage(), e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logError("IO error occurred: " + e.getMessage(), e);
-			e.printStackTrace();
+			logException("IO error occurred: " + e.getMessage(), e);
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 
-		log("FileUploadTester ending");
+		logInfo("FileUploadTester ending");
 		doDelete();
 	}
 

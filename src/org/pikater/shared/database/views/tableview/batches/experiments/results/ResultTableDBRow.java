@@ -2,6 +2,7 @@ package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
 import java.util.Locale;
 
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.views.base.ITableColumn;
@@ -53,7 +54,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 		case AGENT_NAME:
 			return new StringReadOnlyDBViewValue(result.getAgentName().substring(result.getAgentName().lastIndexOf(".") + 1));
 		case WEKA_OPTIONS:
-			return new StringReadOnlyDBViewValue(result.getOptions());
+			return new StringReadOnlyDBViewValue(NewOptions.importXML(result.getOptions()).exportToWeka());
 		case NOTE:
 			return new StringReadOnlyDBViewValue(result.getNote());
 		case ERROR_RATE:
@@ -100,7 +101,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 					if(result.hasAnOutput())
 					{
 						setValidOutput();
-						return (firstValidOutput != null);
+						return firstValidOutput != null;
 					}
 					else
 					{

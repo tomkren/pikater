@@ -13,6 +13,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.result.Results;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 /**
  * Created by Stepan on 4.5.14.
@@ -39,7 +40,7 @@ public class ResultOntology extends BeanOntology {
             add(resultPackage);
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
         
         try {
@@ -54,7 +55,7 @@ public class ResultOntology extends BeanOntology {
             add(valuePackage);
 
         } catch (Exception e) {
-            Log.error(e.getMessage(), e);
+            Log.error("Unexpected error occured:", e);
         }
     }
 

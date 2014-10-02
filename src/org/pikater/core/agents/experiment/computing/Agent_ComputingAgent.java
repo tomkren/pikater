@@ -1,9 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import jade.content.Concept;
-import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
-import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
@@ -27,8 +25,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.pikater.core.AgentNames;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreAgents;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingAction;
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingCommunicator;
@@ -54,13 +52,11 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	 */
 	private static final long serialVersionUID = -7927583436579620995L;
 
-	protected Codec codec = new SLCodec();
-
 	public enum states {
 		NEW, TRAINED
 	}
 
-	private final String CLASS_NAME = "className";
+	private static final String CLASS_NAME = "className";
 
 	/* common properties for all computing agents */
 	public String trainFileName;
@@ -120,9 +116,9 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	public abstract String getAgentType();
 
 	@Override
-	public java.util.List<Ontology> getOntologies() {
+	public List<Ontology> getOntologies() {
 
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
@@ -147,7 +143,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		// register with the DF
 		if (! this.getAID().getLocalName().contains("Service")){	
 			List<String> descr = new ArrayList<String>();
-			descr.add(AgentNames.COMPUTING_AGENT);
+			descr.add(CoreAgents.COMPUTING_AGENT.getName());
 			descr.add(getLocalName());
 	
 			String typeDesc;
@@ -163,7 +159,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 		if (!newAgent) {
 			resurrected = true;
-			System.out.println(getLocalName() + " resurrected.");
+			logInfo("was resurrected");
 			taskFIFO = new LinkedList<ACLMessage>();
 			executionBehaviour.reset();
 			state = states.TRAINED;
@@ -191,10 +187,11 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 						)
 				);
 	
+		executionBehaviour = new ComputingAction(this);
 
 		addBehaviour(new RequestServer(this, reqMsgTemplate));
 		addBehaviour(new CFPResponder(this, cfpMsgTemplate));
-		addBehaviour(executionBehaviour = new ComputingAction(this));
+		addBehaviour(executionBehaviour);
 		
 	} // end setup
 
@@ -212,8 +209,8 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		 */
 		
 		NewOptions taskOptions = new NewOptions(task.getAgent().getOptions());
-		taskOptions.removeOptionByName(CoreConstants.MODE);
-		taskOptions.removeOptionByName(CoreConstants.OUTPUT);
+		taskOptions.removeOptionByName(CoreConstant.Mode.DEFAULT.name());
+		taskOptions.removeOptionByName(CoreConstant.Output.DEFAULT.name());
 		
 		String wekaOptionsString = 
 				taskOptions.exportToWeka();
@@ -275,9 +272,9 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 
 			} catch (CodecException ce) {
-				Agent_ComputingAgent.this.logError(ce.getMessage(), ce);
+				Agent_ComputingAgent.this.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				Agent_ComputingAgent.this.logError(oe.getMessage(), oe);
+				Agent_ComputingAgent.this.logException(oe.getMessage(), oe);
 			}
 			
 			return resultMsg;
@@ -336,11 +333,11 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	}
 	
 	public void logOptions() {
-		log(getOptions(), 1);
+		logInfo(getOptions());
 	}
 	
 	public void logFinishedTask() {
-		log("CA terminating");
+		logInfo("CA terminating");
 		terminate();
 	}
 	

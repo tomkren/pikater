@@ -4,6 +4,7 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.account.User;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 
 public class AccountOntology extends BeanOntology {
@@ -22,7 +23,7 @@ public class AccountOntology extends BeanOntology {
             add(userPackage);
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

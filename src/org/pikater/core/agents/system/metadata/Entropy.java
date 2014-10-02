@@ -92,9 +92,9 @@ public class Entropy {
         double result=0;
         for (int i=0;i<attributeValues.size();i++)
         {
-            if (attributeValues.get(i).equals(fixedAttributeValue))
+            if (attributeValues.get(i).equals(fixedAttributeValue) && classValues.get(i).equals(fixedClassValue))
             {
-                if (classValues.get(i).equals(fixedClassValue)) result++;
+            	result++;
             }
         }
         return result;

@@ -28,11 +28,11 @@ public class GetModelTester extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		log("doing request");
+		logInfo("doing request");
 		Model res = DataManagerService.getModel(this, 70704);
-		log("got response, agent size "+res.getSerializedAgent().length+", result ID "+res.getResultID());
+		logInfo("got response, agent size "+res.getSerializedAgent().length+", result ID "+res.getResultID());
 
-		log("GetModelTester ending");
+		logInfo("GetModelTester ending");
 		doDelete();
 	}
 }

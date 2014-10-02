@@ -96,9 +96,9 @@ public class JPAExternalAgent extends JPAAbstractEntity{
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	public ByteArrayInputStream getInputStream(){
-		ByteArrayInputStream bis=new ByteArrayInputStream(jar);
-		return bis;
+	public ByteArrayInputStream getInputStream()
+	{
+		return new ByteArrayInputStream(jar);
 	}
 	
 	@Transient

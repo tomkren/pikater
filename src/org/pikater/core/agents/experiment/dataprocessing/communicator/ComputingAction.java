@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.system.data.AgentDataSource;
@@ -86,13 +86,13 @@ public class ComputingAction extends FSMBehaviour {
 		evaluations.add(st);
 
 		eval.setEvaluations(evaluations);
-
 		eval.setStatus(desc);
 	}
 
 	/* Get a message from the FIFO of tasks */
 	boolean getRequest() {
-		if (agent.taskFIFO.size() > 0) {
+		if (!agent.taskFIFO.isEmpty())
+		{
 			incomingRequest = agent.taskFIFO.removeFirst();
 			try {
 				ContentElement content = agent.getContentManager()
@@ -101,9 +101,9 @@ public class ComputingAction extends FSMBehaviour {
 						.getAction();
 				return true;
 			} catch (CodecException ce) {
-				agent.logError(ce.getMessage(), ce);
+				agent.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError(oe.getMessage(), oe);
+				agent.logException(oe.getMessage(), oe);
 			}
 		} else {
 			block();
@@ -175,7 +175,7 @@ public class ComputingAction extends FSMBehaviour {
 					getTrainBehaviour.reset(null);
 				}
 
-				if (!mode.equals(CoreConstants.MODE_TRAIN_ONLY)) {
+				if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.name())) {
 					testFn = data.exportInternalTestFileName();
 					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETTESTDATA_STATE);
@@ -354,10 +354,10 @@ public class ComputingAction extends FSMBehaviour {
 					Date start = null;
 					if (agent.state != Agent_ComputingAgent.states.TRAINED) {
 						start = agent.train(eval);
-					} else if (!agent.resurrected) {
-						if (!mode.equals("test_only")) {
-							start = agent.train(eval);
-						}
+					}
+					else if (!agent.resurrected && !mode.equals("test_only"))
+					{
+						start = agent.train(eval);
 					}
 					eval.setStart(start);
 
@@ -365,10 +365,10 @@ public class ComputingAction extends FSMBehaviour {
 						EvaluationMethod evaluation_method = executeAction
 								.getTask().getEvaluationMethod();
 
-						if (!mode.equals(CoreConstants.MODE_TRAIN_ONLY)) {
+						if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.name())) {
 							agent.evaluateCA(evaluation_method, eval);
 
-							if (output.equals(CoreConstants.OUTPUT_PREDICTION)) {
+							if (output.equals(CoreConstant.Output.PREDICTION.name())) {
 								DataInstances di = new DataInstances();
 								di.fillWekaInstances(agent.test);
 								DataInstances labeledTest = agent
@@ -409,10 +409,7 @@ public class ComputingAction extends FSMBehaviour {
 				} catch (Exception e) {
 					success = false;
 					agent.working = false;
-					failureMsg(e.getMessage());
-					agent.log(agent.getLocalName() + ": Error: "
-							+ e.getMessage() + ".");
-					agent.logError(e.getMessage(), e);
+					agent.logException("Unexpected error occured:", e);
 				}
 			}
 
@@ -445,13 +442,13 @@ public class ComputingAction extends FSMBehaviour {
 							eval.setObjectFilename(objectFilename);
 
 						} catch (CodecException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						} catch (OntologyException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						} catch (IOException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						} catch (FIPAException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						}
 					}
 
@@ -461,14 +458,14 @@ public class ComputingAction extends FSMBehaviour {
 						try {
 							eval.setObject(agent.getAgentObject());
 						} catch (IOException e1) {
-							agent.logError(e1.getMessage(), e1);
+							agent.logException(e1.getMessage(), e1);
 						}
 					}
 				}
 				
-				addTaskOutput(InOutType.TEST, CoreConstants.SLOT_TESTING_DATA, agent.test);
-				addTaskOutput(InOutType.TRAIN, CoreConstants.SLOT_TRAINING_DATA, agent.train);
-				addTaskOutput(InOutType.VALIDATION, CoreConstants.SLOT_VALIDATION_DATA, agent.label);
+				addTaskOutput(InOutType.TEST, CoreConstant.SlotContent.TESTING_DATA.getSlotName(), agent.test);
+				addTaskOutput(InOutType.TRAIN, CoreConstant.SlotContent.TRAINING_DATA.getSlotName(), agent.train);
+				addTaskOutput(InOutType.VALIDATION, CoreConstant.SlotContent.VALIDATION_DATA.getSlotName(), agent.label);
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);
@@ -483,25 +480,25 @@ public class ComputingAction extends FSMBehaviour {
 					if (agent.resurrected) {
 						eval.setObject(null);
 					}
-					;
 					agent.currentTask.setResult(eval);
 
 					Result result = new Result((Action) content, agent.currentTask);
 					agent.getContentManager().fillContent(resultMsg, result);
 
 				} catch (UngroundedException e) {
-					agent.logError(e.getMessage(), e);
+					agent.logException(e.getMessage(), e);
 				} catch (CodecException e) {
-					agent.logError(e.getMessage(), e);
+					agent.logException(e.getMessage(), e);
 				} catch (OntologyException e) {
-					agent.logError(e.getMessage(), e);
+					agent.logException(e.getMessage(), e);
 				}
 
 				agent.currentTask.setFinish(agent.getDateTime());
 
 				agent.send(resultMsg);
 				
-				if (agent.taskFIFO.size() > 0) {
+				if (!agent.taskFIFO.isEmpty())
+				{
 					agent.executionBehaviour.restart();
 				} else {
 					agent.logFinishedTask();
@@ -538,7 +535,7 @@ public class ComputingAction extends FSMBehaviour {
 	private String addTaskOutput(InOutType type, String dataType, Instances inst) {
 		if (inst != null) {
 			String md5 = agent.saveArff(inst);
-			agent.log("Saved "+type+" to " + md5);
+			agent.logInfo("Saved "+type+" to " + md5);
 			TaskOutput to = new TaskOutput();
 			to.setType(type);
 			to.setName(md5);

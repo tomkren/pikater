@@ -11,11 +11,12 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.*;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.util.ICloneable;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class NewOption implements Concept, IMergeable, IWekaItem
+public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 {
 	private static final long serialVersionUID = 972224767505690979L;
 	
@@ -277,26 +278,32 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 		
-		String xml = xstream.toXML(this);
-
-		return xml;
+		return xstream.toXML(this);
 	}
 	public static NewOption importXML(String xml) {
 
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 
-		NewOption optionNew = (NewOption) xstream
-				.fromXML(xml);
-
-		return optionNew;
+		return (NewOption) xstream.fromXML(xml);
 	}
 	
 	@Override
 	public NewOption clone()
 	{
-		NewOption result = new NewOption(name, valuesWrapper.clone(), valueRestrictions.clone());
-		result.setDescription(getDescription());
+		NewOption result;
+		try
+		{
+			result = (NewOption) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setName(name);
+		result.setDescription(description);
+		result.setValueRestrictions(valueRestrictions.clone());
+		result.setValuesWrapper(valuesWrapper.clone());
 		return result;
 	}
 	@Override

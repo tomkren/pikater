@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
@@ -29,7 +29,7 @@ public class Agent_Mailing extends PikaterAgent {
 	/** Podporovane typy e-mailu */
 	public static enum EmailType {
 		TEST, RESULT
-	};
+	}
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -43,7 +43,7 @@ public class Agent_Mailing extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-		registerWithDF(AgentNames.MAILING);
+		registerWithDF(CoreAgents.MAILING.getName());
 
 		addBehaviour(new AchieveREResponder(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)) {
 			private static final long serialVersionUID = 746138569142900592L;
@@ -57,10 +57,10 @@ public class Agent_Mailing extends PikaterAgent {
 					else
 						throw new RefuseException("Invalid action requested");
 				} catch (OntologyException e) {
-					Agent_Mailing.this.logError(e.getMessage(), e);
+					Agent_Mailing.this.logException(e.getMessage(), e);
 					throw new NotUnderstoodException("Unknown ontology: " + e.getMessage());
 				} catch (CodecException e) {
-					Agent_Mailing.this.logError(e.getMessage(), e);
+					Agent_Mailing.this.logException(e.getMessage(), e);
 					throw new NotUnderstoodException("Unknown codec: " + e.getMessage());
 				}
 
@@ -79,7 +79,7 @@ public class Agent_Mailing extends PikaterAgent {
 			switch (type) {
 			case TEST:
 				Mailing.sendEmail(to, "Test message", "Example message from pikater MailAgent");
-				log("sent e-mail to " + to);
+				logInfo("sent e-mail to " + to);
 				break;
 			case RESULT:
 				//log("would send mail with results to "+to+", best error rate: "+mailAction.getResult());
@@ -89,14 +89,14 @@ public class Agent_Mailing extends PikaterAgent {
 				}
 				String subj = "Pikater batch finished (" + mailAction.getBatch_id() + ")";
 				Mailing.sendEmail(to, subj, body);
-				log("sent e-mail to " + to);
+				logInfo("sent e-mail to " + to);
 				break;
 			default:
 				throw new UnsupportedOperationException();
 			}
 		} catch (MessagingException e) {
 			String error = "Failed to dispatch e-mail for " + to + " : " + e.getMessage();
-			logError(error, e);
+			logException(error, e);
 
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(error);

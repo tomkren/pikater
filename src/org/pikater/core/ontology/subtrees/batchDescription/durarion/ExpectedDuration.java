@@ -1,8 +1,10 @@
 package org.pikater.core.ontology.subtrees.batchDescription.durarion;
 
+import org.pikater.shared.util.ICloneable;
+
 import jade.content.Concept;
 
-public class ExpectedDuration implements Concept {
+public class ExpectedDuration implements Concept, ICloneable {
 
 	/**
 	 * 
@@ -57,8 +59,8 @@ public class ExpectedDuration implements Concept {
 	public void importDurationType(DurationType durationType) {
 		this.durationType = durationType.name();
 	}	
-	public ExpectedDuration clone() {
-		
+	public ExpectedDuration clone()
+	{
 		ExpectedDuration expectedDuration = new ExpectedDuration();
 		expectedDuration.setDurationType(durationType);
 		return expectedDuration;

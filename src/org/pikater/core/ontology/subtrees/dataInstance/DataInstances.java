@@ -151,7 +151,7 @@ public class DataInstances implements Concept {
 			return "";
 		}
 
-		StringBuffer text = new StringBuffer();
+		StringBuilder text = new StringBuilder();
 		for (Instance inst : instances ) {
 			text.append(inst.toString(this));
 			text.append('\n');

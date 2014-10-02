@@ -11,8 +11,8 @@ import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreAgents;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaJ48;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
@@ -62,13 +62,13 @@ public class Agent_PlannerTester extends PikaterAgent {
 	        sendTask3();
 		}
         
-        log("PlannerTester ending");
+        logInfo("PlannerTester ending");
         doDelete();
 	}
 	
     protected void sendTask() {
     	
-        AID receiver = new AID(AgentNames.PLANNER, false);
+        AID receiver = new AID(CoreAgents.PLANNER.getName(), false);
     	
 		NewOption optionB = new NewOption("B", new IntegerValue(3));
 		List<NewOption> options = new ArrayList<NewOption>();
@@ -89,8 +89,8 @@ public class Agent_PlannerTester extends PikaterAgent {
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode(CoreConstants.MODE_TRAIN_TEST);
-    	datas.setOutput(CoreConstants.OUTPUT_EVALUATION_ONLY);
+    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
+    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
         NewOption optionF = new NewOption("F", 8);
     	
@@ -114,7 +114,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         	
             ACLMessage request = makeActionRequest(receiver, executeTask);
             //send(request);
-            log("Sending test request to Planner");
+            logInfo("Sending test request to Planner");
             send(request);
 /*            
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 100000);
@@ -124,14 +124,14 @@ public class Agent_PlannerTester extends PikaterAgent {
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
 */
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage(), e);
+            logException("Ontology/codec error occurred: "+e.getMessage(), e);
         }
 
     }
 
     protected void sendTask2() {
     	
-        AID receiver = new AID(AgentNames.PLANNER, false);
+        AID receiver = new AID(CoreAgents.PLANNER.getName(), false);
     	
 		NewOption optionC = new NewOption("C", new FloatValue(0.25f));
 		List<NewOption> options = new ArrayList<NewOption>();
@@ -152,8 +152,8 @@ public class Agent_PlannerTester extends PikaterAgent {
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode(CoreConstants.MODE_TRAIN_TEST);
-    	datas.setOutput(CoreConstants.OUTPUT_EVALUATION_ONLY);
+    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
+    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
         NewOption optionF = new NewOption("F", 8);
         
@@ -177,7 +177,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         	
             ACLMessage request = makeActionRequest(receiver, executeTask);
             //send(request);
-            log("Sending test request to Planner");
+            logInfo("Sending test request to Planner");
             send(request);
 /* 
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 100000);
@@ -187,14 +187,14 @@ public class Agent_PlannerTester extends PikaterAgent {
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
 */
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage(), e);
+            logException("Ontology/codec error occurred: "+e.getMessage(), e);
         }
 
     }
     
     protected void sendTask3() {
     	
-        AID receiver = new AID(AgentNames.PLANNER, false);
+        AID receiver = new AID(CoreAgents.PLANNER.getName(), false);
     	
 		NewOption optionC = new NewOption("C", new FloatValue(0.25f));
 		List<NewOption> options = new ArrayList<NewOption>();
@@ -215,8 +215,8 @@ public class Agent_PlannerTester extends PikaterAgent {
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode(CoreConstants.MODE_TRAIN_TEST);
-    	datas.setOutput(CoreConstants.OUTPUT_EVALUATION_ONLY);
+    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
+    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
         NewOption optionF = new NewOption("F", 8);
         
@@ -240,7 +240,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         	
             ACLMessage request = makeActionRequest(receiver, executeTask);
             //send(request);
-            log("Sending test request to Planner");
+            logInfo("Sending test request to Planner");
             send(request);
 /* 
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 100000);
@@ -250,7 +250,7 @@ public class Agent_PlannerTester extends PikaterAgent {
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
 */
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage(), e);
+            logException("Ontology/codec error occurred: "+e.getMessage(), e);
         }
 
     }

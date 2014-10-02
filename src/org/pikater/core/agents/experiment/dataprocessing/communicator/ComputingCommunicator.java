@@ -17,7 +17,7 @@ import jade.util.leap.List;
 
 import java.io.IOException;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.TaskOntology;
@@ -37,10 +37,9 @@ public class ComputingCommunicator {
 			resultMsg.setPerformative(ACLMessage.AGREE);
 			agent.taskFIFO.addLast(req);
 
-			if (agent.taskFIFO.size() == 1) {
-				if (!agent.executionBehaviour.isRunnable()) {
-					agent.executionBehaviour.restart();
-				}
+			if ((agent.taskFIFO.size() == 1) && !agent.executionBehaviour.isRunnable())
+			{
+				agent.executionBehaviour.restart();
 			}
 
 		} else {
@@ -57,11 +56,10 @@ public class ComputingCommunicator {
 			resultMsg.setPerformative(ACLMessage.PROPOSE);
 			agent.taskFIFO.addFirst(req);
 
-			if (agent.taskFIFO.size() == 1) {
-				if (!agent.executionBehaviour.isRunnable()) {
-					agent.executionBehaviour.restart();
-				}
-			}	
+			if ((agent.taskFIFO.size() == 1) && !agent.executionBehaviour.isRunnable())
+			{
+				agent.executionBehaviour.restart();
+			}
 
 		} else {
 			resultMsg.setPerformative(ACLMessage.REFUSE);
@@ -80,7 +78,7 @@ public class ComputingCommunicator {
 		
 		ACLMessage durationMessage=new ACLMessage(ACLMessage.REQUEST);
 		durationMessage.setOntology(DurationOntology.getInstance().getName());
-		durationMessage.addReceiver(new AID(AgentNames.DURATION,false));
+		durationMessage.addReceiver(new AID(CoreAgents.DURATION.getName(), false));
 		durationMessage.setLanguage(agent.getCodec().getName());
 		
 		Action a =new Action();
@@ -90,7 +88,7 @@ public class ComputingCommunicator {
 		try {
 			agent.getContentManager().fillContent(durationMessage, a);
 		} catch (CodecException | OntologyException e) {
-			agent.logError("Codec/Ontology exception in Computing Communicator", e);
+			agent.logException("Codec/Ontology exception in Computing Communicator", e);
 		}
 		agent.send(durationMessage);
 	}
@@ -105,7 +103,7 @@ public class ComputingCommunicator {
 		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.GUI_AGENT);
+		sd.setType(CoreAgents.GUI_AGENT.getName());
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] gui_agents = DFService.search(agent, template);
@@ -113,7 +111,7 @@ public class ComputingCommunicator {
 				msgOut.addReceiver(gui_agents[i].getName());
 			}
 		} catch (FIPAException fe) {
-			agent.logError(fe.getMessage(), fe);
+			agent.logException(fe.getMessage(), fe);
 		}
 
 		msgOut.setConversationId("partial-results");
@@ -127,9 +125,9 @@ public class ComputingCommunicator {
 		try {
 			agent.getContentManager().fillContent(msgOut, content);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		agent.send(msgOut);
@@ -149,13 +147,13 @@ public class ComputingCommunicator {
 				agent.getContentManager().fillContent(msgOut, result);
 
 			} catch (CodecException ce) {
-				agent.logError(ce.getMessage(), ce);
+				agent.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError(oe.getMessage(), oe);
+				agent.logException(oe.getMessage(), oe);
 			}
 
 		} catch (Exception e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException("Unexpected error message:", e);
 		}
 
 		return msgOut;
@@ -174,7 +172,7 @@ public class ComputingCommunicator {
 		saveAgent.setAgent(agentOnt);
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID(AgentNames.MANAGER_AGENT, false));
+		request.addReceiver(new AID(CoreAgents.MANAGER_AGENT.getName(), false));
 		request.setOntology(TaskOntology.getInstance().getName());
 		request.setLanguage(agent.getCodec().getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -186,8 +184,6 @@ public class ComputingCommunicator {
 		agent.getContentManager().fillContent(request, a);
 		ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
 
-		String objectFilename = reply.getContent();
-
-		return objectFilename;
+		return reply.getContent();
 	}
 }

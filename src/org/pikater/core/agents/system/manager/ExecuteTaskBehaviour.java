@@ -8,12 +8,12 @@ import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
+import org.pikater.core.agents.system.computation.graph.ModelComputationNode;
+import org.pikater.core.agents.system.computation.graph.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computation.graph.edges.ErrorEdge;
+import org.pikater.core.agents.system.computation.graph.strategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
@@ -23,8 +23,6 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 	private static final long serialVersionUID = -2044738642107219180L;
 
 	private Agent_Manager myAgent;
-	@SuppressWarnings("unused")
-	private CAStartComputationStrategy strategy;
     private final ModelComputationNode node;
     // original message sent by whoever wants to
     // compute the task (either search agent or
@@ -37,26 +35,25 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 		super(a, req);
 		myAgent = a;
         this.msg = msg;
-		strategy = cs;
         this.node = node;
         node.increaseNumberOfOutstandingTask();
     }
 
 	protected void handleRefuse(ACLMessage refuse) {
-		myAgent.log("Agent "+refuse.getSender().getName()+" refused.", 1);
+		myAgent.logSevere("Agent "+refuse.getSender().getName()+" refused.");
 	}
 	
 	protected void handleFailure(ACLMessage failure) {
 		if (failure.getSender().equals(myAgent.getAMS())) {
-			myAgent. log("Responder does not exist", 1);
+			myAgent.logSevere("Responder does not exist");
 		}
 		else {
-			myAgent.log("Agent "+failure.getSender().getName()+" failed.", 1);	            
+			myAgent.logSevere("Agent "+failure.getSender().getName()+" failed.");	            
 		}
 	}
 	
 	protected void handleInform(ACLMessage inform) {
-		myAgent.log("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
+		myAgent.logInfo("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
 		
 		ContentElement content;
 		try {
@@ -65,12 +62,11 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				// get the original task from msg
 				Result result = (Result) content;					
 				Task t = (Task)result.getValue();
-                ComputationCollectionItem computation =
-                		myAgent.getComputation(t.getBatchID());
+                // ComputationCollectionItem computation = myAgent.getComputation(t.getBatchID()); // unused
                 DataSourceEdge labeledData = new DataSourceEdge();
                 labeledData.setFile(false);
 
-                if (node.ContainsOutput("file"))
+                if (node.containsOutput("file"))
                 {
                     TaskOutput data= t.getOutputByType(Task.InOutType.DATA);
                     if (data==null)
@@ -80,7 +76,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                     labeledData.setDataSourceId(data.getName());
                     node.addToOutputAndProcess(labeledData,"file");
                 }
-                if (node.ContainsOutput(CoreConstants.SLOT_TESTING_DATA))
+                if (node.containsOutput(CoreConstant.SlotContent.TESTING_DATA.getSlotName()))
                 {
                     TaskOutput test= t.getOutputByType(Task.InOutType.TEST);
                     if (test==null)
@@ -88,14 +84,14 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                         test=t.getOutputByType(Task.InOutType.TRAIN);
                     }
                     labeledData.setDataSourceId(test.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstants.SLOT_TESTING_DATA);
+                    node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TESTING_DATA.getSlotName());
                 }
-                if (node.ContainsOutput(CoreConstants.SLOT_TRAINING_DATA))
+                if (node.containsOutput(CoreConstant.SlotContent.TRAINING_DATA.getSlotName()))
                 {
                     TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
 
                     labeledData.setDataSourceId(train.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstants.SLOT_TRAINING_DATA);
+                    node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
                 }
 
 				// save results to the database										
@@ -108,11 +104,11 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                 node.decreaseNumberOfOutstandingTask();
 			}
 		} catch (UngroundedException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		}
 		
 		// send subscription to the original agent after each received task

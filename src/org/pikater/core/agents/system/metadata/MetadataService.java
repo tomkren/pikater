@@ -9,7 +9,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.metadata.NewComputedData;
@@ -20,13 +20,13 @@ public class MetadataService {
 	public static void requestMetadataForDataset(PikaterAgent agent,
 			int dataSetID, int userID) {
 		
-		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
+		AID receiver = new AID(CoreAgents.METADATA_QUEEN.getName(), false);
 
 		NewDataset nds = new NewDataset();
 		nds.setUserID(userID);
 		nds.setDataSetID(dataSetID);
 		
-		agent.log("Sending request to store metadata for DataSetID: " + dataSetID);
+		agent.logInfo("Sending request to store metadata for DataSetID: " + dataSetID);
 
 		try {
 			Ontology ontology = MetadataOntology.getInstance();
@@ -39,28 +39,28 @@ public class MetadataService {
 
 			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request, 10000);
 			if (reply == null)
-				agent.logError("Reply not received.");
+				agent.logSevere("Reply not received.");
 			else
-				agent.log("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+				agent.logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
 		} catch (CodecException e) {
-			agent.logError("Codec error occurred: " + e.getMessage(), e);
+			agent.logException("Codec error occurred: " + e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError("Ontology error occurred: " + e.getMessage(), e);
+			agent.logException("Ontology error occurred: " + e.getMessage(), e);
 		} catch (FIPAException e) {
-			agent.logError("FIPA error occurred: " + e.getMessage(), e);
+			agent.logException("FIPA error occurred: " + e.getMessage(), e);
 		}
 	}
 	
 	public static void requestMetadataForComputedData(PikaterAgent agent,
 			int computedDataID, int userID) {
 
-		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
+		AID receiver = new AID(CoreAgents.METADATA_QUEEN.getName(), false);
 
 		NewComputedData ncd = new NewComputedData();
 		ncd.setUserID(userID);
 		ncd.setComputedDataID(computedDataID);
 		
-		agent.log("Sending request to store metadata for ComputedDataID: " + computedDataID);
+		agent.logInfo("Sending request to store metadata for ComputedDataID: " + computedDataID);
 
 		try {
 			Ontology ontology = MetadataOntology.getInstance();
@@ -73,15 +73,15 @@ public class MetadataService {
 
 			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
 			if (reply == null)
-				agent.logError("Reply not received.");
+				agent.logSevere("Reply not received.");
 			else
-				agent.log("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+				agent.logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
 		} catch (CodecException e) {
-			agent.logError("Codec error occurred: " + e.getMessage(), e);
+			agent.logException("Codec error occurred: " + e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError("Ontology error occurred: " + e.getMessage(), e);
+			agent.logException("Ontology error occurred: " + e.getMessage(), e);
 		} catch (FIPAException e) {
-			agent.logError("FIPA error occurred: " + e.getMessage(), e);
+			agent.logException("FIPA error occurred: " + e.getMessage(), e);
 		}
 	}
 	

@@ -12,7 +12,7 @@ public class RemoteServerInfo
 		USERNAME,
 		PASSWORD,
 		DIRECTORY
-	};
+	}
 	
 	private final String hostname;
 	private final String fingerprint;

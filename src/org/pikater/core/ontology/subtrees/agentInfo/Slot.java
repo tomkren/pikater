@@ -1,7 +1,9 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
-import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
+import org.pikater.core.CoreConstant;
+import org.pikater.core.CoreConstant.SlotCategory;
+import org.pikater.core.CoreConstant.SlotContent;
+import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;
 
@@ -9,49 +11,78 @@ public class Slot implements Concept, ICloneable
 {
 	private static final long serialVersionUID = -1146617082338754196L;
 
-	private String dataType;
-	private String slotType;
+	private String name;
 	private String description;
+	private String categoryName;
 	
+	/**
+	 * Should only be used internally and by Jade.
+	 */
+	@Deprecated
 	public Slot()
 	{
 	}
-	private Slot(String dataType, String slotType, String description)
+	public Slot(String name, SlotCategory category)
 	{
-		this.dataType = dataType;
-		this.slotType = slotType;
+		this.name = name;
+		this.categoryName = category.name();
+	}
+	public Slot(String name, SlotCategory category, String description)
+	{
+		this(name, category);
+		this.description = description;
+	}
+	public Slot(SlotContent contentType)
+	{
+		this(contentType.getSlotName(), contentType.getCategory());
+	}
+	public Slot(SlotContent contentType, String description)
+	{
+		this(contentType);
 		this.description = description;
 	}
 
-	public String getDataType() 
+	public String getName()
 	{
-		return dataType;
+		return name;
 	}
-	public void setDataType(String dataType)
+	public void setName(String name)
 	{
-		this.dataType = dataType;
-	}
-	public String getSlotType()
-	{
-		return slotType;
-	}
-	public void setSlotType(String slotType)
-	{
-		this.slotType = slotType;
-	}
-	public void setDescription(String description)
-	{
-		this.description = description;
+		this.name = name;
 	}
 	public String getDescription()
 	{
 		return this.description;
 	}
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+	public String getCategoryName() 
+	{
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName)
+	{
+		this.categoryName = categoryName;
+	}
 	
 	@Override
 	public Slot clone()
 	{
-		return new Slot(dataType, slotType, description);
+		Slot result;
+		try
+		{
+			result = (Slot) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setName(name);
+		result.setDescription(description);
+		result.setCategoryName(categoryName);
+		return result;
 	}
 	
 	/*
@@ -60,10 +91,10 @@ public class Slot implements Concept, ICloneable
 	public boolean isCompatibleWith(Slot otherSlot)
 	{
 		return true; // TODO: a hack around...
-		// return slotType.equals(otherSlot.slotType);
+		// return slotType.equals(otherSlot.slotType) when the experiment data streams are a bit more "standardized"
 	}
 	public boolean isErrorSlot()
 	{
-		return slotType.equals(SlotTypes.ERROR);
+		return SlotCategory.valueOf(categoryName) == CoreConstant.SlotCategory.ERROR;
 	}
 }

@@ -25,6 +25,7 @@ import org.pikater.shared.database.jpa.PikaterPriviledge;
 import org.pikater.shared.database.jpa.PikaterRole;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.DateUtils;
 
 public class DatabaseInitialisation {
@@ -83,7 +84,7 @@ public class DatabaseInitialisation {
 			content = Files.readAllBytes(Paths.get(jar));
 		} catch (IOException e1) {
 			p("Failed to read JAR "+jar);
-			e1.printStackTrace();
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e1);
 			return;
 		}
 		e.setJar(content);
@@ -122,8 +123,7 @@ public class DatabaseInitialisation {
 		try {
 			fw.write(sourceString);
 		} catch (IOException e) {
-			System.err.println("Can't write output file: "+output.getAbsolutePath());
-			e.printStackTrace();
+			PikaterDBLogger.logThrowable("Can not write to output file: "+output.getAbsolutePath(), e);
 		}finally{
 			fw.close();
 		}
@@ -144,14 +144,18 @@ public class DatabaseInitialisation {
 		p("persistence.xml current target (type new or leave blank) ");
 		p("src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET);
 		String persistenceTarget=br.readLine();
-		if(persistenceTarget.equals(""))
+		if((persistenceTarget==null) || persistenceTarget.isEmpty())
+		{
 			persistenceTarget="src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET;
+		}
 				
 		p("Beans.xml current target (type new or leave blank) ");
-		p("src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE);
+		p("src"+File.separator+CoreConfiguration.getConfigurationFileName());
 		String beansTarget=br.readLine();
-		if(beansTarget.equals(""))
-			beansTarget="src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE;
+		if((beansTarget==null) || beansTarget.isEmpty())
+		{
+			beansTarget="src"+File.separator+CoreConfiguration.getConfigurationFileName();
+		}
 		
 		p("Generating "+persistenceTarget+" ...");
 		this.generateConfigFile(DatabaseInitialisation.PERSISTENCE_CONFIGBASE,
@@ -206,15 +210,20 @@ public class DatabaseInitialisation {
 		p("Whole DB initialisation: 'a'");
 		p("Config file generation : 'c'");
 		p("Just DB initialisation : 'd'");
-		String choice=br.readLine().toLowerCase();
-		if(choice.equals("c")){
-			this.configGeneration();
-		}else if(choice.equals("d")){
-			this.databaseConfiguration();
-		}else if(choice.equals("a")){
-			this.configAll();
+		String choice=br.readLine();
+		if(choice!=null){
+			choice=choice.toLowerCase();
+			if(choice.equals("c")){
+				this.configGeneration();
+			}else if(choice.equals("d")){
+				this.databaseConfiguration();
+			}else if(choice.equals("a")){
+				this.configAll();
+			}else{
+				p("Invalid choice...exiting.");
+			}
 		}else{
-			p("Invalid choice...exiting.");
+			p("End of input stream...exiting");
 		}
 			
 	}

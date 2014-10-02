@@ -202,7 +202,7 @@ public class DatabaseTest {
 	}
 	
 	protected void testModelRemoval() {
-		DAOs.modelDAO.removeOldModels(1);
+		DAOs.modelDAO.removeOldModels((short) 1);
 	}
 
 	protected void testDBConnection() {
@@ -333,7 +333,8 @@ public class DatabaseTest {
 		
 		
 		List<JPADataSetLO> iDslos=DAOs.dataSetDAO.getByDescription("iris.arff");
-		if(iDslos.size()>0){
+		if(!iDslos.isEmpty())
+		{
 			JPADataSetLO idslo=iDslos.get(0);
 			exList.add(idslo.getHash());
 		}
@@ -433,7 +434,7 @@ public class DatabaseTest {
 		System.out.println(s);
 	}
 	
-	public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException, UserNotFoundException{
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException, UserNotFoundException{
 		DatabaseTest dt=new DatabaseTest();
 		dt.test();
 		System.out.println("End of Database Testing");

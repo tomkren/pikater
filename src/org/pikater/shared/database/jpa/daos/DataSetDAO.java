@@ -29,6 +29,7 @@ import org.pikater.shared.database.util.Hash;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 
@@ -181,6 +182,12 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		return getByCriteriaQueryCount(createByOwnerUserUploadVisiblePredicate(owner));
 	}
 	
+	/**
+	 * Retrieves all DataSetLO entities from database, which have hash different from any entry
+	 *  in hashesToBeExcluded list and were uploaded by user.
+	 * @param hashesToBeExcluded list of dataset hashes, that have to be omitted
+	 * @return list of {@link JPADataSetLO} objects
+	 */
 	public List<JPADataSetLO> getAllExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb= em.getCriteriaBuilder();
@@ -192,10 +199,12 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
 		}
 		p=cb.and(p,cb.isNotNull(r.get("globalMetaData")));
-		cq=cq.where(p);
-		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
 		
-		return res;
+		//we want user uploaded datasets
+		p=cb.and(p, cb.equal(r.get("source"), JPADatasetSource.USER_UPLOAD));
+		
+		cq=cq.where(p);
+		return em.createQuery(cq).getResultList();
 	}
 
 	public List<JPADataSetLO> getByOwner(JPAUser user) {
@@ -222,6 +231,13 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		return getByTypedNamedQuery("DataSetLO.getAllWithResults");
 	}
 	
+	/**
+	 * Retrieves all DataSetLO entities from database, for which some results exist
+	 * in the database, have hash different from any entry in hashesToBeExcluded list 
+	 * and were uploaded by user.
+	 * @param hashesToBeExcluded list of dataset hashes, that have to be omitted
+	 * @return list of {@link JPADataSetLO} objects
+	 */
 	public List<JPADataSetLO> getAllWithResultsExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb= em.getCriteriaBuilder();
@@ -235,6 +251,9 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		}
 		p=cb.and(p,cb.isNotNull(r.get("globalMetaData")));
 		
+		//we want user uploaded datasets
+		p=cb.and(p,cb.equal(r.get("source"), JPADatasetSource.USER_UPLOAD));
+		
 		Subquery<JPAResult> subquery=cq.subquery(JPAResult.class);
 		Root<JPAResult> sqroot=subquery.from(JPAResult.class);
 		
@@ -245,9 +264,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		
 		cq=cq.where(p);
 		
-		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
-		
-		return res;
+		return em.createQuery(cq).getResultList();
 	}
 	
 	/**
@@ -274,13 +291,14 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		long oid = -1;
 		String hash = Hash.getMD5Hash(sourceFile);
 		List<JPADataSetLO> sameHashDS = DAOs.dataSetDAO.getByHash(hash);
-		if (sameHashDS.size() > 0) {
+		if (!sameHashDS.isEmpty())
+		{
 			oid = sameHashDS.get(0).getOID();
 		} else {
 			try {
 				oid = new PGLargeObjectAction(null).uploadLOToDB(sourceFile);
 			} catch (Exception e) {
-				e.printStackTrace();
+				PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 			}
 		}
 		JPAFilemapping fm=new JPAFilemapping();
@@ -312,10 +330,13 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			
 			if(changedEntity.getAttributeMetaData()!=null){
 				List<JPAAttributeMetaData> attrList=new ArrayList<JPAAttributeMetaData>();
-				/**System.err.println("No. of attr metadatas : "+changedEntity.getAttributeMetaData().size());
-				for(JPAAttributeMetaData amd : changedEntity.getAttributeMetaData()){
+				/*
+				 System.err.println("No. of attr metadatas : "+changedEntity.getAttributeMetaData().size());
+				 for(JPAAttributeMetaData amd : changedEntity.getAttributeMetaData())
+				 {
 					System.err.println(amd+"   ID: "+amd.getId());
-				}**/
+				 }
+				 */
 				for(JPAAttributeMetaData amd : changedEntity.getAttributeMetaData()){
 					if(amd instanceof JPAAttributeCategoricalMetaData){
 						//System.err.println("Categorical: "+amd.getId());
@@ -345,7 +366,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't update JPA DataSetLO object.", e);
+			PikaterDBLogger.logThrowable("Can't update JPA DataSetLO object.", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();

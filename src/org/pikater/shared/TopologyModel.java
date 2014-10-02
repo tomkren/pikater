@@ -19,7 +19,7 @@ public class TopologyModel
 		{
 			return this.name();
 		}
-	};
+	}
 	
 	/**
 	 * The Set collection is critical for @Step3 class. Do not change it lightly.

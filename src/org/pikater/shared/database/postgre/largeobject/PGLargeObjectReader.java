@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.sql.SQLException;
 
 import org.pikater.shared.database.postgre.MyPGConnection;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
@@ -35,7 +36,7 @@ public class PGLargeObjectReader extends Reader {
 			lobj = con.getLargeObjectAPI();
 			obj = lobj.open(oid, LargeObjectManager.READ);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 	}
 	
@@ -44,12 +45,12 @@ public class PGLargeObjectReader extends Reader {
 		try{
 			if(obj!=null) obj.close();
 		}catch(SQLException e){
-			e.printStackTrace();
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 		try{
 			if(con!=null) ((java.sql.Connection) con).setAutoCommit(true);
 		}catch(SQLException e){
-			e.printStackTrace();
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 	}
 
@@ -61,13 +62,13 @@ public class PGLargeObjectReader extends Reader {
 	 * rely on inheritance from java.io.Reader
 	 */
 	public int read(char[] arg0, int arg1, int arg2) throws IOException {
-		byte buf[] = new byte[arg2];
+		byte[] buf = new byte[arg2];
 		int res=-1;
 		try {
 			res=obj.read(buf, arg1, arg2);
 			if(res==0) return -1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 			return -1;
 		}
 		for(int i=0;i<arg2;i++){

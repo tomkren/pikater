@@ -11,10 +11,12 @@ import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.util.ICloneable;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import jade.content.Concept;
 
-public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable<Value>
+public class ValuesForOption implements Concept, IValidated, ICloneable, IWekaItem, Iterable<Value>
 {
 	private static final long serialVersionUID = -3600291732186684079L;
 
@@ -80,12 +82,17 @@ public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable
 	@Override
 	public ValuesForOption clone()
 	{
-		List<Value> valuesCopied = new ArrayList<Value>();
-		for(Value value : values)
+		ValuesForOption result;
+		try
 		{
-			valuesCopied.add(value.clone());
+			result = (ValuesForOption) super.clone();
 		}
-		return new ValuesForOption(valuesCopied);
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setValues(CollectionUtils.deepCopy(values));
+		return result;
 	}
 	@Override
 	public boolean isValid()

@@ -56,16 +56,15 @@ public class Agent_GridSearch extends Agent_Search {
     @Override
     protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 
-        System.err.println("GENERATING");
+    	logInfo("is generating...");
 
         if (values == null) {
             values = generateValues();
         }
         
-        System.err.println("VALUES: " + values.size());
+        logInfo("generated values: " + values.size());
         
         List<SearchSolution> ret = new LinkedList<SearchSolution>();
-        
         for (int i = 0; i < values.size(); i++) {
             SearchSolution ss = new SearchSolution();
             List<IValueData> v = new ArrayList<IValueData>();
@@ -75,9 +74,7 @@ public class Agent_GridSearch extends Agent_Search {
             ss.setValues(v);
             ret.add(ss);
         }
-        
-        System.err.println("ret: " + ret.size());
-        
+        logInfo("result values: " + ret.size());
         return ret;
     }
 
@@ -93,10 +90,10 @@ public class Agent_GridSearch extends Agent_Search {
                 tries = defaultTries;
             }
             ArrayList<IValueData> valsForItem = new ArrayList<IValueData>();
-            IntervalSearchItem searchItem= ((IntervalSearchItem) si);
+            IntervalSearchItem searchItem = (IntervalSearchItem) si;
             if (searchItem.getMin() instanceof BooleanValue)
             {
-                    valsForItem.addAll(searchItem.possibleValues());
+            	valsForItem.addAll(searchItem.possibleValues());
             }
             if (si instanceof IntervalSearchItem) {
             	IntervalSearchItem isi = (IntervalSearchItem)si;
@@ -160,16 +157,10 @@ public class Agent_GridSearch extends Agent_Search {
 	                }
             	}
             }
-            if (si instanceof SetSItem) {
-                SetSItem ssi = (SetSItem) si;
-                for (int i = 0; i < tries && i < ssi.getSet().size(); i++) {
-                    valsForItem.add(ssi.getSet().get(i));
-                }
-            }
             valsForOpts.add(valsForItem);
         }
         
-        System.err.println("valsForOpts.size(): " + valsForOpts.size());
+        logInfo("valsForOpts.size(): " + valsForOpts.size());
         
         vals.addAll(valsForOpts.get(0));
         

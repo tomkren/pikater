@@ -4,7 +4,7 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -25,19 +25,17 @@ import java.util.Random;
 public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private static final long serialVersionUID = -3594051562022044000L;
-	
-	
-	protected abstract Classifier getClassifierClass();
-    protected Classifier classifier;
 
+	protected Classifier classifier;
 
 	@Override
-	public String getAgentType() {
-		
-		Classifier classifier = new RBFNetwork();//TODO: get method and sets the classifier???
-
-		return classifier.getClass().getName();
+	public String getAgentType()
+	{
+		//TODO: get method and sets the classifier???
+		return RBFNetwork.class.getName();
 	}
+	
+	protected abstract Classifier createClassifier();
 
 	@Override
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
@@ -45,13 +43,15 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		
 		this.logStartTask();
 		
-		log("Training...", 2);
-		log("Options: " + getOptions());
-        classifier=getClassifierClass();
+		logInfo("Training...");
+		logInfo("Options: " + getOptions());
+        classifier=createClassifier();
 		if(classifier == null)
-			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
-		
-		if (options.length > 0) {
+		{
+			throw new IllegalStateException(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
+		}
+		if (options.length > 0)
+		{
             //this is destructive, the options array will be emptied
 			classifier.setOptions(options);
 		}
@@ -76,7 +76,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		this.lastStartDate=new Date(start);
 		this.lastDuration=duration;
-		log("start: " + new Date(start) + " : duration: " + duration, 2);
+		logInfo("start: " + new Date(start) + " : duration: " + duration);
 		
 		state = states.TRAINED; // change agent state
 		options = classifier.getOptions();
@@ -103,11 +103,11 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private Evaluation test(EvaluationMethod evaluation_method) throws Exception{
 		working = true;
-		log("Testing...", 2);
+		logInfo("Testing...");
 
 		// evaluate classifier and print some statistics
 		Evaluation eval = new Evaluation(train);
-        log("Evaluation method: \t", 2);
+        logInfo("Evaluation method: \t");
 		
 		if (evaluation_method.getAgentType().equals(CrossValidation.class.getName()) ){
 			
@@ -120,20 +120,20 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 				folds = valueF.getValue();
 			}
 			
-			log(folds + "-fold cross validation.", 2);
+			logInfo(folds + "-fold cross validation.");
 			eval.crossValidateModel(
 					classifier,
 					test,
 					folds, new Random(1));
 		}
 		else { // name = Standard
-			log("Standard weka evaluation.", 2);
+			logInfo("Standard weka evaluation.");
 			eval.evaluateModel(classifier, test);
 		}
 				
-		log("Error rate: " + eval.errorRate()+" ", 1);
-		log(eval.toSummaryString(getLocalName() + " agent: "
-				+ "\nResults\n=======\n", false), 2);
+		logInfo("Error rate: " + eval.errorRate()+" ");
+		logInfo(eval.toSummaryString(getLocalName() + " agent: "
+				+ "\nResults\n=======\n", false));
 
 		working = false;
 		return eval;
@@ -149,12 +149,12 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		java.util.List<Eval> evaluations = evaluation.getEvaluations();
 		//List evaluations = new ArrayList();
 		Eval ev = new Eval();
-		ev.setName(CoreConstants.ERROR_RATE);
+		ev.setName(CoreConstant.Error.ERROR_RATE.name());
 		ev.setValue((float) eval.errorRate());
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName(CoreConstants.KAPPA_STATISTIC);
+		ev.setName(CoreConstant.Error.KAPPA_STATISTIC.name());
 		try {
 			ev.setValue((float) eval.kappa());
 		} catch (Exception e) {
@@ -163,7 +163,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstants.MEAN_ABSOLUTE_ERROR);
+		ev.setName(CoreConstant.Error.MEAN_ABSOLUTE.name());
 		try {
 			ev.setValue((float) eval.meanAbsoluteError());
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstants.RELATIVE_ABSOLUTE_ERROR);
+		ev.setName(CoreConstant.Error.RELATIVE_ABSOLUTE.name());
 		try {
 			ev.setValue((float) eval.relativeAbsoluteError());
 		} catch (Exception e) {
@@ -181,7 +181,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName(CoreConstants.ROOT_MEAN_SQUARED_ERROR);
+		ev.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());
 		try {
 			ev.setValue((float) eval.rootMeanSquaredError());
 		} catch (Exception e) {
@@ -190,7 +190,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstants.ROOT_RELATIVE_SQUARED_ERROR);
+		ev.setName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
 		try {
 			ev.setValue((float) eval.rootRelativeSquaredError());
 		} catch (Exception e) {
@@ -206,7 +206,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 			DataInstances onto_test) {
 
 		//Evaluation eval = test();
-		double pre[] = new double[test.numInstances()];
+		double[] pre = new double[test.numInstances()];
 		for (int i = 0; i < test.numInstances(); i++) {
 			try {
 				pre[i] = classifier.classifyInstance(test.instance(i));

@@ -56,21 +56,21 @@ public class WeatherSplitterTester extends PikaterAgent {
 		
 		try {
 			ACLMessage request = makeActionRequest(receiver, ex);
-			log("Sending test request");
+			logInfo("Sending test request");
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
 			if (reply == null)
-				logError("Reply not received.");
+				logSevere("Reply not received.");
 			else
-				log("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+				logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
 		} catch (CodecException e) {
-			logError("Codec error occurred: " + e.getMessage(), e);
+			logException("Codec error occurred: " + e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError("Ontology error occurred: " + e.getMessage(), e);
+			logException("Ontology error occurred: " + e.getMessage(), e);
 		} catch (FIPAException e) {
-			logError("FIPA error occurred: " + e.getMessage(), e);
+			logException("FIPA error occurred: " + e.getMessage(), e);
 		}
 
-		log("WeatherSplitterTester ending");
+		logInfo("WeatherSplitterTester ending");
 		doDelete();
 	}
 

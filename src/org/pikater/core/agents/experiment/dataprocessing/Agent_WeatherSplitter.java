@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
@@ -61,29 +61,14 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		agentInfo.setName("WeatherSplitter");
 		agentInfo.setDescription("Splits weather data by prediction.");
 
-		Slot i1 = new Slot();
-		i1.setSlotType(SlotTypes.DATA);
-		i1.setDataType("firstInput");
-		i1.setDescription("First weather input.");
-		Slot i2 = new Slot();
-		i2.setSlotType(SlotTypes.DATA);
-		i2.setDataType("secondInput");
-		i2.setDescription("Second weather input.");
+		Slot i1 = new Slot("firstInput", CoreConstant.SlotCategory.DATA_GENERAL, "First weather input.");
+		Slot i2 = new Slot("secondInput", CoreConstant.SlotCategory.DATA_GENERAL, "Second weather input.");
 		
 		agentInfo.setInputSlots(Arrays.asList(i1, i2));
 
-		Slot o_sunny = new Slot();
-		o_sunny.setSlotType(SlotTypes.DATA);
-		o_sunny.setDataType("sunnyOutput");
-		o_sunny.setDescription("Sunny output.");
-		Slot o_overcast = new Slot();
-		o_overcast.setSlotType(SlotTypes.DATA);
-		o_overcast.setDataType("overcastOutput");
-		o_overcast.setDescription("Overcast output.");
-		Slot o_rainy = new Slot();
-		o_rainy.setSlotType(SlotTypes.DATA);
-		o_rainy.setDataType("rainyOutput");
-		o_rainy.setDescription("Rainy output.");
+		Slot o_sunny = new Slot("sunnyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
+		Slot o_overcast = new Slot("overcastOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
+		Slot o_rainy = new Slot("rainyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
 
 		agentInfo.setOutputSlots(Arrays.asList(o_sunny, o_overcast, o_rainy));
 
@@ -117,7 +102,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 				} catch (ContentException e) {
 					throw new FailureException("Content problem: " + e.getMessage());
 				} catch (FIPAException e) {
-					logError("FIPA exception when performing task", e);
+					logException("FIPA exception when performing task", e);
 					throw new FailureException("Failed because of another agent " + e.getMessage());
 				}
 			}
@@ -126,7 +111,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	}
 
 	private ACLMessage respondToExecute(ACLMessage request) throws ContentException, FIPAException {
-		log("got execute");
+		logInfo("got execute");
 		final ACLMessage reply = request.createReply();
 		final ExecuteTask content;
 		Task performed;
@@ -134,10 +119,10 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 			content = (ExecuteTask) ((Action)getContentManager().extractContent(request)).getAction();
 			performed = performTask(content.getTask());
 		} catch (CodecException e) {
-			logError("Failed to extract task", e);
+			logException("Failed to extract task", e);
 			throw e;
 		} catch (OntologyException e) {
-			logError("Failed to extract task", e);
+			logException("Failed to extract task", e);
 			throw e;
 		}
 
@@ -145,7 +130,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		getContentManager().fillContent(reply, result);
 		reply.setPerformative(ACLMessage.INFORM);
 
-		log("responding with finished task");
+		logInfo("responding with finished task");
 		return reply;
 	}
 	
@@ -154,21 +139,21 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		for (Data dataI : t.getDatas().getDatas()) {
 			String fname = dataI.getInternalFileName();
 			ACLMessage request = makeGetDataRequest(fname);
-			log("sending getData for "+fname);
+			logInfo("sending getData for "+fname);
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
 			res.add(processGetDataResponse(reply));
-			log("got data for "+fname);
+			logInfo("got data for "+fname);
 		}
 		return res;
 	}
 
 	private Task performTask(Task t) throws FIPAException {
-		log("getting data");
+		logInfo("getting data");
 
 		List<DataInstances> weatherData = getDataForTask(t);
-		log("processing data");
+		logInfo("processing data");
 		ArrayList<TaskOutput> outputs = processData(weatherData);
-		log("returning outputs");
+		logInfo("returning outputs");
 		t.setOutput(outputs);
 		return t;
 	}

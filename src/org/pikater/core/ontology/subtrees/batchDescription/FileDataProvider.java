@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
@@ -27,7 +27,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption fileURIOption = new NewOption(CoreConstants.FILEURI, fileURI);
+		NewOption fileURIOption = new NewOption(CoreConstant.FILEURI, fileURI);
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(fileURIOption);
@@ -38,7 +38,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	public void importAllOptions(List<NewOption> options) {
 		
 		for (NewOption optionI : options) {
-			if (optionI.getName().equals(CoreConstants.FILEURI)) {
+			if (optionI.getName().equals(CoreConstant.FILEURI)) {
 				StringValue value = (StringValue) optionI.toSingleValue().getCurrentValue();
 				this.fileURI = value.getValue();
 			}
@@ -54,7 +54,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	public void importAllErrors(List<ErrorSourceDescription> errors) {
 		
 		if (errors != null && !errors.isEmpty()) {
-			new IllegalArgumentException("Argument errors can be only null");
+			throw new IllegalArgumentException("Argument errors can be only null");
 		}
 	}
 
@@ -66,18 +66,17 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
 		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
-			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
+			throw new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		}
 		
 	}
 
-	public FileDataProvider clone() {
-		
-		FileDataProvider fileData = new FileDataProvider();
+	@Override
+	public FileDataProvider clone()
+	{
+		FileDataProvider fileData = (FileDataProvider) super.clone();
 		fileData.setId(this.getId());
 		fileData.setFileURI(fileURI);
-		
 		return fileData;
 	}
-
 }

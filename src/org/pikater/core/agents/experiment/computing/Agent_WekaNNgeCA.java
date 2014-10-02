@@ -14,7 +14,7 @@ public class Agent_WekaNNgeCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = 4300329613493738992L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 
 		return new NNge();
 	}

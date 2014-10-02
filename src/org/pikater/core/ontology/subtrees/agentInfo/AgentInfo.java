@@ -1,8 +1,9 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.util.ICloneable;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -135,19 +136,21 @@ public class AgentInfo implements Concept, ICloneable
 	@Override
 	public AgentInfo clone()
 	{
-		AgentInfo result = new AgentInfo();
+		AgentInfo result;
+		try
+		{
+			result = (AgentInfo) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setOntologyClassName(ontologyClassName);
 		result.setAgentClassName(agentClassName);
 		result.setName(name);
 		result.setDescription(description);
-		for(Slot slot : inputSlots)
-		{
-			result.addInputSlot(slot.clone());
-		}
-		for(Slot slot : outputSlots)
-		{
-			result.addOutputSlot(slot.clone());
-		}
+		result.setInputSlots(CollectionUtils.deepCopy(inputSlots));
+		result.setInputSlots(CollectionUtils.deepCopy(outputSlots));
 		result.setOptions(options.clone());
 		return result;
 	}
@@ -186,11 +189,11 @@ public class AgentInfo implements Concept, ICloneable
 		this.outputSlots.add(outputSlot);
 	}
 	
-	public Slot fetchInputSlotByDataType(String dataType)
+	public Slot fetchInputSlotByName(String slotName)
 	{
 		for(Slot slot : inputSlots)
 		{
-			if(slot.getDataType().equals(dataType))
+			if(slot.getName().equals(slotName))
 			{
 				return slot;
 			}
@@ -198,11 +201,11 @@ public class AgentInfo implements Concept, ICloneable
 		return null;
 	}
 	
-	public Slot fetchOutputSlotByDataType(String dataType)
+	public Slot fetchOutputSlotByName(String slotName)
 	{
 		for(Slot slot : outputSlots)
 		{
-			if(slot.getDataType().equals(dataType))
+			if(slot.getName().equals(slotName))
 			{
 				return slot;
 			}
@@ -214,7 +217,7 @@ public class AgentInfo implements Concept, ICloneable
 	{
 		if(this.agentClassName == null) // some kind of a weird agent (should be exactly one)
 		{
-			if(this.ontologyClassName.equals(ontologyClassName) && this.agentClassName == agentClassName)
+			if(this.ontologyClassName.equals(ontologyClassName) && agentClassName == null)
 			{
 				return true;
 			}
@@ -246,10 +249,7 @@ public class AgentInfo implements Concept, ICloneable
 		String xml = scanner.useDelimiter("\\Z").next();
 		scanner.close();
 		
-		AgentInfo agentInfo =
-				(AgentInfo)xstream.fromXML(xml);
-		
-		return agentInfo;
+		return (AgentInfo)xstream.fromXML(xml);
 	}
 	
 }

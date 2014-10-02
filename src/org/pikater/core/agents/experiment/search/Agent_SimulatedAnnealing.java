@@ -108,7 +108,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		}
 		
 		//create a new solution for evaluation
-		new_solution = Neighbor(solution);
+		new_solution = neighbor(solution);
 		
 		number_of_tries++;
 		
@@ -147,14 +147,14 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	}
 	
 	//Neighbor function: Random solutions in case of beginning, or mutation of existing
-	private SearchSolution Neighbor(SearchSolution sol){
+	private SearchSolution neighbor(SearchSolution sol){
 
-		List<IValueData> new_solution = new ArrayList<IValueData>();
+		List<IValueData> neighbourSolutionValues = new ArrayList<IValueData>();
 		if(sol == null){
 			//Completely new solution
 			for (SearchItem si : getSchema() ) {
 				//dont want to change old solutions
-				new_solution.add(si.randomValue(rnd_gen));
+				neighbourSolutionValues.add(si.randomValue(rnd_gen));
 			}
 		}else{
 			//Neighbor function
@@ -166,12 +166,12 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 				if(rnd_gen.nextDouble() > stability) {
 					val = si.randomValue(rnd_gen);
 				}
-				new_solution.add(val);
+				neighbourSolutionValues.add(val);
 			}
 		}
-		SearchSolution res_sol = new SearchSolution();
-		res_sol.setValues(new_solution);
-		return res_sol;
+		SearchSolution result = new SearchSolution();
+		result.setValues(neighbourSolutionValues);
+		return result;
 	}
 	
 	/*Acceptance probability of annealed solutions: 
@@ -179,13 +179,13 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	  -the worse with probability exp((e-e_new)/temperature)
 	*/
 	private double acceptanceProb(double delta, double temperature){
-		if(!minimization){/*for max problems*/
-			delta = -delta;
+		if(!minimization) // for max problems
+		{
+			return -delta < 0 ? 1.0 : Math.exp(-delta/temperature);
 		}
-		if(delta<0){//it is better
-			return 1.0;
-		}else{
-			return Math.exp(-delta/temperature);
+		else
+		{
+			return delta < 0 ? 1.0 : Math.exp(-delta/temperature);
 		}
 	}
 	

@@ -20,10 +20,10 @@ import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
+import org.pikater.core.agents.system.computation.graph.SearchComputationNode;
+import org.pikater.core.agents.system.computation.graph.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
 import org.pikater.core.ontology.*;
@@ -74,7 +74,7 @@ public class Agent_Manager extends PikaterAgent {
 
     	initDefault();
 
-    	registerWithDF(AgentNames.MANAGER);
+    	registerWithDF(CoreAgents.MANAGER.getName());
 		doWait(30000);
 		
 		MessageTemplate subscriptionTemplate = 
@@ -126,7 +126,7 @@ public class Agent_Manager extends PikaterAgent {
 			ACLMessage query = receive(getSchemaFromSearchTemplate);
 			
 			if (query != null) {
-				log(": a query message received from " + query.getSender().getName());
+				logInfo(": a query message received from " + query.getSender().getName());
 				
 				searchMessages.put(query.getConversationId(), query);				
 				
@@ -156,14 +156,14 @@ public class Agent_Manager extends PikaterAgent {
                         }
 				    }
 					else{
-						logError("unknown message received.");
+						logSevere("unknown message received.");
 					}
 				} catch (UngroundedException e1) {
-					logError(e1.getMessage(), e1);
+					logException(e1.getMessage(), e1);
 				} catch (CodecException e1) {
-					logError(e1.getMessage(), e1);
+					logException(e1.getMessage(), e1);
 				} catch (OntologyException e1) {
-					logError(e1.getMessage(), e1);
+					logException(e1.getMessage(), e1);
 				}
 			}
 			else {
@@ -198,11 +198,11 @@ public class Agent_Manager extends PikaterAgent {
             //TODO: bad ontology
 			getContentManager().fillContent(msgOut, content );
 		} catch (UngroundedException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		// go through every subscription
@@ -234,7 +234,7 @@ public class Agent_Manager extends PikaterAgent {
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] result = DFService.search(this, template);
-			log("Found the following " + agentType + " agents:");
+			logInfo("Found the following " + agentType + " agents:");
 			
 			for (int i = 0; i < result.length; ++i) {
 				AID aid = result[i].getName();
@@ -249,8 +249,8 @@ public class Agent_Manager extends PikaterAgent {
 				Agents.add(aid);
 			}
 		} catch (FIPAException fe) {
-			logError(fe.getMessage(), fe);
-			return null;
+			logException(fe.getMessage(), fe);
+			return new ArrayList<AID>();
 		}
 		
 		return Agents;

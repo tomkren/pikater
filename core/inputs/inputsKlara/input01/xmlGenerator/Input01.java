@@ -45,6 +45,7 @@ public final class Input01 {
 		comAgent.addOption(optionM);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
+		comAgent.setValidationData(fileDataSource);
 		comAgent.setEvaluationMethod(new EvaluationMethod(CrossValidation.class.getName()));
 		comAgent.setEvaluationMethod(evaluationMethod);
 		//comAgent.setModel(70704);
@@ -75,7 +76,7 @@ public final class Input01 {
 
 		ComputationDescription comDescription = createDescription();
 		
-		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input01"
+		String fileName = CoreConfiguration.getKlarasInputsPath() + "input01"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 

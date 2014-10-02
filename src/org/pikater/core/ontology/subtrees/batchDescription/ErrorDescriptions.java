@@ -3,8 +3,11 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ErrorDescriptions {
+import org.pikater.shared.util.ICloneable;
+import org.pikater.shared.util.collections.CollectionUtils;
 
+public class ErrorDescriptions implements ICloneable
+{
 	private List<ErrorSourceDescription> errors;
 
 	public ErrorDescriptions() {
@@ -25,14 +28,19 @@ public class ErrorDescriptions {
 		this.errors.add(error);
 	}
 	
-	public ErrorDescriptions clone() {
-		
-		ErrorDescriptions errorsOnt = new ErrorDescriptions();
-		for (ErrorSourceDescription errorI : errors) {
-			errorsOnt.addErrors(errorI.clone());
+	@Override
+	public ErrorDescriptions clone()
+	{
+		ErrorDescriptions result;
+		try
+		{
+			result = (ErrorDescriptions) super.clone();
 		}
-		
-		return errorsOnt;
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setErrors(CollectionUtils.deepCopy(errors));
+		return result;
 	}
-	
 }

@@ -6,6 +6,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
 import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import xmlGenerator.Input01;
 import xmlGenerator.Input01_model;
@@ -70,9 +71,7 @@ public class TestBatchDescription {
 	private static void testComputatingDescription(
 			ComputationDescription comDescription, String note) {
 
-		UniversalComputationDescription udescriptinSimpleTraining =
-				comDescription.exportUniversalComputationDescription();
-
+		UniversalComputationDescription udescriptinSimpleTraining = comDescription.exportUniversalComputationDescription();
 		ComputationDescription comDescription2 =
 				ComputationDescription.importUniversalComputationDescription(
 						udescriptinSimpleTraining);
@@ -84,7 +83,7 @@ public class TestBatchDescription {
 			comDescription.exportXML("comDescription.xml");
 			comDescription2.exportXML("comDescription2.xml");
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 
 	

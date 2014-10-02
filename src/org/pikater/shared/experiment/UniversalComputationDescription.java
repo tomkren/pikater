@@ -8,7 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.XStreamHelper;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 
 public class UniversalComputationDescription
@@ -115,7 +115,7 @@ public class UniversalComputationDescription
 		{
 			if(!rootElem.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
 			{
-				PikaterLogger.logThrowable("Invalid element processing", new IllegalStateException("Some root elements are not file savers."));
+				PikaterDBLogger.logThrowable("Invalid element processing", new IllegalStateException("Some root elements are not file savers."));
 				return false;
 			}
 		}
@@ -125,12 +125,12 @@ public class UniversalComputationDescription
 			{
 				if(connector.getFromElement() == null)
 				{
-					PikaterLogger.logThrowable("Required information not defined", new IllegalStateException("Some connectors don't have the 'fromElement' field defined."));
+					PikaterDBLogger.logThrowable("Required information not defined", new IllegalStateException("Some connectors don't have the 'fromElement' field defined."));
 					return false;
 				}
 				else if(!allElements.contains(connector.getFromElement()))
 				{
-					PikaterLogger.logThrowable("Invalid element binding", new IllegalStateException("Some connectors' 'fromElement' fields are not registered in the root class."));
+					PikaterDBLogger.logThrowable("Invalid element binding", new IllegalStateException("Some connectors' 'fromElement' fields are not registered in the root class."));
 					return false;
 				}
 				else
@@ -139,9 +139,9 @@ public class UniversalComputationDescription
 					{
 						connector.validate();
 					}
-					catch (Throwable t)
+					catch (Exception t)
 					{
-						PikaterLogger.logThrowable("Invalid connector", t);
+						PikaterDBLogger.logThrowable("Invalid connector", t);
 						return false;
 					}
 				}
@@ -162,7 +162,7 @@ public class UniversalComputationDescription
         		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws CloneNotSupportedException
 	{
 		UniversalComputationDescription uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
 		System.out.println(XStreamHelper.serializeToXML(uDescription, 

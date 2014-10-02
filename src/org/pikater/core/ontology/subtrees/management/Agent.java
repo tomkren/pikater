@@ -5,14 +5,12 @@ import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;
 
-
-public class Agent implements Concept, Cloneable {
-	/**
-	 * 
-	 */
+public class Agent implements Concept, ICloneable
+{
 	private static final long serialVersionUID = 6257129995443147585L;
 	
 	private String name;
@@ -63,15 +61,22 @@ public class Agent implements Concept, Cloneable {
 		return option.fetchOptionByName(name);
 	}
 
-	public Object clone() {
-
-		Agent agent = new Agent();
+	public Agent clone()
+	{
+		Agent agent;
+		try
+		{
+			agent = (Agent) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		agent.setName(name);
 		agent.setObject(object);
 		agent.setOptions(options);
 		agent.setType(type);
 		agent.setModel(model);
-
 		return agent;
 	}
 

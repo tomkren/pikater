@@ -11,7 +11,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -52,14 +52,14 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					logError("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					logError("Codec problem: " + e.getMessage(), e);
+					logException("Codec problem: " + e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: "
+				logSevere("Failure responding to request: "
 						+ request.getContent());
 				return failure;
 			}
@@ -70,7 +70,7 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 	private ACLMessage respondToGetAgentInfo(ACLMessage request) {
 		
 		AgentInfo agentInfo = getAgentInfo();
-		AID receiver = new AID(AgentNames.AGENTINFO_MANAGER, false);
+		AID receiver = new AID(CoreAgents.AGENTINFO_MANAGER.getName(), false);
 		
 		ACLMessage agentInfoMsg = request.createReply();
 		agentInfoMsg.setPerformative(ACLMessage.INFORM);
@@ -80,12 +80,12 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 					agentInfoMsg,
 					new Action(receiver, agentInfo));
 			
-			log("Reply: OK");
+			logInfo("Reply: OK");
 			
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
         
 		return agentInfoMsg;

@@ -5,10 +5,10 @@ import java.util.Date;
 
 public class DateUtils
 {
-	private static final SimpleDateFormat czechDateFormatter = new SimpleDateFormat("dd.MM. yyyy");
-	
 	public static String toCzechDate(Date date)
 	{
+		SimpleDateFormat czechDateFormatter = new SimpleDateFormat("dd.MM. yyyy");
+	
 		if(date == null)
 		{
 			return "";

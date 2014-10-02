@@ -23,12 +23,12 @@ public class Agent_WekaDurationLinearRegression extends
 	
 	@Override	
 	public void logStartTask() {
-		log(DurationServiceRegression_output_prefix, 2);
+		logInfo(DurationServiceRegression_output_prefix);
 	}
 
 	@Override	
 	public void logOptions() {
-		log(DurationServiceRegression_output_prefix + getOptions(),2);
+		logInfo(DurationServiceRegression_output_prefix + getOptions());
 	}
 	
 	@Override	

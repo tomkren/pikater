@@ -38,7 +38,7 @@ public class RemoveExpiredTrainedModels extends ZeroArgJob
 		//TODO: is this OK? Deleting models associated with exepriments, but leaving the experiment statistic untouched
 		//(apart from removing model ID)
 		try{
-			DAOs.modelDAO.removeOldModels(90);//remove models older than 90 days
+			DAOs.modelDAO.removeOldModels((short) 90);//remove models older than 90 days
 		}catch(Exception e){
 			throw new JobExecutionException("Error while trying to delete old models.");
 		}

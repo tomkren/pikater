@@ -1,7 +1,6 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-import org.pikater.core.CoreConstants;
-
+import org.pikater.core.CoreConstant;
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -24,13 +23,13 @@ public class DataSourceDescription implements ISourceDescription {
     public void setDataProvider(IDataProvider dataProvider) {
     	
     	if (dataProvider instanceof FileDataProvider) {
-    		this.setOutputType(CoreConstants.SLOT_FILE_DATA);
+    		this.setOutputType(CoreConstant.SlotContent.FILE_DATA.getSlotName());
     		
     	} else if (dataProvider instanceof ComputingAgent) {
-    		this.setOutputType(CoreConstants.SLOT_COMPUTED_DATA);
+    		this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
     		
     	} else if (dataProvider instanceof CARecSearchComplex) {
-    		this.setOutputType(CoreConstants.SLOT_COMPUTED_DATA);
+    		this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
     	}
     	
         this.dataProvider = dataProvider;
@@ -60,9 +59,18 @@ public class DataSourceDescription implements ISourceDescription {
 		return this.dataProvider;
 	}
 
-	public DataSourceDescription clone() {
-		
-		DataSourceDescription dataSource = new DataSourceDescription();
+	@Override
+	public DataSourceDescription clone()
+	{
+		DataSourceDescription dataSource;
+		try
+		{
+			dataSource = (DataSourceDescription) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		dataSource.setInputType(this.getInputType());
 		dataSource.setOutputType(this.getOutputType());
 		dataSource.setDataProvider(getDataProvider().clone());

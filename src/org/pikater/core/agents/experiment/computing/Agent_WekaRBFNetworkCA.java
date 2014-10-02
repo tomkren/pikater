@@ -14,7 +14,7 @@ public class Agent_WekaRBFNetworkCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = 3480796684001125058L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 
 		return new RBFNetwork();
 	}

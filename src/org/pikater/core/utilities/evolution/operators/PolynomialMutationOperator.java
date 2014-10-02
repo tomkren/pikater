@@ -9,7 +9,8 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 public class PolynomialMutationOperator implements Operator {
 
     private double mutRate;
-    private final double ETA_M = 100;
+    
+    private static final double ETA_M = 100;
 
     public PolynomialMutationOperator(double mutationRate) {
         mutRate = mutationRate;
@@ -44,11 +45,11 @@ public class PolynomialMutationOperator implements Operator {
             double deltaq;
             if (rnd <= 0.5) {
                 double xy = 1.0 - delta1;
-                double val = 2.0 * rnd + (1.0 - 2.0 * rnd) * (Math.pow(xy, (ETA_M + 1.0)));
+                double val = 2.0 * rnd + (1.0 - 2.0 * rnd) * Math.pow(xy, ETA_M + 1.0);
                 deltaq = Math.pow(val, mut_pow) - 1.0;
             } else {
                 double xy = 1.0 - delta2;
-                double val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (Math.pow(xy, (ETA_M + 1.0)));
+                double val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * Math.pow(xy, ETA_M + 1.0);
                 deltaq = 1.0 - (Math.pow(val, mut_pow));
             }
             y = y + deltaq * (yHi - yLow);

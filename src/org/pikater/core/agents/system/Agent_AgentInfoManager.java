@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
@@ -61,13 +61,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		registerWithDF(AgentNames.AGENTINFO_MANAGER);
+		registerWithDF(CoreAgents.AGENTINFO_MANAGER.getName());
 
 		for (Ontology ontologyI : getOntologies()) {
 			getContentManager().registerOntology(ontologyI);
 		}
 
-		log("Agent " + getName() + " started");
+		logInfo("Agent " + getName() + " started");
 
 		//this.agentInfosPublic = 
 		
@@ -89,11 +89,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					action = (Action) getContentManager().extractContent(
 							request);
 				} catch (UngroundedException e) {
-				    logError(e.getMessage(), e);
+				    logException(e.getMessage(), e);
+				    return null;
 				} catch (CodecException e) {
-					logError(e.getMessage(), e);
+					logException(e.getMessage(), e);
+					return null;
 				} catch (OntologyException e) {
-					logError(e.getMessage(), e);
+					logException(e.getMessage(), e);
+					return null;
 				}
 
 				if (action.getAction() instanceof GetAgentInfo) {
@@ -115,7 +118,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
 
-				logError("Failure responding to request: " + request.getContent());
+				logSevere("Failure responding to request: " + request.getContent());
 				return failure;
 			}
 
@@ -213,10 +216,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		Set<Class<? extends Agent_AbstractExperiment>> allClassesSet = 
 		     reflections.getSubTypesOf(Agent_AbstractExperiment.class);
 		 
-		List<Class<? extends Agent_AbstractExperiment>> allClasses =
-				new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
-
-		return allClasses;
+		return new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
 	}
 	
 	private List<Class<? extends Agent_AbstractExperiment>> getComputingAgentClasses(
@@ -228,10 +228,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		Set<Class<? extends Agent_ComputingAgent>> allClassesSet = 
 		     reflections.getSubTypesOf(Agent_ComputingAgent.class);
 		 
-		List<Class<? extends Agent_AbstractExperiment>> allClasses =
-				new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
-
-		return allClasses;
+		return new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
 	}
 
 	private List<AgentClass> notSavedClasses(
@@ -267,9 +264,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;		
@@ -292,9 +289,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -324,9 +321,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -382,16 +379,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			Action replyAction = (Action) agent.getContentManager()
 					.extractContent(agentInfoMsg);
 			
-			AgentInfo agentInfo = (AgentInfo) replyAction.getAction();
-
-			return agentInfo;
+			return (AgentInfo) replyAction.getAction();
 			
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (Codec.CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 		
 		return null;
@@ -416,7 +411,7 @@ class ShutDownAgents extends Thread {
     public void run() {
 
 		for (AgentClass classI : agentClasses){
-			agent.log("Agent " + classI.getAgentClass() + " was killed");
+			agent.logInfo("Agent " + classI.getAgentClass() + " was killed");
 			agent.killAgent(classI.getAgentClass());
 			
 		}

@@ -14,7 +14,7 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.subtrees.duration.Duration;
@@ -27,7 +27,7 @@ public class DurationService extends FIPAService {
 	public static Duration getDuration(PikaterAgent agent, GetDuration gd) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID(AgentNames.DURATION, false));
+		request.addReceiver(new AID(CoreAgents.DURATION.getName(), false));
 		request.setOntology(DurationOntology.getInstance().getName());
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -39,7 +39,7 @@ public class DurationService extends FIPAService {
 		try {
 			agent.getContentManager().fillContent(request, a);
 		} catch (CodecException | OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		Duration duration=new Duration();
@@ -53,13 +53,13 @@ public class DurationService extends FIPAService {
 			duration = (Duration) (((Result) content).getValue());
 
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (UngroundedException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		return duration;

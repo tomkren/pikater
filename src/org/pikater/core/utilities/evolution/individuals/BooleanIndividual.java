@@ -58,7 +58,7 @@ public class BooleanIndividual extends ArrayIndividual{
     }
 
     @Override
-    public Object clone() {
+    public BooleanIndividual clone() {
         
         BooleanIndividual newBI = (BooleanIndividual) super.clone();
         newBI.genes = new boolean[genes.length];

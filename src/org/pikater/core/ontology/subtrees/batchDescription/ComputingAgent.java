@@ -4,7 +4,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -14,6 +14,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 
 /**
@@ -72,7 +73,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument trainingData can't be null");
     	}
     	DataSourceDescription trainingDataC = new DataSourceDescription(); 
-    	trainingDataC.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+    	trainingDataC.setInputType(CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
     	trainingDataC.setOutputType(trainingData.getOutputType());
     	trainingDataC.setDataProvider(trainingData.getDataProvider());
     	
@@ -87,7 +88,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument testingData can't be null");
     	}
     	DataSourceDescription testingDataC = new DataSourceDescription(); 
-    	testingDataC.setInputType(CoreConstants.SLOT_TESTING_DATA);
+    	testingDataC.setInputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
     	testingDataC.setOutputType(testingData.getOutputType());
     	testingDataC.setDataProvider(testingData.getDataProvider());
 
@@ -102,7 +103,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument validationData can't be null");
     	}
     	DataSourceDescription validationDataC = new DataSourceDescription(); 
-    	validationDataC.setInputType(CoreConstants.SLOT_VALIDATION_DATA);
+    	validationDataC.setInputType(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
     	validationDataC.setOutputType(validationData.getOutputType());
     	validationDataC.setDataProvider(validationData.getDataProvider());
 
@@ -143,22 +144,22 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 	@Override
 	public List<NewOption> exportAllOptions() {
-		List<NewOption> options = new ArrayList<NewOption>();
+		List<NewOption> result = new ArrayList<NewOption>();
 
 		NewOption modelOption = null;
 		if (model == null) {
-			modelOption = new NewOption(CoreConstants.MODEL, new NullValue());
+			modelOption = new NewOption(CoreConstant.MODEL, new NullValue());
 		} else {
-			modelOption = new NewOption(CoreConstants.MODEL, model);
+			modelOption = new NewOption(CoreConstant.MODEL, model);
 		}
-		options.add(modelOption);
+		result.add(modelOption);
 		
 		NewOption expectedDurationOption = new NewOption(
-				CoreConstants.DURATION, duration.getDurationType());
+				CoreConstant.DURATION, duration.getDurationType());
 		
-		options.add(expectedDurationOption);
-		options.addAll(this.options);
-		return options;
+		result.add(expectedDurationOption);
+		result.addAll(this.options);
+		return result;
 	}
 
 	@Override
@@ -167,7 +168,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		NewOptions optionsOntol = new NewOptions(options);
 
 		//import model
-		NewOption optModel = optionsOntol.fetchOptionByName(CoreConstants.MODEL);
+		NewOption optModel = optionsOntol.fetchOptionByName(CoreConstant.MODEL);
 
 		if (optModel != null) {
 			Value value = optModel.toSingleValue();
@@ -183,7 +184,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 
 		//import duration
-		NewOption optDuration = optionsOntol.fetchOptionByName(CoreConstants.DURATION);
+		NewOption optDuration = optionsOntol.fetchOptionByName(CoreConstant.DURATION);
 		StringValue valueMethod = (StringValue)
 				optDuration.toSingleValue().getCurrentValue();
 		
@@ -216,7 +217,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (trainingData != null) {
 			DataSourceDescription trainingDataC = new DataSourceDescription();
-			trainingDataC.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+			trainingDataC.setInputType(CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
 			trainingDataC.setOutputType(trainingData.getOutputType());
 			trainingDataC.setDataProvider(trainingData.getDataProvider());
 			slots.add(trainingDataC);
@@ -224,7 +225,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (testingData != null) {
 			DataSourceDescription testingDataC = new DataSourceDescription();
-			testingDataC.setInputType(CoreConstants.SLOT_TESTING_DATA);
+			testingDataC.setInputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
 			testingDataC.setOutputType(testingData.getOutputType());
 			testingDataC.setDataProvider(testingData.getDataProvider());
 			slots.add(testingDataC);
@@ -232,7 +233,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (validationData != null) {
 			DataSourceDescription validationDataC = new DataSourceDescription();
-			validationDataC.setInputType(CoreConstants.SLOT_VALIDATION_DATA);
+			validationDataC.setInputType(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
 			validationDataC.setOutputType(validationData.getOutputType());
 			validationDataC.setDataProvider(validationData.getDataProvider());
 			slots.add(validationDataC);
@@ -240,7 +241,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (evaluationMethod != null) {
 			DataSourceDescription evaluationMethodDataC = new DataSourceDescription();
-			evaluationMethodDataC.setInputType(CoreConstants.SLOT_EVALUATION_METHOD);
+			evaluationMethodDataC.setInputType(CoreConstant.SlotContent.EVALUATION_METHOD.getSlotName());
 			evaluationMethodDataC.setOutputType("evaluationMethod");
 			evaluationMethodDataC.setDataProvider(evaluationMethod);
 			slots.add(evaluationMethodDataC);
@@ -258,47 +259,39 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		DataSourceDescription descriptinTrainingData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_TRAINING_DATA);
+						CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
 		trainingData = descriptinTrainingData;
 
 		DataSourceDescription descriptinTestingData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_TESTING_DATA);
+						CoreConstant.SlotContent.TESTING_DATA.getSlotName());
 		testingData = descriptinTestingData;
 		
 		DataSourceDescription descriptinValidationData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_VALIDATION_DATA);
+						CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
 		validationData = descriptinValidationData;
 		
 		DataSourceDescription descriptinevaluationMethodData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_EVALUATION_METHOD);
+						CoreConstant.SlotContent.EVALUATION_METHOD.getSlotName());
 		evaluationMethod = (EvaluationMethod) descriptinevaluationMethodData.getDataProvider();
 	}
 
-	public ComputingAgent clone() {
-		
-		ComputingAgent comAgentColone = new ComputingAgent();
-		comAgentColone.setId(this.getId());
-		comAgentColone.setAgentType(this.getAgentType());
-		NewOptions optionsOnt = new NewOptions(this.options);
-		comAgentColone.setOptions(optionsOnt.clone().getOptions());
-		comAgentColone.setModel(this.model);
-		
-		comAgentColone.setDuration(this.duration.clone());
-		comAgentColone.setEvaluationMethod(this.evaluationMethod.clone());
-
-		if (this.trainingData != null) {
-			comAgentColone.setTrainingData(this.trainingData.clone());
-		}
-		if (this.testingData != null) {
-			comAgentColone.setTestingData(this.testingData.clone());
-		}
-		if (this.validationData != null) {
-			comAgentColone.setValidationData(this.validationData.clone());
-		}
-		return comAgentColone;
+	@Override
+	public ComputingAgent clone()
+	{
+		ComputingAgent result = (ComputingAgent) super.clone();
+		result.setId(this.getId());
+		result.setAgentType(this.getAgentType());
+		result.setOptions(CollectionUtils.deepCopy(options));
+		result.setModel(this.model);
+		result.setDuration(this.duration.clone());
+		result.setEvaluationMethod(this.evaluationMethod.clone());
+		result.setTrainingData(trainingData != null ? trainingData.clone() : null);
+		result.setTestingData(testingData != null ? testingData.clone() : null);
+		result.setValidationData(validationData != null ? validationData.clone() : null);
+		return result;
 	}
 	
 }

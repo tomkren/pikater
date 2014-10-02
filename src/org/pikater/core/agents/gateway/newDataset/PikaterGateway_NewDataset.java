@@ -6,7 +6,7 @@ import jade.content.onto.OntologyException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.gateway.Initiator;
 import org.pikater.core.agents.gateway.PikaterGateway_General;
@@ -25,7 +25,7 @@ public class PikaterGateway_NewDataset {
 			Ontology metadataOntology = MetadataOntology.getInstance();
 
 			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.METADATA_QUEEN, metadataOntology, newDataset);
+					CoreAgents.METADATA_QUEEN.getName(), metadataOntology, newDataset);
 
 			Initiator initiator = new Initiator(msg);
 			PikaterGateway_General.generalRequest(initiator);

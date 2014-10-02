@@ -22,20 +22,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.computation.planning.PlannerCommunicator;
+import org.pikater.core.agents.system.computation.planning.structures.CPUCore;
+import org.pikater.core.agents.system.computation.planning.structures.CPUCoresStructure;
+import org.pikater.core.agents.system.computation.planning.structures.DataFiles;
+import org.pikater.core.agents.system.computation.planning.structures.DataRegistry;
+import org.pikater.core.agents.system.computation.planning.structures.Lock;
+import org.pikater.core.agents.system.computation.planning.structures.SlaveServersStructure;
+import org.pikater.core.agents.system.computation.planning.structures.TaskToSolve;
+import org.pikater.core.agents.system.computation.planning.structures.WaitingTasksQueues;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.metadata.MetadataService;
-import org.pikater.core.agents.system.planner.PlannerCommunicator;
-import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
-import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
-import org.pikater.core.agents.system.planner.dataStructures.DataFiles;
-import org.pikater.core.agents.system.planner.dataStructures.DataRegistry;
-import org.pikater.core.agents.system.planner.dataStructures.Lock;
-import org.pikater.core.agents.system.planner.dataStructures.SlaveServersStructure;
-import org.pikater.core.agents.system.planner.dataStructures.TaskToSolve;
-import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
@@ -80,7 +80,7 @@ public class Agent_Planner extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		registerWithDF(AgentNames.PLANNER);
+		registerWithDF(CoreAgents.PLANNER.getName());
 
 		// waiting to start ManagerAgent
 		doWait(10000);
@@ -132,14 +132,14 @@ public class Agent_Planner extends PikaterAgent {
 					}
 					
 				} catch (OntologyException e) {
-					logError("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					logError("Codec problem: " + e.getMessage(), e);
+					logException("Codec problem: " + e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: "
+				logSevere("Failure responding to request: "
 						+ request.getContent());
 				return failure;
 			}
@@ -160,7 +160,7 @@ public class Agent_Planner extends PikaterAgent {
 		try {
 			lock.lock();
 		} catch (InterruptedException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 			waitingToStartComputingTasks.addTask(taskToSolve);
 			plan();
@@ -185,7 +185,7 @@ public class Agent_Planner extends PikaterAgent {
 		try {
 			lock.lock();
 		} catch (InterruptedException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 			waitingToStartComputingTasks.updateTaskPriority(
 					batchID, newBatchPriority);
@@ -211,9 +211,9 @@ public class Agent_Planner extends PikaterAgent {
 		try {
 			getContentManager().fillContent(msgSystemLoad, executeResult);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 		
 		return msgSystemLoad;
@@ -240,11 +240,14 @@ public class Agent_Planner extends PikaterAgent {
 			result = (Result) getContentManager().extractContent(
 					finishedTaskMsg);
 		} catch (UngroundedException e1) {
-			logError(e1.getMessage(), e1);
+			logException(e1.getMessage(), e1);
+			return;
 		} catch (CodecException e1) {
-			logError(e1.getMessage(), e1);
+			logException(e1.getMessage(), e1);
+			return;
 		} catch (OntologyException e1) {
-			logError(e1.getMessage(), e1);
+			logException(e1.getMessage(), e1);
+			return;
 		}
 		
 		Task finishedTask = (Task) result.getValue();
@@ -260,7 +263,7 @@ public class Agent_Planner extends PikaterAgent {
 		try {
 			lock.lock();
 		} catch (InterruptedException e1) {
-			logError(e1.getMessage(), e1);
+			logException(e1.getMessage(), e1);
 		}
 			cpuCoresStructure.setCPUCoreAsFree(cpuCore);
 			String node = nodeName(cpuCore.getAID());
@@ -279,9 +282,9 @@ public class Agent_Planner extends PikaterAgent {
 		try {
 			getContentManager().fillContent(msgToManager, executeResult);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 		
 		if (taskToSolve.isSendResultToManager()) {
@@ -295,7 +298,7 @@ public class Agent_Planner extends PikaterAgent {
 	}
 
 	private void saveDataToDB(Task task, String node) {
-		String dataManagerName = AgentNames.DATA_MANAGER;
+		String dataManagerName = CoreAgents.DATA_MANAGER.getName();
 		if (node != null) {
 			dataManagerName += "-";
 			dataManagerName += node;
@@ -306,10 +309,10 @@ public class Agent_Planner extends PikaterAgent {
 		int userID = task.getUserID();
 		
 		for (TaskOutput t : task.getOutput()) {
-			log("requesting save of data "+t.getName());
+			logInfo("requesting save of data "+t.getName());
 			SaveDataset sd = new SaveDataset();
 			sd.setUserID(task.getUserID());
-			String savedFileName = CoreConfiguration.DATA_FILES_PATH+System.getProperty("file.separator")+t.getName();
+			String savedFileName = CoreConfiguration.getDataFilesPath()+System.getProperty("file.separator")+t.getName();
 			sd.setSourceFile(savedFileName);			
 			sd.setDescription("Output from batch "+task.getBatchID()+ " ("+t.getType().toString()+")");
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
@@ -322,21 +325,21 @@ public class Agent_Planner extends PikaterAgent {
 				getContentManager().fillContent(request, new Action(dataManager, sd));
 				reply = FIPAService.doFipaRequestClient(this, request);
 				if (reply == null) {
-					logError("Failed to save output data in DB - reply not received."
+					logSevere("Failed to save output data in DB - reply not received."
 							 +" (Source file: "+savedFileName+")");
 					return;
 				}
 				computedDataID = (Integer)reply.getContentObject();
 			} catch (CodecException | OntologyException | FIPAException e) {
-				logError("Failed to save output data in DB", e);
+				logException("Failed to save output data in DB", e);
 				return;
 			} catch (UnreadableException e) {
-				logError("Failed to request metadata", e);
+				logException("Failed to request metadata", e);
 				return;
 			}
 			MetadataService.requestMetadataForComputedData(this,
 					computedDataID, userID);
-			log("saved output to DB: "+t.getName());
+			logInfo("saved output to DB: "+t.getName());
 		}
 	}
 
@@ -357,7 +360,7 @@ public class Agent_Planner extends PikaterAgent {
 		try {
 			lock.lock();
 		} catch (InterruptedException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 			this.waitingToStartComputingTasks.removeTasks(batchID);
 		lock.unlock();
@@ -395,7 +398,7 @@ public class Agent_Planner extends PikaterAgent {
 		
 		// add back to queue all not finished Tasks and restart function plan
 		if (! notFinishedTasks.isEmpty()) {
-			log("Some SlaveServer is dead");
+			logInfo("Some SlaveServer is dead");
 			waitingToStartComputingTasks.addTasks(notFinishedTasks);
 			waitingToStartComputingTasks.addTask(taskToSolve);
 			plan();
@@ -412,7 +415,7 @@ public class Agent_Planner extends PikaterAgent {
 
 		// add back to queue all needed Tasks and restart function plan
 		if (! dataLocations.existsAllDataFiles()) {
-			log("All Data doesn't exists");
+			logInfo("All Data doesn't exists");
 			Set<TaskToSolve> taskToRestart = dataLocations.tasksToRestart();
 			waitingToStartComputingTasks.addTasks(taskToRestart);
 			

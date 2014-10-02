@@ -22,18 +22,18 @@ import jade.proto.ContractNetInitiator;
 
 import java.util.Date;
 
-import org.pikater.core.AgentNames;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreAgents;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
+import org.pikater.core.agents.system.manager.ManagerAgentService;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standart;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standard;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
@@ -51,7 +51,7 @@ public class Agent_Duration extends PikaterAgent {
 
 	private static final long serialVersionUID = -5555820420884978956L;
     
-    private final String LOG_LR_DURATIONS_NAME="log_LR_durations";
+    private static final String LOG_LR_DURATIONS_NAME="log_LR_durations";
 	
     List<Duration> durations = new ArrayList<Duration>();
     
@@ -68,7 +68,7 @@ public class Agent_Duration extends PikaterAgent {
     
     @Override
     protected String getAgentType(){
-    	return AgentNames.DURATION;
+    	return CoreAgents.DURATION.getName();
     }
     
 	public List<Ontology> getOntologies() {
@@ -87,23 +87,22 @@ public class Agent_Duration extends PikaterAgent {
 
 		initDefault();
 		
-		registerWithDF(AgentNames.DURATION);
+		registerWithDF(CoreAgents.DURATION.getName());
     	
-		if (containsArgument(LOG_LR_DURATIONS_NAME)) {
-			if (isArgumentValueTrue(LOG_LR_DURATIONS_NAME)){
-				log_LR_durations = true;
-			}
-		}		    	
+		if (containsArgument(LOG_LR_DURATIONS_NAME) && isArgumentValueTrue(LOG_LR_DURATIONS_NAME))
+		{
+			log_LR_durations = true;
+		}
 		
         // create linear regression agent
         // send message to AgentManager to create an agent
         aid = ManagerAgentService.createAgent(
         		this,
         		Agent_WekaDurationLinearRegression.class.getName(),
-        		AgentNames.DURATION_SERVICE,
+        		CoreAgents.DURATION_SERVICE.getName(),
         		null);
         
-		this.durationDatasetName = CoreConstants.DURATION_DATASET_NAME;
+		this.durationDatasetName = CoreConstant.DURATION_DATASET_NAME;
 		this.durationDatasetHash = DataManagerService.
 				translateExternalFilename(this, -1, durationDatasetName);
 
@@ -168,9 +167,9 @@ public class Agent_Duration extends PikaterAgent {
                         return reply;
                     }
                 } catch (OntologyException e) {
-                	Agent_Duration.this.logError(e.getMessage(), e);
+                	Agent_Duration.this.logException(e.getMessage(), e);
                 } catch (CodecException e) {
-                	Agent_Duration.this.logError(e.getMessage(), e);
+                	Agent_Duration.this.logException(e.getMessage(), e);
                 }
 
                 ACLMessage failure = request.createReply();
@@ -198,9 +197,9 @@ public class Agent_Duration extends PikaterAgent {
 		
     	long t1 = -1;
 		long t2 = -1;
-		long d = -1; 
+		long d = duration;
 		
-    	while (duration > 0){   		    	
+    	while (d > 0){   		    	
     		try {
 	    		t1 = ((Duration)durations.get(i_d + i)).getStart().getTime();	    		
 	    		if (i_d + i + 1 > durations.size()-1){ 
@@ -212,24 +211,17 @@ public class Agent_Duration extends PikaterAgent {
 	    		}
 	    		long time_between_LRs = t2 - t1;
 	    		
-	    		// if (duration < t){
-	    		if (duration < time_between_LRs){
-	    			d = duration;
-	    		}
-	    		else {
-	    		// 	d = t;
-	    			d = Math.min(t2 - start, time_between_LRs); // osetreni prvniho useku        		
-	    		}
+	    		final long duration1 = duration < time_between_LRs ? duration : Math.min(t2 - start, time_between_LRs); // osetreni prvniho useku
 	    		
 	    		// System.out.println("d: " + d + " LR dur: " + ((Duration)durations.get(i_d + i)).getDuration());
 	    		number_of_LRs += (float)d / (float)(durations.get(i_d + i)).getDurationMiliseconds();
-	    		duration = duration - (int)Math.ceil(d);
+	    		d -= duration1;
 	    		
 	    		i++;
     		
 	    	}
 	    	catch (Exception e){
-	    		logError(e.getMessage(), e);
+	    		logException("Unexpected error occured:", e);
 	    	}
 
     	}
@@ -270,22 +262,22 @@ public class Agent_Duration extends PikaterAgent {
 		}
 		
 		protected void handleRefuse(ACLMessage refuse) {
-			log("Agent "+refuse.getSender().getName()+" refused.", 1);
+			logSevere("Agent "+refuse.getSender().getName()+" refused.");
 		}
 		
 		protected void handleFailure(ACLMessage failure) {
 			if (failure.getSender().equals(myAgent.getAMS())) {
 				// FAILURE notification from the JADE runtime: the receiver
 				// does not exist
-                log("Responder " + failure.getSender().getName() + " does not exist", 1);
+                logSevere("Responder " + failure.getSender().getName() + " does not exist");
 			}
 			else {
-                log("Agent "+failure.getSender().getName()+" failed", 1);
+                logSevere("Agent "+failure.getSender().getName()+" failed");
 			}
 		}
 				
 		protected void handleInform(ACLMessage inform) {
-            log("Agent "+inform.getSender().getName() + " successfully performed the requested action", 2);
+            logSevere("Agent "+inform.getSender().getName() + " successfully performed the requested action");
 																			
 			ContentElement content;
 			try {
@@ -305,25 +297,26 @@ public class Agent_Duration extends PikaterAgent {
 					
 					Duration d = new Duration();
 					for (Eval eval : ev) {
-						if(eval.getName().equals(CoreConstants.DURATION)){
+						if(eval.getName().equals(CoreConstant.DURATION))
+						{
 							d.setDurationMiliseconds((int)eval.getValue());
 						}
 					}
 					d.setStart(evaluation.getStart());
 					durations.add(d);
-					logError(d.getStart() + " - " + d.getDurationMiliseconds());
+					logSevere(d.getStart() + " - " + d.getDurationMiliseconds());
 					if (log_LR_durations){
 						// write duration into a file:
-						log(d.getStart() + " - " + d.getDurationMiliseconds());
+						logInfo(d.getStart() + " - " + d.getDurationMiliseconds());
 					}											
 					
 				}				
 			} catch (UngroundedException e) {
-				agent.logError(e.getMessage(), e);
+				agent.logException(e.getMessage(), e);
 			} catch (CodecException e) {
-				agent.logError(e.getMessage(), e);
+				agent.logException(e.getMessage(), e);
 			} catch (OntologyException e) {
-				agent.logError(e.getMessage(), e);
+				agent.logException(e.getMessage(), e);
 			}			
 		}			
 	} // end of call for proposal bahavior
@@ -355,7 +348,7 @@ public class Agent_Duration extends PikaterAgent {
 						durationDatasetHash,
 						DataTypes.TRAIN_DATA));
 		datas.addData(new Data("xxx", "xxx", DataTypes.TEST_DATA));
-		datas.setMode(CoreConstants.MODE_TRAIN_ONLY);
+		datas.setMode(CoreConstant.Mode.TRAIN_ONLY.name());
 		
 		Task task = new Task();
 		Id _id = new Id();
@@ -366,7 +359,7 @@ public class Agent_Duration extends PikaterAgent {
 		task.setDatas(datas);
 		
 		EvaluationMethod evaluationMethod = new EvaluationMethod();
-		evaluationMethod.setAgentType(Standart.class.getName());
+		evaluationMethod.setAgentType(Standard.class.getName());
 		
 		task.setEvaluationMethod(evaluationMethod);
 		
@@ -383,9 +376,9 @@ public class Agent_Duration extends PikaterAgent {
 			getContentManager().fillContent(cfp, a);
 
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 				
 		return cfp;

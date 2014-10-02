@@ -41,7 +41,7 @@ public class Agent_GASearch extends Agent_Search {
 	 */
 	private ArrayList<SearchSolution> population;
 	//fitness is the error rate - the lower, the better!
-	float fitnesses[];
+	float[] fitnesses;
 	int pop_size = 0;
 	double mut_prob = 0.0;
 	double xover_prob = 0.0;

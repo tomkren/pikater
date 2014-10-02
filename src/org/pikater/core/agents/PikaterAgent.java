@@ -21,61 +21,46 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
-import org.pikater.core.CoreConfiguration;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
+import org.pikater.core.agents.system.manager.ManagerAgentService;
 import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.TerminationOntology;
 import org.pikater.core.ontology.subtrees.agent.TerminateSelf;
-import org.pikater.shared.logging.core.Logger;
-import org.pikater.shared.logging.core.Severity;
-import org.pikater.shared.logging.core.Verbosity;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.pikater.shared.logging.core.AgentLogger;
 
 /**
  * User: Kuba
  * Date: 25.8.13
  * Time: 9:38
  */
-public abstract class PikaterAgent extends Agent {
+public abstract class PikaterAgent extends Agent
+{
 	private static final long serialVersionUID = 3427874121438630714L;
 
-	private final String DEFAULT_LOGGER_BEAN = "logger";
-	private final String LOGGER_BEAN_ARG = "logger";
-	private final String VERBOSITY_ARG = "verbosity";
 	protected Codec codec = new SLCodec();
-	protected String initBeansName = CoreConfiguration.BEANS_CONFIG_FILE;
-	transient protected ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
-	protected Verbosity verbosity = Verbosity.NORMAL;
-	transient private Logger logger;
+	private transient AgentLogger logger;
 	protected Arguments arguments = new Arguments(new HashMap<String, Argument>());
 	/** for the master node this is empty, slave node agents are named with this as the suffix */
 	protected String nodeName;
 	private boolean registeredToDF = false;
-
-	public Codec getCodec() {
-		return codec;
-	}
-
-	public abstract List<Ontology> getOntologies();
-
-	protected String getAgentType() {
-		return this.getClass().getName();
-	}
-
+	
+	/*
+	 * INIT INTERFACE
+	 */
+	
 	protected boolean registerWithDF() {
 		return registerWithDF(new ArrayList<String>());
 	}
 
-	protected boolean registerWithDF(String service) {
-		List<String> st = new ArrayList<String>();
-		st.add(service);
-		return registerWithDF(st);
+	protected boolean registerWithDF(String service)
+	{
+		return registerWithDF(Collections.singletonList(service));
 	}
 
 	protected boolean registerWithDF(List<String> ServiceTypes) {
@@ -114,58 +99,42 @@ public abstract class PikaterAgent extends Agent {
 			for (String st : ServiceTypes) {
 				sb.append(st).append(" ");
 			}
-			log(sb.toString());
+			logInfo(sb.toString());
 			return true;
 
 		} catch (FIPAException e) {
-			logError("Error registering with DF, :" + e);
+			logException("Error registering with DF:", e);
 			return false;
 
 		}
 	} // end registerWithDF
-
-	public String getArgumentValue(String argName) {
-		return arguments.getArgumentValue(argName);
-	}
-
-	public Boolean isArgumentValueTrue(String argName) {
-		return arguments.isArgumentValueTrue(argName);
-	}
-
-	public Boolean containsArgument(String argName) {
-		return arguments.containsArgument(argName);
-	}
-
-	protected void initLogging() {
-		String loggerBean = DEFAULT_LOGGER_BEAN;
-		if (containsArgument(LOGGER_BEAN_ARG)) {
-			loggerBean = getArgumentValue(LOGGER_BEAN_ARG);
-		}
-		logger = (Logger) context.getBean(loggerBean);
-		if (logger == null)
-			throw new RuntimeException("Failed to initialize logger bean");
-		if (containsArgument(VERBOSITY_ARG)) {
-			String verbosityValue = getArgumentValue(VERBOSITY_ARG);
-			switch (verbosityValue) {
-			case "0":
-				verbosity = Verbosity.NO_OUTPUT;
-				break;
-			case "1":
-				verbosity = Verbosity.MINIMAL;
-				break;
-			case "2":
-				verbosity = Verbosity.NORMAL;
-				break;
-			case "3":
-				verbosity = Verbosity.DETAILED;
-				break;
-			}
-		}
-	}
-
+	
 	public void initDefault() {
 		Object[] args = getArguments();
 		initDefault(args);
+	}
+	
+	public void initDefault(Object[] args) {
+		if (getName().contains("-")) {
+			nodeName = getLocalName().substring(getLocalName().lastIndexOf('-')+1);
+		}
+		parseArguments(args);
+		
+		initLogging();
+		logInfo("is alive...");
+		getContentManager().registerLanguage(getCodec());
+		
+		for (Ontology ontologyI : getOntologies() ) {
+			getContentManager().registerOntology(ontologyI);
+		}
+		getContentManager().registerOntology(TerminationOntology.getInstance());
+		
+		addTerminationBehavior();
+	}
+	
+	protected void initLogging()
+	{
+		logger = new AgentLogger(this);
 	}
 	
 	private void addTerminationBehavior() {
@@ -204,26 +173,53 @@ public abstract class PikaterAgent extends Agent {
 			}
 		});
 	}
+	
+	/*
+	 * TERMINATION INTERFACE
+	 */
+	
+	public boolean killAgent(String agentName){
+		ManagerAgentService communicator = new ManagerAgentService();
+		return communicator.killAgent(this, agentName);
+	}
+	
+	public void terminate() {
+		if (registeredToDF) {
+			try {
+				logInfo("Deregistering from DF");
+				DFService.deregister(this);
+			} catch (FIPAException e) {
+				logException("Failed to deregister from DF", e);
+			}
+		}
+		logInfo("Terminating");
+		doDelete();
+	}
+	
+	/*
+	 * MISCELLANEOUS INTERFACE
+	 */
+	
+	public Codec getCodec() {
+		return codec;
+	}
 
-	public void initDefault(Object[] args) {
-		if (context == null) {
-			context = new ClassPathXmlApplicationContext(initBeansName);
-		}
-		if (getName().contains("-")) {
-			nodeName = getLocalName().substring(getLocalName().lastIndexOf('-')+1);
-		}
-		parseArguments(args);
-		initLogging();
+	public abstract List<Ontology> getOntologies();
 
-		log("is alive...", 1);
-		getContentManager().registerLanguage(getCodec());
-		
-		for (Ontology ontologyI : getOntologies() ) {
-			getContentManager().registerOntology(ontologyI);
-		}
-		getContentManager().registerOntology(TerminationOntology.getInstance());
-		
-		addTerminationBehavior();
+	protected String getAgentType() {
+		return this.getClass().getName();
+	}
+
+	public String getArgumentValue(String argName) {
+		return arguments.getArgumentValue(argName);
+	}
+
+	public Boolean isArgumentValueTrue(String argName) {
+		return arguments.isArgumentValueTrue(argName);
+	}
+
+	public Boolean containsArgument(String argName) {
+		return arguments.containsArgument(argName);
 	}
 
 	private void parseArguments(Object[] args) {
@@ -242,32 +238,6 @@ public abstract class PikaterAgent extends Agent {
 		}
 	}
 
-	public void log(String text) {
-		log(text, Verbosity.NORMAL);
-	}
-
-	public void log(String text, Verbosity level) {
-		log(text, level.ordinal());
-	}
-
-	public void log(String text, int level) {
-		if (verbosity.ordinal() >= level) {
-			logger.log(getLocalName(), text);
-		}
-	}
-
-	public void logError(String errorDescription) {
-		logger.logError(getLocalName(), errorDescription);
-	}
-
-	public void logError(String errorDescription, Exception exception) {
-		logger.logError(getLocalName()+": "+errorDescription, exception);
-	}
-	
-	public void logError(String errorDescription, Severity severity) {
-		logger.logError(getLocalName(), errorDescription, severity);
-	}
-	
 	public boolean isSameNode(AID id) {
 		return ((nodeName == null || nodeName.isEmpty()) && !id.getLocalName().contains("-")) ||
 				nodeName != null && id.getLocalName().endsWith("-" + nodeName);
@@ -285,21 +255,27 @@ public abstract class PikaterAgent extends Agent {
 		return createAgent(agent.getType(), agent.getName(), null ); // TODO agent.getOptions ... predelat optiony na argumenty
 	}
 	
-	public boolean killAgent(String agentName){
-		ManagerAgentService communicator = new ManagerAgentService();
-		return communicator.killAgent(this, agentName);
+	/*
+	 * LOGGING INTERFACE
+	 */
+	
+	public void logInfo(String text)
+	{
+		logger.log(Level.INFO, text);
 	}
 	
-	public void terminate() {
-		if (registeredToDF) {
-			try {
-				log("Deregistering from DF");
-				DFService.deregister(this);
-			} catch (FIPAException e) {
-				logError("Failed to deregister from DF", e);
-			}
-		}
-		log("Terminating");
-		doDelete();
+	public void logWarning(String message)
+	{
+		logger.log(Level.WARNING, message);
+	}
+	
+	public void logSevere(String message)
+	{
+		logger.log(Level.SEVERE, message);
+	}
+	
+	public void logException(String message, Throwable t)
+	{
+		logger.logThrowable(message, t);
 	}
 }

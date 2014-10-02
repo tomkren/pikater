@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.core.ontology.subtrees.newOption.base.IMergeable;
 import org.pikater.core.ontology.subtrees.newOption.base.IWekaItem;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.util.ICloneable;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -73,29 +74,29 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 		
-		String xml = xstream.toXML(this);
-
-		return xml;
+		return xstream.toXML(this);
 	}
 	public static NewOptions importXML(String xml) {
 
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 
-		NewOptions optionsNew = (NewOptions) xstream
-				.fromXML(xml);
-
-		return optionsNew;
+		return (NewOptions) xstream.fromXML(xml);
 	}
     
     @Override
     public NewOptions clone()
     {
-    	NewOptions result = new NewOptions();
-    	for (NewOption optionI : options)
-    	{
-    		result.addOption(optionI.clone());
-    	}
+    	NewOptions result;
+		try
+		{
+			result = (NewOptions) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+    	result.setOptions(CollectionUtils.deepCopy(options));
     	return result;
     }
     @Override

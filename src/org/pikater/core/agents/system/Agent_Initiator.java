@@ -6,7 +6,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.configuration.AgentConfiguration;
@@ -24,7 +24,7 @@ public class Agent_Initiator extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
 
-    String fileName = CoreConfiguration.CONFIGURATION_MASTER_FILE;
+    private String fileName = null;
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -37,9 +37,9 @@ public class Agent_Initiator extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-        registerWithDF(AgentNames.INITIATOR);
+        registerWithDF(CoreAgents.INITIATOR.getName());
 
-		log("Agent " + getName() + " configuration " + fileName);
+		logInfo("Agent " + getName() + " configuration " + fileName);
 
 		// read agents from configuration
 		try {
@@ -53,11 +53,11 @@ public class Agent_Initiator extends PikaterAgent {
 				Object[] arguments = processArgs(agentConfiguration.getArguments().toArray());
 				Boolean creationSuccessful = this.createAgent(agentConfiguration.getAgentType(), agentConfiguration.getAgentName(), arguments);
 				if (!creationSuccessful) {
-					logError("Creation of agent " + agentConfiguration.getAgentName() + " failed.");
+					logSevere("Creation of agent " + agentConfiguration.getAgentName() + " failed.");
 				}
 			}
 		} catch (Exception e) {
-			this.logError(e.getMessage(), e);
+			this.logException("Unexpected error occured:", e);
 		}
 
 		addBehaviour(new TickerBehaviour(this, 60000) {
@@ -71,7 +71,7 @@ public class Agent_Initiator extends PikaterAgent {
 
 			protected void onTick() {
 				cal = Calendar.getInstance();
-				System.out.println(myAgent.getLocalName() + ": tick=" + getTickCount() + " time=" + sdf.format(cal.getTime()));
+				logInfo("tick=" + getTickCount() + " time=" + sdf.format(cal.getTime()));
 			}
 		});
 	}
@@ -80,20 +80,20 @@ public class Agent_Initiator extends PikaterAgent {
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
-		if (nodeName != null && !nodeName.isEmpty()) {
-			name = name + "-" + nodeName;
-		}
-
 		try {
-			AgentController agent = container.createNewAgent(name, type, args);
+			AgentController agent = container.createNewAgent(
+					(nodeName != null) && !nodeName.isEmpty() ? name + "-" + nodeName : name,
+					type,
+					args
+			);
 			agent.start();
 			// provide agent time to register with DF etc.
 			doWait(300);
+			return true;
 		} catch (ControllerException e) {
-			logError("Exception while adding agent", e);
+			logException("Exception while adding agent", e);
 			return false;
 		}
-		return true;
 	}
 
 	public Object[] processArgs(Object[] args) {
@@ -112,14 +112,20 @@ public class Agent_Initiator extends PikaterAgent {
 	@Override
 	public void initDefault() {
 		Object[] args = getArguments();
-
-		if (args != null) {
-			if (args.length > 0) {
+		if (args != null)
+		{
+			if (args.length > 0)
+			{
 				fileName = (String) args[0];
 			} 
-			if (args.length > 1) {
+			if (args.length > 1)
+			{
 				nodeName = (String) args[1];
 			}
+		}
+		if(fileName == null)
+		{
+			fileName = CoreConfiguration.getCoreMasterConfigurationFilepath();
 		}
 
 		initLogging();

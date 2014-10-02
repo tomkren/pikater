@@ -54,9 +54,9 @@ public class Metadata implements Concept {
 		for (int i = getAttributeMetadataList().size() - 1; i >= 0; i--) {
 			AttributeMetadata att = (AttributeMetadata) getAttributeMetadataList()
 					.get(i);
-			if (!att.isIsTarget()) {
-				if (att instanceof CategoricalAttributeMetadata)
-					count++;
+			if (!att.isIsTarget() && (att instanceof CategoricalAttributeMetadata))
+			{
+				count++;
 			}
 		}
 		return count;
@@ -67,9 +67,9 @@ public class Metadata implements Concept {
 		for (int i = getAttributeMetadataList().size() - 1; i >= 0; i--) {
 			AttributeMetadata att = (AttributeMetadata) getAttributeMetadataList()
 					.get(i);
-			if (!att.isIsTarget()) {
-				if (att instanceof IntegerAttributeMetadata)
-					count++;
+			if (!att.isIsTarget() && (att instanceof IntegerAttributeMetadata))
+			{
+				count++;
 			}
 		}
 		return count;
@@ -77,10 +77,11 @@ public class Metadata implements Concept {
 
 	public int getNumberOfReal() {
 		int count = 0;
-		for (AttributeMetadata att : getAttributeMetadataList()) {
-			if (!att.isIsTarget()) {
-				if (att instanceof RealAttributeMetadata)
-					count++;
+		for (AttributeMetadata att : getAttributeMetadataList())
+		{
+			if (!att.isIsTarget() && (att instanceof RealAttributeMetadata))
+			{
+				count++;
 			}
 		}
 		return count;

@@ -20,7 +20,7 @@ import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
+import org.pikater.core.agents.system.manager.ManagerAgentService;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -115,7 +115,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                 if (a.getAction() instanceof Recommend) {
  
 					if (finished()){
-						log("Recommendation finished.");
+						logInfo("Recommendation finished.");
 						reply.setPerformative(ACLMessage.INFORM);					
 						reply.setContent("finished");
 						return reply;
@@ -127,7 +127,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                     // merge options with .opt file options
                     myAgentOntology.setOptions(getParameters());
 
-                    log("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()), 2);
+                    logSevere("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()));
 
                     Datas datas = rec.getDatas();
                     
@@ -174,15 +174,15 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     				try {
     					getContentManager().fillContent(reply, result);
     				} catch (CodecException ce) {
-    					logError(ce.getMessage(), ce);
+    					logException(ce.getMessage(), ce);
     				} catch (OntologyException oe) {
-    					logError(oe.getMessage(), oe);
+    					logException(oe.getMessage(), oe);
     				}    				
         		}
             } catch (OntologyException e) {
-            	logError(e.getMessage(), e);
+            	logException(e.getMessage(), e);
             } catch (CodecException e) {
-            	logError(e.getMessage(), e);
+            	logException(e.getMessage(), e);
 			}
 
             return reply;
@@ -225,9 +225,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	public List<NewOption> getAgentOptions(String agentType) {
 		
 		AgentInfo agentInfo = DataManagerService.getAgentInfo(this, agentType);
-		NewOptions optionsOnt = agentInfo.getOptions();
-
-		return optionsOnt.getOptions();
+		return agentInfo.getOptions().getOptions();
 	}
 	
 /*
@@ -307,8 +305,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 */
 	
 	public AID createAgent(String type, String name, Arguments arguments) {
-        AID aid=ManagerAgentService.createAgent(this,type,name,arguments);
-        return aid;
+        return ManagerAgentService.createAgent(this,type,name,arguments);
 	}
 	
 	protected List<NewOption> getParameters(){
@@ -317,4 +314,36 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	
+	protected double d(double v1, double v2, double min, double max)
+	{
+        // map the value to the 0,1 interval; 0 - the same, 1 - the most
+        // different
+
+        return Math.abs(v1 - v2) / (max - min);
+    }
+	
+	protected int dCategory(String v1, String v2)
+	{
+		if((v1 == null) && (v2 == null))
+		{
+			return 0;
+		}
+		else if((v1 == null) || (v2 == null))
+		{
+			return 1;
+		}
+		else
+		{
+			return v1.equals(v2) ? 0 : 1;
+		}
+	}
+	
+	protected int dBoolean(Boolean v1, Boolean v2)
+	{
+		if (v1 == v2)
+		{
+			return 0;
+		}
+		return 1;
+	} 
 }

@@ -1,5 +1,6 @@
 package org.pikater.shared.database.jpa.daos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -30,7 +31,7 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 	}
 	
 	public boolean fileExists(String internalFilename){
-		return getByInternalFilename(internalFilename).size()>0;
+		return !getByInternalFilename(internalFilename).isEmpty();
 	}
 	
 	public List<JPAFilemapping> getByExternalFilename(String externalFilename) {
@@ -46,7 +47,7 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 		if(user!=null){
 			return getByTypedNamedQuery("FileMapping.getByUser", "user", user);
 		}else{
-			return null;
+			return new ArrayList<JPAFilemapping>();
 		}
 	}
 	
@@ -60,7 +61,7 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 				"internalFilename",
 				internalFilename);
 		}else{
-			return null;
+			return new ArrayList<JPAFilemapping>();
 		}
 	}
 	
@@ -74,7 +75,7 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 				"externalFilename",
 				externalFilename);
 		}else{
-			return null;
+			return new ArrayList<JPAFilemapping>();
 		}
 	}
 }

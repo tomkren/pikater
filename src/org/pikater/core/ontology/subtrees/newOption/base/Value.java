@@ -8,8 +8,9 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.util.ICloneable;
 
-public class Value implements Concept, IValidated
+public class Value implements Concept, IValidated, ICloneable
 {
 	private static final long serialVersionUID = 4778874898115080831L;
 
@@ -36,8 +37,7 @@ public class Value implements Concept, IValidated
 	 */
 	public Value(IValueData defaultValue)
 	{
-		this.currentValue = defaultValue.clone();
-		this.type = new ValueType(defaultValue);
+		this(new ValueType(defaultValue));
 	}
 	/**
 	 * Value type is inferred from the arguments.
@@ -46,8 +46,7 @@ public class Value implements Concept, IValidated
 	 */
 	public Value(IValueData defaultValue, RangeRestriction rangeRestriction)
 	{
-		this.currentValue = defaultValue.clone();
-		this.type = new ValueType(defaultValue, rangeRestriction);
+		this(new ValueType(defaultValue, rangeRestriction));
 	}
 	/**
 	 * Value type is inferred from the arguments.
@@ -56,18 +55,18 @@ public class Value implements Concept, IValidated
 	 */
 	public Value(IValueData defaultValue, SetRestriction setRestriction)
 	{
-		this.currentValue = defaultValue.clone();
-		this.type = new ValueType(defaultValue, setRestriction);
+		this(new ValueType(defaultValue, setRestriction));
 	}
 	/**
-	 * Copy-constructor for internal use. 
+	 * Full constructor. Always to be used. 
+	 * @param type
 	 */
-	private Value(ValueType type, IValueData currentValue)
+	private Value(ValueType type)
 	{
-		this.currentValue = currentValue;
 		this.type = type;
+		this.currentValue = this.type.getDefaultValue().clone();
 	}
-
+	
 	public IValueData getCurrentValue()
 	{
 		return currentValue;
@@ -78,14 +77,7 @@ public class Value implements Concept, IValidated
 	 */
 	public void setCurrentValue(IValueData currentValue)
 	{
-		if(currentValue == null)
-		{
-			this.currentValue = getType().getDefaultValue().clone();
-		}
-		else
-		{
-			this.currentValue = currentValue;
-		}
+		this.currentValue = currentValue == null ? type.getDefaultValue().clone() : currentValue;
 	}
 	public ValueType getType()
 	{
@@ -143,6 +135,16 @@ public class Value implements Concept, IValidated
 	@Override
 	public Value clone()
 	{
-		return new Value(type.clone(), currentValue.clone());
+		Value result;
+		try
+		{
+			result = (Value) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setType(type.clone());
+		return result;
 	}
 }

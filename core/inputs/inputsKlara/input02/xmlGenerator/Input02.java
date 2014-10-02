@@ -1,7 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -62,7 +62,7 @@ public final class Input02 {
 
         //Set error provider
         ErrorSourceDescription errorDescription = new ErrorSourceDescription();
-        errorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
+        errorDescription.setOutputType(CoreConstant.SlotContent.ERRORS.getSlotName());
         errorDescription.setProvider(comAgent);
         complex.addError(errorDescription);
 
@@ -70,7 +70,7 @@ public final class Input02 {
         // Note that the data provider is complex.
         // To save each iteration the data source would have to be comAgent
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setOutputType(CoreConstants.SLOT_DATA);
+		computingDataSource.setOutputType(CoreConstant.SlotContent.DATA.getSlotName());
 		computingDataSource.setDataProvider(complex);
 
         FileDataSaver saver = new FileDataSaver();
@@ -91,7 +91,7 @@ public final class Input02 {
 
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input02"
+		String fileName = CoreConfiguration.getKlarasInputsPath() + "input02"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 

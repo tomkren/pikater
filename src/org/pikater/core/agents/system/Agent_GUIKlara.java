@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -48,8 +48,6 @@ public class Agent_GUIKlara extends PikaterAgent {
 	private static final boolean DEBUG_MODE = true;
 	private BufferedReader bufferedConsole=null;
 
-	private String filePath = CoreConfiguration.INPUTS_KLARA_PATH;
-
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -70,7 +68,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-		registerWithDF(AgentNames.GUI_KLARA_AGENT);
+		registerWithDF(CoreAgents.GUI_KLARA_AGENT.getName());
 		
 		bufferedConsole=new BufferedReader(new InputStreamReader(System.in));
 
@@ -79,11 +77,11 @@ public class Agent_GUIKlara extends PikaterAgent {
 			System.out.println("GUIKlara agent starts.");
 			
 			try {
-				runFile(filePath + "input.xml");
+				runFile(CoreConfiguration.getKlarasInputsPath() + "input.xml");
 				
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found.");
-				logError("File not found.", e);
+				logException("File not found.", e);
 			}
 			
 		} else {
@@ -91,9 +89,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 			try {
 				runAutomat();
 			} catch (IOException e) {
-				logError("Error with console in KlaraGUI", e);
+				logException("Error with console in KlaraGUI", e);
 			} catch (Exception e) {
-				logError("General error...", e);
+				logException("General error...", e);
 			}
 			
 		}
@@ -122,7 +120,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				doDelete();
 				
 			} catch (FIPAException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -139,17 +137,17 @@ public class Agent_GUIKlara extends PikaterAgent {
 		System.out.println(" I welcome you Klara !!!");
 
 		String defaultFileName = "input.xml";
-		File testFile = new File(filePath + defaultFileName);
+		File testFile = new File(CoreConfiguration.getKlarasInputsPath() + defaultFileName);
 
 		if(testFile.exists() && !testFile.isDirectory()) {
 
 			System.out.println(" Do you wish to run experiment from file "
-					+ filePath + defaultFileName + " ? (y/n)");
+					+ CoreConfiguration.getKlarasInputsPath() + defaultFileName + " ? (y/n)");
 			System.out.print(">");
 
 			if (bufferedConsole.readLine().equals("y")) {
 				try {
-					runFile(filePath + defaultFileName);
+					runFile(CoreConfiguration.getKlarasInputsPath() + defaultFileName);
 					return;
 				} catch (FileNotFoundException e) {
 					System.out.println(" File not found.");
@@ -179,7 +177,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 				break;
 			} else if(input.startsWith("--dura")){
 				printDurationAgentResponse();
-			} else if (input.startsWith("--run")) {
+			} else if (input.startsWith("--run"))
+			{
+				// TODO: what about this?
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
 			} else if (input.startsWith("--kill")) {
@@ -206,7 +206,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			Ontology taskOntology = TaskOntology.getInstance();
 
 			try {
-				AID planner = new AID(AgentNames.PLANNER, false);
+				AID planner = new AID(CoreAgents.PLANNER.getName(), false);
 
 				ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 				request.addReceiver(planner);
@@ -234,7 +234,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 	private void printDurationAgentResponse() {
 		Duration dur = DurationService.getDuration(this, new GetDuration());
-		log("Last Duration info - Start "+(dur.getStart()!=null? dur.getStart().toString() : "no data  ")+":"+ dur.getDurationMiliseconds()+" ms , LR: "+dur.getLR_duration());
+		logInfo("Last Duration info - Start "+(dur.getStart()!=null? dur.getStart().toString() : "no data  ")+":"+ dur.getDurationMiliseconds()+" ms , LR: "+dur.getLR_duration());
 	}
 
 	private void runFile(String fileName) throws FileNotFoundException {
@@ -251,10 +251,10 @@ public class Agent_GUIKlara extends PikaterAgent {
 		try {
 			Thread.sleep(9000);
 		} catch (InterruptedException e1) {
-			logError(e1.getMessage(), e1);
+			logException(e1.getMessage(), e1);
 		}
 
-        AID receiver = new AID(AgentNames.GUI_AGENTS_COMMUNICATOR, false);
+        AID receiver = new AID(CoreAgents.GUI_AGENTS_COMMUNICATOR.getName(), false);
         
         Ontology ontology = BatchOntology.getInstance();
 
@@ -270,14 +270,14 @@ public class Agent_GUIKlara extends PikaterAgent {
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
 			String replyText = (reply!=null)?reply.getContent():"null";
 			
-			log("Reply: " + replyText);
+			logInfo("Reply: " + replyText);
 			
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (FIPAException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 	}
@@ -312,10 +312,10 @@ public class Agent_GUIKlara extends PikaterAgent {
 				System.out.println("Do you want to convert the document? (y/n)\nDOCUMENT WIHT FOLLOWING PATH WILL BE OVERWRITTEN: "+newPath);
 			}
 			String answer=bufferedConsole.readLine();
-			if(answer.toLowerCase().equals("y")){
+			if(answer != null && answer.equalsIgnoreCase("y")){
 				System.out.println("Do you want to define any header file? (path / -)");
 				answer=bufferedConsole.readLine();
-				if(!answer.equals("-")){
+				if(answer != null && !answer.equals("-")){
 					String headerPath=answer;
 					if(inputType==0){
 						DataSetConverter.xlsToArff(new File(headerPath),new File(path), new File(newPath));
@@ -372,7 +372,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	
 	private int sendRequestSaveDataSet(String filename, int userID, String description){
 		try {
-        	AID dataManager = new AID(AgentNames.DATA_MANAGER, false);
+        	AID dataManager = new AID(CoreAgents.DATA_MANAGER.getName(), false);
     		Ontology ontology = DataOntology.getInstance();
     		SaveDataset sd = new SaveDataset();
     		sd.setUserID(userID);
@@ -386,21 +386,21 @@ public class Agent_GUIKlara extends PikaterAgent {
            
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
             if (reply == null){
-                logError("Reply not received.");
+                logSevere("Reply not received.");
                 return -1;
             }
             else{
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+                logInfo("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
             	return (Integer)reply.getContentObject();
             }
         } catch (CodecException e) {
-            logError("Codec error occurred: "+e.getMessage(), e);
+            logException("Codec error occurred: "+e.getMessage(), e);
         } catch (OntologyException e) {
-            logError("Ontology error occurred: "+e.getMessage(), e);
+            logException("Ontology error occurred: "+e.getMessage(), e);
         } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage(), e);
+            logException("FIPA error occurred: "+e.getMessage(), e);
         } catch (UnreadableException e) {
-        	logError(e.getMessage(), e);
+        	logException(e.getMessage(), e);
 		}
 		return -1;
 	}

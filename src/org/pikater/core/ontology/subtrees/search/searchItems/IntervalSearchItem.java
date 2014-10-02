@@ -72,7 +72,7 @@ public class IntervalSearchItem extends SearchItem {
             int x = getNumber_of_values_to_try();
             int intMin=((IntegerValue)min).getValue();
             int intMax=((IntegerValue)max).getValue();
-            int range = (intMax	-  intMin + 1);
+            int range = intMax - intMin + 1;
             // if there is less possibilities than x -> change x
             if (range < x) {
                 x = range;

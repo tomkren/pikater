@@ -11,7 +11,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -47,7 +47,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 			return false;
 		}
 		
-		String path = CoreConfiguration.DATA_FILES_PATH + relativeFileName;
+		String path = CoreConfiguration.getDataFilesPath() + relativeFileName;
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
@@ -55,17 +55,16 @@ public class Agent_ARFFReader extends PikaterAgent {
 			reader.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
-			logError("Reading of data from file " + path + " failed.");
+			logException("Reading of data from file " + path + " failed.", e);
 			return false;
 		}
-		log("Reading of data from file " + path + " succesful.");
+		logInfo("Reading of data from file " + path + " succesful.");
 		return true;
 	}
 
 	@Override
 	protected String getAgentType() {
-		return AgentNames.ARFF_READER;
+		return CoreAgents.ARFF_READER.getName();
 	}
 
 	@Override
@@ -103,10 +102,10 @@ public class Agent_ARFFReader extends PikaterAgent {
 				Attribute a = data.attribute(i);
 				//AttributeStats as = data.attributeStats(i);
 
-				if (i != (data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1)) {
-					if (!types.contains(a.type())) {
-						types.add(a.type());
-					}
+				int index = data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1; 
+				if ((i != index) && !types.contains(a.type()))
+				{
+					types.add(a.type());
 				}
 			}
 
@@ -122,12 +121,12 @@ public class Agent_ARFFReader extends PikaterAgent {
 			try {
 				getContentManager().fillContent(msgOut, result);
 			} catch (CodecException ce) {
-				logError(ce.getMessage(), ce);
+				logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				logError(oe.getMessage(), oe);
+				logException(oe.getMessage(), oe);
 			}
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
+			logException("Unexpected error message:", e);
 		}
 		return msgOut;
 	} // end SendData
@@ -158,9 +157,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 					return sendData(request);
 				}
 			} catch (CodecException ce) {
-				agent.logError(ce.getMessage(), ce);
+				agent.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError(oe.getMessage(), oe);
+				agent.logException(oe.getMessage(), oe);
 			}
 
 			ACLMessage notUnderstood = request.createReply();

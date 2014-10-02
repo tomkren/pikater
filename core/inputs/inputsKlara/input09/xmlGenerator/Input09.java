@@ -1,7 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
@@ -45,12 +45,12 @@ public final class Input09 {
 		
 		DataSourceDescription dataSourceSunny = new DataSourceDescription();
 		dataSourceSunny.setOutputType("sunnyOutput");
-		dataSourceSunny.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+		dataSourceSunny.setInputType(CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
 		dataSourceSunny.setDataProvider(processing);
 
 		DataSourceDescription dataSourceRainy = new DataSourceDescription();
 		dataSourceRainy.setOutputType("rainyOutput");
-		dataSourceRainy.setInputType(CoreConstants.SLOT_TESTING_DATA);
+		dataSourceRainy.setInputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
 		dataSourceRainy.setDataProvider(processing);
 						
         //Create validation method for a computing agent
@@ -96,7 +96,7 @@ public final class Input09 {
 
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input09"
+		String fileName = CoreConfiguration.getKlarasInputsPath() + "input09"
 				+ System.getProperty("file.separator") + "input.xml";
 
 		comDescription.exportXML(fileName);

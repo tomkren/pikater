@@ -84,7 +84,7 @@ public final class Input07 {
 
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input07"
+		String fileName = CoreConfiguration.getKlarasInputsPath() + "input07"
 				+ System.getProperty("file.separator") + "input.xml";
 
 		comDescription.exportXML(fileName);

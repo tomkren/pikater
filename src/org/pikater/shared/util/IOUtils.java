@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class IOUtils
 {
@@ -100,7 +100,7 @@ public class IOUtils
 		}
 		catch (IOException e)
 		{
-			PikaterLogger.logThrowable(String.format("Could not read the '%s' file because of the below IO error:", filePath), e);
+			PikaterDBLogger.logThrowable(String.format("Could not read the '%s' file because of the below IO error:", filePath), e);
 			return null;
 		}
 	}
@@ -113,7 +113,7 @@ public class IOUtils
 		}
 		catch (IOException e)
 		{
-			PikaterLogger.logThrowable(String.format("Could not write given content to file '%s' because of the below IO error:", filePath), e);
+			PikaterDBLogger.logThrowable(String.format("Could not write given content to file '%s' because of the below IO error:", filePath), e);
 		}
 	}
 	
@@ -163,10 +163,15 @@ public class IOUtils
 	    {
 	    	file = new File(directory + System.getProperty("file.separator") + prefix + "_tmpfile_" + 
 	    			System.currentTimeMillis() + extension);
-	    	file.mkdirs(); 
-	    	file.createNewFile();
-	    	file.deleteOnExit();
-	    	return file;
+	    	if(file.mkdirs() && file.createNewFile())
+	    	{
+	    		file.deleteOnExit();
+		    	return file;
+	    	}
+	    	else
+	    	{
+	    		throw new IllegalStateException("Temporary file could not be created.");
+	    	}
 	    }
 	    catch (IOException e)
 	    {

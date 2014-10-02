@@ -16,7 +16,7 @@ import org.pikater.shared.database.security.bcrypt.BCrypt;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class UserDAO extends AbstractDAO<JPAUser>{
 	
@@ -99,7 +99,7 @@ public class UserDAO extends AbstractDAO<JPAUser>{
 					{
 						sb.append(String.format("- ID: %d", user.getId()));
 					}
-					PikaterLogger.logThrowable(sb.toString(), new IllegalStateException());
+					PikaterDBLogger.logThrowable(sb.toString(), new IllegalStateException());
 					return null;
 			}
 		}

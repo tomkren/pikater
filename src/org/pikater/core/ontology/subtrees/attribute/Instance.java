@@ -41,26 +41,30 @@ public class Instance implements Concept {
 		values.remove(values.size() - 1);
 		values.add(v);
 	}
+	
+	private boolean isValueMissing(int index)
+	{
+		return getMissing().get(index);
+	}
 
 	// ---------------------
 	public String toString(DataInstances _insts) {
 		if (values == null) {
 			return "\n";
 		}
-		StringBuffer text = new StringBuffer();
+		StringBuilder text = new StringBuilder();
 
 		int i = 0;
 
 		for (int indexI = 0; indexI < values.size(); indexI++) {
 
-			boolean missing = getMissing().get(indexI);
 			double value = getValues().get(indexI);
 			Attribute attr = _insts.getAttributes().get(indexI);
 			
 			if (i > 0) {
 				text.append(',');
 			}
-			if (missing) {
+			if (isValueMissing(indexI)) {
 				text.append('?');
 			} else {
 				text.append(attr.stringValue(value));

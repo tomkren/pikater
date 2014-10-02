@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.surrogate.ModelInputNormalizer;
+
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -66,14 +67,15 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
     }
     
     @Override
-    public Object clone() {
-        
-        SearchItemIndividual newSI = (SearchItemIndividual)super.clone();
+    public SearchItemIndividual clone()
+    {
+        SearchItemIndividual newSI = (SearchItemIndividual) super.clone();
         
         newSI.schema = schema;
         newSI.items = new IValueData[items.length];
         
-        for (int i = 0; i < items.length; i++) {
+        for (int i = 0; i < items.length; i++)
+        {
             newSI.items[i] = items[i].clone();
         }
         
@@ -132,31 +134,33 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         Instance inst = new Instance(items.length + 1);
         inst.setDataset(emptyDatasetFromSchema());
         
-        for (int i = 0; i < items.length; i++) {
-            if (schema[i] instanceof SetSItem) {
+        for (int i = 0; i < items.length; i++)
+        {
+            if (schema[i] instanceof SetSItem)
+            {
                 inst.setValue(i, items[i].toString());
                 continue;
             }
             else
             {
                 IntervalSearchItem searchItem=(IntervalSearchItem)schema[i];
-
-                if (searchItem.getMin() instanceof BooleanValue) {
-                    inst.setValue(i, items[i].equals("False") ? 0.0 : 1.0);
+                if (searchItem.getMin() instanceof BooleanValue)
+                {
+                    inst.setValue(i, items[i].hackValue().equals("False") ? 0.0 : 1.0);
                     continue;
                 }
-                if (searchItem.getMin() instanceof IntegerValue) {
+                else if (searchItem.getMin() instanceof IntegerValue)
+                {
                     inst.setValue(i, norm.normalizeInt(items[i], (IntervalSearchItem)schema[i]));
                     continue;
                 }
-                if (searchItem.getMin() instanceof FloatValue) {
+                else if (searchItem.getMin() instanceof FloatValue)
+                {
                     inst.setValue(i, norm.normalizeFloat(items[i], (IntervalSearchItem)schema[i]));
                 }
             }
-
         }
         
         return inst;
     }
-    
 }

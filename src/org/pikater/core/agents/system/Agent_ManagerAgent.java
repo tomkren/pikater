@@ -16,7 +16,7 @@ import jade.wrapper.StaleProxyException;
 
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentRequestResponder;
+import org.pikater.core.agents.system.manager.ManagerAgentRequestResponder;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;
@@ -64,13 +64,13 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		File data = new File(CoreConfiguration.SAVED_PATH);
+		File data = new File(CoreConfiguration.getSavedResultsPath());
 		if (!data.exists()) {
-			log("Creating directory saved");
+			logInfo("Creating directory saved");
 			if (data.mkdirs()) {
-				log("Succesfully created directory saved");
+				logInfo("Succesfully created directory saved");
 			} else {
-				logError("Error creating directory saved");
+				logSevere("Error creating directory saved");
 			}
 		}
 
@@ -114,16 +114,16 @@ public class Agent_ManagerAgent extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					logError("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					logError("Codec problem: " + e.getMessage(), e);
+					logException("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					logError(e.getMessage(), e);
+					logException("Unexpected error occured:", e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: "
+				logSevere("Failure responding to request: "
 						+ request.getContent().substring(0, 2048));
 				return failure;
 			}
@@ -145,22 +145,19 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				i++;
 			}
 		}
-		if (name == null){
-			name = type;
-		}
-		String generatedName = generateName(name);
-
+		
+		String generatedName = generateName(name == null ? type : name);
 		try {
 			try {
 				doCreateAgent(generatedName, type, container, args2);
 			} catch (StaleProxyException e) { // we may have the class in DB
-				log("agent creation failed, trying to get JAR for type " + type + " from DB");
+				logInfo("agent creation failed, trying to get JAR for type " + type + " from DB");
 				DataManagerService.getExternalAgent(this, type);
 				// DataManager will save the JAR to FS if it finds it so we can retry
 				doCreateAgent(generatedName, type, container, args2);
 			}
 		} catch (ControllerException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 			return null;
 		}
 
@@ -176,15 +173,16 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	}
 
 	public String generateName(String name) {
+		String result = name;
 		if (nodeName != null && !nodeName.isEmpty()) {
-			name = name + "-" + nodeName;
+			result += "-" + nodeName;
 		}
 		PlatformController container = getContainerController();
 		try {
-			container.getAgent(name);
+			container.getAgent(result);
 		} catch (ControllerException exc) {
 			// agent with the same name does not exist, we are good
-			return name;
+			return result;
 		}
 
 		for (Integer i = 0; i < 10000; i++) {
@@ -194,10 +192,10 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				container.getAgent(currentName);
 			} catch (ControllerException exc) {
 				// agent with the same name does not exist, we are good
-				name = currentName;
+				result = currentName;
 				break;
 			}
 		}
-		return name;
+		return result;
 	}
 }

@@ -9,8 +9,9 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 public class SBXoverOperator implements Operator {
 
 	private double xover_rate;
-	private final double EPS = 0.00001;
-	private final double ETA_C = 20;
+	
+	private static final double EPS = 0.00001;
+	private static final double ETA_C = 20;
 
 
 	public SBXoverOperator(double cross_rate) {
@@ -47,26 +48,26 @@ public class SBXoverOperator implements Operator {
 			y_hi = a.getMax();
 			double rand = RandomNumberGenerator.getInstance().nextDouble();
 			double beta = 1.0 + (2.0*(y1-y_low)/(y2-y1));
-			double alpha = 2.0 - Math.pow(beta,-(ETA_C+1.0));
+			double alpha = 2.0 - Math.pow(beta,-(ETA_C + 1.0));
 			double betaq = 0;
 			if (rand <= (1.0/alpha))
             {
-                betaq = Math.pow((rand*alpha),(1.0/(ETA_C+1.0)));
+                betaq = Math.pow(rand*alpha, 1.0 / (ETA_C + 1.0));
             }
             else
             {
-                betaq = Math.pow((1.0/(2.0 - rand*alpha)),(1.0/(ETA_C+1.0)));
+                betaq = Math.pow(1.0 / (2.0 - rand*alpha), 1.0 / (ETA_C + 1.0));
             }
 			double c1 = 0.5*((y1+y2)-betaq*(y2-y1));
             beta = 1.0 + (2.0*(y_hi-y2)/(y2-y1));
             alpha = 2.0 - Math.pow(beta,-(ETA_C+1.0));
             if (rand <= (1.0/alpha))
             {
-                betaq = Math.pow((rand*alpha),(1.0/(ETA_C+1.0)));
+                betaq = Math.pow(rand*alpha, 1.0 / (ETA_C + 1.0));
             }
             else
             {
-                betaq = Math.pow((1.0/(2.0 - rand*alpha)),(1.0/(ETA_C+1.0)));
+                betaq = Math.pow(1.0 / (2.0 - rand*alpha), 1.0 / (ETA_C + 1.0));
             }
             double c2 = 0.5*((y1+y2)+betaq*(y2-y1));
             if (c1<y_low)

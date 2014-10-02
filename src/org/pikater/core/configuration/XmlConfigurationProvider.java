@@ -1,5 +1,6 @@
 package org.pikater.core.configuration;
 
+import org.pikater.shared.logging.core.ConsoleLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,12 +50,12 @@ public class XmlConfigurationProvider implements ConfigurationProvider {
                 agentConfigurations.add(agent);
                 }
             }
+            return new ConfigurationImpl(agentConfigurations);
         }
-         catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
             return null;
         }
-        return new ConfigurationImpl(agentConfigurations);
     }
 
     private AgentConfiguration getAgent(Node nNode) {

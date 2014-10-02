@@ -7,8 +7,8 @@ import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
+import org.pikater.core.agents.system.computation.graph.edges.ErrorEdge;
+import org.pikater.core.agents.system.computation.graph.strategies.SearchStartComputationStrategy;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 public class StartGettingParametersFromSearch extends AchieveREInitiator {
@@ -27,7 +27,7 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 		this.strategy = cs;
 		this.msg = msg;
 		
-        myAgent.log("StartGettingParametersFromSearch behavior created.", 2);
+        myAgent.logSevere("StartGettingParametersFromSearch behavior created.");
 	}
 
 	protected void handleAgree(ACLMessage agree) {
@@ -37,8 +37,8 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 	protected void handleInform(ACLMessage inform) {
 		// sending of Options have been finished
 		
-		myAgent.log("Agent " + inform.getSender().getName()
-				+ ": sending of Options have been finished.", 2);
+		myAgent.logSevere("Agent " + inform.getSender().getName()
+				+ ": sending of Options have been finished.");
         
         // send subscription to the original agent after each received task
         myAgent.sendSubscription(inform, msg);
@@ -52,10 +52,10 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 	        strategy.getComputationNode().addToOutputAndProcess(eo, "error");
 														
 		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (OntologyException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
 		}
 														
@@ -71,12 +71,12 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 	}
 			
 	protected void handleRefuse(ACLMessage refuse) {
-        myAgent.log("Agent " + refuse.getSender().getName()
-				+ " refused to perform the requested action.", 1);
+        myAgent.logSevere("Agent " + refuse.getSender().getName()
+				+ " refused to perform the requested action.");
 	}
 
 	protected void handleFailure(ACLMessage failure) {
-        myAgent.log("Agent "+ failure.getSender().getName()
-				+ ": failure while performing the requested action", 1);
+        myAgent.logSevere("Agent "+ failure.getSender().getName()
+				+ ": failure while performing the requested action");
 	}			
 }

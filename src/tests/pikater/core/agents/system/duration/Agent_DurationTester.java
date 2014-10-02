@@ -32,7 +32,7 @@ public class Agent_DurationTester extends PikaterAgent {
 		
 		//TODO: test
         
-        log("DurationTester ending");
+        logInfo("DurationTester ending");
         doDelete();
 	}
 

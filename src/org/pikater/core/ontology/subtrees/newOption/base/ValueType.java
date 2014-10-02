@@ -9,9 +9,10 @@ import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData; 
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.util.ICloneable;
 
-public class ValueType implements Concept, IValidated
+public class ValueType implements Concept, IValidated, ICloneable
 {
 	private static final long serialVersionUID = -4658896847448815807L;
 
@@ -74,10 +75,9 @@ public class ValueType implements Concept, IValidated
 		return defaultValue;
 	}
 	/**
-	 * Set default value via a constructor - this method should only be used by JADE.
+	 * Use only if you really know what you're doing.
 	 * @param defaultValue
 	 */
-	@Deprecated
 	public void setDefaultValue(IValueData defaultValue)
 	{
 		this.defaultValue = defaultValue;
@@ -243,10 +243,18 @@ public class ValueType implements Concept, IValidated
 	@Override
 	public ValueType clone()
 	{
-		return new ValueType(
-				defaultValue.clone(),
-				rangeRestriction != null ? rangeRestriction.clone() : null,
-				setRestriction != null ? setRestriction.clone() : null
-		);
+		ValueType result;
+		try
+		{
+			result = (ValueType) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setDefaultValue(defaultValue.clone());
+		result.setRangeRestriction(rangeRestriction != null ? rangeRestriction.clone() : null);
+		result.setSetRestriction(setRestriction != null ? setRestriction.clone() : null);
+		return result;
 	}
 }

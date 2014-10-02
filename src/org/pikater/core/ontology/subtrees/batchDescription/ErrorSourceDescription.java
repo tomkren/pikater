@@ -1,12 +1,12 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-import org.pikater.core.CoreConstants;
-
+import org.pikater.core.CoreConstant;
+import org.pikater.shared.util.ICloneable;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class ErrorSourceDescription implements ISourceDescription {
+public class ErrorSourceDescription implements ISourceDescription, ICloneable {
 
 	private static final long serialVersionUID = 1229354484860699593L;
 	
@@ -19,7 +19,7 @@ public class ErrorSourceDescription implements ISourceDescription {
     }
     public void setProvider(IErrorProvider errorProvider) {
     	if (errorProvider instanceof FileDataProvider) {
-    		this.setOutputType(CoreConstants.SLOT_ERRORS);
+    		this.setOutputType(CoreConstant.SlotContent.ERRORS.getSlotName());
     	}
         this.provider = errorProvider;
     }
@@ -48,9 +48,18 @@ public class ErrorSourceDescription implements ISourceDescription {
 		return this.provider;
 	}
 	
-	public ErrorSourceDescription clone() {
-    	
-    	ErrorSourceDescription description = new ErrorSourceDescription();
+	@Override
+	public ErrorSourceDescription clone()
+	{
+    	ErrorSourceDescription description;
+		try
+		{
+			description = (ErrorSourceDescription) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
     	description.setProvider(provider);
     	description.setInputType(getInputType());
     	description.setOutputType(getOutputType());

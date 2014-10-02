@@ -3,7 +3,6 @@ package org.pikater.core.ontology.subtrees.newOption.values;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class QuestionMarkRange implements IValidatedValueData
 {
@@ -113,9 +112,20 @@ public class QuestionMarkRange implements IValidatedValueData
 		return null;
 	}
 	@Override
-	public IValueData clone()
+	public QuestionMarkRange clone()
 	{
-		return new QuestionMarkRange(countOfValuesToTry, userDefinedRestriction.clone());
+		QuestionMarkRange result;
+		try
+		{
+			result = (QuestionMarkRange) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setCountOfValuesToTry(countOfValuesToTry);
+		result.setUserDefinedRestriction(userDefinedRestriction.clone());
+		return result;
 	}
 	@Override
 	public String exportToWeka()

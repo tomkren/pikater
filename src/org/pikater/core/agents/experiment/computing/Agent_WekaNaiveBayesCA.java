@@ -14,7 +14,7 @@ public class Agent_WekaNaiveBayesCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = 8375125527735841244L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 		
 		return new NaiveBayes();
 	}

@@ -12,9 +12,9 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computationDescriptionParser.Parser;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.events.LoggerObserver;
+import org.pikater.core.agents.system.computation.graph.ComputationGraph;
+import org.pikater.core.agents.system.computation.graph.events.LoggerObserver;
+import org.pikater.core.agents.system.computation.parser.Parser;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
@@ -43,11 +43,11 @@ public class ParserBehaviour extends AchieveREResponder {
     	try {
             concept = ((Action)(agent.getContentManager().extractContent(request))).getAction();
         } catch (UngroundedException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
            
     	
@@ -85,7 +85,7 @@ public class ParserBehaviour extends AchieveREResponder {
    
 		ACLMessage failure = request.createReply();
 		failure.setPerformative(ACLMessage.FAILURE);
-		agent.logError("Failure responding to request: " + request.getContent());
+		agent.logSevere("Failure responding to request: " + request.getContent());
 		
 		return failure;
     }

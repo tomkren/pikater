@@ -7,24 +7,22 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
-import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.DataProcessingStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
-import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.subtrees.task.Task;
-import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
 import java.util.ArrayList;
+
+import org.pikater.core.agents.system.Agent_Manager;
+import org.pikater.core.agents.system.computation.graph.ComputationNode;
+import org.pikater.core.agents.system.computation.graph.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computation.graph.strategies.DataProcessingStrategy;
+import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
 public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 
 	private static final long serialVersionUID = -2044738642107219180L;
 
 	private Agent_Manager myAgent;
-	private DataProcessingStrategy strategy;
+	// private DataProcessingStrategy strategy; // unused
     private final ComputationNode node;
     private ACLMessage msg; // original message sent by whoever wants to
 	 						// compute the task (either search agent or
@@ -34,28 +32,30 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 	public ExecuteDataProcessingBehaviour(Agent_Manager a, ACLMessage req,
                                           ACLMessage msg, DataProcessingStrategy cs, ComputationNode node) {
 		super(a, req);
-		myAgent = a;
+		
+		this.myAgent = a;
         this.msg = msg;
-		strategy = cs;
+		// this.strategy = cs;
         this.node = node;
+        
         node.increaseNumberOfOutstandingTask();
     }
 
 	protected void handleRefuse(ACLMessage refuse) {
-		myAgent.log("Agent "+refuse.getSender().getName()+" refused.", 1);
+		myAgent.logSevere("Agent "+refuse.getSender().getName()+" refused.");
 	}
 	
 	protected void handleFailure(ACLMessage failure) {
 		if (failure.getSender().equals(myAgent.getAMS())) {
-			myAgent. log("Responder does not exist", 1);
+			myAgent. logSevere("Responder does not exist");
 		}
 		else {
-			myAgent.log("Agent "+failure.getSender().getName()+" failed.", 1);	            
+			myAgent.logSevere("Agent "+failure.getSender().getName()+" failed.");	            
 		}
 	}
 	
 	protected void handleInform(ACLMessage inform) {
-		myAgent.log("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
+		myAgent.logInfo("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
 
 		
 		ContentElement content;
@@ -64,9 +64,7 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 			if (content instanceof Result) {
 				// get the original task from msg
 				Result result = (Result) content;					
-				Task t = (Task)result.getValue();
-                ComputationCollectionItem computation =
-                		myAgent.getComputation(t.getBatchID());
+				Task t = (Task) result.getValue();
                 ArrayList<TaskOutput> outputs = t.getOutput();
                 for (int i=0;i<outputs.size();i++)
                 {
@@ -83,11 +81,11 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
             }
 
 		} catch (UngroundedException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		}
 		
 		// send subscription to the original agent after each received task

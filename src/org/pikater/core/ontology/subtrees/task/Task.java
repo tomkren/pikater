@@ -16,7 +16,7 @@ public class Task implements Concept {
 
 	public enum InOutType {
 		TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA
-	};
+	}
 
 	// administrative:
 	private int nodeID;
@@ -183,11 +183,9 @@ public class Task implements Concept {
     }
 
 	public boolean equalsTask(Task task) {
-		boolean equals =
-				getBatchID() == task.getBatchID() &&
+		return getBatchID() == task.getBatchID() &&
 				getNodeID() == task.getNodeID() &&
 				getComputationID() == task.getComputationID();
-		return equals;
 	}
 	
 }

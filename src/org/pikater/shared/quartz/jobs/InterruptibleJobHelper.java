@@ -1,6 +1,6 @@
 package org.pikater.shared.quartz.jobs;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.quartz.JobKey;
@@ -14,7 +14,7 @@ public class InterruptibleJobHelper
 		this.jobKey = null;
 	}
 	
-	public void startJob(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Throwable
+	public void startJob(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Exception
 	{
 		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(jobClass, jobArgs);
 	}
@@ -33,9 +33,9 @@ public class InterruptibleJobHelper
 			{
 				PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
 			}
-			catch (Throwable t)
+			catch (Exception t)
 			{
-				PikaterLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
+				PikaterDBLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
 			}
 		}
 	}
