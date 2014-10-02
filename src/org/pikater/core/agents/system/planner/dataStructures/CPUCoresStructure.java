@@ -41,17 +41,25 @@ public class CPUCoresStructure {
 	public Set<TaskToSolve> deleteDeadCPUCores(Agent_Planner agent,
 			List<AID> deadSlaveServers) {
 		
-		List<CPUCore> busyCoresKeys =
-				new ArrayList<CPUCore>(this.busyCores.keySet());
+		if (!deadSlaveServers.isEmpty()) {
+			String df;
+			df = "";
+			
+		}
 		
 		// delete untapped cores
+		List<CPUCore> cpuCoresToDelete = new ArrayList<CPUCore>();
 		for (CPUCore untappedCoreI : untappedCores) {
 			AID aidI = untappedCoreI.getAID();
 			
 			if (deadSlaveServers.contains(aidI)) {
-				this.busyCores.remove(untappedCoreI);
+				cpuCoresToDelete.add(untappedCoreI);
 			}
 		}
+		untappedCores.removeAll(cpuCoresToDelete);
+		
+		List<CPUCore> busyCoresKeys =
+				new ArrayList<CPUCore>(this.busyCores.keySet());
 		
 		Set<TaskToSolve> notFinishedTasks = new HashSet<TaskToSolve>();
 		
