@@ -133,6 +133,14 @@ import org.pikater.shared.experiment.UniversalComputationDescription;
 
 import com.google.common.io.Files;
 
+/**
+ * This class is the implementation of Agent, that is used for communication
+ * with the central database.
+ * 
+ * Provides functionality for dataset manipulation, batch and experiments
+ * manipulation, and information querying for agents and users.
+ *
+ */
 public class Agent_DataManager extends PikaterAgent {
 
 	private static final long serialVersionUID = 1L;
@@ -343,11 +351,23 @@ public class Agent_DataManager extends PikaterAgent {
 		cleanupAbortedBatches();
 	}
 
+	/**
+	 * Cleans up the records about experiments and batches, that were being computed
+	 * and have incorrect flag at startup.
+	 */
 	private void cleanupAbortedBatches() {
 		DAOs.batchDAO.cleanUp();
 		DAOs.experimentDAO.cleanUp();
 	}
 
+	/**
+	 * Creates a respond  to a {@link GetUserID} message. {@link GetUserID} is a request
+	 * for user's ID. 
+	 * @param request {@link ACLMessage} of the request.
+	 * @param a {@link Action} containing {@link GetUserID} action
+	 * @return {@link ACLMessage} containing the ID for username in the request or a FAILURE
+	 * message.
+	 */
 	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {
 
 		logInfo("respondToGetUserID");
@@ -356,6 +376,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 		JPAUser userJPA = DAOs.userDAO.getByLogin(getUserID.getLogin()).get(0);
 
+		//if we have received a request for non-existing user
+		//we reply with a FAILURE message
 		if (userJPA == null) {
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
@@ -379,6 +401,14 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Creates a respond to {@link GetUser} action. {@link GetUser} is a request
+	 * for a {@link User} object, that contains all information about the user identified
+	 * by the user's ID.
+	 * @param request {@link ACLMessage} of the request.
+	 * @param a {@link GetUser} action
+	 * @return {@link ACLMessage} containing {@link User} object about the requested user.
+	 */
 	private ACLMessage respondToGetUser(ACLMessage request, Action a) {
 
 		logInfo("respondToGetUser");
@@ -387,6 +417,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 		JPAUser userJPA = DAOs.userDAO.getByID(getUser.getUserID());
 
+		//if we have received a request for non-existing user ID
+		//we respong with a FAILURE message
 		if (userJPA == null) {
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
@@ -417,54 +449,78 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Creates a respond to {@link TranslateFilename} action. {@link TranslateFilename} is
+	 * a request to convert internal filenames to external one's and vice versa.
+	 * 
+	 * The translation is always succeeding. Error state is representing by returning 'error'
+	 * as the translated filename. 
+	 * 
+	 * @param request {@link ACLMessage} received with the request. 
+	 * @param a {@link Action} containing {@link TranslateFilename} action 
+	 * @return {@link ACLMessage} containing String of the translated filename or value 'error'
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
 	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws CodecException, OntologyException {
 
-		TranslateFilename transtateFile = (TranslateFilename) a.getAction();
+		TranslateFilename translateFile = (TranslateFilename) a.getAction();
 
 		String translatedName = "error";
 
-		if (transtateFile.getExternalFilename() != null && transtateFile.getInternalFilename() == null) {
+		//we have request to translate from external filename to internal filename
+		if (translateFile.getExternalFilename() != null && translateFile.getInternalFilename() == null) {
 
-			logInfo("respondToTranslateFilename External File Name " + transtateFile.getExternalFilename());
+			logInfo("respondToTranslateFilename External File Name " + translateFile.getExternalFilename());
 
-			java.util.List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getExternalFilename());
+			java.util.List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(translateFile.getExternalFilename());
 			if (!files.isEmpty())
 			{
 				translatedName = files.get(0).getInternalfilename();
 			} else {
 				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
 
-				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
+				String tempFileName = pathPrefix + translateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
-					translatedName = "temp" + System.getProperty("file.separator") + transtateFile.getExternalFilename();
+					translatedName = "temp" + System.getProperty("file.separator") + translateFile.getExternalFilename();
 			}
 
-		} else if (transtateFile.getInternalFilename() != null && transtateFile.getExternalFilename() == null) {
+		//we have request to translate from internal filename to external filename
+		} else if (translateFile.getInternalFilename() != null && translateFile.getExternalFilename() == null) {
 
-			logInfo("respondToTranslateFilename Internal File Name " + transtateFile.getInternalFilename());
+			logInfo("respondToTranslateFilename Internal File Name " + translateFile.getInternalFilename());
 
-			List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getInternalFilename());
+			List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(translateFile.getInternalFilename());
 			if (!files.isEmpty())
 			{
 				translatedName = files.get(0).getExternalfilename();
 			} else {
 				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
 
-				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
+				String tempFileName = pathPrefix + translateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
-					translatedName = "temp" + System.getProperty("file.separator") + transtateFile.getExternalFilename();
+					translatedName = "temp" + System.getProperty("file.separator") + translateFile.getExternalFilename();
 			}
 		}
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result result = new Result(transtateFile, translatedName);
+		Result result = new Result(translateFile, translatedName);
 		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
 
+	/**
+	 * Creates a respond to {@link GetAgentInfo} action. {@link GetAgentInfo} is
+	 * a request to retrieve {@link AgentInfo} object about the given Agent, identified by 
+	 * its class name.
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link GetAgentInfo} action.
+	 * @return {@link ACLMessage} containing object {@link AgentInfo} of the defined Agent
+	 */
 	protected ACLMessage respondToGetAgentInfo(ACLMessage request, Action a) {
 
 		GetAgentInfo getAgentInfo = (GetAgentInfo) a.getAction();
@@ -491,13 +547,24 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
+	/**
+	 * Creates a respond to {@link GetAgentInfos} action. {@link GetAgentInfos} is
+	 * a request to retrieve {@link AgentInfo} objects about all Agents available for the core
+	 * system - all internal agetns and approved user agents.
+	 *  
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link GetAgentInfos} action.
+	 * @return {@link ACLMessage} containing object {@link AgentInfos}, that has list
+	 * of {@link AgentInfo} objects. If the reply message couldn't be created, message with
+	 * FAILURE flag is returned.
+	 */
 	protected ACLMessage respondToGetAgentInfos(ACLMessage request, Action a) {
 
 		GetAgentInfos getAgentInfos = (GetAgentInfos) a.getAction();
 		int userID = getAgentInfos.getUserID();
 		
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
+		reply.setPerformative(ACLMessage.FAILURE);
 
 		JPAUser user = DAOs.userDAO.getByID(userID);
 		
@@ -517,6 +584,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Result result = new Result(a, agentInfos);
 		try {
 			getContentManager().fillContent(reply, result);
+			reply.setPerformative(ACLMessage.INFORM);
 		} catch (CodecException e) {
 			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
@@ -527,6 +595,17 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
+	
+	/**
+	 * Creates a respond to {@link GetAllAgentInfos} action. {@link GetAllAgentInfos} is
+	 * a request to retrieve {@link AgentInfo} objects about all Agents in the system - all
+	 * internal agents and user's agents whether they're approved or not.
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link GetAllAgentInfos} action.
+	 * @return {@link ACLMessage} containing object {@link AgentInfos}, that has list
+	 * of {@link AgentInfo} objects.
+	 */
 	protected ACLMessage respondToGetAllAgentInfos(ACLMessage request, Action a) {
 		
 		ACLMessage reply = request.createReply();
@@ -553,7 +632,18 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 	
-	protected ACLMessage respondToGetExternalAgentNames(ACLMessage request, Action a) throws CodecException, OntologyException {
+	/**
+	 * Creates a respond to {@link GetExternalAgentNames} action. {@link GetExternalAgentNames} is
+	 * a request to retrieve a list of names of all user agents. This list uses class names as agent
+	 * names.
+	 *   
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link GetExternalAgentNames} action.
+	 * @return {@link ACLMessage} containing object {@link ExternalAgentNames}, that has a list
+	 * of {@link AgentInfo} objects. If the reply message could be filled up with result, message with FAILURE
+	 * flag is returned. 
+	 */
+	protected ACLMessage respondToGetExternalAgentNames(ACLMessage request, Action a) {
 
 		logInfo("getting external agent names");
 
@@ -569,13 +659,34 @@ public class Agent_DataManager extends PikaterAgent {
 		ExternalAgentNames externalAgentNames = new ExternalAgentNames(agentNames);
 
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		Result result = new Result(a, externalAgentNames);
-		getContentManager().fillContent(reply, result);
+		reply.setPerformative(ACLMessage.FAILURE);
+		try{
+			Result result = new Result(a, externalAgentNames);
+			getContentManager().fillContent(reply, result);
+			reply.setPerformative(ACLMessage.INFORM);
+		}catch(CodecException e){
+			logSevere(e.getMessage());
+		}catch(OntologyException e){
+			logSevere(e.getMessage());
+		}
 
 		return reply;
 	}
 
+	/**
+	 * Tries to save data from {@link AgentInfo} object to database a creates a respond to that action.
+	 * {@link AgentInfo} of the given agent is encapsulated in action {@link SaveAgentInfo}.
+	 * 
+	 * If there is no information stored in the database about the agent with given class name, then
+	 * the new information is stored.
+	 * 
+	 * Message with flag FAILURE is returned when, there is information about agent with such class name.
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link SaveAgentInfo} action containing {@link AgentInfo} object
+	 * of the agent, we want to store data about.
+	 * @return {@link ACLMessage} of confirmation or with flag FAILURE, when something went wrongs
+	 */
 	protected ACLMessage respondToSaveAgentInfo(ACLMessage request, Action a) {
 
 		logInfo("RespondToSaveAgentInfo");
@@ -651,6 +762,14 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Creates a respond to {@link LoadBatch} request. {@link LoadBatch} contains the ID
+	 * of the batch to be loaded.
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link LoadBatch} action.
+	 * @return {@link ACLMessage} containing object {@link Batch} describing the batch.
+	 */
 	private ACLMessage respondToLoadBatch(ACLMessage request, Action a) {
 
 		logInfo("respondToLoadBatch");
@@ -686,6 +805,11 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Requests sending a notification e-mail for the given {@link JPABatch}.
+	 * The receiver of the e-mail is the owner of the batch. 
+	 * @param batchJPA {@link JPABatch} object for which sending the e-mail
+	 */
 	private void requestMailNotification(final JPABatch batchJPA) {
 		addBehaviour(new OneShotBehaviour() {
 			private static final long serialVersionUID = -6987340128342367505L;
@@ -727,6 +851,16 @@ public class Agent_DataManager extends PikaterAgent {
 		});
 	}
 
+	/**
+	 * Updating the status for some batch. Both the target batch and the new status
+	 * is described by the {@link UpdateBatchStatus} object. The function also sets the start
+	 * time for batch with COMPUTING as new status or the finish time for batch with FAILED or FINISHED
+	 * as new status.
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Actiong} containing {@link UpdateBatchStatus} action.
+	 * @return {@link ACLMessage} confirming the batch status update.
+	 */
 	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request, Action a) {
 
 		logInfo("respondToUpdateBatchStatus");
