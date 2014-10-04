@@ -18,43 +18,34 @@ import org.quartz.Trigger;
  * 
  * @author SkyCrawl
  */
-public class ResourceExpirationJob extends AbstractJobWithArgs
-{
-	public ResourceExpirationJob()
-	{
+public class ResourceExpirationJob extends AbstractJobWithArgs {
+	public ResourceExpirationJob() {
 		super(2);
 	}
 
 	@Override
-	public boolean argumentCorrect(int index, Object arg)
-	{
-		switch(index)
-		{
-			case 0:
-				return arg instanceof UUID;
-			case 1:
-				return arg instanceof IRegistrarResource;
-			default:
-				return false;
+	public boolean argumentCorrect(int index, Object arg) {
+		switch (index) {
+		case 0:
+			return arg instanceof UUID;
+		case 1:
+			return arg instanceof IRegistrarResource;
+		default:
+			return false;
 		}
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder)
-	{
-	}
-	
-	@Override
-	public Trigger getJobTrigger()
-	{
-		return newTrigger()
-				.startAt(futureDate(DynamicDownloadServlet.EXPIRATION_TIME_IN_SECONDS, IntervalUnit.SECOND))
-		        .build();
+	public void buildJob(JobBuilder builder) {
 	}
 
 	@Override
-	protected void execute() throws JobExecutionException
-	{
+	public Trigger getJobTrigger() {
+		return newTrigger().startAt(futureDate(DynamicDownloadServlet.EXPIRATION_TIME_IN_SECONDS, IntervalUnit.SECOND)).build();
+	}
+
+	@Override
+	protected void execute() throws JobExecutionException {
 		UUID token = getArg(0);
 		IRegistrarResource resource = getArg(1);
 		ResourceRegistrar.expireOnFirstPickupResource(token, resource);

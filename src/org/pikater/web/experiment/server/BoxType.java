@@ -17,49 +17,32 @@ import org.pikater.shared.logging.web.PikaterWebLogger;
  * 
  * @author SkyCrawl
  */
-public enum BoxType
-{
-	INPUT(FileDataProvider.class),
-	PROCESS_DATA(DataProcessing.class),
-	CHOOSE(Recommend.class),
-	SEARCH(Search.class),
-	OPTION(EvaluationMethod.class),
-	COMPUTE(ComputingAgent.class),
-	OUTPUT(FileDataSaver.class),
-	COMPOSITE(CARecSearchComplex.class),
-	MISC(BoxType.class);
-	
+public enum BoxType {
+	INPUT(FileDataProvider.class), PROCESS_DATA(DataProcessing.class), CHOOSE(Recommend.class), SEARCH(Search.class), OPTION(EvaluationMethod.class), COMPUTE(ComputingAgent.class), OUTPUT(
+			FileDataSaver.class), COMPOSITE(CARecSearchComplex.class), MISC(BoxType.class);
+
 	private final Class<?> mappedOntologyClass;
-	
-	private BoxType(Class<?> mappedOntologyClass)
-	{
+
+	private BoxType(Class<?> mappedOntologyClass) {
 		this.mappedOntologyClass = mappedOntologyClass;
 	}
-	
-	public Class<?> toOntologyClass()
-	{
+
+	public Class<?> toOntologyClass() {
 		return mappedOntologyClass;
 	}
-	
-	public static BoxType fromAgentInfo(AgentInfo info)
-	{
-		try
-		{
+
+	public static BoxType fromAgentInfo(AgentInfo info) {
+		try {
 			return fromOntologyClass(Class.forName(info.getOntologyClassName()));
-		}
-		catch (ClassNotFoundException e)
-		{
+		} catch (ClassNotFoundException e) {
 			PikaterWebLogger.logThrowable(String.format("No box type is mapped to '%s'.", info.getOntologyClassName()), e);
 			return null;
 		}
 	}
-	
-	public static BoxType fromOntologyClass(Class<?> ontologyClass)
-	{
-		for(BoxType result : values())
-		{
-			if(result.mappedOntologyClass.equals(ontologyClass))
-			{
+
+	public static BoxType fromOntologyClass(Class<?> ontologyClass) {
+		for (BoxType result : values()) {
+			if (result.mappedOntologyClass.equals(ontologyClass)) {
 				return result;
 			}
 		}

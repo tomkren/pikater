@@ -27,119 +27,87 @@ import org.quartz.JobExecutionException;
  * 
  * @author SkyCrawl
  */
-public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext
-{
+public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext {
 	private IProgressDialogResultHandler context;
-	
-	public DSVisTwoGeneratorJob()
-	{
+
+	public DSVisTwoGeneratorJob() {
 		super(4);
 	}
 
 	@Override
-	public boolean argumentCorrect(int index, Object arg)
-	{
-		switch(index)
-		{
-			case 0:
-			case 1:
-				return arg instanceof JPADataSetLO;
-			case 2:
-				return arg instanceof AttrComparisons;
-			case 3:
-				return arg instanceof IProgressDialogResultHandler;
-			default:
-				return false;
+	public boolean argumentCorrect(int index, Object arg) {
+		switch (index) {
+		case 0:
+		case 1:
+			return arg instanceof JPADataSetLO;
+		case 2:
+			return arg instanceof AttrComparisons;
+		case 3:
+			return arg instanceof IProgressDialogResultHandler;
+		default:
+			return false;
 		}
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder)
-	{
+	public void buildJob(JobBuilder builder) {
 	}
 
 	@Override
-	protected void execute() throws JobExecutionException
-	{
+	protected void execute() throws JobExecutionException {
 		JPADataSetLO dataset1 = getArg(0);
 		JPADataSetLO dataset2 = getArg(1);
 		AttrComparisons comparisonList = getArg(2);
 		context = getArg(3);
 		visualizeDatasetComparison(dataset1, dataset2, comparisonList);
 	}
-	
+
 	@Override
-	public boolean isInterrupted()
-	{
+	public boolean isInterrupted() {
 		return super.isInterrupted();
 	}
 
 	@Override
-	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList)
-	{
+	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList) {
 		DSVisTwoResult result = new DSVisTwoResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
-		try
-		{
-			if(dataset1.getHash().equals(dataset2.getHash()))
-			{
+		try {
+			if (dataset1.getHash().equals(dataset2.getHash())) {
 				throw new IllegalArgumentException("Identical datasets were received for comparison.");
-			}
-			else if(!dataset1.hasComputedMetadata())
-			{
+			} else if (!dataset1.hasComputedMetadata()) {
 				throw new MetadataNotPresentException(dataset1.getDescription());
-			}
-			else if(!dataset2.hasComputedMetadata())
-			{
+			} else if (!dataset2.hasComputedMetadata()) {
 				throw new MetadataNotPresentException(dataset2.getDescription());
 			}
-			
+
 			PGLargeObjectAction downloadAction = new PGLargeObjectAction(this);
 			File datasetCachedFile1 = downloadAction.downloadLOFromDB(dataset1.getOID());
 			File datasetCachedFile2 = downloadAction.downloadLOFromDB(dataset2.getOID());
-				
+
 			float subresultsGenerated = 0;
 			float finalCountOfSubresults = comparisonList.size();
-			for(Tuple<AttrMapping, AttrMapping> attrsToCompare : comparisonList)
-			{
+			for (Tuple<AttrMapping, AttrMapping> attrsToCompare : comparisonList) {
 				// interrupt generation when the user commands it
-				if(isInterrupted())
-				{
+				if (isInterrupted()) {
 					return;
 				}
-				
+
 				// otherwise continue generating
 				DSVisTwoSubresult imageResult = result.createAndRegisterSubresult(attrsToCompare, ImageType.PNG);
-				new ComparisonPNGGenerator(
-						null, // no need to pass in progress listener - progress is updated below
-						new PrintStream(imageResult.getFile()),
-						dataset1,
-						dataset2,
-						datasetCachedFile1,
-						datasetCachedFile2,
-						attrsToCompare.getValue1().getAttrX().getName(),
-						attrsToCompare.getValue2().getAttrX().getName(),
-						attrsToCompare.getValue1().getAttrY().getName(),
-						attrsToCompare.getValue2().getAttrY().getName(),
-						attrsToCompare.getValue1().getAttrTarget().getName(),
-						attrsToCompare.getValue2().getAttrTarget().getName()
-						).create();
+				new ComparisonPNGGenerator(null, // no need to pass in progress listener - progress is updated below
+						new PrintStream(imageResult.getFile()), dataset1, dataset2, datasetCachedFile1, datasetCachedFile2, attrsToCompare.getValue1().getAttrX().getName(), attrsToCompare.getValue2()
+								.getAttrX().getName(), attrsToCompare.getValue1().getAttrY().getName(), attrsToCompare.getValue2().getAttrY().getName(), attrsToCompare.getValue1().getAttrTarget()
+								.getName(), attrsToCompare.getValue2().getAttrTarget().getName()).create();
 				subresultsGenerated++;
 				result.updateProgress(subresultsGenerated / finalCountOfSubresults);
 			}
 			result.finished();
-		}
-		catch (InterruptedException e)
-		{
+		} catch (InterruptedException e) {
 			// user interrupted visualization, don't log
 			result.failed(); // don't forget to... important cleanup will take place
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
 			result.failed(); // don't forget to... important cleanup will take place
-		}
-		finally
-		{
+		} finally {
 			// generated temporary files will be deleted when the JVM exits
 		}
 	}

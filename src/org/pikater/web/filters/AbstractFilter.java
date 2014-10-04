@@ -21,24 +21,21 @@ import org.pikater.web.requests.HttpRequestUtils;
  * 
  * @author SkyCrawl
  */
-public abstract class AbstractFilter implements Filter
-{
+public abstract class AbstractFilter implements Filter {
 	//----------------------------------------------------------
 	// SINGLE (AND SIMPLE) IMPLEMENTATION OF SOME INHERITED ROUTINES
-	
+
 	@Override
-	public void init(FilterConfig arg0) throws ServletException
-	{
+	public void init(FilterConfig arg0) throws ServletException {
 	}
-	
+
 	@Override
-	public void destroy()
-	{
+	public void destroy() {
 	}
-	
+
 	//----------------------------------------------------------
 	// REQUEST DISPATCHING ROUTINES
-	
+
 	/**
 	 * Client-side redirect. Affects the client browser's address bar.
 	 * @param servletResponse
@@ -46,12 +43,11 @@ public abstract class AbstractFilter implements Filter
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	protected void clientRedirect(ServletResponse servletResponse, String redirectString) throws IOException, ServletException
-	{
+	protected void clientRedirect(ServletResponse servletResponse, String redirectString) throws IOException, ServletException {
 		HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 		httpResponse.sendRedirect(redirectString.startsWith("/") ? redirectString.substring(1) : redirectString);
 	}
-	
+
 	/**
 	 * @Deprecated: debug first - see {@link #clientRedirect(ServletResponse, String)}
 	 * 
@@ -63,40 +59,32 @@ public abstract class AbstractFilter implements Filter
 	 * @throws ServletException
 	 */
 	@Deprecated
-	protected void serverForward(ServletRequest servletRequest, ServletResponse servletResponse, String forwardString) throws IOException, ServletException
-	{
+	protected void serverForward(ServletRequest servletRequest, ServletResponse servletResponse, String forwardString) throws IOException, ServletException {
 		servletRequest.getRequestDispatcher(forwardString).forward(servletRequest, servletResponse);
 	}
-	
+
 	//----------------------------------------------------------
 	// PROGRAMMATIC HELPER ROUTINES
-	
-	protected boolean isServletPathDefined(HttpServletRequest httpRequest)
-	{
+
+	protected boolean isServletPathDefined(HttpServletRequest httpRequest) {
 		return HttpRequestUtils.getServletPathWhetherMappedOrNot(httpRequest) != null;
 	}
-	
+
 	//----------------------------------------------------------
 	// DEBUG ROUTINES, ALTER TO FIT YOUR NEEDS
-	
-	protected boolean isApplicationInProductionMode()
-	{
+
+	protected boolean isApplicationInProductionMode() {
 		return Boolean.parseBoolean(WebAppConfiguration.getContext().getInitParameter("productionMode"));
 	}
-	
-	protected boolean shouldPrintDebugInfo()
-	{
+
+	protected boolean shouldPrintDebugInfo() {
 		return Boolean.parseBoolean(WebAppConfiguration.getContext().getInitParameter("printDebugInfoInFilters"));
 	}
-	
-	protected void printRequestComponents(String filterName, HttpServletRequest httpRequest)
-	{
-		PikaterWebLogger.log(Level.WARNING, String.format("Filter '%s' intercepted request:\n"
-				+ "Full URL: %s\n"
-				+ "Derived servlet path: %s\n",
-				filterName,
-				HttpRequestUtils.getFullURL(httpRequest),
-				HttpRequestUtils.getServletPathWhetherMappedOrNot(httpRequest)
-		));
+
+	protected void printRequestComponents(String filterName, HttpServletRequest httpRequest) {
+		PikaterWebLogger.log(
+				Level.WARNING,
+				String.format("Filter '%s' intercepted request:\n" + "Full URL: %s\n" + "Derived servlet path: %s\n", filterName, HttpRequestUtils.getFullURL(httpRequest),
+						HttpRequestUtils.getServletPathWhetherMappedOrNot(httpRequest)));
 	}
 }

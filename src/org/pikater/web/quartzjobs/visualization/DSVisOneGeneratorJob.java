@@ -26,110 +26,82 @@ import org.quartz.JobExecutionException;
  * 
  * @author SkyCrawl
  */
-public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisOne, IPGLOActionContext
-{
+public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisOne, IPGLOActionContext {
 	private IProgressDialogResultHandler context;
-	
-	public DSVisOneGeneratorJob()
-	{
+
+	public DSVisOneGeneratorJob() {
 		super(4);
 	}
-	
+
 	@Override
-	public boolean argumentCorrect(int index, Object arg)
-	{
-		switch(index)
-		{
-			case 0:
-				return arg instanceof JPADataSetLO;
-			case 1:
-				return arg instanceof JPAAttributeMetaData[];
-			case 2:
-				return arg instanceof JPAAttributeMetaData;
-			case 3:
-				return arg instanceof IProgressDialogResultHandler;
-			default:
-				return false;
+	public boolean argumentCorrect(int index, Object arg) {
+		switch (index) {
+		case 0:
+			return arg instanceof JPADataSetLO;
+		case 1:
+			return arg instanceof JPAAttributeMetaData[];
+		case 2:
+			return arg instanceof JPAAttributeMetaData;
+		case 3:
+			return arg instanceof IProgressDialogResultHandler;
+		default:
+			return false;
 		}
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder)
-	{
+	public void buildJob(JobBuilder builder) {
 	}
 
 	@Override
-	protected void execute() throws JobExecutionException
-	{
+	protected void execute() throws JobExecutionException {
 		JPADataSetLO dataset = getArg(0);
 		JPAAttributeMetaData[] attrs = getArg(1);
 		JPAAttributeMetaData attrTarget = getArg(2);
 		context = getArg(3);
 		visualizeDataset(dataset, attrs, attrTarget);
 	}
-	
+
 	@Override
-	public boolean isInterrupted()
-	{
+	public boolean isInterrupted() {
 		return super.isInterrupted();
 	}
 
 	@Override
-	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget)
-	{
+	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) {
 		DSVisOneResult result = new DSVisOneResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
-		try
-		{
-			if(!dataset.hasComputedMetadata())
-			{
+		try {
+			if (!dataset.hasComputedMetadata()) {
 				throw new MetadataNotPresentException(dataset.getFileName());
 			}
-			
+
 			File datasetCachedFile = new PGLargeObjectAction(this).downloadLOFromDB(dataset.getOID());
-			
+
 			float subresultsGenerated = 0;
 			float finalCountOfSubresults = attrs.length * attrs.length;
-			for(JPAAttributeMetaData attrY : attrs)
-			{
-				for(JPAAttributeMetaData attrX : attrs)
-				{
+			for (JPAAttributeMetaData attrY : attrs) {
+				for (JPAAttributeMetaData attrX : attrs) {
 					// interrupt generation when the user commands it
-					if(isInterrupted())
-					{
+					if (isInterrupted()) {
 						return;
 					}
-					
+
 					// otherwise continue generating
-					DSVisOneSubresult imageResult = result.createAndRegisterSubresult(
-							new AttrMapping(attrX, attrY, attrTarget),
-							ImageType.PNG
-					);
-					new SinglePNGGenerator(
-							null, // no need to pass in progress listener - progress is updated below
-							dataset,
-							datasetCachedFile,
-							new PrintStream(imageResult.getFile()),
-							attrX.getName(),
-							attrY.getName(),
-							attrTarget.getName()).create();
+					DSVisOneSubresult imageResult = result.createAndRegisterSubresult(new AttrMapping(attrX, attrY, attrTarget), ImageType.PNG);
+					new SinglePNGGenerator(null, // no need to pass in progress listener - progress is updated below
+							dataset, datasetCachedFile, new PrintStream(imageResult.getFile()), attrX.getName(), attrY.getName(), attrTarget.getName()).create();
 					subresultsGenerated++;
 					result.updateProgress(subresultsGenerated / finalCountOfSubresults);
 				}
 			}
 			result.finished();
-		}
-		catch (InterruptedException e)
-		{
+		} catch (InterruptedException e) {
 			// user interrupted visualization, don't log
 			result.failed(); // don't forget to... important cleanup will take place
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
 			result.failed(); // don't forget to... important cleanup will take place
-		}
-		finally
-		{
+		} finally {
 			// generated temporary files will be deleted when the JVM exits
 		}
 	}

@@ -14,8 +14,7 @@ import org.pikater.web.experiment.IBoxInfoCommon;
  * are stored on the server and hence, only {@link BoxInfoServer}
  * should be used.
  */
-public interface ISlotConnectionsContext<I extends Object, B extends IBoxInfoCommon<I>>
-{
+public interface ISlotConnectionsContext<I extends Object, B extends IBoxInfoCommon<I>> {
 	/**
 	 * Gets the list of boxes to which an edge leads from box
 	 * with the given ID.
@@ -23,7 +22,7 @@ public interface ISlotConnectionsContext<I extends Object, B extends IBoxInfoCom
 	 * @return
 	 */
 	Set<B> getFromNeighbours(I boxID);
-	
+
 	/**
 	 * Gets the list of boxes from which an edge leads to box
 	 * with the given ID.
@@ -31,7 +30,7 @@ public interface ISlotConnectionsContext<I extends Object, B extends IBoxInfoCom
 	 * @return
 	 */
 	Set<B> getToNeighbours(I boxID);
-	
+
 	/**
 	 * Does an edge lead from box with the given ID to box with the given ID?
 	 * @param fromBoxID

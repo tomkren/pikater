@@ -13,38 +13,37 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
  * 
  * @author SkyCrawl
  */
-public class BoxInfoServer implements IBoxInfoCommon<Integer>
-{
+public class BoxInfoServer implements IBoxInfoCommon<Integer> {
 	/*
 	 * Read-only fields (except ID, which is only set once and then it is read-only).
 	 */
-	
+
 	private Integer generatedUniqueID;
-	
+
 	/**
 	 * Box category.
 	 */
 	private final BoxType boxType;
-	
+
 	/**
 	 * Low-level box information provider, fetched from core system.
 	 */
 	private final AgentInfo associatedAgent;
-	
+
 	/*
 	 * Mutable fields.
 	 */
-	
+
 	/**
 	 * X position of the box in the experiment canvas. 
 	 */
 	private int posX;
-	
+
 	/**
 	 * Y position of the box in the experiment canvas.
 	 */
 	private int posY;
-	
+
 	/**
 	 * Whether this box is currently registered and visible in the experiment
 	 * canvas.
@@ -54,9 +53,8 @@ public class BoxInfoServer implements IBoxInfoCommon<Integer>
 	 * set to "true".
 	 */
 	private boolean registered;
-	
-	public BoxInfoServer(AgentInfo associatedAgent, int posX, int posY) throws CloneNotSupportedException
-	{
+
+	public BoxInfoServer(AgentInfo associatedAgent, int posX, int posY) throws CloneNotSupportedException {
 		this.generatedUniqueID = null;
 		this.boxType = BoxType.fromAgentInfo(associatedAgent);
 		this.associatedAgent = associatedAgent.clone(); // each box needs to have a unique instance (to preserve original instances intact)
@@ -64,75 +62,54 @@ public class BoxInfoServer implements IBoxInfoCommon<Integer>
 		this.posY = posY;
 		this.registered = true;
 	}
-	
+
 	@Override
-	public Integer getID()
-	{
+	public Integer getID() {
 		return generatedUniqueID;
 	}
-	
+
 	@Override
-	public void setID(Integer id)
-	{
-		if(generatedUniqueID == null)
-		{
+	public void setID(Integer id) {
+		if (generatedUniqueID == null) {
 			generatedUniqueID = id;
-		}
-		else
-		{
+		} else {
 			throw new IllegalStateException("ID has already been set.");
 		}
 	}
-	
-	public int getPosX()
-	{
+
+	public int getPosX() {
 		return posX;
 	}
 
-	public void setPosX(int posX)
-	{
+	public void setPosX(int posX) {
 		this.posX = posX;
 	}
-	
-	public int getPosY()
-	{
+
+	public int getPosY() {
 		return posY;
 	}
 
-	public void setPosY(int posY)
-	{
+	public void setPosY(int posY) {
 		this.posY = posY;
 	}
-	
-	public boolean isRegistered()
-	{
+
+	public boolean isRegistered() {
 		return registered;
 	}
 
-	public void setRegistered(boolean registered)
-	{
+	public void setRegistered(boolean registered) {
 		this.registered = registered;
 	}
-	
-	public AgentInfo getAssociatedAgent()
-	{
+
+	public AgentInfo getAssociatedAgent() {
 		return associatedAgent;
 	}
-	
-	public BoxType getBoxType()
-	{
+
+	public BoxType getBoxType() {
 		return boxType;
 	}
-	
-	public BoxInfoClient toClientFormat()
-	{
-		return new BoxInfoClient(
-				generatedUniqueID,
-				boxType.name(),
-				associatedAgent.getName(),
-				posX,
-				posY,
-				ExpEditor.getBoxPictureURL(boxType)
-		);
+
+	public BoxInfoClient toClientFormat() {
+		return new BoxInfoClient(generatedUniqueID, boxType.name(), associatedAgent.getName(), posX, posY, ExpEditor.getBoxPictureURL(boxType));
 	}
 }

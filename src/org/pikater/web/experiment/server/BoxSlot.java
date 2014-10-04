@@ -9,63 +9,50 @@ import org.pikater.core.ontology.subtrees.agentInfo.Slot;
  * 
  * @author SkyCrawl
  */
-public class BoxSlot
-{
+public class BoxSlot {
 	private final BoxInfoServer parentBox;
 	private final Slot childSlot;
 	private final SlotDirection childSlotsType;
-	
-	public BoxSlot(BoxInfoServer parentBox, Slot childSlot)
-	{
+
+	public BoxSlot(BoxInfoServer parentBox, Slot childSlot) {
 		this.parentBox = parentBox;
-		if(parentBox.getAssociatedAgent().getInputSlots().contains(childSlot))
-		{
+		if (parentBox.getAssociatedAgent().getInputSlots().contains(childSlot)) {
 			this.childSlotsType = SlotDirection.INPUT;
-		}
-		else if(parentBox.getAssociatedAgent().getOutputSlots().contains(childSlot))
-		{
+		} else if (parentBox.getAssociatedAgent().getOutputSlots().contains(childSlot)) {
 			this.childSlotsType = SlotDirection.OUTPUT;
-		}
-		else
-		{
+		} else {
 			this.childSlotsType = null;
 		}
 		this.childSlot = childSlot;
 	}
 
-	public BoxInfoServer getParentBox()
-	{
+	public BoxInfoServer getParentBox() {
 		return parentBox;
 	}
 
-	public Slot getChildSlot()
-	{
+	public Slot getChildSlot() {
 		return childSlot;
 	}
 
-	public SlotDirection getChildSlotsType()
-	{
+	public SlotDirection getChildSlotsType() {
 		return childSlotsType;
 	}
-	
-	public boolean isFromEndpoint()
-	{
+
+	public boolean isFromEndpoint() {
 		return childSlotsType == SlotDirection.OUTPUT;
 	}
-	
-	public boolean isValid()
-	{
-		if((childSlotsType == null) || (parentBox == null) || (childSlot == null))
-		{
+
+	public boolean isValid() {
+		if ((childSlotsType == null) || (parentBox == null) || (childSlot == null)) {
 			return false;
 		}
 		// parent-child relationship between the box and slot is ensured by the constructor and slot type null check above
 		return true;
 	}
-	
+
 	//---------------------------------------------------------
 	// COMPARISON INTERFACE - GENERATED WITH ECLIPSE
-	
+
 	/*
 	 * NOT NEEDED AFTER ALL BUT KEPT FOR NEEDY TIMES
 	 * 1) Equals comparisons were removed because they're unwanted and could
@@ -75,7 +62,7 @@ public class BoxSlot
 	 * of this class in collections, we don't have to do check again
 	 * in here.
 	 */
-	
+
 	/*
 	@Override
 	public boolean equals(Object obj)

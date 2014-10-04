@@ -22,41 +22,35 @@ import org.quartz.JobExecutionException;
  * 
  * @author SkyCrawl
  */
-public class UploadedAgentHandler extends ImmediateOneTimeJob
-{
-	public UploadedAgentHandler()
-	{
+public class UploadedAgentHandler extends ImmediateOneTimeJob {
+	public UploadedAgentHandler() {
 		super(5);
 	}
 
 	@Override
-	public boolean argumentCorrect(int index, Object arg)
-	{
-		switch(index)
-		{
-			case 0:
-				return arg instanceof JPAUser;
-			case 1:
-			case 2:
-			case 3:
-				return arg instanceof String;
-			case 4:
-				return arg instanceof File;
-				
-			default:
-				return false;
+	public boolean argumentCorrect(int index, Object arg) {
+		switch (index) {
+		case 0:
+			return arg instanceof JPAUser;
+		case 1:
+		case 2:
+		case 3:
+			return arg instanceof String;
+		case 4:
+			return arg instanceof File;
+
+		default:
+			return false;
 		}
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder)
-	{
+	public void buildJob(JobBuilder builder) {
 		// builder.withIdentity("RemoveExpiredTrainedModels", "Jobs");
 	}
 
 	@Override
-	protected void execute() throws JobExecutionException
-	{
+	protected void execute() throws JobExecutionException {
 		// information from GUI
 		JPAUser owner = getArg(0);
 		String fileName = getArg(1);
@@ -65,8 +59,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 		File uploadedFile = getArg(4);
 
 		// transport to database
-		try
-		{
+		try {
 			JPAExternalAgent agent = new JPAExternalAgent();
 			agent.setAgentClass(agentClass);
 			agent.setName(fileName);
@@ -74,28 +67,20 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			agent.setOwner(owner);
 			agent.setCreated(new Date());
 			byte[] content;
-			try
-			{
+			try {
 				content = Files.readAllBytes(Paths.get(uploadedFile.getAbsolutePath()));
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 				throw new JobExecutionException("Unable to open input jar", e);
 			}
 			agent.setJar(content);
 			DAOs.externalAgentDAO.storeEntity(agent);
-			
-			try
-			{
+
+			try {
 				WebToCoreEntryPoint.notify_newAgent(agent.getId());
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				PikaterWebLogger.logThrowable("Could not send notification about a new external agent to core.", e);
 			}
-		}
-		finally
-		{
+		} finally {
 			uploadedFile.delete();
 		}
 	}

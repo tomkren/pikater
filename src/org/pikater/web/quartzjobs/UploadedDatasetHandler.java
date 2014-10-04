@@ -23,83 +23,71 @@ import org.quartz.JobExecutionException;
  * 
  * @author SkyCrawl
  */
-public class UploadedDatasetHandler extends ImmediateOneTimeJob
-{
-	public UploadedDatasetHandler()
-	{
+public class UploadedDatasetHandler extends ImmediateOneTimeJob {
+	public UploadedDatasetHandler() {
 		super(5); // number of arguments
 	}
-	
+
 	@Override
-	public boolean argumentCorrect(int index, Object arg)
-	{
-		switch (index)
-		{
-			case 0:
-				return arg instanceof JPAUser;
-			case 1:
-			case 2:
-				return arg instanceof String;
-			case 3:
-				return arg instanceof File;
-			case 4:
-				return arg instanceof String;
-			
-			default:
-				return false;
+	public boolean argumentCorrect(int index, Object arg) {
+		switch (index) {
+		case 0:
+			return arg instanceof JPAUser;
+		case 1:
+		case 2:
+			return arg instanceof String;
+		case 3:
+			return arg instanceof File;
+		case 4:
+			return arg instanceof String;
+
+		default:
+			return false;
 		}
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder)
-	{
+	public void buildJob(JobBuilder builder) {
 		// builder.withIdentity("RemoveExpiredTrainedModels", "Jobs");
 	}
 
 	@Override
-	protected void execute() throws JobExecutionException
-	{
+	protected void execute() throws JobExecutionException {
 		// information from GUI that can not be computed
 		JPAUser owner = getArg(0);
 		String optionalARFFHeaders = getArg(1);
 		String description = getArg(2);
 		File uploadedFile = getArg(3);
 		String realFilename = getArg(4);
-		
+
 		// the conversion
 		File convertedFile = null;
-		try
-		{
-			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
-			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,realFilename,description, owner.getId(),JPADatasetSource.USER_UPLOAD);
-			
-			try
-			{
+		try {
+			convertedFile = this.convert(uploadedFile, optionalARFFHeaders);
+			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile, realFilename, description, owner.getId(), JPADatasetSource.USER_UPLOAD);
+
+			try {
 				WebToCoreEntryPoint.notify_newDataset(newDatasetID);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				PikaterWebLogger.logThrowable("Could not send notification about a new dataset to core.", e);
 			}
-			
+
 		} catch (IOException e) {
 			throw new JobExecutionException(e);
-		} catch (DataSetConverterCellException e){
+		} catch (DataSetConverterCellException e) {
 			throw new JobExecutionException(e);
 		} catch (DataSetConverterException e) {
 			throw new JobExecutionException(e);
-		}
-		finally{
-			if(uploadedFile.exists()){
+		} finally {
+			if (uploadedFile.exists()) {
 				uploadedFile.delete();
 			}
-			if((convertedFile!=null)&&convertedFile.exists()){
+			if ((convertedFile != null) && convertedFile.exists()) {
 				convertedFile.delete();
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * Converts the input file to an ARFF file
 	 * Input file can be in ARFF,CSV,XLS,XLSX formats.
@@ -110,37 +98,37 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 	 * @throws DataSetConverterException 
 	 * @throws Exception
 	 */
-	private File convert(File file,String header) throws IOException, DataSetConverterException{
+	private File convert(File file, String header) throws IOException, DataSetConverterException {
 		String path = file.getAbsolutePath().toLowerCase();
-		
-		File convertedFile=new File(file.getAbsolutePath()+".convert");
-		
-		if(path.endsWith("txt")){
-			if(header==null){
+
+		File convertedFile = new File(file.getAbsolutePath() + ".convert");
+
+		if (path.endsWith("txt")) {
+			if (header == null) {
 				return file;
-			}else{
+			} else {
 				DataSetConverter.joinARFFFileWithHeader(file, header, convertedFile);
 				return convertedFile;
 			}
-		}else{
-			DataSetConverter.InputType inputType= InputType.INVALID;
-			if(path.endsWith("xls")){
-				convertedFile=new File(file.getAbsolutePath().substring(0, path.lastIndexOf("xls"))+"arff");
-				inputType=InputType.XLS;
-			}else if(path.endsWith("xlsx")){
-				convertedFile=new File(file.getAbsolutePath().substring(0, path.lastIndexOf("xlsx"))+"arff");
-				inputType=InputType.XLSX;
-			}else if(path.endsWith("csv")){
-				convertedFile=new File(file.getAbsolutePath().substring(0, path.lastIndexOf("csv"))+"arff");
-				inputType=InputType.CSV;
-			}else{
+		} else {
+			DataSetConverter.InputType inputType = InputType.INVALID;
+			if (path.endsWith("xls")) {
+				convertedFile = new File(file.getAbsolutePath().substring(0, path.lastIndexOf("xls")) + "arff");
+				inputType = InputType.XLS;
+			} else if (path.endsWith("xlsx")) {
+				convertedFile = new File(file.getAbsolutePath().substring(0, path.lastIndexOf("xlsx")) + "arff");
+				inputType = InputType.XLSX;
+			} else if (path.endsWith("csv")) {
+				convertedFile = new File(file.getAbsolutePath().substring(0, path.lastIndexOf("csv")) + "arff");
+				inputType = InputType.CSV;
+			} else {
 				//System.err.println("Not supported input file format!\nPlease use ARFF,XLS or XLSX formats");
 				return null;
 			}
-			
-			if(inputType==InputType.INVALID){
+
+			if (inputType == InputType.INVALID) {
 				return null;
-			}else{
+			} else {
 				DataSetConverter.spreadSheetToArff(inputType, file, header, convertedFile);
 				return convertedFile;
 			}

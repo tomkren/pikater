@@ -18,70 +18,58 @@ import org.quartz.JobExecutionException;
  * 
  * @author SkyCrawl
  */
-public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob
-{
-	public ExportBatchResultsJob()
-	{
+public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob {
+	public ExportBatchResultsJob() {
 		super(3);
 	}
 
 	@Override
-	public boolean argumentCorrect(int index, Object arg)
-	{
-		switch(index)
-		{
-			case 0:
-				return arg instanceof JPABatch;
-			case 1:
-				return arg instanceof File;
-			case 2:
-				return arg instanceof IProgressDialogResultHandler;
-				
-			default:
-				return false;
+	public boolean argumentCorrect(int index, Object arg) {
+		switch (index) {
+		case 0:
+			return arg instanceof JPABatch;
+		case 1:
+			return arg instanceof File;
+		case 2:
+			return arg instanceof IProgressDialogResultHandler;
+
+		default:
+			return false;
 		}
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder)
-	{
+	public void buildJob(JobBuilder builder) {
 	}
 
 	@Override
-	protected void execute() throws JobExecutionException
-	{
+	protected void execute() throws JobExecutionException {
 		// information from GUI
 		JPABatch batch = getArg(0);
 		File resultFile = getArg(1);
 		IProgressDialogResultHandler resultHandler = getArg(2);
 
 		// the actual action
-		try
-		{
-			ResultExporter re=new ResultExporter(new FileOutputStream(resultFile));
-			
-			re.header((JPABatch)null, (JPAExperiment)null);
-			
+		try {
+			ResultExporter re = new ResultExporter(new FileOutputStream(resultFile));
+
+			re.header((JPABatch) null, (JPAExperiment) null);
+
 			float experimentsExported = 0;
-			float experimentCount = batch.getExperiments().size();  
-			for(JPAExperiment experiment : batch.getExperiments())
-			{
+			float experimentCount = batch.getExperiments().size();
+			for (JPAExperiment experiment : batch.getExperiments()) {
 				re.row(batch, experiment);
-				
+
 				experimentsExported++;
 				resultHandler.updateProgress(experimentsExported / experimentCount);
 			}
-			
+
 			re.close();
 			resultHandler.finished(null);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
 			resultHandler.failed(); // don't forget to... important cleanup will take place
-		}
-		finally
-		{
+		} finally {
 			// generated temporary files will be deleted when the JVM exits
 		}
 	}
