@@ -718,6 +718,17 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	
+	/**
+	 * Saves a new batch inserted in the core system. It converts the content of a {@link Batch} object
+	 * encapsulated in the {@link SaveBatch} obejct to batch format used in the database. The conversion includes 
+	 * creating a XML of universal computation description, that represents the batch. Some batch metadata are 
+	 * also stored - e.g. name of the batch, owner...
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing a {@link SaveBatch} action
+	 * @return {@link ACLMessage} of the reply
+	 */
 	private ACLMessage respondToSaveBatch(ACLMessage request, Action a) {
 
 		logInfo("RespondToSaveBatch");
@@ -899,6 +910,15 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Creates a respond containing the priority of the specified batch. The ID of the batch
+	 * is contained in the {@link GetBatchPriority} object. If no batch is available in the 
+	 * database with the given ID, then message with FAILURE flag is returned.
+	 *  
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing the {@link GetBatchPriority} object.
+	 * @return {@link ACLMessage} of the reply
+	 */
 	private ACLMessage respondToGetBatchPriority(ACLMessage request, Action a) {
 		logInfo("respondToGetBatchPriority");
 
@@ -928,6 +948,15 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
+	/**
+	 * Stores a new experiment to the database. Experiments are parts of the batch and were created
+	 * by the Parser Agent. Data about the experiment are stored in a {@link Experiment} object
+	 * encapsulated in a  {@link SavedExperiment} object
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing the {@link SavedExperiment} action.
+	 * @return {@link ACLMessage} of the reply
+	 */
 	private ACLMessage respondToSaveExperiment(ACLMessage request, Action a) {
 
 		logInfo("respondToSaveExperiment");
@@ -935,7 +964,7 @@ public class Agent_DataManager extends PikaterAgent {
 		SaveExperiment saveExperiment = (SaveExperiment) a.getAction();
 		Experiment experiment = saveExperiment.getExperiment();
 
-		/**TODO: Parser sends SaveExperiment message, when experiment is
+		/** Parser sends SaveExperiment message, when experiment is
 		* created and computation has begun
 		* DAO now sets current date for created and started, but maybe the created can be ommited...
 		* */
@@ -965,6 +994,16 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Changes the status of the specified experiment to a new status defined in the message. If the new 
+	 * status is COMPUTING, the new start time is set to the experiment. If the new status is FAILED or FINISHED,
+	 * new finish time is set to the experiment. The new status and the experiment ID is contained in a 
+	 * {@link UpdateExperimentStatus} object.
+	 *
+	 * @param request {@link ACLMessage} of the request.
+	 * @param a {@link Action} containing the {@link UpdateExperimentStatus}
+	 * @return {@link ACLMessage} of the reply
+	 */
 	protected ACLMessage respondToUpdateExperimentStatus(ACLMessage request, Action a) {
 
 		logInfo("respondToUpdateExperimentStatus");
@@ -995,6 +1034,13 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Function deciding, whether a {@link JPAAbstractEntity} object is contained in the list based upon it's ID.
+	 *  
+	 * @param list the list we are searching in
+	 * @param item the item we are searching for
+	 * @return true if item is in the list or false 
+	 */
 	private <T extends JPAAbstractEntity> boolean containsID(List<T> list, T item ){
 		for(T i : list){
 			if(i.getId()==item.getId()){
@@ -1004,10 +1050,26 @@ public class Agent_DataManager extends PikaterAgent {
 		return false;
 	}
 	
+	/**
+	 * Function that always returns a not null list. If list in argument is not null, then this list is the 
+	 * result. If the list in argument is null an empty list is returned.
+	 * 
+	 * @param list for which we want safe access
+	 * @return a not null list
+	 */
 	private <E> List<E> safe(List<E> list){
 		return (list!=null)?list:Collections.<E>emptyList();
 	}
 	
+	/**
+	 * Function that stores result statistics for each finished experiment. These statistics contain
+	 * some data about how well the experiment performed with the agent it was running on. Each result
+	 * contains set of input and output datasets, several error statistics and timestamps of start and finish.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing action {@link SaveResults}
+	 * @return {@link ACLMessage} of the reply
+	 */
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
@@ -1022,6 +1084,7 @@ public class Agent_DataManager extends PikaterAgent {
 		logInfo("Saving result for hash: " + task.getDatas().exportInternalTrainFileName());
 		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
 
+		//Associating input datasets with the result
 		for(Data data : safe(task.getDatas().getDatas())){
 			if(data==null)
 				continue;
@@ -1039,6 +1102,7 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 		}
 		
+		//Associating output datasets with the result
 		for (TaskOutput output : task.getOutput()) {
 			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(output.getName())).getSingleResultWithNull();
 			if(dslo!=null){
@@ -1148,6 +1212,15 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Stores a dataset file created by an experiment. The location of the file
+	 * is encapsulated in the {@link SaveDataset} action.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing {@link SaveDataset} action
+	 * @return {@link ACLMessage} of the reply containing the ID of stored dataset or with
+	 * FAILURE flag set after unsuccessful operation.
+	 */
 	private ACLMessage respondToSaveDatasetMessage(ACLMessage request, Action a) {
 		SaveDataset sd = (SaveDataset) a.getAction();
 
@@ -1171,6 +1244,12 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Associates model with the result identified by its ID.
+	 *  
+	 * @param task {@link Task} containing data about the model.
+	 * @param resultId ID of the result, for that model will be added
+	 */
 	private void saveResultModel(Task task, int resultId) {
 		Model m = new Model();
 		m.setAgentClassName(task.getAgent().getType());
@@ -1184,6 +1263,16 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 	}
 
+	/**
+	 * Stores metadata received in {@link SaveMetadata} action to the dataset with the given ID.
+	 * If there exist some metadata for dataset with same hash, then those metadata are associated
+	 * with the current dataset. In other case, {@link Metadata} object received in {@link SaveMetadata}
+	 * object is converted to database's metadata format and is associated with the dataset.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing {@link SaveMetadata} action
+	 * @return {@link ACLMessage} with the reply
+	 */
 	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) {
 		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
 		Metadata metadata = saveMetadata.getMetadata();
@@ -1226,6 +1315,15 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Retrieves metadata for the given dataset hash, which are sent back in the reply {@link jade.domain.introspection.ACLMessage}
+	 * 
+	 * @param request {@link ACLMessage} received with the request/
+	 * @param a {@link Action} containing {@link GetMetadata} action
+	 * @return {@link ACLMessage} reply containing the retrieved {@link Metadata} object
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
 	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
 		GetMetadata gm = (GetMetadata) a.getAction();
 
@@ -1250,6 +1348,12 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Creates an {@link AttributeMetadata} object from a {@link JPAAttributeMetaData} object.
+	 * 
+	 * @param amd {@link JPAAttributeMetaData} object
+	 * @return {@link AttributeMetadata} object representing the same metadata as the input object.
+	 */
 	private AttributeMetadata convertJPAAttributeMetadataToOntologyMetadata(JPAAttributeMetaData amd) {
 		AttributeMetadata attributeMetadata;
 
@@ -1286,6 +1390,13 @@ public class Agent_DataManager extends PikaterAgent {
 		return attributeMetadata;
 	}
 
+	/**
+	 * Creates an object of ontology metadata representation from metadata datas stored within
+	 * a {@link JPADataSetLO} object, that is returned as a {@link Metadata} object.
+	 *  
+	 * @param dslo {@link JPADataSetLO} object containing the metadata.
+	 * @return {@link Metadata} object
+	 */
 	private Metadata convertJPADatasetToOntologyMetadata(JPADataSetLO dslo) {
 		JPAGlobalMetaData gmd = dslo.getGlobalMetaData();
 
@@ -1326,6 +1437,15 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
+	/**
+	 * Retrieves all metadata for the datasets specified in the {@link GetAllMetadata} action.
+	 *  
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing {@link GetAllMetadata} action
+	 * @return {@link ACLMessage} reply containing metadata for the datasets.
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
 	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
 
@@ -1366,6 +1486,16 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Retrieves the N best agents - ordering based on result's error rate - for the given dataset hash.
+	 *   
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link GetMultipleBestAgents} action
+	 * @return {@link ACLMessage} containing N best agents for the dataset.
+	 * @throws ClassNotFoundException
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
 	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws ClassNotFoundException, CodecException, OntologyException {
 		GetMultipleBestAgents g = (GetMultipleBestAgents) a.getAction();
 		String datasethash = g.getNearestInternalFileName();
@@ -1403,6 +1533,15 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Saves model for the result. Both model and result for which the model will be
+	 * associated are defined in the {@link Model} object ecapsulated in the {@link SaveModel}
+	 * action.
+	 * 
+	 * @param request {@link ACLMessage} of the request. 
+	 * @param a {@link Action} containing {@link SaveModel} action
+	 * @return {@link ACLMessage} of the reply indicating success or failure using flags INFORM or FAILURE
+	 */
 	private ACLMessage respondToSaveModel(ACLMessage request, Action a) {
 
 		SaveModel sm = (SaveModel) a.getAction();
@@ -1421,6 +1560,13 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Retrieves model with given ID, that is encapsulated in {@link GetModel} action.
+	 *  
+	 * @param request {@link ACLMessage} of the request.
+	 * @param a {@link Action} containing {@link GetModel} action
+	 * @return {@link ACLMessage} of the reply
+	 */
 	private ACLMessage respondToGetModel(ACLMessage request, Action a) {
 		GetModel gm = (GetModel) a.getAction();
 
@@ -1447,9 +1593,16 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	
+	/**
+	 * Retrieves all models stored in the database
+	 * 
+	 * @param request {@link ACLMessage} of the request
+	 * @param a {@link Action} containing {@link GetModels} action, that is used for determining
+	 * whether this function is called or not
+	 * @return {@link ACLMessage} containing all models stored in the database.
+	 */
 	private ACLMessage respondToGetModels(ACLMessage request, Action a) {
-		//GetModels gm=(GetModels)a.getAction();
-
 		List<JPAModel> savedModels = DAOs.modelDAO.getAll();
 
 		Models models = new Models();
@@ -1478,6 +1631,20 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Retrieves an external agent's JAR file from the database, based upon the agent's class name.
+	 * The class name is received within an {@link GetExternalAgentJar} object.
+	 * 
+	 * The content of the JAR file is copied to a file of the local file system with a path
+	 * determined by {@link CoreConfiguration#getExtAgentsPath()}
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param a {@link Action} containing {@link GetExternalAgentJar} action
+	 * @return {@link ACLMessage} indicating success if everything went well
+	 * @throws FailureException
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
 	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws FailureException, CodecException, OntologyException {
 		String type = ((GetExternalAgentJar) a.getAction()).getType();
 		logInfo("getting JAR for agent type " + type);
@@ -1535,6 +1702,20 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Retrieves a dataset from the database based on the dataset's hash. The content of
+	 * the dataset is copied to a file of the local filesystem with a path determined by
+	 * {@link CoreConfiguration#getDataFilesPath()}
+	 * 
+	 * The hash of the dataset is encapsulated in an {@link GetFile} object.
+	 *    
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing {@link GetFile} action
+	 * @return {@link ACLMessage} of the reply
+	 * @throws CodecException
+	 * @throws OntologyException
+	 * @throws ClassNotFoundException
+	 */
 	private ACLMessage respondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException {
 		String hash = ((GetFile) a.getAction()).getHash();
 		logInfo(new Date().toString() + " DataManager.GetFile");
@@ -1588,6 +1769,15 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	
+	/**
+	 * Retrieves the ID, hash and filename triplet for all dataset stored in the database.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing {@link GetAllDatasetInfo} action, which used to determine
+	 * whether this function is called or not
+	 * @return {@link ACLMessage} of the reply containing {@link DatasetsInfo} object of triplet's list
+	 */
 	public ACLMessage respondToGetAllDatasetInfo(ACLMessage request, Action a) {
 		
 		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getAllUserUploaded();
