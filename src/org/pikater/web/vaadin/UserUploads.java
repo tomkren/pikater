@@ -25,57 +25,53 @@ import com.vaadin.ui.UI;
  * 
  * @author SkyCrawl
  */
-public class UserUploads implements Serializable, IFileUploadEvents
-{
+public class UserUploads implements Serializable, IFileUploadEvents {
 	private static final long serialVersionUID = 1643776529186934301L;
-	
+
 	// -----------------------------------------------
 	// FILE SIZE DEFINITIONS
-	
+
 	/*
 	 * Signed 4B-integer poses a maximum of 2.147 GB.
 	 * Unsigned 4B-integer poses a maximum of 4.294 GB.
 	 */
-	
+
 	private static final int ONE_KB = 1000;
 	private static final int ONE_MB = ONE_KB * 1000;
 	private static final int ONE_GB = ONE_MB * 1000;
 	private static final int MAX_CONCURRENT_UPLOADS = 3;
-	
+
 	// -----------------------------------------------
 	// INTERNAL FIELDS
-	
+
 	/**
 	 * How many files the corresponding user uploads at the moment.
 	 */
 	private int currentUploadsCount;
-	
+
 	/**
 	 * A backup of the original push mode. When an upload starts, set the current UI's push mode to
 	 * Automatic and when all the uploads finish, set it back to the original value. 
 	 */
 	private PushMode originalPushMode;
-	
+
 	// -----------------------------------------------
 	// CONSTRUCTOR
-	
-	public UserUploads()
-	{
+
+	public UserUploads() {
 		this.currentUploadsCount = 0;
 		this.originalPushMode = null;
 	}
-	
+
 	// -----------------------------------------------
 	// INHERITED INTERFACE
-	
+
 	/**
 	 * Only for internal use.
 	 */
 	@Override
-	public synchronized void uploadStarted(StreamingStartEvent event)
-	{
-		if(!isAFileBeingUploaded())
-		{
+	public synchronized void uploadStarted(StreamingStartEvent event) {
+		if (!isAFileBeingUploaded()) {
 			onThingsGoingToBeUploaded();
 		}
 		currentUploadsCount++;
@@ -85,11 +81,9 @@ public class UserUploads implements Serializable, IFileUploadEvents
 	 * Only for internal use.
 	 */
 	@Override
-	public synchronized void uploadFailed(StreamingErrorEvent event)
-	{
+	public synchronized void uploadFailed(StreamingErrorEvent event) {
 		currentUploadsCount--;
-		if(!isAFileBeingUploaded())
-		{
+		if (!isAFileBeingUploaded()) {
 			onThingsUploadFinished();
 		}
 	}
@@ -98,25 +92,22 @@ public class UserUploads implements Serializable, IFileUploadEvents
 	 * Only for internal use.
 	 */
 	@Override
-	public synchronized void uploadFinished(StreamingEndEvent event, File uploadedFileHandler)
-	{
+	public synchronized void uploadFinished(StreamingEndEvent event, File uploadedFileHandler) {
 		currentUploadsCount--;
-		if(!isAFileBeingUploaded())
-		{
+		if (!isAFileBeingUploaded()) {
 			onThingsUploadFinished();
 		}
 	}
-	
+
 	// -----------------------------------------------
 	// OTHER PUBLIC METHODS
-	
-	public MyUploadStateWindow createUploadInfoProvider()
-	{
+
+	public MyUploadStateWindow createUploadInfoProvider() {
 		MyUploadStateWindow result = new MyUploadStateWindow();
 		result.setWindowPosition(MyUploadStateWindow.WindowPosition.BOTTOM_RIGHT);
 		return result;
 	}
-	
+
 	/**
 	 * This is the most important method of this class.
 	 * Creates a new upload button and binds it with the constant UploadStateWindow instance, unique for each
@@ -127,20 +118,14 @@ public class UserUploads implements Serializable, IFileUploadEvents
 	 * @param uploadedFileHandler
 	 * @return
 	 */
-	public MyMultiUpload createUploadButton(String caption, MyUploadStateWindow uploadInfoProvider, EnumSet<HttpContentType> allowedMIMETypes) 
-			throws UploadLimitReachedException
-	{
-		if(get() >= MAX_CONCURRENT_UPLOADS)
-		{
+	public MyMultiUpload createUploadButton(String caption, MyUploadStateWindow uploadInfoProvider, EnumSet<HttpContentType> allowedMIMETypes) throws UploadLimitReachedException {
+		if (get() >= MAX_CONCURRENT_UPLOADS) {
 			throw new UploadLimitReachedException();
-		}
-		else
-		{
+		} else {
 			MyMultiUpload result = new MyMultiUpload(uploadInfoProvider, false); // true doesn't work... seems to be a bug in the plugin
 			result.setMaxFileSize(ONE_GB);
 			result.setAcceptedMimeTypes(new ArrayList<String>(HttpContentType.getMimeTypes(allowedMIMETypes)));
-			result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", 
-					CollectionUtils.join(HttpContentType.getExtensions(allowedMIMETypes), ", ")));
+			result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", CollectionUtils.join(HttpContentType.getExtensions(allowedMIMETypes), ", ")));
 			result.setSizeErrorMsgPattern("Error: you can only upload files up to 1GB.");
 			result.setMaxVisibleRows(5);
 			result.getSmartUpload().setUploadButtonCaptions(caption, caption);
@@ -152,28 +137,24 @@ public class UserUploads implements Serializable, IFileUploadEvents
 	/** 
 	 * @return whether a file is being uploaded in ANY UI instance
 	 */
-	public boolean isAFileBeingUploaded()
-	{
+	public boolean isAFileBeingUploaded() {
 		return get() > 0;
 	}
-	
+
 	// -----------------------------------------------
 	// PRIVATE FIELDS
-	
-	private synchronized int get()
-	{
+
+	private synchronized int get() {
 		return currentUploadsCount;
 	}
-	
-	private void onThingsGoingToBeUploaded()
-	{
+
+	private void onThingsGoingToBeUploaded() {
 		originalPushMode = UI.getCurrent().getPushConfiguration().getPushMode();
 		UI.getCurrent().getPushConfiguration().setPushMode(PushMode.AUTOMATIC);
 		// alternative: polling (e.g. "UI.setPollInterval(1500);")
 	}
-	
-	private void onThingsUploadFinished()
-	{
+
+	private void onThingsUploadFinished() {
 		UI.getCurrent().getPushConfiguration().setPushMode(originalPushMode);
 	}
 }

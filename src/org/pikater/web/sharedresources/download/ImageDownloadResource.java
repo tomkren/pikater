@@ -9,26 +9,22 @@ import org.pikater.web.sharedresources.ResourceExpiration;
  * 
  * @author SkyCrawl
  */
-public class ImageDownloadResource extends FileDownloadResource
-{
+public class ImageDownloadResource extends FileDownloadResource {
 	private final int imageWidth;
 	private final int imageHeight;
-	
-	public ImageDownloadResource(File file, ResourceExpiration expiration, String mimeType, int imageWidth, int imageHeight) 
-	{
+
+	public ImageDownloadResource(File file, ResourceExpiration expiration, String mimeType, int imageWidth, int imageHeight) {
 		super(file, expiration, mimeType);
-		
+
 		this.imageWidth = imageWidth;
 		this.imageHeight = imageHeight;
 	}
 
-	public int getImageWidth()
-	{
+	public int getImageWidth() {
 		return imageWidth;
 	}
 
-	public int getImageHeight()
-	{
+	public int getImageHeight() {
 		return imageHeight;
 	}
 }

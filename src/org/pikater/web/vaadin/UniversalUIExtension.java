@@ -17,51 +17,43 @@ import com.vaadin.ui.UI;
  * @see {@link UniversalUIExtensionClientRpc}
  * @see {@link UniversalUIExtensionServerRpc}
  */
-public class UniversalUIExtension extends AbstractExtension
-{
+public class UniversalUIExtension extends AbstractExtension {
 	private static final long serialVersionUID = 8278201529558658998L;
-	
-	public UniversalUIExtension()
-	{
-		registerRpc(new UniversalUIExtensionServerRpc()
-		{
+
+	public UniversalUIExtension() {
+		registerRpc(new UniversalUIExtensionServerRpc() {
 			private static final long serialVersionUID = -5824200287684658506L;
-			
+
 			@Override
-			public void logWarning(String message)
-			{
+			public void logWarning(String message) {
 				PikaterWebLogger.log(Level.WARNING, message);
 			}
 
 			@Override
-			public void logThrowable(String message, String throwableStackTrace)
-			{
+			public void logThrowable(String message, String throwableStackTrace) {
 				PikaterWebLogger.log(Level.SEVERE, String.format("%s\n%s", message, throwableStackTrace));
 			}
 
 			@Override
-			public void logUncaughtNativeClientException()
-			{
+			public void logUncaughtNativeClientException() {
 				PikaterWebLogger.log(Level.SEVERE, "An uncaught native client exception has been thrown. Best to launch a thorough debug.");
 			}
 		});
 	}
-	
+
 	/**
 	 * Exposing the inherited API.
 	 * @param mainUI
 	 */
-	public void extend(UI anyUI)
-    {
-        super.extend(anyUI);
-    }
-	
+	public void extend(UI anyUI) {
+		super.extend(anyUI);
+	}
+
 	/**
 	 * Access the client side features of this extension.
 	 * @return
 	 */
-	public UniversalUIExtensionClientRpc getClientRPC()
-	{
-		return getRpcProxy(UniversalUIExtensionClientRpc.class); 
+	public UniversalUIExtensionClientRpc getClientRPC() {
+		return getRpcProxy(UniversalUIExtensionClientRpc.class);
 	}
 }

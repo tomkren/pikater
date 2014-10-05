@@ -6,27 +6,22 @@ package org.pikater.web.sharedresources;
  * 
  * @author SkyCrawl
  */
-public class ResourceException extends Exception
-{
+public class ResourceException extends Exception {
 	private static final long serialVersionUID = 6741732074523686135L;
 
-	public ResourceException()
-	{
+	public ResourceException() {
 		super();
 	}
-	
-	public ResourceException(String message)
-	{
+
+	public ResourceException(String message) {
 		super(message);
 	}
-	
-	public ResourceException(Throwable cause)
-	{
+
+	public ResourceException(Throwable cause) {
 		super(cause);
 	}
 
-	public ResourceException(String message, Throwable cause)
-	{
+	public ResourceException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }

@@ -17,62 +17,57 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.IKineticShapeWrappe
  * 
  * @author SkyCrawl
  */
-public class MultiSelectionRectangle implements IKineticShapeWrapper
-{
+public class MultiSelectionRectangle implements IKineticShapeWrapper {
 	/**
 	 * The kinetic shape representing the rectangle.
 	 */
 	private final PathSVG path;
-	
+
 	/**
 	 * The point, where the user started his selection with a mouse down event.
 	 */
 	private Vector2d originalMousePosition;
-	
+
 	/**
 	 * The latest mouse position.
 	 */
 	private Vector2d currentMousePosition;
-	
-	public MultiSelectionRectangle()
-	{
+
+	public MultiSelectionRectangle() {
 		super();
 
 		this.path = Kinetic.createPathSVG(Vector2d.origin, "");
 		this.path.setStroke(Colour.red);
 		this.path.setListening(false);
-		
+
 		reset();
 	}
-	
+
 	// **********************************************************************************************
 	// INHERITED INTERFACE
-	
+
 	@Override
-	public Node getMasterNode()
-	{
+	public Node getMasterNode() {
 		return path;
 	}
 
 	// **********************************************************************************************
 	// PUBLIC INTERFACE
-	
-	public Vector2d getOriginalMousePosition()
-	{
+
+	public Vector2d getOriginalMousePosition() {
 		return this.originalMousePosition;
 	}
-	
+
 	/**
 	 * Sets the starting point of a selection. Use this method when user clicks
 	 * the left mouse button and holds it.
 	 * @param position
 	 */
-	public void setOriginalMousePosition(Vector2d position)
-	{
+	public void setOriginalMousePosition(Vector2d position) {
 		this.originalMousePosition = position;
 		this.currentMousePosition = position;
 	}
-	
+
 	/**
 	 * <p>Updates the rectangle with a new mouse position somehow. Use this
 	 * method when user moves their mouse while still holding the left
@@ -85,44 +80,36 @@ public class MultiSelectionRectangle implements IKineticShapeWrapper
 	 * @param up
 	 * @param right
 	 */
-	public void updatePath(Vector2d left, Vector2d up, Vector2d right)
-	{
+	public void updatePath(Vector2d left, Vector2d up, Vector2d right) {
 		this.currentMousePosition = up;
 		this.path.setData(new Path().moveTo(originalMousePosition).lineTo(left).lineTo(up).lineTo(right).lineTo(originalMousePosition).toSVGPath());
 	}
-	
+
 	/**
 	 * Returns the box (position and size) of the current selection.
 	 * @return
 	 */
-	public Box2d getSelection()
-	{
+	public Box2d getSelection() {
 		Vector2d pos, size;
-		if(originalMousePosition.x < currentMousePosition.x)
-		{
+		if (originalMousePosition.x < currentMousePosition.x) {
 			pos = originalMousePosition;
 			size = currentMousePosition.sub(originalMousePosition);
-		}
-		else
-		{
+		} else {
 			pos = currentMousePosition;
 			size = originalMousePosition.sub(currentMousePosition);
 		}
-		if(size.x < 0)
-		{
+		if (size.x < 0) {
 			pos.x += size.x;
 			size.x = Math.abs(size.x);
 		}
-		if(size.y < 0)
-		{
+		if (size.y < 0) {
 			pos.y += size.y;
 			size.y = Math.abs(size.y);
 		}
 		return new Box2d(pos, size);
 	}
-	
-	public void reset()
-	{
+
+	public void reset() {
 		this.originalMousePosition = Vector2d.origin;
 		this.currentMousePosition = Vector2d.origin;
 	}

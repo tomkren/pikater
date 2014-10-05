@@ -5,8 +5,7 @@ package org.pikater.web.sharedresources;
  * 
  * @author SkyCrawl
  */
-public enum ResourceExpiration
-{
+public enum ResourceExpiration {
 	/**
 	 * If this expiration value is assigned to a resource, it will expire
 	 * either with the first {@link ResourceRegistrar#getResource(java.util.UUID)}
@@ -14,7 +13,7 @@ public enum ResourceExpiration
 	 * when a download timeout is reached.
 	 */
 	ON_FIRST_PICKUP,
-	
+
 	/**
 	 * This is the default. All resources expire when user logs out or his session
 	 * expires.

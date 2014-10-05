@@ -5,6 +5,5 @@ import com.vaadin.shared.communication.ClientRpc;
 /** 
  * @author SkyCrawl
  */
-public interface AnchorClientRpc extends ClientRpc
-{
+public interface AnchorClientRpc extends ClientRpc {
 }

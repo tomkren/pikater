@@ -12,8 +12,7 @@ import org.pikater.web.servlets.DynamicDownloadServlet;
  * 
  * @author SkyCrawl
  */
-public interface IRegistrarResource
-{
+public interface IRegistrarResource {
 	/**
 	 * Gets the resource's expiration time (event-based).
 	 * @return

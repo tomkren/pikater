@@ -16,60 +16,42 @@ import com.vaadin.server.VaadinSession;
  * 
  * @author SkyCrawl
  */
-public class UserAuth
-{
-	public static Integer getUserID(VaadinSession session)
-	{
-		if(session == null)
-		{
+public class UserAuth {
+	public static Integer getUserID(VaadinSession session) {
+		if (session == null) {
 			throw new NullPointerException("Session is null. Did you use the 'getSession()' method? If so, make sure you"
 					+ "use it from the 'AbstractComponent.attach' method or just use 'VaadinSession.getCurrent()' instead.");
-		}
-		else
-		{
+		} else {
 			return UserSession.getUserID(session);
 		}
 	}
-	
-	public static JPAUser getUserEntity(VaadinSession session)
-	{
-		if(WebAppConfiguration.avoidUsingDBForNow())
-		{
+
+	public static JPAUser getUserEntity(VaadinSession session) {
+		if (WebAppConfiguration.avoidUsingDBForNow()) {
 			return JPAUser.getDummy();
-		}
-		else
-		{
+		} else {
 			return DAOs.userDAO.getByID(getUserID(session), EmptyResultAction.LOG_NULL);
 		}
 	}
-	
-	public static boolean isUserAuthenticated(VaadinSession session)
-	{
+
+	public static boolean isUserAuthenticated(VaadinSession session) {
 		return getUserID(session) != null;
 	}
-	
-	public static void login(VaadinSession session, int userID)
-	{
-		if(isUserAuthenticated(session))
-		{
+
+	public static void login(VaadinSession session, int userID) {
+		if (isUserAuthenticated(session)) {
 			throw new IllegalStateException("User is already authenticated in this session.");
-		}
-		else
-		{
+		} else {
 			UserSession.storeUserID(session, userID);
 			UserSession.storeUserUploadManager(session, new UserUploads());
 		}
 	}
-	
-	public static void logout(VaadinSession session)
-	{
-		if(isUserAuthenticated(session))
-		{
+
+	public static void logout(VaadinSession session) {
+		if (isUserAuthenticated(session)) {
 			UserSession.storeUserUploadManager(session, null);
 			UserSession.storeUserID(session, null);
-		}
-		else
-		{
+		} else {
 			throw new IllegalStateException("User is not authenticated.");
 		}
 	}

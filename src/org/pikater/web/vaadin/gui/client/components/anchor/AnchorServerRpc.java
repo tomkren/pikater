@@ -6,8 +6,7 @@ import com.vaadin.shared.communication.ServerRpc;
 /** 
  * @author SkyCrawl
  */
-public interface AnchorServerRpc extends ServerRpc
-{
+public interface AnchorServerRpc extends ServerRpc {
 	/**
 	 * Method called (on the server side) when the client side anchor is clicked.
 	 * @param mouseDetails details of the click

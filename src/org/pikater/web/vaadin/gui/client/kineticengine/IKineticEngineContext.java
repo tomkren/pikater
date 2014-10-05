@@ -10,12 +10,14 @@ import com.google.gwt.user.client.Element;
  *  
  * @author SkyCrawl
  */
-public interface IKineticEngineContext
-{
+public interface IKineticEngineContext {
 	Element getStageDOMElement();
+
 	KineticEngine getEngine();
+
 	GraphItemCreator getGraphItemCreator();
+
 	KineticUndoRedoManager getHistoryManager();
-	
+
 	ClickMode getClickMode();
 }

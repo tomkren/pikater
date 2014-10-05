@@ -14,34 +14,28 @@ import com.google.gwt.user.client.Event;
  * 
  * @author SkyCrawl
  */
-public class AppEntryPoint implements EntryPoint
-{
+public class AppEntryPoint implements EntryPoint {
 	@Override
-	public void onModuleLoad()
-	{
+	public void onModuleLoad() {
 		/*
 		 * Adds a keyboard listener that keeps track of what keys are currently ressed.
 		 */
 		Event.addNativePreviewHandler(GWTKeyboardManager.getNativePreviewHandler());
-		
+
 		/*
 		 * Send uncaught exceptions to the server:  
 		 */
-		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler()
-		{
+		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
-			public void onUncaughtException(Throwable e)
-			{
+			public void onUncaughtException(Throwable e) {
 				GWTLogger.logThrowable("Uncaught exception from client:", e);
-				
+
 				/*
-				if((e instanceof UmbrellaException) || (e instanceof JavaScriptException))
-				{
+				if((e instanceof UmbrellaException) || (e instanceof JavaScriptException)) {
 					// native exceptions usually contain no useful information => send a generic "warning" instead:
 					GWTLogger.logUncaughtNativeClientException();
 				}
-				else
-				{
+				else {
 					GWTLogger.logThrowable("Uncaught exception from client:", e);
 				}
 				*/

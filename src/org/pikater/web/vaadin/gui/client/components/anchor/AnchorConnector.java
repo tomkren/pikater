@@ -21,79 +21,61 @@ import com.vaadin.client.communication.StateChangeEvent;
  * @author SkyCrawl
  */
 @Connect(org.pikater.web.vaadin.gui.server.components.anchor.Anchor.class)
-public class AnchorConnector extends AbstractComponentConnector
-{
+public class AnchorConnector extends AbstractComponentConnector {
 	private static final long serialVersionUID = 5557617858638230393L;
-	
+
 	private final AnchorServerRpc rpc = RpcProxy.create(AnchorServerRpc.class, this);
 	private HandlerRegistration clickHandlerRegistration;
-	
-	public AnchorConnector()
-	{
+
+	public AnchorConnector() {
 		this.clickHandlerRegistration = null;
-		
-		registerRpc(AnchorClientRpc.class, new AnchorClientRpc()
-		{
+
+		registerRpc(AnchorClientRpc.class, new AnchorClientRpc() {
 			private static final long serialVersionUID = -8432862667383416641L;
 		});
 	}
 
 	@Override
-	protected Anchor createWidget()
-	{
+	protected Anchor createWidget() {
 		return GWT.create(Anchor.class);
 	}
 
 	@Override
-	public Anchor getWidget()
-	{
+	public Anchor getWidget() {
 		return (Anchor) super.getWidget();
 	}
 
 	@Override
-	public AnchorState getState()
-	{
+	public AnchorState getState() {
 		return (AnchorState) super.getState();
 	}
 
 	@Override
-	public void onStateChanged(StateChangeEvent stateChangeEvent)
-	{
+	public void onStateChanged(StateChangeEvent stateChangeEvent) {
 		super.onStateChanged(stateChangeEvent);
-		
+
 		getWidget().setText(getState().text);
-		if(getState().forwardClickToServer)
-		{
+		if (getState().forwardClickToServer) {
 			/*
 			 * Clicks on the GWT anchor widget will delegate to the server.
 			 */
-			
+
 			getWidget().getElement().removeAttribute("href"); // no client-side handling of the click
-			if(clickHandlerRegistration == null)
-			{
-				clickHandlerRegistration = getWidget().addClickHandler(new ClickHandler()
-				{
-					public void onClick(ClickEvent event)
-					{
-						if(isEnabled())
-						{
-							rpc.clicked(MouseEventDetailsBuilder.buildMouseEventDetails(
-									event.getNativeEvent(),
-									getWidget().getElement()
-							));
+			if (clickHandlerRegistration == null) {
+				clickHandlerRegistration = getWidget().addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						if (isEnabled()) {
+							rpc.clicked(MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent(), getWidget().getElement()));
 						}
 					}
 				});
 			}
-		}
-		else
-		{
+		} else {
 			/*
 			 * Clicks on the GWT anchor widget will NOT delegate to the server.
 			 */
-			
-			if(clickHandlerRegistration != null)
-			{
+
+			if (clickHandlerRegistration != null) {
 				clickHandlerRegistration.removeHandler();
 				clickHandlerRegistration = null;
 			}

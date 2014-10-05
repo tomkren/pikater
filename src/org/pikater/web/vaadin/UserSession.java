@@ -17,49 +17,42 @@ import com.vaadin.server.VaadinSession;
  * 
  * @author SkyCrawl
  */
-public class UserSession
-{
+public class UserSession {
 	private static final String key_userID = "k_uid";
 	private static final String key_userUploads = "k_uu";
 	private static final String key_sharedResources = "k_sr";
-	
+
 	// ----------------------------------------------------------
 	// PRIVATE INTERFACE (INFRASTRUCTURE)
 
-	private static void setAttribute(VaadinSession session, String key, Object value)
-	{
+	private static void setAttribute(VaadinSession session, String key, Object value) {
 		session.setAttribute(key, value);
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T extends Object> T getAttribute(VaadinSession session, String key)
-	{
+	private static <T extends Object> T getAttribute(VaadinSession session, String key) {
 		return (T) session.getAttribute(key);
 	}
-	
+
 	// ----------------------------------------------------------
 	// INTERFACE MANIPULATING WITH INDIVIDUAL ATTRIBUTES
-	
-	public static int getUserID(VaadinSession session)
-	{
+
+	public static int getUserID(VaadinSession session) {
 		return getAttribute(session, UserSession.key_userID);
 	}
-	
-	public static void storeUserID(VaadinSession session, Integer userID)
-	{
+
+	public static void storeUserID(VaadinSession session, Integer userID) {
 		setAttribute(session, UserSession.key_userID, userID);
 	}
-	
-	public static UserUploads getUserUploadManager(VaadinSession session)
-	{
+
+	public static UserUploads getUserUploadManager(VaadinSession session) {
 		return getAttribute(session, UserSession.key_userUploads);
 	}
-	
-	public static void storeUserUploadManager(VaadinSession session, UserUploads manager)
-	{
+
+	public static void storeUserUploadManager(VaadinSession session, UserUploads manager) {
 		setAttribute(session, UserSession.key_userUploads, new UserUploads());
 	}
-	
+
 	/**
 	 * <p>All shared resources registered with {@link ResourceRegistrar} and
 	 * {@link ResourceExpiration#ON_SESSION_END} are also required to be
@@ -70,27 +63,23 @@ public class UserSession
 	 * @param session user's session
 	 * @param resourceID the identifier assigned to the given resource by {@link ResourceRegistrar}
 	 */
-	public static void rememberSharedResource(VaadinSession session, UUID resourceID)
-	{
+	public static void rememberSharedResource(VaadinSession session, UUID resourceID) {
 		Set<UUID> sharedResources = getSharedResources(session);
-		if(sharedResources == null)
-		{
+		if (sharedResources == null) {
 			sharedResources = new HashSet<UUID>();
 		}
-		if(sharedResources.add(resourceID))
-		{
+		if (sharedResources.add(resourceID)) {
 			session.setAttribute(key_sharedResources, sharedResources);
 		}
 	}
-	
+
 	/**
 	 * Returns all identifiers stored by {@link #rememberSharedResource(VaadinSession, UUID)}
 	 * method. 
 	 * @param session user's session
 	 * @return
 	 */
-	public static Set<UUID> getSharedResources(VaadinSession session)
-	{
+	public static Set<UUID> getSharedResources(VaadinSession session) {
 		return getAttribute(session, key_sharedResources);
 	}
 }
