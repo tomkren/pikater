@@ -28,6 +28,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.help.UnsupportedOperationException;
+
 import org.apache.commons.io.FileUtils;
 import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
@@ -134,12 +136,13 @@ import org.pikater.shared.experiment.UniversalComputationDescription;
 import com.google.common.io.Files;
 
 /**
- * This class is the implementation of Agent, that is used for communication
- * with the central database.
+ * <p>This agent implementation is used to commit database
+ * changes made from the core system and also provides
+ * database entities to other agents.</p>
  * 
- * Provides functionality for dataset manipulation, batch and experiments
- * manipulation, and information querying for agents and users.
- *
+ * <p>Each method corresponds to a particular use case.</p>
+ * 
+ * @author siposp
  */
 public class Agent_DataManager extends PikaterAgent {
 
@@ -191,7 +194,7 @@ public class Agent_DataManager extends PikaterAgent {
 				try {
 					Action a = (Action) getContentManager().extractContent(request);
 
-					/**
+					/*
 					 * Acount action
 					 */
 					if (a.getAction() instanceof GetUserID) {
@@ -201,14 +204,14 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToGetUser(request, a);
 					}
 
-					/**
+					/*
 					 * LogicalNameTraslate actions
 					 */
 					if (a.getAction() instanceof TranslateFilename) {
 						return respondToTranslateFilename(request, a);
 					}
 
-					/**
+					/*
 					 * AgentInfo actions
 					 */
 					if (a.getAction() instanceof SaveAgentInfo) {
@@ -227,7 +230,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToGetExternalAgentNames(request, a);
 					}
 
-					/**
+					/*
 					 * Batch actions
 					 */
 					if (a.getAction() instanceof SaveBatch) {
@@ -243,7 +246,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToGetBatchPriority(request, a);
 					}
 
-					/**
+					/*
 					 * Experiment actions
 					 */
 					if (a.getAction() instanceof SaveExperiment) {
@@ -253,7 +256,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToUpdateExperimentStatus(request, a);
 					}
 
-					/**
+					/*
 					 * Results actions
 					 */
 					if (a.getAction() instanceof SaveResults) {
@@ -263,14 +266,14 @@ public class Agent_DataManager extends PikaterAgent {
 						logSevere("Not Implemented");
 					}
 
-					/**
+					/*
 					 * Dataset actions
 					 */
 					if (a.getAction() instanceof SaveDataset) {
 						return respondToSaveDatasetMessage(request, a);
 					}
 
-					/**
+					/*
 					 * Metadata actions
 					 */
 					if (a.getAction() instanceof SaveMetadata) {
@@ -286,7 +289,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToGetTheBestAgent(request, a);
 					}
 
-					/**
+					/*
 					 * Model actions
 					 */
 					if (a.getAction() instanceof SaveModel) {
@@ -299,7 +302,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToGetModels(request, a);
 					}
 
-					/**
+					/*
 					 * Files actions
 					 */
 					if (a.getAction() instanceof GetExternalAgentJar) {
@@ -316,20 +319,22 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToGetAllDatasetInfo(request, a);
 					}
 					
-					/**
+					/*
 					 * Deprecated Files actions
+					 * TODO: maybe better to throw appropriate exception like this
+					 * so that the problem can be better noticed?
 					 */
 					if (a.getAction() instanceof GetFileInfo) {
-						logSevere("Not Implemented - Deprecated");
+						throw new UnsupportedOperationException();
 					}
 					if (a.getAction() instanceof ImportFile) {
-						logSevere("Not Implemented - Deprecated");
+						throw new UnsupportedOperationException();
 					}
 					if (a.getAction() instanceof GetFiles) {
-						logSevere("Not Implemented - Deprecated");
+						throw new UnsupportedOperationException();
 					}
 					if (a.getAction() instanceof DeleteTempFiles) {
-						logSevere("Not Implemented - Deprecated");
+						throw new UnsupportedOperationException();
 					}
 
 				} catch (OntologyException e) {
@@ -352,8 +357,10 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Cleans up the records about experiments and batches, that were being computed
-	 * and have incorrect flag at startup.
+	 * <p>Cleans up all records related to a batch that was interrupted while
+	 * in execution from database.</p>
+	 * 
+	 * <p>This method is currently only called when the system starts.</p>
 	 */
 	private void cleanupAbortedBatches() {
 		DAOs.batchDAO.cleanUp();
@@ -361,12 +368,11 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Creates a respond  to a {@link GetUserID} message. {@link GetUserID} is a request
-	 * for user's ID. 
+	 * Creates a respond to a {@link GetUserID} request message.
+	 * 
 	 * @param request {@link ACLMessage} of the request.
 	 * @param a {@link Action} containing {@link GetUserID} action
-	 * @return {@link ACLMessage} containing the ID for username in the request or a FAILURE
-	 * message.
+	 * @return {@link ACLMessage} containing the requested ID or a FAILURE message.
 	 */
 	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {
 
@@ -375,10 +381,8 @@ public class Agent_DataManager extends PikaterAgent {
 		GetUserID getUserID = (GetUserID) a.getAction();
 
 		JPAUser userJPA = DAOs.userDAO.getByLogin(getUserID.getLogin()).get(0);
-
-		//if we have received a request for non-existing user
-		//we reply with a FAILURE message
 		if (userJPA == null) {
+			// received request links to a non-existing user account - respond with a FAILURE message
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
 			logSevere("UserLogin " + getUserID.getLogin() + " doesn't exist");
@@ -402,12 +406,11 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Creates a respond to {@link GetUser} action. {@link GetUser} is a request
-	 * for a {@link User} object, that contains all information about the user identified
-	 * by the user's ID.
+	 * Creates a respond to the {@link GetUser} action.
+	 * 
 	 * @param request {@link ACLMessage} of the request.
 	 * @param a {@link GetUser} action
-	 * @return {@link ACLMessage} containing {@link User} object about the requested user.
+	 * @return {@link ACLMessage} containing the requested {@link User} object
 	 */
 	private ACLMessage respondToGetUser(ACLMessage request, Action a) {
 
@@ -416,10 +419,8 @@ public class Agent_DataManager extends PikaterAgent {
 		GetUser getUser = (GetUser) a.getAction();
 
 		JPAUser userJPA = DAOs.userDAO.getByID(getUser.getUserID());
-
-		//if we have received a request for non-existing user ID
-		//we respong with a FAILURE message
 		if (userJPA == null) {
+			// received request links to a non-existing user account - respond with a FAILURE message
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
 			logSevere("UserID " + getUser.getUserID() + " doesn't exist");
@@ -450,11 +451,14 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Creates a respond to {@link TranslateFilename} action. {@link TranslateFilename} is
-	 * a request to convert internal filenames to external one's and vice versa.
+	 * <p>Creates a respond to the {@link TranslateFilename} action requesting
+	 * filename conversions in database. Conversions always succeed. 
 	 * 
-	 * The translation is always succeeding. Error state is representing by returning 'error'
-	 * as the translated filename. 
+	 * TODO: If the action is always successful, why is there a need for errors?
+	 * "Error state is representing by returning 'error' as the translated filename."
+	 * 
+	 * TODO: wouldn't it be better to return null if something went wrong? Lets hard-code
+	 * a little less :).
 	 * 
 	 * @param request {@link ACLMessage} received with the request. 
 	 * @param a {@link Action} containing {@link TranslateFilename} action 
@@ -468,7 +472,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		String translatedName = "error";
 
-		//we have request to translate from external filename to internal filename
+		// external to internal filename translation was requested
 		if (translateFile.getExternalFilename() != null && translateFile.getInternalFilename() == null) {
 
 			logInfo("respondToTranslateFilename External File Name " + translateFile.getExternalFilename());
@@ -485,7 +489,7 @@ public class Agent_DataManager extends PikaterAgent {
 					translatedName = "temp" + System.getProperty("file.separator") + translateFile.getExternalFilename();
 			}
 
-		//we have request to translate from internal filename to external filename
+		// internal to external filename translation was requested
 		} else if (translateFile.getInternalFilename() != null && translateFile.getExternalFilename() == null) {
 
 			logInfo("respondToTranslateFilename Internal File Name " + translateFile.getInternalFilename());
@@ -513,13 +517,11 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Creates a respond to {@link GetAgentInfo} action. {@link GetAgentInfo} is
-	 * a request to retrieve {@link AgentInfo} object about the given Agent, identified by 
-	 * its class name.
-	 * 
+	 * Creates a respond to {@link GetAgentInfo} action.
+	 *  
 	 * @param request {@link ACLMessage} received with the request.
 	 * @param a {@link Action} containing {@link GetAgentInfo} action.
-	 * @return {@link ACLMessage} containing object {@link AgentInfo} of the defined Agent
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo} object
 	 */
 	protected ACLMessage respondToGetAgentInfo(ACLMessage request, Action a) {
 
@@ -548,15 +550,12 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Creates a respond to {@link GetAgentInfos} action. {@link GetAgentInfos} is
-	 * a request to retrieve {@link AgentInfo} objects about all Agents available for the core
-	 * system - all internal agetns and approved user agents.
-	 *  
+	 * Creates a respond to {@link GetAgentInfos} action.
+	 *   
 	 * @param request {@link ACLMessage} received with the request.
 	 * @param a {@link Action} containing {@link GetAgentInfos} action.
-	 * @return {@link ACLMessage} containing object {@link AgentInfos}, that has list
-	 * of {@link AgentInfo} objects. If the reply message couldn't be created, message with
-	 * FAILURE flag is returned.
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo} objects
+	 * wrapped in {@link AgentInfos} or a FAILURE message.
 	 */
 	protected ACLMessage respondToGetAgentInfos(ACLMessage request, Action a) {
 
@@ -594,17 +593,14 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 
 	}
-
 	
 	/**
-	 * Creates a respond to {@link GetAllAgentInfos} action. {@link GetAllAgentInfos} is
-	 * a request to retrieve {@link AgentInfo} objects about all Agents in the system - all
-	 * internal agents and user's agents whether they're approved or not.
+	 * Creates a respond to {@link GetAllAgentInfos} action.
 	 * 
 	 * @param request {@link ACLMessage} received with the request.
 	 * @param a {@link Action} containing {@link GetAllAgentInfos} action.
-	 * @return {@link ACLMessage} containing object {@link AgentInfos}, that has list
-	 * of {@link AgentInfo} objects.
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo}
+	 * objects wrapped in {@link AgentInfos}.
 	 */
 	protected ACLMessage respondToGetAllAgentInfos(ACLMessage request, Action a) {
 		
@@ -633,15 +629,12 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 	
 	/**
-	 * Creates a respond to {@link GetExternalAgentNames} action. {@link GetExternalAgentNames} is
-	 * a request to retrieve a list of names of all user agents. This list uses class names as agent
-	 * names.
+	 * Creates a respond to {@link GetExternalAgentNames} action.
 	 *   
 	 * @param request {@link ACLMessage} received with the request.
 	 * @param a {@link Action} containing {@link GetExternalAgentNames} action.
-	 * @return {@link ACLMessage} containing object {@link ExternalAgentNames}, that has a list
-	 * of {@link AgentInfo} objects. If the reply message could be filled up with result, message with FAILURE
-	 * flag is returned. 
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo} objects
+	 * wrapped in {@link ExternalAgentNames} or a FAILURE message.
 	 */
 	protected ACLMessage respondToGetExternalAgentNames(ACLMessage request, Action a) {
 
@@ -674,18 +667,18 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Tries to save data from {@link AgentInfo} object to database a creates a respond to that action.
-	 * {@link AgentInfo} of the given agent is encapsulated in action {@link SaveAgentInfo}.
-	 * 
-	 * If there is no information stored in the database about the agent with given class name, then
-	 * the new information is stored.
-	 * 
-	 * Message with flag FAILURE is returned when, there is information about agent with such class name.
+	 * Attempts to save an instance of {@link AgentInfo} wrapped in
+	 * {@link SaveAgentInfo} to database and responds with the result:
+	 * <ul>
+	 * <li> If there is no record about the agent (class name) in database yet, 
+	 * the object is stored successfully.
+	 * <li> If such record already exists, FAILURE message is returned. 
+	 * </ul>
 	 * 
 	 * @param request {@link ACLMessage} received with the request.
-	 * @param a {@link Action} containing {@link SaveAgentInfo} action containing {@link AgentInfo} object
-	 * of the agent, we want to store data about.
-	 * @return {@link ACLMessage} of confirmation or with flag FAILURE, when something went wrongs
+	 * @param a {@link Action} providing the {@link AgentInfo} object wrapped
+	 * in {@link SaveAgentInfo}.
+	 * @return see above
 	 */
 	protected ACLMessage respondToSaveAgentInfo(ACLMessage request, Action a) {
 
@@ -720,10 +713,10 @@ public class Agent_DataManager extends PikaterAgent {
 
 	
 	/**
-	 * Saves a new batch inserted in the core system. It converts the content of a {@link Batch} object
-	 * encapsulated in the {@link SaveBatch} obejct to batch format used in the database. The conversion includes 
-	 * creating a XML of universal computation description, that represents the batch. Some batch metadata are 
-	 * also stored - e.g. name of the batch, owner...
+	 * Saves a new batch wrapped in {@link SaveBatch} to database,
+	 * after it is first converted to a {@link UniversalComputationDescription
+	 * database-compatible batch format} and then to XML. Some metadata are 
+	 * also stored - e.g. name of the batch.
 	 * 
 	 * @param request {@link ACLMessage} received with the request
 	 * @param a {@link Action} containing a {@link SaveBatch} action
@@ -779,7 +772,7 @@ public class Agent_DataManager extends PikaterAgent {
 	 * 
 	 * @param request {@link ACLMessage} received with the request.
 	 * @param a {@link Action} containing {@link LoadBatch} action.
-	 * @return {@link ACLMessage} containing object {@link Batch} describing the batch.
+	 * @return {@link ACLMessage} containing {@link Batch} object defining the batch.
 	 */
 	private ACLMessage respondToLoadBatch(ACLMessage request, Action a) {
 
@@ -817,9 +810,12 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Requests sending a notification e-mail for the given {@link JPABatch}.
-	 * The receiver of the e-mail is the owner of the batch. 
-	 * @param batchJPA {@link JPABatch} object for which sending the e-mail
+	 * Requests a notification e-mail be sent to the owner of
+	 * the given {@link JPABatch}.
+	 * 
+	 * TODO: What is this email about?
+	 *  
+	 * @param batchJPA
 	 */
 	private void requestMailNotification(final JPABatch batchJPA) {
 		addBehaviour(new OneShotBehaviour() {
@@ -831,7 +827,7 @@ public class Agent_DataManager extends PikaterAgent {
 				SendEmail action = new SendEmail(Agent_Mailing.EmailType.RESULT, mailAddr);
 				action.setBatch_id(batchJPA.getId());
 				List<JPAExperiment> exps = batchJPA.getExperiments();
-				// when there was more than 1 sub-experiment, don't send the best result 
+				// when there was more than 1 sub-experiment, send the best result 
 				if (exps.size() == 1 && !exps.get(0).getResults().isEmpty())
 				{
 					double bestErrorRate = 200;
@@ -863,10 +859,17 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Updating the status for some batch. Both the target batch and the new status
-	 * is described by the {@link UpdateBatchStatus} object. The function also sets the start
-	 * time for batch with COMPUTING as new status or the finish time for batch with FAILED or FINISHED
-	 * as new status.
+	 * <p>Updates the given batch's status with the given status. Both of them
+	 * are specified by {@link UpdateBatchStatus} object wrapped within
+	 * the action.</p>
+	 * 
+	 * As a side effect:
+	 * <ul>
+	 * <li> If the given status is {@link JPABatchStatus#COMPUTING}, sets the start
+	 * time for the given batch.
+	 * <li> If the given status is {@link JPABatchStatus#FAILED} or
+	 * {@link JPABatchStatus#FINISHED}, sets the finish time for the given batch. 
+	 * </ul>
 	 * 
 	 * @param request {@link ACLMessage} received with the request.
 	 * @param a {@link Actiong} containing {@link UpdateBatchStatus} action.
@@ -911,13 +914,13 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * Creates a respond containing the priority of the specified batch. The ID of the batch
-	 * is contained in the {@link GetBatchPriority} object. If no batch is available in the 
-	 * database with the given ID, then message with FAILURE flag is returned.
+	 * Creates a respond containing priority of the batch specified
+	 * in incoming {@link GetBatchPriority} object.
 	 *  
 	 * @param request {@link ACLMessage} received with the request.
 	 * @param a {@link Action} containing the {@link GetBatchPriority} object.
-	 * @return {@link ACLMessage} of the reply
+	 * @return {@link ACLMessage} of the reply or FAILURE message if no such batch
+	 * exists in the database. 
 	 */
 	private ACLMessage respondToGetBatchPriority(ACLMessage request, Action a) {
 		logInfo("respondToGetBatchPriority");
@@ -945,7 +948,6 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 
 		return reply;
-
 	}
 
 	/**
