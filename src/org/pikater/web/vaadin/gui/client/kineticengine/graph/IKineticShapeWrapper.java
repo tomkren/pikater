@@ -8,8 +8,7 @@ import net.edzard.kinetic.Node;
  * 
  * @author SkyCrawl
  */
-public interface IKineticShapeWrapper
-{
+public interface IKineticShapeWrapper {
 	/**
 	 * Gets the master node.
 	 * @return The node that contains the whole underlying structure.

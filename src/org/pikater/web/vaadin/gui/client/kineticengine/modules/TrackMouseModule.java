@@ -18,42 +18,37 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventL
  * 
  * @author SkyCrawl
  */
-public final class TrackMouseModule implements IEngineModule
-{
+public final class TrackMouseModule implements IEngineModule {
 	public static String moduleID;
-	
+
 	/**
 	 * The engine instance to work with.
 	 */
 	private final KineticEngine kineticEngine;
-	
+
 	/**
 	 * The box that the mouse is currently hovering on.
 	 */
 	private BoxGraphItemClient currentlyHoveredBox;
-	
+
 	/**
 	 * The special event handlers/listeners to attach to boxes.
 	 */
-	private class BoxMouseOverListener extends BoxListener
-	{
-		public BoxMouseOverListener(BoxGraphItemClient parentBox)
-		{
+	private class BoxMouseOverListener extends BoxListener {
+		public BoxMouseOverListener(BoxGraphItemClient parentBox) {
 			super(parentBox);
 		}
 
 		@Override
-		protected void handleInner(KineticEvent event)
-		{
+		protected void handleInner(KineticEvent event) {
 			setCurrentlyHoveredBox(getEventSourceBox());
 			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.POINTER);
 		}
 	}
-	private class BoxMouseOutHandler extends ModuleEventListener
-	{
+
+	private class BoxMouseOutHandler extends ModuleEventListener {
 		@Override
-		protected void handleInner(KineticEvent event)
-		{
+		protected void handleInner(KineticEvent event) {
 			unsetCurrentlyHoveredBox();
 			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.AUTO);
 		}
@@ -62,71 +57,59 @@ public final class TrackMouseModule implements IEngineModule
 	/**
 	 * Constructor.
 	 */
-	public TrackMouseModule(KineticEngine kineticEngine)
-	{
+	public TrackMouseModule(KineticEngine kineticEngine) {
 		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.currentlyHoveredBox = null;
 	}
-	
+
 	// **********************************************************************************************
 	// INHERITED INTERFACE
-	
+
 	@Override
-	public String getModuleID()
-	{
+	public String getModuleID() {
 		return moduleID;
 	}
-	
+
 	@Override
-	public void createModuleCrossReferences()
-	{
+	public void createModuleCrossReferences() {
 	}
-	
+
 	@Override
-	public String[] getGraphItemTypesToAttachHandlersTo()
-	{
+	public String[] getGraphItemTypesToAttachHandlersTo() {
 		return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };
 	}
 
 	@Override
-	public void attachHandlers(AbstractGraphItemClient<?> graphItem)
-	{
-		if(graphItem instanceof BoxGraphItemClient)
-		{
-			BoxGraphItemClient box = (BoxGraphItemClient)graphItem;
+	public void attachHandlers(AbstractGraphItemClient<?> graphItem) {
+		if (graphItem instanceof BoxGraphItemClient) {
+			BoxGraphItemClient box = (BoxGraphItemClient) graphItem;
 			box.getMasterNode().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(moduleID));
 			box.getMasterNode().addEventListener(new BoxMouseOutHandler(), EventType.Basic.MOUSEOUT.withName(moduleID));
-		}
-		else
-		{
+		} else {
 			throw new IllegalStateException();
 		}
 	}
-	
+
 	// **********************************************************************************************
 	// PUBLIC INTERFACE
-	
-	public boolean isABoxHovered()
-	{
+
+	public boolean isABoxHovered() {
 		return currentlyHoveredBox != null;
 	}
-	
-	public BoxGraphItemClient getCurrentlyHoveredBox()
-	{
+
+	public BoxGraphItemClient getCurrentlyHoveredBox() {
 		return currentlyHoveredBox;
 	}
-	
+
 	// **********************************************************************************************
 	// PRIVATE INTERFACE
 
-	private void setCurrentlyHoveredBox(BoxGraphItemClient currentlyHoveredBox)
-	{
+	private void setCurrentlyHoveredBox(BoxGraphItemClient currentlyHoveredBox) {
 		this.currentlyHoveredBox = currentlyHoveredBox;
 	}
-	
-	private void unsetCurrentlyHoveredBox()
-	{
+
+	private void unsetCurrentlyHoveredBox() {
 		currentlyHoveredBox = null;
 	}
 }

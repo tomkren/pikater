@@ -1,11 +1,9 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.graph;
 
 /**
- * Common interface for graph item settings classes. Despite it is
- * currently empty, it is also needed for polymorphism.
+ * Marker interface for graph item settings classes.
  * 
  * @author SkyCrawl
  */
-public interface IGraphItemSettings
-{
+public interface IGraphItemSettings {
 }
