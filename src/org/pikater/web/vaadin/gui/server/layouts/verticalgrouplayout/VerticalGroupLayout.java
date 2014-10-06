@@ -5,6 +5,12 @@ import org.pikater.web.vaadin.gui.server.layouts.SimplePanel;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * A {@link VerticalLayout vertical layout} with a caption
+ * and CSS border around it.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("verticalGroupLayout.css")
 public class VerticalGroupLayout extends SimplePanel
 {
@@ -18,11 +24,19 @@ public class VerticalGroupLayout extends SimplePanel
 		setSizeUndefined();
 	}
 	
+	/**
+	 * Gets the "logical" inner layout that makes up this layout.
+	 * @return
+	 */
 	public VerticalLayout getInnerLayout()
 	{
 		return this.inner;
 	}
 	
+	/**
+	 * Sets the "logical" inner layout that makes up this layout.
+	 * @return
+	 */
 	public void setInnerLayout(String caption, VerticalLayout layout)
 	{
 		this.inner = layout;

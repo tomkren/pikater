@@ -26,7 +26,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 
 /**
- * Entry point into the visualization functionality.
+ * Displays the generated visualization pages.
  * 
  * @author SkyCrawl
  */

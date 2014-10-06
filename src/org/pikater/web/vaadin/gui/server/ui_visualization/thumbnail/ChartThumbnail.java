@@ -18,8 +18,12 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 
 /**
- * A thumbnail of the given generated subresult (image). Double click
- * enlarges it in a separate overlay, with a zoom functionality.
+ * <p>A thumbnail of the given generated subresult (image). Double click
+ * enlarges it in a separate overlay, with a zoom functionality.</p>
+ * 
+ * <p>TODO: This class is only a temporary solution to visualization. An
+ * alternative (but much more time-consuming) solution would be to use
+ * deep zoom images and a client-side viewer for them (like openseadragon).</p>
  * 
  * @author SkyCrawl
  */

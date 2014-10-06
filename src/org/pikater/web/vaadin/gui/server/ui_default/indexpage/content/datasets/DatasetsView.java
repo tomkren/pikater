@@ -17,11 +17,21 @@ import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbourWizardStep;
 import org.pikater.web.vaadin.gui.server.layouts.SimplePanel;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TabSheet;
 
+/**
+ * View implementing the administrator dataset feature.
+ * 
+ * @author SkyCrawl
+ * 
+ * @see {@link DefaultUI}
+ * @see {@link ContentProvider}
+ */
 public class DatasetsView extends ExpandableView
 {
 	private static final long serialVersionUID = -1564809345462937610L;

@@ -6,6 +6,12 @@ import org.pikater.web.vaadin.gui.client.extensions.AutoVerticalBorderLayoutExte
 import com.vaadin.server.AbstractExtension;
 import com.vaadin.ui.CustomLayout;
 
+/**
+ * Extension for {@link AutoVerticalBorderLayout} to make it work - all
+ * of its features are really implemented on the client.
+ * 
+ * @author SkyCrawl
+ */
 public class AutoVerticalBorderLayoutExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;

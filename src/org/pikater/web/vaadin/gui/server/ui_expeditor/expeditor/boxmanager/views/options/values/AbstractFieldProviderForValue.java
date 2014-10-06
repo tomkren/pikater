@@ -13,6 +13,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberConstant;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -20,8 +21,18 @@ import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 
+/**
+ * Class wrapping all generic methods providing fields to
+ * {@link OptionValueForm}. Designed to be subclassed to
+ * provide templated field groups.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class AbstractFieldProviderForValue
 {
+	/**
+	 * All generated fields.
+	 */
 	private final Map<String, AbstractField<? extends Object>> generatedFields;
 	
 	public AbstractFieldProviderForValue()
@@ -29,27 +40,43 @@ public abstract class AbstractFieldProviderForValue
 		this.generatedFields = new LinkedHashMap<String, AbstractField<? extends Object>>(); // LinkedHashMap keeps insertion order
 	}
 	
+	/**
+	 * The main entry-point method.
+	 * @param value
+	 */
 	public void generateFields(Value value)
 	{
 		generatedFields.clear();
 		doGenerateFields(value);
 	}
 	
+	/**
+	 * Pick up the result of {@link #generatedFields(Value)}.
+	 * @return
+	 */
 	public Map<String, AbstractField<? extends Object>> getGeneratedFields()
 	{
 		return generatedFields;
 	}
 	
-	//---------------------------------------------------
-	// ABSTRACT INTERFACE
-		
+	/**
+	 * Custom method that actually generates anything. Use this class's
+	 * static methods to generate fields and then register them with
+	 * {@link #addField(String, AbstractField)}.
+	 * @param value
+	 */
 	protected abstract void doGenerateFields(Value value);
 	
+	protected void addField(String notificationDescription, AbstractField<? extends Object> field)
+	{
+		generatedFields.put(notificationDescription, field);
+	}
+	
 	//--------------------------------------------------------------------------
-	// MAIN FIELD CONSTRUCTION ROUTINES
+	// UTILITY METHODS TO GENERATE FIELDS
 	
 	@SuppressWarnings("unchecked")
-	protected <N extends Number & Comparable<? super N>> AbstractField<? extends Object> createNumericField(String caption, final IFieldContext<N> context, 
+	protected static <N extends Number & Comparable<? super N>> AbstractField<? extends Object> createNumericField(String caption, final IFieldContext<N> context, 
 			final IOnValueChange<N> valueChangeHandler)
 	{
 		// create & bind with the value type
@@ -104,7 +131,7 @@ public abstract class AbstractFieldProviderForValue
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <O extends Object> AbstractField<? extends Object> createEnumeratedField(O currentValue, List<O> options, String caption,
+	protected static <O extends Object> AbstractField<? extends Object> createEnumeratedField(O currentValue, List<O> options, String caption,
 			final IOnValueChange<O> valueChangeHandler)
 	{
 		final ComboBox cb_value = FormFieldFactory.createComboBox(caption, options, currentValue, true, false);
@@ -122,7 +149,7 @@ public abstract class AbstractFieldProviderForValue
 		return cb_value;
 	}
 	
-	protected AbstractField<? extends Object> createTextField(String caption, final IFieldContext<String> context, final IOnValueChange<String> valueChangeHandler)
+	protected static AbstractField<? extends Object> createTextField(String caption, final IFieldContext<String> context, final IOnValueChange<String> valueChangeHandler)
 	{
 		if(context.getSetRestriction() != null)
 		{
@@ -155,7 +182,7 @@ public abstract class AbstractFieldProviderForValue
 		}
 	}
 	
-	protected AbstractField<? extends Object> createAttemptsField(final int defaultCountOfValuesToTry, final IOnValueChange<Integer> valueChangeHandler)
+	protected static AbstractField<? extends Object> createAttemptsField(final int defaultCountOfValuesToTry, final IOnValueChange<Integer> valueChangeHandler)
 	{
 		return createNumericField("Attempts:", new IFieldContext<Integer>()
 		{
@@ -196,28 +223,9 @@ public abstract class AbstractFieldProviderForValue
 	}
 	
 	//--------------------------------------------------------------------------
-	// CONVENIENCE INTERFACE
+	// UTILITY METHODS TO CREATE CONTEXT OBJECTS USED IN OTHER METHODS OF THIS CLASS
 
-	@SuppressWarnings("unchecked")
-	protected <O extends Object> List<O> getUnsortedEnumerationForValue(List<IValueData> values)
-	{
-		List<O> options = new ArrayList<O>();
-		for(IValueData possibleValue : values)
-		{
-			options.add((O) possibleValue.hackValue());
-		}
-		return options;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <OC extends Object & Comparable<? super OC>> List<OC> getSortedEnumerationForValue(List<IValueData> values)
-	{
-		List<OC> options = (List<OC>) getUnsortedEnumerationForValue(values);
-		Collections.sort(options);
-		return options;
-	}
-	
-	protected <O extends Object> IFieldContext<O> getFieldContextFrom(final O currentValue, final Value value)
+	protected static <O extends Object> IFieldContext<O> getFieldContextFrom(final O currentValue, final Value value)
 	{
 		return new IFieldContext<O>()
 		{
@@ -242,13 +250,30 @@ public abstract class AbstractFieldProviderForValue
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <O extends Object> IFieldContext<O> getFieldContextFrom(final Value value)
+	protected static <O extends Object> IFieldContext<O> getFieldContextFrom(final Value value)
 	{
 		return getFieldContextFrom((O) value.getCurrentValue().hackValue(), value);
 	}
 	
-	protected void addField(String notificationDescription, AbstractField<? extends Object> field)
+	//--------------------------------------------------------------------------
+	// VARIOUS OTHER UTILITY METHODS
+	
+	@SuppressWarnings("unchecked")
+	protected static <O extends Object> List<O> getUnsortedEnumerationForValue(List<IValueData> values)
 	{
-		generatedFields.put(notificationDescription, field);
+		List<O> options = new ArrayList<O>();
+		for(IValueData possibleValue : values)
+		{
+			options.add((O) possibleValue.hackValue());
+		}
+		return options;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static <OC extends Object & Comparable<? super OC>> List<OC> getSortedEnumerationForValue(List<IValueData> values)
+	{
+		List<OC> options = (List<OC>) getUnsortedEnumerationForValue(values);
+		Collections.sort(options);
+		return options;
 	}
 }

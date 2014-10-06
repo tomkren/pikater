@@ -20,6 +20,7 @@ import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 import org.pikater.web.vaadin.gui.server.components.upload.UploadLimitReachedException;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.ParentAwareWizardStep;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
@@ -32,6 +33,14 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+/**
+ * Wizard to be displayed in a dialog, guiding users through the process
+ * of uploading their own "computation methods". Once they're approved
+ * by an administrator, they should be available in the {@link ExpEditor}
+ * experiment editor.
+ * 
+ * @author SkyCrawl
+ */
 public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> implements IDialogComponent
 {
 	private static final long serialVersionUID = -2782484084003504941L;

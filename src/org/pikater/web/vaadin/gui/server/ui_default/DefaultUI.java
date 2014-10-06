@@ -11,6 +11,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 
+/**
+ * Defines the "index page" of the web application.
+ * 
+ * @author SkyCrawl
+ */
 @Title("Pikatorium")
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
@@ -36,7 +41,8 @@ public class DefaultUI extends CustomConfiguredUI
 	protected void displayChildContent()
 	{
 		/*
-		 * Display index page if authenticated or make the user authenticate first and then display it.
+		 * Display index page if user is authenticated or make him authenticate first
+		 * and then display it.
 		 */
 		if(UserAuth.isUserAuthenticated(VaadinSession.getCurrent()))
 		{
@@ -59,7 +65,7 @@ public class DefaultUI extends CustomConfiguredUI
 	{
 		setPageCroppedAndHorizontallyCentered(true); // to make it look better
 		
-		// return new IndexPage for each UI unless you want all browser tabs to be synchronized and display the same content
+		// return new index page for each UI unless you want all browser tabs to be synchronized and display the same content
 		setContent(new IndexPage());
 	}
 }

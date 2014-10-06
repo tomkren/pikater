@@ -30,6 +30,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Wizard to be displayed in a dialog, guiding users through setup of
+ * dataset comparison.
+ * 
+ * @author SkyCrawl
+ */
 public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons> implements IDialogComponent
 {
 	private static final long serialVersionUID = -2782484084003504941L;

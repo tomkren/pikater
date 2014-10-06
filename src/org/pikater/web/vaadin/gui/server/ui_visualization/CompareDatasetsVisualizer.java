@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
-import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixCaptionProvider;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixLayoutHeaderProvider;
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisTwoUIArgs;
@@ -95,7 +95,7 @@ public class CompareDatasetsVisualizer extends VerticalLayout
 				}
 			}
 			
-		}, new IMatrixCaptionProvider<AttrMapping>()
+		}, new IMatrixLayoutHeaderProvider<AttrMapping>()
 		{
 			@Override
 			public Label getCaptionComponent (AttrMapping index)

@@ -7,7 +7,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
-import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixCaptionProvider;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixLayoutHeaderProvider;
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
@@ -84,7 +84,7 @@ public class SingleDatasetVisualizer extends VerticalLayout
 				};
 			}
 			
-		}, new IMatrixCaptionProvider<JPAAttributeMetaData>()
+		}, new IMatrixLayoutHeaderProvider<JPAAttributeMetaData>()
 		{
 			@Override
 			public Label getCaptionComponent(JPAAttributeMetaData index)

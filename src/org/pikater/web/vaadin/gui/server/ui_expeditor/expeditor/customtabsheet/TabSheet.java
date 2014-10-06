@@ -7,6 +7,7 @@ import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
 import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
@@ -19,25 +20,61 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 
+/**
+ * <p>Vaadin's {@link com.vaadin.ui.TabSheet} seemed a bit unpredictable
+ * when dealing with client-side content like our {@link KineticComponent},
+ * causing several headaches. This class aims to provide the same basic
+ * functionality without the mysterious inner mechanics of Vaadin's tab
+ * sheet component.</p>
+ * 
+ * <p>Warning: this class is not thread-safe. If a single user works with
+ * it, there should be no problems but beware updating it with a background
+ * task for instance.</p>
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("tabSheet.css")
 public class TabSheet extends CustomComponent
 {
 	private static final long serialVersionUID = -4571956367761332160L;
 	
-	private final AutoVerticalBorderLayout innerLayout;
-	private final HorizontalLayout tabBar;
-	private final Panel defaultContent;
-	private TabSheetTabComponent selectedTabComponent;
-
-	private final Map<TabSheetTabComponent, Panel> tabToContentContainer;
-	private final ITabSheetOwner owner;
+	/*
+	 * GUI components.
+	 */
 	
-	public TabSheet(ITabSheetOwner owner)
+	/**
+	 * Master layout of this component.
+	 */
+	private final AutoVerticalBorderLayout innerLayout;
+	
+	/**
+	 * North component of {@link #innerLayout}.
+	 */
+	private final HorizontalLayout tabBar;
+	
+	/**
+	 * Inner component of {@link #tabBar} that is currently selected.
+	 */
+	private TabSheetTabComponent selectedTabComponent;
+	
+	/**
+	 * Displayed in the content area when the {@link #tabBar} is empty.
+	 */
+	private final Panel defaultContent;
+	
+	/*
+	 * Programmatic variables.
+	 */
+	
+	private final ITabSheetContext context;
+	private final Map<TabSheetTabComponent, Panel> tabToContentContainer;
+	
+	public TabSheet(ITabSheetContext context)
 	{
 		super();
 		
 		/*
-		 * Inner component init. 
+		 * Inner component init.
 		 */
 		
 		this.tabBar = new HorizontalLayout();
@@ -77,12 +114,17 @@ public class TabSheet extends CustomComponent
 		
 		this.selectedTabComponent = null;
 		this.tabToContentContainer = new HashMap<TabSheetTabComponent, Panel>();
-		this.owner = owner;
+		this.context = context;
 	}
 	
 	//---------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
+	/**
+	 * Creates a new tab with the given components.
+	 * @param tabComponent the tab component appended to {@link #tabBar}
+	 * @param contentComponent the content component to be displayed in the content area
+	 */
 	public void addTab(TabSheetTabComponent tabComponent, AbstractComponent contentComponent)
 	{
 		prepareTabComponent(tabComponent);
@@ -105,18 +147,26 @@ public class TabSheet extends CustomComponent
 		selectedTabComponent = tabComponent;
 		tabComponent.setSelected(true);
 		setSelectedContent(tabToContentContainer.get(tabComponent));
-		owner.onTabSelectionChange();
+		context.onTabSelectionChange();
 	}
 	
 	//---------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
+	/**
+	 * Only add tabs with this method. Handles some special cases.
+	 * @param newTab
+	 */
 	private void doAddTab(AbstractComponent newTab)
 	{
 		this.tabBar.addComponent(newTab, tabBar.getComponentCount() == 0 ? 0 : tabBar.getComponentCount() - 1);
 		this.tabBar.setComponentAlignment(newTab, Alignment.MIDDLE_CENTER);
 	}
 	
+	/**
+	 * Creates the component that, when clicked, creates and adds a new empty tab.
+	 * @return
+	 */
 	private AbstractComponent createAddTabComponent()
 	{
 		IconButton addTabButton = new IconButton(ThemeResources.img_plusIcon16);
@@ -127,13 +177,17 @@ public class TabSheet extends CustomComponent
 			@Override
 			public void click(com.vaadin.event.MouseEvents.ClickEvent event)
 			{
-				owner.addEmptyTab();
+				context.addEmptyTab();
 			}
 		});
 		addTabButton.setStyleName("custom-tabsheet-tabs-tab-add");
 		return addTabButton;
 	}
 	
+	/**
+	 * Attaches required event handlers.
+	 * @param tabComponent
+	 */
 	private void prepareTabComponent(final TabSheetTabComponent tabComponent)
 	{
 		tabComponent.addClickListener(new com.vaadin.event.MouseEvents.ClickListener()
@@ -206,6 +260,11 @@ public class TabSheet extends CustomComponent
 		tabComponent.setStyleName("custom-tabsheet-tabs-tab");
 	}
 	
+	/**
+	 * Creates container for content component of a tab.
+	 * @param content
+	 * @return
+	 */
 	private Panel createContentContainer(AbstractComponent content)
 	{
 		Panel result = new Panel();
@@ -218,6 +277,12 @@ public class TabSheet extends CustomComponent
 		return result;
 	}
 	
+	/**
+	 * Sets the selected tab's content component's container as
+	 * the selected component. Only to be used from
+	 * {@link #setSelectedTab(TabSheetTabComponent)}.
+	 * @param content
+	 */
 	private void setSelectedContent(Panel content)
 	{
 		innerLayout.setComponent(Border.SOUTH, content != null ? content : defaultContent);

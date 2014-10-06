@@ -11,10 +11,11 @@ import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.ExpEditorUI;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxbrowser.BoxBrowserToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IBoxManagerToolboxContext;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.ITabSheetOwner;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.ITabSheetContext;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheet;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
@@ -33,11 +34,24 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 
+/**
+ * <p>Master component for {@link ExpEditorUI}.</p>
+ * 
+ * <p>For an overview of what this component and its
+ * children components do, see user guide.</p>
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("expEditor.css")
-public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwner
+public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetContext
 {
 	private static final long serialVersionUID = -3411515276069271598L;
 	
+	/**
+	 * Toolboxes currently supported by experiment editor.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public enum ExpEditorToolbox
 	{
 		BOX_BROWSER,
@@ -244,11 +258,23 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	// -------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
+	/**
+	 * Gets object holding all information about currently supported
+	 * boxes in the experiment editor.
+	 * @return
+	 */
 	public KnownCoreAgents getAgentInfoProvider()
 	{
 		return agentInfoProvider;
 	}
 	
+	/**
+	 * Maps declared box categories to icons stored in Vaadin's
+	 * static resource folder.
+	 * @param type
+	 * @see {@link ThemeResources}
+	 * @return
+	 */
 	public static String getBoxPictureURL(BoxType type)
 	{
 		String imgRelativePath;
@@ -327,6 +353,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		}
 	}
 	
+	/**
+	 * Gets the content of {@link #getActiveTab()}.
+	 * @return
+	 */
 	public KineticComponent getActiveKineticComponent()
 	{
 		CustomTabSheetTabComponent activeTab = getActiveTab();
@@ -346,12 +376,20 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		getActiveKineticComponent().importExperiment(experiment);
 	}
 	
+	/**
+	 * If the given toolbox is hidden, displays it.
+	 * @param toolbox
+	 */
 	public void openToolbox(ExpEditorToolbox toolbox)
 	{
 		setToolboxVisible(toolbox, true);
 		extension.getClientRPC().command_resizeSelectedKineticComponent();
 	}
 	
+	/**
+	 * Hides the given toolbox.
+	 * @param toolbox
+	 */
 	public void minimizeToolbox(ExpEditorToolbox toolbox)
 	{
 		setToolboxVisible(toolbox, false);
@@ -366,7 +404,12 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		KineticComponent contentComponent = new KineticComponent(this);
 		experimentTabs.addTab(new CustomTabSheetTabComponent(tabCaption, contentComponent), new KineticDnDWrapper(contentComponent));
 	}
-	
+
+	/**
+	 * Shows/hides the given toolbox.
+	 * @param toolbox
+	 * @param visible
+	 */
 	private void setToolboxVisible(ExpEditorToolbox toolbox, boolean visible)
 	{
 		switch(toolbox)

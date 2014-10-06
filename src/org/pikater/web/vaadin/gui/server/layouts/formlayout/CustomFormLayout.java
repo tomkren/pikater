@@ -22,6 +22,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
+/**
+ * Our own version of {@link FormLayout} capable of much more, especially
+ * dynamic actions (enabling a button, for example) when a field is edited. 
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("customFormLayout.css")
 public abstract class CustomFormLayout extends VerticalLayout implements IDialogResultValidator, View
 {
@@ -96,7 +102,12 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	// --------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
-	public void addCustomButtonInterface(Component component)
+	/**
+	 * Attach the given component (probably a button) to the button
+	 * interface of this form layout. It is located at the bottom.
+	 * @param component
+	 */
+	public void attachToButtonInterface(Component component)
 	{
 		buttonInterface.addComponent(component);
 	}
@@ -164,6 +175,10 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 		}
 	}
 	
+	/**
+	 * A.K.A.: set it enabled or disabled, depending on whether
+	 * the form's fields are all valid and at least one is updated.
+	 */
 	protected synchronized void updateActionButton()
 	{
 		if(btn_actionBtn != null)
@@ -185,6 +200,12 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 		}
 	}
 	
+	/**
+	 * A small workaround that may sometimes come in handy for
+	 * programmatic purposes.
+	 * @param field
+	 * @param value
+	 */
 	protected static <T extends Object> void setValueAndIgnoreReadOnly(AbstractField<T> field, T value)
 	{
 		boolean readOnly = field.isReadOnly();
@@ -193,22 +214,51 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 		field.setReadOnly(readOnly);
 	}
 	
+	/**
+	 * <p>Stores data in {@link AbstractField#setData(Object)}, so don't use it
+	 * for anything else if you use this method.</p>
+	 * 
+	 * <p>Intended to be used together with
+	 * {@link #setValueBackup(AbstractField, Object)}</p>
+	 * @param field
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	protected static <T extends Object> T getValueBackup(AbstractField<T> field)
 	{
 		return (T) field.getData();
 	}
 	
+	/**
+	 * <p>Gets the stored data from {@link AbstractField#setData(Object)}, so don't use it
+	 * for anything else if you use this method.</p>
+	 * 
+	 * <p>Intended to be used together with
+	 * {@link #getValueBackup(AbstractField, Object)}</p>
+	 * @param field
+	 * @param value
+	 */
 	protected static <T extends Object> void setValueBackup(AbstractField<T> field, T value)
 	{
 		field.setData(value);
 	}
 	
+	/**
+	 * For this method to work, the {@link #setCommitted(AbstractField)}
+	 * must first be called on the field.
+	 * @param field
+	 * @return
+	 */
 	protected static <T extends Object> boolean isUpdated(AbstractField<T> field)
 	{
 		return !field.getValue().equals(getValueBackup(field)); // value backup may be null and should be last
 	}
 	
+	/**
+	 * Stores the current value as a backup so that {@link #isUpdated(AbstractField)}
+	 * can be used later.
+	 * @param field
+	 */
 	protected static <T extends Object> void setCommitted(AbstractField<T> field)
 	{
 		setValueBackup(field, field.getValue());
@@ -235,6 +285,11 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	// --------------------------------------------------------------
 	// PRIVATE TYPES AND INTERFACE
 	
+	/**
+	 * A class wrapping some information associated to fields.
+	 * 
+	 * @author SkyCrawl
+	 */
 	private static class FieldInfo
 	{
 		public final String notificationDescription;
@@ -247,14 +302,14 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 		}
 	}
 	
-	private boolean isForm(boolean checkValid, boolean checkUpdated)
+	private boolean isForm(boolean valid, boolean updated)
 	{
-		boolean atLeastOneUpdated = !checkUpdated;
+		boolean atLeastOneUpdated = !updated;
 		Iterator<Component> fieldIterator = fLayout.iterator();
 		while(fieldIterator.hasNext())
 		{
 			AbstractField<?> field = (AbstractField<?>) fieldIterator.next();
-			if(checkValid) 
+			if(valid) 
 			{
 				if(field instanceof AbstractTextField)
 				{

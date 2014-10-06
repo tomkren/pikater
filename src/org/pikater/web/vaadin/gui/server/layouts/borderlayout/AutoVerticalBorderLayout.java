@@ -11,6 +11,18 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomLayout;
 
+/**
+ * <p>Defines 5 areas to put arbitrary components inside. Looks like this:</br>
+ *  ___________________________________</br>
+ * |_________________N_________________|</br>
+ * |__W__|___________C__________|___E__|</br>
+ * |_________________S_________________|</br>
+ * </p>
+ * 
+ * <p>Shortcuts stand for "north", "west", "center", "east" and "south".</p>
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("autoVerticalBorderLayout.css")
 public class AutoVerticalBorderLayout extends CustomLayout implements AutoVerticalBorderLayoutExtensionClientRpc
 {
@@ -26,6 +38,11 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 		this.extension.extend(this);
 	}
 	
+	/**
+	 * Set content to the given area.
+	 * @param border
+	 * @param component
+	 */
 	public void setComponent(Border border, AbstractComponent component)
 	{
 		if(component == null)
@@ -35,6 +52,11 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 		addComponent(component, border.name());
 	}
 	
+	/**
+	 * Get content of the given area.
+	 * @param border
+	 * @return
+	 */
 	public Component getComponent(Border border)
 	{
 		return getComponent(border.name());

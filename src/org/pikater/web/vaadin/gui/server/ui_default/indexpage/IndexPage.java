@@ -2,6 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
@@ -14,6 +15,11 @@ import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionUnit;
 
 import com.vaadin.annotations.StyleSheet;
 
+/**
+ * Master component for {@link DefaultUI index page UI}.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("indexPage.css")
 public class IndexPage extends AutoVerticalBorderLayout
 {
@@ -23,6 +29,9 @@ public class IndexPage extends AutoVerticalBorderLayout
 	
 	public IndexPage()
 	{
+		/*
+		 * A new tab was created or a browser refresh occured.  
+		 */
 		super();
 		
 		this.contentArea = new ContentArea();
@@ -38,10 +47,12 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setColumnInvisible(Column.EAST, Column.CENTER);
 		setFixedLayout(new Dimension(200, DimensionUnit.PX), new Dimension(DimensionMode.AUTO), new Dimension(DimensionMode.AUTO));
 		
-		// display the content depicted by request URL or display default content if it is not defined
-		if(CustomConfiguredUI.isURIFragmentDefined()) // a browser refresh or bookmark
+		/*
+		 * Display the content depicted by URL fragment or display default content if no fragment is defined.
+		 */
+		if(CustomConfiguredUI.isURIFragmentDefined())
 		{
-			// try to stay on the page
+			// try to preserve the original content being displayed
 			IWebFeature featureFromRequest = ContentProvider.getFeatureFromNavigatorName(CustomConfiguredUI.getURIFragment());
 			if(featureFromRequest == null)
 			{
@@ -50,7 +61,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 			}
 			else
 			{
-				// stay on the page
+				// original content successfully preserved
 				openContent(featureFromRequest);
 			}
 		}
@@ -61,6 +72,11 @@ public class IndexPage extends AutoVerticalBorderLayout
 		}
 	}
 	
+	/**
+	 * Index page's content can only be a predefined component
+	 * bound with a certain feature in {@link ContentProvider}.
+	 * @param feature
+	 */
 	public void openContent(IWebFeature feature)
 	{
 		this.contentArea.setContentView(feature);

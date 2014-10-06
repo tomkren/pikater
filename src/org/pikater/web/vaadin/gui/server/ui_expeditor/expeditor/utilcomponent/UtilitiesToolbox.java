@@ -6,6 +6,11 @@ import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.ui.Label;
 
+/**
+ * Not used at the moment but might be sometime in the future.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("utilitiesToolbox.css")
 public class UtilitiesToolbox extends Toolbox
 {

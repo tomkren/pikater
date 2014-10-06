@@ -12,6 +12,12 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
 
+/**
+ * Default view. Welcomes users into the application and displays
+ * the date and time of their last visit. 
+ * 
+ * @author SkyCrawl
+ */
 public class WelcomeView extends Label implements IContentComponent
 {
 	private static final long serialVersionUID = 9077723300509194087L;

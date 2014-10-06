@@ -4,11 +4,17 @@ import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.CustomFormCheckBox;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 
+/**
+ * Class providing {@link BooleanValue}-backed fields to {@link OptionValueForm}.
+ * 
+ * @author SkyCrawl
+ */
 public class BooleanValueProvider extends AbstractFieldProviderForValue
 {
 	@Override

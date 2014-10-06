@@ -10,6 +10,8 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 import org.pikater.web.vaadin.gui.server.components.upload.UploadLimitReachedException;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -17,6 +19,14 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 
+/**
+ * View implementing the user agent feature.
+ * 
+ * @author SkyCrawl
+ * 
+ * @see {@link DefaultUI}
+ * @see {@link ContentProvider}
+ */
 @StyleSheet("userAgentsView.css")
 public class UserAgentsView extends AgentsView
 {

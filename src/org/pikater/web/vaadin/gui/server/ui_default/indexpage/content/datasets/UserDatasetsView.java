@@ -9,6 +9,8 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 import org.pikater.web.vaadin.gui.server.components.upload.UploadLimitReachedException;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.upload.DatasetUploadWizard;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -18,6 +20,14 @@ import com.vaadin.ui.Button.ClickEvent;
 
 import de.steinwedel.messagebox.MessageBox;
 
+/**
+ * View implementing the user dataset feature.
+ * 
+ * @author SkyCrawl
+ * 
+ * @see {@link DefaultUI}
+ * @see {@link ContentProvider}
+ */
 public class UserDatasetsView extends DatasetsView
 {
 	private static final long serialVersionUID = 5568928739598297585L;

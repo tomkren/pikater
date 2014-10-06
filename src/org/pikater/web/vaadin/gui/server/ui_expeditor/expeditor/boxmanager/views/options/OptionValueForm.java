@@ -25,6 +25,7 @@ import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.BoxManagerOptionView;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special.CAModelFieldProvider;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special.FileInputFieldProvider;
@@ -45,9 +46,11 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 
 /**
- * This GUI component makes a best effort at displaying the given arguments,
- * even if not valid. That way, the box can still be usable in some 
- * situations.
+ * <p>Master component of {@link BoxManagerOptionView}.</p>
+ * 
+ * <p>Makes a best effort at displaying the given arguments,
+ * even if not valid. That way, the source box can still be
+ * usable in some situations.</p>
  */
 public class OptionValueForm extends CustomFormLayout
 {
@@ -92,7 +95,7 @@ public class OptionValueForm extends CustomFormLayout
 	}
 	
 	//---------------------------------------------------------------------------------------
-	// ROOT METHOD TO CREATE THE FORM - CREATES A TYPE FIELD AND CALLS OTHER METHODS
+	// ROOT METHOD TO CREATE THE FORM - CREATES A TYPE FIELD AND CALLS OTHER METHODS OF THIS CLASS
 	
 	private void setupFields()
 	{
@@ -223,7 +226,7 @@ public class OptionValueForm extends CustomFormLayout
 			recreateTypeSpecificFields(dataSource.getValue());
 			
 			// add a special button to reset value to default (default value of the currently selected type)
-			addCustomButtonInterface(new Button("Reset value", new Button.ClickListener()
+			attachToButtonInterface(new Button("Reset value", new Button.ClickListener()
 			{
 				private static final long serialVersionUID = 838180535195566779L;
 

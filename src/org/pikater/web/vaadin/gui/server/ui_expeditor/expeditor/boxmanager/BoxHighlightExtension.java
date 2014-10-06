@@ -5,6 +5,13 @@ import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout
 
 import com.vaadin.server.AbstractExtension;
 
+/**
+ * A special extension to arbitrary components highlighting
+ * the given experiment boxes in the given experiment/
+ * kinetic canvas.
+ * 
+ * @author SkyCrawl
+ */
 public class BoxHighlightExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 3081925647057133214L;

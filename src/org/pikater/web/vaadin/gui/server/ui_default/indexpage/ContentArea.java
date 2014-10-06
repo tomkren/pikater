@@ -2,6 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.shared.util.ReflectionUtils;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
@@ -13,6 +14,11 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
+/**
+ * Defines content area of the {@link DefaultUI index page}.
+ * 
+ * @author SkyCrawl
+ */
 public class ContentArea extends Panel
 {
 	private static final long serialVersionUID = 7642456908975377869L;
@@ -33,7 +39,8 @@ public class ContentArea extends Panel
 			private boolean result;
 
 			/**
-			 * Called after {@link Navigator#navigateTo(String)}, e.g. after {@link ContentArea#setContent(Component content)} or
+			 * Called after {@link Navigator#navigateTo(String)}, e.g. after
+			 * {@link ContentArea#setContent(Component content)} or
 			 * {@link ContentArea#setContent(IWebFeature feature)} method.
 			 */
 			@Override
@@ -81,6 +88,16 @@ public class ContentArea extends Panel
 		{
 			registerAllViewsFromFeatureSet(featureSetClass);
 		}
+	}
+	
+	/**
+	 * @deprecated Use {@link #setContentView(IWebFeature)} instead.
+	 */
+	@Deprecated
+	@Override
+	public void setContent(Component content)
+	{
+		super.setContent(content);
 	}
 	
 	//---------------------------------------------------------------

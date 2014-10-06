@@ -9,6 +9,7 @@ import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.AdminFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.UserFeature;
@@ -19,6 +20,12 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Feature navigation menu within {@link IndexPage}, which
+ * backtracks to {@link DefaultUI}.
+ * 
+ * @author SkyCrawl
+ */
 public class LeftMenu extends Panel
 {
 	private static final long serialVersionUID = -3876199300842530858L;

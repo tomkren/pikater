@@ -14,6 +14,13 @@ import com.vaadin.ui.TextField;
 
 import de.steinwedel.messagebox.MessageBox;
 
+/**
+ * Adds a special computation agent model ID lookup to a 
+ * field inherited from parent.
+ * 
+ * @author SkyCrawl
+ * @see {@link IntegerValueProvider} 
+ */
 public class CAModelFieldProvider extends IntegerValueProvider
 {
 	private final String agentClassSimpleName;

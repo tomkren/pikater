@@ -3,6 +3,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.UserAuth;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
@@ -12,6 +13,17 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Defines banner area (top strip) of the {@link DefaultUI index page}.
+ * Beside displaying banner in the background, this component also
+ * defines authentication interface that:
+ * <ul>
+ * <li> displays the currently authenticated account,
+ * <li> provides a logout button.
+ * </ul>
+ * 
+ * @author SkyCrawl
+ */
 public class BannerArea extends HorizontalLayout
 {
 	private static final long serialVersionUID = 8822379309622158669L;

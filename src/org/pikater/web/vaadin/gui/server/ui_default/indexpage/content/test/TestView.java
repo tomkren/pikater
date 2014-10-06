@@ -14,6 +14,8 @@ import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.dbviews.TestDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
 
 import com.vaadin.event.MouseEvents.ClickListener;
@@ -24,6 +26,18 @@ import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * <p>View implementing the test feature - purely for development.</p>
+ * 
+ * <p>This class contains some useful code snippets should they ever
+ * be needed. This is also the perfect place to try various things
+ * being integrated into production code.<p>
+ * 
+ * @author SkyCrawl
+ * 
+ * @see {@link DefaultUI}
+ * @see {@link ContentProvider}
+ */
 public class TestView extends VerticalLayout implements IContentComponent
 {
 	private static final long serialVersionUID = -6639847503623900929L;

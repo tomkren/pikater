@@ -2,8 +2,14 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.view
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 
+/**
+ * Class providing {@link DoubleValue}-backed fields to {@link OptionValueForm}.
+ * 
+ * @author SkyCrawl
+ */
 public class DoubleValueProvider extends AbstractFieldProviderForValue
 {
 	@Override

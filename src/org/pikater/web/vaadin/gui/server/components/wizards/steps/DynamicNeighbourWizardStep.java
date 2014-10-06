@@ -44,6 +44,10 @@ public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, W
 	//----------------------------------------------------
 	// OTHER PUBLIC INTERFACE
 	
+	/**
+	 * Whether this step doesn't construct any further steps.
+	 * @return
+	 */
 	public boolean isLeaf()
 	{
 		return isLeaf;

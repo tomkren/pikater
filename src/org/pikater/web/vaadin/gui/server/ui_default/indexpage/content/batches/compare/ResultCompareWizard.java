@@ -26,6 +26,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Wizard to be displayed in a dialog, guiding users through setup of
+ * experiment results comparison.
+ * 
+ * @author SkyCrawl
+ */
 public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> implements IDialogComponent
 {
 	private static final long serialVersionUID = -2782484084003504941L;

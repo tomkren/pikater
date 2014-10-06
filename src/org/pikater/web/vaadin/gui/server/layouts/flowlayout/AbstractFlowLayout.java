@@ -3,11 +3,19 @@ package org.pikater.web.vaadin.gui.server.layouts.flowlayout;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.CssLayout;
 
+/**
+ * Base class for flow layouts wrapped as Vaadin components.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("flowLayout.css")
 public abstract class AbstractFlowLayout extends CssLayout 
 {
 	private static final long serialVersionUID = -6039020584387592993L;
 	
+	/**
+	 * Provides styles for inner components.
+	 */
 	private final IFlowLayoutStyleProvider styleProvider;
 	
 	public AbstractFlowLayout()
@@ -16,7 +24,7 @@ public abstract class AbstractFlowLayout extends CssLayout
 	}
 	
 	/**
-	 * Creates a horizontal flow layout with the given style provider for
+	 * Creates a flow layout with the given style provider for
 	 * inner components.
 	 */
 	public AbstractFlowLayout(IFlowLayoutStyleProvider styleProvider)
@@ -27,6 +35,10 @@ public abstract class AbstractFlowLayout extends CssLayout
 		this.styleProvider = styleProvider;
 	}
 	
+	/**
+	 * Gets the style provider for inner components associated with this flow layout.
+	 * @return
+	 */
 	protected IFlowLayoutStyleProvider getStyleProvider()
 	{
 		return styleProvider;

@@ -25,6 +25,10 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Subview of overview, built especially for editing slots.
+ * @see {@link BoxManagerView#OVERVIEW}
+ */
 public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 {
 	private static final long serialVersionUID = 2987699648757179970L;

@@ -11,6 +11,19 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickListener;
 
+/**
+ * <p>Component to manage all experiment-related settings for
+ * a certain experiment box.</p>
+ * 
+ * <p>Current implementation requires the box to be selected
+ * in the kinetic canvas (exactly this one - no more, no
+ * less).</p>
+ * 
+ * <p>For information on how to use the experiment editor and
+ * setup experiment, see user guide (documentation).</p>
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("boxManagerToolbox.css")
 public class BoxManagerToolbox extends Toolbox implements IContextForViews
 {
@@ -136,7 +149,7 @@ public class BoxManagerToolbox extends Toolbox implements IContextForViews
 		switch(selectedBoxesInformation.length)
 		{
 			case 0: // nothing is selected
-				currentView.setBoxIdentificationLabel("none");
+				currentView.setBoxIdentification("none");
 				currentView.setEnabled(false);
 				return false;
 				
@@ -148,11 +161,11 @@ public class BoxManagerToolbox extends Toolbox implements IContextForViews
 					this.overview.setContentFrom(currentBoxDataSource);
 					resetView();
 				}
-				currentView.refreshBoxIdentificationLabel();
+				currentView.refreshBoxIdentification();
 				return true;
 				
 			default: // multiple specific box types are selected
-				currentView.setBoxIdentificationLabel("multiple");
+				currentView.setBoxIdentification("multiple");
 				currentView.setEnabled(false);
 				return false;
 		}

@@ -22,6 +22,10 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
+/**
+ * Subview of overview, built especially for editing slots.
+ * @see {@link BoxManagerView#SLOTVIEW}
+ */
 public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 {
 	private static final long serialVersionUID = 7575836463215779077L;
@@ -156,14 +160,14 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 		}
 		if(vLayout_slots_new.getComponentCount() > 0)
 		{
-			getBoxIdentificationExtension().getStyle().setProperty(
+			getBoxIdentificationStyler().getStyle().setProperty(
 					"background-color",
 					KineticBoxSettings.getColor(VisualStyle.SELECTED).toString()
 			);
 		}
 		else
 		{
-			getBoxIdentificationExtension().getStyle().setProperty("background-color", "transparent");
+			getBoxIdentificationStyler().getStyle().setProperty("background-color", "transparent");
 			BoxManagerOverview.correctEmptyLayout(vLayout_slots_new);
 		}
 		replaceComponent(this.vLayout_slots, vLayout_slots_new);

@@ -48,6 +48,11 @@ import com.vaadin.ui.VerticalLayout;
 
 import de.steinwedel.messagebox.MessageBox;
 
+/**
+ * Toolbar for {@link ExpEditor}, displayed at the top of the page.
+ * 
+ * @author SkyCrawl
+ */
 public class Toolbar extends VerticalLayout
 {
 	private static final long serialVersionUID = 3627484964167144046L;
@@ -77,6 +82,11 @@ public class Toolbar extends VerticalLayout
 	//---------------------------------------------------------------
 	// PUBLIC METHODS
 	
+	/**
+	 * Callback for when experiment tab is changed so that the toolbar
+	 * may be "reset" to display correct values for the given tab.
+	 * @param newActiveTabContent
+	 */
 	public void onTabSelectionChange(KineticComponent newActiveTabContent)
 	{
 		if(newActiveTabContent != null)
@@ -90,6 +100,11 @@ public class Toolbar extends VerticalLayout
 		}
 	}
 	
+	/**
+	 * Callback from client, when user changes click mode by a
+	 * keyboard shortcut. 
+	 * @param newClickMode
+	 */
 	public void onClickModeAlteredOnClient(ClickMode newClickMode)
 	{
 		clickModeCB.select(newClickMode.name());
@@ -154,50 +169,6 @@ public class Toolbar extends VerticalLayout
 			}
 		});
 		
-		/*
-		MenuItem settingsMenuItem = menu.addItem("Settings", null);
-		settingsMenuItem.setStyleName("expEditor-menu-topLevelItem");
-		MenuItem shapeSizeMenuItem = settingsMenuItem.addItem("Shape size (%)", null);
-		for(int percent = 0; percent <= 100; percent += 25)
-		{
-			String caption;
-			if(percent == 0)
-			{
-				caption = "0% (minimum reasonable size)";
-			}
-			else if(percent == 100)
-			{
-				caption = "100% (maximum reasonable size)";
-			}
-			else
-			{
-				caption = String.valueOf(percent) + '%';
-			}
-			final int finalPercentCopy = percent;
-			shapeSizeMenuItem.addItem(caption, new Command()
-			{
-				private static final long serialVersionUID = 5772970839298315921L;
-
-				@Override
-				public void menuSelected(MenuItem selectedItem)
-				{
-					setKineticBoxSize(finalPercentCopy);
-				}
-			});
-		}
-		shapeSizeMenuItem.addSeparator();
-		shapeSizeMenuItem.addItem("Scale to browser width", new Command()
-		{
-			private static final long serialVersionUID = 3151967610233119809L;
-
-			@Override
-			public void menuSelected(MenuItem selectedItem)
-			{
-				setKineticBoxSize(-1);
-			}
-		});
-		*/
-		
 		MenuItem viewMenuItem = menu.addItem("View", null);
 		viewMenuItem.setStyleName("menu-topLevelItem");
 		/*
@@ -226,25 +197,6 @@ public class Toolbar extends VerticalLayout
 					parentEditor.openToolbox(toolbox);
 				}
 			});
-		}
-		
-		if(debugMode)
-		{
-			/*
-			MenuItem debugMenuItem = menu.addItem("Debug", null);
-			debugMenuItem.setStyleName("menu-topLevelItem");
-			debugMenuItem.addItem("Show debug window", new Command()
-			{
-				private static final long serialVersionUID = 4109313735302030716L;
-
-				@Override
-				public void menuSelected(MenuItem selectedItem)
-				{
-					// TODO:
-					MyNotifications.showWarning(null, "Not implemented yet.");
-				}
-			});
-			*/
 		}
 		
 		addComponent(menu);
@@ -542,6 +494,12 @@ public class Toolbar extends VerticalLayout
 	//---------------------------------------------------------------
 	// MISCELLANEOUS PRIVATE INTERFACE
 	
+	/**
+	 * Experiment tabshet may be empty (no tabs present). This method
+	 * avoids errors when trying to execute tab-related code.
+	 * @param action
+	 * @param displayWarningIfNull
+	 */
 	private void executeForNonNullActiveTab(IActiveKineticComponentAction action, boolean displayWarningIfNull)
 	{
 		KineticComponent activeComponent = parentEditor.getActiveKineticComponent();
@@ -563,6 +521,13 @@ public class Toolbar extends VerticalLayout
 		void doAction(KineticComponent activeComponent);
 	}
 	
+	/**
+	 * Special component used in dialogs with which experiments may be
+	 * chosen to load. Both types of experiments may be loaded - either
+	 * saved experiments not yet queued or experiments queued in the past.
+	 * 
+	 * @author SkyCrawl
+	 */
 	private abstract class LoadExperimentComponent extends TabSheet implements IDialogComponent
 	{
 		private static final long serialVersionUID = -7500075637433995569L;
@@ -648,58 +613,4 @@ public class Toolbar extends VerticalLayout
 			arguments.add(experimentToLoad);
 		}
 	}
-	
-	
-	/*
-	private void build(boolean debugMode)
-	{
-		if(debugMode)
-		{
-			Button btn_setLeftTA1 = new Button("Set boxes layer (left)");
-			btn_setLeftTA1.addClickListener(new ClickListener()
-			{
-				@Override
-				public void buttonClick(ClickEvent event)
-				{
-					// leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, GWTMisc.jsonAttrsToSerialize));
-				}
-			});
-			addComponent(btn_setLeftTA1);
-			
-			Button btn_setLeftTA2 = new Button("Set edge layer (left)");
-			btn_setLeftTA2.addClickListener(new ClickListener()
-			{
-				@Override
-				public void buttonClick(ClickEvent event)
-				{
-					// leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_EDGES, GWTMisc.jsonAttrsToSerialize));
-					// leftTextArea.setText(kineticCanvas.getEngine().serializeToJSON(EngineComponent.LAYER_EDGES));
-				}
-			});
-			addComponent(btn_setLeftTA2);
-			
-			Button btn_setRightTA = new Button("Set selection (right)");
-			btn_setRightTA.addClickListener(new ClickListener()
-			{
-				@Override
-				public void buttonClick(ClickEvent event)
-				{
-					// rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, GWTMisc.jsonAttrsToSerialize));
-				}
-			});
-			addComponent(btn_setRightTA);
-			
-			Button btn_displayComparison = new Button("Display JSON comparison");
-			btn_displayComparison.addClickListener(new ClickListener()
-			{
-				@Override
-				public void buttonClick(ClickEvent event)
-				{
-					// jsonComparisonPanel.show();
-				}
-			});
-			addComponent(btn_displayComparison);
-		}
-	}
-	*/
 }

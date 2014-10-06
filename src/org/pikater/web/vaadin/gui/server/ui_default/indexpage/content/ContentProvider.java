@@ -3,6 +3,9 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.UserAuth;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.IndexPage;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.LeftMenu;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents.AgentsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents.UserAgentsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches.BatchesView;
@@ -13,18 +16,59 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.test.TestV
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users.UserProfileView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users.UsersView;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinSession;
 
+/**
+ * All features (components intended to be displayed in the content
+ * area of {@link DefaultUI}) should be registered here.
+ * 
+ * @author SkyCrawl
+ */
 public class ContentProvider
 {
+	/**
+	 * Interface required for each feature.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public interface IWebFeature
 	{
+		/**
+		 * Whether the currently authenticated user (or a guest user)
+		 * has access to this feature.
+		 * @param session
+		 * @return
+		 */
 		boolean accessAllowed(VaadinSession session);
+		
+		/**
+		 * Gets the menu caption for this feature.
+		 * @return
+		 * @see {@link LeftMenu}
+		 */
 		String toMenuCaption();
+		
+		/**
+		 * Gets the URL fragment used to represent this feature.
+		 * @return
+		 * @see {@link Navigator}
+		 * @see {@link IndexPage}
+		 */
 		String toNavigatorName();
+		
+		/**
+		 * Gets the class of the component implementing this feature.
+		 * @return
+		 */
 		Class<? extends IContentComponent> toComponentClass();
 	}
 	
+	/**
+	 * Common enumeration for all "miscellaneous" features.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public enum DefaultFeature implements IWebFeature
 	{
 		// IMPORTANT: always bind the default content with empty navigator name.
@@ -73,6 +117,11 @@ public class ContentProvider
 		}
 	}
 	
+	/**
+	 * Common enumeration for all administrator features.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public enum AdminFeature implements IWebFeature
 	{
 		// IMPORTANT: all navigator names should start with "admin". See {@link #getFeatureFromNavigatorName} below.
@@ -127,6 +176,11 @@ public class ContentProvider
 		}
 	}
 	
+	/**
+	 * Common enumeration for all user features.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public enum UserFeature implements IWebFeature
 	{
 		// IMPORTANT: all navigator names should start with "user". See {@link #getFeatureFromNavigatorName} below.
@@ -188,6 +242,11 @@ public class ContentProvider
 		}
 	}
 	
+	/**
+	 * In other words, gets the feature represented by the given URL fragment. 
+	 * @param navigatorName
+	 * @return
+	 */
 	public static IWebFeature getFeatureFromNavigatorName(String navigatorName)
 	{
 		if(navigatorName == null)

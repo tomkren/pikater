@@ -14,6 +14,15 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Views items indexed by a "left" and "top" index. Items viewed may be
+ * filtered by both indexes.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <I> The index type of the matrix.
+ * @param <R> The item type of the matrix.
+ */
 @StyleSheet("matrixLayout.css")
 public class MatrixLayout<I extends Object, R extends Thumbnail> extends VerticalLayout
 {
@@ -24,7 +33,7 @@ public class MatrixLayout<I extends Object, R extends Thumbnail> extends Vertica
 	 */
 	
 	private static final String HEADER_WIDTH = "150px";
-	private static final String HEADER_HEIGHT = "30px"; // synchronize this with the header component's line height (CSS)
+	private static final String HEADER_HEIGHT = "30px"; // synchronize this with CSS (header component's line height)
 	
 	/*
 	 * Data source related variables.
@@ -40,7 +49,7 @@ public class MatrixLayout<I extends Object, R extends Thumbnail> extends Vertica
 	private HeaderComponent selectedHeader_leftIndex;
 	private HeaderComponent selectedHeader_topIndex;
 	
-	public MatrixLayout(IMatrixDataSource<I, R> dataSource, IMatrixCaptionProvider<I> captionProvider, IFlowLayoutStyleProvider contentStyleProvider)
+	public MatrixLayout(IMatrixDataSource<I, R> dataSource, IMatrixLayoutHeaderProvider<I> captionProvider, IFlowLayoutStyleProvider contentStyleProvider)
 	{
 		super();
 		setPrimaryStyleName("matrixView");
@@ -197,6 +206,12 @@ public class MatrixLayout<I extends Object, R extends Thumbnail> extends Vertica
 	//--------------------------------------------------------
 	// PRIVATE INTERFACE
 	
+	/**
+	 * <p>Updates the content area and displays items for the current
+	 * selection.</p>
+	 * 
+	 * <p>For the sake of clarity, the method is divided into 3 parts.</p>
+	 */
 	private void updateContent()
 	{
 		content.removeAllComponents();
@@ -213,6 +228,10 @@ public class MatrixLayout<I extends Object, R extends Thumbnail> extends Vertica
 		}
 	}
 	
+	/**
+	 * Subroutine of {@link #updateContent()}. Only use this method
+	 * from within it.
+	 */
 	private void updateContentFor(I indexLeft)
 	{
 		if(selectedHeader_topIndex != null)
@@ -228,6 +247,10 @@ public class MatrixLayout<I extends Object, R extends Thumbnail> extends Vertica
 		}
 	}
 	
+	/**
+	 * Subroutine of {@link #updateContent()}. Only use this method
+	 * from within it.
+	 */
 	private void updateContentFor(I indexLeft, I indexTop)
 	{
 		Component currentComponent = dataSource.getElement(indexLeft, indexTop);
@@ -240,6 +263,12 @@ public class MatrixLayout<I extends Object, R extends Thumbnail> extends Vertica
 	//--------------------------------------------------------
 	// PRIVATE TYPES
 	
+	/**
+	 * A component representing an index which is selected/deselected
+	 * with a click.
+	 * 
+	 * @author SkyCrawl
+	 */
 	private class HeaderComponent extends Panel
 	{
 		private static final long serialVersionUID = 8986511648022361418L;

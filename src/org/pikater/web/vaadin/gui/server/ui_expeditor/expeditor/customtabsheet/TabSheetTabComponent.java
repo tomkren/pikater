@@ -9,12 +9,34 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 
+/**
+ * Tab component for {@link TabSheet}.
+ * 
+ * @author SkyCrawl
+ */
 public class TabSheetTabComponent extends Panel // something clickable
 {
 	private static final long serialVersionUID = -8893352392192406060L;
 	
+	/*
+	 * Inner GUI components.
+	 */
+	
+	/**
+	 * Component visually identifying the tab for the user.
+	 */
 	private final Label label;
+	
+	/**
+	 * Component to close the parent tab. Not attached by
+	 * default. Use {@link #addCloseHandler(ClickListener)}
+	 * to attach it manually.
+	 */
 	private final IconButton closeTabButton;
+	
+	/*
+	 * Programmatic variables.
+	 */
 	private boolean isSelected;
 	
 	public TabSheetTabComponent(String caption)
@@ -48,21 +70,41 @@ public class TabSheetTabComponent extends Panel // something clickable
 		label.setValue(caption);
 	}
 	
+	/**
+	 * Is there a need to display a dialog so that the user
+	 * can confirm closing this tab?
+	 * @return
+	 */
 	public boolean canCloseTab()
 	{
 		return true; // just some default implementation - override in subclasses
 	}
 	
+	/**
+	 * Makes this tab closeable, attaches a special clickable component
+	 * which handles close events with the given close handler.
+	 * {@link #canCloseTab()} is not a part of this - if intended to be
+	 * used, use must do that within the close handler or elsewhere.
+	 * @param closeHandler
+	 */
 	public void addCloseHandler(ClickListener closeHandler)
 	{
 		this.closeTabButton.addClickListener(closeHandler);
 	}
 	
+	/**
+	 * Is this tab currently selected?
+	 * @return
+	 */
 	public boolean isSelected()
 	{
 		return isSelected;
 	}
 	
+	/**
+	 * Selects/deselects this tab.
+	 * @param selected
+	 */
 	public void setSelected(boolean selected)
 	{
 		if(isSelected() != selected)

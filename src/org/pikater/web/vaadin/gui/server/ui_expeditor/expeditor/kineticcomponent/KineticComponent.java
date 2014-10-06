@@ -16,6 +16,7 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTa
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheet;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.IKineticComponent;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
@@ -25,6 +26,13 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphIt
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractComponent;
 
+/**
+ * Content component for {@link ExpEditor experiment editor's} {@link TabSheet tab
+ * sheet} tabs. Contains kinetic canvas (in the client implementation) used to
+ * draw experiments. Also manages experiment data structure.
+ * 
+ * @author SkyCrawl
+ */
 @JavaScript(value = "kinetic-v4.7.3-dev.js")
 public class KineticComponent extends AbstractComponent implements IKineticComponent
 {
@@ -70,6 +78,12 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	//---------------------------------------------------------------
 	// CONSTRUCTOR
 	
+	/**
+	 * Constructor.</br>
+	 * Remember to also use {@link #setParentTab(CustomTabSheetTabComponent)}
+	 * for each instance of this component.
+	 * @param parentEditor
+	 */
 	public KineticComponent(final ExpEditor parentEditor)
 	{
 		super();
@@ -424,11 +438,20 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		return experimentGraph;
 	}
 	
+	/**
+	 * Database ID of the last loaded experiment for this canvas.
+	 * @return
+	 */
 	public Integer getPreviouslyLoadedExperimentID()
 	{
 		return previouslyLoadedExperimentID;
 	}
 	
+	/**
+	 * This reference can not be passed via a constructor because
+	 * of implementation issues. Make sure to do it sometime later.
+	 * @param parentTab
+	 */
 	public void setParentTab(CustomTabSheetTabComponent parentTab)
 	{
 		this.parentTab = parentTab;
@@ -441,6 +464,16 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		// return getState().serverThinksThatSchemaIsModified;
 	}
 	
+	/**
+	 * Creates a new box for the given arguments and adds it to
+	 * the kinetic canvas. In other words, handles the whole
+	 * process.
+	 * @param info
+	 * @param absX
+	 * @param absY
+	 * @param sendToClient
+	 * @return
+	 */
 	public BoxInfoServer createBox(AgentInfo info, int absX, int absY, boolean sendToClient)
 	{
 		BoxInfoServer result = null;

@@ -3,10 +3,20 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.AgentsDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
+/**
+ * View implementing the administrator agent feature.
+ * 
+ * @author SkyCrawl
+ * 
+ * @see {@link DefaultUI}
+ * @see {@link ContentProvider}
+ */
 public class AgentsView extends DBTableLayout implements IContentComponent
 {
 	private static final long serialVersionUID = -4608720645535772140L;

@@ -19,10 +19,20 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbourWizardStep;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 
+/**
+ * View implementing the administrator batch feature.
+ * 
+ * @author SkyCrawl
+ * 
+ * @see {@link DefaultUI}
+ * @see {@link ContentProvider}
+ */
 public class BatchesView extends ExpandableView
 {
 	private static final long serialVersionUID = 5847910505253647132L;

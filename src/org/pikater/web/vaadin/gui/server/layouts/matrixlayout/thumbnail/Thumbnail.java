@@ -1,14 +1,19 @@
 package org.pikater.web.vaadin.gui.server.layouts.matrixlayout.thumbnail;
 
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
+
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /** 
- * TODO: This class is only a temporary solution to visualization. An alternative
- * (but much more time-consuming) solution would be to use deep zoom images
- * and a client-side viewer for them (like openseadragon).
+ * <p>A component representing a given item of the {@link MatrixLayout} at
+ * the given coordinates. Overriding classes need to define the content
+ * component and the text identifying this item.</p>
+ * 
+ * <p>IMPORTANT NOTE: after creating the subclass, the {@link #init()}
+ * method needs to be called.</p>
  */
 @StyleSheet("thumbnail.css")
 public abstract class Thumbnail extends VerticalLayout
@@ -22,6 +27,10 @@ public abstract class Thumbnail extends VerticalLayout
 		setStyleName("thumbnail");
 	}
 	
+	/**
+	 * Initializes the thumbnail, asks the subclass for content
+	 * component and caption.
+	 */
 	protected void init()
 	{
 		Component content = getContent();

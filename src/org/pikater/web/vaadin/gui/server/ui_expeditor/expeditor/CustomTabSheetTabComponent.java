@@ -1,8 +1,15 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheet;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
+/**
+ * Custom tab component for {@link TabSheet}, specific to {@link ExpEditor
+ * experiment editor}, associated to a certain {@link KineticComponent}. 
+ * 
+ * @author SkyCrawl
+ */
 public class CustomTabSheetTabComponent extends TabSheetTabComponent
 {
 	private static final long serialVersionUID = 2019691593787134700L;
@@ -22,7 +29,8 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 	{
 		if(contentComponent.getExperimentGraph() != null)
 		{
-			return contentComponent.getExperimentGraph().isEmpty(); // TODO: content modified
+			// TODO: check whether content has been modified when that particular feature is supported
+			return contentComponent.getExperimentGraph().isEmpty();
 		}
 		else
 		{
@@ -35,6 +43,11 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 		return contentComponent;
 	}
 	
+	/**
+	 * @deprecated Not supported at the moment.
+	 * @param modified
+	 */
+	@Deprecated
 	public void setTabContentModified(boolean modified)
 	{
 		if(modified)

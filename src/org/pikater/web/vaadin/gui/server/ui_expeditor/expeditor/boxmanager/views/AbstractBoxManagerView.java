@@ -2,20 +2,44 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.view
 
 import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
 import org.vaadin.jouni.dom.Dom;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Base class for all {@link BoxManagerToolbox box manager toolbox}
+ * views/subviews.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <S> Data source object type for this view.
+ */
 public abstract class AbstractBoxManagerView<S extends Object> extends VerticalLayout
 {
 	private static final long serialVersionUID = 2129962006939216700L;
 	
+	/**
+	 * Context providing all necessary information background information.
+	 */
 	private final IContextForViews context;
-	private final Label boxIdentificationLabel;
-	private final Dom boxIdentificationExtension;
 	
+	/**
+	 * Component displaying the box's identification - category and name.
+	 */
+	private final Label boxIdentificationLabel;
+	
+	/**
+	 * Extension providing server-side CSS styling interface
+	 * to {@link #boxIdentificationLabel}.
+	 */
+	private final Dom boxIdentificationStyler;
+	
+	/**
+	 * Data source for this view.
+	 */
 	private S currentSource;
 	
 	public AbstractBoxManagerView(IContextForViews context)
@@ -36,17 +60,24 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 		};
 		this.boxIdentificationLabel.setSizeUndefined();
 		this.boxIdentificationLabel.setStyleName("emphasizedLabel");
-		this.boxIdentificationExtension = new Dom(this.boxIdentificationLabel);
+		this.boxIdentificationStyler = new Dom(this.boxIdentificationLabel);
 		
 		this.currentSource = null;
 	}
 	
-	public void setBoxIdentificationLabel(String label)
+	/**
+	 * A special method to override the box identification text.
+	 * @param label
+	 */
+	public void setBoxIdentification(String label)
 	{
 		boxIdentificationLabel.setValue(label);
 	}
 	
-	public void refreshBoxIdentificationLabel()
+	/**
+	 * Comes in handy when the data source for this view gets changed.
+	 */
+	public void refreshBoxIdentification()
 	{
 		boxIdentificationLabel.setValue(String.format("%s@%s", 
 				BoxType.fromAgentInfo(context.getCurrentBoxDataSource().getAssociatedAgent()).name(),
@@ -54,6 +85,11 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 		));
 	}
 	
+	/**
+	 * Set data source for view. Handles the whole process, nothing else
+	 * is needed.
+	 * @param source
+	 */
 	public void setContentFrom(S source)
 	{
 		if(currentSource != source)
@@ -76,7 +112,7 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 			}
 			
 			currentSource = source;
-			refreshBoxIdentificationLabel();
+			refreshBoxIdentification();
 			refreshContent();
 		}
 	}
@@ -84,8 +120,18 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	//-------------------------------------------------
 	// ABSTRACT INTERFACE
 	
+	/**
+	 * Throws an exception if something is not right with the
+	 * given data source.
+	 * @param source
+	 * @throws IllegalArgumentException
+	 */
 	protected abstract void validateSource(S source) throws IllegalArgumentException;
 	
+	/**
+	 * Called when this view's data source is changed so as to
+	 * refresh the displayed content for another object.
+	 */
 	public abstract void refreshContent();
 	
 	//-------------------------------------------------
@@ -101,11 +147,14 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 		return boxIdentificationLabel;
 	}
 	
-	protected Dom getBoxIdentificationExtension()
+	protected Dom getBoxIdentificationStyler()
 	{
-		return boxIdentificationExtension;
+		return boxIdentificationStyler;
 	}
 	
+	/**
+	 * Gets the data source for this view.
+	 */
 	protected S getCurrentSource()
 	{
 		return currentSource;

@@ -10,6 +10,13 @@ import org.vaadin.actionbuttontextfield.widgetset.client.ActionButtonType;
 
 import com.vaadin.ui.TextField;
 
+/**
+ * Adds a special dataset filename lookup to a 
+ * field inherited from parent.
+ * 
+ * @author SkyCrawl
+ * @see {@link StringValueProvider} 
+ */
 public class FileInputFieldProvider extends StringValueProvider
 {
 	@Override

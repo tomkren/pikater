@@ -5,8 +5,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * A server-side implementation (or a "copy") of the GWT
- * {@link com.google.gwt.dom.builder.shared.StyleBuilder}.
+ * <p>This class was inspired by GWT's {@link com.google.gwt.dom.builder.shared.
+ * StyleBuilder}. Its primary purpose was to avoid having to define a lot of
+ * customized CSS code for many individual instances of the same component.</p>
+ * 
+ * <p>If CSS directly affects a component's functionality or just overrides
+ * one property, there's not really a need to devise a special new style name
+ * for such alterations.</p>
  * 
  * @author SkyCrawl
  */
@@ -25,7 +30,7 @@ public class StyleBuilder
 	}
 	
 	/**
-	 * Build into a CSS-compatible string.
+	 * Build styles defined by this class into a single CSS-compatible string.
 	 * @return
 	 */
 	public String build()

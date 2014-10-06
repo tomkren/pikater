@@ -16,6 +16,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 
+/**
+ * Displays the experiment editor.
+ * 
+ * @author SkyCrawl
+ */
 @Title("Experiments")
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
@@ -41,7 +46,8 @@ public class ExpEditorUI extends CustomConfiguredUI
 	protected void displayChildContent()
 	{
 		/*
-		 * Display editor if authenticated or make the user authenticate first and then display it.
+		 * Display index page if user is authenticated or make him authenticate first
+		 * and then display it.
 		 */
 		if(UserAuth.isUserAuthenticated(VaadinSession.getCurrent()))
 		{
@@ -57,6 +63,28 @@ public class ExpEditorUI extends CustomConfiguredUI
 					displayExperimentEditor();
 				}
 			});
+		}
+	}
+	
+	/**
+	 * Method displaying the content of this UI. We want each instance of this
+	 * UI to have its own copy of experiment "boxes". {@link #createAgentInfoProvider()}
+	 * is used to provide that.
+	 */
+	private void displayExperimentEditor()
+	{
+		final KnownCoreAgents agentInfoProvider = createAgentInfoProvider();
+		if(agentInfoProvider != null)
+		{
+			// disable regular page layout
+			setPageCroppedAndHorizontallyCentered(false);
+			
+			// simply create a new empty editor and let the user handle the rest
+			ExpEditor editor = new ExpEditor(agentInfoProvider);
+			setContent(editor);
+			
+			// display an empty experiment by default
+			editor.addEmptyTab();
 		}
 	}
 	
@@ -82,22 +110,5 @@ public class ExpEditorUI extends CustomConfiguredUI
 			agentInfoProvider = KnownCoreAgents.getDummy();
 		}
 		return agentInfoProvider;
-	}
-	
-	private void displayExperimentEditor()
-	{
-		final KnownCoreAgents agentInfoProvider = createAgentInfoProvider();
-		if(agentInfoProvider != null)
-		{
-			// disable regular page layout
-			setPageCroppedAndHorizontallyCentered(false);
-			
-			// simply create a new empty editor and let the user handle the rest
-			ExpEditor editor = new ExpEditor(agentInfoProvider);
-			setContent(editor);
-			
-			// display an empty experiment by default
-			editor.addEmptyTab();
-		}
 	}
 }

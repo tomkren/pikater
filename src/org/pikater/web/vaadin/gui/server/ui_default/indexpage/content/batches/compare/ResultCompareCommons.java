@@ -4,6 +4,12 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.vaadin.gui.server.components.forms.DatasetVisualizationForm;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 
+/**
+ * Class encapsulating all information required to compare
+ * experiment results.
+ * 
+ * @author SkyCrawl
+ */
 class ResultCompareCommons implements IWizardCommon
 {
 	private final JPADataSetLO dataset_result;

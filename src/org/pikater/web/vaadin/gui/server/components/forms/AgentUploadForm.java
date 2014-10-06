@@ -139,7 +139,7 @@ public class AgentUploadForm extends CustomFormLayout
 		});
 		this.upload.setEnabled(false);
 		
-		addCustomButtonInterface(this.upload);
+		attachToButtonInterface(this.upload);
 	}
 	
 	@Override

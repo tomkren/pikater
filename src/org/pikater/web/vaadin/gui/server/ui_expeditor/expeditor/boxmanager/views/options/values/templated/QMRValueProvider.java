@@ -9,11 +9,17 @@ import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.shared.util.Interval;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 
 import com.vaadin.data.Validator;
 import com.vaadin.ui.AbstractField;
 
+/**
+ * Class providing {@link QuestionMarkRange}-backed fields to {@link OptionValueForm}.
+ * 
+ * @author SkyCrawl
+ */
 public class QMRValueProvider extends AbstractFieldProviderForValue
 {
 	@Override

@@ -5,6 +5,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.web.experiment.server.BoxInfoServer;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerView;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.IOptionViewDataSource;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;
@@ -14,6 +15,10 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
+/**
+ * Subview of overview, built especially for editing slots.
+ * @see {@link BoxManagerView#OPTIONVIEW}
+ */
 public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption>
 {
 	private static final long serialVersionUID = 5778436487377608808L;
@@ -96,7 +101,7 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption>
 		});
 		currentForm.setCaption("Value information:");
 		currentForm.setSizeFull();
-		currentForm.addCustomButtonInterface(new Button("Back to overview", new Button.ClickListener()
+		currentForm.attachToButtonInterface(new Button("Back to overview", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = 8283308445389621644L;
 

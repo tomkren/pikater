@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.web.config.KnownCoreAgents;
 import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickListener;
@@ -19,6 +20,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Toolbox displayed on the left of {@link ExpEditor}, containing
+ * all available experiment editor boxes.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("boxBrowserToolbox.css")
 public class BoxBrowserToolbox extends Toolbox
 {

@@ -10,6 +10,12 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent
 
 import com.vaadin.server.AbstractExtension;
 
+/**
+ * Extension implementing some add-on supporting features to
+ * {@link ExpEditor experiment editor}.
+ * 
+ * @author SkyCrawl
+ */
 public class ExpEditorExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;
@@ -40,11 +46,21 @@ public class ExpEditorExtension extends AbstractExtension
         super.extend(expEditor);
     }
 	
+	/**
+	 * Get handle to client commands.
+	 * @return
+	 */
 	public ExpEditorExtensionClientRpc getClientRPC()
 	{
 		return getRpcProxy(ExpEditorExtensionClientRpc.class);
 	}
 	
+	/**
+	 * @deprecated Not supported at the moment.
+	 * @param content
+	 * @param modified
+	 */
+	@Deprecated
 	public void setKineticContentModified(KineticComponent content, boolean modified)
 	{
 		if(modified ? modifiedContent.add(content) : modifiedContent.remove(content))

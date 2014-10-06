@@ -13,6 +13,11 @@ import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbo
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 
+/**
+ * An expandable view made especially for documentation purposes.
+ * 
+ * @author SkyCrawl
+ */
 public class TestExpandableView extends ExpandableView
 {
 	private static final long serialVersionUID = 5513288294724671701L;
