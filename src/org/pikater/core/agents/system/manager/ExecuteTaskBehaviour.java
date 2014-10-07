@@ -60,53 +60,51 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 	}
 	
 	protected void handleInform(ACLMessage inform) {
-		myAgent.logInfo("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
+		
+		myAgent.logInfo("Agent " + inform.getSender().getName() +
+				" successfully performed the requested action.");
 		
 		ContentElement content;
 		try {
 			content = myAgent.getContentManager().extractContent(inform);
+			
 			if (content instanceof Result) {
 				// get the original task from msg
 				Result result = (Result) content;					
-				Task t = (Task)result.getValue();
-                // ComputationCollectionItem computation = myAgent.getComputation(t.getBatchID()); // unused
+				Task task = (Task)result.getValue();
+                
                 DataSourceEdge labeledData = new DataSourceEdge();
                 labeledData.setFile(false);
 
-                if (node.containsOutput("file"))
-                {
-                    TaskOutput data= t.getOutputByType(Task.InOutType.DATA);
-                    if (data==null)
-                    {
-                        data=t.getOutput().get(0);
+                if (node.containsOutput("file")) {
+                    TaskOutput data= task.getOutputByType(Task.InOutType.DATA);
+                    if (data == null) {
+                        data = task.getOutput().get(0);
                     }
                     labeledData.setDataSourceId(data.getName());
                     node.addToOutputAndProcess(labeledData,"file");
                 }
-                if (node.containsOutput(CoreConstant.SlotContent.TESTING_DATA.getSlotName()))
-                {
-                    TaskOutput test= t.getOutputByType(Task.InOutType.TEST);
-                    if (test==null)
-                    {
-                        test=t.getOutputByType(Task.InOutType.TRAIN);
+                if (node.containsOutput(CoreConstant.SlotContent.TESTING_DATA.getSlotName())) {
+                    TaskOutput test = task.getOutputByType(Task.InOutType.TEST);
+                    if (test == null) {
+                        test = task.getOutputByType(Task.InOutType.TRAIN);
                     }
                     labeledData.setDataSourceId(test.getName());
                     node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TESTING_DATA.getSlotName());
                 }
-                if (node.containsOutput(CoreConstant.SlotContent.TRAINING_DATA.getSlotName()))
-                {
-                    TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
+                if (node.containsOutput(CoreConstant.SlotContent.TRAINING_DATA.getSlotName())) {
+                    TaskOutput train = task.getOutputByType(Task.InOutType.TRAIN);
 
                     labeledData.setDataSourceId(train.getName());
                     node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
                 }
 
 				// save results to the database										
-				if (t.getSaveResults()){
-					DataManagerService.saveResult(myAgent, t, t.getExperimentID());
+				if (task.getSaveResults()){
+					DataManagerService.saveResult(myAgent, task, task.getExperimentID());
 				}
-                Task task=(Task)result.getValue();
-                ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationID());
+                Task taskResult = (Task)result.getValue();
+                ErrorEdge errorEdge = new ErrorEdge(taskResult.getResult(),taskResult.getComputationID());
                 node.addToOutputAndProcess(errorEdge,"error");
                 node.decreaseNumberOfOutstandingTask();
 			}

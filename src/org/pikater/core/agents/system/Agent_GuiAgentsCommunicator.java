@@ -1,6 +1,9 @@
 package org.pikater.core.agents.system;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -25,13 +28,22 @@ import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
+/**
+ * 
+ * Communicator for GUI-Agents
+ *
+ */
 public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7226837600070711675L;
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
-	public java.util.List<Ontology> getOntologies() {
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());		
 		ontologies.add(BatchOntology.getInstance());
@@ -39,6 +51,9 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 		return ontologies;
 	}
 
+	/**
+	 * Agent setup
+	 */
 	@Override
 	protected void setup() {
 
@@ -46,44 +61,59 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 		logInfo("is starting up...");
 		registerWithDF(CoreAgents.GUI_AGENTS_COMMUNICATOR.getName());
 
-		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+		MessageTemplate template =
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		
-		addBehaviour(new AchieveREResponder(this, mt) {
+		addBehaviour(new AchieveREResponder(this, template) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+			protected ACLMessage handleRequest(ACLMessage request
+					) throws NotUnderstoodException, RefuseException {
+				
 				try {
-					Action a = (Action) getContentManager().extractContent(request);
+					Action action = (Action)
+							getContentManager().extractContent(request);
 					
-					/**
+					/*
 					 * ExecuteBatch actions
 					 */
-					if (a.getAction() instanceof ExecuteBatch) {
-						return respondToExecuteBatch(request, a);
+					if (action.getAction() instanceof ExecuteBatch) {
+						return respondToExecuteBatch(request, action);
 					}
 				
 				} catch (OntologyException e) {
-					logException("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " +
+						e.getMessage(), e);
 				} catch (CodecException e) {
 					logException("Codec problem: " + e.getMessage(), e);
-				} catch (Exception e) {
-					logException("Unexpected error occured:", e);
 				}
 	
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logSevere("Failure responding to request: " + request.getContent());
+				
+				logSevere("Failure responding to request: " +
+					request.getContent());
+				
 				return failure;
 			}
 	
 		});
 	}
 	
-	private ACLMessage respondToExecuteBatch(ACLMessage request, Action a) {
+	/**
+	 * Save a new Batch by using {@link Agent_DataManager} and send
+	 * inform message to {@link Agent_Manager}
+	 * 
+	 * @param request
+	 * @param action
+	 * @return - OK message
+	 */
+	private ACLMessage respondToExecuteBatch(ACLMessage request,
+			Action action) {
 		
-		ExecuteBatch exeBatch = (ExecuteBatch) a.getAction();
+		ExecuteBatch exeBatch = (ExecuteBatch) action.getAction();
         ComputationDescription compDescription = exeBatch.getDescription();
 
         String batchName = null;
@@ -108,7 +138,8 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 				return failure;
 			}
 			           
-			logInfo("Agent recieved ComputingDescription from " + request.getSender().getName() );
+			logInfo("Agent recieved ComputingDescription from " +
+					request.getSender().getName() );
 			
 
             Batch batch = new Batch();
@@ -119,7 +150,8 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
             batch.setOwnerID(batchOwnerID);
             batch.setDescription(compDescription);
 
-            // send received ComputationDescription as Batch to DataManger to save to DB
+            // send received ComputationDescription as Batch
+            // to DataManger to save to DB
             int batchId =  DataManagerService.saveBatch(this, batch);
             logInfo("BatchId: " + batchId + " saved");
 

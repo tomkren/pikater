@@ -7,26 +7,41 @@ import java.util.List;
 import java.util.Random;
 
 
+/**
+ * Item in solution-schema
+ */
 public abstract class SearchItem implements Concept {
-	/**
-	 * Item in solution-schema
-	 */
+
     private String name;
 	private static final long serialVersionUID = 3249399049389780447L;
-	private Integer number_of_values_to_try;
-	//Create random solution item
-	public IValueData randomValue(Random rnd_gen)
+	private Integer numberOfValuesToTry;
+
+	/**
+	 * Create random solution item
+	 * 
+	 * @param rndGen
+	 * @return
+	 */
+	public IValueData randomValue(Random rndGen)
     {
-        List<IValueData>   possibleValues=possibleValues();
-        return possibleValues.get(rnd_gen.nextInt(possibleValues.size()));
+        List<IValueData> possibleValues = possibleValues();
+        int index = rndGen.nextInt(possibleValues.size());
+        return possibleValues.get(index);
     }
-	//Returns all possible values from this schema
+	
+	/**
+	 * Returns all possible values from this schema
+	 * 
+	 * @return
+	 */
 	public abstract List<IValueData> possibleValues();
-	public Integer getNumber_of_values_to_try() {
-		return number_of_values_to_try;
+	
+	public Integer getNumberOfValuesToTry() {
+		return numberOfValuesToTry;
 	}
-	public void setNumber_of_values_to_try(Integer numberOfValuesToTry) {
-		number_of_values_to_try = numberOfValuesToTry;
+	
+	public void setNumberOfValuesToTry(Integer numberOfValuesToTry) {
+		this.numberOfValuesToTry = numberOfValuesToTry;
 	}
 
     public String getName() {

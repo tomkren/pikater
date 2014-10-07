@@ -1,34 +1,43 @@
 package org.pikater.core;
 
-public class CoreConstant
-{
+/**
+ * 
+ * Represents s set of constants used in Pikater core
+ *
+ */
+public class CoreConstant {
+	
 	/**
 	 * Private constructors hide the public ones.
 	 */
-	private CoreConstant()
-	{
-	}
+	private CoreConstant()  {}
 	
-	public static enum SlotDirection
-	{
+	/**
+	 * 
+	 * Represents a slot direction, input or output
+	 *
+	 */
+	public static enum SlotDirection {
 		INPUT,
 		OUTPUT;
 		
-		public SlotDirection getOther()
-		{
-			if(this == INPUT)
-			{
+		public SlotDirection getOther() {
+			
+			if(this == INPUT) {
 				return OUTPUT;
-			}
-			else
-			{
+			
+			} else {
 				return INPUT;
 			}
 		}
 	}
 	
-	public static enum SlotCategory
-	{
+	/**
+	 * 
+	 * Represents types of data which is flowing through the slot
+	 *
+	 */
+	public static enum SlotCategory {
 		DATA_GENERAL,
 		DATA_AGENT,
 		DATA_SEARCH,
@@ -37,8 +46,13 @@ public class CoreConstant
 		ERROR
 	}
 	
-	public static enum SlotContent
-	{
+	/**
+	 * 
+	 * Represents types of the slot
+	 *
+	 */
+	public static enum SlotContent {
+		
 		DATA("data"),
 		FILE_DATA("fileData"),
 		TRAINING_DATA("trainingData"),
@@ -54,20 +68,17 @@ public class CoreConstant
 		
 		private final String slotName;
 		
-		private SlotContent(String slotName)
-		{
+		private SlotContent(String slotName) {
 			this.slotName = slotName;
 		}
 		
-		public String getSlotName()
-		{
+		public String getSlotName() {
 			return slotName;
 		}
 		
-		public SlotCategory getCategory()
-		{
-			switch(this)
-			{
+		public SlotCategory getCategory() {
+			
+			switch(this) {
 				case DATA:
 				case COMPUTED_DATA:
 				case FILE_DATA:
@@ -93,23 +104,35 @@ public class CoreConstant
 		}
 	}
 	
-	public static enum Mode
-	{
+	/**
+	 * 
+	 * Represents modes of the Batch
+	 *
+	 */
+	public static enum Mode {
 		DEFAULT,
 		TRAIN_ONLY,
 		TEST_ONLY,
 		TRAIN_TEST,
 	}
 	
-	public static enum Output
-	{
+	/**
+	 * 
+	 * Represents types of the Output
+	 *
+	 */
+	public static enum Output {
 		DEFAULT,
 		EVALUATION_ONLY,
 		PREDICTION;
 	}
 	
-	public static enum Error
-	{
+	/**
+	 * 
+	 * Represents types of the error in the terminology of machine learning
+	 *
+	 */
+	public static enum Error {
 		ERROR_RATE,
 		KAPPA_STATISTIC,
 		MEAN_ABSOLUTE,
@@ -117,7 +140,8 @@ public class CoreConstant
 		ROOT_MEAN_SQUARED,
 		ROOT_RELATIVE_SQUARED;
 	}
-	
+
+	public static final String INPUT_FILE_NAME = "input.xml";
 	public static final String DURATION_DATASET_NAME = "lineardata.arff";
 	public static final String MODEL = "model";
 	public static final String DURATION = "duration";

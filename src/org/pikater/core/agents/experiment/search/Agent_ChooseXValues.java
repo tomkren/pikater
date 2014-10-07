@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
@@ -11,17 +12,20 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.search.ChooseXValue_Box;
 
+/*
+ * 
+ * Implementation of simple tabulation of solutions
+ * 
+ */
 public class Agent_ChooseXValues extends Agent_Search {
-	/*
-	 * Implementation of simple tabulation of solutions 
-	 */
+
 	private static final long serialVersionUID = 838429530327268572L;
+	
 	private int n = Integer.MAX_VALUE;
 	private int ni = 0;
-	private int default_number_of_values_to_try = 5;
+	private int defaultNumberOfValuesToTry = 5;
 
-	private List<SearchSolution> solutions_list ;
-	//private Vector<String> sub_options_vector ;
+	private List<SearchSolution> solutionsList;
 
 	@Override
 	protected String getAgentType() {
@@ -30,12 +34,11 @@ public class Agent_ChooseXValues extends Agent_Search {
 	
 	@Override
 	protected AgentInfo getAgentInfo() {
-
 		return ChooseXValue_Box.get();
 	}
 
 	@Override
-	protected boolean finished() {
+	protected boolean isFinished() {
 		if (ni < n) {
 			return false;
 		} else {
@@ -43,14 +46,22 @@ public class Agent_ChooseXValues extends Agent_Search {
 		}
 	}
 
-	//TODO: Something less recursive
-	private void generate(List<IValueData> cur_solution_part,
-			List<List<IValueData>> possible_solution_values, int beg_ind) {
+
+	/**
+	 * Generate solution
+	 * 
+	 * @param curSolutionPart
+	 * @param possibleSolutionValues
+	 * @param begInd
+	 */
+	private void generate(List<IValueData> curSolutionPart,
+			List<List<IValueData>> possibleSolutionValues, int begInd) {
 		
-		if (possible_solution_values.size()-beg_ind < 1) {//if we are at the end
+		if (possibleSolutionValues.size()-begInd < 1) {
+			// at the end
 			
 			List<IValueData> vals = new ArrayList<IValueData>();
-			for (IValueData valI : cur_solution_part) {
+			for (IValueData valI : curSolutionPart) {
 				vals.add(valI);
 			}
 
@@ -58,69 +69,81 @@ public class Agent_ChooseXValues extends Agent_Search {
 			//then solution part is whole solution
 			solution.setValues(vals);
 			
-			solutions_list.add(solution);
+			solutionsList.add(solution);
 			return;
 		}
 		
-		List<IValueData> pos_vals = possible_solution_values.get(beg_ind);
-		for (int i = 0; i < pos_vals.size(); i++) {//For each possible value on the index beg_ind
-			cur_solution_part.add(pos_vals.get(i));//append the value to the part of the solution
+		List<IValueData> posVals = possibleSolutionValues.get(begInd);
+		
+		// for each possible value on the index begInd
+		for (int i = 0; i < posVals.size(); i++) {
 			
-			generate(cur_solution_part,	possible_solution_values, beg_ind+1);//recursion
-			cur_solution_part.remove(cur_solution_part.size()-1);//undo append
+			// append the value to the part of the solution
+			curSolutionPart.add(posVals.get(i));
+			
+			// recursion
+			generate(curSolutionPart, possibleSolutionValues, begInd+1);
+			
+			// undo append
+			curSolutionPart.remove(curSolutionPart.size()-1);
 		}
 	}
 
-
-	private void generateSolutions_list(List<SearchItem> schema) {
-		List<List<IValueData>> possible_solutions =
+	/**
+	 * Generate solutions
+	 * 
+	 * @param schema
+	 */
+	private void generateSolutionsList(List<SearchItem> schema) {
+		List<List<IValueData>> possibleSolutions =
 				new ArrayList<List<IValueData>>();
 		
 		for (SearchItem searchItemI : schema) {
-			if (searchItemI.getNumber_of_values_to_try() == 0) {
-				searchItemI.setNumber_of_values_to_try(default_number_of_values_to_try);
+			if (searchItemI.getNumberOfValuesToTry() == 0) {
+				searchItemI.setNumberOfValuesToTry(defaultNumberOfValuesToTry);
 			}
-			possible_solutions.add(searchItemI.possibleValues());
+			possibleSolutions.add(searchItemI.possibleValues());
 		}
-		generate(new ArrayList<IValueData>(), possible_solutions, 0);
-		n = solutions_list.size();
+		generate(new ArrayList<IValueData>(), possibleSolutions, 0);
+		n = solutionsList.size();
 	}
 
 	@Override
-	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
+	protected List<SearchSolution> generateNewSolutions(
+			List<SearchSolution> solutions, float[][] evaluations) {
 		
-		if (n == 0)
-		{
+		if (n == 0) {
 			return new ArrayList<SearchSolution>();
 		}
 		/*SearchSolution new_solution = (SearchSolution)solutions_list.get(ni++);
 		new ArrayList();
 		res_solutions.add(new_solution);*/
-		ni+=n;
-		return solutions_list;
+		ni += n;
+		
+		return solutionsList;
 	}
 
 
 	@Override
 	protected void loadSearchOptions() {
-		List<NewOption> search_options = getSearchOptions();
 		
-		for (NewOption next : search_options) {
-
-			if (next.getName().equals("N")){
-				IntegerValue value = (IntegerValue) next.toSingleValue().getCurrentValue();
-				default_number_of_values_to_try = value.getValue();
-			}
-		}
+		NewOptions searchOptions = getSearchOptions();
+		
+		if (searchOptions.containsOptionWithName("N")) {
+			NewOption optionN = searchOptions.fetchOptionByName("N");
+			IntegerValue valueN = (IntegerValue)
+					optionN.toSingleValue().getCurrentValue();
+			defaultNumberOfValuesToTry = valueN.getValue(); 
+		}	
+		
 		List<SearchItem> schema = getSchema();
 		n = Integer.MAX_VALUE;
 		ni = 0;
-		solutions_list = new ArrayList<SearchSolution>();
-		generateSolutions_list(schema);
-		query_block_size = n;
+		solutionsList = new ArrayList<SearchSolution>();
+		generateSolutionsList(schema);
+		queryBlockSize = n;
 	}
 
-	// TODO
 	@Override	
 	protected float updateFinished(float[][] evaluations) {
 		return 1;

@@ -20,6 +20,11 @@ import xmlGenerator.Input08;
 import xmlGenerator.Input09;
 import xmlGenerator.Input10;
 
+/**
+ * 
+ * Tests of BatchDescription an Universal format
+ *
+ */
 public class TestBatchDescription {
 
 	public static void test() {
@@ -78,6 +83,14 @@ public class TestBatchDescription {
 
 	}
 
+	/**
+	 * Tests to convert {@link ComputationDescription} to universal format
+	 * and back.
+	 * 
+	 *  @param comDescription {@link  ComputationDescription} batch to test
+	 *  @param note
+	 * 
+	 */
 	private static void testComputatingDescription(
 			ComputationDescription comDescription, String note) {
 

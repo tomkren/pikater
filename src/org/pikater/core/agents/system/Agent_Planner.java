@@ -50,7 +50,11 @@ import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
-
+/**
+ * 
+ * Agent performs the function of Planner Task to distributed slave servers
+ * 
+ */
 public class Agent_Planner extends PikaterAgent {
 	
 	private static final long serialVersionUID = 820846175393846627L;
@@ -149,6 +153,13 @@ public class Agent_Planner extends PikaterAgent {
 		//dataRegistry.updateDataSets();
 	}
 	
+	/**
+	 * Handle respond to {@link ExecuteTask}
+	 * 
+	 * @param request {@link ACLMessage} - received message
+	 * @param a {@link Action} - {@link ExecuteTask} action
+	 * @return {@link ACLMessage}
+	 */
 	protected ACLMessage respondToExecuteTask(ACLMessage request, Action a) {
 
 		ExecuteTask executeTask = (ExecuteTask) a.getAction();
@@ -174,6 +185,13 @@ public class Agent_Planner extends PikaterAgent {
 		return null;
 	}
 
+	/**
+	 * Handle respond to {@link BatchPriorityChanged}
+	 * 
+	 * @param request {@link ACLMessage} - received message
+	 * @param a {@link Action} - {@link BatchPriorityChanged} action
+	 * @return {@link ACLMessage} - OK inform message
+	 */
 	protected ACLMessage respondToBatchPriorityChanged(ACLMessage request, Action a) {
 		
 		BatchPriorityChanged batchPriorityChanged =
@@ -198,6 +216,13 @@ public class Agent_Planner extends PikaterAgent {
 		return reply;
 	}
 	
+	/**
+	 * Handle respond to {@link GetSystemLoad}
+	 * 
+	 * @param request {@link ACLMessage} - received message
+	 * @param a {@link Action} - {@link BatchPriorityChanged} action
+	 * @return {@link ACLMessage} - contains actual  {@link SystemLoad}
+	 */
 	protected ACLMessage respondToGetSystemLoad(ACLMessage request, Action a) {
 
 		SystemLoad systemLoad = getSystemLoad();
@@ -218,7 +243,12 @@ public class Agent_Planner extends PikaterAgent {
 		
 		return msgSystemLoad;
 	}
-	
+
+	/**
+	 * Get system CPU load, contains load of all distributed slave servers
+	 * 
+	 * @return {@link SystemLoad}
+	 */
 	private SystemLoad getSystemLoad() {
 		
 		SystemLoad systemLoad = new SystemLoad();
@@ -233,6 +263,11 @@ public class Agent_Planner extends PikaterAgent {
 		return systemLoad;
 	}
 	
+	/**
+	 * Get system CPU load, contains load of all distributed slave servers
+	 * 
+	 * @return {@link SystemLoad}
+	 */
 	public void respondToFinishedTask(ACLMessage finishedTaskMsg) {
 
 		Result result = null;
@@ -297,6 +332,13 @@ public class Agent_Planner extends PikaterAgent {
 		//reply.setContent("OK - FinishedTask msg recieved");
 	}
 
+	/**
+	 * Send a message to save output of {@link Task}, receiver is agent
+	 * {@link Agent_DataManager}
+	 * 
+	 * @param task {@link Task}
+	 * @param node - slave server description
+	 */
 	private void saveDataToDB(Task task, String node) {
 		String dataManagerName = CoreAgents.DATA_MANAGER.getName();
 		if (node != null) {
@@ -343,6 +385,11 @@ public class Agent_Planner extends PikaterAgent {
 		}
 	}
 
+	/**
+	 * Convert {@link AID} to node name
+	 * @param aid {@link AID}
+	 * @return String - name of node 
+	 */
 	private static String nodeName(AID aid) {
 		String name = aid.getLocalName();
 		if (name.contains("-")) {
@@ -352,6 +399,12 @@ public class Agent_Planner extends PikaterAgent {
 		}
 	}
 
+	/**
+	 * Handle respond to kill all {@link Task} with concrete BatchID
+	 * @param request {@link ACLMessage}
+	 * @param a {@link Action} - action {@link KillTasks}
+	 * @return {@link ACLMessage}
+	 */
 	private ACLMessage respondToKillTasks(ACLMessage request, Action a) {
 		
 		KillTasks killTasks = (KillTasks) a.getAction();
@@ -371,6 +424,10 @@ public class Agent_Planner extends PikaterAgent {
 		return reply;
 	}
 	
+	
+	/**
+	 * Scheduling of incoming Tasks to free distributed CPUs
+	 */
 	private void plan() {
 
 		// test if some task is available

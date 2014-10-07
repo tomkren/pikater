@@ -26,6 +26,9 @@ public class Agent_Initiator extends PikaterAgent {
 
     private String fileName = null;
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -34,6 +37,9 @@ public class Agent_Initiator extends PikaterAgent {
 		return ontologies;
 	}
 	
+	/**
+	 * Agent setup
+	 */
 	@Override
 	protected void setup() {
 		initDefault();
@@ -43,17 +49,29 @@ public class Agent_Initiator extends PikaterAgent {
 
 		// read agents from configuration
 		try {
-			XmlConfigurationProvider configProvider = new XmlConfigurationProvider(fileName);
+			XmlConfigurationProvider configProvider =
+					new XmlConfigurationProvider(fileName);
 
-			Configuration configuration = configProvider.getConfiguration();
-			List<AgentConfiguration> agentConfigurations = configuration.getAgentConfigurations();
+			Configuration configuration =
+					configProvider.getConfiguration();
+			List<AgentConfiguration> agentConfigurations =
+					configuration.getAgentConfigurations();
+			
 			for (AgentConfiguration agentConfiguration : agentConfigurations) {
 				// Preimplemented jade agents do not count with named arguments,
 				// convert to string if necessary
-				Object[] arguments = processArgs(agentConfiguration.getArguments().toArray());
-				Boolean creationSuccessful = this.createAgent(agentConfiguration.getAgentType(), agentConfiguration.getAgentName(), arguments);
+				
+				Object [] argArray = agentConfiguration.getArguments().toArray();
+				Object[] arguments = processArgs(argArray);
+				
+				Boolean creationSuccessful = this.createAgent(
+						agentConfiguration.getAgentType(),
+						agentConfiguration.getAgentName(),
+						arguments);
+				
 				if (!creationSuccessful) {
-					logSevere("Creation of agent " + agentConfiguration.getAgentName() + " failed.");
+					logSevere("Creation of agent " +
+						agentConfiguration.getAgentName() + " failed.");
 				}
 			}
 		} catch (Exception e) {
@@ -61,31 +79,43 @@ public class Agent_Initiator extends PikaterAgent {
 		}
 
 		addBehaviour(new TickerBehaviour(this, 60000) {
-			/**
-			 * 
-			 */
+
 			private static final long serialVersionUID = 2962563585712447816L;
 
-			Calendar cal;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar calender;
+			SimpleDateFormat sdf =
+					new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 			protected void onTick() {
-				cal = Calendar.getInstance();
-				logInfo("tick=" + getTickCount() + " time=" + sdf.format(cal.getTime()));
+				
+				calender = Calendar.getInstance();
+				logInfo("tick=" + getTickCount() + " time=" +
+					sdf.format(calender.getTime()) );
 			}
 		});
 	}
 
+	/**
+	 * Creates agent in this container
+	 * @param type - agent type = name of class
+	 * @param name - agent name
+	 * @param args
+	 * @return - confirms creation
+	 */
 	public Boolean createAgent(String type, String name, Object[] args) {
+		
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
+		String agentName = name;
+		if ((nodeName != null) && (!nodeName.isEmpty())) {
+			agentName = name + "-" + nodeName;
+		}
+		
 		try {
 			AgentController agent = container.createNewAgent(
-					(nodeName != null) && !nodeName.isEmpty() ? name + "-" + nodeName : name,
-					type,
-					args
-			);
+					agentName, type, args);
+			
 			agent.start();
 			// provide agent time to register with DF etc.
 			doWait(300);
@@ -96,36 +126,44 @@ public class Agent_Initiator extends PikaterAgent {
 		}
 	}
 
-	public Object[] processArgs(Object[] args) {
-		Object[] toReturn = new Object[args.length];
-		for (int i = 0; i < args.length; i++) {
-			Argument arg = (Argument) args[i];
+	/**
+	 * Arguments conversion
+	 * 
+	 * @param arguments
+	 * @return
+	 */
+	public Object[] processArgs(Object[] arguments) {
+		
+		Object[] toReturn = new Object[arguments.length];
+		for (int i = 0; i < arguments.length; i++) {
+			Argument arg = (Argument) arguments[i];
 			if (arg.getSendOnlyValue()) {
 				toReturn[i] = arg.getValue();
 			} else {
-				toReturn[i] = args[i];
+				toReturn[i] = arguments[i];
 			}
 		}
 		return toReturn;
 	}
 
+	/**
+	 * Initialization
+	 */
 	@Override
 	public void initDefault() {
+		
 		Object[] args = getArguments();
-		if (args != null)
-		{
-			if (args.length > 0)
-			{
+		if (args != null) {
+			if (args.length > 0) {
 				fileName = (String) args[0];
 			} 
-			if (args.length > 1)
-			{
+			if (args.length > 1) {
 				nodeName = (String) args[1];
 			}
 		}
-		if(fileName == null)
-		{
-			fileName = CoreConfiguration.getCoreMasterConfigurationFilepath();
+		if (fileName == null) {
+			fileName = CoreConfiguration
+					.getCoreMasterConfigurationFilepath();
 		}
 
 		initLogging();

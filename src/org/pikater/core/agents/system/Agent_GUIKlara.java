@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
@@ -39,15 +40,24 @@ import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
+import org.pikater.shared.database.exceptions.DataSetConverterException;
 import org.pikater.shared.database.util.DataSetConverter;
 
 
+/**
+ * 
+ * User-defined agent to communicate with users
+ *
+ */
 public class Agent_GUIKlara extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
 	private static final boolean DEBUG_MODE = true;
-	private BufferedReader bufferedConsole=null;
+	private BufferedReader bufferedConsole = null;
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -58,26 +68,29 @@ public class Agent_GUIKlara extends PikaterAgent {
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(DurationOntology.getInstance());
 		ontologies.add(AccountOntology.getInstance());
-		
-		//for test purposes
 		ontologies.add(ModelOntology.getInstance());
 		
 		return ontologies;
 	}
 	
+	/**
+	 * Agent setup
+	 */
 	@Override
 	protected void setup() {
 		initDefault();
 		registerWithDF(CoreAgents.GUI_KLARA_AGENT.getName());
 		
-		bufferedConsole=new BufferedReader(new InputStreamReader(System.in));
+		bufferedConsole = new BufferedReader(
+				new InputStreamReader(System.in));
 
 		if (DEBUG_MODE) {
 			
 			System.out.println("GUIKlara agent starts.");
 			
 			try {
-				runFile(CoreConfiguration.getKlarasInputsPath() + "input.xml");
+				runFile(CoreConfiguration.getKlarasInputsPath() +
+						CoreConstant.INPUT_FILE_NAME);
 				
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found.");
@@ -99,12 +112,23 @@ public class Agent_GUIKlara extends PikaterAgent {
 	
 	BufferedReader inputReader;
 
-	private void runAutomat() throws Exception {
+	/**
+	 * Run user interactive automat to offers options and actions
+	 * 
+	 * @throws IOException 
+	 * @throws DataSetConverterException 
+	 */
+	private void runAutomat() throws IOException, DataSetConverterException {
 		
 		System.out.println(
-				"--------------------------------------------------------------------------------\n" +
-				"| System Pikater: Multiagents system                                           |\n" +
-				"--------------------------------------------------------------------------------\n" +
+				"---------------------------------------------"
+				+ "-----------------------------------\n" +
+						
+				"| System Pikater: Multiagents system         "
+				+ "                                  |\n" +
+				
+				"---------------------------------------------"
+				+ "-----------------------------------\n" +
 				"  Hi I'm Klara's GUI console Agent ..." +
 				"\n"
 				);
@@ -126,8 +150,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 
 		System.out.println("Please enter your password: ");
-		String inputPassword=bufferedConsole.readLine();
-		String correctPassword="123";
+		String inputPassword = bufferedConsole.readLine();
+		String correctPassword = "123";
 		
 		if(!inputPassword.equals(correctPassword)){
 			System.err.println("Sorry, you're not Klara");
@@ -136,18 +160,21 @@ public class Agent_GUIKlara extends PikaterAgent {
 		
 		System.out.println(" I welcome you Klara !!!");
 
-		String defaultFileName = "input.xml";
-		File testFile = new File(CoreConfiguration.getKlarasInputsPath() + defaultFileName);
+		String defaultFileNameWithPath =
+				CoreConfiguration.getKlarasInputsPath() +
+				CoreConstant.INPUT_FILE_NAME;
+		
+		File testFile = new File(defaultFileNameWithPath);
 
-		if(testFile.exists() && !testFile.isDirectory()) {
+		if (testFile.exists() && !testFile.isDirectory()) {
 
 			System.out.println(" Do you wish to run experiment from file "
-					+ CoreConfiguration.getKlarasInputsPath() + defaultFileName + " ? (y/n)");
+					+ defaultFileNameWithPath + " ? (y/n)");
 			System.out.print(">");
 
 			if (bufferedConsole.readLine().equals("y")) {
 				try {
-					runFile(CoreConfiguration.getKlarasInputsPath() + defaultFileName);
+					runFile(defaultFileNameWithPath);
 					return;
 				} catch (FileNotFoundException e) {
 					System.out.println(" File not found.");
@@ -167,7 +194,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 						" Help             --help\n" +
 						" Shutdown         --shutdown\n" +
 						" Kill Batch       --kill [batchID]\n" +
-						" Add dataset      --add-dataset [username] [description] <path>\n" +
+						" Add dataset      --add-dataset [username] "
+						+ "[description] <path>\n" +
 						" Get duration     --dura\n"+
 						" For test purposes --test "+
 						" Run Experiment   --run <file.xml>\n"
@@ -175,15 +203,21 @@ public class Agent_GUIKlara extends PikaterAgent {
 			
 			} else if (input.startsWith("--shutdown")) {
 				break;
-			} else if(input.startsWith("--dura")){
+				
+			} else if(input.startsWith("--dura")) {
 				printDurationAgentResponse();
-			} else if (input.startsWith("--run"))
-			{
-				// TODO: what about this?
+				
+			} else if (input.startsWith("--run")) {
+				int index = input.indexOf("--run") + "--run ".length();
+				String fileName = input.substring(index);
+				runFile(fileName);
+
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
+				
 			} else if (input.startsWith("--kill")) {
 				killBatch(input);
+				
 			} else {
 				System.out.println(
 						"Sorry, I don't understand you. \n" +
@@ -194,6 +228,10 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 	}
 
+	/**
+	 * Sends respond to kill all Task from Batch
+	 * @param input - input line
+	 */
 	private void killBatch(String input) {
 		String[] cmd=input.split(" ");
 		int batchID=-1;
@@ -212,13 +250,17 @@ public class Agent_GUIKlara extends PikaterAgent {
 				request.addReceiver(planner);
 				request.setLanguage(getCodec().getName());
 				request.setOntology(taskOntology.getName());
-				getContentManager().fillContent(request, new Action(planner, killBatch));
+				
+				Action action = new Action(planner, killBatch);
+				getContentManager().fillContent(request, action);
 
-				ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
+				ACLMessage reply =
+						FIPAService.doFipaRequestClient(this, request, 10000);
 
-				if((reply!=null)&&(reply.getPerformative()==ACLMessage.INFORM)){
+				if ((reply != null) &&
+					(reply.getPerformative() == ACLMessage.INFORM)) {
 					System.out.println("Planner responded Inform");
-				}else{
+				} else {
 					System.err.println("Planner couldn't perform the action");
 				}
             
@@ -226,17 +268,40 @@ public class Agent_GUIKlara extends PikaterAgent {
 				e.printStackTrace();
 			}
            
-		}catch(NumberFormatException nfe){
+		} catch(NumberFormatException nfe) {
 			System.err.println("Wrong number format of Batch ID");
 		}
 		
 	}
 
+	/**
+	 * Prints Duration, information receives from {@link Agent_Duration}
+	 */
 	private void printDurationAgentResponse() {
-		Duration dur = DurationService.getDuration(this, new GetDuration());
-		logInfo("Last Duration info - Start "+(dur.getStart()!=null? dur.getStart().toString() : "no data  ")+":"+ dur.getDurationMiliseconds()+" ms , LR: "+dur.getLR_duration());
+		Duration duration =
+				DurationService.getDuration(this, new GetDuration());
+		
+		String start;
+		if (duration.getStart() != null) {
+			start = duration.getStart().toString();
+		} else {
+			start = "no data  ";
+		}
+		
+		logInfo(
+				"Last Duration info - Start " +
+				start + ":" + duration.getDurationMiliseconds() +
+				" ms , LR: " + duration.getLR_duration()
+				);
 	}
 
+	/**
+	 * Loads a XML file, converts the XML structure to
+	 * {@link ComputationDescription}, sends request to run this batch
+	 * 
+	 * @param fileName - name of XML file which contains new {@link Batch}
+	 * @throws FileNotFoundException
+	 */
 	private void runFile(String fileName) throws FileNotFoundException {
 
 		System.out.println("Loading experiment from file: " + fileName);
@@ -254,7 +319,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 			logException(e1.getMessage(), e1);
 		}
 
-        AID receiver = new AID(CoreAgents.GUI_AGENTS_COMMUNICATOR.getName(), false);
+        AID receiver = new AID(
+        		CoreAgents.GUI_AGENTS_COMMUNICATOR.getName(), false);
         
         Ontology ontology = BatchOntology.getInstance();
 
@@ -265,10 +331,18 @@ public class Agent_GUIKlara extends PikaterAgent {
         msg.setOntology(ontology.getName());
 
         try {
-			getContentManager().fillContent(msg, new Action(receiver, executeBatch));
+        	Action action = new Action(receiver, executeBatch);
+			getContentManager().fillContent(msg, action);
 			
-			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
-			String replyText = (reply!=null)?reply.getContent():"null";
+			ACLMessage reply =
+					FIPAService.doFipaRequestClient(this, msg, 10000);
+			
+			String replyText;
+			if (reply != null) {
+				replyText = reply.getContent();
+			} else {
+				replyText = "null";
+			}
 			
 			logInfo("Reply: " + replyText);
 			
@@ -283,50 +357,80 @@ public class Agent_GUIKlara extends PikaterAgent {
 	}
 	
 	/**
+	 * Ensures the dataset conversion and interaction with user
 	 * 
-	 * @param file
+	 * @param file to convert
 	 * @return The filename of the file to be saved
-	 * @throws Exception 
+	 * @throws IOException 
+	 * @throws DataSetConverterException 
 	 */
-	private String testAndAskForConversion(File file) throws Exception{
+	private String testAndAskForConversion(File file
+			) throws IOException, DataSetConverterException {
+		
 		String path = file.getAbsolutePath().toLowerCase();
-		if(path.endsWith("arff")){
+		
+		if (path.endsWith("arff")) {
 			return file.getAbsolutePath();
-		}else{
-			String newPath="";
-			int inputType=-1;
-			if(path.endsWith("xls")){
-				newPath=file.getAbsolutePath().substring(0, path.lastIndexOf("xls"))+"arff";
-				inputType=0;
-				System.out.println("Input recognised as Excel (XLS) spreadsheet");
-			}else if(path.endsWith("xlsx")){
-				newPath=file.getAbsolutePath().substring(0, path.lastIndexOf("xlsx"))+"arff";
-				System.out.println("Input recognised as Excel 2007 (XLSX) spreadsheet");
-				inputType=1;
-			}else{
-				System.err.println("Not supported input file format!\nPlease use ARFF,XLS or XLSX formats");
+		} else {
+			String newPath = "";
+			int inputType = -1;
+			
+			if (path.endsWith("xls")) {
+				newPath = file.getAbsolutePath().substring(0,
+						path.lastIndexOf("xls")) + "arff";
+				inputType = 0;
+				System.out.println("Input recognised as Excel "
+						+ "(XLS) spreadsheet");
+				
+			} else if(path.endsWith("xlsx")) {
+				newPath = file.getAbsolutePath().substring(0,
+						path.lastIndexOf("xlsx")) + "arff";
+				inputType = 1;
+				System.out.println("Input recognised as Excel "
+						+ "2007 (XLSX) spreadsheet");
+			} else {
+				System.err.println("Not supported input file format!"
+						+ "\nPlease use ARFF,XLS or XLSX formats");
 				return null;
 			}
 			
-			if((inputType==0)||(inputType==1)){
-				System.out.println("Do you want to convert the document? (y/n)\nDOCUMENT WIHT FOLLOWING PATH WILL BE OVERWRITTEN: "+newPath);
+			if ((inputType == 0) || (inputType==1)) {
+				System.out.println(
+						"Do you want to convert the document? (y/n)\n" +
+						"DOCUMENT WIHT FOLLOWING PATH WILL BE OVERWRITTEN:" +
+						" " + newPath);
 			}
-			String answer=bufferedConsole.readLine();
-			if(answer != null && answer.equalsIgnoreCase("y")){
-				System.out.println("Do you want to define any header file? (path / -)");
-				answer=bufferedConsole.readLine();
-				if(answer != null && !answer.equals("-")){
-					String headerPath=answer;
-					if(inputType==0){
-						DataSetConverter.xlsToArff(new File(headerPath),new File(path), new File(newPath));
-					}else if(inputType==1){
-						DataSetConverter.xlsxToArff(new File(headerPath),new File(path), new File(newPath));
+			String answer = bufferedConsole.readLine();
+			if (answer != null && answer.equalsIgnoreCase("y")) {
+				
+				System.out.println("Do you want to define any header "
+						+ "file? (path / -)");
+				
+				answer = bufferedConsole.readLine();
+				if (answer != null && !answer.equals("-")) {
+					String headerPath = answer;
+					
+					if(inputType == 0) {
+						DataSetConverter.xlsToArff(
+								new File(headerPath),
+								new File(path),
+								new File(newPath));
+					} else if(inputType == 1) {
+						DataSetConverter.xlsxToArff(
+								new File(headerPath),
+								new File(path),
+								new File(newPath));
 					}
-				}else{
-					if(inputType==0){
-						DataSetConverter.xlsToArff(new File(path), new File(newPath));
-					}else if(inputType==1){
-						DataSetConverter.xlsxToArff(new File(path), new File(newPath));
+				} else {
+					if(inputType == 0){
+						DataSetConverter.xlsToArff(
+								new File(path),
+								new File(newPath));
+						
+					} else if(inputType == 1){
+						DataSetConverter.xlsxToArff(
+								new File(path),
+								new File(newPath));
 					}
 				}
 				return newPath;
@@ -335,41 +439,72 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 	}
 	
-	private void addDataset(String cmd) throws Exception{
+	/**
+	 * Inserts a new dataset to system
+	 * @param cmd
+	 * @throws DataSetConverterException 
+	 * @throws IOException 
+	 */
+	private void addDataset(String cmd
+			) throws IOException, DataSetConverterException {
+		
 		int dataSetID = -1;
 		int userID = -1;
 		
 		String[] cmdA=cmd.split(" ");
-		if(cmdA.length==4){
-			String username=cmdA[1];
-			String description=cmdA[2];
-			String filename=testAndAskForConversion(new File(cmdA[3]));
+		if (cmdA.length == 4) {
+			
+			String username = cmdA[1];
+			String description = cmdA[2];
+			String filename = testAndAskForConversion(new File(cmdA[3]));
 			userID = DataManagerService.getUserID(this, username);
-			if(filename==null) return;
-			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
-		}else if(cmdA.length==3){
-			String username=cmdA[1];
-			String description="Dataset saved in KlaraGui";
-			String filename=testAndAskForConversion(new File(cmdA[2]));
+			
+			if (filename == null) {
+				return;
+			}
+			dataSetID = this.sendRequestSaveDataSet(
+					filename, userID, description);
+			
+		} else if (cmdA.length == 3) {
+			
+			String username = cmdA[1];
+			String description = "Dataset saved in KlaraGui";
+			String filename = testAndAskForConversion(new File(cmdA[2]));
 			userID = DataManagerService.getUserID(this, username);
-			if(filename==null) return;
-			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
-		}else if(cmdA.length==2){
+			
+			if (filename == null) {
+				return;
+			}
+			dataSetID = this.sendRequestSaveDataSet(
+					filename, userID, description);
+			
+		} else if (cmdA.length == 2) {
 			String username="klara";
 			String description="Dataset saved in KlaraGui";
 			String filename=testAndAskForConversion(new File(cmdA[1]));
 			userID = DataManagerService.getUserID(this, username);
-			if(filename==null) return;
-			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
-		}else{
+			
+			if (filename == null) {
+				return;
+			}
+			dataSetID = this.sendRequestSaveDataSet(
+					filename, userID, description);
+		} else {
 			System.err.println("Wrong parameters");
 		}
 		
-		if(dataSetID!=-1){
+		if (dataSetID != -1) {
 			MetadataService.requestMetadataForDataset(this, dataSetID, userID);
 		}
 	}
 	
+	/**
+	 * Sends a request to save dataset by using {@link Agent_DataManager}
+	 * @param filename - name of the dataset file to save
+	 * @param userID - user who is storing file to the database
+	 * @param description
+	 * @return int dataSetID
+	 */
 	private int sendRequestSaveDataSet(String filename, int userID, String description){
 		try {
         	AID dataManager = new AID(CoreAgents.DATA_MANAGER.getName(), false);
@@ -385,20 +520,23 @@ public class Agent_GUIKlara extends PikaterAgent {
             getContentManager().fillContent(request, new Action(dataManager, sd));
            
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
-            if (reply == null){
+            if (reply == null) {
                 logSevere("Reply not received.");
                 return -1;
-            }
-            else{
-                logInfo("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+            
+            } else {
+                logInfo("Reply received: " +
+                		ACLMessage.getPerformative(reply.getPerformative()) +
+                		" " + reply.getContent());
+                
             	return (Integer)reply.getContentObject();
             }
         } catch (CodecException e) {
-            logException("Codec error occurred: "+e.getMessage(), e);
+            logException("Codec error occurred: " + e.getMessage(), e);
         } catch (OntologyException e) {
-            logException("Ontology error occurred: "+e.getMessage(), e);
+            logException("Ontology error occurred: " + e.getMessage(), e);
         } catch (FIPAException e) {
-            logException("FIPA error occurred: "+e.getMessage(), e);
+            logException("FIPA error occurred: " + e.getMessage(), e);
         } catch (UnreadableException e) {
         	logException(e.getMessage(), e);
 		}

@@ -18,13 +18,13 @@ public class Agent_RandomSearch extends Agent_Search {
 
 	private static final long serialVersionUID = 2777277001533605329L;
 
-	private int number_of_tries = 0;
-	private float error_rate = 1;
+	private int numberOfTries = 0;
+	private float errorRate = 1;
 	
-	private int maximum_tries;
-	private float final_error_rate;
+	private int maximumTries;
+	private float finalErrorRate;
 	
-	protected Random rnd_gen = new Random(1);
+	protected Random rndGen = new Random(1);
 
 	@Override
 	protected String getAgentType() {
@@ -37,12 +37,12 @@ public class Agent_RandomSearch extends Agent_Search {
 	}
 
 	@Override
-	protected boolean finished() {
-		if (number_of_tries >= maximum_tries) {
+	protected boolean isFinished() {
+		if (numberOfTries >= maximumTries) {
 			return true;
 		}
 
-		if (error_rate <= final_error_rate) {
+		if (errorRate <= finalErrorRate) {
 			return true;
 		}
 		return false;
@@ -51,44 +51,45 @@ public class Agent_RandomSearch extends Agent_Search {
 	@Override
 	protected void loadSearchOptions(){
 		
-		final_error_rate = (float) 0.01;
-		maximum_tries= 10;
+		finalErrorRate = (float) 0.01;
+		maximumTries= 10;
 		
 		// find maximum tries in Options
-		NewOptions options = new NewOptions(getSearchOptions());
+		NewOptions options = getSearchOptions();
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.fetchOptionByName("E");
-			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
-			final_error_rate = valueE.getValue(); 
+			FloatValue valueE =
+					(FloatValue) optionE.toSingleValue().getCurrentValue();
+			finalErrorRate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.fetchOptionByName("M");
-			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
-			maximum_tries = valueM.getValue(); 
+			IntegerValue valueM =
+					(IntegerValue) optionM.toSingleValue().getCurrentValue();
+			maximumTries = valueM.getValue(); 
 		}	
 		
-		// query_block_size = 1;
-		query_block_size = maximum_tries;
+		queryBlockSize = maximumTries;
 		logInfo(getLocalName()+" parameters are: ");
-		logInfo("   final_error_rate: " + final_error_rate);
-		logInfo("   maximum_tries: " + maximum_tries);		
+		logInfo("   finalErrorRate: " + finalErrorRate);
+		logInfo("   maximumTries: " + maximumTries);		
 	}
 
 	@Override
 	protected float updateFinished(float[][] evaluations) {
 		if (evaluations == null){
-			error_rate = 1;
+			errorRate = 1;
 		}
 		else{
-			float best_err = evaluations[0][0];
+			float bestError = evaluations[0][0];
 			for(int i = 0; i < evaluations.length; i++){
-				if(evaluations[i][0]<best_err)
-					best_err = evaluations[i][0];
+				if(evaluations[i][0]<bestError)
+					bestError = evaluations[i][0];
 			}
-			error_rate = best_err;//((Evaluation)(evaluations.get(0))).getError_rate();			
+			errorRate = bestError;		
 		}
-		return error_rate;
+		return errorRate;
 	}
 	
 	private SearchSolution genRandomSolution(){
@@ -96,7 +97,7 @@ public class Agent_RandomSearch extends Agent_Search {
 		List<IValueData> new_solution = new ArrayList<IValueData>();
         List<String> names = new ArrayList<String>();
 		for (SearchItem si : getSchema() ) {
-			new_solution.add(si.randomValue(rnd_gen));
+			new_solution.add(si.randomValue(rndGen));
             names.add(si.getName());
 		}
 		SearchSolution sol = new SearchSolution();
@@ -105,14 +106,16 @@ public class Agent_RandomSearch extends Agent_Search {
 	}
 		
 	@Override
-	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
-		number_of_tries+=query_block_size;
+	protected List<SearchSolution> generateNewSolutions(
+			List<SearchSolution> solutions, float[][] evaluations) {
 		
-		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
+		numberOfTries += queryBlockSize;
+		
+		List<SearchSolution> solutionsList = new ArrayList<SearchSolution>();
 		//generate sequence of random solutions
-		for(int i = 0; i < query_block_size; i++){
-			solutions_list.add(genRandomSolution());
+		for (int i = 0; i < queryBlockSize; i++) {
+			solutionsList.add(genRandomSolution());
 		}
-		return solutions_list;
+		return solutionsList;
 	}	
 }

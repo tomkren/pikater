@@ -41,13 +41,22 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
+/**
+ * 
+ * This agent is manager of informations {@link AgentInfo} about
+ * all experiment agents
+ *
+ */
 public class Agent_AgentInfoManager extends PikaterAgent {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6530381228391705988L;
 	
+	/**
+	 * Get {@link List<Ontology>} that utilizes this agent
+	 * 
+	 * @param agentClasses list of {@link AgentClass}
+	 *        represents {@link PikaterAgent} to wake
+	 */
 	public List<Ontology> getOntologies() {
 
 		List<Ontology> ontologies = new ArrayList<Ontology>();
@@ -68,8 +77,6 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		}
 
 		logInfo("Agent " + getName() + " started");
-
-		//this.agentInfosPublic = 
 		
 		MessageTemplate newAgentInfoTemplate =
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
@@ -129,6 +136,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 	}
 
+	/**
+	 * Ensures {@link AgentInfo} structures initialization,
+	 * obtaining information about agents
+	 * 
+	 */
 	private void initializationAgentInfo() {
 		List<AgentClass> agentClasses =
 				getAllExperimmentAgentClasses();
@@ -144,6 +156,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		shutDownAgents.start();
 	}
 
+	/**
+	 * Wake agents, ask for {@link AgentInfo} structures,
+	 * store structures by using {@link Agent_DataManager}
+	 * 
+	 * @param agentClasses list of {@link AgentClass}
+	 *        represents {@link PikaterAgent} to wake
+	 */
 	private void wakeUpAgentInfo(
 			List<AgentClass> agentClasses) {
 		
@@ -161,7 +180,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		}
 		
 	}
-	
+
+	/**
+	 * Get Experiment all {@link PikaterAgent} classes in the system
+	 * 
+	 * @return {@link List<AgentClass>} classes of {@link PikaterAgent}
+	 * 
+	 */
 	private List<AgentClass> getAllExperimmentAgentClasses() {
 		
 		List<Class<? extends Agent_AbstractExperiment>> allAgentClasses =
@@ -218,7 +243,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		 
 		return new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
 	}
-	
+
 	private List<Class<? extends Agent_AbstractExperiment>> getComputingAgentClasses(
 			Class<? extends Agent_AbstractExperiment> agentClass) {
 		
@@ -231,6 +256,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
 	}
 
+	/**
+	 * Filter not saved classes
+	 * 
+	 * @param agentClasses {@link List<AgentClass>} - name of agent class
+	 * @param savedAgentInfos {@link AgentInfos}
+	 * @return {@link List<AgentClass>} new AgentInfos
+	 * 
+	 */
 	private List<AgentClass> notSavedClasses(
 			List<AgentClass> agentClasses,
 			AgentInfos savedAgentInfos) {
@@ -246,6 +279,15 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return notSavedAgents;
 	}
 	
+	/**
+	 * Request for {@link AgentInfo}
+	 * 
+	 * @param request {@link ACLMessage} - message
+	 * @param action {@link Action} - action {@link  GetAgentInfo}
+	 * @return {@link ACLMessage} contains AgentInfo,
+	 *         informations about agent
+	 * 
+	 */
 	private ACLMessage respondToGetAgentInfo(ACLMessage request, Action action) {
 		
 		GetAgentInfo getAgentInfo = (GetAgentInfo)action.getAction();
@@ -272,6 +314,15 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return reply;		
 	}
 	
+	/**
+	 * Request for all {@link AgentInfos}
+	 * 
+	 * @param request {@link ACLMessage} - message
+	 * @param action {@link Action} - action {@link  GetAgentInfos}
+	 * @return {@link ACLMessage} contains AgentInfos,
+	 *         informations about agent
+	 * 
+	 */
 	private ACLMessage respondToGetAgentInfos(ACLMessage request, Action action) {
 
 		GetAgentInfos getAgentInfos = (GetAgentInfos)action.getAction();
@@ -298,6 +349,16 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 	}
 	
+	/**
+	 * Request for {@link AgentInfos} (visible {@link AgentInfo})
+	 * for actual user
+	 * 
+	 * @param request {@link ACLMessage} - message
+	 * @param action {@link Action} - action {@link  GetAgentInfoVisibleForUser}
+	 * @return {@link ACLMessage} contains AgentInfos,
+	 *         informations about agent
+	 * 
+	 */
 	private ACLMessage respondToGetAgentInfoVisibleForUser(ACLMessage request, Action action) {
 
 		GetAgentInfoVisibleForUser getAgentInfoVisibleForUser =
@@ -330,6 +391,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 	}
 	
+	/**
+	 * New {@link PikaterAgent} was added to system
+	 * 
+	 * @param agent {@link PikaterAgent} which sends request
+	 * @param agentName - name of {@link PikaterAgent} which receive request
+	 * @return {@link ACLMessage} - OK information message
+	 * 
+	 */
 	protected ACLMessage respondToNewAgent(ACLMessage request, Action action) {
 
 		NewAgent newAgent = (NewAgent)action.getAction();
@@ -346,6 +415,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Get {@link AgentInfo} from {@link PikaterAgent}
+	 * 
+	 * @param agent {@link PikaterAgent} which sends request
+	 * @param agentName - name of {@link PikaterAgent} which receive request
+	 * @return {@link AgentInfo} - informations about agent
+	 * 
+	 */
 	public AgentInfo getAgentInfo(PikaterAgent agent, String agentName) {
 		
 		if (agent == null) {

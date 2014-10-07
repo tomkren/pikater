@@ -16,11 +16,13 @@ import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData
 
 import jade.content.Concept;
 
+/**
+ * Ontology contains {@link List<AgentInfo>},
+ * list of informations about PikaterAgents
+ * 
+ */
 public class AgentInfos implements Concept {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4635414687017805968L;
 
 	private List<AgentInfo> agentInfos;
