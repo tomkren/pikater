@@ -473,7 +473,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 }
 
 
-
+/**
+ * 
+ * Thread for killing awakened agents
+ *
+ */
 class ShutDownAgents extends Thread {
 
 	private List<AgentClass> agentClasses;
@@ -487,8 +491,10 @@ class ShutDownAgents extends Thread {
 	
     public void run() {
 
-		for (AgentClass classI : agentClasses){
-			agent.logInfo("Agent " + classI.getAgentClass() + " was killed");
+		for (AgentClass classI : agentClasses) {
+			agent.logInfo("Agent " +
+					classI.getAgentClass() +
+					" was killed");
 			agent.killAgent(classI.getAgentClass());
 			
 		}

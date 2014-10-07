@@ -825,7 +825,7 @@ public class Agent_DataManager extends PikaterAgent {
 			public void action() {
 				String mailAddr = batchJPA.getOwner().getEmail();
 				SendEmail action = new SendEmail(Agent_Mailing.EmailType.RESULT, mailAddr);
-				action.setBatch_id(batchJPA.getId());
+				action.setBatchId(batchJPA.getId());
 				List<JPAExperiment> exps = batchJPA.getExperiments();
 				// when there was more than 1 sub-experiment, send the best result 
 				if (exps.size() == 1 && !exps.get(0).getResults().isEmpty())

@@ -10,6 +10,7 @@ import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
+import jade.wrapper.AgentController;
 
 import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
@@ -28,11 +29,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * Agent reads Data-Sets from ARFF file
+ *
+ */
 public class Agent_ARFFReader extends PikaterAgent {
+	
 	private static final long serialVersionUID = 7116837600070711675L;
+	
 	// data read from file
 	protected Instances data;
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 
@@ -42,7 +53,14 @@ public class Agent_ARFFReader extends PikaterAgent {
 		return ontologies;
 	}
 	
+	/**
+	 * Reads the Data-Set from file
+	 * 
+	 * @param relativeFileName
+	 * @return
+	 */
 	boolean ReadFromFile(String relativeFileName) {
+		
 		if (relativeFileName == null || relativeFileName.length() == 0) {
 			return false;
 		}
@@ -62,6 +80,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 		return true;
 	}
 
+	/**
+	 * Get type of agent
+	 */
 	@Override
 	protected String getAgentType() {
 		return CoreAgents.ARFF_READER.getName();
@@ -73,26 +94,46 @@ public class Agent_ARFFReader extends PikaterAgent {
 		registerWithDF();
 		getContentManager().registerOntology(DataOntology.getInstance());
 
-		MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+		
+		MessageTemplate template =
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		addBehaviour(new GetDataResponder(this, template));
-	} // end Setup
+	}
 
+	/**
+	 * Sends data
+	 * 
+	 * @param request - ontology {@link GetData} 
+	 * @return - message with data
+	 */
 	protected ACLMessage sendData(ACLMessage request) {
+		
 		// responding message
 		ACLMessage msgOut = request.createReply();
 		msgOut.setPerformative(ACLMessage.INFORM);
+		
 		try {
-			ContentElement content = getContentManager().extractContent(request);
-			GetData gd = (GetData) ((Action) content).getAction();
-			String file_name = gd.getFileName();
-			int lastSlash = Math.max(Math.max(file_name.lastIndexOf("/"), file_name.lastIndexOf("\\")), 0);
-			file_name = file_name.substring(lastSlash); // trim to relative
-			DataManagerService.ensureCached(this, file_name);
+			ContentElement content =
+					getContentManager().extractContent(request);
+			GetData getData = (GetData) ((Action) content).getAction();
+			
+			String fileName = getData.getFileName();
+			
+			int slashIndex = Math.max(
+					fileName.lastIndexOf("/"),
+					fileName.lastIndexOf("\\"));
+			int lastSlashIndex = Math.max(slashIndex, 0);
+			
+			// trim to relative
+			fileName = fileName.substring(lastSlashIndex);
+			DataManagerService.ensureCached(this, fileName);
 			DataInstances instances = new DataInstances();
+			
 			// Read the file
-			boolean file_read = ReadFromFile(file_name);
+			boolean file_read = ReadFromFile(fileName);
 			if (!file_read) {
-				throw new FailureException("File hasn't been read. Wrong file-name?");
+				throw new FailureException(
+						"File hasn't been read. Wrong file-name?");
 			}
 
 			instances.fillWekaInstances(data);
@@ -100,22 +141,30 @@ public class Agent_ARFFReader extends PikaterAgent {
 
 			for (int i = 0; i < data.numAttributes(); i++) {
 				Attribute a = data.attribute(i);
-				//AttributeStats as = data.attributeStats(i);
 
-				int index = data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1; 
-				if ((i != index) && !types.contains(a.type()))
-				{
+				int index;
+				if (data.classIndex() >= 0) {
+					index = data.classIndex();
+				} else {
+					index = data.numAttributes() - 1;
+				}
+				
+				if ( (i != index) && (!types.contains(a.type())) ) {
 					types.add(a.type());
 				}
 			}
 
 			Result result;
-			if (gd.getO2aAgent() != null) {
-				// log("putting o2a data to "+gd.getO2a_agent());
-				getContainerController().getAgent(gd.getO2aAgent()).putO2AObject(instances, false);
-				result = new Result((Action) content, true);
+			Action action = (Action) content;
+			if (getData.getO2aAgent() != null) {
+				
+				AgentController agentController =
+						getContainerController().getAgent(getData.getO2aAgent());
+				agentController.putO2AObject(instances, false);
+				
+				result = new Result(action, true);
 			} else {
-				result = new Result((Action) content, instances);
+				result = new Result(action, instances);
 			}
 
 			try {
@@ -129,15 +178,27 @@ public class Agent_ARFFReader extends PikaterAgent {
 			logException("Unexpected error message:", e);
 		}
 		return msgOut;
-	} // end SendData
+	}
 
+	/**
+	 * 
+	 * Behavior to manage a request {@link GetData}
+	 *
+	 */
 	private class GetDataResponder extends AchieveREResponder {
 		private static final long serialVersionUID = 4340928332826216394L;
 
 		private PikaterAgent agent;
-		
-		public GetDataResponder(PikaterAgent agent, MessageTemplate mt) {
-			super(agent, mt);
+				
+		/**
+		 * Constructor
+		 * 
+		 * @param agent
+		 * @param messageTemplate
+		 */
+		public GetDataResponder(PikaterAgent agent,
+				MessageTemplate messageTemplate) {
+			super(agent, messageTemplate);
 			this.agent = agent;
 		}
 
@@ -146,12 +207,14 @@ public class Agent_ARFFReader extends PikaterAgent {
 			ACLMessage agree = request.createReply();
 			agree.setPerformative(ACLMessage.AGREE);
 			return agree;
-		} // end prepareResponse
+		}
 
 		@Override
-		protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) {
+		protected ACLMessage prepareResultNotification(
+				ACLMessage request, ACLMessage response) {
 			try {
-				ContentElement content = getContentManager().extractContent(request);
+				ContentElement content =
+						getContentManager().extractContent(request);
 				// GetData
 				if (((Action) content).getAction() instanceof GetData) {
 					return sendData(request);
@@ -165,7 +228,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 			ACLMessage notUnderstood = request.createReply();
 			notUnderstood.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 			return notUnderstood;
-		} // end prepareResultNotification
+		}
 	}
 
 }

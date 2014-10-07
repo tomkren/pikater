@@ -36,6 +36,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * 
+ * Agent which controls other agents
+ * performs creating, killing, loading...
+ *
+ */
 public class Agent_ManagerAgent extends PikaterAgent {
 
 	/**
@@ -48,6 +54,9 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	private ManagerAgentRequestResponder responder =
 			new ManagerAgentRequestResponder(this);
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 
@@ -60,6 +69,9 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		return ontologies;
 	}
 
+	/**
+	 * Agent setup
+	 */
 	@Override
 	protected void setup() {
 		initDefault();
@@ -131,6 +143,14 @@ public class Agent_ManagerAgent extends PikaterAgent {
 
 	}
 
+	/**
+	 * Creates agent in this container
+	 * 
+	 * @param type - class of agent
+	 * @param name - agent name
+	 * @param args
+	 * @return
+	 */
 	public String _createAgent(String type, String name, Arguments args) {
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
@@ -166,12 +186,30 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		return generatedName;
 	}
 	
-	private void doCreateAgent(String name, String type, PlatformController container, Argument[] args) throws ControllerException {
+	/**
+	 * Does agent creating in a selected container
+	 * 
+	 * @param name - agent name
+	 * @param type - class of agent
+	 * @param container
+	 * @param args
+	 * @throws ControllerException
+	 */
+	private void doCreateAgent(String name, String type,
+			PlatformController container,
+			Argument[] args) throws ControllerException {
+		
 		AgentController agent = container.createNewAgent(name, type, args);
 		agentsNames.put(name, agent);
 		agent.start();
 	}
 
+	/**
+	 * Generates a unused name for a new agent
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public String generateName(String name) {
 		String result = name;
 		if (nodeName != null && !nodeName.isEmpty()) {
@@ -188,7 +226,6 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		for (Integer i = 0; i < 10000; i++) {
 			String currentName = name + i.toString();
 			try {
-				// TODO: write without exceptions
 				container.getAgent(currentName);
 			} catch (ControllerException exc) {
 				// agent with the same name does not exist, we are good

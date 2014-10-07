@@ -91,7 +91,8 @@ public class Agent_Planner extends PikaterAgent {
 		
 		
 		Ontology taskOntontology = TaskOntology.getInstance();
-		Ontology agentManagementOntontology = AgentManagementOntology.getInstance();
+		Ontology agentManagementOntontology =
+				AgentManagementOntology.getInstance();
 		
 		MessageTemplate reqMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(
@@ -101,8 +102,10 @@ public class Agent_Planner extends PikaterAgent {
 						MessageTemplate.and(
 							MessageTemplate.MatchLanguage(codec.getName()),
 							MessageTemplate.or(
-								MessageTemplate.MatchOntology(taskOntontology.getName()),
-								MessageTemplate.MatchOntology(agentManagementOntontology.getName())
+								MessageTemplate.MatchOntology(
+										taskOntontology.getName()),
+								MessageTemplate.MatchOntology(
+										agentManagementOntontology.getName())
 							))));
 
 		addBehaviour(new AchieveREResponder(this, reqMsgTemplate) {
@@ -136,7 +139,8 @@ public class Agent_Planner extends PikaterAgent {
 					}
 					
 				} catch (OntologyException e) {
-					logException("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " +
+						e.getMessage(), e);
 				} catch (CodecException e) {
 					logException("Codec problem: " + e.getMessage(), e);
 				}
@@ -192,13 +196,15 @@ public class Agent_Planner extends PikaterAgent {
 	 * @param a {@link Action} - {@link BatchPriorityChanged} action
 	 * @return {@link ACLMessage} - OK inform message
 	 */
-	protected ACLMessage respondToBatchPriorityChanged(ACLMessage request, Action a) {
+	protected ACLMessage respondToBatchPriorityChanged(ACLMessage request,
+			Action a) {
 		
 		BatchPriorityChanged batchPriorityChanged =
 				(BatchPriorityChanged) a.getAction();
 		int batchID = batchPriorityChanged.getBatchID();
 		
-		int newBatchPriority = DataManagerService.getBatchPriority(this, batchID);
+		int newBatchPriority =
+				DataManagerService.getBatchPriority(this, batchID);
 		
 		try {
 			lock.lock();
@@ -223,7 +229,8 @@ public class Agent_Planner extends PikaterAgent {
 	 * @param a {@link Action} - {@link BatchPriorityChanged} action
 	 * @return {@link ACLMessage} - contains actual  {@link SystemLoad}
 	 */
-	protected ACLMessage respondToGetSystemLoad(ACLMessage request, Action a) {
+	protected ACLMessage respondToGetSystemLoad(ACLMessage request,
+			Action a) {
 
 		SystemLoad systemLoad = getSystemLoad();
 		
@@ -286,7 +293,8 @@ public class Agent_Planner extends PikaterAgent {
 		}
 		
 		Task finishedTask = (Task) result.getValue();
-		finishedTask.setFinish(Agent_DataManager.getCurrentPikaterDateString());
+		finishedTask.setFinish(
+				Agent_DataManager.getCurrentPikaterDateString());
 
 		CPUCore cpuCore = cpuCoresStructure.
 				getCPUCoreOfComputingTask(finishedTask);
@@ -313,7 +321,8 @@ public class Agent_Planner extends PikaterAgent {
 		msgToManager.setLanguage(new SLCodec().getName());
 		msgToManager.setOntology(TaskOntology.getInstance().getName());
 		
-		Result executeResult = new Result(taskToSolve.getAction(), finishedTask);
+		Result executeResult =
+				new Result(taskToSolve.getAction(), finishedTask);
 		try {
 			getContentManager().fillContent(msgToManager, executeResult);
 		} catch (CodecException e) {
@@ -350,13 +359,22 @@ public class Agent_Planner extends PikaterAgent {
 		
 		int userID = task.getUserID();
 		
-		for (TaskOutput t : task.getOutput()) {
-			logInfo("requesting save of data "+t.getName());
+		for (TaskOutput taskOutputI : task.getOutput()) {
+			logInfo("requesting save of data " + taskOutputI.getName());
 			SaveDataset sd = new SaveDataset();
 			sd.setUserID(task.getUserID());
-			String savedFileName = CoreConfiguration.getDataFilesPath()+System.getProperty("file.separator")+t.getName();
+			
+			String savedFileName =
+					CoreConfiguration.getDataFilesPath() +
+					System.getProperty("file.separator") +
+					taskOutputI.getName();
+			
 			sd.setSourceFile(savedFileName);			
-			sd.setDescription("Output from batch "+task.getBatchID()+ " ("+t.getType().toString()+")");
+			sd.setDescription(
+					"Output from batch " +
+					task.getBatchID() +
+					" ("+taskOutputI.getType().toString()+")");
+			
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 			request.addReceiver(dataManager);
 			request.setLanguage(getCodec().getName());
@@ -364,11 +382,13 @@ public class Agent_Planner extends PikaterAgent {
 			ACLMessage reply = null;
 			int computedDataID;
 			try {
-				getContentManager().fillContent(request, new Action(dataManager, sd));
+				Action actionI = new Action(dataManager, sd);
+				getContentManager().fillContent(request, actionI);
 				reply = FIPAService.doFipaRequestClient(this, request);
 				if (reply == null) {
-					logSevere("Failed to save output data in DB - reply not received."
-							 +" (Source file: "+savedFileName+")");
+					logSevere("Failed to save output data in DB "
+							+ "- reply not received."
+							+ " (Source file: " + savedFileName+")");
 					return;
 				}
 				computedDataID = (Integer)reply.getContentObject();
@@ -381,7 +401,7 @@ public class Agent_Planner extends PikaterAgent {
 			}
 			MetadataService.requestMetadataForComputedData(this,
 					computedDataID, userID);
-			logInfo("saved output to DB: "+t.getName());
+			logInfo("saved output to DB: "+taskOutputI.getName());
 		}
 	}
 

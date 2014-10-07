@@ -31,32 +31,56 @@ import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.recommend.Recommend;
 
 
 /**
- * Base recommender class for metalaerning recommendation
+ * 
+ * Base recommender class for meta-learning recommendation
+ * 
  */
 public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1314060594137998065L;
 
-	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Datas data);
+	/**
+	 * Choose the best agent type for this type of data
+	 * 
+	 * @param data
+	 * @return
+	 */
+	protected abstract org.pikater.core.ontology.subtrees.management.Agent
+		chooseBestAgent(Datas data);
+	
+	/**
+	 * Get agent type
+	 */
 	protected abstract String getAgentType();
+	
+	/**
+	 * Detects if the recommendation is finished
+	 * 
+	 * @return
+	 */
 	protected abstract boolean finished();
+	
+	/**
+	 * Updates status finished
+	 */
 	protected abstract void updateFinished();
     
-	public static Class<? extends Agent_ComputingAgent> DEFAULT_AGENT = Agent_WekaRBFNetworkCA.class;
+	public static Class<? extends Agent_ComputingAgent> DEFAULT_AGENT =
+			Agent_WekaRBFNetworkCA.class;
 	
 	private org.pikater.core.ontology.subtrees.management.Agent myAgentOntology =
 			new org.pikater.core.ontology.subtrees.management.Agent();
 	
 
-
+	/**
+	 * Get ontologies which is using this agent
+	 */
     @Override
 	public List<Ontology> getOntologies() {
 		
@@ -71,6 +95,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		return ontologies;
 	}
 	
+	/**
+	 * Agent setup
+	 */
     @Override
     protected void setup() {
     	
@@ -81,10 +108,10 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         Ontology ontology = RecommendOntology.getInstance();
         
         // receive request
-        MessageTemplate mt = MessageTemplate.and(
+        MessageTemplate template = MessageTemplate.and(
         		MessageTemplate.MatchOntology(ontology.getName()),
         		MessageTemplate.MatchPerformative(ACLMessage.REQUEST));        
-		addBehaviour(new RecommendBehaviour(this, mt));
+		addBehaviour(new RecommendBehaviour(this, template));
 
 
 		addAgentInfoBehaviour(getAgentInfo());
@@ -92,11 +119,13 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     }
          
 	
+    /**
+     * 
+     * Recommender behavior
+     *
+     */
 	protected class RecommendBehaviour extends AchieveREResponder {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = -8353926385111974474L;
 		private PikaterAgent agent;
 		
@@ -105,6 +134,13 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 			this.agent = agent;
 		}
 
+		/**
+		 * Handles request - receive Recommend ontology
+		 * @param request - message
+		 * @return - OK message
+		 * @throws NotUnderstoodException
+		 * @throws RefuseException
+		 */
         @Override
         protected ACLMessage handleRequest(ACLMessage request)
         	throws NotUnderstoodException, RefuseException {
@@ -126,10 +162,13 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                 	Recommend rec = (Recommend) a.getAction();
                     myAgentOntology = rec.getRecommender();
                     
-                    // merge options with .opt file options
                     myAgentOntology.setOptions(getParameters());
 
-                    logSevere("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()));
+                    String wekaOptionsString =
+                    		NewOptions.exportToWeka(
+                    				myAgentOntology.getOptions());
+                    
+                    logSevere("options: " + wekaOptionsString);
 
                     Datas datas = rec.getDatas();
                     
@@ -144,19 +183,17 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						metadata = DataManagerService.getMetadata(agent, gm);
 						datas.setMetadata(metadata);
 					}                            			
-
-					// else TODO - overit, jestli jsou metadata OK, pripadne vygenerovat
 					
-					org.pikater.core.ontology.subtrees.management.Agent recommended_agent = chooseBestAgent(rec.getDatas());
+					org.pikater.core.ontology.subtrees.management.Agent recommendedAgent =
+							chooseBestAgent(rec.getDatas());
                     
-					if(recommended_agent==null){
+					if(recommendedAgent == null){
 						reply.setPerformative(ACLMessage.FAILURE);
 						return reply;
 					}
 					
 
-					//TODO:
-                    // fill options
+                    // Fill options
 /*
 					agent.logError(recommended_agent.getType());
 					List<NewOption> options = getAgentOptions(recommended_agent.getType());
@@ -168,7 +205,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 					recommended_agent.setOptions(mergedOptions);
 */					
             		// Prepare the content of inform message                       
-    				Result result = new Result(a, recommended_agent);
+    				Result result = new Result(a, recommendedAgent);
 					reply.setPerformative(ACLMessage.INFORM);					
     				
     				updateFinished();
@@ -187,10 +224,18 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         }
     }				        
     
-	private List<NewOption> mergeOptions(List<NewOption> o1_CA, List<NewOption> o2) {
+	/**
+	 * Options merging
+	 * 
+	 * @param options1CA - options of Computing Agent
+	 * @param options2 - second options
+	 * @return - merged options
+	 */
+	private List<NewOption> mergeOptions(List<NewOption> options1CA,
+			List<NewOption> options2) {
 		
-		List<NewOption> new_options = new ArrayList<>();
-		if (o1_CA != null) {
+		List<NewOption> newOptions = new ArrayList<>();
+		if (options1CA != null) {
 
 			// if this type of agent has got some options
 			// update the options (merge them)
@@ -198,148 +243,85 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 			// go through the CA options
 			// replace the value and add it to the new options
 
-			for (NewOption o2I : o2) {
+			for (NewOption option2I : options2) {
 				
-				o2I.resetToDefaultValue();
+				option2I.resetToDefaultValue();
 				
-				for (NewOption o1CAJ : o1_CA) {
+				for (NewOption option1CAJ : options1CA) {
 
-					if (o2I.getName().equals(o1CAJ.getName())) {
-						// ostatni optiony zustanou puvodni (= ze souboru)			
+					if (option2I.getName().equals(option1CAJ.getName())) {
 
 						// copy the value
-                        o2I.setValuesWrapper(o1CAJ.getValuesWrapper().clone());
+						ValuesForOption valForOption =
+								option1CAJ.getValuesWrapper().clone();
+                        option2I.setValuesWrapper(valForOption);
 					}
 				}
 				
-				if (o2I.isValid(false)){
-					new_options.add(o2I);
+				if (option2I.isValid(false)) {
+					newOptions.add(option2I);
 				}
 			}
 		}
-		return new_options;
+		return newOptions;
 	}
 
+	/**
+	 * Get options of the concrete agent type
+	 * 
+	 * @param agentType
+	 * @return
+	 */
 	public List<NewOption> getAgentOptions(String agentType) {
 		
-		AgentInfo agentInfo = DataManagerService.getAgentInfo(this, agentType);
+		AgentInfo agentInfo =
+				DataManagerService.getAgentInfo(this, agentType);
 		return agentInfo.getOptions().getOptions();
 	}
 	
-/*
-	protected List<NewOption> getAgentOptions(String agentType) {
-
-		Ontology ontology = AgentInfoOntology.getInstance();
-		
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		// find an agent according to type
-		jade.util.leap.List agents = getAgentsByType(agentType);
-		request.addReceiver((AID)agents.get(0));
-
-		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-		request.setLanguage(codec.getName());
-		request.setOntology(ontology.getName());
-
-		GetOptions get = new GetOptions();
-		Action a = new Action();
-		a.setAction(get);
-		a.setActor(this.getAID());
-
-		try {
-			// Let JADE convert from Java objects to string
-			getContentManager().fillContent(request, a);
-
-			ACLMessage inform = FIPAService.doFipaRequestClient(this, request);
-
-			if (inform == null) {
-				return null;
-			}
-
-			Result r = (Result) getContentManager().extractContent(inform);
-
-			return ((org.pikater.core.ontology.subtrees.management.Agent) r.getItems().get(0)).getOptions();
-
-		} catch (CodecException ce) {
-			logError(ce.getMessage(), ce);
-		} catch (OntologyException oe) {
-			logError(oe.getMessage(), oe);
-		} catch (FIPAException fe) {
-			logError(fe.getMessage(), fe);
-		}
-		return null;
-	}
-
-	public jade.util.leap.List getAgentsByType(String agentType) {				
-		
-		jade.util.leap.List Agents = new jade.util.leap.ArrayList(); // List of AIDs
-		
-		// Make the list of agents of given type
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(agentType);
-		template.addServices(sd);
-		try {
-			DFAgentDescription[] result = DFService.search(this, template);
-			// System.out.println(getLocalName()+": Found the following " + agentType + " agents:");
-			
-			for (int i = 0; i < result.length; ++i) {
-				AID aid = result[i].getName();
-				Agents.add(aid);
-			}
-			
-			while (Agents.size() < 1) {
-				AID aid = createAgent(agentType, null, null);
-				Agents.add(aid);
-			}
-		} catch (FIPAException fe) {
-			logError(fe.getMessage(), fe);
-			return null;
-		}
-		
-		return Agents;
-		
-	} // end getAgentsByType
-*/
-	
+	/**
+	 * Creates a agent by using agent {@link Agent_ManagerAgent}
+	 */
 	public AID createAgent(String type, String name, Arguments arguments) {
+		
         return ManagerAgentService.createAgent(this,type,name,arguments);
 	}
 	
-	protected List<NewOption> getParameters(){
+	/**
+	 * Get parameters - merged options with default
+	 * @return
+	 */
+	protected List<NewOption> getParameters() {
 		List<NewOption> optFileOptions =
 				this.getAgentInfo().getOptions().getOptions();
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	
-	protected double d(double v1, double v2, double min, double max)
-	{
+	protected double d(double v1, double v2, double min, double max) {
         // map the value to the 0,1 interval; 0 - the same, 1 - the most
         // different
 
         return Math.abs(v1 - v2) / (max - min);
     }
 	
-	protected int dCategory(String v1, String v2)
-	{
-		if((v1 == null) && (v2 == null))
-		{
+	protected int dCategory(String v1, String v2) {
+		
+		if ((v1 == null) && (v2 == null)) {
 			return 0;
 		}
-		else if((v1 == null) || (v2 == null))
-		{
+		else if ((v1 == null) || (v2 == null)) {
 			return 1;
-		}
-		else
-		{
-			return v1.equals(v2) ? 0 : 1;
+		} else {
+			if (v1.equals(v2)) {
+				return 0;
+			} else {
+				return 1;
+			}
 		}
 	}
 	
-	protected int dBoolean(Boolean v1, Boolean v2)
-	{
-		if (v1 == v2)
-		{
+	protected int dBoolean(Boolean v1, Boolean v2) {
+		if (v1 == v2) {
 			return 0;
 		}
 		return 1;

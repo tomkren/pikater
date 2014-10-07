@@ -16,7 +16,9 @@ import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
 /**
+ * 
  * Behavior executing DM tasks - send them to planner and wait for results
+ * 
  */
 public class ExecuteTaskBehaviour extends AchieveREInitiator{
 
@@ -31,7 +33,8 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
     private ACLMessage msg;
 
     /**
-     *
+     * Constructor
+     * 
      * @param a Owning manager
      * @param req Request to send
      * @param msg Original request message
@@ -46,10 +49,16 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
         node.increaseNumberOfOutstandingTask();
     }
 
+	/**
+	 * Handle refuse for Task sending
+	 */
 	protected void handleRefuse(ACLMessage refuse) {
 		myAgent.logSevere("Agent "+refuse.getSender().getName()+" refused.");
 	}
 	
+	/**
+	 * Handle failure for Task sending
+	 */
 	protected void handleFailure(ACLMessage failure) {
 		if (failure.getSender().equals(myAgent.getAMS())) {
 			myAgent.logSevere("Responder does not exist");
@@ -59,6 +68,9 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 		}
 	}
 	
+	/**
+	 * Handle inform for Task sending
+	 */
 	protected void handleInform(ACLMessage inform) {
 		
 		myAgent.logInfo("Agent " + inform.getSender().getName() +
@@ -82,30 +94,40 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                         data = task.getOutput().get(0);
                     }
                     labeledData.setDataSourceId(data.getName());
-                    node.addToOutputAndProcess(labeledData,"file");
+                    node.addToOutputAndProcess(labeledData, "file");
                 }
-                if (node.containsOutput(CoreConstant.SlotContent.TESTING_DATA.getSlotName())) {
+
+                CoreConstant.SlotContent testingData =
+                		CoreConstant.SlotContent.TESTING_DATA;
+                
+                if (node.containsOutput(testingData.getSlotName())) {
                     TaskOutput test = task.getOutputByType(Task.InOutType.TEST);
                     if (test == null) {
                         test = task.getOutputByType(Task.InOutType.TRAIN);
                     }
                     labeledData.setDataSourceId(test.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TESTING_DATA.getSlotName());
+                    node.addToOutputAndProcess(labeledData, testingData.getSlotName());
                 }
-                if (node.containsOutput(CoreConstant.SlotContent.TRAINING_DATA.getSlotName())) {
+
+                CoreConstant.SlotContent trainingData =
+                		CoreConstant.SlotContent.TRAINING_DATA;
+
+                if (node.containsOutput(trainingData.getSlotName())) {
                     TaskOutput train = task.getOutputByType(Task.InOutType.TRAIN);
 
                     labeledData.setDataSourceId(train.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
+                    node.addToOutputAndProcess(labeledData, trainingData.getSlotName());
                 }
 
 				// save results to the database										
-				if (task.getSaveResults()){
+				if (task.getSaveResults()) {
 					DataManagerService.saveResult(myAgent, task, task.getExperimentID());
 				}
                 Task taskResult = (Task)result.getValue();
-                ErrorEdge errorEdge = new ErrorEdge(taskResult.getResult(),taskResult.getComputationID());
-                node.addToOutputAndProcess(errorEdge,"error");
+                int taskResultID = taskResult.getComputationID();
+                
+                ErrorEdge errorEdge = new ErrorEdge(taskResult.getResult(), taskResultID);
+                node.addToOutputAndProcess(errorEdge, "error");
                 node.decreaseNumberOfOutstandingTask();
 			}
 		} catch (CodecException | OntologyException e) {

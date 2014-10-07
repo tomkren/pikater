@@ -44,24 +44,27 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
-import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
+/**
+ * 
+ * Agent used for performance measuring
+ *
+ */
 public class Agent_Duration extends PikaterAgent {
 
 	private static final long serialVersionUID = -5555820420884978956L;
     
-    private static final String LOG_LR_DURATIONS_NAME="log_LR_durations";
+    private static final String LOG_LR_DURATIONS_NAME = "log_LR_durations";
 	
     List<Duration> durations = new ArrayList<Duration>();
     
-    int t = 10000; //ms
+    int timeMs = 10000;
     AID aid = null;
-    int id = 0;
     
     Duration lastDuration;
     
-    boolean log_LR_durations = false;
+    boolean logDurations = false;
     
 	private String durationDatasetName;
 	private String durationDatasetHash;
@@ -71,6 +74,10 @@ public class Agent_Duration extends PikaterAgent {
     	return CoreAgents.DURATION.getName();
     }
     
+	/**
+	 * Get ontologies which is using this agent
+	 */
+    @Override
 	public List<Ontology> getOntologies() {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
@@ -82,6 +89,9 @@ public class Agent_Duration extends PikaterAgent {
 		return ontologies;
 	}
 	
+	/**
+	 * Agent setup
+	 */
     @Override
     protected void setup() {
 
@@ -89,9 +99,9 @@ public class Agent_Duration extends PikaterAgent {
 		
 		registerWithDF(CoreAgents.DURATION.getName());
     	
-		if (containsArgument(LOG_LR_DURATIONS_NAME) && isArgumentValueTrue(LOG_LR_DURATIONS_NAME))
-		{
-			log_LR_durations = true;
+		if (containsArgument(LOG_LR_DURATIONS_NAME) &&
+				isArgumentValueTrue(LOG_LR_DURATIONS_NAME)) {
+			logDurations = true;
 		}
 		
         // create linear regression agent
@@ -114,13 +124,14 @@ public class Agent_Duration extends PikaterAgent {
 		
 		doWait(2000);
 		
-        addBehaviour(new TestBehaviour(this, t));			  
+        addBehaviour(new TestBehaviour(this, timeMs));			  
         
         Ontology ontology = DurationOntology.getInstance();
         MessageTemplate memplate = MessageTemplate.and(
         		MessageTemplate.MatchOntology(
         				ontology.getName()),
-        				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+        				MessageTemplate.MatchPerformative(
+        						ACLMessage.REQUEST));
 
         addBehaviour(new AchieveREResponder(this, memplate) {
 
@@ -131,10 +142,11 @@ public class Agent_Duration extends PikaterAgent {
                     throws NotUnderstoodException, RefuseException {
 
                 try {
-                    Action a = (Action) getContentManager().extractContent(request);
+                    Action action = (Action)
+                    		getContentManager().extractContent(request);
 
-                    if (a.getAction() instanceof SetDuration) {
-                        SetDuration sd = (SetDuration) a.getAction();
+                    if (action.getAction() instanceof SetDuration) {
+                        SetDuration sd = (SetDuration) action.getAction();
                         
                         ACLMessage reply = request.createReply();
                         reply.setPerformative(ACLMessage.INFORM);
@@ -143,18 +155,20 @@ public class Agent_Duration extends PikaterAgent {
                         durations.add(duration);
  
                         duration.setLR_duration(
-                        		countDuration(duration.getStart(), duration.getDurationMiliseconds()));
+                        		countDuration(
+                        				duration.getStart(),
+                        				duration.getDurationMiliseconds()));
                         
-                        lastDuration=duration;
+                        lastDuration = duration;
                         
-                        Result r = new Result(sd, duration);                        
-						getContentManager().fillContent(reply, r);												
+                        Result result = new Result(sd, duration);                        
+						getContentManager().fillContent(reply, result);												
 
                         return reply;
                     }
                     
-                    if (a.getAction() instanceof GetDuration) {
-                    	GetDuration gd = (GetDuration) a.getAction();
+                    if (action.getAction() instanceof GetDuration) {
+                    	GetDuration gd = (GetDuration) action.getAction();
                         
                     	gd.setDuration(lastDuration);
                     	
@@ -179,43 +193,62 @@ public class Agent_Duration extends PikaterAgent {
         });
     }
     
-    private float countDuration(Date _start, long duration){    	
-    	if (duration >= Integer.MAX_VALUE){
+    /**
+     * Counts a duration
+     * 
+     * @param startDate
+     * @param duration
+     * @return
+     */
+    private float countDuration(Date startDate, long duration) {
+    	
+    	if (duration >= Integer.MAX_VALUE) {
     		return Integer.MAX_VALUE;
     	}    	
     	
-    	float number_of_LRs = 0; 
-    	long start = _start.getTime();
+    	float numberOfLRs = 0; 
+    	long start = startDate.getTime();
     	
     	// find the duration right before the start
-    	int i_d = durations.size()-1;
-    	while (start < (durations.get(i_d)).getStart().getTime()){    		
-    		i_d--;
+    	int id = durations.size() -1;
+    	
+    	while (start < (durations.get(id)).getStart().getTime()) {    		
+    		id--;
     	}
     	
     	int i = 0;
 		
     	long t1 = -1;
 		long t2 = -1;
-		long d = duration;
+		long durationMs = duration;
 		
-    	while (d > 0){   		    	
+    	while (durationMs > 0) {   		    	
     		try {
-	    		t1 = ((Duration)durations.get(i_d + i)).getStart().getTime();	    		
-	    		if (i_d + i + 1 > durations.size()-1){ 
-	    			// after last LR
-	        		t2 = t1 + t; // expected time    		
-	    		}
-	    		else {
-	    			t2 = ((Duration)durations.get(i_d + i + 1)).getStart().getTime();
-	    		}
-	    		long time_between_LRs = t2 - t1;
+    			
+    			Duration durationI = durations.get(id + i);
+	    		t1 = durationI.getStart().getTime();
 	    		
-	    		final long duration1 = duration < time_between_LRs ? duration : Math.min(t2 - start, time_between_LRs); // osetreni prvniho useku
+	    		if (id + i + 1 > durations.size()-1){ 
+	    			// after last LR, expected time
+	        		t2 = t1 + timeMs;
 	    		
-	    		// System.out.println("d: " + d + " LR dur: " + ((Duration)durations.get(i_d + i)).getDuration());
-	    		number_of_LRs += (float)d / (float)(durations.get(i_d + i)).getDurationMiliseconds();
-	    		d -= duration1;
+	    		} else {
+	    			Duration durationIplus = durations.get(id + i + 1);
+	    			t2 = durationIplus.getStart().getTime();
+	    		}
+	    		long timeBetweenLRs = t2 - t1;
+	    		
+	    		// handles the first part
+	    		long duration1;
+	    		if (duration < timeBetweenLRs) {
+	    			duration1 = duration;
+	    		} else {
+	    			duration1 = Math.min(t2 - start, timeBetweenLRs);
+	    		}
+	    		
+	    		long durationIMs = durationI.getDurationMiliseconds();
+	    		numberOfLRs += (float)durationMs / (float)durationIMs;
+	    		durationMs -= duration1;
 	    		
 	    		i++;
     		
@@ -226,22 +259,35 @@ public class Agent_Duration extends PikaterAgent {
 
     	}
     	    	
-    	return number_of_LRs;
+    	return numberOfLRs;
     }
   
+    /**
+     * 
+     * Behavior for the one test
+     *
+     */
     protected class TestBehaviour extends TickerBehaviour {
 
 		private static final long serialVersionUID = -2200601967185243650L;
 		private PikaterAgent agent;
 
 
+		/**
+		 * Constructor
+		 * 
+		 * @param agent
+		 * @param period
+		 */
 		public TestBehaviour(PikaterAgent agent, long period) {
 			super(agent, period);
 			this.agent = agent;
 		}
 
+		/**
+		 * Computes linear regression on random (but the same) Data-Set
+		 */
 		protected void onTick() {
-			// compute linear regression on random (but the same) dataset
 					
 	        ACLMessage durationMsg = createCFPmessage(aid, agent,
 	        		durationDatasetName, durationDatasetHash);
@@ -262,52 +308,63 @@ public class Agent_Duration extends PikaterAgent {
 		}
 		
 		protected void handleRefuse(ACLMessage refuse) {
-			logSevere("Agent "+refuse.getSender().getName()+" refused.");
+			logSevere("Agent "+refuse.getSender().getName() + " refused.");
 		}
 		
 		protected void handleFailure(ACLMessage failure) {
 			if (failure.getSender().equals(myAgent.getAMS())) {
 				// FAILURE notification from the JADE runtime: the receiver
 				// does not exist
-                logSevere("Responder " + failure.getSender().getName() + " does not exist");
+                logSevere("Responder " +
+                		failure.getSender().getName() +
+                		" does not exist");
 			}
 			else {
-                logSevere("Agent "+failure.getSender().getName()+" failed");
+                logSevere("Agent " +
+                		failure.getSender().getName() +
+                		" failed");
 			}
 		}
 				
 		protected void handleInform(ACLMessage inform) {
-            logSevere("Agent "+inform.getSender().getName() + " successfully performed the requested action");
+            logSevere("Agent " +
+            		inform.getSender().getName() +
+            		" successfully performed the requested action");
 																			
 			ContentElement content;
 			try {
 				content = getContentManager().extractContent(inform);
 				if (content instanceof Result) {
 					Result result = (Result) content;					
-					jade.util.leap.List tasks = (jade.util.leap.List)result.getValue();
+					jade.util.leap.List tasks =
+							(jade.util.leap.List)result.getValue();
 					Task task = (Task) tasks.get(0);
 					
-					if (durations.size() > 1000000) { // over 270 hours
+					// over 270 hours
+					if (durations.size() > 1000000) {
 						durations.remove(0);
 					}
 					
 					// save the duration of the computation to the list
 					Evaluation evaluation = (Evaluation)task.getResult();
-					List<Eval> ev = evaluation.getEvaluations();
+					List<Eval> evaluations = evaluation.getEvaluations();
 					
-					Duration d = new Duration();
-					for (Eval eval : ev) {
-						if(eval.getName().equals(CoreConstant.DURATION))
-						{
-							d.setDurationMiliseconds((int)eval.getValue());
+					Duration duration = new Duration();
+					for (Eval evalI : evaluations) {
+						if(evalI.getName().equals(CoreConstant.DURATION)) {
+							int evalMs = (int)evalI.getValue();
+							duration.setDurationMiliseconds(evalMs);
 						}
 					}
-					d.setStart(evaluation.getStart());
-					durations.add(d);
-					logSevere(d.getStart() + " - " + d.getDurationMiliseconds());
-					if (log_LR_durations){
+					duration.setStart(evaluation.getStart());
+					durations.add(duration);
+					
+					logSevere(duration.getStart() +
+							" - " + duration.getDurationMiliseconds());
+					if (logDurations){
 						// write duration into a file:
-						logInfo(d.getStart() + " - " + d.getDurationMiliseconds());
+						logInfo(duration.getStart() +
+								" - " + duration.getDurationMiliseconds());
 					}											
 					
 				}				
@@ -319,9 +376,18 @@ public class Agent_Duration extends PikaterAgent {
 				agent.logException(e.getMessage(), e);
 			}			
 		}			
-	} // end of call for proposal bahavior
+	}
+	
 
-        
+    /**
+     * Prepares a message for the duration service
+     * 
+     * @param aid - receiver identification
+     * @param agent - agent for login exceptions
+     * @param durationDatasetName
+     * @param durationDatasetHash
+     * @return
+     */
     protected ACLMessage createCFPmessage(AID aid, PikaterAgent agent,
     		String durationDatasetName, String durationDatasetHash) {
 
@@ -335,8 +401,6 @@ public class Agent_Duration extends PikaterAgent {
 		cfp.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 
 		// We want to receive a reply in 10 secs
-		//cfp.setReplyByDate(new java.util.Date(System.currentTimeMillis() + 10000));
-
 		org.pikater.core.ontology.subtrees.management.Agent ag =
 				new org.pikater.core.ontology.subtrees.management.Agent();
 		ag.setType(Agent_WekaLinearRegression.class.getName());
@@ -350,11 +414,7 @@ public class Agent_Duration extends PikaterAgent {
 		datas.addData(new Data("xxx", "xxx", DataTypes.TEST_DATA));
 		datas.setMode(CoreConstant.Mode.TRAIN_ONLY.name());
 		
-		Task task = new Task();
-		Id _id = new Id();
-		_id.setIdentificator(Integer.toString(id));
-		id++;
-		
+		Task task = new Task();		
 		task.setAgent(ag);
 		task.setDatas(datas);
 		
@@ -369,11 +429,11 @@ public class Agent_Duration extends PikaterAgent {
 		executeTask.setTask(task);
 		
 		try {
-			Action a = new Action();
-			a.setAction(executeTask);
-			a.setActor(this.getAID());
+			Action action = new Action();
+			action.setAction(executeTask);
+			action.setActor(this.getAID());
 										
-			getContentManager().fillContent(cfp, a);
+			getContentManager().fillContent(cfp, action);
 
 		} catch (CodecException e) {
 			agent.logException(e.getMessage(), e);
@@ -383,5 +443,5 @@ public class Agent_Duration extends PikaterAgent {
 				
 		return cfp;
 
-	} // end createCFPmessage()
+	}
 }

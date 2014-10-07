@@ -166,7 +166,7 @@ public class ComputationNode {
      */
     public void startComputation()
     {
-        idle=false;
+        idle = false;
         startBehavior.execute(this);
     }
 
@@ -175,7 +175,7 @@ public class ComputationNode {
      */
     public void computationFinished()
     {
-        idle=true;
+        idle = true;
         numberOfTasksChanged();
         if (canComputationStart())
         {

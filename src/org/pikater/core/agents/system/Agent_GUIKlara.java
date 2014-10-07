@@ -230,6 +230,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 	/**
 	 * Sends respond to kill all Task from Batch
+	 * 
 	 * @param input - input line
 	 */
 	private void killBatch(String input) {

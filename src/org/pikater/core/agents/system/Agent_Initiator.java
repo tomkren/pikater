@@ -20,6 +20,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * 
+ * Agent which starts the whole system core
+ *
+ */
 public class Agent_Initiator extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
