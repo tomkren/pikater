@@ -2,6 +2,13 @@ package org.pikater.core.ontology.subtrees.agentInfo;
 
 import jade.content.AgentAction;
 
+/**
+ * Request for {@link AgentInfo} objects for all computation
+ * related agents approved to be used - all internal agents
+ * and approved user agents.
+ * 
+ * @author stepan
+ */
 public class GetAgentInfos implements AgentAction {
 
 	/**
