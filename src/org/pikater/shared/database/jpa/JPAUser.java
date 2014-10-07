@@ -20,6 +20,9 @@ import javax.persistence.Transient;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
+/**
+ * Class {@link JPAUser} represents record about user of system.
+ */
 @Entity
 @Table(
 		name="_User",

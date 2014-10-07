@@ -15,6 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPARole} represents record about roles in pikater.
+ * <p>
+ * Each role contains a list of privileges, that are needed for performing certain actions.  
+ */
 @Entity
 @Table(name="Role")
 @NamedQueries({

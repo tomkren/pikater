@@ -12,6 +12,9 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 
+/**
+ * Class {@link JPAAgentInfo} represents a record about an agent available in pikater. 
+ */
 @Entity	
 @Table(name="AgentInfo")
 @NamedQueries({

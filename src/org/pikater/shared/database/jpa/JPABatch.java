@@ -21,7 +21,11 @@ import javax.persistence.Transient;
 
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
-
+/**
+ * Class {@link JPABatch} represents record about a computation batch.
+ * <p>
+ * Each of this class contains a list of experiments that form the actual batch. 
+ */
 @Entity
 @Table(
 		name="Batch",
