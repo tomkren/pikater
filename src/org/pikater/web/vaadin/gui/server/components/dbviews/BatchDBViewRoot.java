@@ -38,192 +38,145 @@ import com.vaadin.ui.TextField;
  * 
  * @author SkyCrawl
  */
-public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewRoot<V>
-{
-	public BatchDBViewRoot(V view)
-	{
+public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewRoot<V> {
+	public BatchDBViewRoot(V view) {
 		super(view);
 	}
 
 	@Override
-	public int getColumnSize(ITableColumn column)
-	{
+	public int getColumnSize(ITableColumn column) {
 		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
-		switch(specificColumn)
-		{
-			case FINISHED:
-			case CREATED:
-				return 75;
-			
-			case TOTAL_PRIORITY:
-			case USER_PRIORITY:
-			case STATUS:
-				return 100;
-				
-			case OWNER:
-				return 100;
-			case NAME:
-				return 125;
-			case NOTE:
-				return 150;
-			case ABORT:
-				return 75;
-			case RESULTS:
-				return 100;
-				
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+		switch (specificColumn) {
+		case FINISHED:
+		case CREATED:
+			return 75;
+
+		case TOTAL_PRIORITY:
+		case USER_PRIORITY:
+		case STATUS:
+			return 100;
+
+		case OWNER:
+			return 100;
+		case NAME:
+			return 125;
+		case NOTE:
+			return 150;
+		case ABORT:
+			return 75;
+		case RESULTS:
+			return 100;
+
+		default:
+			throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
-	
+
 	@Override
-	public ITableColumn getExpandColumn()
-	{
+	public ITableColumn getExpandColumn() {
 		return BatchTableDBView.Column.NOTE;
 	}
-	
+
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
-	{
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component) {
 		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
-		if(specificColumn == BatchTableDBView.Column.NOTE)
-		{
+		if (specificColumn == BatchTableDBView.Column.NOTE) {
 			TextField tf_value = (TextField) component;
 			tf_value.setDescription(tf_value.getValue());
-		}
-		else if(specificColumn == BatchTableDBView.Column.TOTAL_PRIORITY)
-		{
-			value.setOnCommitCallback(new AbstractDBViewValue.IOnValueCommitted()
-			{
+		} else if (specificColumn == BatchTableDBView.Column.TOTAL_PRIORITY) {
+			value.setOnCommitCallback(new AbstractDBViewValue.IOnValueCommitted() {
 				@Override
-				public void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value)
-				{
+				public void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value) {
 					final BatchTableDBRow specificRow = (BatchTableDBRow) row;
-					if(WebAppConfiguration.isCoreEnabled())
-					{
-						try
-						{
+					if (WebAppConfiguration.isCoreEnabled()) {
+						try {
 							WebToCoreEntryPoint.notify_batchPriorityChanged(specificRow.getBatch().getId());
-						}
-						catch (Exception e)
-						{
+						} catch (Exception e) {
 							PikaterWebLogger.logThrowable(String.format("Could not notify core about a priority change of batch '%d':", specificRow.getBatch().getId()), e);
 							MyNotifications.showApplicationError();
 						}
-					}
-					else
-					{
+					} else {
 						GeneralDialogs.info("Core not available", "Priority was changed but it won't be effective.");
 					}
 				}
 			});
 		}
 	}
-	
+
 	@Override
-	public void approveAction(ITableColumn column, final AbstractTableRowDBView row, Runnable action)
-	{
+	public void approveAction(ITableColumn column, final AbstractTableRowDBView row, Runnable action) {
 		final BatchTableDBRow specificRow = (BatchTableDBRow) row;
-		
+
 		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
-		if(specificColumn == BatchTableDBView.Column.ABORT)
-		{
-			if(WebAppConfiguration.isCoreEnabled())
-			{
-				try
-				{
+		if (specificColumn == BatchTableDBView.Column.ABORT) {
+			if (WebAppConfiguration.isCoreEnabled()) {
+				try {
 					WebToCoreEntryPoint.notify_killBatch(specificRow.getBatch().getId());
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					PikaterWebLogger.logThrowable(String.format("Could not kill batch '%d':", specificRow.getBatch().getId()), e);
 					MyNotifications.showApplicationError();
 				}
-			}
-			else
-			{
+			} else {
 				GeneralDialogs.info("Core not available", "Experiments can not be aborted at this time.");
 			}
-		}
-		else if(specificColumn == BatchTableDBView.Column.RESULTS)
-		{
+		} else if (specificColumn == BatchTableDBView.Column.RESULTS) {
 			final File tmpFile = IOUtils.createTemporaryFile("results", ".csv");
-			
+
 			// download, don't run action
-			ProgressDialog.show("Export progress...", new ProgressDialog.IProgressDialogTaskHandler()
-			{
+			ProgressDialog.show("Export progress...", new ProgressDialog.IProgressDialogTaskHandler() {
 				private InterruptibleJobHelper underlyingTask;
-				
+
 				@Override
-				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
-				{
+				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception {
 					// start the task and bind it with the progress dialog
 					underlyingTask = new InterruptibleJobHelper();
-					underlyingTask.startJob(ExportBatchResultsJob.class, new Object[]
-					{
-						specificRow.getBatch(),
-						tmpFile,
-						contextForTask
-					});
+					underlyingTask.startJob(ExportBatchResultsJob.class, new Object[] { specificRow.getBatch(), tmpFile, contextForTask });
 				}
-				
+
 				@Override
-				public void abortTask()
-				{
+				public void abortTask() {
 					underlyingTask.abort();
 				}
-				
+
 				@Override
-				public void onTaskFinish(IProgressDialogTaskResult result)
-				{
-					try
-					{
-						UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
-						{
+				public void onTaskFinish(IProgressDialogTaskResult result) {
+					try {
+						UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource() {
 							@Override
-							public ResourceExpiration getLifeSpan()
-							{
+							public ResourceExpiration getLifeSpan() {
 								return ResourceExpiration.ON_FIRST_PICKUP;
 							}
 
 							@Override
-							public InputStream getStream() throws Exception
-							{
+							public InputStream getStream() throws Exception {
 								return new FileInputStream(tmpFile);
 							}
 
 							@Override
-							public long getSize()
-							{
+							public long getSize() {
 								return tmpFile.length();
 							}
 
 							@Override
-							public String getMimeType()
-							{
+							public String getMimeType() {
 								return HttpContentType.TEXT_CSV.getMimeType();
 							}
 
 							@Override
-							public String getFilename()
-							{
+							public String getFilename() {
 								return tmpFile.getName();
 							}
 						});
 						Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
-					}
-					catch (Exception e)
-					{
+					} catch (Exception e) {
 						// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
 						PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 						throw new RuntimeException(e);
 					}
 				}
 			});
-		}
-		else
-		{
-			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name())); 
+		} else {
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name()));
 		}
 	}
 }

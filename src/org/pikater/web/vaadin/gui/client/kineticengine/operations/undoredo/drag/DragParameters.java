@@ -7,51 +7,43 @@ import net.edzard.kinetic.Vector2d;
  * 
  * @author SkyCrawl
  */
-public class DragParameters
-{
+public class DragParameters {
 	private Vector2d originalPosition;
 	private Vector2d newPosition;
-	
-	public DragParameters()
-	{
+
+	public DragParameters() {
 	}
-	private DragParameters(Vector2d originalPosition, Vector2d newPosition)
-	{
+
+	private DragParameters(Vector2d originalPosition, Vector2d newPosition) {
 		this.originalPosition = originalPosition;
 		this.newPosition = newPosition;
 	}
 
-	public Vector2d getOriginalPosition()
-	{
+	public Vector2d getOriginalPosition() {
 		return originalPosition;
 	}
-	public void setOriginalPosition(Vector2d originalPosition)
-	{
+
+	public void setOriginalPosition(Vector2d originalPosition) {
 		this.originalPosition = originalPosition;
 	}
-	public Vector2d getNewPosition()
-	{
+
+	public Vector2d getNewPosition() {
 		return newPosition;
 	}
-	public void setNewPosition(Vector2d newPosition)
-	{
+
+	public void setNewPosition(Vector2d newPosition) {
 		this.newPosition = newPosition;
 	}
-	
-	public Vector2d getDelta()
-	{
-		if((originalPosition == null) || (newPosition == null)) 
-		{
+
+	public Vector2d getDelta() {
+		if ((originalPosition == null) || (newPosition == null)) {
 			throw new IllegalStateException("Original or new position has not been set.");
-		}
-		else
-		{
+		} else {
 			return new Vector2d(newPosition).sub(originalPosition);
 		}
 	}
-	
-	public DragParameters copy()
-	{
+
+	public DragParameters copy() {
 		return new DragParameters(originalPosition, newPosition);
 	}
 }

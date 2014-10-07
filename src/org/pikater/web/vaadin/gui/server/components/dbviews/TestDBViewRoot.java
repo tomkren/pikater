@@ -15,32 +15,26 @@ import com.vaadin.ui.AbstractComponent;
  * 
  * @author SkyCrawl
  */
-public class TestDBViewRoot extends AbstractDBViewRoot<TestTableDBView>
-{
-	public TestDBViewRoot(TestTableDBView underlyingDBView)
-	{
+public class TestDBViewRoot extends AbstractDBViewRoot<TestTableDBView> {
+	public TestDBViewRoot(TestTableDBView underlyingDBView) {
 		super(underlyingDBView);
 	}
 
 	@Override
-	public int getColumnSize(ITableColumn column)
-	{
+	public int getColumnSize(ITableColumn column) {
 		return 100;
 	}
 
 	@Override
-	public ITableColumn getExpandColumn()
-	{
+	public ITableColumn getExpandColumn() {
 		return null;
 	}
 
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
-	{
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component) {
 	}
 
 	@Override
-	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
-	{
+	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action) {
 	}
 }

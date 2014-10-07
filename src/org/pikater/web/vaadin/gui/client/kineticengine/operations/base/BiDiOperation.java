@@ -8,20 +8,18 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
  * 
  * @author SkyCrawl
  */
-public abstract class BiDiOperation
-{
+public abstract class BiDiOperation {
 	protected final KineticEngine kineticEngine;
-	
-	public BiDiOperation(KineticEngine kineticEngine)
-	{
+
+	public BiDiOperation(KineticEngine kineticEngine) {
 		this.kineticEngine = kineticEngine;
 	}
-	
+
 	/**
 	 * Undo this operation.
 	 */
 	public abstract void undo();
-	
+
 	/**
 	 * Redo this operation.
 	 */

@@ -14,49 +14,42 @@ import com.vaadin.ui.AbstractComponent;
  * 
  * @author SkyCrawl
  */
-public class CategoricalMetadataDBViewRoot extends AbstractDBViewRoot<CategoricalMetaDataTableDBView>
-{
-	public CategoricalMetadataDBViewRoot(CategoricalMetaDataTableDBView view)
-	{
+public class CategoricalMetadataDBViewRoot extends AbstractDBViewRoot<CategoricalMetaDataTableDBView> {
+	public CategoricalMetadataDBViewRoot(CategoricalMetaDataTableDBView view) {
 		super(view);
 	}
 
 	@Override
-	public int getColumnSize(ITableColumn column)
-	{
+	public int getColumnSize(ITableColumn column) {
 		CategoricalMetaDataTableDBView.Column specificColumn = (CategoricalMetaDataTableDBView.Column) column;
-		switch(specificColumn)
-		{
-			case NAME:
-				return 150;
-			case IS_TARGET:
-				return 75;
-			case CATEGORY_COUNT:
-				return 100;
-			case RATIO_OF_MISSING_VALUES:
-				return 125;
-			case CLASS_ENTROPY:
-				return 75;
-			case ENTROPY:
-				return 115;
-			default:
-				throw new IllegalStateException(String.format("No sizing information found for column '%s'", specificColumn.name()));
+		switch (specificColumn) {
+		case NAME:
+			return 150;
+		case IS_TARGET:
+			return 75;
+		case CATEGORY_COUNT:
+			return 100;
+		case RATIO_OF_MISSING_VALUES:
+			return 125;
+		case CLASS_ENTROPY:
+			return 75;
+		case ENTROPY:
+			return 115;
+		default:
+			throw new IllegalStateException(String.format("No sizing information found for column '%s'", specificColumn.name()));
 		}
 	}
-	
+
 	@Override
-	public ITableColumn getExpandColumn()
-	{
+	public ITableColumn getExpandColumn() {
 		return null;
 	}
-	
+
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
-	{
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component) {
 	}
-	
+
 	@Override
-	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
-	{
+	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action) {
 	}
 }

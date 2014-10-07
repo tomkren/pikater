@@ -28,129 +28,104 @@ import com.vaadin.ui.TextField;
  * 
  * @author SkyCrawl
  */
-public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBView>
-{
-	public AgentsDBViewRoot(ExternalAgentTableDBView view)
-	{
+public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBView> {
+	public AgentsDBViewRoot(ExternalAgentTableDBView view) {
 		super(view);
 	}
 
 	@Override
-	public int getColumnSize(ITableColumn column)
-	{
+	public int getColumnSize(ITableColumn column) {
 		ExternalAgentTableDBView.Column specificColumn = (ExternalAgentTableDBView.Column) column;
-		switch(specificColumn)
-		{
-			case OWNER:
-			case CREATED:
-				return 100;
-			case NAME:
-				return 150;
-			case AGENT_CLASS:
-				return 150;
-			case DESCRIPTION:
-				return 250;
-			case APPROVED:
-				return 75;
-			case DOWNLOAD:
-				return 100;
-			case DELETE:
-				return 75;
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+		switch (specificColumn) {
+		case OWNER:
+		case CREATED:
+			return 100;
+		case NAME:
+			return 150;
+		case AGENT_CLASS:
+			return 150;
+		case DESCRIPTION:
+			return 250;
+		case APPROVED:
+			return 75;
+		case DOWNLOAD:
+			return 100;
+		case DELETE:
+			return 75;
+		default:
+			throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
-	
+
 	@Override
-	public ITableColumn getExpandColumn()
-	{
+	public ITableColumn getExpandColumn() {
 		return ExternalAgentTableDBView.Column.DESCRIPTION;
 	}
-	
+
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
-	{
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component) {
 		ExternalAgentTableDBView.Column specificColumn = (ExternalAgentTableDBView.Column) column;
-		if((specificColumn == Column.AGENT_CLASS) || (specificColumn == Column.DESCRIPTION)) 
-		{
+		if ((specificColumn == Column.AGENT_CLASS) || (specificColumn == Column.DESCRIPTION)) {
 			TextField tf_value = (TextField) component;
 			tf_value.setDescription(tf_value.getValue());
 		}
 	}
-	
+
 	@Override
-	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
-	{
+	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action) {
 		String agentName = (String) row.getValueWrapper(ExternalAgentTableDBView.Column.NAME).getValue();
-		
+
 		ExternalAgentTableDBView.Column specificColumn = (ExternalAgentTableDBView.Column) column;
-		if(specificColumn == Column.DOWNLOAD)
-		{
+		if (specificColumn == Column.DOWNLOAD) {
 			// download, don't run action
 			final ExternalAgentTableDBRow rowView = (ExternalAgentTableDBRow) row;
-			try
-			{
-				final UUID agentDownloadResourceUUID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
-				{
+			try {
+				final UUID agentDownloadResourceUUID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource() {
 					@Override
-					public ResourceExpiration getLifeSpan()
-					{
+					public ResourceExpiration getLifeSpan() {
 						return ResourceExpiration.ON_FIRST_PICKUP;
 					}
 
 					@Override
-					public InputStream getStream()
-					{
+					public InputStream getStream() {
 						return rowView.getAgent().getInputStream();
 					}
 
 					@Override
-					public long getSize()
-					{
+					public long getSize() {
 						return rowView.getAgent().getJar().length;
 					}
 
 					@Override
-					public String getMimeType()
-					{
+					public String getMimeType() {
 						return HttpContentType.APPLICATION_JAR.getMimeType();
 					}
 
 					@Override
-					public String getFilename()
-					{
+					public String getFilename() {
 						String fileName = rowView.getAgent().getName();
-						if(!fileName.endsWith(".jar"))
-						{
+						if (!fileName.endsWith(".jar")) {
 							fileName += ".jar";
 						}
-						return fileName; 
+						return fileName;
 					}
 				});
 				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(agentDownloadResourceUUID));
-			}
-			catch(Exception e)
-			{
+			} catch (Exception e) {
 				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
 				PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 				throw new RuntimeException(e);
 			}
-		}
-		else if(specificColumn == Column.DELETE)
-		{
-			GeneralDialogs.confirm(null, String.format("Really delete agent '%s'?", agentName), new GeneralDialogs.IDialogResultHandler()
-			{
+		} else if (specificColumn == Column.DELETE) {
+			GeneralDialogs.confirm(null, String.format("Really delete agent '%s'?", agentName), new GeneralDialogs.IDialogResultHandler() {
 				@Override
-				public boolean handleResult(Object[] args)
-				{
+				public boolean handleResult(Object[] args) {
 					action.run();
 					getParentTable().rebuildRowCache();
 					return true; // close the dialog
 				}
 			});
-		}
-		else
-		{
+		} else {
 			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name()));
 		}
 	}

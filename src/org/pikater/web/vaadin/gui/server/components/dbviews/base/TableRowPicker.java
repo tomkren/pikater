@@ -17,27 +17,23 @@ import com.vaadin.ui.Label;
  * 
  * @author SkyCrawl
  */
-public class TableRowPicker extends DBTableLayout implements IDialogResultPreparer
-{
+public class TableRowPicker extends DBTableLayout implements IDialogResultPreparer {
 	private static final long serialVersionUID = 9055067769093710286L;
 
-	public TableRowPicker(String caption)
-	{
+	public TableRowPicker(String caption) {
 		setSizeUndefined();
 		setReadOnly(true);
 		getTable().setMultiSelect(false);
 		addComponentAsFirst(new Label(caption));
 	}
-	
+
 	@Override
-	public boolean isResultReadyToBeHandled()
-	{
+	public boolean isResultReadyToBeHandled() {
 		return getTable().isARowSelected();
 	}
 
 	@Override
-	public void addArgs(List<Object> arguments)
-	{
+	public void addArgs(List<Object> arguments) {
 		arguments.add(getTable().getViewsOfSelectedRows()[0]);
 	}
 }

@@ -17,40 +17,32 @@ import com.vaadin.ui.AbstractComponent;
  *
  * @param <T> The view type.
  */
-public abstract class AbstractDBViewRoot<T extends AbstractTableDBView>
-{
+public abstract class AbstractDBViewRoot<T extends AbstractTableDBView> {
 	private final T underlyingDBView;
-	private DBTable parentTable; 
-	
-	public AbstractDBViewRoot(T underlyingDBView)
-	{
+	private DBTable parentTable;
+
+	public AbstractDBViewRoot(T underlyingDBView) {
 		this.underlyingDBView = underlyingDBView;
 	}
-	
-	public T getUnderlyingDBView()
-	{
+
+	public T getUnderlyingDBView() {
 		return underlyingDBView;
 	}
-	
-	public void setParentTable(DBTable parentTable)
-	{
+
+	public void setParentTable(DBTable parentTable) {
 		this.parentTable = parentTable;
 	}
-	
-	public DBTable getParentTable()
-	{
-		if(parentTable != null)
-		{
+
+	public DBTable getParentTable() {
+		if (parentTable != null) {
 			return parentTable;
-		}
-		else
-		{
+		} else {
 			throw new IllegalStateException("No table has been associated with this view. Check {@link DBTable}.");
 		}
 	}
-	
+
 	public abstract int getColumnSize(ITableColumn column);
-	
+
 	/**
 	 * Gets the column to take up any remaining width of the table,
 	 * after it has been distributed to columns as specified by
@@ -58,7 +50,7 @@ public abstract class AbstractDBViewRoot<T extends AbstractTableDBView>
 	 * @return
 	 */
 	public abstract ITableColumn getExpandColumn();
-	
+
 	/**
 	 * Post-processing for table cells, after they have been initialized.
 	 * @param column
@@ -66,7 +58,7 @@ public abstract class AbstractDBViewRoot<T extends AbstractTableDBView>
 	 * @param component
 	 */
 	public abstract void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component);
-	
+
 	/**
 	 * This method is called after the user clicks a button within a cell 
 	 * in {@link DBTable}. It is a top-level check whether the button's

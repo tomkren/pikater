@@ -15,29 +15,24 @@ import java.util.Map.Entry;
  * 
  * @author SkyCrawl
  */
-public class StyleBuilder
-{
+public class StyleBuilder {
 	private final Map<String, String> propertyToValue;
 
-	public StyleBuilder()
-	{
+	public StyleBuilder() {
 		this.propertyToValue = new HashMap<String, String>();
 	}
-	
-	public void setProperty(String property, String value)
-	{
+
+	public void setProperty(String property, String value) {
 		propertyToValue.put(property, value);
 	}
-	
+
 	/**
 	 * Build styles defined by this class into a single CSS-compatible string.
 	 * @return
 	 */
-	public String build()
-	{
+	public String build() {
 		StringBuilder sb = new StringBuilder();
-		for(Entry<String, String> entry: propertyToValue.entrySet())
-		{
+		for (Entry<String, String> entry : propertyToValue.entrySet()) {
 			sb.append(String.format("%s: %s; ", entry.getKey(), entry.getValue()));
 		}
 		return sb.toString();

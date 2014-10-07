@@ -18,30 +18,25 @@ import net.edzard.kinetic.event.KineticEvent;
  * 
  * @author SkyCrawl
  */
-public abstract class ModuleEventListener implements IEventListener
-{
+public abstract class ModuleEventListener implements IEventListener {
 	@Override
-	public void handle(KineticEvent event)
-	{
-		if(!event.isProcessed())
-		{
+	public void handle(KineticEvent event) {
+		if (!event.isProcessed()) {
 			handleInner(event);
 			/*
 			if(JSNI_SharedConfig.isDebugModeActivated())
 			{
-				if(event.isProcessed())
-				{
+				if(event.isProcessed()) {
 					event.setProcessed(GWTMisc.getSimpleName(listener.getClass()));
 				}
-				else
-				{
+				else {
 					// TODO
 				}
 			}
 			*/
 		}
 	}
-	
+
 	/**
 	 * This method is only called if the event has not been previously
 	 * set as "processed". For more information, view Javadoc of 

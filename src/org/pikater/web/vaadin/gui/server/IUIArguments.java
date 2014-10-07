@@ -8,7 +8,6 @@ import com.vaadin.ui.UI;
  * 
  * @author SkyCrawl
  */
-public interface IUIArguments
-{
+public interface IUIArguments {
 	String toRedirectURL();
 }

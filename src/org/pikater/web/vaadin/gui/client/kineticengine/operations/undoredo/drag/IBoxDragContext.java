@@ -12,19 +12,18 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient
  *
  * @author SkyCrawl
  */
-public interface IBoxDragContext
-{
+public interface IBoxDragContext {
 	KineticEngine getParentEngine();
-	
+
 	/**
 	 * Gets the current position of the box (or group of boxes) being
 	 * moved.
 	 * @return
 	 */
 	Vector2d getCurrentBasePosition();
-	
+
 	Set<BoxGraphItemClient> getBoxesBeingMoved();
-	
+
 	/**
 	 * Gets edges that are connected to a box from
 	 * {@link #getBoxesBeingMoved()} but still not
@@ -32,14 +31,15 @@ public interface IBoxDragContext
 	 * @return
 	 */
 	Set<EdgeGraphItemClient> getEdgesInBetween();
-	
+
 	/**
 	 * Gets all kinetic {@link Node nodes} representing
 	 * boxes and edges being moved. 
 	 * @return
 	 */
 	Node[] getNodesBeingMoved();
-	
+
 	void setNewPositions(Node[] allMovedNodes, DragParameters params);
+
 	void setOriginalPositions(Node[] allMovedNodes, DragParameters params);
 }

@@ -15,17 +15,15 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGra
  * 
  * @author SkyCrawl
  */
-public class DeleteEdgeOperation extends BiDiOperation
-{
+public class DeleteEdgeOperation extends BiDiOperation {
 	private final ItemRegistrationModule itemRegistrationModule;
 	private final SelectionModule selectionModule;
 	private final EdgeGraphItemClient edgeToRemove;
 	private final boolean edgeSelectedOriginally;
-	
-	public DeleteEdgeOperation(KineticEngine kineticEngine, EdgeGraphItemClient edgeToRemove)
-	{
+
+	public DeleteEdgeOperation(KineticEngine kineticEngine, EdgeGraphItemClient edgeToRemove) {
 		super(kineticEngine);
-		
+
 		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
 		this.selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
 		this.edgeToRemove = edgeToRemove;
@@ -33,25 +31,19 @@ public class DeleteEdgeOperation extends BiDiOperation
 	}
 
 	@Override
-	public void undo()
-	{
+	public void undo() {
 		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, !edgeSelectedOriginally, true, edgeToRemove);
-		if(edgeSelectedOriginally)
-		{
+		if (edgeSelectedOriginally) {
 			// select both endpoints (and thus the edge also)
-			selectionModule.doSelectionRelatedOperation(SelectionOperation.SELECTION, true, true, 
-					edgeToRemove.getEndPoint(EndPoint.FROM), edgeToRemove.getEndPoint(EndPoint.TO)); 
+			selectionModule.doSelectionRelatedOperation(SelectionOperation.SELECTION, true, true, edgeToRemove.getEndPoint(EndPoint.FROM), edgeToRemove.getEndPoint(EndPoint.TO));
 		}
 	}
 
 	@Override
-	public void redo()
-	{
-		if(edgeSelectedOriginally)
-		{
+	public void redo() {
+		if (edgeSelectedOriginally) {
 			// deselect both endpoints first (and thus the edge also)
-			selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, 
-					edgeToRemove.getEndPoint(EndPoint.FROM), edgeToRemove.getEndPoint(EndPoint.TO)); 
+			selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, edgeToRemove.getEndPoint(EndPoint.FROM), edgeToRemove.getEndPoint(EndPoint.TO));
 		}
 		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, true, edgeToRemove);
 	}

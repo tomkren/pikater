@@ -35,178 +35,139 @@ import com.vaadin.ui.AbstractComponent;
  * 
  * @author SkyCrawl
  */
-public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends AbstractDBViewRoot<V>
-{
-	public ExperimentDBViewRoot(V view)
-	{
+public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends AbstractDBViewRoot<V> {
+	public ExperimentDBViewRoot(V view) {
 		super(view);
 	}
 
 	@Override
-	public int getColumnSize(ITableColumn column)
-	{
+	public int getColumnSize(ITableColumn column) {
 		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
-		switch(specificColumn)
-		{
-			case STATUS:
-				return 100;
-			
-			case STARTED:
-			case FINISHED:
-				return 75;
-			
-			case MODEL_STRATEGY:
-			case BEST_MODEL:
-			case RESULTS:
-				return 100;
-			
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+		switch (specificColumn) {
+		case STATUS:
+			return 100;
+
+		case STARTED:
+		case FINISHED:
+			return 75;
+
+		case MODEL_STRATEGY:
+		case BEST_MODEL:
+		case RESULTS:
+			return 100;
+
+		default:
+			throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
-	
+
 	@Override
-	public ITableColumn getExpandColumn()
-	{
+	public ITableColumn getExpandColumn() {
 		return null;
 	}
-	
+
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
-	{
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component) {
 	}
-	
+
 	@Override
-	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
-	{
+	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action) {
 		final ExperimentTableDBRow specificRow = (ExperimentTableDBRow) row;
-		
+
 		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
-		if(specificColumn == ExperimentTableDBView.Column.BEST_MODEL)
-		{
+		if (specificColumn == ExperimentTableDBView.Column.BEST_MODEL) {
 			final JPAModel modelToServe = DAOs.resultDAO.getByExperimentBestResult(specificRow.getExperiment()).getCreatedModel();
-			try
-			{
-				UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
-				{
+			try {
+				UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource() {
 					@Override
-					public ResourceExpiration getLifeSpan()
-					{
+					public ResourceExpiration getLifeSpan() {
 						return ResourceExpiration.ON_FIRST_PICKUP;
 					}
 
 					@Override
-					public InputStream getStream() throws Exception
-					{
+					public InputStream getStream() throws Exception {
 						return modelToServe.getInputStream();
 					}
 
 					@Override
-					public long getSize()
-					{
+					public long getSize() {
 						return modelToServe.getSerializedAgent().length;
 					}
 
 					@Override
-					public String getMimeType()
-					{
+					public String getMimeType() {
 						return HttpContentType.TEXT_CSV.getMimeType();
 					}
 
 					@Override
-					public String getFilename()
-					{
+					public String getFilename() {
 						return modelToServe.getFileName();
 					}
 				});
 				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
 				PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 				throw new RuntimeException(e);
 			}
-		}
-		else if(specificColumn == ExperimentTableDBView.Column.RESULTS)
-		{
+		} else if (specificColumn == ExperimentTableDBView.Column.RESULTS) {
 			final File tmpFile = IOUtils.createTemporaryFile("results", ".csv");
-			
+
 			// download, don't run action
-			ProgressDialog.show("Export progress...", new ProgressDialog.IProgressDialogTaskHandler()
-			{
+			ProgressDialog.show("Export progress...", new ProgressDialog.IProgressDialogTaskHandler() {
 				private InterruptibleJobHelper underlyingTask;
-				
+
 				@Override
-				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
-				{
+				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception {
 					// start the task and bind it with the progress dialog
 					underlyingTask = new InterruptibleJobHelper();
-					underlyingTask.startJob(ExportExperimentResultsJob.class, new Object[]
-					{
-						specificRow.getExperiment(),
-						tmpFile,
-						contextForTask
-					});
+					underlyingTask.startJob(ExportExperimentResultsJob.class, new Object[] { specificRow.getExperiment(), tmpFile, contextForTask });
 				}
-				
+
 				@Override
-				public void abortTask()
-				{
+				public void abortTask() {
 					underlyingTask.abort();
 				}
-				
+
 				@Override
-				public void onTaskFinish(IProgressDialogTaskResult result)
-				{
-					try
-					{
-						UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
-						{
+				public void onTaskFinish(IProgressDialogTaskResult result) {
+					try {
+						UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource() {
 							@Override
-							public ResourceExpiration getLifeSpan()
-							{
+							public ResourceExpiration getLifeSpan() {
 								return ResourceExpiration.ON_FIRST_PICKUP;
 							}
 
 							@Override
-							public InputStream getStream() throws Exception
-							{
+							public InputStream getStream() throws Exception {
 								return new FileInputStream(tmpFile);
 							}
 
 							@Override
-							public long getSize()
-							{
+							public long getSize() {
 								return tmpFile.length();
 							}
 
 							@Override
-							public String getMimeType()
-							{
+							public String getMimeType() {
 								return HttpContentType.TEXT_CSV.getMimeType();
 							}
 
 							@Override
-							public String getFilename()
-							{
+							public String getFilename() {
 								return tmpFile.getName();
 							}
 						});
 						Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
-					}
-					catch(Exception e)
-					{
+					} catch (Exception e) {
 						// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
 						PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 						throw new RuntimeException(e);
 					}
 				}
 			});
-		}
-		else
-		{
-			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name())); 
+		} else {
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name()));
 		}
 	}
 }

@@ -7,17 +7,14 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
  * 
  * @author SkyCrawl
  */
-public abstract class BoxListener extends ModuleEventListener
-{
+public abstract class BoxListener extends ModuleEventListener {
 	private final BoxGraphItemClient parentBox;
-	
-	public BoxListener(BoxGraphItemClient parentBox)
-	{
+
+	public BoxListener(BoxGraphItemClient parentBox) {
 		this.parentBox = parentBox;
 	}
-	
-	protected BoxGraphItemClient getEventSourceBox()
-	{
+
+	protected BoxGraphItemClient getEventSourceBox() {
 		return parentBox;
 	}
 }

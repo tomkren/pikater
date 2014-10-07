@@ -20,44 +20,39 @@ import com.vaadin.ui.AbstractComponent;
  * @author SkyCrawl
  */
 @StyleSheet("anchor.css")
-public class Anchor extends AbstractComponent implements AnchorClientRpc
-{
+public class Anchor extends AbstractComponent implements AnchorClientRpc {
 	private static final long serialVersionUID = 2302390089747233688L;
-	
+
 	/**
 	 * Creates an anchor that handles click events on the server.
 	 * @param caption
 	 * @param listener
 	 */
-	public Anchor(String caption, final ClickListener listener)
-	{
+	public Anchor(String caption, final ClickListener listener) {
 		super();
 		setPrimaryStyleName("v-widget anchor");
 		addStyleName("v-label");
 		setValue(caption);
-		
-		registerRpc(new AnchorServerRpc()
-		{
+
+		registerRpc(new AnchorServerRpc() {
 			private static final long serialVersionUID = 8647290803389019408L;
-	
+
 			@Override
-			public void clicked(MouseEventDetails mouseDetails)
-			{
-				if(listener != null)
-				{
+			public void clicked(MouseEventDetails mouseDetails) {
+				if (listener != null) {
 					listener.click(new ClickEvent(Anchor.this, mouseDetails));
 				}
 			}
 		});
 		getState().forwardClickToServer = true;
-		
+
 		/*
 		 * TODO: everything is working now but for the sake of nicer implementation... use
 		 * a default javascript function that does nothing but DOESN'T let the browser refresh
 		 * the page (href attribute is responsible for that and it needs some kind of an empty command).
 		 */
 	}
-	
+
 	/**
 	 * Creates an anchor that executes custom javascript code when clicked.
 	 * @param caption the title of the anchor
@@ -68,45 +63,36 @@ public class Anchor extends AbstractComponent implements AnchorClientRpc
 	 * </ul>
 	 * @param bookmarklet true to make this anchor a bookmarklet
 	 */
-	public Anchor(String caption, String functionSource)
-	{
+	public Anchor(String caption, String functionSource) {
 		super();
 		setPrimaryStyleName("v-widget v-label anchor");
 		setValue(caption);
-		
-		if(functionSource == null)
-		{
+
+		if (functionSource == null) {
 			functionSource = "";
 		}
-		if(functionSource.startsWith("function"))
-		{
+		if (functionSource.startsWith("function")) {
 			getState().hrefAttrContent = String.format("javascript:(%s)();", functionSource);
-		}
-		else
-		{
+		} else {
 			getState().hrefAttrContent = String.format("javascript:%s", functionSource);
 		}
 	}
-	
-	public String getValue()
-	{
+
+	public String getValue() {
 		return getState().text;
 	}
-	
-	public void setValue(String value)
-	{
+
+	public void setValue(String value) {
 		getState().text = value;
 	}
-	
+
 	@Override
-	protected AnchorState getState()
-	{
+	protected AnchorState getState() {
 		return (AnchorState) super.getState();
 	}
-	
+
 	@SuppressWarnings("unused")
-	private AnchorClientRpc getClientRPC()
-	{
+	private AnchorClientRpc getClientRPC() {
 		return getRpcProxy(AnchorClientRpc.class);
 	}
 }

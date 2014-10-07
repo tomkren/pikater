@@ -13,42 +13,36 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGra
  * 
  * @author SkyCrawl
  */
-public final class ItemRegistrationOperation extends BiDiOperation
-{
+public final class ItemRegistrationOperation extends BiDiOperation {
 	private final BoxGraphItemClient[] boxes;
 	private final EdgeGraphItemClient[] edges;
 	private final ItemRegistrationModule itemRegistrationModule;
 	private final boolean notifyServer;
-	
-	public ItemRegistrationOperation(KineticEngine kineticEngine, BoxGraphItemClient[] boxes, EdgeGraphItemClient[] edges, boolean notifyServer)
-	{
+
+	public ItemRegistrationOperation(KineticEngine kineticEngine, BoxGraphItemClient[] boxes, EdgeGraphItemClient[] edges, boolean notifyServer) {
 		super(kineticEngine);
-		
+
 		this.boxes = boxes == null ? new BoxGraphItemClient[0] : boxes;
 		this.edges = edges == null ? new EdgeGraphItemClient[0] : edges;
 		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
 		this.notifyServer = notifyServer;
-		
-		for(BoxGraphItemClient box : boxes)
-		{
+
+		for (BoxGraphItemClient box : boxes) {
 			kineticEngine.attachModuleHandlersTo(box);
 		}
-		for(EdgeGraphItemClient edge : edges)
-		{
+		for (EdgeGraphItemClient edge : edges) {
 			kineticEngine.attachModuleHandlersTo(edge);
 		}
 	}
-	
+
 	@Override
-	public void undo()
-	{
+	public void undo() {
 		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, notifyServer, edges);
 		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, notifyServer, boxes); // automatically deselects
 	}
 
 	@Override
-	public void redo()
-	{
+	public void redo() {
 		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, notifyServer, boxes);
 		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, notifyServer, edges);
 	}

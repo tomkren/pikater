@@ -40,163 +40,133 @@ import de.steinwedel.messagebox.MessageBox;
  * 
  * @author SkyCrawl
  */
-public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBViewRoot<V>
-{
-	public ResultDBViewRoot(V view)
-	{
+public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBViewRoot<V> {
+	public ResultDBViewRoot(V view) {
 		super(view);
 	}
 
 	@Override
-	public int getColumnSize(ITableColumn column)
-	{
+	public int getColumnSize(ITableColumn column) {
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
-		switch(specificColumn)
-		{
-			case AGENT_NAME:
-			case ERROR_RATE:
-			case KAPPA:
-			case REL_ABS_ERR:
-			case MEAN_ABS_ERR:
-			case VISUALIZE:
-			case COMPARE:
-				return 100;
-				
-			case ROOT_REL_SQR_ERR:
-			case TRAINED_MODEL:
-				return 115;
-				
-			case WEKA_OPTIONS:
-			case NOTE:
-			case ROOT_MEAN_SQR_ERR:
-				return 125;
-			
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+		switch (specificColumn) {
+		case AGENT_NAME:
+		case ERROR_RATE:
+		case KAPPA:
+		case REL_ABS_ERR:
+		case MEAN_ABS_ERR:
+		case VISUALIZE:
+		case COMPARE:
+			return 100;
+
+		case ROOT_REL_SQR_ERR:
+		case TRAINED_MODEL:
+			return 115;
+
+		case WEKA_OPTIONS:
+		case NOTE:
+		case ROOT_MEAN_SQR_ERR:
+			return 125;
+
+		default:
+			throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
-	
+
 	@Override
-	public ITableColumn getExpandColumn()
-	{
+	public ITableColumn getExpandColumn() {
 		return null;
 	}
-	
+
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
-	{
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component) {
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
-		if(specificColumn == ResultTableDBView.Column.NOTE)
-		{
+		if (specificColumn == ResultTableDBView.Column.NOTE) {
 			TextField tf_value = (TextField) component;
-			tf_value.setDescription(tf_value.getValue());				
+			tf_value.setDescription(tf_value.getValue());
 		}
 	}
-	
+
 	@Override
-	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
-	{
+	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action) {
 		final ResultTableDBRow specificRow = (ResultTableDBRow) row;
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
-		if(specificColumn == ResultTableDBView.Column.TRAINED_MODEL)
-		{
-			try
-			{
+		if (specificColumn == ResultTableDBView.Column.TRAINED_MODEL) {
+			try {
 				// download, don't run action
-				UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
-				{
+				UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource() {
 					@Override
-					public ResourceExpiration getLifeSpan()
-					{
+					public ResourceExpiration getLifeSpan() {
 						return ResourceExpiration.ON_FIRST_PICKUP;
 					}
-	
+
 					@Override
-					public InputStream getStream() throws Exception
-					{
+					public InputStream getStream() throws Exception {
 						return specificRow.getResult().getCreatedModel().getInputStream();
 					}
-	
+
 					@Override
-					public long getSize()
-					{
+					public long getSize() {
 						return specificRow.getResult().getCreatedModel().getSerializedAgent().length;
 					}
-	
+
 					@Override
-					public String getMimeType()
-					{
+					public String getMimeType() {
 						return HttpContentType.APPLICATION_OCTET_STREAM.getMimeType();
 					}
-	
+
 					@Override
-					public String getFilename()
-					{
+					public String getFilename() {
 						return specificRow.getResult().getCreatedModel().getFileName();
 					}
 				});
 				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
-			}
-			catch(Exception e)
-			{
+			} catch (Exception e) {
 				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
 				PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 				throw new RuntimeException(e);
 			}
-		}
-		else if(specificColumn == ResultTableDBView.Column.VISUALIZE)
-		{
+		} else if (specificColumn == ResultTableDBView.Column.VISUALIZE) {
 			final JPADataSetLO resultsDataset = specificRow.getFirstValidOutput(); // this is a temporary solution
-			GeneralDialogs.componentDialog("Attributes to visualize", new DatasetVisualizationForm(resultsDataset), new DialogCommons.IDialogResultHandler()
-			{
+			GeneralDialogs.componentDialog("Attributes to visualize", new DatasetVisualizationForm(resultsDataset), new DialogCommons.IDialogResultHandler() {
 				@Override
-				public boolean handleResult(final Object[] args)
-				{
+				public boolean handleResult(final Object[] args) {
 					// show progress dialog
-					ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
-					{
+					ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler() {
 						private DatasetVisualizationEntryPoint underlyingTask;
 
 						@Override
-						public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
-						{
+						public void startTask(IProgressDialogResultHandler contextForTask) throws Exception {
 							JPAAttributeMetaData[] attrsToCompare = (JPAAttributeMetaData[]) args[0];
 							JPAAttributeMetaData attrTarget = (JPAAttributeMetaData) args[1];
-							
+
 							// start the task and bind it with the progress dialog
 							underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
 							underlyingTask.visualizeDataset(resultsDataset, attrsToCompare, attrTarget);
 						}
 
 						@Override
-						public void abortTask()
-						{
+						public void abortTask() {
 							underlyingTask.abort();
 						}
 
 						@Override
-						public void onTaskFinish(IProgressDialogTaskResult result)
-						{
+						public void onTaskFinish(IProgressDialogTaskResult result) {
 							// and when the task finishes, construct the UI
-							DSVisOneUIArgs uiArgs = new DSVisOneUIArgs(resultsDataset, (DSVisOneResult) result); 
+							DSVisOneUIArgs uiArgs = new DSVisOneUIArgs(resultsDataset, (DSVisOneResult) result);
 							Page.getCurrent().setLocation(uiArgs.toRedirectURL());
 						}
 					});
 					return true;
 				}
 			});
-		}
-		else if(specificColumn == ResultTableDBView.Column.COMPARE)
-		{
+		} else if (specificColumn == ResultTableDBView.Column.COMPARE) {
 			final JPADataSetLO resultsDataset = specificRow.getFirstValidOutput(); // this is a temporary solution
 			final JPADataSetLO inputDataset = specificRow.getFirstValidInput(); // this is a temporary solution
 			MessageBox mb = GeneralDialogs.wizardDialog("Result compare guide", new ResultCompareWizard(resultsDataset, inputDataset));
 			mb.setWidth("800px");
 			mb.setHeight("500px");
-		}
-		else
-		{
-			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name())); 
+		} else {
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name()));
 		}
 	}
 }
