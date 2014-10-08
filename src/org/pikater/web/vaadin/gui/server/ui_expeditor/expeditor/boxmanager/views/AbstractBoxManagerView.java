@@ -67,7 +67,6 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	
 	/**
 	 * A special method to override the box identification text.
-	 * @param label
 	 */
 	public void setBoxIdentification(String label)
 	{
@@ -88,7 +87,6 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	/**
 	 * Set data source for view. Handles the whole process, nothing else
 	 * is needed.
-	 * @param source
 	 */
 	public void setContentFrom(S source)
 	{
@@ -123,7 +121,6 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	/**
 	 * Throws an exception if something is not right with the
 	 * given data source.
-	 * @param source
 	 * @throws IllegalArgumentException
 	 */
 	protected abstract void validateSource(S source) throws IllegalArgumentException;

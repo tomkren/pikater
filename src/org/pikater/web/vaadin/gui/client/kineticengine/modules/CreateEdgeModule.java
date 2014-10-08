@@ -86,7 +86,6 @@ public final class CreateEdgeModule implements IEngineModule {
 
 		/**
 		 * Finish creation of a new edge.
-		 * @param toEndPoint
 		 */
 		public void finishOperation(BoxGraphItemClient toEndPoint) {
 			// IMPORTANT: don't violate the call order

@@ -154,7 +154,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 
 	/**
 	 * See {@link SlotConnections}.
-	 * @return
 	 */
 	public SlotConnections getSlotConnections() {
 		return slotConnections;
@@ -165,9 +164,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 
 	/**
 	 * Either connects or disconnects two given boxes, depending on the the last argument.
-	 * @param fromBoxKey
-	 * @param toBoxKey
-	 * @param connect
 	 */
 	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey, boolean connect) {
 		/*
@@ -220,8 +216,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	/**
 	 * Converts web experiment format into universal experiment format.</br>
 	 * This conversion is substantially simpler than its counterpart. It should always work.
-	 * @param webFormat
-	 * @return
 	 * @throws ConversionException
 	 */
 	public UniversalComputationDescription toUniversalFormat(KnownCoreAgents agentInfoProvider) throws ConversionException {
@@ -342,8 +336,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * </ul>
 	 * These changes may cause exceptions when trying to convert (previously converted)
 	 * experiments back to web format.
-	 * @param uniFormat
-	 * @return
 	 * @throws ConversionException
 	 */
 	public static ExperimentGraphServer fromUniversalFormat(KnownCoreAgents agentInfoProvider, UniversalComputationDescription uniFormat) throws ConversionException {

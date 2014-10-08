@@ -261,7 +261,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetCont
 	/**
 	 * Gets object holding all information about currently supported
 	 * boxes in the experiment editor.
-	 * @return
 	 */
 	public KnownCoreAgents getAgentInfoProvider()
 	{
@@ -271,9 +270,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetCont
 	/**
 	 * Maps declared box categories to icons stored in Vaadin's
 	 * static resource folder.
-	 * @param type
 	 * @see {@link ThemeResources}
-	 * @return
 	 */
 	public static String getBoxPictureURL(BoxType type)
 	{
@@ -355,7 +352,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetCont
 	
 	/**
 	 * Gets the content of {@link #getActiveTab()}.
-	 * @return
 	 */
 	public KineticComponent getActiveKineticComponent()
 	{
@@ -378,7 +374,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetCont
 	
 	/**
 	 * If the given toolbox is hidden, displays it.
-	 * @param toolbox
 	 */
 	public void openToolbox(ExpEditorToolbox toolbox)
 	{
@@ -388,7 +383,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetCont
 	
 	/**
 	 * Hides the given toolbox.
-	 * @param toolbox
 	 */
 	public void minimizeToolbox(ExpEditorToolbox toolbox)
 	{
@@ -407,8 +401,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetCont
 
 	/**
 	 * Shows/hides the given toolbox.
-	 * @param toolbox
-	 * @param visible
 	 */
 	private void setToolboxVisible(ExpEditorToolbox toolbox, boolean visible)
 	{

@@ -28,7 +28,6 @@ public class LedIndicator extends Panel
 	}
 	/** 
 	 * @param theme the color theme of this led indicator
-	 * @param listener
 	 */
 	public LedIndicator(LedIndicatorTheme theme, ClickListener listener)
 	{
@@ -49,7 +48,6 @@ public class LedIndicator extends Panel
 	/**
 	 * Enabled/disable changing the led indicator's style when
 	 * a mouse pointer hovers over it.
-	 * @param enabled
 	 */
 	public void setHoverEnabled(boolean enabled)
 	{
@@ -65,7 +63,6 @@ public class LedIndicator extends Panel
 	
 	/**
 	 * Set the color theme of this led indicator.
-	 * @param theme
 	 */
 	public void setTheme(LedIndicatorTheme theme)
 	{

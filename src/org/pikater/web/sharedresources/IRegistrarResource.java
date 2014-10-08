@@ -15,7 +15,6 @@ import org.pikater.web.servlets.DynamicDownloadServlet;
 public interface IRegistrarResource {
 	/**
 	 * Gets the resource's expiration time (event-based).
-	 * @return
 	 */
 	ResourceExpiration getLifeSpan();
 }

@@ -54,13 +54,11 @@ public abstract class AbstractDSVisSubresult<I>
 	
 	/**
 	 * Gets the Y index associated to this subresult.
-	 * @return
 	 */
 	public abstract I toLeftIndex();
 	
 	/**
 	 * Gets the X index associated to this subresult.
-	 * @return
 	 */
 	public abstract I toTopIndex();
 }

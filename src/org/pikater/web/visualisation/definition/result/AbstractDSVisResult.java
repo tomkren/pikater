@@ -80,7 +80,6 @@ public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>
 	 * Transforms the registered images (subresults) into a matrix view
 	 * for further processing.
 	 *  
-	 * @return
 	 */
 	public IMatrixDataSource<I, R> toMatrixView()
 	{

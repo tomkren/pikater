@@ -25,7 +25,6 @@ public abstract class ExpandableViewStep extends DynamicNeighbourWizardStep<IWiz
 	/**
 	 * Adds the given {@link DBTableLayout table} in this step.
 	 * 
-	 * @param layout
 	 */
 	protected void registerDBViewLayout(final DBTableLayout layout) {
 		if (!isLeaf()) {
@@ -66,8 +65,6 @@ public abstract class ExpandableViewStep extends DynamicNeighbourWizardStep<IWiz
 	/**
 	 * Internal method called when the "Next"button is clicked or when a custom
 	 * action triggers construction of the next step.
-	 * @param view
-	 * @return
 	 */
 	protected abstract ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view);
 }

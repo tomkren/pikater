@@ -75,7 +75,6 @@ public class IndexPage extends AutoVerticalBorderLayout
 	/**
 	 * Index page's content can only be a predefined component
 	 * bound with a certain feature in {@link ContentProvider}.
-	 * @param feature
 	 */
 	public void openContent(IWebFeature feature)
 	{

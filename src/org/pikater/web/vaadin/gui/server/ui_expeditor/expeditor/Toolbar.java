@@ -85,7 +85,6 @@ public class Toolbar extends VerticalLayout
 	/**
 	 * Callback for when experiment tab is changed so that the toolbar
 	 * may be "reset" to display correct values for the given tab.
-	 * @param newActiveTabContent
 	 */
 	public void onTabSelectionChange(KineticComponent newActiveTabContent)
 	{
@@ -103,7 +102,6 @@ public class Toolbar extends VerticalLayout
 	/**
 	 * Callback from client, when user changes click mode by a
 	 * keyboard shortcut. 
-	 * @param newClickMode
 	 */
 	public void onClickModeAlteredOnClient(ClickMode newClickMode)
 	{
@@ -497,8 +495,6 @@ public class Toolbar extends VerticalLayout
 	/**
 	 * Experiment tabshet may be empty (no tabs present). This method
 	 * avoids errors when trying to execute tab-related code.
-	 * @param action
-	 * @param displayWarningIfNull
 	 */
 	private void executeForNonNullActiveTab(IActiveKineticComponentAction action, boolean displayWarningIfNull)
 	{

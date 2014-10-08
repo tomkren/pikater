@@ -156,7 +156,6 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 	
 	/**
 	 * Return the first dynamically constructed step.
-	 * @return
 	 */
 	protected abstract DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> createFirstStep();
 }

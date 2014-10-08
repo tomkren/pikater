@@ -73,7 +73,6 @@ public class TabSheetTabComponent extends Panel // something clickable
 	/**
 	 * Is there a need to display a dialog so that the user
 	 * can confirm closing this tab?
-	 * @return
 	 */
 	public boolean canCloseTab()
 	{
@@ -85,7 +84,6 @@ public class TabSheetTabComponent extends Panel // something clickable
 	 * which handles close events with the given close handler.
 	 * {@link #canCloseTab()} is not a part of this - if intended to be
 	 * used, use must do that within the close handler or elsewhere.
-	 * @param closeHandler
 	 */
 	public void addCloseHandler(ClickListener closeHandler)
 	{
@@ -94,7 +92,6 @@ public class TabSheetTabComponent extends Panel // something clickable
 	
 	/**
 	 * Is this tab currently selected?
-	 * @return
 	 */
 	public boolean isSelected()
 	{
@@ -103,7 +100,6 @@ public class TabSheetTabComponent extends Panel // something clickable
 	
 	/**
 	 * Selects/deselects this tab.
-	 * @param selected
 	 */
 	public void setSelected(boolean selected)
 	{

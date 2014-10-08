@@ -20,8 +20,6 @@ public class KineticBoxSettings implements IGraphItemSettings
 	
 	/**
 	 * Constructor to use from "client" or "shared" packages.
-	 * @param iconsVisible
-	 * @param scale
 	 */
 	public KineticBoxSettings(boolean iconsVisible, double scale)
 	{

@@ -51,7 +51,6 @@ public class KineticState implements IKineticEngineContext
 	 * and it needs to be registered with the state, otherwise weird
 	 * errors will pop up.
 	 * 
-	 * @param parentWidget
 	 */
 	public void setParentWidget(KineticComponentWidget parentWidget)
 	{

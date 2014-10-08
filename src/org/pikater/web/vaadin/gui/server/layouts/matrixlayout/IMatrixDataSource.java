@@ -19,21 +19,16 @@ public interface IMatrixDataSource<I extends Object, R extends Object>
 	
 	/**
 	 * Gets Y indexes.
-	 * @return
 	 */
 	Collection<I> getLeftIndexSet();
 	
 	/**
 	 * Gets X indexes.
-	 * @return
 	 */
 	Collection<I> getTopIndexSet();
 	
 	/**
 	 * Gets data source (not necessarily a component) for item at the given indexes.
-	 * @param leftIndex
-	 * @param topIndex
-	 * @return
 	 */
 	R getElement(I leftIndex, I topIndex);
 }

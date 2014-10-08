@@ -35,7 +35,6 @@ public class HorizontalFlowLayout extends AbstractFlowLayout
 	
 	/**
 	 * Adds the specified component to the right (applies a float: right property).
-	 * @param c
 	 */
 	public void addComponentToRight(Component c)
 	{

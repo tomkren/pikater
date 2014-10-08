@@ -9,8 +9,6 @@ import org.vaadin.teemu.wizards.WizardStep;
  * 
  * @author SkyCrawl
  *
- * @param <OUTPUT>
- * @param <WIZARD>
  */
 public abstract class ParentAwareWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithOutput<OUTPUT>> implements WizardStep
 {

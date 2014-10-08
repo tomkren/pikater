@@ -77,7 +77,6 @@ public class UserSession {
 	 * Returns all identifiers stored by {@link #rememberSharedResource(VaadinSession, UUID)}
 	 * method. 
 	 * @param session user's session
-	 * @return
 	 */
 	public static Set<UUID> getSharedResources(VaadinSession session) {
 		return getAttribute(session, key_sharedResources);

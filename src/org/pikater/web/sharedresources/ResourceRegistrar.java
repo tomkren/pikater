@@ -44,9 +44,6 @@ public class ResourceRegistrar {
 	 * This is the base method for creating download URLs. First, a resource mapping needs
 	 * to be created, resource ID returned (which is what this method returns) and then
 	 * a download URL may be constructed with {@link #getDownloadURL(UUID)}.
-	 * @param resource
-	 * @param lifeSpan
-	 * @return
 	 */
 	public static UUID registerResource(VaadinSession session, IRegistrarResource resource) throws ResourceException {
 		/*
@@ -89,8 +86,6 @@ public class ResourceRegistrar {
 
 	/**
 	 * Returns whether a resource is mapped to the given ID. 
-	 * @param resourceID
-	 * @return
 	 */
 	public static boolean isResourceRegistered(UUID resourceID) {
 		synchronized (LOCK_OBJECT) {
@@ -101,8 +96,6 @@ public class ResourceRegistrar {
 	/**
 	 * Gets the resource associated with the given ID. Mind that resource may expire
 	 * on first pickup and using this method may expire the returned resource.
-	 * @param resourceID
-	 * @return
 	 */
 	public static IRegistrarResource getResource(UUID resourceID) {
 		synchronized (LOCK_OBJECT) {
@@ -113,8 +106,6 @@ public class ResourceRegistrar {
 	/**
 	 * Translates the given resource ID to a token (String) so it can be passed (for instance) to another UI
 	 * as an URL parameter.
-	 * @param resourceID
-	 * @return
 	 */
 	public static String fromResourceID(UUID resourceID) {
 		return resourceID.toString();
@@ -123,8 +114,6 @@ public class ResourceRegistrar {
 	/**
 	 * Translates the given token constructed with the {@link #fromResourceID(UUID)} method
 	 * into a resource ID.
-	 * @param resourceToken
-	 * @return
 	 */
 	public static UUID toResourceID(String resourceToken) throws ResourceException {
 		if (resourceToken == null) {
@@ -145,8 +134,6 @@ public class ResourceRegistrar {
 	 * 
 	 * {@link RuntimeException RuntimeExceptions} will be caught by the default
 	 * UI error handler and a visible notification will be displayed to user.
-	 * @param e
-	 * @param resp 
 	 */
 	public static void handleError(Exception e, HttpServletResponse resp) {
 		if (e instanceof ResourceException) {
@@ -181,8 +168,6 @@ public class ResourceRegistrar {
 	 * Creates a download URL for the given resource ID. The associated resource
 	 * must be an instance of {@link IDownloadResource}. The returned URL points to
 	 * {@link DynamicDownloadServlet}.
-	 * @param uuid
-	 * @return
 	 */
 	public static String getDownloadURL(UUID resourceID) throws ResourceException {
 		synchronized (LOCK_OBJECT) {
@@ -206,8 +191,6 @@ public class ResourceRegistrar {
 
 	/**
 	 * Expires a resource that was to be expired on first pickup.
-	 * @param resourceID
-	 * @param resource
 	 */
 	public static void expireOnFirstPickupResource(UUID resourceID, IRegistrarResource resource) {
 		synchronized (LOCK_OBJECT) {
@@ -219,8 +202,6 @@ public class ResourceRegistrar {
 
 	/**
 	 * Method to be used when a resource expires.
-	 * @param resourceID
-	 * @param resource
 	 */
 	public static void expireSessionResources(VaadinSession session) {
 		synchronized (LOCK_OBJECT) {

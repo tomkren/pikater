@@ -31,7 +31,6 @@ public class MoveBoxesOperation extends BiDiOperation {
 
 	/**
 	 * Constructor. Use AFTER the drag itself.
-	 * @param context
 	 */
 	public MoveBoxesOperation(IBoxDragContext context, DragParameters params) {
 		super(context.getParentEngine());

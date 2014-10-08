@@ -19,7 +19,6 @@ public class CellBrowserCellExtension extends AbstractExtension implements CellB
 	
 	/**
 	 * Exposing the inherited API for extension.
-	 * @param mainUI
 	 */
 	public void extend(CustomLayout innerCellLayout)
     {

@@ -101,13 +101,6 @@ public class FormFieldFactory
 	
 	/**
 	 * A generic method to create a range-validated number (Integer, Float or Double) field.
-	 * @param caption
-	 * @param value
-	 * @param min
-	 * @param max
-	 * @param required
-	 * @param readOnly
-	 * @return
 	 */
 	public static <N extends Number> TextField getNumericField(String caption, N value, N min, N max, boolean required, boolean readOnly)
 	{

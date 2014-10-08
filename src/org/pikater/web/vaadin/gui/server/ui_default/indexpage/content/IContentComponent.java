@@ -15,7 +15,6 @@ public interface IContentComponent extends View, Component
 {
 	/**
 	 * Programmatic check whether the view can be closed.
-	 * @return
 	 */
 	boolean isReadyToClose();
 	
@@ -24,7 +23,6 @@ public interface IContentComponent extends View, Component
 	 * called and should return the message that will be shown
 	 * in the close-confirming dialog. User needs to approve of it
 	 * as well. 
-	 * @return
 	 */
 	String getCloseMessage();
 	

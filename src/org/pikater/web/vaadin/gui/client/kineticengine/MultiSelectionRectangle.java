@@ -61,7 +61,6 @@ public class MultiSelectionRectangle implements IKineticShapeWrapper {
 	/**
 	 * Sets the starting point of a selection. Use this method when user clicks
 	 * the left mouse button and holds it.
-	 * @param position
 	 */
 	public void setOriginalMousePosition(Vector2d position) {
 		this.originalMousePosition = position;
@@ -76,9 +75,6 @@ public class MultiSelectionRectangle implements IKineticShapeWrapper {
 	 * <p>A little bit of "magic" is used here that even us don't understand anymore...
 	 * This should probably be made more clear (and complex)</p>
 	 * 
-	 * @param left
-	 * @param up
-	 * @param right
 	 */
 	public void updatePath(Vector2d left, Vector2d up, Vector2d right) {
 		this.currentMousePosition = up;
@@ -87,7 +83,6 @@ public class MultiSelectionRectangle implements IKineticShapeWrapper {
 
 	/**
 	 * Returns the box (position and size) of the current selection.
-	 * @return
 	 */
 	public Box2d getSelection() {
 		Vector2d pos, size;

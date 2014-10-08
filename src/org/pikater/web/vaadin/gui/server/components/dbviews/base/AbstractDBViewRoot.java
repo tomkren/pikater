@@ -47,15 +47,11 @@ public abstract class AbstractDBViewRoot<T extends AbstractTableDBView> {
 	 * Gets the column to take up any remaining width of the table,
 	 * after it has been distributed to columns as specified by
 	 * {@link #getColumnSize(ITableColumn)}.
-	 * @return
 	 */
 	public abstract ITableColumn getExpandColumn();
 
 	/**
 	 * Post-processing for table cells, after they have been initialized.
-	 * @param column
-	 * @param value
-	 * @param component
 	 */
 	public abstract void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component);
 
@@ -63,9 +59,6 @@ public abstract class AbstractDBViewRoot<T extends AbstractTableDBView> {
 	 * This method is called after the user clicks a button within a cell 
 	 * in {@link DBTable}. It is a top-level check whether the button's
 	 * action handler may be executed for the given row. 
-	 * @param column
-	 * @param row
-	 * @param action
 	 */
 	public abstract void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action);
 }

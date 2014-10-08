@@ -54,9 +54,6 @@ public abstract class Axis {
 	/**
 	 * Joins the two given axises to one
 	 * The new axis has minimum and maximum value from both axis and the other properties from the first one (color,caption)
-	 * @param axis1
-	 * @param axis2
-	 * @return
 	 * @throws AxisNotJoinableException
 	 */
 	public static Axis join(Axis axis1,Axis axis2) throws AxisNotJoinableException

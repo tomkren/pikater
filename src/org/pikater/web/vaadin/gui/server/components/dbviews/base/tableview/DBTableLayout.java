@@ -92,7 +92,6 @@ public class DBTableLayout extends VerticalLayout {
 
 	/**
 	 * Gets the underlying table component.
-	 * @return
 	 */
 	public DBTable getTable() {
 		return table;
@@ -100,7 +99,6 @@ public class DBTableLayout extends VerticalLayout {
 
 	/**
 	 * 
-	 * @param viewRoot
 	 */
 	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot) {
 		table.setView(viewRoot);
@@ -110,7 +108,6 @@ public class DBTableLayout extends VerticalLayout {
 	 * If set to true, change made to a cell will automatically
 	 * be published to database IMMEDIATELY. Otherwise, changes
 	 * will only apply when the "save changes" button is clicked.
-	 * @param immediate
 	 */
 	public void setCommitImmediately(boolean immediate) {
 		chb_commit.setValue(immediate);
@@ -118,7 +115,6 @@ public class DBTableLayout extends VerticalLayout {
 
 	/**
 	 * Add/remove visual padding to the paging component.
-	 * @param enabled
 	 */
 	public void setPagingPadding(boolean enabled) {
 		if (enabled) {
@@ -131,7 +127,6 @@ public class DBTableLayout extends VerticalLayout {
 	/**
 	 * Adds a custom component (most likely a button) to the button
 	 * interface.
-	 * @param component
 	 */
 	public void addCustomActionComponent(Component component) {
 		hl_btnInterface.addComponent(component);

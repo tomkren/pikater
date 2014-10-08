@@ -399,7 +399,6 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 
 	/**
 	 * Called to switch internal state to 'edge', after both endpoints have been specified.
-	 * @param updateEdge
 	 */
 	private void toEdge_onFinish(boolean updateEdge) {
 		// change the state

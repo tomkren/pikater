@@ -45,7 +45,6 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 	
 	/**
 	 * @deprecated Not supported at the moment.
-	 * @param modified
 	 */
 	@Deprecated
 	public void setTabContentModified(boolean modified)

@@ -38,7 +38,6 @@ public interface IFileUploadEvents
 	
 	/**
 	 * When an upload is successfully finished. 
-	 * @param event
 	 */
 	void uploadFinished(StreamingEndEvent event, File uploadedTemporaryFile);
 }

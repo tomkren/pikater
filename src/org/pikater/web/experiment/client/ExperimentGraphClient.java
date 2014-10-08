@@ -108,9 +108,6 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 
 	/**
 	 * Either connects or disconnects two given boxes, depending on the the last argument.
-	 * @param fromBoxKey
-	 * @param toBoxKey
-	 * @param connect
 	 */
 	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey, boolean connect) {
 		/*

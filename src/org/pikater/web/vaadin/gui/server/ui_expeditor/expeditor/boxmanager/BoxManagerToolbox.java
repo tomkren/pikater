@@ -134,7 +134,6 @@ public class BoxManagerToolbox extends Toolbox implements IContextForViews
 	
 	/**
 	 * Resets the content of this toolbox according to the given resources.
-	 * @param selectedBoxesInformation
 	 * @return whether the new content needs to be displayed
 	 */
 	public boolean setContentFromSelectedBoxes(BoxInfoServer[] selectedBoxesInformation)

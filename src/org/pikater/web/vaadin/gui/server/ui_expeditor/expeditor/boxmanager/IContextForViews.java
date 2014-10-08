@@ -14,21 +14,17 @@ public interface IContextForViews extends IBoxManagerToolboxContext
 {
 	/**
 	 * Gets the currently viewed view/subview.
-	 * @return
 	 */
 	AbstractBoxManagerView<?> getCurrentView();
 	
 	/**
 	 * Sets the currently viewed view/subview to
 	 * the given one.
-	 * @param view
 	 */
 	void setView(AbstractBoxManagerView<?> view);
 	
 	/**
 	 * Gets a specific registered view.
-	 * @param view
-	 * @return
 	 */
 	AbstractBoxManagerView<?> getView(BoxManagerView view);
 	
@@ -41,7 +37,6 @@ public interface IContextForViews extends IBoxManagerToolboxContext
 	/**
 	 * Gets the currently selected/viewed/processed experiment
 	 * box.
-	 * @return
 	 */
 	BoxInfoServer getCurrentBoxDataSource();
 }

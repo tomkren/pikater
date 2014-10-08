@@ -92,7 +92,6 @@ public class PagingComponent extends HorizontalLayout
 	 * Look at the currently selected page and page size and
 	 * determine the current overall offset of this first visible
 	 * item.
-	 * @return
 	 */
 	public int getOverallOffset()
 	{
@@ -101,7 +100,6 @@ public class PagingComponent extends HorizontalLayout
 	
 	/**
 	 * Sets currently viewed page to the given page.
-	 * @param page
 	 * @param spawnEvents if true, calls {@link IPagedComponent#onPageChanged(int)}.
 	 */
 	public void setPage(int page, boolean spawnEvents)
@@ -127,14 +125,12 @@ public class PagingComponent extends HorizontalLayout
 		 * {@link #getAllItemsCount} is called to update the paging component further.</br>
 		 * <font color="red">RED ALERT: </font> do not EVER update paging in this method.
 		 * The component updates itself as needed.
-		 * @param itemsPerPage
 		 */
 		void onPageChanged(int page);
 		
 		/**
 		 * Callback for when user sets a different page size. Paging is not updated
 		 * by default, you must do it yourselves if you wish to react upon this event. 
-		 * @param itemsPerPage
 		 */
 		void onPageSizeChanged(int itemsPerPage);
 	}
@@ -279,7 +275,6 @@ public class PagingComponent extends HorizontalLayout
 		/**
 		 * Sets currently viewed page to the given page. Needs to be used AFTER
 		 * {@link #setPageCount(int)}.
-		 * @param page
 		 * @param spawnEvents if true, calls {@link IPagedComponent#onPageChanged(int)}.
 		 */
 		public void setPage(int page, boolean spawnEvents)
@@ -304,7 +299,6 @@ public class PagingComponent extends HorizontalLayout
 		 * Updates inner components with a new page count, without
 		 * spawning any events. Also updates the selected page if
 		 * necessary but does NOT reset it to the first page.
-		 * @param pageCount
 		 */
 		public void setPageCount(final int pageCount)
 		{
@@ -341,7 +335,6 @@ public class PagingComponent extends HorizontalLayout
 		/**
 		 * Provides a way to make changes to the inner navigation
 		 * components without triggering any attached event handlers.
-		 * @param updateAction
 		 */
 		private void updateWithoutSpawningEvents(Runnable updateAction)
 		{

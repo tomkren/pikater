@@ -36,7 +36,6 @@ public class BoxHighlightExtension extends AbstractExtension
 	
 	/**
 	 * Exposing the inherited API.
-	 * @param mainUI
 	 */
 	public void extend(HorizontalFlowLayout component)
     {

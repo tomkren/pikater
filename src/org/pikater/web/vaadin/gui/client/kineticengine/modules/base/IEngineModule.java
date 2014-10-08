@@ -13,7 +13,6 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemCl
 public interface IEngineModule {
 	/**
 	 * Return a unique ID specific to this module. 
-	 * @return
 	 */
 	public String getModuleID();
 
@@ -30,14 +29,12 @@ public interface IEngineModule {
 	 * 
 	 * <p>Example: <pre>return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };</pre>
 	 * 
-	 * @return
 	 */
 	public String[] getGraphItemTypesToAttachHandlersTo();
 
 	/**
 	 * Attach your required event handlers to the given graph item,
 	 * if needed. Consult {@link #getGraphItemTypesToAttachHandlersTo()}.
-	 * @param graphItem
 	 */
 	public void attachHandlers(AbstractGraphItemClient<?> graphItem);
 }

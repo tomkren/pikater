@@ -27,7 +27,6 @@ public class HttpRequestUtils {
 	 * <h1>Now onto what this method actually does:</h1>
 	 * This method tries to overcome the above issue by always returning the servlet path, whether mapped
 	 * to a servlet or not. 
-	 * @param httpRequest
 	 * @return Whether the servlet path is defined:</br>
 	 * <ul>
 	 * <li> "http://localhost:8080/Pikater" or "http://localhost:8080/Pikater/" => it is not
@@ -60,9 +59,7 @@ public class HttpRequestUtils {
 	}
 
 	/**
-	 * @param request
 	 * @param stopAtIncl the component to stop the URL at - inclusive
-	 * @return
 	 */
 	public static String getURLPrefix(HttpServletRequest request, HttpRequestComponent stopAtIncl) {
 		StringBuilder result = new StringBuilder();
@@ -78,8 +75,6 @@ public class HttpRequestUtils {
 
 	/**
 	 * <font color="red">RED ALERT:</font> this method assumes that we use HTTP/HTTPS.
-	 * @param request
-	 * @param builder
 	 */
 	private static void writeRequestFragment(HttpServletRequest request, HttpRequestComponent currentComponent, StringBuilder builder) {
 		switch (currentComponent) {

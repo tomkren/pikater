@@ -8,8 +8,6 @@ import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSte
  * 
  * @author SkyCrawl
  *
- * @param <OUTPUT>
- * @param <WIZARD>
  */
 public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithDynamicSteps<OUTPUT>> extends ParentAwareWizardStep<OUTPUT, WIZARD>
 {
@@ -46,7 +44,6 @@ public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, W
 	
 	/**
 	 * Whether this step doesn't construct any further steps.
-	 * @return
 	 */
 	public boolean isLeaf()
 	{

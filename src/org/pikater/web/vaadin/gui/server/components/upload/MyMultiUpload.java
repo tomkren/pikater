@@ -48,7 +48,6 @@ public class MyMultiUpload extends MultiFileUpload
     
     /**
      * Add a custom upload event handlers, like when a new one starts.
-     * @param callbacks
      */
     public void addFileUploadEventsCallback(IFileUploadEvents callbacks)
     {

@@ -18,7 +18,6 @@ public interface IBoxDragContext {
 	/**
 	 * Gets the current position of the box (or group of boxes) being
 	 * moved.
-	 * @return
 	 */
 	Vector2d getCurrentBasePosition();
 
@@ -28,14 +27,12 @@ public interface IBoxDragContext {
 	 * Gets edges that are connected to a box from
 	 * {@link #getBoxesBeingMoved()} but still not
 	 * being moved directly.
-	 * @return
 	 */
 	Set<EdgeGraphItemClient> getEdgesInBetween();
 
 	/**
 	 * Gets all kinetic {@link Node nodes} representing
 	 * boxes and edges being moved. 
-	 * @return
 	 */
 	Node[] getNodesBeingMoved();
 

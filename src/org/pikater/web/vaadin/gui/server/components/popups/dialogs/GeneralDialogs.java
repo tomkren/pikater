@@ -22,9 +22,6 @@ public class GeneralDialogs extends DialogCommons
 {
 	/**
 	 * A simple notification message box that can closed right away.
-	 * @param title
-	 * @param message
-	 * @return
 	 */
 	public static MessageBox info(String title, String message)
 	{
@@ -41,9 +38,6 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A simple warning message box that can closed right away.
-	 * @param title
-	 * @param message
-	 * @return
 	 */
 	public static MessageBox warning(String title, String message)
 	{
@@ -60,9 +54,6 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A simple error message box that can closed right away.
-	 * @param title
-	 * @param message
-	 * @return
 	 */
 	public static MessageBox error(String title, String message)
 	{
@@ -74,10 +65,6 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A simple confirmation message box that can closed right away.
-	 * @param title
-	 * @param message
-	 * @param resultHandler
-	 * @return
 	 */
 	public static MessageBox confirm(String title, String message, IDialogResultHandler resultHandler)
 	{
@@ -97,10 +84,7 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A text-prompt in the form of a dialog.
-	 * @param title
 	 * @param inputLabel what do we want the user to enter
-	 * @param resultHandler
-	 * @return
 	 */
 	public static MessageBox textPrompt(String title, String inputLabel, final IDialogResultHandler resultHandler)
 	{
@@ -135,9 +119,6 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A custom component, wrapped in a dialog.
-	 * @param title
-	 * @param content
-	 * @return
 	 */
 	public static MessageBox componentDialog(String title, IDialogComponent content)
 	{
@@ -157,10 +138,6 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A custom component, wrapped in a dialog.
-	 * @param title
-	 * @param content
-	 * @param resultHandler
-	 * @return
 	 */
 	public static MessageBox componentDialog(String title, IDialogResultPreparer content, IDialogResultHandler resultHandler)
 	{
@@ -181,9 +158,6 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A custom wizard component, wrapped in a dialog.
-	 * @param title
-	 * @param content
-	 * @return
 	 */
 	public static <C extends WizardForDialog<?> & IDialogComponent> MessageBox wizardDialog(String title, final C content)
 	{
@@ -228,10 +202,6 @@ public class GeneralDialogs extends DialogCommons
 	
 	/**
 	 * A custom wizard component, wrapped in a dialog.
-	 * @param title
-	 * @param content
-	 * @param resultHandler
-	 * @return
 	 */
 	public static <C extends WizardForDialog<?> & IDialogResultPreparer> MessageBox wizardDialog(String title, final C content, final IDialogResultHandler resultHandler)
 	{

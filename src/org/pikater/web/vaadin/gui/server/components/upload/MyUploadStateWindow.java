@@ -50,7 +50,6 @@ public class MyUploadStateWindow extends UploadStateWindow
 	
 	/**
 	 * Note: on any UI. 
-	 * @return
 	 */
 	public boolean isAFileBeingUploaded()
 	{

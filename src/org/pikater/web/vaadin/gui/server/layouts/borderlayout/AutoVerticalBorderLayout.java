@@ -40,8 +40,6 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 	
 	/**
 	 * Set content to the given area.
-	 * @param border
-	 * @param component
 	 */
 	public void setComponent(Border border, AbstractComponent component)
 	{
@@ -54,8 +52,6 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 	
 	/**
 	 * Get content of the given area.
-	 * @param border
-	 * @return
 	 */
 	public Component getComponent(Border border)
 	{

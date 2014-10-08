@@ -26,7 +26,6 @@ public class VerticalGroupLayout extends SimplePanel
 	
 	/**
 	 * Gets the "logical" inner layout that makes up this layout.
-	 * @return
 	 */
 	public VerticalLayout getInnerLayout()
 	{
@@ -35,7 +34,6 @@ public class VerticalGroupLayout extends SimplePanel
 	
 	/**
 	 * Sets the "logical" inner layout that makes up this layout.
-	 * @return
 	 */
 	public void setInnerLayout(String caption, VerticalLayout layout)
 	{

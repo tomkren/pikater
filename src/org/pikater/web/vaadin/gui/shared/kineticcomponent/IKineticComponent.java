@@ -15,14 +15,12 @@ public interface IKineticComponent
 	/**
 	 * Highlights the given boxes in the kinetic canvas according to
 	 * the {@link KineticBoxSettings visual style} specified.
-	 * @param boxIDs
 	 */
 	void highlightBoxes(Integer[] boxIDs);
 	
 	/**
 	 * Cancels any highlights made with the {@link #highlightBoxes(Integer[])}
 	 * method.
-	 * @param boxIDs
 	 */
 	void cancelBoxHighlight();
 	

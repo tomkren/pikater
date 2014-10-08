@@ -74,7 +74,6 @@ public class Dimension implements Serializable
 	/**
 	 * The actual constructor to use.
 	 * 
-	 * @param dimension
 	 */
 	public Dimension(DimensionMode dimension)
 	{
@@ -91,7 +90,6 @@ public class Dimension implements Serializable
 	
 	/**
 	 * Does the currently defined dimension equal "100%"? 
-	 * @return
 	 */
 	public boolean isSetToMax()
 	{

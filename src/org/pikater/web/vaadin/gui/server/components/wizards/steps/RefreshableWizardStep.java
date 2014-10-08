@@ -9,8 +9,6 @@ import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithOutput;
  * 
  * @author SkyCrawl
  *
- * @param <OUTPUT>
- * @param <WIZARD>
  */
 public abstract class RefreshableWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithOutput<OUTPUT>> extends ParentAwareWizardStep<OUTPUT, WIZARD>
 {

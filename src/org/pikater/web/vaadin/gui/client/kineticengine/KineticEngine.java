@@ -382,7 +382,6 @@ public final class KineticEngine {
 
 	/**
 	 * Highlight boxes only for a single stage repaint.
-	 * @param boxIDs
 	 */
 	public void highlightUntilNextRepaint(Integer[] boxIDs) {
 		for (Integer id : boxIDs) {

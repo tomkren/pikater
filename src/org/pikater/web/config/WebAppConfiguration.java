@@ -33,7 +33,6 @@ public class WebAppConfiguration {
 	/**
 	 * Set the web application's context. All relevant settings found in the deployment
 	 * descriptor will be derived from it.
-	 * @param context
 	 * @see {@link #getContextParam(String)}
 	 */
 	public static void setContext(ServletContext context) {
@@ -46,7 +45,6 @@ public class WebAppConfiguration {
 
 	/**
 	 * Get the web application's context.
-	 * @param context
 	 */
 	public static ServletContext getContext() {
 		return WEBAPPCONTEXT;
@@ -66,7 +64,6 @@ public class WebAppConfiguration {
 	 * features remain unlimited.
 	 * </ul> 
 	 * 
-	 * @return
 	 */
 	public static boolean isCoreEnabled() {
 		return Boolean.parseBoolean((String) getContextParam(PARAMKEY_CORE_ENABLED));
@@ -83,7 +80,6 @@ public class WebAppConfiguration {
 	 * This is useful to allow offline development when the database is offline
 	 * or under maintenance.
 	 * 
-	 * @return
 	 */
 	public static boolean avoidUsingDBForNow() {
 		return false;
@@ -92,7 +88,6 @@ public class WebAppConfiguration {
 	/**
 	 * Whether the application has been launched successfully and a valid
 	 * configuration has been parsed.
-	 * @return
 	 */
 	public static boolean isApplicationReadyToServe() {
 		return isValid(); // when remote Jade launching is implemented, edit accordingly
@@ -100,7 +95,6 @@ public class WebAppConfiguration {
 
 	/**
 	 * Whether settings derived from the web deployment descriptor are all valid.
-	 * @return
 	 */
 	public static boolean isValid() {
 		return WEBAPPCONTEXT != null;

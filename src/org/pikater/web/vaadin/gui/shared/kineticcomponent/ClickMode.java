@@ -20,7 +20,6 @@ public enum ClickMode
 	
 	/**
 	 * Returns the complement of this enum constant.
-	 * @return
 	 */
 	public ClickMode getOther()
 	{

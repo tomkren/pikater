@@ -36,7 +36,6 @@ public class NumberRangeValidator<N extends Number> implements Validator
 	
 	/**
 	 * Add a range to validate against.
-	 * @param boundsProvider
 	 */
 	public void addBoundsProvider(Interval<N> boundsProvider)
 	{
@@ -46,8 +45,6 @@ public class NumberRangeValidator<N extends Number> implements Validator
 	/**
 	 * Parse the given value into the validator's associated number
 	 * type.
-	 * @param value
-	 * @return
 	 * @throws InvalidValueException
 	 */
 	@SuppressWarnings("unchecked")

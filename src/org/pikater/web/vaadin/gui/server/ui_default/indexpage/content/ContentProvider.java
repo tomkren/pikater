@@ -37,21 +37,17 @@ public class ContentProvider
 		/**
 		 * Whether the currently authenticated user (or a guest user)
 		 * has access to this feature.
-		 * @param session
-		 * @return
 		 */
 		boolean accessAllowed(VaadinSession session);
 		
 		/**
 		 * Gets the menu caption for this feature.
-		 * @return
 		 * @see {@link LeftMenu}
 		 */
 		String toMenuCaption();
 		
 		/**
 		 * Gets the URL fragment used to represent this feature.
-		 * @return
 		 * @see {@link Navigator}
 		 * @see {@link IndexPage}
 		 */
@@ -59,7 +55,6 @@ public class ContentProvider
 		
 		/**
 		 * Gets the class of the component implementing this feature.
-		 * @return
 		 */
 		Class<? extends IContentComponent> toComponentClass();
 	}
@@ -244,8 +239,6 @@ public class ContentProvider
 	
 	/**
 	 * In other words, gets the feature represented by the given URL fragment. 
-	 * @param navigatorName
-	 * @return
 	 */
 	public static IWebFeature getFeatureFromNavigatorName(String navigatorName)
 	{

@@ -46,8 +46,6 @@ public class GWTMisc
 	
 	/**
 	 * GWT compatible version of getting simple class names.
-	 * @param cls
-	 * @return
 	 */
 	public static String getSimpleName(Class<? extends Object> cls)
 	{

@@ -24,14 +24,11 @@ public interface KineticComponentServerRpc extends ServerRpc
 	 * Runtime absolute position of this component's master HTML element.
 	 * Useful when trying to determine where exactly into the client
 	 * kinetic canvas we should paint the dragged & dropped boxes.
-	 * @param absoluteX
-	 * @param absoluteY
 	 */
 	void command_onLoadCallback(int absoluteX, int absoluteY);
 	
 	/**
 	 * Currently unsupported. 
-	 * @param modified
 	 * @see {@link KineticUndoRedoManager}
 	 */
 	@Deprecated
@@ -40,7 +37,6 @@ public interface KineticComponentServerRpc extends ServerRpc
 	/**
 	 * Command to programmatically change {@link ClickMode click mode}
 	 * of the current {@link KineticComponent}.
-	 * @param newClickMode
 	 */
 	void command_alterClickMode(ClickMode newClickMode);
 	

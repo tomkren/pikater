@@ -31,7 +31,6 @@ public class AutoVerticalBorderLayoutExtension extends AbstractExtension
 	
 	/**
 	 * Exposing the inherited API.
-	 * @param mainUI
 	 */
 	public void extend(CustomLayout layout)
     {

@@ -42,7 +42,6 @@ public abstract class AbstractFieldProviderForValue
 	
 	/**
 	 * The main entry-point method.
-	 * @param value
 	 */
 	public void generateFields(Value value)
 	{
@@ -52,7 +51,6 @@ public abstract class AbstractFieldProviderForValue
 	
 	/**
 	 * Pick up the result of {@link #generatedFields(Value)}.
-	 * @return
 	 */
 	public Map<String, AbstractField<? extends Object>> getGeneratedFields()
 	{
@@ -63,7 +61,6 @@ public abstract class AbstractFieldProviderForValue
 	 * Custom method that actually generates anything. Use this class's
 	 * static methods to generate fields and then register them with
 	 * {@link #addField(String, AbstractField)}.
-	 * @param value
 	 */
 	protected abstract void doGenerateFields(Value value);
 	

@@ -18,7 +18,6 @@ public class DBTableContainerItems implements ICommitable {
 	/**
 	 * Vaadin tables work with IDs, so we have to have all
 	 * rows mapped.
-	 * @return
 	 * @see {@link #getRowIDs()}
 	 * @see {@link #getRow(Object)}
 	 */
@@ -48,8 +47,6 @@ public class DBTableContainerItems implements ICommitable {
 	 * Look at the table, define a query with its help, ask 
 	 * database for the new rows, store them and wait until
 	 * the table picks them up. 
-	 * @param container
-	 * @param queryResult
 	 */
 	public void loadRows(DBTableContainer container, QueryResult queryResult) {
 		// first, clear the previous rows

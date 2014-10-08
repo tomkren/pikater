@@ -82,7 +82,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	 * Constructor.</br>
 	 * Remember to also use {@link #setParentTab(CustomTabSheetTabComponent)}
 	 * for each instance of this component.
-	 * @param parentEditor
 	 */
 	public KineticComponent(final ExpEditor parentEditor)
 	{
@@ -241,8 +240,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			
 			/**
 			 * Does all kinds of checks and throws exceptions.
-			 * @param opKind
-			 * @param edge
 			 */
 			private void interboxConnectionAction(RegistrationOperation opKind, EdgeGraphItemShared edge)
 			{
@@ -319,7 +316,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	{
 		/**
 		 * Handle the exported experiment in this method.
-		 * @param exportedExperiment
 		 * @param experimentSavedCallback callback for when the experiment is successfully saved to database
 		 */
 		void handleExperiment(UniversalComputationDescription exportedExperiment, IOnExperimentSaved experimentSavedCallback);
@@ -440,7 +436,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	
 	/**
 	 * Database ID of the last loaded experiment for this canvas.
-	 * @return
 	 */
 	public Integer getPreviouslyLoadedExperimentID()
 	{
@@ -450,7 +445,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	/**
 	 * This reference can not be passed via a constructor because
 	 * of implementation issues. Make sure to do it sometime later.
-	 * @param parentTab
 	 */
 	public void setParentTab(CustomTabSheetTabComponent parentTab)
 	{
@@ -468,11 +462,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	 * Creates a new box for the given arguments and adds it to
 	 * the kinetic canvas. In other words, handles the whole
 	 * process.
-	 * @param info
-	 * @param absX
-	 * @param absY
-	 * @param sendToClient
-	 * @return
 	 */
 	public BoxInfoServer createBox(AgentInfo info, int absX, int absY, boolean sendToClient)
 	{

@@ -185,7 +185,6 @@ public abstract class CustomConfiguredUI extends UI {
 	 * The notifications feature has a tendency to cause a lot of confusion because the notifications
 	 * component has to always be present in UI's layout and this should be done transparently...
 	 * 
-	 * @param content
 	 */
 	private void setMyContent(Component content) {
 		if (content == null) // most likely Vaadin's own initialization, unfortunately...
@@ -266,9 +265,6 @@ public abstract class CustomConfiguredUI extends UI {
 	/**
 	 * Tries to authenticate the user. If the provided auth info is correct, automatically
 	 * authenticates the user in this UI.
-	 * @param session
-	 * @param login
-	 * @param password
 	 * @return true if the provided auth info was correct
 	 */
 	private void authenticateUser(String login, String password, boolean adminCheck) {
@@ -302,8 +298,6 @@ public abstract class CustomConfiguredUI extends UI {
 	/**
 	 * Only to be used from the {@link #init(VaadinRequest)} method when an
 	 * unrecoverable error occurs.
-	 * @param errorCode
-	 * @param message
 	 */
 	protected void returnErrorCode(int errorCode, String message) {
 		try {
@@ -353,8 +347,6 @@ public abstract class CustomConfiguredUI extends UI {
 	/**
 	 * Returns something like "http://my.domain/Pikater". A URL that can be used
 	 * to access various application artifacts or servlets. 
-	 * @param ui
-	 * @return
 	 */
 	public static String getBaseAppURLFromLastRequest() {
 		return HttpRequestUtils.getURLPrefix(VaadinServletService.getCurrentServletRequest(), HttpRequestComponent.P4_APPCONTEXT);
@@ -363,8 +355,6 @@ public abstract class CustomConfiguredUI extends UI {
 	/**
 	 * Returns something like "http://my.domain/Pikater/index". A URL that, if used in the
 	 * browser's address bar, redirects the user to the given UI.
-	 * @param ui
-	 * @return
 	 */
 	public static String getRedirectURLToUI(PikaterUI ui) {
 		return CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + ui.getURLPattern();

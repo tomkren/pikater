@@ -37,7 +37,6 @@ public abstract class AbstractFlowLayout extends CssLayout
 	
 	/**
 	 * Gets the style provider for inner components associated with this flow layout.
-	 * @return
 	 */
 	protected IFlowLayoutStyleProvider getStyleProvider()
 	{

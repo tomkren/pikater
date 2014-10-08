@@ -10,8 +10,6 @@ public class DatasetVisualizationValidation
 	/**
 	 * Checks whether the given attribute mapping is valid for image
 	 * generation. Relates to single dataset visualization.
-	 * @param attributes
-	 * @return
 	 */
 	public static boolean isCompatible(AttrMapping attributes)
 	{
@@ -21,9 +19,6 @@ public class DatasetVisualizationValidation
 	/**
 	 * Checks whether the given attribute mappings are valid for image
 	 * generation. Relates to dataset comparison. 
-	 * @param attributes1
-	 * @param attributes2
-	 * @return
 	 */
 	public static boolean areCompatible(AttrMapping attributes1, AttrMapping attributes2)
 	{

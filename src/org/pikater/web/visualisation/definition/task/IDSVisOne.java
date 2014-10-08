@@ -16,9 +16,6 @@ public interface IDSVisOne
 {
 	/**
 	 * Triggers single dataset visualization with the given parameters.
-	 * @param dataset
-	 * @param attrs
-	 * @param attrTarget
 	 * @throws Exception
 	 */
 	void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Exception;

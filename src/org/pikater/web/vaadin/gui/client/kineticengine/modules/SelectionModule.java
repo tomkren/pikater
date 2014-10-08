@@ -107,7 +107,6 @@ public class SelectionModule implements IEngineModule {
 
 	/**
 	 * Constructor.
-	 * @param kineticEngine
 	 */
 	public SelectionModule(KineticEngine kineticEngine) {
 		moduleID = GWTMisc.getSimpleName(this.getClass());
@@ -214,10 +213,6 @@ public class SelectionModule implements IEngineModule {
 	 * edges too.</br>
 	 * As huge as this method aims to be, it concentrates heavy logic into this class while offering
 	 * a simple declarative interface to the calling code.
-	 * @param opKind
-	 * @param drawOnFinish 
-	 * @param notifyServer
-	 * @param boxes
 	 */
 	public void doSelectionRelatedOperation(SelectionOperation opKind, boolean drawOnFinish, boolean notifyServer, BoxGraphItemClient... boxes) {
 		boolean aBoxInverted = false;
@@ -267,7 +262,6 @@ public class SelectionModule implements IEngineModule {
 	}
 
 	/** 
-	 * @param edge
 	 * @param originalEndPoint the original endpoint of the edge
 	 * @param newEndPoint the new endpoint of the edge
 	 * @param staticEndPoint the other endpoint of the edge that is unaffected by the drag operation 
@@ -328,7 +322,6 @@ public class SelectionModule implements IEngineModule {
 
 	/**
 	 * Get boxes that are currently selected.
-	 * @return
 	 */
 	public BoxGraphItemClient[] getSelectedBoxes() {
 		return selectedBoxes.toArray(new BoxGraphItemClient[0]);
@@ -336,7 +329,6 @@ public class SelectionModule implements IEngineModule {
 
 	/**
 	 * Get edges that have both endpoints selected.
-	 * @return
 	 */
 	public EdgeGraphItemClient[] getSelectedEdges() {
 		return selectedEdges.toArray(new EdgeGraphItemClient[0]);
@@ -344,7 +336,6 @@ public class SelectionModule implements IEngineModule {
 
 	/**
 	 * Get edges that have exactly 1 endpoint selected.
-	 * @return
 	 */
 	public EdgeGraphItemClient[] getEdgesInBetween() {
 		return edgesInBetween.toArray(new EdgeGraphItemClient[0]);
@@ -352,7 +343,6 @@ public class SelectionModule implements IEngineModule {
 
 	/**
 	 * Get edges that have at least 1 endpoint selected.
-	 * @return
 	 */
 	public EdgeGraphItemClient[] getAllRelatedEdges() {
 		Set<EdgeGraphItemClient> result = new HashSet<EdgeGraphItemClient>(selectedEdges);

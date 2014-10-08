@@ -63,9 +63,6 @@ public class SingleArffDataset extends ArffDataset{
 	/**
 	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
 	 * @param dslo The JPADataSetLO entity of the dataset
-	 * @param XName
-	 * @param YName
-	 * @param ColorName
 	 */
 	public SingleArffDataset(JPADataSetLO dslo,String XName,String YName,String ColorName){
 		super(dslo);
@@ -79,11 +76,6 @@ public class SingleArffDataset extends ArffDataset{
 	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
 	 * Dataset should be pre-cached to file datasetCachedFile and the JPA entity is used only for accessing metadata
 	 * @param dslo The JPADataSetLO entity of the dataset
-	 * @param datasetCachedFile
-	 * @param stream
-	 * @param XIndex
-	 * @param YIndex
-	 * @param ColorIndex
 	 */
 	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile,int XIndex,int YIndex,int ColorIndex){
 		super(dslo,datasetCachedFile);
@@ -97,10 +89,6 @@ public class SingleArffDataset extends ArffDataset{
 	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
 	 * Dataset should be pre-cached to file datasetCachedFile and the JPA entity is used only for accessing metadata
 	 * @param dslo The JPADataSetLO entity of the dataset
-	 * @param datasetCachedFile
-	 * @param XName
-	 * @param YName
-	 * @param ColorName
 	 */
 	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile,
 			String XName, String YName, String ColorName) {

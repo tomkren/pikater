@@ -12,7 +12,6 @@ public interface ExpEditorExtensionClientRpc extends ClientRpc
 	 * on the client. When drawing boxes in the Kinetic stage, images need to be already loaded
 	 * on the client (downloaded and ready), otherwise Kinetic won't draw them correctly.
 	 * That is what this method aims to do.
-	 * @param pictureURLs
 	 */
 	void command_cacheBoxPictures(String[] pictureURLs);
 	

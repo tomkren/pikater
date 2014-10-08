@@ -105,7 +105,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	/**
 	 * Attach the given component (probably a button) to the button
 	 * interface of this form layout. It is located at the bottom.
-	 * @param component
 	 */
 	public void attachToButtonInterface(Component component)
 	{
@@ -114,7 +113,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	
 	/**
 	 * At least one field's value is updated.
-	 * @return
 	 */
 	public boolean isFormUpdated()
 	{
@@ -123,7 +121,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	
 	/**
 	 * All fields are valid (including the "required" attribute) and at least one is updated.
-	 * @return
 	 */
 	public boolean isFormValidAndUpdated()
 	{
@@ -142,8 +139,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	/**
 	 * Only add fields with this method after all initializations have been made. The moment you
 	 * add a field, value change events start affecting the form.
-	 * @param notificationDescription
-	 * @param field
 	 */
 	protected void addField(String notificationDescription, AbstractField<? extends Object> field) 
 	{
@@ -163,7 +158,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	
 	/**
 	 * Completely detach the field from the form leaving it in original state.
-	 * @param field
 	 */
 	protected void removeField(AbstractField<? extends Object> field) 
 	{
@@ -203,8 +197,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	/**
 	 * A small workaround that may sometimes come in handy for
 	 * programmatic purposes.
-	 * @param field
-	 * @param value
 	 */
 	protected static <T extends Object> void setValueAndIgnoreReadOnly(AbstractField<T> field, T value)
 	{
@@ -220,8 +212,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	 * 
 	 * <p>Intended to be used together with
 	 * {@link #setValueBackup(AbstractField, Object)}</p>
-	 * @param field
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	protected static <T extends Object> T getValueBackup(AbstractField<T> field)
@@ -235,8 +225,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	 * 
 	 * <p>Intended to be used together with
 	 * {@link #getValueBackup(AbstractField, Object)}</p>
-	 * @param field
-	 * @param value
 	 */
 	protected static <T extends Object> void setValueBackup(AbstractField<T> field, T value)
 	{
@@ -246,8 +234,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	/**
 	 * For this method to work, the {@link #setCommitted(AbstractField)}
 	 * must first be called on the field.
-	 * @param field
-	 * @return
 	 */
 	protected static <T extends Object> boolean isUpdated(AbstractField<T> field)
 	{
@@ -257,7 +243,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	/**
 	 * Stores the current value as a backup so that {@link #isUpdated(AbstractField)}
 	 * can be used later.
-	 * @param field
 	 */
 	protected static <T extends Object> void setCommitted(AbstractField<T> field)
 	{

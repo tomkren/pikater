@@ -16,8 +16,6 @@ public interface IFlowLayoutStyleProvider
 	/**
 	 * Sets styles to be applied to the given compoment via
 	 * a {@link StyleBuilder} instance.
-	 * @param c
-	 * @param builder
 	 */
 	void setStylesForInnerComponent(Component c, StyleBuilder builder);
 }

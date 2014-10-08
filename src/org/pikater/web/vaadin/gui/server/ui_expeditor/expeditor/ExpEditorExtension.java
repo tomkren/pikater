@@ -39,7 +39,6 @@ public class ExpEditorExtension extends AbstractExtension
 	
 	/**
 	 * Exposing the inherited API.
-	 * @param mainUI
 	 */
 	public void extend(ExpEditor expEditor)
     {
@@ -48,7 +47,6 @@ public class ExpEditorExtension extends AbstractExtension
 	
 	/**
 	 * Get handle to client commands.
-	 * @return
 	 */
 	public ExpEditorExtensionClientRpc getClientRPC()
 	{
@@ -57,8 +55,6 @@ public class ExpEditorExtension extends AbstractExtension
 	
 	/**
 	 * @deprecated Not supported at the moment.
-	 * @param content
-	 * @param modified
 	 */
 	@Deprecated
 	public void setKineticContentModified(KineticComponent content, boolean modified)

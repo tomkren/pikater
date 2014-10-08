@@ -100,7 +100,6 @@ public class ThemeResources {
 	 * e.g. "WebContent/VAADIN/themes/{theme-name}/".</p>
 	 * 
 	 * @param relativeResourcePath theme-relative path to a file
-	 * @return
 	 */
 	public static String getVaadinRelativePathForResource(String relativeResourcePath) {
 		return "./VAADIN/themes/pikater/" + relativeResourcePath;

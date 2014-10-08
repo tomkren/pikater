@@ -9,9 +9,6 @@ public interface ScalableImageExtensionClientRpc extends ClientRpc
 {
 	/**
 	 * Sets the image to be contained and its original size. This needs to be called.
-	 * @param imageURL
-	 * @param imageWidth
-	 * @param imageHeight
 	 */
 	void setImage(String imageURL, int imageWidth, int imageHeight);
 	

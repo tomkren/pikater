@@ -16,9 +16,6 @@ public interface IDSVisTwo
 {
 	/**
 	 * Triggers dataset comparison with the given parameters.
-	 * @param dataset1
-	 * @param dataset2
-	 * @param comparisonList
 	 * @throws Exception
 	 */
 	void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList) throws Exception;

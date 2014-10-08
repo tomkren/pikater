@@ -63,8 +63,6 @@ public class SlotConnections {
 	 * Connects the given 2 {@link BoxSlot endpoints}/slots, if possible, and throws exceptions
 	 * otherwise.</br>
 	 * No need to distinguish between input/output {@link BoxSlot endpoints}.
-	 * @param endPoint1
-	 * @param endPoint2
 	 */
 	public void connect(BoxSlot endPoint1, BoxSlot endPoint2) {
 		if (!endPoint1.isValid() || !endPoint2.isValid()) {
@@ -85,7 +83,6 @@ public class SlotConnections {
 	 * Disconnects the given slots, if they were previously connected.
 	 * Throws exceptions otherwise.</br>
 	 * Input/output slots are not distinguished in this method. Both can be passed.
-	 * @param slot 
 	 */
 	public void disconnect(Slot slot1, Slot slot2) {
 		if (!connectionExistsFor(slot1)) {
@@ -100,9 +97,6 @@ public class SlotConnections {
 	/**
 	 * A self explanatory method.</br>
 	 * No need to distinguish between input/output slots.
-	 * @param slot1
-	 * @param slot2
-	 * @return
 	 */
 	public boolean areSlotsConnected(Slot slot1, Slot slot2) {
 		if (connectionExistsFor(slot1) && connectionExistsFor(slot2)) {
@@ -114,8 +108,6 @@ public class SlotConnections {
 	/**
 	 * Gets the list of {@link BoxSlot endpoints} that can be connected to the given
 	 * {@link BoxSlot endpoint}. 
-	 * @param endpoint
-	 * @return
 	 */
 	public Set<BoxSlot> getCandidateEndpoints(BoxSlot endpoint) {
 		Set<BoxSlot> result = new HashSet<BoxSlot>();
@@ -136,8 +128,6 @@ public class SlotConnections {
 	/**
 	 * Get all {@link BoxSlot endpoints} backed by an edge between the owner boxes
 	 * and whose slots are connected to the given slot 
-	 * @param slot
-	 * @return
 	 */
 	public Set<BoxSlot> getConnectedValidEndpoints(Slot slot) {
 		Set<BoxSlot> result = new HashSet<BoxSlot>();
@@ -162,8 +152,6 @@ public class SlotConnections {
 
 	/** 
 	 * Whether {@link #getConnectedValidEndpoints(Slot)} returns a non-empty result.
-	 * @param slot
-	 * @return
 	 */
 	public boolean isSlotConnectedToAValidEndpoint(Slot slot) {
 		return !getConnectedValidEndpoints(slot).isEmpty();
@@ -171,8 +159,6 @@ public class SlotConnections {
 
 	/**
 	 * A self explanatory convenience method.
-	 * @param box
-	 * @return
 	 */
 	public boolean hasASlotConnected(BoxInfoServer box) {
 		for (Slot inputSlot : box.getAssociatedAgent().getInputSlots()) {
@@ -194,8 +180,6 @@ public class SlotConnections {
 	/**
 	 * IMPORTANT: doesn't distinguish between valid and invalid connections
 	 * (whether an edge exists between the affected boxes or not). 
-	 * @param slot
-	 * @return
 	 */
 	private boolean connectionExistsFor(Slot slot) {
 		if (connectionMap.containsKey(slot)) {

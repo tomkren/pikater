@@ -28,7 +28,6 @@ public class JSNI_SharedConfig
 	
 	/**
 	 * Used to set the application mode on the client.
-	 * @param mode
 	 */
 	private static native void setAppMode(String mode)
 	/*-{

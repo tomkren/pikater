@@ -28,7 +28,6 @@ public class StyleBuilder {
 
 	/**
 	 * Build styles defined by this class into a single CSS-compatible string.
-	 * @return
 	 */
 	public String build() {
 		StringBuilder sb = new StringBuilder();

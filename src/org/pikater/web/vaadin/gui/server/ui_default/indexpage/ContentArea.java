@@ -105,7 +105,6 @@ public class ContentArea extends Panel
 	
 	/**
 	 * The main routine for setting the content component.
-	 * @param feature
 	 */
 	public void setContentView(IWebFeature feature)
 	{

@@ -30,7 +30,6 @@ public class GWTLogger
 	
 	/**
 	 * Sends a message to the server where it will be logged as a warning.
-	 * @param message
 	 */
 	public static void logWarning(String message)
 	{
@@ -44,8 +43,6 @@ public class GWTLogger
 	 * Sends a message and a throwable to the server where they will be logged as an error. Only use this
 	 * with your own Java exceptions in GWT code. Native exceptions are useless for a GWT developer and
 	 * {@link #logUncaughtNativeClientException} should be used instead. 
-	 * @param properJavaThrowable
-	 * @return
 	 */
 	public static void logThrowable(String message, Throwable t)
 	{

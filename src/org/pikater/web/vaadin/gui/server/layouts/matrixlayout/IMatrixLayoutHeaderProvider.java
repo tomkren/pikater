@@ -13,8 +13,6 @@ public interface IMatrixLayoutHeaderProvider<I extends Object>
 {
 	/**
 	 * Gets caption for the given index of {@link MatrixLayout}.
-	 * @param index
-	 * @return
 	 */
 	Label getCaptionComponent(I index);
 }

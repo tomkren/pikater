@@ -25,7 +25,6 @@ public class DialogCommons
 {
 	/**
 	 * Applies general messagebox settings.
-	 * @param box
 	 * @param enterButton which button to bind with the ENTER key
 	 * @param closeWithAnyButton whether the dialog should close after clicking ANY of its buttons
 	 */
@@ -55,9 +54,6 @@ public class DialogCommons
 	 * <li> Message box closing when user hits the "ESCAPE" key.
 	 * </ul>
 	 *   
-	 * @param box
-	 * @param enterButton
-	 * @param escapeToClose
 	 */
 	protected static void bindActionsToKeyboard(MessageBox box, Button enterButton, boolean escapeToClose)
 	{
@@ -156,7 +152,6 @@ public class DialogCommons
 		 * The super implementation does nothing and is called for any button clicks that are not handled
 		 * by default.
 		 * Override to add custom actions for these buttons.
-		 * @param button
 		 * @return True whether the button has been successfully processed. If not, an exception is 
 		 * thrown to indicate that no action is mapped to a button.
 		 */
@@ -294,7 +289,6 @@ public class DialogCommons
 	{
 		/**
 		 * Custom action to be called when the dialog's main accept button is clicked.
-		 * @param args
 		 * @return true if the dialog is no longer needed and should close
 		 */
 		boolean handleResult(Object[] args);

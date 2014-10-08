@@ -112,11 +112,6 @@ public class UserUploads implements Serializable, IFileUploadEvents {
 	 * This is the most important method of this class.
 	 * Creates a new upload button and binds it with the constant UploadStateWindow instance, unique for each
 	 * user (this class is unique for each user). 
-	 * @param caption
-	 * @param allowedMIMETypes
-	 * @param customCallbacks
-	 * @param uploadedFileHandler
-	 * @return
 	 */
 	public MyMultiUpload createUploadButton(String caption, MyUploadStateWindow uploadInfoProvider, EnumSet<HttpContentType> allowedMIMETypes) throws UploadLimitReachedException {
 		if (get() >= MAX_CONCURRENT_UPLOADS) {

@@ -166,7 +166,6 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 	 * used in {@link #setView(AbstractDBViewRoot)}.
 	 * For example, if {@link UsersTableDBView} was
 	 * used, then this method returns {@link UsersTableDBRow}.
-	 * @return
 	 */
 	public AbstractTableRowDBView[] getViewsOfSelectedRows() {
 		CustomOrderSet<Object> sortedSelectedItemSet = new CustomOrderSet<Object>(getSelectedRowIDs());
@@ -186,7 +185,6 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 	/**
 	 * {@link DBTableContainer} uses this to fetch the currently
 	 * viewed data. 
-	 * @return
 	 */
 	public QueryConstraints getQuery() {
 		return new QueryConstraints(currentSortColumn, currentSortOrder, pagingControls.getOverallOffset(), pagingControls.getPageSize());
@@ -199,7 +197,6 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 	 * <p>This is the most important method. Without it, the table is but an
 	 * empty shell.</p>
 	 * 
-	 * @param viewRoot
 	 */
 	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot) {
 		// first register thy self in the view and don't forget to!

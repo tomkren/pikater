@@ -188,9 +188,6 @@ public class DBTableContainer implements Container.Sortable, ICommitable {
 	/**
 	 * Return content class for the given column/cell. The table is homogenous
 	 * and descendants of {@link AbstractTableDBView} directly require/imply it.
-	 * @param container
-	 * @param column
-	 * @return
 	 */
 	public static Class<? extends Object> getPresentationType(DBTableContainer container, ITableColumn column) {
 		switch (column.getColumnType()) {
@@ -214,11 +211,6 @@ public class DBTableContainer implements Container.Sortable, ICommitable {
 	/**
 	 * Vaadin tables work with "properties", instead of working directly with values. 
 	 * We have created our own, with a little extra nice features.
-	 * @param container
-	 * @param column
-	 * @param row
-	 * @param value
-	 * @return
 	 */
 	public static Property<? extends Object> getProperty(DBTableContainer container, ITableColumn column, AbstractTableRowDBView row, AbstractDBViewValue<? extends Object> value) {
 		switch (column.getColumnType()) {
@@ -279,7 +271,6 @@ public class DBTableContainer implements Container.Sortable, ICommitable {
 	/**
 	 * Return the total number of rows for the currently viewed
 	 * database table. This is needed for table paging to work.
-	 * @return
 	 */
 	public int getUnconstrainedQueryResultsCount() {
 		return currentlyViewedRows.getAllItemsCount();

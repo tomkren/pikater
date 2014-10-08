@@ -25,8 +25,6 @@ public class Anchor extends AbstractComponent implements AnchorClientRpc {
 
 	/**
 	 * Creates an anchor that handles click events on the server.
-	 * @param caption
-	 * @param listener
 	 */
 	public Anchor(String caption, final ClickListener listener) {
 		super();

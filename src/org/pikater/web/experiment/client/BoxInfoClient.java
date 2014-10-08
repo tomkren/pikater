@@ -41,12 +41,6 @@ public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer> {
 
 	/**
 	 * See {@link BoxInfoServer} for an example of what values need to be passed here.
-	 * @param boxID
-	 * @param boxTypeName
-	 * @param displayName
-	 * @param posX
-	 * @param posY
-	 * @param pictureURL
 	 */
 	public BoxInfoClient(Integer boxID, String boxTypeName, String displayName, int posX, int posY, String pictureURL) {
 		this.boxID = boxID;

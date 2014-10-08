@@ -48,8 +48,6 @@ public class GWTCursorManager
 	/**
 	 * Set special cursor style to display when hovering over the specified element.
 	 * 
-	 * @param element
-	 * @param cursorType
 	 */
 	public static void setCursorType(Element element, MyCursor cursorType)
 	{
@@ -68,7 +66,6 @@ public class GWTCursorManager
 	/**
 	 * Set cursor style for this element that was previous to the current one.
 	 * 
-	 * @param element
 	 */
 	public static void rollBackCursor(Element element)
 	{

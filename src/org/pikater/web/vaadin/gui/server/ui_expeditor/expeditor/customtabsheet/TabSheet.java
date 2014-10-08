@@ -155,7 +155,6 @@ public class TabSheet extends CustomComponent
 	
 	/**
 	 * Only add tabs with this method. Handles some special cases.
-	 * @param newTab
 	 */
 	private void doAddTab(AbstractComponent newTab)
 	{
@@ -165,7 +164,6 @@ public class TabSheet extends CustomComponent
 	
 	/**
 	 * Creates the component that, when clicked, creates and adds a new empty tab.
-	 * @return
 	 */
 	private AbstractComponent createAddTabComponent()
 	{
@@ -186,7 +184,6 @@ public class TabSheet extends CustomComponent
 	
 	/**
 	 * Attaches required event handlers.
-	 * @param tabComponent
 	 */
 	private void prepareTabComponent(final TabSheetTabComponent tabComponent)
 	{
@@ -262,8 +259,6 @@ public class TabSheet extends CustomComponent
 	
 	/**
 	 * Creates container for content component of a tab.
-	 * @param content
-	 * @return
 	 */
 	private Panel createContentContainer(AbstractComponent content)
 	{
@@ -281,7 +276,6 @@ public class TabSheet extends CustomComponent
 	 * Sets the selected tab's content component's container as
 	 * the selected component. Only to be used from
 	 * {@link #setSelectedTab(TabSheetTabComponent)}.
-	 * @param content
 	 */
 	private void setSelectedContent(Panel content)
 	{

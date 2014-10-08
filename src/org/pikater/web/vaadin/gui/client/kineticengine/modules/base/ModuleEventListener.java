@@ -41,7 +41,6 @@ public abstract class ModuleEventListener implements IEventListener {
 	 * This method is only called if the event has not been previously
 	 * set as "processed". For more information, view Javadoc of 
 	 * {@link ModuleEventListener}.
-	 * @param event
 	 */
 	protected abstract void handleInner(KineticEvent event);
 }

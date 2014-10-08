@@ -43,7 +43,6 @@ public class UniversalUIExtension extends AbstractExtension {
 
 	/**
 	 * Exposing the inherited API.
-	 * @param mainUI
 	 */
 	public void extend(UI anyUI) {
 		super.extend(anyUI);
@@ -51,7 +50,6 @@ public class UniversalUIExtension extends AbstractExtension {
 
 	/**
 	 * Access the client side features of this extension.
-	 * @return
 	 */
 	public UniversalUIExtensionClientRpc getClientRPC() {
 		return getRpcProxy(UniversalUIExtensionClientRpc.class);

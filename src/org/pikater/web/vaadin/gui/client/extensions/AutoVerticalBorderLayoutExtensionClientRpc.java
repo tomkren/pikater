@@ -16,16 +16,12 @@ public interface AutoVerticalBorderLayoutExtensionClientRpc extends ClientRpc
 	/**
 	 * Note that for optimal results only 1 row should have its height
 	 * set to maximum.
-	 * @param row
-	 * @param dimension
 	 */
 	void setRowHeight(Row row, Dimension dimension);
 	
 	/**
 	 * Note that for optimal results only 1 column should have its width
 	 * set to maximum.
-	 * @param designatedColumn
-	 * @param dimension
 	 */
 	void setColumnWidth(Column designatedColumn, Dimension dimension);
 	
@@ -44,9 +40,6 @@ public interface AutoVerticalBorderLayoutExtensionClientRpc extends ClientRpc
 	void setCellPadding(int pixels);
 	
 	/**
-	 * @param westDimension
-	 * @param centerDimension
-	 * @param eastDimension
 	 * @see http://www.w3.org/TR/CSS21/tables.html#fixed-table-layout
 	 */
 	void setFixedLayout(Dimension westDimension, Dimension centerDimension, Dimension eastDimension);

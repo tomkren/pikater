@@ -99,7 +99,6 @@ public class MyUploadReceiver implements UploadReceiver
 	
     /**
      * The method we are doing all this for. See this class's Javadoc.
-     * @return
      */
 	public File getUploadedFileHandler()
 	{

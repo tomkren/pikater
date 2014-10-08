@@ -14,25 +14,21 @@ public interface IBoxInfoCommon<I extends Object> {
 
 	/**
 	 * Returns the box's X position in the experiment canvas.
-	 * @return
 	 */
 	int getPosX();
 
 	/**
 	 * Sets the box's X position in the experiment canvas.
-	 * @return
 	 */
 	void setPosX(int posX);
 
 	/**
 	 * Returns the box's Y position in the experiment canvas.
-	 * @return
 	 */
 	int getPosY();
 
 	/**
 	 * Sets the box's Y position in the experiment canvas.
-	 * @return
 	 */
 	void setPosY(int posY);
 }

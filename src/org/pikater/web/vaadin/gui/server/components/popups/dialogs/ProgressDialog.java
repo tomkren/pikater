@@ -30,9 +30,6 @@ public class ProgressDialog extends DialogCommons
 {
 	/**
 	 * The main method of this class, showing the given progress dialog.
-	 * @param title
-	 * @param progressDialogEvents
-	 * @return
 	 */
 	public static ProgressDialogContext show(String title, final IProgressDialogTaskHandler progressDialogEvents)
 	{
@@ -346,7 +343,6 @@ public class ProgressDialog extends DialogCommons
 		 * Vaadin doesn't like when components are updated while response with
 		 * previous updates is being written. Use this method to update components
 		 * from background threads to avoid accidental concurrent access issues.
-		 * @param command
 		 */
 		private void executeInLock(Runnable command)
 		{

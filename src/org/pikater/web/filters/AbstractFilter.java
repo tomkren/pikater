@@ -38,8 +38,6 @@ public abstract class AbstractFilter implements Filter {
 
 	/**
 	 * Client-side redirect. Affects the client browser's address bar.
-	 * @param servletResponse
-	 * @param redirectString
 	 * @throws IOException
 	 * @throws ServletException
 	 */
@@ -52,9 +50,6 @@ public abstract class AbstractFilter implements Filter {
 	 * @Deprecated: debug first - see {@link #clientRedirect(ServletResponse, String)}
 	 * 
 	 * Server-side forward. Doesn't affect the client browser's address bar.
-	 * @param servletRequest
-	 * @param servletResponse
-	 * @param forwardString
 	 * @throws IOException
 	 * @throws ServletException
 	 */

@@ -257,7 +257,6 @@ public class OptionValueForm extends CustomFormLayout
 	 * <li> Register all the fields provided by {@link #typeSpecificFieldProvider}
 	 * into the form.
 	 * </ul>
-	 * @param value
 	 */
 	private void recreateTypeSpecificFields(Value value)
 	{

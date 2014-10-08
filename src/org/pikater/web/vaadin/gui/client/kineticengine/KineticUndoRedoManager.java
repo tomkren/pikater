@@ -24,7 +24,6 @@ public class KineticUndoRedoManager {
 
 	/**
 	 * Load history from a backup.
-	 * @param history
 	 */
 	public void loadHistory(KineticUndoRedoManager history) {
 		if (history != null) {
@@ -51,7 +50,6 @@ public class KineticUndoRedoManager {
 
 	/**
 	 * Register a new change and put it on top of the change history.
-	 * @param operation
 	 */
 	public void push(BiDiOperation operation) {
 		// alterStateIf(undoStack.isEmpty());

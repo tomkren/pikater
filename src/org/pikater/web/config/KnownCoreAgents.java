@@ -53,9 +53,6 @@ public class KnownCoreAgents implements Iterable<AgentInfo> {
 
 	/**
 	 * This method is required to either return the requested object or throw an exception. 
-	 * @param ontologyClassName
-	 * @param agentClassName
-	 * @return
 	 */
 	public AgentInfo getUnique(String ontologyClassName, String agentClassName) {
 		List<AgentInfo> result = new ArrayList<AgentInfo>();
@@ -76,8 +73,6 @@ public class KnownCoreAgents implements Iterable<AgentInfo> {
 
 	/**
 	 * Queries for all agents with the given type, returned as a {@link List}.
-	 * @param type
-	 * @return
 	 */
 	public List<AgentInfo> getAllByType(BoxType type) {
 		List<AgentInfo> result = new ArrayList<AgentInfo>();
@@ -104,7 +99,6 @@ public class KnownCoreAgents implements Iterable<AgentInfo> {
 	 * (see {@link WebAppConfiguration}).
 	 * @param agentsFromCore A list of known agents exported from core system. See
 	 * {@link WebToCoreEntryPoint}.
-	 * @return
 	 */
 	public static KnownCoreAgents getFrom(AgentInfos agentsFromCore) {
 		KnownCoreAgents agentInfoCollection = new KnownCoreAgents();
@@ -124,7 +118,6 @@ public class KnownCoreAgents implements Iterable<AgentInfo> {
 	 * <li> Agent names should have distinct names.
 	 * <li> Option and slot names (if both input or both output) MUST be distinct within a  single agent. 
 	 * </ul> 
-	 * @return
 	 */
 	public static KnownCoreAgents getDummy() {
 		KnownCoreAgents knownAgents = new KnownCoreAgents();

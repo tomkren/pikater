@@ -47,7 +47,6 @@ public class ItemRegistrationModule implements IEngineModule {
 
 	/**
 	 * Constructor.
-	 * @param kineticEngine
 	 */
 	public ItemRegistrationModule(KineticEngine engine) {
 		moduleID = GWTMisc.getSimpleName(this.getClass());
@@ -87,10 +86,6 @@ public class ItemRegistrationModule implements IEngineModule {
 	 * <ul>
 	 * <li> Proper initialization of the given items.
 	 * </ul>
-	 * @param opKind
-	 * @param drawOnFinish
-	 * @param notifyServer
-	 * @param boxes
 	 */
 	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, BoxGraphItemClient... boxes) {
 		// first deselect provided boxes, if necessary
@@ -129,10 +124,6 @@ public class ItemRegistrationModule implements IEngineModule {
 	 * <ul>
 	 * <li> Proper initialization of the given items.
 	 * </ul>
-	 * @param opKind
-	 * @param drawOnFinish
-	 * @param notifyServer
-	 * @param edges
 	 */
 	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, EdgeGraphItemClient... edges) {
 		boolean visible = opKind == RegistrationOperation.REGISTER;

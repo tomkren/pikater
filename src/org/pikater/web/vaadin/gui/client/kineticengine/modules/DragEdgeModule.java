@@ -157,7 +157,6 @@ public final class DragEdgeModule implements IEngineModule {
 
 	/**
 	 * Constructor.
-	 * @param kineticEngine
 	 */
 	public DragEdgeModule(KineticEngine kineticEngine) {
 		moduleID = GWTMisc.getSimpleName(this.getClass());
