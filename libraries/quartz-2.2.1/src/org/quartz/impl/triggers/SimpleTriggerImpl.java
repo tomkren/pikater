@@ -194,12 +194,16 @@ public class SimpleTriggerImpl extends AbstractTrigger<SimpleTrigger> implements
      * the given end time.
      * </p>
      * 
+     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
+     * @param repeatCount
      *          The number of times for the <code>Trigger</code> to repeat
      *          firing, use {@link #REPEAT_INDEFINITELY} for unlimited times.
+     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      * 
      * @deprecated use a TriggerBuilder instead
@@ -217,12 +221,16 @@ public class SimpleTriggerImpl extends AbstractTrigger<SimpleTrigger> implements
      * the given end time.
      * </p>
      * 
+     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
+     * @param repeatCount
      *          The number of times for the <code>Trigger</code> to repeat
      *          firing, use {@link #REPEAT_INDEFINITELY} for unlimited times.
+     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      * 
      * @deprecated use a TriggerBuilder instead
@@ -245,12 +253,16 @@ public class SimpleTriggerImpl extends AbstractTrigger<SimpleTrigger> implements
      * interval the given number of times, or until the given end time.
      * </p>
      * 
+     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
+     * @param repeatCount
      *          The number of times for the <code>Trigger</code> to repeat
      *          firing, use {@link #REPEAT_INDEFINITELY}for unlimitted times.
+     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      * 
      * @deprecated use a TriggerBuilder instead

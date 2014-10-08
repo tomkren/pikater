@@ -889,6 +889,7 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
     /**
      * sendNotification
      * 
+     * @param eventType
      */
     public void sendNotification(String eventType) {
         sendNotification(eventType, null, null);
@@ -897,6 +898,8 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
     /**
      * sendNotification
      * 
+     * @param eventType
+     * @param data
      */
     public void sendNotification(String eventType, Object data) {
         sendNotification(eventType, data, null);
@@ -905,6 +908,9 @@ public class QuartzSchedulerMBeanImpl extends StandardMBean implements
     /**
      * sendNotification
      * 
+     * @param eventType
+     * @param data
+     * @param msg
      */
     public void sendNotification(String eventType, Object data, String msg) {
         Notification notif = new Notification(eventType, this, sequenceNumber

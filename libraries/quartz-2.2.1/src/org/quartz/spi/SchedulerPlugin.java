@@ -75,8 +75,11 @@ public interface SchedulerPlugin {
      * <code>SchedulerContext</code>.
      * </p>
      * 
+     * @param name
      *          The name by which the plugin is identified.
+     * @param scheduler
      *          The scheduler to which the plugin is registered.
+     * @param loadHelper
      *            The classLoadHelper the <code>SchedulerFactory</code> is
      *            actually using
      * 

@@ -52,7 +52,9 @@ public class PointbaseDelegate extends StdJDBCDelegate {
      * Insert the job detail record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to insert
      * @return number of rows inserted
      * @throws IOException
@@ -95,7 +97,9 @@ public class PointbaseDelegate extends StdJDBCDelegate {
      * Update the job detail record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to update
      * @return number of rows updated
      * @throws IOException
@@ -267,7 +271,9 @@ public class PointbaseDelegate extends StdJDBCDelegate {
      * Update the job data map for the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to update
      * @return the number of rows updated
      */
@@ -305,8 +311,11 @@ public class PointbaseDelegate extends StdJDBCDelegate {
      * Insert a new calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name for the new calendar
+     * @param calendar
      *          the calendar
      * @return the number of rows inserted
      * @throws IOException
@@ -339,8 +348,11 @@ public class PointbaseDelegate extends StdJDBCDelegate {
      * Update a calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name for the new calendar
+     * @param calendar
      *          the calendar
      * @return the number of rows updated
      * @throws IOException
@@ -378,7 +390,9 @@ public class PointbaseDelegate extends StdJDBCDelegate {
      * JDBC <code>java.sql.Blob</code> operations.
      * </p>
      * 
+     * @param rs
      *          the result set, already queued to the correct row
+     * @param colName
      *          the column name for the BLOB
      * @return the deserialized Object from the ResultSet BLOB
      * @throws ClassNotFoundException
@@ -415,7 +429,9 @@ public class PointbaseDelegate extends StdJDBCDelegate {
      * uses standard JDBC <code>java.sql.Blob</code> operations.
      * </p>
      * 
+     * @param rs
      *          the result set, already queued to the correct row
+     * @param colName
      *          the column name for the BLOB
      * @return the deserialized Object from the ResultSet BLOB
      * @throws ClassNotFoundException

@@ -34,8 +34,11 @@ public class SampledCounterConfig extends CounterConfig {
     /**
      * Make a new timed counter config (duh)
      * 
+     * @param intervalSecs
      *            the interval (in seconds) between sampling
+     * @param historySize
      *            number of counter samples that will be retained in memory
+     * @param isResetOnSample
      *            true if the counter should be reset to 0 upon each sample
      */
     public SampledCounterConfig(int intervalSecs, int historySize, boolean isResetOnSample, long initialValue) {

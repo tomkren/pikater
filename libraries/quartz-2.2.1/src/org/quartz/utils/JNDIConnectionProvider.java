@@ -76,6 +76,7 @@ public class JNDIConnectionProvider implements ConnectionProvider {
     /**
      * Constructor
      * 
+     * @param jndiUrl
      *          The url for the datasource
      */
     public JNDIConnectionProvider(String jndiUrl, boolean alwaysLookup) {
@@ -87,7 +88,9 @@ public class JNDIConnectionProvider implements ConnectionProvider {
     /**
      * Constructor
      * 
+     * @param jndiUrl
      *          The URL for the DataSource
+     * @param jndiProps
      *          The JNDI properties to use when establishing the InitialContext
      *          for the lookup of the given URL.
      */

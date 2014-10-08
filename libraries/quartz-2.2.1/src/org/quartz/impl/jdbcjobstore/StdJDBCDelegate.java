@@ -212,9 +212,13 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Insert the job detail record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param newState
      *          the new state for the triggers
+     * @param oldState1
      *          the first old state to update
+     * @param oldState2
      *          the second old state to update
      * @return number of rows updated
      */
@@ -240,6 +244,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Get the names of all of the triggers that have misfired.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link
      * org.quartz.utils.Key}</code> objects
@@ -272,7 +277,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select all of the triggers in a given state.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param state
      *          the state the triggers must be in
      * @return an array of trigger <code>Key</code> s
      */
@@ -402,6 +409,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * have misfired.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link
      * org.quartz.utils.Key}</code> objects
@@ -448,6 +456,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * returned triggers to ensure that they are fired.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link org.quartz.Trigger}</code> objects
      */
@@ -503,6 +512,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Delete all fired triggers.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of rows deleted
      */
@@ -583,7 +593,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Insert the job detail record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to insert
      * @return number of rows inserted
      * @throws IOException
@@ -622,7 +634,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update the job detail record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to update
      * @return number of rows updated
      * @throws IOException
@@ -661,6 +675,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Get the names of all of the triggers associated with the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link
      * org.quartz.utils.Key}</code> objects
@@ -693,6 +708,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Delete the job detail record for the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of rows deleted
      */
@@ -718,6 +734,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Check whether or not the given job is stateful.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return true if the job exists and is stateful, false otherwise
      */
@@ -743,6 +760,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Check whether or not the given job exists.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return true if the job exists, false otherwise
      */
@@ -773,7 +791,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update the job data map for the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to update
      * @return the number of rows updated
      */
@@ -800,6 +820,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the JobDetail object for a given job name / group name.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the populated JobDetail object
      * @throws ClassNotFoundException
@@ -878,6 +899,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the total number of jobs stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the total number of jobs stored
      */
@@ -906,6 +928,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select all of the job group names that are stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>String</code> group names
      */
@@ -934,7 +957,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select all of the jobs contained in a given group.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param matcher
      *          the groupMatcher to evaluate the jobs against
      * @return an array of <code>String</code> job names
      */
@@ -1007,8 +1032,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Insert the base trigger data.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger to insert
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows inserted
      */
@@ -1081,7 +1109,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Insert the blob trigger data.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger to insert
      * @return the number of rows inserted
      */
@@ -1116,8 +1146,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update the base trigger data.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger to insert
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows updated
      */
@@ -1205,7 +1238,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update the blob trigger data.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger to insert
      * @return the number of rows updated
      */
@@ -1243,6 +1278,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Check whether or not a trigger exists.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return true if the trigger exists, false otherwise
      */
@@ -1272,7 +1308,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update the state for a given trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param state
      *          the new state for the trigger
      * @return the number of rows updated
      */
@@ -1297,10 +1335,15 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * given old states.
      * </p>
      * 
+     * @param conn
      *          the DB connection
+     * @param newState
      *          the new state for the trigger
+     * @param oldState1
      *          one of the old state the trigger must be in
+     * @param oldState2
      *          one of the old state the trigger must be in
+     * @param oldState3
      *          one of the old state the trigger must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -1332,11 +1375,17 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * are in one of the given old states.
      * </p>
      * 
+     * @param conn
      *          the DB connection
+     * @param matcher
      *          the groupMatcher to evaluate the triggers against
+     * @param newState
      *          the new state for the trigger
+     * @param oldState1
      *          one of the old state the trigger must be in
+     * @param oldState2
      *          one of the old state the trigger must be in
+     * @param oldState3
      *          one of the old state the trigger must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -1367,8 +1416,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * old state.
      * </p>
      * 
+     * @param conn
      *          the DB connection
+     * @param newState
      *          the new state for the trigger
+     * @param oldState
      *          the old state the trigger must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -1396,9 +1448,13 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * they are in the given old state.
      * </p>
      * 
+     * @param conn
      *          the DB connection
+     * @param matcher
      *          the groupMatcher to evaluate the triggers against
+     * @param newState
      *          the new state for the trigger group
+     * @param oldState
      *          the old state the triggers must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -1426,7 +1482,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update the states of all triggers associated with the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param state
      *          the new state for the triggers
      * @return the number of rows updated
      */
@@ -1470,6 +1528,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Delete the cron trigger data for a trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of rows deleted
      */
@@ -1492,6 +1551,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Delete the base trigger data for a trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of rows deleted
      */
@@ -1526,6 +1586,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the number of triggers associated with a given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of triggers for the given job
      */
@@ -1555,6 +1616,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the job to which the trigger is associated.
      * </p>
      *
+     * @param conn
      *          the DB Connection
      * @return the <code>{@link org.quartz.JobDetail}</code> object
      *         associated with the given trigger
@@ -1573,6 +1635,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      *
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the <code>{@link org.quartz.JobDetail}</code> object
      *         associated with the given trigger
@@ -1617,6 +1680,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the triggers for a job
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>(@link org.quartz.Trigger)</code> objects
      *         associated with a given job.
@@ -1678,6 +1742,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select a trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the <code>{@link org.quartz.Trigger}</code> object
      * @throws JobPersistenceException 
@@ -1815,8 +1880,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select a trigger's JobDataMap.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param triggerName
      *          the name of the trigger
+     * @param groupName
      *          the group containing the trigger
      * @return the <code>{@link org.quartz.JobDataMap}</code> of the Trigger,
      * never null, but possibly empty.
@@ -1864,6 +1932,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select a trigger' state value.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the <code>{@link org.quartz.Trigger}</code> object
      */
@@ -1898,6 +1967,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select a trigger' status (state & next fire time).
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return a <code>TriggerStatus</code> object, or null
      */
@@ -1943,6 +2013,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the total number of triggers stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the total number of triggers stored
      */
@@ -1971,6 +2042,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select all of the trigger group names that are stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>String</code> group names
      */
@@ -2020,7 +2092,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select all of the triggers contained in a given group.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param matcher
      *          to evaluate against known triggers
      * @return a Set of <code>TriggerKey</code>s
      */
@@ -2158,8 +2232,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Insert a new calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name for the new calendar
+     * @param calendar
      *          the calendar
      * @return the number of rows inserted
      * @throws IOException
@@ -2187,8 +2264,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update a calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name for the new calendar
+     * @param calendar
      *          the calendar
      * @return the number of rows updated
      * @throws IOException
@@ -2216,7 +2296,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Check whether or not a calendar exists.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the calendar
      * @return true if the trigger exists, false otherwise
      */
@@ -2246,7 +2328,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select a calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the calendar
      * @return the Calendar
      * @throws ClassNotFoundException
@@ -2285,7 +2369,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Check whether or not a calendar is referenced by any triggers.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the calendar
      * @return true if any triggers reference the calendar, false otherwise
      */
@@ -2314,7 +2400,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Delete a calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the trigger
      * @return the number of rows deleted
      */
@@ -2337,6 +2425,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the total number of calendars stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the total number of calendars stored
      */
@@ -2366,6 +2455,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select all of the stored calendars.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>String</code> calendar names
      */
@@ -2398,6 +2488,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the next time that a trigger will be fired.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the next fire time, or 0 if no trigger will be fired
      * 
@@ -2427,7 +2518,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Select the trigger that will be fired at the given fire time.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param fireTime
      *          the time that the trigger will be fired
      * @return a <code>{@link org.quartz.utils.Key}</code> representing the
      *         trigger that will be fired at the given fire time, or null if no
@@ -2463,8 +2556,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * in ascending order of fire time, and then descending by priority.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param noLaterThan
      *          highest value of <code>getNextFireTime()</code> of the triggers (exclusive)
+     * @param noEarlierThan 
      *          highest value of <code>getNextFireTime()</code> of the triggers (inclusive)
      *          
      * @return A (never null, possibly empty) list of the identifiers (Key objects) of the next triggers to be fired.
@@ -2483,9 +2579,13 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * in ascending order of fire time, and then descending by priority.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param noLaterThan
      *          highest value of <code>getNextFireTime()</code> of the triggers (exclusive)
+     * @param noEarlierThan 
      *          highest value of <code>getNextFireTime()</code> of the triggers (inclusive)
+     * @param maxCount 
      *          maximum number of trigger keys allow to acquired in the returning list.
      *          
      * @return A (never null, possibly empty) list of the identifiers (Key objects) of the next triggers to be fired.
@@ -2530,8 +2630,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Insert a fired trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows inserted
      */
@@ -2571,8 +2674,11 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Update a fired trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows inserted
      */
@@ -2792,7 +2898,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * Delete a fired trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param entryId
      *          the fired trigger entry to delete
      * @return the number of rows deleted
      */
@@ -2913,6 +3021,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * "{0}" with the table prefix.
      * </p>
      * 
+     * @param query
      *          the unsubstitued query
      * @return the query, with proper table prefix substituted
      */
@@ -2933,6 +3042,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * version of an Object.
      * </p>
      * 
+     * @param obj
      *          the object to serialize
      * @return the serialized ByteArrayOutputStream
      * @throws IOException
@@ -2955,6 +3065,7 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * version of a <code>{@link org.quartz.JobDataMap}</code>.
      * </p>
      * 
+     * @param data
      *          the JobDataMap to serialize
      * @return the serialized ByteArrayOutputStream
      * @throws IOException
@@ -3062,7 +3173,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * JDBC <code>java.sql.Blob</code> operations.
      * </p>
      * 
+     * @param rs
      *          the result set, already queued to the correct row
+     * @param colName
      *          the column name for the BLOB
      * @return the deserialized Object from the ResultSet BLOB
      * @throws ClassNotFoundException
@@ -3103,7 +3216,9 @@ public class StdJDBCDelegate implements DriverDelegate, StdJDBCConstants {
      * uses standard JDBC <code>java.sql.Blob</code> operations.
      * </p>
      * 
+     * @param rs
      *          the result set, already queued to the correct row
+     * @param colName
      *          the column name for the BLOB
      * @return the deserialized Object from the ResultSet BLOB
      * @throws ClassNotFoundException

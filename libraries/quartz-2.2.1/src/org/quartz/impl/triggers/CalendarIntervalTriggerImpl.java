@@ -153,11 +153,15 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger<CalendarInterva
      * and repeat at the the given interval until the given end time.
      * </p>
      * 
+     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
+     * @param intervalUnit
      *          The repeat interval unit (minutes, days, months, etc).
+     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      */
     public CalendarIntervalTriggerImpl(String name, Date startTime,
@@ -171,11 +175,15 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger<CalendarInterva
      * and repeat at the the given interval until the given end time.
      * </p>
      * 
+     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
+     * @param intervalUnit
      *          The repeat interval unit (minutes, days, months, etc).
+     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      */
     public CalendarIntervalTriggerImpl(String name, String group, Date startTime,
@@ -195,11 +203,15 @@ public class CalendarIntervalTriggerImpl extends AbstractTrigger<CalendarInterva
      * interval until the given end time.
      * </p>
      * 
+     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
+     * @param intervalUnit
      *          The repeat interval unit (minutes, days, months, etc).
+     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      */
     public CalendarIntervalTriggerImpl(String name, String group, String jobName,

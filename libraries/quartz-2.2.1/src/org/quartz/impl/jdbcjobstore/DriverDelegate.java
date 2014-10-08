@@ -83,9 +83,13 @@ public interface DriverDelegate {
      * state.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param newState
      *          the new state for the triggers
+     * @param oldState1
      *          the first old state to update
+     * @param oldState2
      *          the second old state to update
      * @return number of rows updated
      */
@@ -99,6 +103,7 @@ public interface DriverDelegate {
      * the given timestamp.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link
      * org.quartz.utils.Key}</code> objects
@@ -112,6 +117,7 @@ public interface DriverDelegate {
      * misfired - according to the given timestamp.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link
      * org.quartz.utils.Key}</code> objects
@@ -154,6 +160,7 @@ public interface DriverDelegate {
      * have misfired - according to the given timestamp.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link
      * org.quartz.utils.Key}</code> objects
@@ -179,6 +186,7 @@ public interface DriverDelegate {
      * returned triggers to ensure that they are fired.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>{@link org.quartz.Trigger}</code> objects
      */
@@ -190,6 +198,7 @@ public interface DriverDelegate {
      * Delete all fired triggers.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of rows deleted
      */
@@ -200,6 +209,7 @@ public interface DriverDelegate {
      * Delete all fired triggers of the given instance.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of rows deleted
      */
@@ -215,7 +225,9 @@ public interface DriverDelegate {
      * Insert the job detail record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to insert
      * @return number of rows inserted
      * @throws IOException
@@ -229,7 +241,9 @@ public interface DriverDelegate {
      * Update the job detail record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to update
      * @return number of rows updated
      * @throws IOException
@@ -243,6 +257,7 @@ public interface DriverDelegate {
      * Get the names of all of the triggers associated with the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return an array of <code>{@link
@@ -255,6 +270,7 @@ public interface DriverDelegate {
      * Delete the job detail record for the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the number of rows deleted
@@ -267,6 +283,7 @@ public interface DriverDelegate {
      * Check whether or not the given job disallows concurrent execution.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return true if the job exists and disallows concurrent execution, false otherwise
@@ -278,6 +295,7 @@ public interface DriverDelegate {
      * Check whether or not the given job exists.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return true if the job exists, false otherwise
@@ -290,7 +308,9 @@ public interface DriverDelegate {
      * Update the job data map for the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param job
      *          the job to update
      * @return the number of rows updated
      * @throws IOException
@@ -304,6 +324,7 @@ public interface DriverDelegate {
      * Select the JobDetail object for a given job name / group name.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the populated JobDetail object
@@ -322,6 +343,7 @@ public interface DriverDelegate {
      * Select the total number of jobs stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the total number of jobs stored
      */
@@ -332,6 +354,7 @@ public interface DriverDelegate {
      * Select all of the job group names that are stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>String</code> group names
      */
@@ -342,7 +365,9 @@ public interface DriverDelegate {
      * Select all of the jobs contained in a given group.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param matcher
      *          the group matcher to evaluate against the known jobs
      * @return an array of <code>String</code> job names
      */
@@ -358,8 +383,11 @@ public interface DriverDelegate {
      * Insert the base trigger data.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger to insert
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows inserted
      */
@@ -371,8 +399,11 @@ public interface DriverDelegate {
      * Update the base trigger data.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger to insert
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows updated
      */
@@ -384,6 +415,7 @@ public interface DriverDelegate {
      * Check whether or not a trigger exists.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the number of rows updated
@@ -395,8 +427,10 @@ public interface DriverDelegate {
      * Update the state for a given trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
+     * @param state
      *          the new state for the trigger
      * @return the number of rows updated
      */
@@ -409,9 +443,12 @@ public interface DriverDelegate {
      * old state.
      * </p>
      * 
+     * @param conn
      *          the DB connection
      * 
+     * @param newState
      *          the new state for the trigger
+     * @param oldState
      *          the old state the trigger must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -425,11 +462,16 @@ public interface DriverDelegate {
      * given old states.
      * </p>
      * 
+     * @param conn
      *          the DB connection
      * 
+     * @param newState
      *          the new state for the trigger
+     * @param oldState1
      *          one of the old state the trigger must be in
+     * @param oldState2
      *          one of the old state the trigger must be in
+     * @param oldState3
      *          one of the old state the trigger must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -445,11 +487,17 @@ public interface DriverDelegate {
      * are in one of the given old states.
      * </p>
      * 
+     * @param conn
      *          the DB connection
+     * @param matcher
      *          the group matcher to evaluate against the known triggers
+     * @param newState
      *          the new state for the trigger
+     * @param oldState1
      *          one of the old state the trigger must be in
+     * @param oldState2
      *          one of the old state the trigger must be in
+     * @param oldState3
      *          one of the old state the trigger must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -464,9 +512,13 @@ public interface DriverDelegate {
      * they are in the given old state.
      * </p>
      * 
+     * @param conn
      *          the DB connection
+     * @param matcher
      *          the matcher to evaluate against the known triggers
+     * @param newState
      *          the new state for the trigger group
+     * @param oldState
      *          the old state the triggers must be in
      * @return int the number of rows updated
      * @throws SQLException
@@ -480,8 +532,10 @@ public interface DriverDelegate {
      * Update the states of all triggers associated with the given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
+     * @param state
      *          the new state for the triggers
      * @return the number of rows updated
      */
@@ -494,9 +548,12 @@ public interface DriverDelegate {
      * are the given current state.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
+     * @param state
      *          the new state for the triggers
+     * @param oldState
      *          the old state of the triggers
      * @return the number of rows updated
      */
@@ -509,6 +566,7 @@ public interface DriverDelegate {
      * Delete the base trigger data for a trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the number of rows deleted
@@ -520,6 +578,7 @@ public interface DriverDelegate {
      * Select the number of triggers associated with a given job.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of triggers for the given job
      */
@@ -530,6 +589,7 @@ public interface DriverDelegate {
      * Select the job to which the trigger is associated.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the <code>{@link org.quartz.JobDetail}</code> object
@@ -553,6 +613,7 @@ public interface DriverDelegate {
      * Select the triggers for a job
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return an array of <code>(@link org.quartz.Trigger)</code> objects
@@ -568,7 +629,9 @@ public interface DriverDelegate {
      * Select the triggers for a calendar
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calName
      *          the name of the calendar
      * @return an array of <code>(@link org.quartz.Trigger)</code> objects
      *         associated with the given calendar.
@@ -582,6 +645,7 @@ public interface DriverDelegate {
      * Select a trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the <code>{@link org.quartz.Trigger}</code> object
@@ -595,8 +659,11 @@ public interface DriverDelegate {
      * Select a trigger's JobDataMap.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param triggerName
      *          the name of the trigger
+     * @param groupName
      *          the group containing the trigger
      * @return the <code>{@link org.quartz.JobDataMap}</code> of the Trigger,
      * never null, but possibly empty.
@@ -610,6 +677,7 @@ public interface DriverDelegate {
      * Select a trigger' state value.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the <code>{@link org.quartz.Trigger}</code> object
@@ -621,6 +689,7 @@ public interface DriverDelegate {
      * Select a trigger' status (state & next fire time).
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return a <code>TriggerStatus</code> object, or null
@@ -633,6 +702,7 @@ public interface DriverDelegate {
      * Select the total number of triggers stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the total number of triggers stored
      */
@@ -643,6 +713,7 @@ public interface DriverDelegate {
      * Select all of the trigger group names that are stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>String</code> group names
      */
@@ -655,7 +726,9 @@ public interface DriverDelegate {
      * Select all of the triggers contained in a given group.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param matcher
      *          to evaluate against known triggers
      * @return a Set of <code>TriggerKey</code>s
      */
@@ -667,7 +740,9 @@ public interface DriverDelegate {
      * Select all of the triggers in a given state.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param state
      *          the state the triggers must be in
      * @return an array of trigger <code>Key</code> s
      */
@@ -704,8 +779,11 @@ public interface DriverDelegate {
      * Insert a new calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name for the new calendar
+     * @param calendar
      *          the calendar
      * @return the number of rows inserted
      * @throws IOException
@@ -719,8 +797,11 @@ public interface DriverDelegate {
      * Update a calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name for the new calendar
+     * @param calendar
      *          the calendar
      * @return the number of rows updated
      * @throws IOException
@@ -734,7 +815,9 @@ public interface DriverDelegate {
      * Check whether or not a calendar exists.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the calendar
      * @return true if the trigger exists, false otherwise
      */
@@ -746,7 +829,9 @@ public interface DriverDelegate {
      * Select a calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the calendar
      * @return the Calendar
      * @throws ClassNotFoundException
@@ -763,7 +848,9 @@ public interface DriverDelegate {
      * Check whether or not a calendar is referenced by any triggers.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the calendar
      * @return true if any triggers reference the calendar, false otherwise
      */
@@ -775,7 +862,9 @@ public interface DriverDelegate {
      * Delete a calendar.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param calendarName
      *          the name of the trigger
      * @return the number of rows deleted
      */
@@ -787,6 +876,7 @@ public interface DriverDelegate {
      * Select the total number of calendars stored.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the total number of calendars stored
      */
@@ -797,6 +887,7 @@ public interface DriverDelegate {
      * Select all of the stored calendars.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return an array of <code>String</code> calendar names
      */
@@ -811,6 +902,7 @@ public interface DriverDelegate {
      * Select the next time that a trigger will be fired.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the next fire time, or 0 if no trigger will be fired
      * 
@@ -823,7 +915,9 @@ public interface DriverDelegate {
      * Select the trigger that will be fired at the given fire time.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param fireTime
      *          the time that the trigger will be fired
      * @return a <code>{@link org.quartz.utils.Key}</code> representing the
      *         trigger that will be fired at the given fire time, or null if no
@@ -838,8 +932,11 @@ public interface DriverDelegate {
      * in ascending order of fire time, and then descending by priority.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param noLaterThan
      *          highest value of <code>getNextFireTime()</code> of the triggers (exclusive)
+     * @param noEarlierThan 
      *          highest value of <code>getNextFireTime()</code> of the triggers (inclusive)
      *          
      * @return A (never null, possibly empty) list of the identifiers (Key objects) of the next triggers to be fired.
@@ -855,9 +952,13 @@ public interface DriverDelegate {
      * in ascending order of fire time, and then descending by priority.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param noLaterThan
      *          highest value of <code>getNextFireTime()</code> of the triggers (exclusive)
+     * @param noEarlierThan 
      *          highest value of <code>getNextFireTime()</code> of the triggers (inclusive)
+     * @param maxCount 
      *          maximum number of trigger keys allow to acquired in the returning list.
      *          
      * @return A (never null, possibly empty) list of the identifiers (Key objects) of the next triggers to be fired.
@@ -870,8 +971,11 @@ public interface DriverDelegate {
      * Insert a fired trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows inserted
      */
@@ -884,8 +988,11 @@ public interface DriverDelegate {
      * "firing instance", "fire time", and "state".
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param trigger
      *          the trigger
+     * @param state
      *          the state that the trigger should be stored in
      * @return the number of rows inserted
      */
@@ -944,7 +1051,9 @@ public interface DriverDelegate {
      * Delete a fired trigger.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
+     * @param entryId
      *          the fired trigger entry to delete
      * @return the number of rows deleted
      */
@@ -956,6 +1065,7 @@ public interface DriverDelegate {
      * Get the number instances of the identified job currently executing.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * 
      * @return the number instances of the identified job currently executing.
@@ -967,6 +1077,7 @@ public interface DriverDelegate {
      * Insert a scheduler-instance state record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of inserted rows.
      */
@@ -979,6 +1090,7 @@ public interface DriverDelegate {
      * Delete a scheduler-instance state record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of deleted rows.
      */
@@ -991,6 +1103,7 @@ public interface DriverDelegate {
      * Update a scheduler-instance state record.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      * @return the number of updated rows.
      */
@@ -1007,6 +1120,7 @@ public interface DriverDelegate {
      * instance will be returned.
      * </p>
      * 
+     * @param conn
      *          the DB Connection
      */
     List<SchedulerStateRecord> selectSchedulerStateRecords(Connection conn, String instanceId)

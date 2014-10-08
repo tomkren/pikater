@@ -354,8 +354,11 @@ public class DateBuilder {
      * tomorrow's date.
      * </p>
      * 
+     * @param second
      *          The value (0-59) to give the seconds field of the date
+     * @param minute
      *          The value (0-59) to give the minutes field of the date
+     * @param hour
      *          The value (0-23) to give the hours field of the date
      * @return the new date
      */
@@ -387,8 +390,11 @@ public class DateBuilder {
      * today's date (equivalent to {@link #dateOf(int, int, int)}).
      * </p>
      * 
+     * @param second
      *          The value (0-59) to give the seconds field of the date
+     * @param minute
      *          The value (0-59) to give the minutes field of the date
+     * @param hour
      *          The value (0-23) to give the hours field of the date
      * @return the new date
      */
@@ -402,8 +408,11 @@ public class DateBuilder {
      * today's date  (equivalent to {@link #todayAt(int, int, int)}).
      * </p>
      * 
+     * @param second
      *          The value (0-59) to give the seconds field of the date
+     * @param minute
      *          The value (0-59) to give the minutes field of the date
+     * @param hour
      *          The value (0-23) to give the hours field of the date
      * @return the new date
      */
@@ -432,10 +441,15 @@ public class DateBuilder {
      * given date.
      * </p>
      * 
+     * @param second
      *          The value (0-59) to give the seconds field of the date
+     * @param minute
      *          The value (0-59) to give the minutes field of the date
+     * @param hour
      *          The value (0-23) to give the hours field of the date
+     * @param dayOfMonth
      *          The value (1-31) to give the day of month field of the date
+     * @param month
      *          The value (1-12) to give the month field of the date
      * @return the new date
      */
@@ -468,11 +482,17 @@ public class DateBuilder {
      * given date.
      * </p>
      * 
+     * @param second
      *          The value (0-59) to give the seconds field of the date
+     * @param minute
      *          The value (0-59) to give the minutes field of the date
+     * @param hour
      *          The value (0-23) to give the hours field of the date
+     * @param dayOfMonth
      *          The value (1-31) to give the day of month field of the date
+     * @param month
      *          The value (1-12) to give the month field of the date
+     * @param year
      *          The value (1970-2099) to give the year field of the date
      * @return the new date
      */
@@ -530,6 +550,7 @@ public class DateBuilder {
      * date's 'day' will be promoted, and the time will be set to 00:00:00.
      * </p>
      * 
+     * @param date
      *          the Date to round, if <code>null</code> the current time will
      *          be used
      * @return the new rounded date
@@ -562,6 +583,7 @@ public class DateBuilder {
      * with the time of 08:00:00.
      * </p>
      * 
+     * @param date
      *          the Date to round, if <code>null</code> the current time will
      *          be used
      * @return the new rounded date
@@ -610,6 +632,7 @@ public class DateBuilder {
      * then the hour (and possibly the day) will be promoted.
      * </p>
      * 
+     * @param date
      *          the Date to round, if <code>null</code> the current time will
      *          be used
      * @return the new rounded date
@@ -641,6 +664,7 @@ public class DateBuilder {
      * with the time of 08:13:00.
      * </p>
      * 
+     * @param date
      *          the Date to round, if <code>null</code> the current time will
      *          be used
      * @return the new rounded date
@@ -675,6 +699,7 @@ public class DateBuilder {
      * date.
      * </p>
      * 
+     * @param date
      *          the Date to round, if <code>null</code> the current time will
      *          be used
      * @return the new rounded date
@@ -705,6 +730,7 @@ public class DateBuilder {
      * date with the time of 08:13:54.000.
      * </p>
      * 
+     * @param date
      *          the Date to round, if <code>null</code> the current time will
      *          be used
      * @return the new rounded date
@@ -806,8 +832,10 @@ public class DateBuilder {
      * </table>
      * </p>
      * 
+     * @param date
      *          the Date to round, if <code>null</code> the current time will
      *          be used
+     * @param minuteBase
      *          the base-minute to set the time on
      * @return the new rounded date
      * 

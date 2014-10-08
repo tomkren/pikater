@@ -105,6 +105,10 @@ public interface QuartzSchedulerMBean {
     /**
      * Schedule an existing job with an existing trigger.
      * 
+     * @param jobName
+     * @param jobGroup
+     * @param triggerName
+     * @param triggerGroup
      * @return date of nextFireTime
      * @throws Exception
      */
@@ -148,6 +152,9 @@ public interface QuartzSchedulerMBean {
      *   Integer, Double, Float, String, Boolean, Date, Character, Map<String, Object>.
      * Maps are limited to containing values from the same set of types, less Map itself.
      * 
+     * @param jobName
+     * @param jobGroup
+     * @param abstractTriggerInfo
      * @throws Exception
      */
     void scheduleJob(String jobName, String jobGroup,

@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * When the number of items added exceeds the maximum capacity, items that were
  * added first are lost.
  * 
+ * @param <T>
  *            Type of the item's to add in this queue
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
@@ -38,6 +39,7 @@ public class CircularLossyQueue<T> {
     /**
      * Constructs the circular queue with the specified capacity
      * 
+     * @param size
      */
     @SuppressWarnings("unchecked")
     public CircularLossyQueue(int size) {
@@ -51,6 +53,7 @@ public class CircularLossyQueue<T> {
     /**
      * Adds a new item
      * 
+     * @param newVal
      */
     public void push(T newVal) {
         int index = (int) (currentIndex.incrementAndGet() % maxSize);
@@ -61,6 +64,7 @@ public class CircularLossyQueue<T> {
      * Returns an array of the current elements in the queue. The order of
      * elements is in reverse order of the order items were added.
      * 
+     * @param type
      * @return An array containing the current elements in the queue. The first
      *         element of the array is the tail of the queue and the last
      *         element is the head of the queue

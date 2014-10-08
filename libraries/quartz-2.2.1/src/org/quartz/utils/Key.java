@@ -52,7 +52,9 @@ public class Key<T>  implements Serializable, Comparable<Key<T>> {
     /**
      * Construct a new key with the given name and group.
      * 
+     * @param name
      *          the name
+     * @param group
      *          the group
      */
     public Key(String name, String group) {

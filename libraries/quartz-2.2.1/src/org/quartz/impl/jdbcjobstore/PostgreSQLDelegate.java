@@ -47,7 +47,9 @@ public class PostgreSQLDelegate extends StdJDBCDelegate {
      * JDBC <code>java.sql.Blob</code> operations.
      * </p>
      * 
+     * @param rs
      *          the result set, already queued to the correct row
+     * @param colName
      *          the column name for the BLOB
      * @return the deserialized Object from the ResultSet BLOB
      * @throws ClassNotFoundException

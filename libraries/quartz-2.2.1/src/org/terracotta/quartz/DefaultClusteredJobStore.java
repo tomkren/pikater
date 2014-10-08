@@ -374,6 +374,7 @@ class DefaultClusteredJobStore implements ClusteredJobStore {
    * The number of milliseconds by which a trigger must have missed its next-fire-time, in order for it to be considered
    * "misfired" and thus have its misfire instruction applied.
    * 
+   * @param misfireThreshold
    */
   @Override
   public void setMisfireThreshold(long misfireThreshold) {

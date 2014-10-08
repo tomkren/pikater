@@ -285,6 +285,7 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin,
      * Set the message that is printed upon the completion of a trigger's
      * firing.
      * 
+     * @param triggerCompleteMessage
      *          String in java.text.MessageFormat syntax.
      */
     public void setTriggerCompleteMessage(String triggerCompleteMessage) {
@@ -294,6 +295,7 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin,
     /**
      * Set the message that is printed upon a trigger's firing.
      * 
+     * @param triggerFiredMessage
      *          String in java.text.MessageFormat syntax.
      */
     public void setTriggerFiredMessage(String triggerFiredMessage) {
@@ -303,6 +305,7 @@ public class LoggingTriggerHistoryPlugin implements SchedulerPlugin,
     /**
      * Set the message that is printed upon a trigger's firing.
      * 
+     * @param triggerMisfiredMessage
      *          String in java.text.MessageFormat syntax.
      */
     public void setTriggerMisfiredMessage(String triggerMisfiredMessage) {

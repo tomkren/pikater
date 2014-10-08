@@ -35,6 +35,9 @@ public class SampledRateCounterConfig extends SampledCounterConfig {
      * whether counters should reset on each sample or not.
      * Initial values of both numerator and denominator are zeroes
      * 
+     * @param intervalSecs
+     * @param historySize
+     * @param isResetOnSample
      */
     public SampledRateCounterConfig(int intervalSecs, int historySize, boolean isResetOnSample) {
         this(intervalSecs, historySize, isResetOnSample, 0, 0);
@@ -45,6 +48,11 @@ public class SampledRateCounterConfig extends SampledCounterConfig {
      * whether counters should reset on each sample or not. Also the initial
      * values for the numerator and the denominator
      * 
+     * @param intervalSecs
+     * @param historySize
+     * @param isResetOnSample
+     * @param initialNumeratorValue
+     * @param initialDenominatorValue
      */
     public SampledRateCounterConfig(int intervalSecs, int historySize, boolean isResetOnSample, long initialNumeratorValue,
             long initialDenominatorValue) {

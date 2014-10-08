@@ -42,6 +42,7 @@ public interface Counter {
     /**
      * Returns the value of the counter and sets it to the new value
      * 
+     * @param newValue
      * @return Returns the old value
      */
     long getAndSet(long newValue);
@@ -56,6 +57,7 @@ public interface Counter {
     /**
      * Increment the counter by given amount
      * 
+     * @param amount
      * @return the value of the counter after incrementing
      */
     long increment(long amount);
@@ -63,6 +65,7 @@ public interface Counter {
     /**
      * Decrement the counter by given amount
      * 
+     * @param amount
      * @return the value of the counter after decrementing
      */
     long decrement(long amount);
@@ -70,6 +73,7 @@ public interface Counter {
     /**
      * Sets the value of the counter to the supplied value
      * 
+     * @param newValue
      */
     void setValue(long newValue);
 

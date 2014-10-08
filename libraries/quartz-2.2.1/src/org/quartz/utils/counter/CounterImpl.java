@@ -42,6 +42,7 @@ public class CounterImpl implements Counter, Serializable {
     /**
      * Constructor with initial value
      * 
+     * @param initialValue
      */
     public CounterImpl(long initialValue) {
         this.value = new AtomicLong(initialValue);

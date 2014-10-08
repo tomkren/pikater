@@ -60,8 +60,10 @@ public interface OperableTrigger extends MutableTrigger {
      * in order to get the final instruction code from the trigger.
      * </p>
      * 
+     * @param context
      *          is the <code>JobExecutionContext</code> that was used by the
      *          <code>Job</code>'s<code>execute(xx)</code> method.
+     * @param result
      *          is the <code>JobExecutionException</code> thrown by the
      *          <code>Job</code>, if any (may be null).
      * @return one of the <code>CompletedExecutionInstruction</code> constants.
@@ -104,6 +106,7 @@ public interface OperableTrigger extends MutableTrigger {
      * given the Calendar's new settings). 
      * </p>
      * 
+     * @param cal
      */
     public void updateWithNewCalendar(Calendar cal, long misfireThreshold);
 

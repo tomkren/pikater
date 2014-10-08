@@ -235,8 +235,10 @@ public class CronTriggerImpl extends AbstractTrigger<CronTrigger> implements Cro
      * zone will be set the the system's default.
      * </p>
      * 
+     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
      * 
@@ -274,17 +276,25 @@ public class CronTriggerImpl extends AbstractTrigger<CronTrigger> implements Cro
      * the time zone will be set to the system's default.
      * </p>
      * 
+     * @param name
      *          of the <code>Trigger</code>
+     * @param group
      *          of the <code>Trigger</code>
+     * @param jobName
      *          name of the <code>{@link org.quartz.JobDetail}</code>
      *          executed on firetime
+     * @param jobGroup
      *          group of the <code>{@link org.quartz.JobDetail}</code>
      *          executed on firetime
+     * @param startTime
      *          A <code>Date</code> set to the earliest time for the <code>Trigger</code>
      *          to start firing.
+     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
+     * @param cronExpression
      *          A cron expression dictating the firing sequence of the <code>Trigger</code>
+     * @param timeZone
      *          Specifies for which time zone the <code>cronExpression</code>
      *          should be interpreted, i.e. the expression 0 0 10 * * ?, is
      *          resolved to 10:00 am in this time zone.

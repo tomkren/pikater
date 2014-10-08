@@ -35,6 +35,7 @@ public class SampledRateCounterImpl extends SampledCounterImpl implements Sample
     /**
      * Constructor accepting the config
      * 
+     * @param config
      */
     public SampledRateCounterImpl(SampledRateCounterConfig config) {
         super(config);

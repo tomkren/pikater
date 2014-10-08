@@ -30,6 +30,7 @@ public class CounterConfig {
     /**
      * Creates a config with the initial value
      * 
+     * @param initialValue
      */
     public CounterConfig(long initialValue) {
         this.initialValue = initialValue;

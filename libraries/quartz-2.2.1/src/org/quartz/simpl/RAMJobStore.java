@@ -238,7 +238,9 @@ public class RAMJobStore implements JobStore {
      * Store the given <code>{@link org.quartz.JobDetail}</code> and <code>{@link org.quartz.Trigger}</code>.
      * </p>
      * 
+     * @param newJob
      *          The <code>JobDetail</code> to be stored.
+     * @param newTrigger
      *          The <code>Trigger</code> to be stored.
      * @throws ObjectAlreadyExistsException
      *           if a <code>Job</code> with the same name/group already
@@ -255,7 +257,9 @@ public class RAMJobStore implements JobStore {
      * Store the given <code>{@link org.quartz.Job}</code>.
      * </p>
      * 
+     * @param newJob
      *          The <code>Job</code> to be stored.
+     * @param replaceExisting
      *          If <code>true</code>, any <code>Job</code> existing in the
      *          <code>JobStore</code> with the same name & group should be
      *          over-written.
@@ -389,7 +393,9 @@ public class RAMJobStore implements JobStore {
      * Store the given <code>{@link org.quartz.Trigger}</code>.
      * </p>
      *
+     * @param newTrigger
      *          The <code>Trigger</code> to be stored.
+     * @param replaceExisting
      *          If <code>true</code>, any <code>Trigger</code> existing in
      *          the <code>JobStore</code> with the same name & group should
      *          be over-written.
@@ -662,10 +668,13 @@ public class RAMJobStore implements JobStore {
      * Store the given <code>{@link org.quartz.Calendar}</code>.
      * </p>
      *
+     * @param calendar
      *          The <code>Calendar</code> to be stored.
+     * @param replaceExisting
      *          If <code>true</code>, any <code>Calendar</code> existing
      *          in the <code>JobStore</code> with the same name & group
      *          should be over-written.
+     * @param updateTriggers
      *          If <code>true</code>, any <code>Trigger</code>s existing
      *          in the <code>JobStore</code> that reference an existing
      *          Calendar with the same name with have their next fire time
@@ -750,6 +759,7 @@ public class RAMJobStore implements JobStore {
      * Retrieve the given <code>{@link org.quartz.Trigger}</code>.
      * </p>
      *
+     * @param calName
      *          The name of the <code>Calendar</code> to be retrieved.
      * @return The desired <code>Calendar</code>, or null if there is no
      *         match.

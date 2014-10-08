@@ -321,6 +321,7 @@ public interface Scheduler {
      * The scheduler cannot be re-started.
      * </p>
      * 
+     * @param waitForJobsToComplete
      *          if <code>true</code> the scheduler will not allow this method
      *          to return until all currently executing jobs have completed.
      * 
@@ -483,6 +484,7 @@ public interface Scheduler {
      * - however, the new trigger need not have the same name as the old trigger.
      * 
      * @param triggerKey identity of the trigger to replace
+     * @param newTrigger
      *          The new <code>Trigger</code> to be stored.
      * 
      * @return <code>null</code> if a <code>Trigger</code> with the given

@@ -59,6 +59,7 @@ public class ValidationException extends Exception {
     /**
      * Constructor for ValidationException.
      * 
+     * @param message
      *          exception message.
      */
     public ValidationException(String message) {
@@ -68,6 +69,7 @@ public class ValidationException extends Exception {
     /**
      * Constructor for ValidationException.
      * 
+     * @param errors
      *          collection of validation exceptions.
      */
     public ValidationException(Collection<Exception> errors) {
@@ -81,7 +83,9 @@ public class ValidationException extends Exception {
     /**
      * Constructor for ValidationException.
      * 
+     * @param message
      *          exception message.
+     * @param errors
      *          collection of validation exceptions.
      */
     public ValidationException(String message, Collection<Exception> errors) {

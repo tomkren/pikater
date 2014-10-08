@@ -34,6 +34,8 @@ public class TimeStampedCounterValue implements Serializable {
     /**
      * Constructor accepting the value of both timestamp and the counter value.
      * 
+     * @param timestamp
+     * @param value
      */
     public TimeStampedCounterValue(long timestamp, long value) {
         this.timestamp = timestamp;

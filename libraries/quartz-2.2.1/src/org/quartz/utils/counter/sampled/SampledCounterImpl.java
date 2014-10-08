@@ -49,6 +49,7 @@ public class SampledCounterImpl extends CounterImpl implements SampledCounter {
     /**
      * Constructor accepting a {@link SampledCounterConfig}
      * 
+     * @param config
      */
     public SampledCounterImpl(SampledCounterConfig config) {
         super(config.getInitialValue());
