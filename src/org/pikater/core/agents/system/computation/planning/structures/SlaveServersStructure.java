@@ -14,10 +14,20 @@ import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.manager.ManagerAgentService;
 
+/**
+ * 
+ * Data-model represents a set of Slave servers
+ *
+ */
 public class SlaveServersStructure {
 
 	private List<AID> slaveServers = new ArrayList<AID>();
 	
+	/**
+	 * Check new slave serves
+	 * @param agent - {@link Agent_Planner}
+	 * @return - list of new servers
+	 */
 	public List<AID> checkForNewSlaveServers(Agent_Planner agent) {
 		
 		 DFAgentDescription template = new DFAgentDescription();
@@ -49,6 +59,12 @@ public class SlaveServersStructure {
 		return newSlaveServers;
 	}
 
+	/**
+	 * Check new dead servers
+	 * 
+	 * @param agent - {@link Agent_Planner}
+	 * @return - list of new servers
+	 */
 	public List<AID> checkForDeadSlaveServers(Agent_Planner agent) {
 		
 		List<AID> deadServers = new ArrayList<AID>();
@@ -63,6 +79,11 @@ public class SlaveServersStructure {
 		return deadServers;
 	}
 	
+	/**
+	 * Contains Slave server
+	 * @param slaveServer
+	 * @return
+	 */
 	private boolean contains(AID slaveServer) {
 				
 		for (AID dfaDescriptI : slaveServers) {

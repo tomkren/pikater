@@ -295,6 +295,11 @@ public class Agent_Duration extends PikaterAgent {
 		} 
     }
     
+    /**
+     * 
+     * Behavior which executes duration Task
+     *
+     */
 	protected class ExecuteTaskInitiator extends ContractNetInitiator{
 
 		private static final long serialVersionUID = -4895199062239049907L;

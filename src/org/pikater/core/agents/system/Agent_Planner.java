@@ -264,7 +264,7 @@ public class Agent_Planner extends PikaterAgent {
 		systemLoad.setNumberOfUntappedCores(
 				cpuCoresStructure.getNumOfUntappedCores());
 		systemLoad.setNumberOfTasksInQueue(
-				waitingToStartComputingTasks.getNumberOfTasksInQueue());
+				waitingToStartComputingTasks.getNumberOfTasksInStructure());
 		systemLoad.print();
 		
 		return systemLoad;
@@ -315,7 +315,6 @@ public class Agent_Planner extends PikaterAgent {
 			plan();
 		lock.unlock();
 		
-		/////
 		ACLMessage msgToManager = taskToSolve.getMsg().createReply();
 		msgToManager.setPerformative(ACLMessage.INFORM);
 		msgToManager.setLanguage(new SLCodec().getName());
@@ -334,7 +333,6 @@ public class Agent_Planner extends PikaterAgent {
 		if (taskToSolve.isSendResultToManager()) {
 			send(msgToManager);
 		}
-		/////
 		
 		//ACLMessage reply = finishedTaskMsg.createReply();
 		//reply.setPerformative(ACLMessage.INFORM);
@@ -483,7 +481,7 @@ public class Agent_Planner extends PikaterAgent {
 		}
 
 
-		//delete CPU cores from dataRegistry
+		// delete CPU cores from dataRegistry
 		dataRegistry.deleteDeadCPUCores(deadSlaveServers);
 		dataRegistry.updateDataSets();
 		// get location of all files needed to solve the Task

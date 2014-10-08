@@ -19,8 +19,7 @@ public class ComputationGraph extends Observable {
     private int id;
     private int batchID;
     
-    public ComputationGraph()
-    {
+    public ComputationGraph() {
         id = CoreConfiguration.getGUIDGenerator().getAndAllocateGUID();
     }
 
@@ -37,8 +36,7 @@ public class ComputationGraph extends Observable {
      * @param nodeId  Id of the node
      * @return Computation node with the ID
      */
-    public ComputationNode getNode(Integer nodeId)
-    {
+    public ComputationNode getNode(Integer nodeId) {
         return nodes.get(nodeId);
     }
 
@@ -46,30 +44,26 @@ public class ComputationGraph extends Observable {
      * Add node to the graph
      * @param node Node to be added
      */
-    public void addNode(ComputationNode node)
-    {
+    public void addNode(ComputationNode node) {
         nodes.put(node.getId(),node);
     }
 
     /**
      * Starts computation - try to start computation of each node
      */
-    public void startBatchComputation()
-    {
-           for (ComputationNode node:nodes.values())
-           {
-               if (node.canComputationStart())
-               {
-                   node.startComputation();
-               }
+    public void startBatchComputation() {
+    	
+       for (ComputationNode node:nodes.values()) {
+           if (node.canComputationStart()) {
+               node.startComputation();
            }
+       }
     }
 
     /**
      * No node is computing or waiting for something - batch is finished
      */
-    public void computationBatchFinished()
-    {
+    public void computationBatchFinished() {
         BatchFinished finishedEvent = new BatchFinished(batchID);
         setChanged();
         notifyObservers(finishedEvent);
@@ -78,12 +72,10 @@ public class ComputationGraph extends Observable {
     /**
      * State updated, some node made progress
      */
-    public void updateState()
-    {
-        for (ComputationNode node:nodes.values())
-        {
-            if (node.existsUnfinishedTasks())
-            {
+    public void updateState() {
+    	
+        for (ComputationNode node:nodes.values()) {
+            if (node.existsUnfinishedTasks()) {
             	return;
             }
         }
