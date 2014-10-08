@@ -14,8 +14,7 @@ import org.pikater.shared.util.SimpleIDGenerator;
  * 
  * @author SkyCrawl
  */
-public class DBTableContainerItems implements ICommitable
-{
+public class DBTableContainerItems implements ICommitable {
 	/**
 	 * Vaadin tables work with IDs, so we have to have all
 	 * rows mapped.
@@ -24,30 +23,27 @@ public class DBTableContainerItems implements ICommitable
 	 * @see {@link #getRow(Object)}
 	 */
 	private final Map<Integer, DBTableItem> currentlyViewedRows;
-	
+
 	/**
 	 * You never know when it might come in handy.
 	 * @see {@link #getAllItemsCount()}
 	 */
 	private QueryResult lastQueryResult;
-	
-	public DBTableContainerItems()
-	{
+
+	public DBTableContainerItems() {
 		this.currentlyViewedRows = new HashMap<Integer, DBTableItem>();
 	}
-	
+
 	@Override
-	public void commitToDB()
-	{
-		for(DBTableItem row : currentlyViewedRows.values())
-		{
+	public void commitToDB() {
+		for (DBTableItem row : currentlyViewedRows.values()) {
 			row.commitToDB();
 		}
 	}
-	
+
 	//-----------------------------------------------
 	// MAIN CONTAINER INTERFACE - SHOULD BE SELF EXPLANATORY
-	
+
 	/**
 	 * Look at the table, define a query with its help, ask 
 	 * database for the new rows, store them and wait until
@@ -55,117 +51,88 @@ public class DBTableContainerItems implements ICommitable
 	 * @param container
 	 * @param queryResult
 	 */
-	public void loadRows(DBTableContainer container, QueryResult queryResult)
-	{
+	public void loadRows(DBTableContainer container, QueryResult queryResult) {
 		// first, clear the previous rows
 		this.currentlyViewedRows.clear();
-		
+
 		// then generate the new ones
 		SimpleIDGenerator ids = new SimpleIDGenerator();
-		for(AbstractTableRowDBView row : queryResult.getConstrainedResults())
-		{
+		for (AbstractTableRowDBView row : queryResult.getConstrainedResults()) {
 			this.currentlyViewedRows.put(ids.getAndIncrement(), new DBTableItem(container, row));
 		}
-		
+
 		// and finally:
 		lastQueryResult = queryResult;
 	}
-	
-	public Set<Integer> getRowIDs()
-	{
+
+	public Set<Integer> getRowIDs() {
 		return this.currentlyViewedRows.keySet();
 	}
-	
-	public DBTableItem getRow(Object rowID)
-	{
+
+	public DBTableItem getRow(Object rowID) {
 		return this.currentlyViewedRows.get(rowID);
 	}
-	
-	public int getAllItemsCount()
-	{
+
+	public int getAllItemsCount() {
 		return lastQueryResult.getAllResultsCount();
 	}
-	
+
 	//-----------------------------------------------
 	// SORT INTERFACE - REFER TO THE CONTAINER.SORTABLE INTERFACE JAVADOC WHEN IMPLEMENTING
-	
+
 	/*
 	 * Although these methods are not really used by our tables (we
 	 * have support for native sorting by queries), they are set
 	 * to be "sortable" and thus require having a sortable container
 	 * at their disposal.
 	 */
-	
-	public Object getFirstItemID()
-	{
-		if(!currentlyViewedRows.isEmpty())
-		{
+
+	public Object getFirstItemID() {
+		if (!currentlyViewedRows.isEmpty()) {
 			return SimpleIDGenerator.getFirstID();
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
 
-	public Object getNextItemID(Object itemId)
-	{
-		if(isLastID(itemId))
-		{
+	public Object getNextItemID(Object itemId) {
+		if (isLastID(itemId)) {
 			return null;
-		}
-		else
-		{
+		} else {
 			Integer integer = (Integer) itemId;
 			return integer + 1;
 		}
 	}
 
-	public Object getPrevItemID(Object itemId)
-	{
-		if(isFirstID(itemId))
-		{
+	public Object getPrevItemID(Object itemId) {
+		if (isFirstID(itemId)) {
 			return null;
-		}
-		else
-		{
+		} else {
 			Integer integer = (Integer) itemId;
 			return integer - 1;
 		}
 	}
 
-	public Object getLastItemID()
-	{
-		if(!currentlyViewedRows.isEmpty())
-		{
+	public Object getLastItemID() {
+		if (!currentlyViewedRows.isEmpty()) {
 			return currentlyViewedRows.size() - 1;
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
 
-	public boolean isFirstID(Object itemId)
-	{
-		if(itemId == null)
-		{
+	public boolean isFirstID(Object itemId) {
+		if (itemId == null) {
 			return false;
-		}
-		else
-		{
+		} else {
 			return itemId.equals(SimpleIDGenerator.getFirstID());
 		}
 	}
 
-	public boolean isLastID(Object itemId)
-	{
-		if(itemId == null)
-		{
+	public boolean isLastID(Object itemId) {
+		if (itemId == null) {
 			return false;
-		}
-		else
-		{
+		} else {
 			return itemId.equals(getLastItemID());
 		}
 	}

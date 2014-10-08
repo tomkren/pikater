@@ -17,62 +17,52 @@ import com.vaadin.event.ItemClickEvent;
  * 
  * @author SkyCrawl
  */
-public abstract class ExpandableViewStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
-{
-	public ExpandableViewStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, boolean isLeaf)
-	{
+public abstract class ExpandableViewStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> {
+	public ExpandableViewStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, boolean isLeaf) {
 		super(parentWizard, isLeaf);
 	}
-	
+
 	/**
 	 * Adds the given {@link DBTableLayout table} in this step.
 	 * 
 	 * @param layout
 	 */
-	protected void registerDBViewLayout(final DBTableLayout layout)
-	{
-		if(!isLeaf())
-		{
-			layout.getTable().addValueChangeListener(new ValueChangeListener()
-			{
+	protected void registerDBViewLayout(final DBTableLayout layout) {
+		if (!isLeaf()) {
+			layout.getTable().addValueChangeListener(new ValueChangeListener() {
 				private static final long serialVersionUID = 2787932307187569389L;
 
 				@Override
-				public void valueChange(ValueChangeEvent event)
-				{
+				public void valueChange(ValueChangeEvent event) {
 					getParentWizard().getNextButton().setEnabled(!layout.getTable().getSelectedRowIDs().isEmpty());
 				}
 			});
-			layout.getTable().addItemClickListener(new ItemClickEvent.ItemClickListener()
-			{
+			layout.getTable().addItemClickListener(new ItemClickEvent.ItemClickListener() {
 				private static final long serialVersionUID = -243751947346194008L;
 
 				@Override
-				public void itemClick(ItemClickEvent event)
-				{
-					if(event.isDoubleClick())
-					{
+				public void itemClick(ItemClickEvent event) {
+					if (event.isDoubleClick()) {
 						/*
 						 * The second click might deselect the row but we need it selected
 						 * because of the "Next" button in wizards.
 						 */
-						
+
 						layout.getTable().select(event.getItemId());
-						getParentWizard().advance(constructNextStepFromView(
-								layout.getTable().getContainerDataSource().getItem(event.getItemId()).getRowView()));
+						getParentWizard().advance(constructNextStepFromView(layout.getTable().getContainerDataSource().getItem(event.getItemId()).getRowView()));
 					}
 				}
 			});
 		}
 	}
-	
+
 	/**
 	 * Method called when the "Next" button is clicked. Should internally call
 	 * {@link #constructNextStepFromView(AbstractTableRowDBView)}.
 	 */
 	@Override
 	public abstract ExpandableViewStep constructNextStep();
-	
+
 	/**
 	 * Internal method called when the "Next"button is clicked or when a custom
 	 * action triggers construction of the next step.
