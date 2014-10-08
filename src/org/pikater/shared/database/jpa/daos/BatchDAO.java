@@ -57,11 +57,6 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	
 	/**
 	 * Creates a list of all batches, that doesn't have the specified status.
-	 * @param offset
-	 * @param maxResultCount
-	 * @param sortColumn
-	 * @param sortOrder
-	 * @param status
 	 * @return the list of batches
 	 */
 	public List<JPABatch> getAllExcludeByStatus(int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder,JPABatchStatus status) {
@@ -70,7 +65,6 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	
 	/**
 	 * Computes the number of batches, that doesn't have the specified status
-	 * @param status 
 	 * @return the number of batches
 	 */
 	public int getAllExcludeByStatusCount(JPABatchStatus status){
@@ -107,12 +101,6 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	
 	/**
 	 * Creates a list of batches with specified status for the given user.
-	 * @param owner
-	 * @param status
-	 * @param offset
-	 * @param maxResultCount
-	 * @param sortColumn
-	 * @param sortOrder
 	 * @return the list of batches
 	 */
 	public List<JPABatch> getByOwnerAndStatus(JPAUser owner,JPABatchStatus status,int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder) {
@@ -121,8 +109,6 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	
 	/**
 	 * Computes the number of batches with the given status, for the specified user
-	 * @param owner
-	 * @param status
 	 * @return the number of batches
 	 */
 	public int getByOwnerAndStatusCount(JPAUser owner, JPABatchStatus status){
@@ -139,12 +125,6 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	
 	/**
 	 * Creates list of batches of given user, that don't have the specified status.
-	 * @param owner
-	 * @param status
-	 * @param offset
-	 * @param maxResultCount
-	 * @param sortColumn
-	 * @param sortOrder
 	 * @return list of batches
 	 */
 	public List<JPABatch> getByOwnerAndNotStatus(JPAUser owner, JPABatchStatus status,int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder) {
@@ -153,8 +133,6 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	
 	/**
 	 * Computes the number of batches of given user, that don't have the specified status
-	 * @param owner
-	 * @param status
 	 * @return the number of batches
 	 */
 	public int getByOwnerAndNotStatusCount(JPAUser owner, JPABatchStatus status){
@@ -194,7 +172,6 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	
 	/**
 	 * 
-	 * @param experiment
 	 * @return the ID of the saved Experiment Entity, -1 when failed to save
 	 */
 	public int addExperimentToBatch(Experiment experiment){

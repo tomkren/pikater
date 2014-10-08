@@ -23,7 +23,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	
 	/**
 	 * Declares the type of this value so that the calling GUI code knows how to render it.
-	 * @return
 	 */
 	public DBViewValueType getType()
 	{
@@ -32,7 +31,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	
 	/**
 	 * Gets the currently set value.
-	 * @return
 	 */
 	public T getValue()
 	{
@@ -41,7 +39,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 
 	/**
 	 * Sets the given value.
-	 * @param newValue
 	 * @throws UnsupportedOperationException if this value is read-only
 	 */
 	public void setValue(T newValue) throws UnsupportedOperationException
@@ -59,7 +56,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	
 	/**
 	 * Has this value been edited and not committed?
-	 * @return
 	 */
 	public boolean isEdited()
 	{
@@ -68,7 +64,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	
 	/**
 	 * Sets a custom action to be called when this value is committed to database.
-	 * @param onCommitCallback
 	 */
 	public void setOnCommitCallback(IOnValueCommitted onCommitCallback)
 	{
@@ -118,8 +113,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	{
 		/**
 		 * Called when a value is edited and committed to database.
-		 * @param row
-		 * @param value
 		 */
 		void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value);
 	}
@@ -129,7 +122,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	
 	/**
 	 * Is this value read-only?
-	 * @return
 	 */
 	public abstract boolean isReadOnly();
 	
@@ -137,7 +129,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	 * Called when a new value is received. This method must do appropriate actions
 	 * to update related entities but NOT commit them to database yet. To commit, 
 	 * the {@link #commitEntities()} is used.
-	 * @param newValue
 	 */
 	protected abstract void updateEntities(T newValue);
 	

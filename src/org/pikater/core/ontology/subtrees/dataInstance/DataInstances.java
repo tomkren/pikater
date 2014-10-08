@@ -27,7 +27,6 @@ public class DataInstances implements Concept {
 	}
 
 	/**
-	 * @param name
 	 *            the name to set
 	 */
 	public void setName(String name) {
@@ -42,7 +41,6 @@ public class DataInstances implements Concept {
 	}
 
 	/**
-	 * @param attributes
 	 *            the attributes to set
 	 */
 	public void setAttributes(List<Attribute> attributes) {
@@ -57,7 +55,6 @@ public class DataInstances implements Concept {
 	}
 
 	/**
-	 * @param instances
 	 *            the instaces to set
 	 */
 	public void setInstances(List<Instance> instances) {

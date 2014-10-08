@@ -21,7 +21,6 @@ public class GetParameters implements AgentAction {
 	
 	/**
 	 * Get schema
-	 * @return
 	 */
 	public List<SearchItem> getSchema() {
 		return schema;
@@ -29,7 +28,6 @@ public class GetParameters implements AgentAction {
 	
 	/**
 	 * Set schema
-	 * @param schema
 	 */
 	public void setSchema(List<SearchItem> schema) {
 		this.schema = schema;
@@ -37,7 +35,6 @@ public class GetParameters implements AgentAction {
 	
 	/**
 	 * Get options which are searched 
-	 * @return
 	 */
 	public List<NewOption> getSearchOptions() {
 		return searchOptions;
@@ -45,7 +42,6 @@ public class GetParameters implements AgentAction {
 	
 	/**
 	 * Set searched options
-	 * @param searchOptions
 	 */
 	public void setSearchOptions(List<NewOption> searchOptions) {
 		this.searchOptions = searchOptions;

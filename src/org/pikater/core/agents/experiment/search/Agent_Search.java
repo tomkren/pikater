@@ -56,8 +56,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	/**
 	 * Generates new solution
 	 * 
-	 * @param solutions
-	 * @param evaluations
 	 * @return List of Options
 	 */
 	protected abstract List<SearchSolution> generateNewSolutions(
@@ -65,15 +63,12 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	
 	/**
 	 * Detects the end of searching
-	 * @return
 	 */
 	protected abstract boolean isFinished();
 	
 	/**
 	 * Updates finished state
 	 * 
-	 * @param evaluations
-	 * @return
 	 */
 	protected abstract float updateFinished(float[][] evaluations);
 	
@@ -113,7 +108,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 	/**
 	 * Get schema
-	 * @return
 	 */
 	protected List<SearchItem> getSchema() {
 		if(schema != null) {
@@ -125,7 +119,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	}
 	/**
 	 * Get options
-	 * @return
 	 */
 	protected NewOptions getSearchOptions() {
 
@@ -140,8 +133,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	 * Converts List of Evals to an array of values,
 	 * at the moment only error_rate
 	 * 
-	 * @param eval
-	 * @return
 	 */
 	private float[] namedEvalsToFitness(Evaluation eval) {
 		
@@ -165,8 +156,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	/**
 	 * Convert array of fitness to list of Eval
 	 * 
-	 * @param fitness
-	 * @return
 	 */
 	private List<Eval> fitnessToNamedEvals(float[] fitness) {
 		
@@ -303,7 +292,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 				/**
 				 * New wave of evaluation - generation of query
 				 * 
-				 * @param requestMsg
 				 */
 				private void newWaveOfEvaluation(ACLMessage requestMsg) {
 					

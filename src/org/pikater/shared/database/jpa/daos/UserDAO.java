@@ -123,7 +123,6 @@ public class UserDAO extends AbstractDAO<JPAUser>{
 	
 	/**
 	 * Sets new pasword to the given entity, doesn't update it in DB. 
-	 * @param user
 	 * @return the new password in plain text
 	 */
 	public String resetPasswordButDontUpdate(JPAUser user)

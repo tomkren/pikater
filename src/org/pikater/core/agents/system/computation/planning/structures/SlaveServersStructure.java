@@ -81,8 +81,6 @@ public class SlaveServersStructure {
 	
 	/**
 	 * Contains Slave server
-	 * @param slaveServer
-	 * @return
 	 */
 	private boolean contains(AID slaveServer) {
 				

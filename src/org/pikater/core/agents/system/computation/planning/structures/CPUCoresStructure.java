@@ -28,8 +28,6 @@ public class CPUCoresStructure {
 	/**
 	 * CPU Cores initialization
 	 * 
-	 * @param agent
-	 * @param slaveServers
 	 */
 	public void initNewCPUCores(Agent_Planner agent,
 			List<AID> slaveServers) {
@@ -54,8 +52,6 @@ public class CPUCoresStructure {
 	 * Deletes dead CPU Cores - all cores in the dead servers
 	 * 
 	 * @param agent - {@link Agent_Planner}
-	 * @param deadSlaveServers
-	 * @return
 	 */
 	public Set<TaskToSolve> deleteDeadCPUCores(Agent_Planner agent,
 			List<AID> deadSlaveServers) {
@@ -96,8 +92,6 @@ public class CPUCoresStructure {
 	/**
 	 * Sets a concrete CPU as free
 	 *  
-	 * @param cpuCore
-	 * @return
 	 */
 	public TaskToSolve setCPUCoreAsFree(CPUCore cpuCore) {
 		
@@ -120,8 +114,6 @@ public class CPUCoresStructure {
 	/**
 	 * Sets a concrete CPU as busy
 	 * 
-	 * @param selectedCore
-	 * @param task
 	 */
 	public void setCPUCoreAsBusy(CPUCore selectedCore, TaskToSolve task) {
 		
@@ -143,8 +135,6 @@ public class CPUCoresStructure {
 	 * Get the best CPU Core for the Task
 	 * 
 	 * @param task - Task to solve
-	 * @param dataLocations
-	 * @return
 	 */
 	public CPUCore getTheBestCPUCoreForTask(TaskToSolve task,
 			DataFiles dataLocations) {
@@ -175,8 +165,6 @@ public class CPUCoresStructure {
 	/**
 	 * Get CPU Core which is computing concrete Task (TaskID)
 	 * 
-	 * @param task
-	 * @return
 	 */
 	public CPUCore getCPUCoreOfComputingTask(Task task) {
 		
@@ -196,8 +184,6 @@ public class CPUCoresStructure {
 	/**
 	 * Get {@link TaskToSolve} for the concrete {@link Task}
 	 * 
-	 * @param task
-	 * @return
 	 */
 	public TaskToSolve getTaskToSolveOfComputingTask(Task task) {
 		
@@ -218,8 +204,6 @@ public class CPUCoresStructure {
 	/**
 	 * Get {@link TaskToSolve} by the taskID
 	 * 
-	 * @param taskID
-	 * @return
 	 */
 	public TaskToSolve getComputingTask(int taskID) {
 	
@@ -234,7 +218,6 @@ public class CPUCoresStructure {
 	/**
 	 * Get number of busy CPU Cores in the structure
 	 * 
-	 * @return
 	 */
 	public int getNumOfBusyCores() {
 		return this.busyCores.size();
@@ -243,7 +226,6 @@ public class CPUCoresStructure {
 	/**
 	 * Get number of untapped CPU Cores in the structure
 	 * 
-	 * @return
 	 */
 	public int getNumOfUntappedCores() {
 		return this.untappedCores.size();
@@ -251,7 +233,6 @@ public class CPUCoresStructure {
 	
 	/**
 	 * Check existence of a untapped CPU Core
-	 * @return
 	 */
 	public boolean isExistingUntappedCore() {
 		return getNumOfUntappedCores() > 0;

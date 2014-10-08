@@ -81,10 +81,6 @@ public class JPABatch extends JPAAbstractEntity{
 	
 	/**
 	 * Creates an experiment to be saved (not queued).
-	 * @param name
-	 * @param note
-	 * @param xml
-	 * @param owner
 	 */
 	public JPABatch(String name, String note, String xml, JPAUser owner)
 	{
@@ -100,13 +96,6 @@ public class JPABatch extends JPAAbstractEntity{
 	
 	/**
 	 * Creates an experiment to be queued.
-	 * @param name
-	 * @param note
-	 * @param xml
-	 * @param owner
-	 * @param userAssignedPriority
-	 * @param computationEstimateInHours
-	 * @param sendEmailAfterFinish
 	 */
 	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, boolean sendEmailAfterFinish)
 	{
@@ -176,7 +165,6 @@ public class JPABatch extends JPAAbstractEntity{
 	 * <li> To override priority by an administrator, use this method.
 	 * <li> To initialize total priority of a new batch, use {@link #updateTotalPriority()}.
 	 * </ul>
-	 * @param totalPriority
 	 */
 	@Deprecated
 	public void setTotalPriority(int totalPriority){
@@ -184,7 +172,6 @@ public class JPABatch extends JPAAbstractEntity{
 	}
 	/**
 	 * Only THIS value is used in core system as priority for the whole batch.
-	 * @return
 	 */
 	public int getTotalPriority(){
 		return this.totalPriority;

@@ -48,8 +48,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	/**
 	 * Choose the best agent type for this type of data
 	 * 
-	 * @param data
-	 * @return
 	 */
 	protected abstract org.pikater.core.ontology.subtrees.management.Agent
 		chooseBestAgent(Datas data);
@@ -62,7 +60,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	/**
 	 * Detects if the recommendation is finished
 	 * 
-	 * @return
 	 */
 	protected abstract boolean finished();
 	
@@ -269,8 +266,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	/**
 	 * Get options of the concrete agent type
 	 * 
-	 * @param agentType
-	 * @return
 	 */
 	public List<NewOption> getAgentOptions(String agentType) {
 		
@@ -289,7 +284,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	/**
 	 * Get parameters - merged options with default
-	 * @return
 	 */
 	protected List<NewOption> getParameters() {
 		List<NewOption> optFileOptions =

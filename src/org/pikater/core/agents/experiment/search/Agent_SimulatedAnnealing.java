@@ -163,8 +163,6 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	/**
 	 * Random solutions in case of beginning, or mutation of existing
 	 * 
-	 * @param solution
-	 * @return
 	 */
 	private SearchSolution neighbor(SearchSolution solution) {
 
@@ -200,9 +198,6 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	 *   -the better values are accepted
 	 *   -the worse with probability exp((e-e_new)/temperature)
 	 *   
-	 * @param delta
-	 * @param temperature
-	 * @return
 	 */
 	private double acceptanceProb(double delta, double temperature){
 		

@@ -32,8 +32,6 @@ public class ResultDAO extends AbstractDAO<JPAResult> {
 	/**
 	 * Creates a list of all results, that have connected model
 	 * @param experiment {@link JPAExperiment} for which we search results
-	 * @param offset
-	 * @param maxResultCount
 	 * @return the list of results
 	 */
 	public List<JPAResult> getByExperimentWithModel(JPAExperiment experiment, int offset, int maxResultCount){
@@ -89,7 +87,6 @@ public class ResultDAO extends AbstractDAO<JPAResult> {
 	 * Persists a model for the specific result
 	 * <p>
 	 * The ID of the result is held by the {@link Model} object 
-	 * @param model
 	 * @return ID of persisted model, -1 if error happened
 	 */
 	public int setModelForResult(Model model){

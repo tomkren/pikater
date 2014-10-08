@@ -201,7 +201,6 @@ public class ComputationNode {
 
     /**
      * Sets startegz that will be executed on computation start
-     * @param startBehavior
      */
     public void setStartBehavior(StartComputationStrategy startBehavior) {
         this.startBehavior = startBehavior;

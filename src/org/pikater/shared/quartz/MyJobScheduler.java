@@ -29,7 +29,6 @@ public class MyJobScheduler extends PropertiesHandler
 	 * package is loaded.</br></br>
 	 * 
 	 * We will provide our own configuration. 
-	 * @param quartzConfAbsPath
 	 */
 	public MyJobScheduler(String quartzConfAbsPath)
 	{
@@ -88,7 +87,6 @@ public class MyJobScheduler extends PropertiesHandler
 	
 	/**
 	 * Define a zero-argument job - build it, create it and schedule it.
-	 * @param clazz
 	 * @throws Throwable
 	 */
 	public JobKey defineJob(Class<? extends ZeroArgJob> clazz) throws Exception
@@ -98,7 +96,6 @@ public class MyJobScheduler extends PropertiesHandler
 
 	/**
 	 * Define an arbitrary job - build it, create it and schedule it.
-	 * @param jobClass
 	 */
 	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Exception
 	{
@@ -131,7 +128,6 @@ public class MyJobScheduler extends PropertiesHandler
 	
 	/**
 	 * Interrupts the given job.
-	 * @param key
 	 */
 	public void interruptJob(JobKey key)
 	{

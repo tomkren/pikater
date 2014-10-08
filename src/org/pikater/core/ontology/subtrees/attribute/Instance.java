@@ -21,7 +21,6 @@ public class Instance implements Concept {
 		return values;
 	}
 	/**
-	 * @param values
 	 *            the values to set
 	 */
 	public void setValues(List<Double> values) {
