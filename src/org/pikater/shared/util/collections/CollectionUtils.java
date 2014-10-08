@@ -2,6 +2,7 @@ package org.pikater.shared.util.collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,6 +14,18 @@ import org.pikater.shared.util.ICloneable;
 
 public class CollectionUtils
 {
+	/**
+	 * Always returns a non-null list - either the argument list or
+	 * a new empty list.
+	 * 
+	 * @param list for which we want safe access
+	 * @return a non-null list
+	 */
+	public static <O extends Object> List<O> nullSafeList(List<O> list)
+	{
+		return list != null ? list : Collections.<O>emptyList();
+	}
+	
 	public static Set<String> enumSetToStringSet(EnumSet<?> enumSet)
 	{
 		Set<String> result = new HashSet<String>();
@@ -50,7 +63,7 @@ public class CollectionUtils
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <O extends ICloneable> List<O> deepCopy(List<O> source)
+	public static <C extends ICloneable> List<C> deepCopy(List<C> source)
 	{
 		if(source == null)
 		{
@@ -58,11 +71,11 @@ public class CollectionUtils
 		}
 		else
 		{
-			List<O> copy = new ArrayList<O>(source.size());
-			for(O item : source)
+			List<C> copy = new ArrayList<C>(source.size());
+			for(C item : source)
 			{
 				ICloneable itemCopy = ((ICloneable) item).clone();
-				copy.add((O) itemCopy);
+				copy.add((C) itemCopy);
 			}
 			return copy;
 		}

@@ -25,7 +25,7 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
-import org.pikater.shared.database.util.Hash;
+import org.pikater.shared.database.util.DatabaseUtilities;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
@@ -289,7 +289,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		newDSLO.setApproved(owner.isAdmin());
 		
 		long oid = -1;
-		String hash = Hash.getMD5Hash(sourceFile);
+		String hash = DatabaseUtilities.getMD5Hash(sourceFile);
 		List<JPADataSetLO> sameHashDS = DAOs.dataSetDAO.getByHash(hash);
 		if (!sameHashDS.isEmpty())
 		{

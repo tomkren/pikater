@@ -49,6 +49,7 @@ import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
+import org.pikater.core.utilities.CoreUtilities;
 
 /**
  * 
@@ -294,7 +295,7 @@ public class Agent_Planner extends PikaterAgent {
 		
 		Task finishedTask = (Task) result.getValue();
 		finishedTask.setFinish(
-				Agent_DataManager.getCurrentPikaterDateString());
+				CoreUtilities.getCurrentPikaterDateString());
 
 		CPUCore cpuCore = cpuCoresStructure.
 				getCPUCoreOfComputingTask(finishedTask);
@@ -458,7 +459,7 @@ public class Agent_Planner extends PikaterAgent {
 				removeTaskWithHighestPriority();
 		
 		Task task = taskToSolve.getTask();
-		task.setStart(Agent_DataManager.getCurrentPikaterDateString());
+		task.setStart(CoreUtilities.getCurrentPikaterDateString());
 		
 		// update number of cores
 		List<AID> newSlaveServers =

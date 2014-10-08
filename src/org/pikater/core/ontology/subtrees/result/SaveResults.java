@@ -4,6 +4,13 @@ import org.pikater.core.ontology.subtrees.task.Task;
 
 import jade.content.AgentAction;
 
+/**
+ * When an experiment has successfully finished executing, an instance of
+ * this message should be sent to {@łink Agent_DataManager}. For more
+ * information about what data this message contains, refer to {@link Task}. 
+ * 
+ * @author stepan
+ */
 public class SaveResults implements AgentAction {
 
 	private static final long serialVersionUID = -7028457864866356063L;
