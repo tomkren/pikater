@@ -148,8 +148,6 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	 * 
 	 * @param type - class of agent
 	 * @param name - agent name
-	 * @param args
-	 * @return
 	 */
 	public String _createAgent(String type, String name, Arguments args) {
 		// get a container controller for creating new agents
@@ -191,8 +189,6 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	 * 
 	 * @param name - agent name
 	 * @param type - class of agent
-	 * @param container
-	 * @param args
 	 * @throws ControllerException
 	 */
 	private void doCreateAgent(String name, String type,
@@ -207,8 +203,6 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	/**
 	 * Generates a unused name for a new agent
 	 * 
-	 * @param name
-	 * @return
 	 */
 	public String generateName(String name) {
 		String result = name;

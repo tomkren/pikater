@@ -100,7 +100,6 @@ public class JobStoreCMT extends JobStoreSupport {
      * DataSource. This can be helpfull in a few situations, such as if you
      * have a driver that complains if it is called when it is already off.
      * 
-     * @param b
      */
     public void setDontSetNonManagedTXConnectionAutoCommitFalse(boolean b) {
         dontSetNonManagedTXConnectionAutoCommitFalse = b;
@@ -114,7 +113,6 @@ public class JobStoreCMT extends JobStoreSupport {
     /**
      * Set the transaction isolation level of DB connections to sequential.
      * 
-     * @param b
      */
     public void setTxIsolationLevelReadCommitted(boolean b) {
         setTxIsolationLevelReadCommitted = b;

@@ -64,11 +64,8 @@ public class TriggerUtils {
      * The input trigger will be cloned before any work is done, so you need
      * not worry about its state being altered by this method.
      * 
-     * @param trigg
      *          The trigger upon which to do the work
-     * @param cal
      *          The calendar to apply to the trigger's schedule
-     * @param numTimes
      *          The number of next fire times to produce
      * @return List of java.util.Date objects
      */
@@ -103,11 +100,8 @@ public class TriggerUtils {
      * The input trigger will be cloned before any work is done, so you need
      * not worry about its state being altered by this method.
      * 
-     * @param trigg
      *          The trigger upon which to do the work
-     * @param cal
      *          The calendar to apply to the trigger's schedule
-     * @param numTimes
      *          The number of next fire times to produce
      * @return the computed Date, or null if the trigger (as configured) will not fire that many times.
      */
@@ -156,13 +150,9 @@ public class TriggerUtils {
      * in the output List.
      * </p>
      * 
-     * @param trigg
      *          The trigger upon which to do the work
-     * @param cal
      *          The calendar to apply to the trigger's schedule
-     * @param from
      *          The starting date at which to find fire times
-     * @param to
      *          The ending date at which to stop finding fire times
      * @return List of java.util.Date objects
      */

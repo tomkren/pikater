@@ -95,7 +95,6 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * which is presumed to b e valid cron expression (and hence only a
      * RuntimeException will be thrown if it is not).
      * 
-     * @param cronExpression
      *            the cron expression string to base the schedule on.
      * @return the new CronScheduleBuilder
      * @throws RuntimeException
@@ -118,7 +117,6 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * which may not be a valid cron expression (and hence a ParseException will
      * be thrown if it is not).
      * 
-     * @param cronExpression
      *            the cron expression string to base the schedule on.
      * @return the new CronScheduleBuilder
      * @throws ParseException
@@ -148,7 +146,6 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
     /**
      * Create a CronScheduleBuilder with the given cron-expression.
      * 
-     * @param cronExpression
      *            the cron expression to base the schedule on.
      * @return the new CronScheduleBuilder
      * @see CronExpression
@@ -161,9 +158,7 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * Create a CronScheduleBuilder with a cron-expression that sets the
      * schedule to fire every day at the given time (hour and minute).
      * 
-     * @param hour
      *            the hour of day to fire
-     * @param minute
      *            the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
@@ -182,11 +177,8 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * schedule to fire at the given day at the given time (hour and minute) on
      * the given days of the week.
      * 
-     * @param daysOfWeek
      *            the dasy of the week to fire
-     * @param hour
      *            the hour of day to fire
-     * @param minute
      *            the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
@@ -223,11 +215,8 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * schedule to fire one per week on the given day at the given time (hour
      * and minute).
      * 
-     * @param dayOfWeek
      *            the day of the week to fire
-     * @param hour
      *            the hour of day to fire
-     * @param minute
      *            the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
@@ -256,11 +245,8 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * schedule to fire one per month on the given day of month at the given
      * time (hour and minute).
      * 
-     * @param dayOfMonth
      *            the day of the month to fire
-     * @param hour
      *            the hour of day to fire
-     * @param minute
      *            the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
@@ -280,7 +266,6 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
     /**
      * The <code>TimeZone</code> in which to base the schedule.
      * 
-     * @param timezone
      *            the time-zone for the schedule.
      * @return the updated CronScheduleBuilder
      * @see CronExpression#getTimeZone()

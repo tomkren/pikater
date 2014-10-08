@@ -104,7 +104,6 @@ public class Agent_Initiator extends PikaterAgent {
 	 * Creates agent in this container
 	 * @param type - agent type = name of class
 	 * @param name - agent name
-	 * @param args
 	 * @return - confirms creation
 	 */
 	public Boolean createAgent(String type, String name, Object[] args) {
@@ -134,8 +133,6 @@ public class Agent_Initiator extends PikaterAgent {
 	/**
 	 * Arguments conversion
 	 * 
-	 * @param arguments
-	 * @return
 	 */
 	public Object[] processArgs(Object[] arguments) {
 		

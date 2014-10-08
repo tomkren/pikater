@@ -36,7 +36,6 @@ public class WaitingTasksQueues {
 	/**
 	 * Add all Task to queues
 	 * 
-	 * @param taskToSolve
 	 */
 	public void addTasks(Set<TaskToSolve> taskToSolve) {
 		List<TaskToSolve> tasks = new ArrayList<TaskToSolve>(taskToSolve);
@@ -49,7 +48,6 @@ public class WaitingTasksQueues {
 	/**
 	 * Add a Task to queue
 	 * 
-	 * @param taskToSolve
 	 */
 	public void addTask(TaskToSolve taskToSolve) {
 		
@@ -69,8 +67,6 @@ public class WaitingTasksQueues {
 	/**
 	 * Change priority for all Tasks with concrete batchID
 	 * 
-	 * @param batchID
-	 * @param newPriority
 	 */
 	public void updateTaskPriority(int batchID, int newPriority) {
 
@@ -106,7 +102,6 @@ public class WaitingTasksQueues {
 	/**
 	 * Removes and returns Task with highest priority
 	 * 
-	 * @return
 	 */
 	public TaskToSolve removeTaskWithHighestPriority() {
 		
@@ -123,7 +118,6 @@ public class WaitingTasksQueues {
 	/**
 	 * Exists some Task to solve
 	 * 
-	 * @return
 	 */
 	public boolean isExistingTaskToSolve() {
 		
@@ -133,7 +127,6 @@ public class WaitingTasksQueues {
 	/**
 	 * Removes all Tasks with batchID
 	 * 
-	 * @param batchID
 	 */
 	public void removeTasks(int batchID) {
 
@@ -167,7 +160,6 @@ public class WaitingTasksQueues {
 	/**
 	 * Get number of all Tasks in the structure
 	 * 
-	 * @return
 	 */
 	public int getNumberOfTasksInStructure() {
 		return shortTimeDurationQueue.size() +

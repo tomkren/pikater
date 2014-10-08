@@ -196,9 +196,6 @@ public class Agent_Duration extends PikaterAgent {
     /**
      * Counts a duration
      * 
-     * @param startDate
-     * @param duration
-     * @return
      */
     private float countDuration(Date startDate, long duration) {
     	
@@ -276,8 +273,6 @@ public class Agent_Duration extends PikaterAgent {
 		/**
 		 * Constructor
 		 * 
-		 * @param agent
-		 * @param period
 		 */
 		public TestBehaviour(PikaterAgent agent, long period) {
 			super(agent, period);
@@ -389,9 +384,6 @@ public class Agent_Duration extends PikaterAgent {
      * 
      * @param aid - receiver identification
      * @param agent - agent for login exceptions
-     * @param durationDatasetName
-     * @param durationDatasetHash
-     * @return
      */
     protected ACLMessage createCFPmessage(AID aid, PikaterAgent agent,
     		String durationDatasetName, String durationDatasetHash) {

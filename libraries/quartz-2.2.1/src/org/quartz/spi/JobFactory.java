@@ -54,7 +54,6 @@ public interface JobFactory {
      * configuration problem led to the issue wih instantiating the Job. 
      * </p>
      * 
-     * @param bundle
      *            The TriggerFiredBundle from which the <code>JobDetail</code>
      *            and other info relating to the trigger firing can be obtained.
      * @param scheduler a handle to the scheduler that is about to execute the job.

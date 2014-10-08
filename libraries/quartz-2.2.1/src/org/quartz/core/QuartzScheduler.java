@@ -679,7 +679,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
      * The scheduler cannot be re-started.
      * </p>
      * 
-     * @param waitForJobsToComplete
      *          if <code>true</code> the scheduler will not allow this method
      *          to return until all currently executing jobs have completed.
      */
@@ -1104,7 +1103,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
      * given name, and store the new given one - which must be associated
      * with the same job.
      * </p>
-     * @param newTrigger
      *          The new <code>Trigger</code> to be stored.
      * 
      * @return <code>null</code> if a <code>Trigger</code> with the given

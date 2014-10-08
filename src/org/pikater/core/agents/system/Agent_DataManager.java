@@ -815,7 +815,6 @@ public class Agent_DataManager extends PikaterAgent {
 	 * 
 	 * TODO: What is this email about?
 	 *  
-	 * @param batchJPA
 	 */
 	private void requestMailNotification(final JPABatch batchJPA) {
 		addBehaviour(new OneShotBehaviour() {

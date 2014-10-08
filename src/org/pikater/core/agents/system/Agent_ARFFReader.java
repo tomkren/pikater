@@ -56,8 +56,6 @@ public class Agent_ARFFReader extends PikaterAgent {
 	/**
 	 * Reads the Data-Set from file
 	 * 
-	 * @param relativeFileName
-	 * @return
 	 */
 	boolean ReadFromFile(String relativeFileName) {
 		
@@ -193,8 +191,6 @@ public class Agent_ARFFReader extends PikaterAgent {
 		/**
 		 * Constructor
 		 * 
-		 * @param agent
-		 * @param messageTemplate
 		 */
 		public GetDataResponder(PikaterAgent agent,
 				MessageTemplate messageTemplate) {

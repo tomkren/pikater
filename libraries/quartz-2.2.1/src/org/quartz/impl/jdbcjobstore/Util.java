@@ -58,9 +58,7 @@ public final class Util {
      * "{0}" with the table prefix.
      * </p>
      * 
-     * @param query
      *          the unsubstitued query
-     * @param tablePrefix
      *          the table prefix
      * @return the query, with proper table prefix substituted
      */
@@ -73,9 +71,7 @@ public final class Util {
      * Obtain a unique key for a given job.
      * </p>
      * 
-     * @param jobName
      *          the job name
-     * @param groupName
      *          the group containing the job
      * @return a unique <code>String</code> key
      */
@@ -88,9 +84,7 @@ public final class Util {
      * Obtain a unique key for a given trigger.
      * </p>
      * 
-     * @param triggerName
      *          the trigger name
-     * @param groupName
      *          the group containing the trigger
      * @return a unique <code>String</code> key
      */

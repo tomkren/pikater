@@ -99,8 +99,6 @@ public class Agent_Mailing extends PikaterAgent {
 
 	/**
 	 * Handle a request {@link SendEmail} and send back a answer
-	 * @param request
-	 * @return
 	 * @throws NotUnderstoodException
 	 * @throws CodecException
 	 * @throws OntologyException
@@ -162,8 +160,6 @@ public class Agent_Mailing extends PikaterAgent {
 	 * A help function for conversion Enum values
 	 * ​​corresponding to the desired type of mail
 	 * 
-	 * @param mailAction
-	 * @return
 	 * @throws NotUnderstoodException
 	 */
 	private EmailType getEmailType(SendEmail mailAction

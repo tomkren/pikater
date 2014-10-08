@@ -163,7 +163,6 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * Creates an in memory job store (<code>{@link RAMJobStore}</code>)
      * The thread priority is set to Thread.NORM_PRIORITY
      *
-     * @param maxThreads
      *          The number of threads in the thread pool
      * @throws SchedulerException
      *           if initialization failed.
@@ -182,9 +181,7 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * Creates a proxy to a remote scheduler. This scheduler can be retrieved
      * via {@link DirectSchedulerFactory#getScheduler()}
      *
-     * @param rmiHost
      *          The hostname for remote scheduler
-     * @param rmiPort
      *          Port for the remote scheduler. The default RMI port is 1099.
      * @throws SchedulerException
      *           if the remote scheduler could not be reached.
@@ -202,13 +199,9 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * scheduler can only be retrieved via
      * {@link DirectSchedulerFactory#getScheduler(String)}
      *
-     * @param schedulerName
      *          The name for the scheduler.
-     * @param schedulerInstanceId
      *          The instance ID for the scheduler.
-     * @param rmiHost
      *          The hostname for remote scheduler
-     * @param rmiPort
      *          Port for the remote scheduler. The default RMI port is 1099.
      * @throws SchedulerException
      *           if the remote scheduler could not be reached.
@@ -227,16 +220,11 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * bind name. This scheduler can only be retrieved via
      * {@link DirectSchedulerFactory#getScheduler(String)}
      *
-     * @param schedulerName
      *          The name for the scheduler.
-     * @param schedulerInstanceId
      *          The instance ID for the scheduler.
-     * @param rmiBindName
      *          The name of the remote scheduler in the RMI repository.  If null
      *          defaults to the generated unique identifier.
-     * @param rmiHost
      *          The hostname for remote scheduler
-     * @param rmiPort
      *          Port for the remote scheduler. The default RMI port is 1099.
      * @throws SchedulerException
      *           if the remote scheduler could not be reached.
@@ -261,9 +249,7 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * scheduler can be retrieved via
      * {@link DirectSchedulerFactory#getScheduler()}
      *
-     * @param threadPool
      *          The thread pool for executing jobs
-     * @param jobStore
      *          The type of job store
      * @throws SchedulerException
      *           if initialization failed
@@ -281,13 +267,9 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * scheduler can only be retrieved via
      * {@link DirectSchedulerFactory#getScheduler(String)}
      *
-     * @param schedulerName
      *          The name for the scheduler.
-     * @param schedulerInstanceId
      *          The instance ID for the scheduler.
-     * @param threadPool
      *          The thread pool for executing jobs
-     * @param jobStore
      *          The type of job store
      * @throws SchedulerException
      *           if initialization failed
@@ -303,20 +285,13 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * Creates a scheduler using the specified thread pool and job store and
      * binds it to RMI.
      *
-     * @param schedulerName
      *          The name for the scheduler.
-     * @param schedulerInstanceId
      *          The instance ID for the scheduler.
-     * @param threadPool
      *          The thread pool for executing jobs
-     * @param jobStore
      *          The type of job store
-     * @param rmiRegistryHost
      *          The hostname to register this scheduler with for RMI. Can use
      *          "null" if no RMI is required.
-     * @param rmiRegistryPort
      *          The port for RMI. Typically 1099.
-     * @param idleWaitTime
      *          The idle wait time in milliseconds. You can specify "-1" for
      *          the default value, which is currently 30000 ms.
      * @throws SchedulerException
@@ -339,24 +314,16 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * Creates a scheduler using the specified thread pool, job store, and
      * plugins, and binds it to RMI.
      *
-     * @param schedulerName
      *          The name for the scheduler.
-     * @param schedulerInstanceId
      *          The instance ID for the scheduler.
-     * @param threadPool
      *          The thread pool for executing jobs
-     * @param jobStore
      *          The type of job store
-     * @param schedulerPluginMap
      *          Map from a <code>String</code> plugin names to
      *          <code>{@link org.quartz.spi.SchedulerPlugin}</code>s.  Can use
      *          "null" if no plugins are required.
-     * @param rmiRegistryHost
      *          The hostname to register this scheduler with for RMI. Can use
      *          "null" if no RMI is required.
-     * @param rmiRegistryPort
      *          The port for RMI. Typically 1099.
-     * @param idleWaitTime
      *          The idle wait time in milliseconds. You can specify "-1" for
      *          the default value, which is currently 30000 ms.
      * @throws SchedulerException
@@ -379,26 +346,17 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * Creates a scheduler using the specified thread pool, job store, and
      * plugins, and binds it to RMI.
      *
-     * @param schedulerName
      *          The name for the scheduler.
-     * @param schedulerInstanceId
      *          The instance ID for the scheduler.
-     * @param threadPool
      *          The thread pool for executing jobs
-     * @param threadExecutor
      *          The thread executor for executing jobs
-     * @param jobStore
      *          The type of job store
-     * @param schedulerPluginMap
      *          Map from a <code>String</code> plugin names to
      *          <code>{@link org.quartz.spi.SchedulerPlugin}</code>s.  Can use
      *          "null" if no plugins are required.
-     * @param rmiRegistryHost
      *          The hostname to register this scheduler with for RMI. Can use
      *          "null" if no RMI is required.
-     * @param rmiRegistryPort
      *          The port for RMI. Typically 1099.
-     * @param idleWaitTime
      *          The idle wait time in milliseconds. You can specify "-1" for
      *          the default value, which is currently 30000 ms.
      * @throws SchedulerException
@@ -422,31 +380,20 @@ public class DirectSchedulerFactory implements SchedulerFactory {
      * Creates a scheduler using the specified thread pool, job store, and
      * plugins, and binds it to RMI.
      *
-     * @param schedulerName
      *          The name for the scheduler.
-     * @param schedulerInstanceId
      *          The instance ID for the scheduler.
-     * @param threadPool
      *          The thread pool for executing jobs
-     * @param threadExecutor
      *          The thread executor for executing jobs
-     * @param jobStore
      *          The type of job store
-     * @param schedulerPluginMap
      *          Map from a <code>String</code> plugin names to
      *          <code>{@link org.quartz.spi.SchedulerPlugin}</code>s.  Can use
      *          "null" if no plugins are required.
-     * @param rmiRegistryHost
      *          The hostname to register this scheduler with for RMI. Can use
      *          "null" if no RMI is required.
-     * @param rmiRegistryPort
      *          The port for RMI. Typically 1099.
-     * @param idleWaitTime
      *          The idle wait time in milliseconds. You can specify "-1" for
      *          the default value, which is currently 30000 ms.
-     * @param maxBatchSize
      *          The maximum batch size of triggers, when acquiring them
-     * @param batchTimeWindow
      *          The time window for which it is allowed to "pre-acquire" triggers to fire
      * @throws SchedulerException
      *           if initialization failed

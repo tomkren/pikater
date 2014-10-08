@@ -83,9 +83,6 @@ public class PGLargeObjectReader extends Reader {
 	 * to get the data from the Datasase.
 	 * In order to retrieve the whole file from the database you can use the size() method to 
 	 * create a sufficient byte array.
-	 * @param buf
-	 * @param offset
-	 * @param count
 	 * @return Number of bytes read or -1 if nothing was read
 	 */
 	public int read(byte[] buf, int offset, int count) {

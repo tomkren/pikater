@@ -28,7 +28,6 @@ public interface CounterManager {
     /**
      * Creates a Counter based on tha passed config
      * 
-     * @param config
      * @return The counter created and managed by this CounterManager
      */
     Counter createCounter(CounterConfig config);
@@ -41,7 +40,6 @@ public interface CounterManager {
     /**
      * Shuts down the counter
      * 
-     * @param counter
      */
     void shutdownCounter(Counter counter);
 

@@ -488,7 +488,6 @@ public abstract class JobStoreSupport implements JobStore, Constants {
      * Set the JDBC driver delegate class.
      * </p>
      * 
-     * @param delegateClassName
      *          the delegate class name
      */
     @SuppressWarnings("UnusedDeclaration") /* called reflectively */
@@ -515,7 +514,6 @@ public abstract class JobStoreSupport implements JobStore, Constants {
      * Set the JDBC driver delegate's initialization string.
      * </p>
      * 
-     * @param delegateInitString
      *          the delegate init string
      */
     @SuppressWarnings("UnusedDeclaration") /* called reflectively */
@@ -1044,9 +1042,7 @@ public abstract class JobStoreSupport implements JobStore, Constants {
      * Store the given <code>{@link org.quartz.JobDetail}</code> and <code>{@link org.quartz.Trigger}</code>.
      * </p>
      * 
-     * @param newJob
      *          The <code>JobDetail</code> to be stored.
-     * @param newTrigger
      *          The <code>Trigger</code> to be stored.
      * @throws ObjectAlreadyExistsException
      *           if a <code>Job</code> with the same name/group already
@@ -1071,9 +1067,7 @@ public abstract class JobStoreSupport implements JobStore, Constants {
      * Store the given <code>{@link org.quartz.JobDetail}</code>.
      * </p>
      * 
-     * @param newJob
      *          The <code>JobDetail</code> to be stored.
-     * @param replaceExisting
      *          If <code>true</code>, any <code>Job</code> existing in the
      *          <code>JobStore</code> with the same name & group should be
      *          over-written.
@@ -1140,9 +1134,7 @@ public abstract class JobStoreSupport implements JobStore, Constants {
      * Store the given <code>{@link org.quartz.Trigger}</code>.
      * </p>
      * 
-     * @param newTrigger
      *          The <code>Trigger</code> to be stored.
-     * @param replaceExisting
      *          If <code>true</code>, any <code>Trigger</code> existing in
      *          the <code>JobStore</code> with the same name & group should
      *          be over-written.
@@ -1601,11 +1593,8 @@ public abstract class JobStoreSupport implements JobStore, Constants {
      * Store the given <code>{@link org.quartz.Calendar}</code>.
      * </p>
      * 
-     * @param calName
      *          The name of the calendar.
-     * @param calendar
      *          The <code>Calendar</code> to be stored.
-     * @param replaceExisting
      *          If <code>true</code>, any <code>Calendar</code> existing
      *          in the <code>JobStore</code> with the same name & group
      *          should be over-written.
@@ -1735,7 +1724,6 @@ public abstract class JobStoreSupport implements JobStore, Constants {
      * Retrieve the given <code>{@link org.quartz.Trigger}</code>.
      * </p>
      * 
-     * @param calName
      *          The name of the <code>Calendar</code> to be retrieved.
      * @return The desired <code>Calendar</code>, or null if there is no
      *         match.

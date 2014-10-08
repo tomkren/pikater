@@ -140,9 +140,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger<DailyTimeInter
      * repeat at the the given interval.
      * </p>
      * 
-     * @param startTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should begin occurring.          
-     * @param endTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should stop occurring.          
      * @param intervalUnit The repeat interval unit. The only intervals that are valid for this type of trigger are 
      * {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
@@ -158,9 +156,7 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger<DailyTimeInter
      * repeat at the the given interval.
      * </p>
      * 
-     * @param startTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should begin occurring.          
-     * @param endTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should stop occurring.          
      * @param intervalUnit The repeat interval unit. The only intervals that are valid for this type of trigger are 
      * {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
@@ -177,19 +173,14 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger<DailyTimeInter
      * and repeat at the the given interval until the given end time.
      * </p>
      * 
-     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
-     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
-     * @param startTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should begin occurring.          
-     * @param endTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should stop occurring.          
      * @param intervalUnit The repeat interval unit. The only intervals that are valid for this type of trigger are
      * {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
-     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      * @throws IllegalArgumentException if an invalid IntervalUnit is given, or the repeat interval is zero or less.
      */
@@ -205,19 +196,14 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger<DailyTimeInter
      * and repeat at the the given interval until the given end time.
      * </p>
      * 
-     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
-     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
-     * @param startTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should begin occurring.          
-     * @param endTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should stop occurring.          
      * @param intervalUnit The repeat interval unit. The only intervals that are valid for this type of trigger are 
      * {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
-     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      * @throws IllegalArgumentException if an invalid IntervalUnit is given, or the repeat interval is zero or less.
      */
@@ -241,19 +227,14 @@ public class DailyTimeIntervalTriggerImpl extends AbstractTrigger<DailyTimeInter
      * interval until the given end time.
      * </p>
      * 
-     * @param startTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to fire.
-     * @param endTime
      *          A <code>Date</code> set to the time for the <code>Trigger</code>
      *          to quit repeat firing.
-     * @param startTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should begin occurring.          
-     * @param endTimeOfDay 
      *          The <code>TimeOfDay</code> that the repeating should stop occurring.          
      * @param intervalUnit The repeat interval unit. The only intervals that are valid for this type of trigger are 
      * {@link IntervalUnit#SECOND}, {@link IntervalUnit#MINUTE}, and {@link IntervalUnit#HOUR}.
-     * @param repeatInterval
      *          The number of milliseconds to pause between the repeat firing.
      * @throws IllegalArgumentException if an invalid IntervalUnit is given, or the repeat interval is zero or less.
      */

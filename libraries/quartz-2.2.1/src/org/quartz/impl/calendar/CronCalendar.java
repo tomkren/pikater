@@ -61,7 +61,6 @@ public class CronCalendar extends BaseCalendar {
      *                     see {@link BaseCalendar} for more information on base
      *                     calendar functionality
      * @param expression   a String representation of the desired cron expression
-     * @param timeZone
      *          Specifies for which time zone the <code>expression</code>
      *          should be interpreted, i.e. the expression 0 0 10 * * ?, is
      *          resolved to 10:00 am in this time zone.  If 

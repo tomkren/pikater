@@ -387,7 +387,6 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * this Trigger.
      * </p>
      * 
-     * @param calendarName
      *          use <code>null</code> to dis-associate a Calendar.
      */
     public void setCalendarName(String calendarName) {
@@ -518,10 +517,8 @@ public abstract class AbstractTrigger<T extends Trigger> implements OperableTrig
      * in order to get the final instruction code from the trigger.
      * </p>
      * 
-     * @param context
      *          is the <code>JobExecutionContext</code> that was used by the
      *          <code>Job</code>'s<code>execute(xx)</code> method.
-     * @param result
      *          is the <code>JobExecutionException</code> thrown by the
      *          <code>Job</code>, if any (may be null).
      * @return one of the CompletedExecutionInstruction constants.

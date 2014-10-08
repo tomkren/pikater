@@ -7,7 +7,6 @@ import jade.content.onto.OntologyException;
 public class Main {
 
 	/**
-	 * @param args
 	 * @throws OntologyException 
 	 */
 	public static void main(String[] args) throws OntologyException {

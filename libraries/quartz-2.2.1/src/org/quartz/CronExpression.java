@@ -280,7 +280,6 @@ public final class CronExpression implements Serializable, Cloneable {
      * Constructs a new {@code CronExpression} as a copy of an existing
      * instance.
      * 
-     * @param expression
      *            The existing cron expression to be copied
      */
     public CronExpression(CronExpression expression) {

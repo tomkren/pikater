@@ -36,8 +36,6 @@ public class DataRegistry {
 	/**
 	 * Constructor - initialization
 	 * 
-	 * @param agent
-	 * @param cpuCoresStructure
 	 */
 	public DataRegistry(PikaterAgent agent,
 			CPUCoresStructure cpuCoresStructure) {
@@ -73,8 +71,6 @@ public class DataRegistry {
 	/**
 	 * Save data to concrete location
 	 * 
-	 * @param taskToSolve
-	 * @param slaveServerAID
 	 */
 	public void saveDataLocation(TaskToSolve taskToSolve, AID slaveServerAID) {
 		
@@ -105,8 +101,6 @@ public class DataRegistry {
 	/**
 	 * Get Locations for the concrete Task
 	 * 
-	 * @param task
-	 * @return
 	 */
 	public DataFiles getDataLocations(TaskToSolve task) {
 		
@@ -132,7 +126,6 @@ public class DataRegistry {
 	/**
 	 * Delete dead CPU Cores
 	 * 
-	 * @param deadSlaveServers
 	 */
 	public void deleteDeadCPUCores(List<AID> deadSlaveServers) {
 		

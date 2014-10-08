@@ -49,8 +49,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
     }
     /**
 	 * Creates an option with a single predefined value. Value type and restrictions are inferred.
-	 * @param name
-	 * @param defaultValue
 	 */
 	public NewOption(String name, IValueData defaultValue)
 	{
@@ -59,9 +57,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	/**
 	 * Creates an option with a single predefined value. Value 
 	 * type and restrictions are inferred from the arguments.
-	 * @param name
-	 * @param defaultValue
-	 * @param rangeRestriction
 	 */
 	public NewOption(String name, IValueData defaultValue, RangeRestriction rangeRestriction)
 	{
@@ -70,9 +65,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	/**
 	 * Creates an option with a single predefined value. Value 
 	 * type and restrictions are inferred from the arguments.
-	 * @param name
-	 * @param defaultValue
-	 * @param setRestriction
 	 */
 	public NewOption(String name, IValueData defaultValue, SetRestriction setRestriction)
 	{
@@ -80,8 +72,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	}
 	/**
 	 * Creates an option with a single predefined {@link QuestionMarkRange} value. Value type and restrictions are inferred.
-	 * @param name
-	 * @param defaultValue
 	 */
 	public NewOption(String name, QuestionMarkRange defaultValue)
 	{
@@ -89,8 +79,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	}
 	/**
 	 * Creates an option with a single predefined {@link QuestionMarkSet} value. Value type and restrictions are inferred.
-	 * @param name
-	 * @param defaultValue
 	 */
 	public NewOption(String name, QuestionMarkSet defaultValue)
 	{
@@ -99,8 +87,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	/**
 	 * Creates an option with a single predefined value. Value 
 	 * type and restrictions are inferred from the arguments.
-	 * @param name
-	 * @param value
      */
 	public NewOption(String name, Value value)
 	{
@@ -109,8 +95,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	/**
 	 * Creates an option with a single predefined value. Value 
 	 * type and restrictions are inferred from the arguments.
-	 * @param name
-	 * @param value
      */
 	public NewOption(String name, Value value, ValueType... types)
 	{
@@ -118,9 +102,7 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	}
 	/**
 	 * Creates an option with a single predefined value. Value type is inferred, restriction is given.
-	 * @param name
 	 * @param value <font color="red">make sure the value's type is the same instance as in the 'restriction' param</font>
-	 * @param restriction
 	 */
 	public NewOption(String name, Value value, TypeRestriction restriction)
 	{
@@ -128,8 +110,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	}
 	/**
 	 * Creates an option with multiple values.
-	 * @param name
-	 * @param restrictions
 	 */
 	public NewOption(String name, List<Value> values, List<TypeRestriction> restrictions)
 	{
@@ -137,9 +117,6 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 	}
 	/**
 	 * More or less a copy-constructor; for internal use.
-	 * @param name
-	 * @param values
-	 * @param restrictions
 	 */
 	private NewOption(String name, ValuesForOption values, RestrictionsForOption restrictions)
 	{

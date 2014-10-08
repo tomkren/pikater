@@ -48,7 +48,6 @@ public class JobDetailSupport {
     }
 
     /**
-     * @param cData
      * @return JobDetail
      */
     public static JobDetail newJobDetail(CompositeData cData)
@@ -107,7 +106,6 @@ public class JobDetailSupport {
     }
     
     /**
-     * @param jobDetail
      * @return CompositeData
      */
     public static CompositeData toCompositeData(JobDetail jobDetail) {

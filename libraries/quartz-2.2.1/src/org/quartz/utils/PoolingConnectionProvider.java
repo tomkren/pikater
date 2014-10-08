@@ -147,7 +147,6 @@ public class PoolingConnectionProvider implements ConnectionProvider {
      * </UL>
      * </p>
      * 
-     * @param config
      *            configuration properties
      */
     public PoolingConnectionProvider(Properties config) throws SchedulerException, SQLException {

@@ -168,9 +168,6 @@ public class Parser {
     /**
      * Processes a node that is in the beginning of computation - reads file
      * 
-     * @param file
-     * @param child
-     * @param connectionName
      */
     private void parseFileDataProvider(FileDataProvider file,
     		ComputationNode child, String connectionName) {

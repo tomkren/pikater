@@ -108,10 +108,8 @@ public class SimpleThreadPool implements ThreadPool {
      * of <code>Thread</code> s that have the given priority.
      * </p>
      * 
-     * @param threadCount
      *          the number of worker <code>Threads</code> in the pool, must
      *          be > 0.
-     * @param threadPriority
      *          the thread priority for the worker threads.
      * 
      * @see java.lang.Thread
@@ -192,7 +190,6 @@ public class SimpleThreadPool implements ThreadPool {
     }
 
     /**
-     * @param inheritLoader
      *          The threadsInheritContextClassLoaderOfInitializingThread to
      *          set.
      */
@@ -219,7 +216,6 @@ public class SimpleThreadPool implements ThreadPool {
     }
 
     /**
-     * @param makeThreadsDaemons
      *          The value of makeThreadsDaemons to set.
      */
     public void setMakeThreadsDaemons(boolean makeThreadsDaemons) {
@@ -404,7 +400,6 @@ public class SimpleThreadPool implements ThreadPool {
      * thread.
      * </p>
      * 
-     * @param runnable
      *          the <code>Runnable</code> to be added.
      */
     public boolean runInThread(Runnable runnable) {

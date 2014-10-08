@@ -60,9 +60,7 @@ public class TriggerStatus {
     /**
      * Construct a new TriggerStatus with the status name and nextFireTime.
      * 
-     * @param status
      *          the trigger's status
-     * @param nextFireTime
      *          the next time the trigger will fire
      */
     public TriggerStatus(String status, Date nextFireTime) {

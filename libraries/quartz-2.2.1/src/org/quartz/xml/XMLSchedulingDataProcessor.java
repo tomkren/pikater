@@ -365,7 +365,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
     /**
      * Process the xml file named <code>fileName</code>.
      * 
-     * @param fileName
      *          meta data file name.
      */
     protected void processFile(String fileName) throws Exception {
@@ -428,7 +427,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
     /**
      * Returns an <code>URL</code> from the fileName as a resource.
      * 
-     * @param fileName
      *          file name.
      * @return an <code>URL</code> from the fileName as a resource.
      */
@@ -456,9 +454,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
      * Process the xmlfile named <code>fileName</code> with the given system
      * ID.
      * 
-     * @param fileName
      *          meta data file name.
-     * @param systemId
      *          system ID.
      */
     protected void processFile(String fileName, String systemId)
@@ -482,9 +478,7 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
      * Process the xmlfile named <code>fileName</code> with the given system
      * ID.
      * 
-     * @param stream
      *          an input stream containing the xml content.
-     * @param systemId
      *          system ID.
      */
     public void processStreamAndScheduleJobs(InputStream stream, String systemId, Scheduler sched)
@@ -842,7 +836,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
      * Process the xml file in the given location, and schedule all of the
      * jobs defined within it.
      * 
-     * @param fileName
      *          meta data file name.
      */
     public void processFileAndScheduleJobs(String fileName, Scheduler sched) throws Exception {
@@ -853,7 +846,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
      * Process the xml file in the given location, and schedule all of the
      * jobs defined within it.
      * 
-     * @param fileName
      *          meta data file name.
      */
     public void processFileAndScheduleJobs(String fileName, String systemId, Scheduler sched) throws Exception {
@@ -885,7 +877,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
     /**
      * Returns an <code>InputStream</code> from the fileName as a resource.
      * 
-     * @param fileName
      *          file name.
      * @return an <code>InputStream</code> from the fileName as a resource.
      */
@@ -980,7 +971,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
     /**
      * Schedules the given sets of jobs and triggers.
      * 
-     * @param sched
      *          job scheduler.
      * @exception SchedulerException
      *              if the Job or Trigger cannot be added to the Scheduler, or
@@ -1176,7 +1166,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
      * 
      * Receive notification of a warning.
      * 
-     * @param e
      *          The error information encapsulated in a SAX parse exception.
      * @exception SAXException
      *              Any SAX exception, possibly wrapping another exception.
@@ -1190,7 +1179,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
      * 
      * Receive notification of a recoverable error.
      * 
-     * @param e
      *          The error information encapsulated in a SAX parse exception.
      * @exception SAXException
      *              Any SAX exception, possibly wrapping another exception.
@@ -1204,7 +1192,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
      * 
      * Receive notification of a non-recoverable error.
      * 
-     * @param e
      *          The error information encapsulated in a SAX parse exception.
      * @exception SAXException
      *              Any SAX exception, possibly wrapping another exception.
@@ -1216,7 +1203,6 @@ public class XMLSchedulingDataProcessor implements ErrorHandler {
     /**
      * Adds a detected validation exception.
      * 
-     * @param e
      *          SAX exception.
      */
     protected void addValidationException(SAXException e) {

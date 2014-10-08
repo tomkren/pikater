@@ -88,10 +88,6 @@ public class JPAUser extends JPAAbstractEntity{
 	 * - not an admin,
 	 * - lowest priority possible (administrator should raise),
 	 * - passive status (administrator acceptance is needed).  
-	 * @param login
-	 * @param password
-	 * @param email
-	 * @return
 	 */
 	public static JPAUser createAccountForGUI(String login, String password, String email)
 	{
@@ -103,10 +99,6 @@ public class JPAUser extends JPAAbstractEntity{
 	 * - admin account,
 	 * - maximum priority,
 	 * - active status (no administrator acceptance is needed). 
-	 * @param login
-	 * @param password
-	 * @param email
-	 * @param role
 	 */
 	public static JPAUser createAccountForDBInit(String login, String password, String email, JPARole role)
 	{
@@ -115,7 +107,6 @@ public class JPAUser extends JPAAbstractEntity{
 	
 	/**
 	 * Used in web for offline development when the database is not reachable or usable for some reason.
-	 * @return
 	 */
 	public static JPAUser getDummy()
 	{

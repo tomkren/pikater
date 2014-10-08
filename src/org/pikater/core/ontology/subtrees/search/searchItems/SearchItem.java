@@ -19,8 +19,6 @@ public abstract class SearchItem implements Concept {
 	/**
 	 * Create random solution item
 	 * 
-	 * @param rndGen
-	 * @return
 	 */
 	public IValueData randomValue(Random rndGen)
     {
@@ -32,7 +30,6 @@ public abstract class SearchItem implements Concept {
 	/**
 	 * Returns all possible values from this schema
 	 * 
-	 * @return
 	 */
 	public abstract List<IValueData> possibleValues();
 	

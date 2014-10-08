@@ -442,7 +442,6 @@ public class Agent_GUIKlara extends PikaterAgent {
 	
 	/**
 	 * Inserts a new dataset to system
-	 * @param cmd
 	 * @throws DataSetConverterException 
 	 * @throws IOException 
 	 */
@@ -503,7 +502,6 @@ public class Agent_GUIKlara extends PikaterAgent {
 	 * Sends a request to save dataset by using {@link Agent_DataManager}
 	 * @param filename - name of the dataset file to save
 	 * @param userID - user who is storing file to the database
-	 * @param description
 	 * @return int dataSetID
 	 */
 	private int sendRequestSaveDataSet(String filename, int userID, String description){

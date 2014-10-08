@@ -24,7 +24,6 @@ public class IOUtils
 	
 	/**
 	 * If you're going to use this, first use the {@link #setAbsoluteBaseAppPath setAbsoluteBaseAppPath} method.
-	 * @return
 	 */
 	public static String getAbsoluteBaseAppPath()
 	{
@@ -62,7 +61,6 @@ public class IOUtils
 	
 	/**
 	 * Abstract method to join string paths. Automatically handles directory separation. The argument paths are assumed to be valid.
-	 * @param prefixPath
 	 * @param fileNameOrDirectory Must not be an absolute path.
 	 * @return Path that is a concatenation of the arguments.
 	 */
@@ -119,8 +117,6 @@ public class IOUtils
 	
 	/**
 	 * Creates a temporary file in the system defined temp directory, with no extension.
-	 * @param prefix
-	 * @return
 	 */
 	public static File createTemporaryFile(String prefix)
 	{
@@ -130,9 +126,6 @@ public class IOUtils
 	/**
 	 * Creates a temporary file in the system defined temp directory, with
 	 * the given extension.
-	 * @param prefix
-	 * @param extension
-	 * @return
 	 */
 	public static File createTemporaryFile(String prefix, String extension)
 	{
@@ -151,10 +144,7 @@ public class IOUtils
 	
 	/**
 	 * Creates a temporary file in the given directory, with given extension.
-	 * @param directory
-	 * @param prefix
 	 * @param extension must include a dot, e.g. ".jpg"
-	 * @return
 	 */
 	public static File createTemporaryFile(String directory, String prefix, String extension)
 	{

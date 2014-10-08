@@ -49,7 +49,6 @@ public interface MutableTrigger extends Trigger {
      * this Trigger.
      * </p>
      * 
-     * @param calendarName
      *          use <code>null</code> to dis-associate a Calendar.
      */
     public void setCalendarName(String calendarName);

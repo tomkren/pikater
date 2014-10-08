@@ -62,9 +62,7 @@ public interface TriggerListener {
      * interface.
      * </p>
      * 
-     * @param trigger
      *          The <code>Trigger</code> that has fired.
-     * @param context
      *          The <code>JobExecutionContext</code> that will be passed to
      *          the <code>Job</code>'s<code>execute(xx)</code> method.
      */
@@ -83,9 +81,7 @@ public interface TriggerListener {
      * interface.
      * </p>
      * 
-     * @param trigger
      *          The <code>Trigger</code> that has fired.
-     * @param context
      *          The <code>JobExecutionContext</code> that will be passed to
      *          the <code>Job</code>'s<code>execute(xx)</code> method.
      */
@@ -105,7 +101,6 @@ public interface TriggerListener {
      * does a lot.
      * </p>
      * 
-     * @param trigger
      *          The <code>Trigger</code> that has misfired.
      */
     void triggerMisfired(Trigger trigger);
@@ -118,12 +113,9 @@ public interface TriggerListener {
      * called.
      * </p>
      * 
-     * @param trigger
      *          The <code>Trigger</code> that was fired.
-     * @param context
      *          The <code>JobExecutionContext</code> that was passed to the
      *          <code>Job</code>'s<code>execute(xx)</code> method.
-     * @param triggerInstructionCode
      *          the result of the call on the <code>Trigger</code>'s<code>triggered(xx)</code>
      *          method.
      */

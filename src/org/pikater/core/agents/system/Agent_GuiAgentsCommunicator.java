@@ -106,8 +106,6 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 	 * Save a new Batch by using {@link Agent_DataManager} and send
 	 * inform message to {@link Agent_Manager}
 	 * 
-	 * @param request
-	 * @param action
 	 * @return - OK message
 	 */
 	private ACLMessage respondToExecuteBatch(ACLMessage request,

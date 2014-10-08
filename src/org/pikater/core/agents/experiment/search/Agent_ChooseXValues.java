@@ -50,9 +50,6 @@ public class Agent_ChooseXValues extends Agent_Search {
 	/**
 	 * Generate solution
 	 * 
-	 * @param curSolutionPart
-	 * @param possibleSolutionValues
-	 * @param begInd
 	 */
 	private void generate(List<IValueData> curSolutionPart,
 			List<List<IValueData>> possibleSolutionValues, int begInd) {
@@ -92,7 +89,6 @@ public class Agent_ChooseXValues extends Agent_Search {
 	/**
 	 * Generate solutions
 	 * 
-	 * @param schema
 	 */
 	private void generateSolutionsList(List<SearchItem> schema) {
 		List<List<IValueData>> possibleSolutions =

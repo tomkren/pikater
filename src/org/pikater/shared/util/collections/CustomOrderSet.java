@@ -19,7 +19,6 @@ public class CustomOrderSet<T> extends TreeSet<T>
 	
 	/**
 	 * Creates an empty set sorting with the given comparator.
-	 * @param comp
 	 */
 	public CustomOrderSet(Comparator<T> comp)
 	{
@@ -29,7 +28,6 @@ public class CustomOrderSet<T> extends TreeSet<T>
 	/**
 	 * Creates a duplicate of the given collection that sorts using natural
 	 * ordering (the element type has to implement {@link Comparable}). 
-	 * @param unsortedCollection
 	 */
 	public CustomOrderSet(Collection<T> unsortedCollection)
 	{
@@ -38,8 +36,6 @@ public class CustomOrderSet<T> extends TreeSet<T>
 
 	/**
 	 * Creates a duplicate of the given collection that sorts using the given comparator.
-	 * @param unsortedCollection
-	 * @param comp
 	 */
 	public CustomOrderSet(Collection<T> unsortedCollection, Comparator<T> comp)
 	{

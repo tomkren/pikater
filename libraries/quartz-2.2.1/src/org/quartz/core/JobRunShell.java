@@ -89,7 +89,6 @@ public class JobRunShell extends SchedulerListenerSupport implements Runnable {
      * Create a JobRunShell instance with the given settings.
      * </p>
      *
-     * @param scheduler
      *          The <code>Scheduler</code> instance that should be made
      *          available within the <code>JobExecutionContext</code>.
      */

@@ -33,7 +33,6 @@ public class Value implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * Value type is inferred from the argument.
-	 * @param defaultValue
 	 */
 	public Value(IValueData defaultValue)
 	{
@@ -41,8 +40,6 @@ public class Value implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * Value type is inferred from the arguments.
-	 * @param defaultValue
-	 * @param rangeRestriction
 	 */
 	public Value(IValueData defaultValue, RangeRestriction rangeRestriction)
 	{
@@ -50,8 +47,6 @@ public class Value implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * Value type is inferred from the arguments.
-	 * @param defaultValue
-	 * @param setRestriction
 	 */
 	public Value(IValueData defaultValue, SetRestriction setRestriction)
 	{
@@ -59,7 +54,6 @@ public class Value implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * Full constructor. Always to be used. 
-	 * @param type
 	 */
 	private Value(ValueType type)
 	{
@@ -73,7 +67,6 @@ public class Value implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * If null is given, default value is set as current value.
-	 * @param currentValue
 	 */
 	public void setCurrentValue(IValueData currentValue)
 	{
@@ -85,7 +78,6 @@ public class Value implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * Don't forget to also call {@link #setCurrentValue(IValueData)} to match this new type.
-	 * @param type
 	 */
 	public void setType(ValueType type)
 	{
@@ -105,7 +97,6 @@ public class Value implements Concept, IValidated, ICloneable
 	 * - Type binding: default value matches current value, both match the registered type.
 	 * - Type validity: registered type is valid.
 	 * - Restrictions: if registered type has a restriction, type binding and validity is checked against it.
-	 * @return
 	 */
 	@Override
 	public boolean isValid()
