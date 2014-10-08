@@ -12,6 +12,11 @@ import java.util.Set;
 
 import org.pikater.shared.util.ICloneable;
 
+/**
+ * Utility class providing various utility methods to collections.
+ * 
+ * @author SkyCrawl
+ */
 public class CollectionUtils
 {
 	/**

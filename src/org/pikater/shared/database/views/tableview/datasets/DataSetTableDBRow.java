@@ -10,7 +10,7 @@ import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
-import org.pikater.shared.util.FilesizeUtils;
+import org.pikater.shared.util.IOUtils;
 
 public class DataSetTableDBRow extends AbstractTableRowDBView {
 
@@ -46,7 +46,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				return new StringReadOnlyDBViewValue("N/A");
 			}
 		case SIZE:
-			return new StringReadOnlyDBViewValue(FilesizeUtils.formatFileSize(dataset.getSize()));
+			return new StringReadOnlyDBViewValue(IOUtils.formatFileSize(dataset.getSize()));
 		case CREATED:
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(dataset.getCreated()));
 		case OWNER:

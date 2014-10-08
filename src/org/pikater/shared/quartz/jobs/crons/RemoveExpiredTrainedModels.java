@@ -10,6 +10,12 @@ import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 
+/**
+ * Even though class is not used at all, it serves as a nice example
+ * of how to define a cron in our application.
+ * 
+ * @author SkyCrawl
+ */
 @DisallowConcurrentExecution
 public class RemoveExpiredTrainedModels extends ZeroArgJob
 {
@@ -35,7 +41,7 @@ public class RemoveExpiredTrainedModels extends ZeroArgJob
 	@Override
 	public void execute() throws JobExecutionException
 	{
-		//TODO: is this OK? Deleting models associated with exepriments, but leaving the experiment statistic untouched
+		//TODO: is this OK? Deleting models associated with experiments, but leaving the experiment statistic untouched
 		//(apart from removing model ID)
 		try{
 			DAOs.modelDAO.removeOldModels((short) 90);//remove models older than 90 days

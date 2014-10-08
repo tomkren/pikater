@@ -7,9 +7,16 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.DecimalFormat;
 
 import org.pikater.shared.logging.database.PikaterDBLogger;
 
+/**
+ * Utility class handling some common tasks related to
+ * files and paths.
+ * 
+ * @author SkyCrawl
+ */
 public class IOUtils
 {
 	//----------------------------------------------------------------------------------------------------------------
@@ -17,13 +24,21 @@ public class IOUtils
 	
 	private static String baseAbsAppPath = null;
 	
+	/**
+	 * This method must be called prior to using any other
+	 * path-related methods from this class.
+	 * 
+	 * @param baseAbsAppPath absolute path to this application (the "src"
+	 * folder's parent folder)
+	 */
 	public static void setAbsoluteBaseAppPath(String baseAbsAppPath)
 	{
 		IOUtils.baseAbsAppPath = baseAbsAppPath;
 	}
 	
 	/**
-	 * If you're going to use this, first use the {@link #setAbsoluteBaseAppPath setAbsoluteBaseAppPath} method.
+	 * Gets the path set with {@link #setAbsoluteBaseAppPath(String)}. If null,
+	 * throws an exception.
 	 */
 	public static String getAbsoluteBaseAppPath()
 	{
@@ -34,37 +49,60 @@ public class IOUtils
 		return baseAbsAppPath;
 	}
 	
+	/**
+	 * {@link #setAbsoluteBaseAppPath(String)} needs to be called before using this
+	 * method.
+	 */
 	public static String getAbsoluteSRCPath()
 	{
 		return joinPathComponents(getAbsoluteBaseAppPath(), "src");
 	}
 	
+	/**
+	 * {@link #setAbsoluteBaseAppPath(String)} needs to be called before using this
+	 * method.
+	 */
 	public static String getAbsoluteCorePath()
 	{
 		return joinPathComponents(getAbsoluteBaseAppPath(), "core");
 	}
 	
+	/**
+	 * {@link #setAbsoluteBaseAppPath(String)} needs to be called before using this
+	 * method.
+	 */
 	public static String getAbsoluteWEBINFPath()
 	{
 		return joinPathComponents(getAbsoluteBaseAppPath(), "WEB-INF");
 	}
 	
+	/**
+	 * {@link #setAbsoluteBaseAppPath(String)} needs to be called before using this
+	 * method.
+	 */
 	public static String getAbsoluteWEBINFCLASSESPath()
 	{
 		return joinPathComponents(getAbsoluteWEBINFPath(), "classes");
 	}
 	
+	/**
+	 * {@link #setAbsoluteBaseAppPath(String)} needs to be called before using this
+	 * method.
+	 */
 	public static String getAbsoluteWEBINFCONFPath()
 	{
 		return joinPathComponents(getAbsoluteWEBINFPath(), "conf");
 	}
 	
 	/**
-	 * Abstract method to join string paths. Automatically handles directory separation. The argument paths are assumed to be valid.
-	 * @param fileNameOrDirectory Must not be an absolute path.
-	 * @return Path that is a concatenation of the arguments.
+	 * Abstract method to join string-defined paths. Automatically handles
+	 * directory separation.
+	 * 
+	 * @param prefixPath 
+	 * @param suffixPath may denote a directory or file but must NOT be an absolute path
+	 * @return
 	 */
-	public static String joinPathComponents(String prefixPath, String fileNameOrDirectory)
+	public static String joinPathComponents(String prefixPath, String suffixPath)
 	{
 		StringBuilder result = new StringBuilder();
 		result.append(prefixPath);
@@ -72,23 +110,41 @@ public class IOUtils
 		{
 			result.append(System.getProperty("file.separator"));
 		}
-		if(fileNameOrDirectory.startsWith(System.getProperty("file.separator")))
+		if(suffixPath.startsWith(System.getProperty("file.separator")))
 		{
 			throw new IllegalArgumentException("The suffix path must not be absolute.");
 		}
-		result.append(fileNameOrDirectory);
+		result.append(suffixPath);
 		return result.toString();
 	}
 	
-	public static String getAbsolutePath(String basePath, Class<?> clazz)
+	/**
+	 * Gets an absolute path to the given class - consists of 2 parts:
+	 * <ol>
+	 * <li> Absolute path to the application. See {@link #setAbsoluteBaseAppPath(String)},
+	 * which must be called prior to this method.
+	 * <li> Relative source path to the given class.
+	 * </ol>
+	 * 
+	 * @param basePath
+	 * @param clazz
+	 * @return
+	 */
+	public static String getAbsolutePath(Class<?> clazz)
 	{
-		return joinPathComponents(basePath, clazz.getPackage().getName().replace(".", System.getProperty("file.separator")))
+		return joinPathComponents(getAbsoluteSRCPath(), clazz.getPackage().getName().replace(".", System.getProperty("file.separator")))
 				+ System.getProperty("file.separator"); 
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------
 	// FILE RELATED STUFF
-		
+	
+	/**
+	 * Reads the content of the given file to a string.
+	 * 
+	 * @param filePath 
+	 * @return
+	 */
 	public static String readTextFile(String filePath)
 	{
 		try
@@ -103,6 +159,13 @@ public class IOUtils
 		}
 	}
 	
+	/**
+	 * Writes the given content to the given using the given charset.
+	 * 
+	 * @param filePath
+	 * @param content
+	 * @param charset
+	 */
 	public static void writeToFile(String filePath, String content, Charset charset)
 	{
 		try
@@ -117,6 +180,9 @@ public class IOUtils
 	
 	/**
 	 * Creates a temporary file in the system defined temp directory, with no extension.
+	 * 
+	 * @param prefix
+	 * @return
 	 */
 	public static File createTemporaryFile(String prefix)
 	{
@@ -126,6 +192,10 @@ public class IOUtils
 	/**
 	 * Creates a temporary file in the system defined temp directory, with
 	 * the given extension.
+	 * 
+	 * @param prefix
+	 * @param extension
+	 * @return
 	 */
 	public static File createTemporaryFile(String prefix, String extension)
 	{
@@ -144,7 +214,12 @@ public class IOUtils
 	
 	/**
 	 * Creates a temporary file in the given directory, with given extension.
+	 * 
+	 * @param extension
+	 * @param directory
+	 * @param prefix
 	 * @param extension must include a dot, e.g. ".jpg"
+	 * @return
 	 */
 	public static File createTemporaryFile(String directory, String prefix, String extension)
 	{
@@ -167,5 +242,21 @@ public class IOUtils
 	    {
 	    	throw new IllegalStateException("Could not create a temporary file.", e);
 	    }
+	}
+
+	/**
+	 * Converts the given size in bytes into the appropriate string
+	 * notation, e.g. "10 KiB".
+	 * 
+	 * @param size
+	 * @return
+	 * @see <a href="http://stackoverflow.com/questions/3263892/format-file-size-as-mb-gb-etc">StackOverFlow</a>
+	 */
+	public static String formatFileSize(long size)
+	{
+		if(size <= 0) return "0";
+		final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
+		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
 }

@@ -1,4 +1,4 @@
-package  org.pikater.shared;
+package  org.pikater.shared.unused;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
