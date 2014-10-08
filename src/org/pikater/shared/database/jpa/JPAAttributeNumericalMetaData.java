@@ -6,6 +6,10 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPAAttributeNumericalMetaData} represents a recourd about dataset's
+ * one numerical attribute.
+ */
 @Entity
 @Table(name="AttributeNumericalMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)

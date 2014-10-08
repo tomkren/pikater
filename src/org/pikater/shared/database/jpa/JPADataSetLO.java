@@ -26,7 +26,15 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
-
+/**
+ * Class {@link JPADataSetLO} represents record about the datasets available in the database.
+ * These datasets are stored in large object files and this class just contains the ID of that particular large object.
+ * <p>
+ * Datasets have certain metadata, that are stored using several additional classes.
+ * 
+ * @see org.pikater.shared.database.jpa.JPAAttributeMetaData
+ * @see org.pikater.shared.database.jpa.JPAGlobalMetaData
+ */
 @Entity	
 @Table(
 		name="DataSetLO",

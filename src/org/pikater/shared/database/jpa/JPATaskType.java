@@ -7,6 +7,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPATaskType} represents record about the task types, that can
+ * be performed on the datasets.
+ */
 @Entity
 @Table(name="TaskType")
 @NamedQueries({

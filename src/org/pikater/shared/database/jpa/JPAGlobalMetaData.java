@@ -7,6 +7,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPAGlobalMetaData} represents record about global metadata of a dataset.
+ */
 @Entity
 @Table(name="GlobalMetaData")
 @NamedQueries({
