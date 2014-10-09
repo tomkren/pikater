@@ -9,6 +9,12 @@ import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
 import org.pikater.web.visualisation.implementation.datasource.ArffDataset;
 
+/**
+ * Class for accessing an ARFF dataset with the specified attributes for X, Y axis and for point coloring
+ *
+ * @author siposp
+ *
+ */
 public class SingleArffDataset extends ArffDataset{
 	
 	private int attrXIndex;
@@ -117,15 +123,29 @@ public class SingleArffDataset extends ArffDataset{
 		}
 	}
 	
-	
+	/**
+	 * Returns the X axis for the dataset.
+	 * @return {@link Axis} object
+	 * @see org.pikater.web.visualisation.implementation.datasource.ArffDataset#getAxis(int)
+	 */
 	public Axis getXAxis(){
 		return this.getAxis(attrXIndex);
 	}
 	
+	/**
+	 * Returns the Y axis for the dataset.
+	 * @return {@link Axis} object
+	 * @see org.pikater.web.visualisation.implementation.datasource.ArffDataset#getAxis(int)
+	 */
 	public Axis getYAxis(){
 		return this.getAxis(attrYIndex);
 	}
 	
+	/**
+	 * Returns the Colorer for the Z axis.
+	 * @return {@link Colorer} object
+	 * @see org.pikater.web.visualisation.implementation.datasource.ArffDataset#getColorer(int)
+	 */
 	public Colorer getZColorer(){
 		return this.getColorer(attrColorIndex);
 	}

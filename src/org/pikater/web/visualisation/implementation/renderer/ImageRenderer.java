@@ -10,8 +10,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 /**
- * Renderer class, that can be used to render graphics to {@link BufferedImage}.
+ * <p>Renderer class, that can be used to render graphics to {@link BufferedImage}.</p>
+ * <p>Functions of this class draw to an already prepared {@link BufferedImage} object. The main
+ * advantage of the approach is, that the size of final image doesn't depend on the amount of data 
+ * being drawn in the chart. However, huge bitmap images can occupy a significant amount of memory.</p>
  * 
+ * @author siposp
  */
 public class ImageRenderer implements RendererInterface {
 

@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.io.PrintStream;
 
 /**
- * Renderer class, that can be used to render graphics to SVG format.
+ * <p>Renderer class, that can be used to render graphics to Scalable Vector Graphics (SVG) format.</p>
+ * <p>This class can be used for rendering into streams, that results in low memory footprint. However, please consider
+ * that rendering large charts can result in huge output SVG files.</p>
  *
+ * @author siposp
  */
 public class SVGRenderer implements RendererInterface {
 

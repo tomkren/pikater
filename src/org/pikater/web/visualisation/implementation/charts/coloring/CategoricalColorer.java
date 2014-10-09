@@ -4,6 +4,12 @@ import java.awt.Color;
 
 import org.pikater.web.visualisation.implementation.exceptions.ColorerNotMergeableException;
 
+/**
+ * Class implementing colorer used for categorical values.
+ * 
+ * @author siposp
+ *
+ */
 public class CategoricalColorer implements Colorer {
 
 	private int numberOfCategories;
@@ -29,6 +35,9 @@ public class CategoricalColorer implements Colorer {
 		return Color.getHSBColor((float)(value/this.numberOfCategories), 1.0f, 1.0f);
 	}
 
+	/**
+	 * Merges two {@link CategoricalColorer} objects if they have the same number of categories.
+	 */
 	@Override
 	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException
 	{

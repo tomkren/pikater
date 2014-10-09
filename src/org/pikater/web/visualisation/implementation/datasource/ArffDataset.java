@@ -25,6 +25,11 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader.ArffReader;
 
+/**
+ * Abstract class implementing some functions for accessing the dataset 
+ * 
+ * @author siposp
+ */
 public abstract class ArffDataset {
 
 	private InputStream arffStream;
@@ -81,10 +86,19 @@ public abstract class ArffDataset {
 		}
 	}
 	
+	/**
+	 * Returns the structure of the current dataset
+	 * @return {@link Instances} object of the dataset
+	 */
 	public Instances getInstances(){
 		return this.data;
 	}
 
+	/**
+	 * Returns the index of the attribute for a given name
+	 * @param attrName name of the attribute
+	 * @return the index of the attribute or -1 if dataset was not yet initialized
+	 */
 	public int translateAttributeNameToIndex(String attrName){
 		if(data!=null){
 			return data.attribute(attrName).index();
@@ -93,6 +107,11 @@ public abstract class ArffDataset {
 		}
 	}
 	
+	/**
+	 * Returns the name of the attribute for a given index
+	 * @param index of the attribute
+	 * @return name of the attribute
+	 */
 	public String translateAttributeIndexToName(int index){
 		if(data!=null){
 			return data.attribute(index).name();
@@ -101,10 +120,19 @@ public abstract class ArffDataset {
 		}
 	}
 
+	/**
+	 * Returns the value of the given attribute in current row.
+	 * @param attributeIndex index of attribute which value is returned
+	 * @return value of the attribute
+	 */
 	public double getAttributeValue(int attributeIndex){
 		return this.currentInstance.value(attributeIndex);
 	}
 	
+	/**
+	 * Returns the number of attributes.
+	 * @return number of attributes
+	 */
 	public int getNumberOfAttributes(){
 		if(data!=null){
 			return data.numAttributes();
@@ -113,6 +141,11 @@ public abstract class ArffDataset {
 		}
 	}
 	
+	/**
+	 * Tries to read a not yet attended item from the dataset.
+	 * @return true if the next item was read
+	 * @throws IOException
+	 */
 	public boolean next() throws IOException{
 		currentInstance=null;
 		if(datasetInitialized){
@@ -126,6 +159,18 @@ public abstract class ArffDataset {
 		return false;
 	}
 	
+	/**
+	 * <p>Creates the appropriate axis for the dataset's attribute.</p>
+	 * <p>
+	 * Type of the returned axis depends on the attribute's type in the following way:  
+	 * <ul>
+	 * <li>if the attribute contains nominal data (several categories) then {@link CategoricalAxis} is returned</li>
+	 * <li>if the attribute contains other than nominal data (most probably real numbers) then {@link ValueAxis} is returned.</li>
+	 * </ul>
+	 * </p>
+	 * @param attrIndex index of attribute for which the axis is created
+	 * @return the created axis
+	 */
 	public Axis getAxis(int attrIndex){
 		Attribute attribute=data.attribute(attrIndex);
 		Axis res;
@@ -142,7 +187,7 @@ public abstract class ArffDataset {
 							dslo.getAttributeMinValue(attribute.name()),
 							dslo.getAttributeMaxValue(attribute.name()));
 				} catch (AttributeException e) {
-					//however, this shouldn't happen, because stream contains
+					//however, this shouldn't happen, because stream contains the dataset metadata were created for
 					PikaterWebLogger.logThrowable("Unexpected error encountered:", e);
 					res=new ValueAxis();
 				}
@@ -154,6 +199,20 @@ public abstract class ArffDataset {
 		return res;
 	}
 	
+	/**
+	 * <p>Creates the appropriate colorer for the dataset's attribute. This colorer is used
+	 * to generate the proper color of the point representing the data entry.
+	 * </p>
+	 * <p>
+	 * Type of the returned colorer depends on the attribute's type in the following way:
+	 * <ul>
+	 * <li>if the attribute contains nominal data (several categories) then {@link CategoricalColorer} is returned</li>
+	 * <li>if the attribute contains other than nominal data (most probably real numbers) the {@link LinearColorer} is returned</li>
+	 * </ul>
+	 * </p>
+	 * @param attrIndex index of attribute for which the colorer is created
+	 * @return the created colorer
+	 */
 	public Colorer getColorer(int attrIndex){
 		Attribute attribute=data.attribute(attrIndex);
 		if(attribute.isNominal()){
@@ -176,6 +235,10 @@ public abstract class ArffDataset {
 		}	
 	}
 	
+	/**
+	 * Returns the number of data entries in the file
+	 * @return number of data entries
+	 */
 	public int getNumberOfInstances(){
 		if(dslo!=null){
 			return dslo.getGlobalMetaData().getNumberofInstances();
@@ -184,6 +247,10 @@ public abstract class ArffDataset {
 		}
 	}
 	
+	/**
+	 * Closes the stream used for accessing the dataset file
+	 * @throws IOException
+	 */
 	public void close() throws IOException{
 		arffStream.close();
 	}

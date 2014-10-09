@@ -1,5 +1,13 @@
 package org.pikater.web.visualisation.implementation.datasource.single;
 
+/**
+ * Class implementing a point for a triplet. The triplet consists of values of the same type
+ * defined using type parameter T.
+ * 
+ * @author siposp
+ *
+ * @param <T> type of objects forming a triplet
+ */
 public class XYZItem<T> {
 	private T x;
 	private T y;

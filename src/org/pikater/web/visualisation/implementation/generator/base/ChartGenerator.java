@@ -8,11 +8,9 @@ import javax.imageio.ImageIO;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
-import org.pikater.web.visualisation.implementation.charts.MatrixChart;
 import org.pikater.web.visualisation.implementation.charts.SingleChart;
 import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
-import org.pikater.web.visualisation.implementation.datasource.multiple.MultipleArffDataset;
 import org.pikater.web.visualisation.implementation.datasource.single.ArffXYZPoint;
 import org.pikater.web.visualisation.implementation.datasource.single.SingleArffDataset;
 import org.pikater.web.visualisation.implementation.exceptions.AxisNotJoinableException;
@@ -219,92 +217,6 @@ public class ChartGenerator {
 			if((listener!=null)&&(percentage>lastPercentage)){
 				listener.updateProgress(percentage / new Float(100));
 				lastPercentage=percentage;
-			}
-		}
-
-		dataset.close();
-	}
-	
-
-	/**
-	 * Generates a MatrixChart in <b>SVG</b> format for the given {@link JPADataSetLO} object.
-	 * <p>
-	 * Let the number of dataset's attributes be N, then the created chart has N rows and
-	 * N columns and in each subchart the {@link Colorer} is based on N-1<sup>th</sup> attribute. 
-	 * <p>
-	 * If it is possible all axes and the colorer are autoscaled using the data stored in the database.
-	 * <p>
-	 * Variant of this function generating chart in PNG format can be found here: {@link ChartGenerator#generatePNGMatrixDatasetChart(JPADataSetLO, PrintStream) 
-	 * @param input The input {@link JPADataSetLO} object.
-	 * @param output The stream where the result is written
-	 * @throws IOException
-	 */
-	public static void generateSVGMatrixDatasetChart(JPADataSetLO input,PrintStream output) throws IOException{
-		SVGRenderer svgr=new SVGRenderer(output, MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
-		svgr.begin();
-		generateMatrixDatasetChart(input,svgr,null);
-		svgr.end();
-		output.close();
-	}
-	
-	public static void generateSVGMatrixDatasetChart(JPADataSetLO input,PrintStream output,AbstractDSVisResult<?,?> listener) throws IOException{
-		SVGRenderer svgr=new SVGRenderer(output, MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
-		svgr.begin();
-		generateMatrixDatasetChart(input,svgr,listener);
-		svgr.end();
-		output.close();
-	}
-	
-	
-	/**
-	 * Generates a MatrixChart in <b>PNG</b> format for the given {@link JPADataSetLO} object.
-	 * <p>
-	 * Let the number of dataset's attributes be N, then the created chart has N rows and
-	 * N columns and in each subchart the {@link Colorer} is based on N-1<sup>th</sup> attribute. 
-	 * <p>
-	 * If it is possible all axes and the colorer are autoscaled using the data stored in the database.
-	 * <p>
-	 * Variant of this function generating chart in SVG format can be found here: {@link ChartGenerator#generateSVGMatrixDatasetChart(JPADataSetLO, PrintStream) 
-	 * @param input The input {@link JPADataSetLO} object.
-	 * @param output The stream where the result is written
-	 * @throws IOException
-	 */
-	public static void generatePNGMatrixDatasetChart(JPADataSetLO input,PrintStream output) throws IOException{
-		ImageRenderer ir=new ImageRenderer(MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
-		ir.begin();
-		generateMatrixDatasetChart(input,ir,null);
-		ir.end();
-		
-		ImageIO.write(ir.getImage(), "PNG", output);
-		
-		output.close();
-	}
-	
-	public static void generatePNGMatrixDatasetChart(JPADataSetLO input,PrintStream output, AbstractDSVisResult<?,?> listener) throws IOException{
-		ImageRenderer ir=new ImageRenderer(MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
-		ir.begin();
-		generateMatrixDatasetChart(input,ir, listener);
-		ir.end();
-		
-		ImageIO.write(ir.getImage(), "PNG", output);
-		
-		output.close();
-	}
-	
-	private static void generateMatrixDatasetChart(JPADataSetLO input,RendererInterface renderer, AbstractDSVisResult<?,?> listener) throws IOException
-	{
-		MultipleArffDataset dataset=new MultipleArffDataset(input);
-
-		int attrNum=dataset.getNumberOfAttributes();
-		
-		MatrixChart mchg=new MatrixChart(dataset, MATRIX_CHART_SIZE, MATRIX_CHART_SIZE, attrNum, renderer, attrNum-1);
-		
-		while(dataset.next()){
-			
-			for(int row=0;row<attrNum;row++){
-				for(int column=0;column<attrNum;column++){
-					mchg.renderPoint(row, column, dataset.getAttributeValue(column), dataset.getAttributeValue(row), dataset.getAttributeValue(attrNum-1), 7);
-				}
 			}
 		}
 

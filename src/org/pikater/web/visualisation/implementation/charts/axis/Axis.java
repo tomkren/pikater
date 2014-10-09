@@ -4,6 +4,12 @@ import java.awt.Color;
 
 import org.pikater.web.visualisation.implementation.exceptions.AxisNotJoinableException;
 
+/**
+ * Abstract class containing implementations of functions common for all axis types.
+ *  
+ * @author siposp
+ *
+ */
 public abstract class Axis {
 	/**
 	 * Returns the position of the given value relative to this axis
@@ -24,29 +30,55 @@ public abstract class Axis {
 	
 	private Color axisColor=Color.BLACK;
 
+	/**
+	 * Retuns the color of the axis
+	 * @return {@link Color} object
+	 */
 	public Color getAxisColor() {
 		return axisColor;
 	}
 
+	/**
+	 * Sets the new color for the axis
+	 * @param axisColor {@link Color} object of the new color
+	 */
 	public void setAxisColor(Color axisColor) {
 		this.axisColor = axisColor;
 	}
 	
-	
 	private String caption;
+	
+	/**
+	 * Returns the caption for the axis
+	 * @return axis' caption
+	 */
 	public String getCaption() {
 		return caption;
 	}
 
+	/**
+	 * Sets the caption for the axis
+	 * @param caption the new caption
+	 */
 	public void setCaption(String caption) {
 		this.hasCaption=true;
 		this.caption = caption;
 	}
 
 	private boolean hasCaption=false;
+	
+	/**
+	 * Returns true if the caption for this axis is visible or false for invisible caption
+	 * @return true for visible caption
+	 */
 	public boolean isCaptionVisible(){
 		return this.hasCaption;
 	}
+	
+	/**
+	 * Sets the caption visibility
+	 * @param visible true for visible caption
+	 */
 	public void setCaptionVisible(boolean visible){
 		this.hasCaption=visible;
 	}
