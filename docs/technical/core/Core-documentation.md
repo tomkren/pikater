@@ -103,8 +103,8 @@ Motivací pro tuto funkci byla podpora paralelního spouštění úloh, zrychlen
 
 Nová struktura sloužící jako obecný prostředník mezi interními formáty experimentů jádra (dokonce i konzolových GUI agentů) a webové nadstavby. Univerzální formát tedy:
 * představuje formát, v němž jsou experimenty ukládány do databáze,
-* definuje experimenty (nepřímo) jako grafické krabičky spojené hranami a lze do něj uložit speciální informace webové reprezentace (aktuálně jsou pouze vyžadovány pozice krabiček).
-* je navržen, aby byl rozšiřitelný oběma směry (pro jádro i webvé rozhraní) a snaží se o vzájemné odstínění.
+* definuje experimenty (nepřímo) jako grafické krabičky spojené hranami a lze do něj uložit speciální informace webové reprezentace (aktuálně jsou vyžadovány pouze pozice krabiček).
+* je navržen, aby byl rozšiřitelný oběma směry (pro jádro i webové rozhraní) a snaží se o vzájemné odstínění.
 
 Aktuální návrh vychází z myšlenky obalit vnitřní ontologie dávky, přičemž až na jisté výjimky se každý takový obal nepovinně odkazuje na třídu s informacemi pro GUI.
 
@@ -137,11 +137,11 @@ V paměti (a systému) jsou datasety reprezentovány ontologií `DataInstances` 
 
 **Řešení přenosu**  
 
-V původním Pikateru se načtená data předávala výpočetním agentům přímo ACL zprávami, což se ukázalo jako nanejvýš neefektivní – potenciálně velká data musela projít drahou serializací a deserializací, dokonce i v rámci jednoho JADE kontejneru.
+V původním Pikateru se načtená data předávala výpočetním agentům přímo ACL zprávami, což se ukázalo jako nanejvýš neefektivní – potenciálně velká data musela projít drahou serializací a deserializací, dokonce i v rámci jednoho JADE containeru.
 
-Nyní jsou data přenášena z databáze přímo do agenta dedikovaného pro přístup k databázi, který se vyskytuje v každém kontejneru. Aktuální systém přepokládá výskyt právě jednoho slave kontejneru na jednom fyzickém stroji.
+Nyní jsou data přenášena z databáze přímo do agenta dedikovaného pro přístup k databázi, který se vyskytuje v každém containeru. Aktuální systém předpokládá výskyt právě jednoho slave containeru na jednom fyzickém stroji.
 
-V rámci daného kontejneru (stroje) jsou pak data přenášena tzv. "object to agent" rozhraním, které platforma JADE poskytuje. K přenosu dat vlastně dojde pouze předáním odkazu do stejného adresního prostoru, bez zbytečné serializace nebo kopírování dat.
+V rámci daného containeru (stroje) jsou pak data přenášena tzv. "object to agent" rozhraním, které platforma JADE poskytuje. K přenosu dat vlastně dojde pouze předáním odkazu do stejného adresního prostoru, bez zbytečné serializace nebo kopírování dat.
 
 Pro zefektivnění přenosů mezi různými stroji pak bylo zavedeno cacheování dat. Data se na každém stroji zachovávají (nemažou) a pokud již jsou na daném stroji k dispozici, nepřenášejí se systémem znovu.
 
@@ -185,7 +185,7 @@ Tento agent se nachází na každém containeru právě jednou. Na master i slav
 
 Přijímá následující ontologie bez odpovědi:
 * `CreateAgent`  
-Signál pro vytváření agenta specifikovaného ve zprávě obsahující textový řetězec "type" (plné jméno třídy agenta), textový řetězec "name" (udávající jméno agenta), ontologii `Arguments` (poskytuje argumenty agenta).
+Signál pro vytvoření agenta specifikovaného ve zprávě.
 * `KillAgent`  
 Signál pro ukončení agenta specifikovaného ve zprávě.
 * `SaveAgent`  
@@ -197,7 +197,7 @@ Agenti se ukládají i oživují ze souborů umístěných na filesystému. Pře
 
 Přijímá následující ontologie s odpovědí:
 * `GetComputerInfo`  
-Odpovídá zasláním informací o počítači, na kterém běží. Vrací ontologii `ComputerInfo`, která obsahuje například počet jader procesoru.
+Odpovídá ontologií `ComputerInfo`. Vrací informace o počítači, na kterém běží, například počet jader procesoru.
 * `Ping`  
 Odpovídá zasílateli, aby bylo vidět, že container "žije".
 
@@ -229,7 +229,7 @@ Přijímá následující ontologie bez odpovědi:
 * `NewBatch`  
 Signál pro spuštění nové dávky. Obsahuje jednoznačný identifikátor dávky a uživatele, který ji zadal.
 * `LoadBatch`  
-Signál pro načtení dávky. Dávka je získána z agenta `DataManager`, ve formě ontologie `Batch` obsahující všechny relevantní informace.
+Signál pro načtení dávky. Dávka je získána z agenta `DataManager` ve formě ontologie `Batch` obsahující všechny relevantní informace.
 
 <font color="red">Rámcový postup pro spuštění nové dávky:</font>
 
@@ -259,7 +259,7 @@ V okamžiku, kdy se všechny fronty vyprázdní a Manager obdrží od plánovač
 
 Slouží k efektivnímu plánování příchozích úloh (prostřednictvím ontologie `Task`), které představují jeden problém pro jednoho výpočetního agenta nebo data processing.
 
-Důvodem, proč vznikl tento agent, je snaha maximálně odstínit problematiku spouštění úloh od parsování dávek a řízení výpočtů. Distribuované výpočty (paralelní spouštění úloh) přináší do systému poměrně velký zmatek:
+Důvodem vzniku tohoto agenta je snaha maximálně odstínit problematiku spouštění úloh od parsování dávek a řízení výpočtů. Distribuované výpočty (paralelní spouštění úloh) přináší do systému poměrně velký zmatek:
 * Úlohy jsou spouštěny na několika containerech umístěných na různých strojích.
 * V každém containeru může zároveň běžet několik úloh.
 
@@ -269,15 +269,15 @@ Je třeba vyřešit vzniklý problém přepravy dat mezi agenty.
 
 Přijímá následující ontologie bez odpovědi:
 * `ExecuteTask`  
-Signál pro zadání jedné úlohy (pro jednoho agenta). Přijaté úlohy se řadí do datové struktury `WaitingTaskQueues` představující skupinu prioritních front pro úlohy, které čekají na zpracování. Po každém doručení nové úlohy zároveň dochází k přeplánování.
+Signál pro zadání jedné úlohy (pro jednoho agenta). Přijaté úlohy se řadí do datové struktury `WaitingTaskQueues` představující skupinu prioritních front. Po doručení každé nové úlohy dochází k přeplánování.
 * `KillTasks`  
-Signál pro "ukončení" úloh, týkajících se jisté dávky. Plánovač vyřadí ze struktury front ty z úloh, které odpovídají ID dávky a které ještě nebyly spuštěny. Nedopočítané úlohy nejsou nijak rušeny a úspěšně doběhnou.
+Signál pro "ukončení" úloh jisté dávky - plánovač je vyřadí ze struktury front, přičemž nedopočítané úlohy nejsou nijak rušeny a úspěšně doběhnou.
 
 Přijímá následující ontologie s odpovědí:
 * `GetSystemLoad`  
 Odpovídá zasláním informací o aktuálním vytížení systému - aktuální využití všech CPU jader v rámci celého slave containeru. Informace jsou získány z třídy `CPUCoresStructure`, s jejíž pomocí funguje rozvrhování úloh. 
 
-Rozvrhování se spouští kdykoli agent detekuje změny, které by mohly ovlivnit optimalitu rozvržení zadaných úloh na dostupné zdroje. Typickými zástupci takových podnětů jsou příjem nové úlohy a skončení úlohy.
+Rozvrhování se spouští po detekci změny, jež by mohla ovlivnit optimalitu rozvržení úloh. Typickými zástupci takových podnětů jsou příjem nové úlohy a dokončení/ukončení úlohy.
 
 Proces plánování: <font color="red">(tohle chce speciálně zkontrolovat...)</font>
 
@@ -291,7 +291,7 @@ Proces plánování: <font color="red">(tohle chce speciálně zkontrolovat...)<
 8. Plánovač vytvořenému agentovi pošle vybranou úlohu a označí vybrané výpočetní jádro za obsazené.
 9. Po dokončení úlohy se plánovači vrátí informace o spočtených souborech. Plánovač si je uloží do třídy `DataRegistry` a odešle vypočtenou úlohu zpět agentovi `Manager`.
 
-Agenti po dokončení výpočtu jim přiřazené úlohy a navrácení výsledku sami "zemřou".
+Jakmile agenti dokončení výpočet svých úloh a navrátí výsledky, jsou sami ukončeni.
 
 #### AgentInfoManager
 
@@ -299,31 +299,32 @@ Slouží ke sbírání informací (instancí třídy `AgentInfo`) o experimentov
 
 Přijímá následující ontologie s odpovědí:
 * `GetAgentInfo`  
-Obsahuje ID uživatele, pro něhož se má sestavit seznam přípustných krabiček (instancí třídy `AgentInfo`) - ty jsou navráceny v odpovědi. Odpověď obsahuje jak defaultní agenty nahrané na GitHubu, tak i externí agenty nahrané do aplikace samotným uživatelem.
+Obsahuje ID uživatele, pro něhož se má sestavit seznam přípustných krabiček (instancí třídy `AgentInfo`). Tento seznam je navrácen a obsahuje jak defaultní experimentové agenty, tak i externí agenty nahrané do aplikace samotným uživatelem.
 
 Přijímá následující ontologie bez odpovědi:
 * `NewAgent`  
-Signál pro zaregistrování nově uploadnutého externího agenta do systému. Z příchozí zprávy je vzato plné jméno nového agenta, agent se vytvoří a do databáze je pro něj uložena struktura `AgentInfo` (prostřednictvím agenta `DataManager` a ontologie `SaveAgentInfo`). Ihned poté je agent ukončen.
+Signál pro zaregistrování nového externího agenta do systému.  
+Agent je vytvořen (stačí načíst jeho ".JAR" soubor a vyzvednout si jeho plné jméno z příchozí zprávy), požádán o vypublikování informací o sobě (ontologie `AgentInfo`) a publikované informace jsou uloženy do databáze prostřednictvím agenta `DataManager` a ontologie `SaveAgentInfo`. Ihned poté je agent ukončen.
 
-Tímto způsobem si agent vždy při zapnutí ověřuje, že jsou v databázi uloženy informace o všech experimentových agentech. Pakliže ne, stejným postupem je struktura `AgentInfo` reinicializována pro každého takového agenta.
+Agent při zapnutí vždy ověřuje, že jsou v databázi uloženy informace o všech experimentových agentech. Pakliže nejsou, všichni takoví agenti jsou ihned vytyčeným postupem zaregistrováni.
 
 #### Agent_KlaraGUIAgent
 
-Agent je pojmenovaný po Mgr. Kláře Peškové, autorce původního Pikateru. Vznikl jako další "entry-point" do aplikace, nezávislý na webové nadstavbě, ze kterého by byla dostupná veškerá funkcionalita jádra.
+Agent je pojmenovaný po Mgr. Kláře Peškové, autorce původního Pikateru. Vznikl jako další "vstupní bod" do jádra, nezávislý na webové nadstavbě.
 
 Po zapnutí agenta se spustí jednoduchý komunikační automat, který umožňuje v konzolovém režimu zadat novou dávku, přidat nový dataset a vygenerovat pro něj metadata. Nová dávka se načítá v podobě instance třídy `ComputationDescription`, serializované do XML souboru na filesystému. Konverze formátu z/do JAVA objektů zajišťuje knihovna XStream.
 
-Agent komunikuje s agentem `GUIComunicator`, jehož snahou je vytvořit jednotné přístupové rozhraní pro všechny takové agenty. V praxi si tedy může každý vytvořit vlastního "GUI agenta" a vlastní formát pro serializaci třídy `ComputationDescription`.
+Komunikace probíhá přes agenta `GUIComunicator`, jehož snahou je vytvořit jednotné přístupové rozhraní pro všechny GUI agenty jako je tento. V praxi si tedy může kdokoli vytvořit vlastní přístupový bod do systému, s vlastní definicí dávek. Nakonec je ovšem samozřejmě nutné implementovat konverzi do `ComputationDescription`, kterou používá jádro.
 
 #### Agent_Mailing
 
-Nový agent. Zprostředkovává zbytku systému "emailovací službu". Komunikuje s lokálním SMTP serverem.
+Nový agent. Zprostředkovává zbytku systému službu posílání emailů. Vyžaduje, aby na daném stroji běžel lokální SMTP server.
 
 Přijímá následující ontologie bez odpovědi:
 * `SendEmail`  
 Signál pro zaslání emailu specifikovaného zprávou na jednu emailovou adresu. 
 
-Aktuálně je agent je v systému využíván pouze při dopočtení dávky.
+Aktuálně je agent je v systému využíván pouze při dokončení dávky.
 
 **Odesílání notifikace o dokončeném výpočtu**  
 
@@ -340,7 +341,7 @@ Agent\nDataManager-->>-Agent\nManager:
 
 #### Agent_ARFFReader
 
-Agenta je využíván k načítání ARFF souborů z filesystému a transformaci načtených dat na ontologie.
+Agent je využíván k načítání ARFF souborů z filesystému a jejich transformaci na ontologie.
 
 Přijímá ontologii `GetData` obsahující jméno souboru a jako odpověď zasílá ontologii `DataInstances`.
 
@@ -376,13 +377,13 @@ Představují "datové transformace", dědí od agenta `DataProcessing`. Na vstu
 
 Data mají v celém systému formát ARFF a tento agent tedy využívá pro čtení i zapisování dat agenta `ARFFReader`.
 
-V dávkách/experimentech jsou data processing agenti identifikování ontologií `DataProcessing`.
+V dávkách jsou data processing agenti identifikování ontologií `DataProcessing`.
 
 Existence data processingu umožňuje učit modely postupně, případně vytvářet dva modely, kde jeden řeší lépe problém pro data jednoho typu a druhý pro data jiného typu. Jako příklad uvedeme agenta `WeatherSplitter`, který obdrží na vstupu dva vstupní datasety se stejnou strukturou a na základě hodnoty v jistém sloupečku je rozdělí na tři soubory.
 
 #### Výpočetní agenti
 
-Specifičtější forma data processingu. Nejedná se o pouhé datové transformace, nýbrž přímo o proces strojového učení. Většinou je k tomu využita knihovna Weka, ale nic nebrání vlastní implementaci jakékoli metody. Tyto agenty nazýváme výpočetní, protože provádějí časově nejnáročnější operace v systému. Ze stejného důvodu se výpočty distribuují na slave servery. Pro reprezentaci výpočetního agenta se v dávkách používá ontologie `ComputingAgent`.
+Specifičtější forma data processingu. Nejedná se o pouhé datové transformace, nýbrž přímo o proces strojového učení. Většinou je k tomu využita knihovna Weka, ale nic nebrání vlastní implementaci jakékoli metody. Tyto agenty nazýváme výpočetní, protože provádějí časově nejnáročnější operace v systému, a proto se výpočty distribuují na více strojů. Pro reprezentaci výpočetního agenta se v dávkách používá ontologie `ComputingAgent`.
 
 Přijímají následující ontologie bez odpovědi:
 * `Task`  
@@ -391,9 +392,11 @@ Signál pro provedení procesu trénování, testování a validace. Vše určuj
 **Natrénované modely**  
 Dle specifikace serializují výpočetní agenti (v závislosti na úloze) svůj model a posílají ho jako součást výsledku výpočtu v ontologii `Task`. Agent `Manager` tento model přepošle k uložení agentovi `DataManager`, který ho uloží do databáze s vazbou na daný výsledek a experiment.
 
-Serializaci modelu zajišťuje metoda (zděděná od předka) `org.pikater.core.agents.experiment.computing.Agent_ComputingAgent.getAgentObject()`.
+Serializaci modelu zajišťuje metoda zděděná od předka:  
+`org.pikater.core.agents.experiment.computing.Agent_ComputingAgent.getAgentObject()`.
 
-Dříve uložený model lze oživit prostřednictvím meotdy `org.pikater.core.ontology.subtrees.management.LoadAgent()`.
+Dříve uložený model lze oživit prostřednictvím metody:  
+`org.pikater.core.ontology.subtrees.management.LoadAgent()`.
 
 **Uložení natrénovaného modelu**  
 
@@ -419,18 +422,7 @@ ManagerAgent->ManagerAgent: starts saved agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
-<font color="red">TODO: začlenit obrázek</font>
-
-{{{{{{
-Manager->+ManagerAgent: LoadAgent (ID)
-activate Manager
-ManagerAgent->+DataManager: GetModel (ID)
-DataManager-->>-ManagerAgent: (agent)
-ManagerAgent->ManagerAgent: starts saved agent
-ManagerAgent-->>-Manager: (agent AID)
-}}}}}}
-
-<font color="red">TODO: začlenit obrázek</font>
+**Načítání dat pro úlohy**  
 
 {{{{{{
 ComputingAgent->+ARFFReader: GetData
@@ -446,9 +438,9 @@ ARFFReader-->>-ComputingAgent: (data - O2A)
 
 #### Hledači
 
-Jsou využíváni pro procházení množiny parametrů, dědí od abstraktního agenta `Searcher` a v dávkách jsou reprezentováni ontologií `Searcher`.
+Využívají se pro procházení množiny parametrů, dědí od abstraktního agenta `Searcher` a v dávkách jsou reprezentováni ontologií `Searcher`.
 
-K efektivnímu procházení stavového prostoru se používá mnoho přístupů. Od nejjednodušších agentů využívajících náhodný výběr hodnoty parametru (např. `RandomSearch`), přes složitější (`ChooseXValues`), po složité hledače využívající genetických a evolučních algoritmů. Složitější agenti obsahují více nastavení a nabízí širší možnosti prohledávání.
+K efektivnímu procházení stavového prostoru se používá mnoho přístupů - od nejjednodušších využívajících náhodný výběr hodnoty parametru (např. `RandomSearch`), přes složitější (`ChooseXValues`), po složité hledače využívající genetických a evolučních algoritmů. Složitější agenti obsahují více nastavení a nabízí širší možnosti prohledávání.
 
 Přijímají následující ontologie s odpovědí:
 * `GetParameters`  
@@ -462,10 +454,10 @@ Zpětná vazba úspěšnosti vygenerovaných parametrů. Jako metrika jsou použ
 
 Jejich úkolem je vybírat pro daná vstupní data vhodnou metodu strojového učení. V praxi dostanou hash vstupního souboru trénovací množiny dat a vydávají plné jméno třídy agenta, který by měl pro daná vstupní data vytvořit nejkvalitnější/nejúspěšnější model. Dokáží poradit nejen metodu strojového učení, ale i nastavení jejích parametrů - k tomu využívají primárně podobnost vstupních datových množin. Pro porovnávání dat se nepoužívají přímo velké vstupní soubory, nýbrž vygenerovaná metadata (v zájmu efektivity a snadnějšího zpracování). Metadata byla navržena tak, aby dokázala pojmout informace o každém sloupci datového ARFF souboru a aby obsahovala k jednotlivým sloupcům i jisté typované statistiky.
 
-Všimněte si, že vstupní data nemusí nutně být vstupní data celé dávky nebo experimentu - mohou to například být i data spočítané předchozí dílčí úlohou. Jedinou podmínkou je, aby měla vygenerovaná metadata.
+Všimněte si, že vstupní data nemusí nutně být vstupní data celé dávky nebo experimentu - mohou to například být i data spočtená předchozí dílčí úlohou. Jedinou podmínkou je, aby měla vygenerovaná metadata.
 
 **Proces doporučení:**  
-Jakmile je nalezena povahově nejbližší datová množinu (ke vstupním datům), projdou se prostřednictvím agenta `DataManager` výsledky všech předchozích výpočtů s ní souvisejících a vybere se ten "nejúspěšnější". Ke každému výpočtu (úloze) lze dohledat agenta, který tohoto výsledku dosáhl a tento údaj se vrátí.
+Jakmile je nalezena povahově nejbližší datová množinu (ke vstupním datům), projdou se prostřednictvím agenta `DataManager` výsledky všech předchozích výpočtů s ní souvisejících a vybere se ten "nejúspěšnější". Ke každému výpočtu (úloze) lze dohledat agenta, který tohoto výsledku dosáhl.
 
 #### Agent_DataManager
 
@@ -474,7 +466,7 @@ Původně byl Pikater vytvořen jako multiagentní a maximálně adaptibilní sy
 Webové GUI využívá na rozdíl od jednotlivých agentů přímý přístup do databáze. Teoreticky by šlo i z webového GUI využívat pro manipulaci s databází tohoto agenta, ale z mnoha důvodů se jedná o naprosto nevhodnou variantu:
 * Velice podstatně by se zvýšil počet definovaných ontologií a komplexnost systému.
 * Došlo by k razantnímu zpomalení aplikace.
-* Webové GUI by se stalo závislé na jádru.
+* Webové GUI by se stalo zcela závislé na jádru.
 
 **Použité ontologie**  
 Můžeme je rozdělit do několika logických oblastí:
@@ -483,7 +475,7 @@ Můžeme je rozdělit do několika logických oblastí:
 * Pro ukládání a načítání struktury `AgentInfo` se používají ontologie `SaveAgentInfo` a `GetAgentInfo`. Existují i ontologie pro získání všech `AgentInfo` interních i externích krabiček uložených v databázi.
 * Pro práci s dávkami se používají ontologie `SaveBatch`, `LoadBatch`, `UpdateBatchStatus`, `GetBatchPriority`.
 * Podobně koncipované jsou ontologie pracující s experimenty: `SaveExperiment` a `UpdateExperimentStatus`.
-* Analogicky se ukládají i výsledky: `SaveResults`, `LoadResult`. Ontologie `Result` ovšem slouží puze pro reprezentaci chyb natrénovaného modelu a neobsahuje tudíž žádné datové množiny.
+* Analogicky se ukládají i výsledky: `SaveResults`, `LoadResult`. Ontologie `Result` ovšem slouží pouze pro reprezentaci chyb natrénovaného modelu a neobsahuje tudíž žádné datové množiny.
 * Pro ukládání datových množin slouží ontologie `SaveDataset`. Načítání provádí ontologie `GetFile`. Speciálním případem jsou pak externí agenti - pro ně je k dispozici ontologie `GetExternalAgentJar`. Ukládání agentů provádí pouze webové GUI, tudíž ontologie "SaveExternalAgent" neexistuje.
 * Pro ukládání a čtení vygenerovaných metadat se využívají ontologie `SaveMetadata`, `GetMetadata`, `GetAllMetadata` a `GetMultipleBestAgents`.
 
@@ -493,12 +485,12 @@ Tento agent generuje metadata pro jednotlivé datové množiny. Počítá statis
 
 Přijímá následující ontologie bez odpovědi:
 * `NewDataset`  
-Signál pro zaregistrování nového uživatelem uploadnutého datasetu do systému.
+Signál pro vygenerování metadat k novému uživatelem zadanému datasetu.
 * `NewComputedData`  
-Signál pro vygenerování metadat pro novou datovou množinu vypočtenou systémem. Výsledek se odešle v ontologii `Metadata` agentu `DataManager`, který je uloží do záznamů o daném datasetu.
+Signál pro vygenerování metadat k nové datové množině vypočtené systémem. Výsledná metadata jsou prostřednictvím ontologie `Metadata` odeslána agentu `DataManager`, který je uloží a sváže s daným datasetem.
 
 <font color="red">TODO: nechtěli byste k následujícímu raději udělat obrázek?
-- po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat. Ten zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž mohou u výpočtů obsahujících datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.</font>
+po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat. Ten zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž mohou u výpočtů obsahujících datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.</font>
 
 ### Externí agenti
 
@@ -530,20 +522,6 @@ ManagerAgent->ManagerAgent: starts new agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
-<font color="red">TODO: začlenit obrázek</font>
-
-{{{{{{
-Manager->+ManagerAgent: CreateAgent (type)
-activate Manager
-opt external agent JAR not present locally
-ManagerAgent->+DataManager: GetExternalAgentJar (type)
-DataManager->DataManager: loads JAR\nstores it locally
-DataManager-->>-ManagerAgent: 
-end
-ManagerAgent->ManagerAgent: starts new agent
-ManagerAgent-->>-Manager: (agent AID)
-}}}}}}
-
 ### Gateway agenti
 
 Jádro si klade za cíl definovat komunikační rozhraní a poskytovat ho jako službu jiným komponentám. Slouží k tomu právě tito agenti.
@@ -560,7 +538,7 @@ Všechny ontologie lze nalézt v balíčku `org.pikater.core.ontology`.
 
 ### AccountOntology
 
-Tuto množinu ontologií využívají agenti, kteří využívají pro svůj chod informace z účtů uživatelů (ID, emaily a tak dále). K dispozici je dává agent `DataManager`.
+Tuto množinu ontologií využívají agenti, kteří vyžadují pro svůj chod informace z účtů uživatelů (ID, email a tak dále). K dispozici je dává agent `DataManager`.
     
 ### AgentInfoOntology
 
@@ -601,54 +579,72 @@ Dalším speciálním výpočetním elementem  je evaluační metoda, která se 
     
 ### DataOntology
 
-DataOntology je množina ontologií používající se pro přepravu dat mezi agenty.  Díky možnosti spustit výpočet jednoho Batche distribuovaně na více strojích není možné, aby si jednotliví agenti předávali data pouze přes sdílený file systém, ale musela vzniknout infrastruktura pro přesuny dat a tato Ontologie. Tuto infrastrukturu z hlediska objemu dat bude nejvíce vytěžovat přeprava vstupních datasetů a vypočtených dat.  Jako soubory se mezi agenty na různých containerech přepravují JARka externích agentů, která nejsou součástí GitHub repozitáře.  Uživatelem těchto ontologií jsou tudíž agenti, kteří potřebují v systému přepravovat nějaká data. Agent ManagerAgent využívá přepravy JARek externích agentů, v případě že obdrží požadavek na vytvoření nového agenta jehož zdrojové kódy nemá na svém containeru k dispozici. Agent ARFFReader žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním file systému . Agent Planner využívá ontologie pro řízení, ukládání vypočtených dat do databáze odstíněné centrálním DataManagerem.
+<font color="red">TODO: dodělat</font>
+
+Prostřednictvím této množiny ontologií se přepravují data mezi agenty - vstupní datasety a datasety vypočtené během spuštění dávky.
+
+Díky možnosti spustit výpočet jednoho Batche distribuovaně na více strojích není možné, aby si jednotliví agenti předávali data pouze přes sdílený filesystém, ale musela vzniknout infrastruktura pro přesuny dat a tato Ontologie. 
+
+Tuto infrastrukturu z hlediska objemu dat bude nejvíce vytěžovat přeprava vstupních datasetů a vypočtených dat.  
+
+Jako soubory se mezi agenty na různých containerech přepravují JARka externích agentů, která nejsou součástí GitHub repozitáře.  Uživatelem těchto ontologií jsou tudíž agenti, kteří potřebují v systému přepravovat nějaká data. Agent ManagerAgent využívá přepravy JARek externích agentů, v případě že obdrží požadavek na vytvoření nového agenta jehož zdrojové kódy nemá na svém containeru k dispozici. Agent ARFFReader žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním filesystému. Agent Planner využívá ontologie pro řízení, ukládání vypočtených dat do databáze odstíněné centrálním DataManagerem.
 
 ### DurationOntology 
 
-Následující množinu ontologií využívá primárně agent DutationAgent, který slouží k měření doby výpočtu.
+Zaznamenává dobu výpočtu úloh, kterou měří `DurationAgent`.
 
 ### ExperimentOntology
 
-Ontologie ExperimentOntology se využívá pro manipulaci s takzvanými experimenty, což jsou podproblémy jedné Batche. Tuto roli nejvíce využívá agent Manager, který za pomoci agenta DataManagera řeší řízení, rozpársování Batche na jednotlivé experimenty jejich vytvoření a zalogování a změny jejich statusů.    
+Ontologie reprezentující podproblémy jedné dávky. Nejvíce ji využívá agent `Manager`, který za pomoci agenta `DataManagera` řídí výpočet dávek, rozděluje je na podproblémy a loguje jejich změny.
 
 ### FileNameTranslationOntology
 
-Pro potřebu překládání uživatelsky přívětivého takzvaného externího jména datasetu na systémem zpracovatelné interní jméno, se využívá právě tato skupina Ontologií. Interní jméno datového souboru je zpravidla md5 hash jeho obsahu. Tato konvence interního pojmenovávání souborů zjednodušuje řízení efektivní přepravy dat a přirozenou cestou zabraňuje tomu, aby se na filesystému objevovaly jedny data vícekrát. Dochází zde sice k překryvu jmen souborů, které mají logicky rozdílný význam, ovšem v problematice strojového učení jde touto cestou mnohonásobně zefektivnit využitelnost potřebných diskových kapacit. Překlad provádí agent DataManager, který má uloženou mapu párování interních a externích jmen souborů. Překlad se volá z agenta Managera při pársování zadaných Batchů, kde v Ontologii FileDataImput překládá logické jméno vstupního ARFF souboru. Překlad využívá také agent Duration pro získání interního jména datasetu nastaveného v konfiguraci,  na kterém se opakovaně spouští úloha lineární regrese představující pro systém jednu logickou jednotku systémového času.
+Prostřednictvím této ontologie dochází k překladu externího jména datasetu (jméno souboru) na systémem zpracovatelné interní jméno (zpravidla hash jeho obsahu). Tato konvence zjednodušuje a zefektivňuje proces řízení přepravy dat a zabraňuje zbytečné duplicitě dat na filesystému.
+
+Překlad provádí agent `DataManager`, který spravuje párování externích a interních jmen souborů a dochází k němu:
+* téměř ihned po zadání dávky ke spuštění - překládají se vstupní externí datasety,
+* v agentu `Duration` pro překlad interního datasetu, na kterém se opakovaně spouští úloha lineární regrese představující pro systém jednu jednotku systémového času.
 
 ### MailingOntology
 
-Tuto množinu Ontologií využívají všichni agenti, kteří chtějí komunikovat s agentem Mailing za účelem nechání si poslat emailovou zprávu. Této možnosti využívá agent Manager při skončení výpočtu každého Batche za účelem informovat uživatele o dokončení výpočtu. V rámci celého systému Pikater se odesílání emailů využívá k informování uživatele i na dalších místech. Webové GUI emailem oznamuje třeba změnu hesla k uživatelskému účtu. V těchto případech se ale emaily posílají přímo z webové nástavby Pikateru za použití stejné knihovny, kterou využívá agent Mailing. Díky tomuto odstínění webové GUI z hlediska návrhu systému, získalo větší nezávislost na jádře a dostalo možnost provádět, některé pro jádro systému nepříliš podstatné operace samo.
+Tyto ontologie se využívají pro zadání povelu k zaslání určitého emailu. Aktuálně je pouze využívá agent `Manager` po dokončení výpočtu dávek - zasílá informaci o dokončení výpočtu uživateli, který dávku zadal a přidá nejmenší chybu, které bylo při strojovém učení v dané dávce dosáhnuto.
 
 ### MetadataOntology
 
-Výzkumnou motivací pro vznik systému Pikater bylo na základě předchozích výpočtů a podobností dat odhadovat optimální metodu strojového učení pro právě řešený experiment. Proces určení míry podobnosti dvou ARFFsouborů je časově i paměťově náročná operace, která může zároveň nezanedbatelně zatěžovat přenesenou infrastrukturu. Díky motivaci odstranit tyto problémy, došlo ke vzniku metadat , které by měly sloužit jako popis množiny dat. Algoritmus porovnávající ARFF soubory nevyužívá přímo fyzických dat, ale vystačí si pouze s vygenerovanými metadaty. Díky vhodné volbě struktury metadat jsou schopny Rekomendři velmi dobře odhadnout z předchozích výpočtů optimální metodu strojového učení. Cílem této Ontologie je zajistit řízení generování,  přepravu, ukládání a načítání datadat. Agent, který v systému zajišťuje vygenerování metadat ve spolupráci s ARFFReaderem je agent MetadataQueen. Tomuto agentovi chodí zprávy informujícího o přidání nového vstupního datasetu od Gateway agenta, nebo od uživateli definovanými GUIagenty. Příkazy pro vygenerování metadat k vypočteným datovým souborům posílá i agent Planner,  v koordinaci s datovými přenosy souborů. Vypočtená metadata se posílají k uložení agentovi DataManager, který je ukládá do databáze. Konzumentem pro každý dataset i vypočtená data vygenerovaných metadat jsou z pravidla pouze Recommendři, kteří provádějí na jejich základě porovnávání datových množin.
+Využívají se:
+* při generování a ukládání metadat pro datasety v agentech `Planner`, `MetadataQueen` a `DataManager`,
+* pro porovnávání datasetů v doporučovačích (více informací v kapitole o doporučovačích).
 
 ### ModelOntology
 
-ModelOntology je množina Ontologií používající se pro práci s modely. Hlavní funkcionalitou je ukládání a načítání natrénovaných modelů. Ukládání modelu zajišťuje agent ManagerAgent ve spolupráci s DataManagerem.
+Prostřednictvím této množiny ontologií dochází k ukládání/načítání modelů (agentů).
 
 ### RecommendOntology
 
-Tuto množinu Ontologií využívá agent Manager pro komunikaci s Recommendery. Účelem komunikace je předat popis experimentu a to primárně identifikovat vstupní data na základě kterých zvolený Recommender vybere nejlepšího agenta pro tento problém strojového učení. Následně doporučí Optiony,  se kterými by se měl agent spouštět za účelem minimalizovat chybu ErrorRate. Výsledky za použití těchto ontologií, pak Recommender vrací Managerovi.
+Slouží ke zpřístupnění funkce doporučovačů zbytku systému, tj. vybírat pro dané datasety "nejlepší" metodu strojového učení (agenta) a "nejvhodnější" hodnoty nastavení.
 
 ### ResultOntology
 
-Výpočetní agenti, za jednu sekvenci trénování, testování a validace, vyprodukují ontologickou strukturu pojmenovanou Results, která obsahuje výsledky důležité z pohledu výzkumu strojového učení, což paradoxně nejsou výsledná data, ale jedná se o seznam chyb, popisující úspěšnost učení modelu. Cílem této ontologie je zajistit  pro každou tuto sekvenci uložení ontologie Results za použití agenta DataManagera do databází. O ukládání výsledků se stará agent Manager.
+Cílem této ontologie je poskytnout prostředek přepravy výsledků experimentů. Výsledky produkují pro jednu sekvenci trénování, testování a validace výpočetní agenti a z pohledu výzkumu strojového učení se jedná o nejdůležitější informace. Nejsou to výsledná data, nýbrž seznam chyb popisující úspěšnost naučeného modelu.
 
 ### SearchOntology
 
-Agent Manager tuto Ontologii používá pro komunikaci se Searcherem za účelem efektivního prohledávání, dávající důraz na vhodný poměr exploatace a explorace, stavového prostoru Optionu. Autoři jednotlivých Searcher agentů se snažili vytvořit co nejobecnější interface pro předávání parametrů pro procházení z agenta Managera do agenta Searchera. Za tímto účelem vznikla Ontologie Eval, na kterou se překládá Ontologie Option.
+Slouží ke zpřístupnění funkce hledačů zbytku systému, tj. efektivně prohledávat stavový prostor modelů s důrazem na zachování vhodného poměru explorace a exploatace.
 
 ### TaskOntology
 
-TaskOntology je Ontologie, která umožňuje pracovat jednotlivým agentům v rámci Pikateru s jedním Taskem, neboli s objektem reprezentující nejnižší úroveň logického problému. Agent Manager, který jako první v řadě z hlediska průtoku dat používá Ontologi Task, neřeší pouze problém řízení výpočtu, ale také transformace příchozích Batchů na jednotlivé experimenty, které transformuje na seznam konkrétních dále nedělitelných Tasků. Tyto Tasky pak přeposílá agentovi Plannerovi, který za podpory hlídání datových závislostí předává Tasky distribuovaným výpočetním agentům, případně DataProcessingům. Jak DataProcessingy, tak výpočetní agenti, přijímají zadání jednoho výpočtu jako Ontologii Task. 
+Množina ontologií umožňujících jednotlivým agentům pracovat s úlohami.  
+Úlohy jsou řízeny agentem `Manager`, který je přeposílá agentu `Planner` a ten je distribuuje výpočetním agentům, případně data processingům. Jak data processingy, tak i výpočetní agenti přijímají výpočty pouze v podobě úloh.
 
-#### Ontologie Task
+#### Task
 
-Ontologie Task je obecná struktura, která je schopná pojmout jakýkoli pro Pikater dále nedělitelný problém určený pro libovolný typ agenta, obsahující neomezené množství vstupních souborů potřebných pro výpočet. Ukrývá informace o identifikaci Batche experimentu, ke kterému patří identifikátor uživatele, který Batche zadal  a spoustu dalších Optionů ovlivňující běh výpočtu. Pro plánování Tasku je zde informace o předpokládané délce běhu výpočtu, která má zajistit průchodnost systému pro krátce trvající výpočty. Po výpočtu Tasku se Ontologie Task předává zpátky až do agenta Managera. V tento okamžik jsou v Tasku vyplněné informace o vypočtených souborech, které výpočetní agent nebo DataProcessing vyprodukoval na file systém. Zároveň vypočtený Task obsahuje datum a čas začátku a konce běhu výpočtu.
-
-Další agent využívající Ontologii Task je agent Duration, který využívá vlastního výpočetního agenta Duration servis odděděného od Wekovského výpočetního agenta LinearRegresion  pro počítání samplu lineární regrese. Zadávání tohoto samplu se ovšem posílá přímo agentovi DurationServis bez využití služeb agenta Plannera.
+Obecná struktura/ontologie schopná pojmout jednu úlohu pro jakéhokoli agenta. Vlastnosti:
+* Nese informace, se kterými lze identifikovat dávku, ke které úloha patří.
+* Může obsahovat neomezené množství vstupních souborů potřebných pro výpočet.
+* Obsahuje nastavení ovlivňující běh výpočtu.
+* Obsahuje informace o předpokládané délce běhu výpočtu.
+* Je obousměrná a po dokončení výpočtu úlohy je navrácena agentu `Manager`, obohacená o odkazy na vypočtené datasety a časy začátku a konce výpočtu.
 
 ### TerminationOntology
 
-Tuto Ontologii využívají všichni experimentoví agenti, což jsou agenti typu výpočetní agent Recommender a Sercher, případně DataProcessing, kteří jsou buď defaultně součástí systému a nebo si je uživatel může do systému sám přidat v podobě JARka. O zabíjení agentů se stará agent ManagerAgent. Při přidání nového agenta do systému nebo inicializaci systému společně s agentem AgentInfoManager budí a následně zabíjí experimentální agenty. Dochází k buzení a následnému šetrnému zabíjení experimentových agentů.  Aparát šetrného zabíjení agentů je v systému nezbytný, agenty nejde jednoduše pouze zabít, ale musí se také nechat odregistrovat z JADE Directory Facilitator. Nejjednodušší cestou je požádat příslušného agenta z pozice ManagerAgenta, aby sám sebe ukončil. Snaha o čistý způsob zabíjení agentů byla primární motivací pro vznik této ontologie.  
+Ontologie pro ukončování agentů. Je zapotřebí k šetrnému "zabíjení" agentů - agenty nelze jednoduše ukončit násilím, protože služba JADE Directory Facilitator by pak byla ponechána v nekonzistentním stavu. Agenti jsou tedy "žádáni" o ukončení prostřednictvím této ontologie.
