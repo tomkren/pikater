@@ -71,6 +71,9 @@ public class Agent_Planner extends PikaterAgent {
 	private DataRegistry dataRegistry =
 			new DataRegistry(this, cpuCoresStructure);
 	
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
@@ -82,6 +85,9 @@ public class Agent_Planner extends PikaterAgent {
 		return ontologies;
 	}
 	
+	/**
+	 * Agent setup
+	 */
 	protected void setup() {
 		initDefault();
 
@@ -155,7 +161,6 @@ public class Agent_Planner extends PikaterAgent {
 
 		});
 
-		//dataRegistry.updateDataSets();
 	}
 	
 	/**

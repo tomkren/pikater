@@ -147,6 +147,9 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public java.util.List<Ontology> getOntologies() {
 

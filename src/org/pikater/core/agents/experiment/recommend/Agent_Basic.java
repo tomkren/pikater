@@ -11,9 +11,7 @@ import org.pikater.core.options.recommend.BasicRecommend_Box;
 
 
 public class Agent_Basic extends Agent_Recommender {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1175580440950655620L;
 
 	private double minAttributes = Integer.MAX_VALUE;
@@ -35,7 +33,9 @@ public class Agent_Basic extends Agent_Recommender {
 	}
 
 	@Override
-	protected org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Datas data){		
+	protected org.pikater.core.ontology.subtrees.management.Agent
+		chooseBestAgent(Datas data) {
+		
 		// in data there are already metadata filled in 
 		// return agent with (partially/not at all) filled options
 		
@@ -50,9 +50,9 @@ public class Agent_Basic extends Agent_Recommender {
 		Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
 		
 		// set the min, max instances and attributes first
-		for(Metadata next_md : allMetadata.getMetadatas()) {
+		for(Metadata nextMd : allMetadata.getMetadatas()) {
 
-			int na = next_md.getNumberOfAttributes();
+			int na = nextMd.getNumberOfAttributes();
 			if (na < minAttributes) {
 				minAttributes = na;
 			}
@@ -60,7 +60,7 @@ public class Agent_Basic extends Agent_Recommender {
 				maxAttributes = na;
 			}
 
-			int ni = next_md.getNumberOfInstances();
+			int ni = nextMd.getNumberOfInstances();
 			if (ni < minInstances) {
 				minInstances = ni;
 			}
@@ -72,29 +72,35 @@ public class Agent_Basic extends Agent_Recommender {
         StringBuilder sb = new StringBuilder("Files: ");
 		logSevere("*********** files from the table: ");
 
-		double d_best = Integer.MAX_VALUE;
-		Metadata m_best = null;
+		double dBest = Integer.MAX_VALUE;
+		Metadata mBest = null;
 
-		double d_new;
+		double dNew;
 
-		for (Metadata next_md : allMetadata.getMetadatas()) {
-			d_new = distance(metadata, next_md);
-			if (!next_md.getInternalName().equals(metadata.getInternalName()) && (d_new < d_best))
-			{
-				d_best = d_new;
-				m_best = next_md;
+		for (Metadata nextMd : allMetadata.getMetadatas()) {
+			dNew = distance(metadata, nextMd);
+			if (!nextMd.getInternalName().equals(metadata.getInternalName()) && (dNew < dBest)) {
+				dBest = dNew;
+				mBest = nextMd;
 			}
-			sb.append("    " + next_md.getExternalName() + " distance: " + d_new + "\n");
+			sb.append("    " + nextMd.getExternalName() + " distance: " + dNew + "\n");
 		}
         logInfo(sb.toString());
 		
-		logWarning("Nearest file: " + ((m_best!=null)?m_best.getExternalName():"only original file has results"));
+        String extNameOfBest;
+        if (mBest != null) {
+        	extNameOfBest = mBest.getExternalName();
+        } else {
+        	extNameOfBest = "only original file has results";
+        }
+        
+		logWarning("Nearest file: " + extNameOfBest);
 		
 		
 		org.pikater.core.ontology.subtrees.management.Agent agent = null;
 		
-		if(m_best!=null){
-			String nearestInternalName = m_best.getInternalName();
+		if (mBest != null) {
+			String nearestInternalName = mBest.getInternalName();
 			// 2. find the agent with the lowest error_rate
 			agent = DataManagerService.getTheBestAgent(this, nearestInternalName);
 		}
@@ -103,12 +109,13 @@ public class Agent_Basic extends Agent_Recommender {
 			String wekaOptionString = NewOptions.exportToWeka(agent.getOptions()); 
 			logWarning("Best agent type: "+ agent.getType() +
 					", options: " + wekaOptionString);
-		}
-		else{
-			agent=new org.pikater.core.ontology.subtrees.management.Agent();
+			
+		} else {
+			agent = new org.pikater.core.ontology.subtrees.management.Agent();
 			agent.setType(Agent_Recommender.DEFAULT_AGENT.getName());
 			agent.setName(Agent_Recommender.DEFAULT_AGENT.getName());
-			logInfo("No results in database for file " + ((m_best!=null)?m_best.getExternalName():"no file")+" ... Using default agent: "+agent.getType());
+			
+			logInfo("No results in database for file " + ((mBest!=null)?mBest.getExternalName():"no file")+" ... Using default agent: "+agent.getType());
 			
 		}
 		
@@ -119,14 +126,15 @@ public class Agent_Basic extends Agent_Recommender {
 	private String distanceMatrix() {
 		String matrix = "";
 		
-		GetAllMetadata gm = new GetAllMetadata();
-		gm.setResultsRequired(false);
+		GetAllMetadata getMetadata = new GetAllMetadata();
+		getMetadata.setResultsRequired(false);
 	
-		Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
+		Metadatas allMetadata =
+				DataManagerService.getAllMetadata(this, getMetadata);
 	
-		for(Metadata next_coll : allMetadata.getMetadatas()) {
+		for(Metadata nextCollI : allMetadata.getMetadatas()) {
 			
-			int na = next_coll.getNumberOfAttributes();
+			int na = nextCollI.getNumberOfAttributes();
 			if (na < minAttributes) {
 				minAttributes = na;
 			}
@@ -134,7 +142,7 @@ public class Agent_Basic extends Agent_Recommender {
 				maxAttributes = na;
 			}
 	
-			int ni = next_coll.getNumberOfInstances();
+			int ni = nextCollI.getNumberOfInstances();
 			if (ni < minInstances) {
 				minInstances = ni;
 			}
@@ -143,15 +151,15 @@ public class Agent_Basic extends Agent_Recommender {
 			}
 		}
 	
-		double d;
-		for(Metadata next_coll : allMetadata.getMetadatas()) {
+		double distance;
+		for(Metadata nextCollI : allMetadata.getMetadatas()) {
 
-			matrix +=next_coll.getExternalName() + ";";
+			matrix += nextCollI.getExternalName() + ";";
 
-			for(Metadata next_row : allMetadata.getMetadatas()) {
+			for (Metadata nextRowJ : allMetadata.getMetadatas()) {
 				
-				d = distance(next_coll, next_row);
-				matrix += String.format("%.10f", d);
+				distance = distance(nextCollI, nextRowJ);
+				matrix += String.format("%.10f", distance);
 				matrix += ";";				
 			}
 			matrix +="\n";
@@ -161,36 +169,36 @@ public class Agent_Basic extends Agent_Recommender {
 		
 	} // end distanceMatrix
 
-	/*
+	/**
 	 * Compute distance between two datasets (use metadata)
 	 */
 	private double distance(Metadata m1, Metadata m2) {
 
-		double wAttribute_type = 1;
-		double wDefault_task = 1;
-		double wMissing_values = 1;
-		double wNumber_of_attributes = 1;
-		double wNumber_of_instances = 1;
+		double wAttributeType = 1;
+		double wDefaultTask = 1;
+		double wMissingValues = 1;
+		double wNumberOfAttributes = 1;
+		double wNumberOfInstances = 1;
 
 		// can be null
-		double dAttribute_type = dCategory(m1.getAttributeType(), m2
+		double dAttributeType = dCategory(m1.getAttributeType(), m2
 				.getAttributeType());
 		double dDefault_task = dCategory(m1.getDefaultTask(), m2
 				.getDefaultTask());
 		// default false - always set
-		double dMissing_values = dBoolean(m1.getMissingValues(), m2
+		double dMissingValues = dBoolean(m1.getMissingValues(), m2
 				.getMissingValues());
 		// mandatory attributes - always set
-		double dNumber_of_attributes = d(m1.getNumberOfAttributes(), m2
+		double dNumberOfAttributes = d(m1.getNumberOfAttributes(), m2
 				.getNumberOfAttributes(), minAttributes, maxAttributes);
-		double dNumber_of_instances = d(m1.getNumberOfInstances(), m2
+		double dNumberOfInstances = d(m1.getNumberOfInstances(), m2
 				.getNumberOfInstances(), minInstances, maxInstances);
 
 		// return distance
-		return wAttribute_type * dAttribute_type + wDefault_task
-				* dDefault_task + wMissing_values * dMissing_values
-				+ wNumber_of_attributes * dNumber_of_attributes
-				+ wNumber_of_instances * dNumber_of_instances;
+		return wAttributeType * dAttributeType + wDefaultTask
+				* dDefault_task + wMissingValues * dMissingValues
+				+ wNumberOfAttributes * dNumberOfAttributes
+				+ wNumberOfInstances * dNumberOfInstances;
 	}
 
 	@Override

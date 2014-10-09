@@ -1,5 +1,6 @@
 package org.pikater.core.agents.system;
 
+import jade.content.Concept;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -47,11 +48,14 @@ public class Agent_Manager extends PikaterAgent {
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
 	}
-    public void addComputation(ComputationCollectionItem item)
-    {
+	
+    public void addComputation(ComputationCollectionItem item) {
         computationCollection.put(item.getBatchID(),item);
     }
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -69,7 +73,9 @@ public class Agent_Manager extends PikaterAgent {
 		return ontologies;
 	}
 	
-	
+	/**
+	 * Agent setup
+	 */
 	protected void setup() {
 
     	initDefault();
@@ -78,19 +84,28 @@ public class Agent_Manager extends PikaterAgent {
 		doWait(30000);
 		
 		MessageTemplate subscriptionTemplate = 
-						MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE),
-								MessageTemplate.MatchPerformative(ACLMessage.CANCEL));
+				MessageTemplate.or(
+						MessageTemplate.MatchPerformative(
+								ACLMessage.SUBSCRIBE),
+						MessageTemplate.MatchPerformative(
+								ACLMessage.CANCEL));
 		
-		addBehaviour(new ParserBehaviour(this));
-				
-		addBehaviour(new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
+		ParserBehaviour parserBehaviour = new ParserBehaviour(this);
+		addBehaviour(parserBehaviour);
 		
-		addBehaviour(new RequestServer(this)); // TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
+		SubscriptionResponder subscriptionResponder =
+				new SubscriptionResponder(this,
+						subscriptionTemplate,
+						new ManagerSubscriptionManager());
+		addBehaviour(subscriptionResponder);
 		
-	} // end setup
+		addBehaviour(new RequestServer(this));
+		// TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
+		
+	}
 		
 			
-	public class subscriptionManager implements SubscriptionManager {
+	public class ManagerSubscriptionManager implements SubscriptionManager {
 		public boolean register(Subscription s) {
 			subscriptions.add(s);
 			return true;
@@ -111,9 +126,13 @@ public class Agent_Manager extends PikaterAgent {
 		
 		MessageTemplate getSchemaFromSearchTemplate =
 				MessageTemplate.and(
-				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_QUERY),
-				MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF),
-				MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+				MessageTemplate.MatchProtocol(
+						FIPANames.InteractionProtocol.FIPA_QUERY),
+				MessageTemplate.and(
+						MessageTemplate.MatchPerformative(
+								ACLMessage.QUERY_REF),
+				MessageTemplate.and(
+						MessageTemplate.MatchLanguage(codec.getName()),
 				MessageTemplate.MatchOntology(ontology.getName()))));
 
 		
@@ -126,13 +145,16 @@ public class Agent_Manager extends PikaterAgent {
 			ACLMessage query = receive(getSchemaFromSearchTemplate);
 			
 			if (query != null) {
-				logInfo(": a query message received from " + query.getSender().getName());
+				logInfo(": a query message received from " +
+						query.getSender().getName());
 				
 				searchMessages.put(query.getConversationId(), query);				
 				
 				try {
 					ContentElement content = getContentManager().extractContent(query);
-					if (((Action) content).getAction() instanceof ExecuteParameters) {
+					Concept action = ((Action) content).getAction();
+					
+					if (action instanceof ExecuteParameters) {
 						// manager received new options from search to execute
 						ExecuteParameters ep = (ExecuteParameters) (((Action) content).getAction());
 
@@ -147,15 +169,13 @@ public class Agent_Manager extends PikaterAgent {
 									.getProblemGraph().getNode(nodeId); 
 
 
-                        for (SearchSolution ss : ep.getSolutions())
-                        {
+                        for (SearchSolution searchSolutionI : ep.getSolutions()) {
                             SolutionEdge se = new SolutionEdge();
                             se.setComputationID(computationId);
-                            se.setOptions(ss);
+                            se.setOptions(searchSolutionI);
                             searchNode.addToOutputAndProcess(se, "searchedoptions");
                         }
-				    }
-					else{
+				    } else {
 						logSevere("unknown message received.");
 					}
 				} catch (UngroundedException e1) {
@@ -165,16 +185,11 @@ public class Agent_Manager extends PikaterAgent {
 				} catch (OntologyException e1) {
 					logException(e1.getMessage(), e1);
 				}
-			}
-			else {
+
+			} else {
 				block();
 			}
 
-			/*
-			ACLMessage result_msg = request.createReply();
-			result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-			send(result_msg);
-			*/
 			return;
 
 		}
@@ -216,7 +231,7 @@ public class Agent_Manager extends PikaterAgent {
 			}
 		}
 		
-	} // end sendSubscription
+	}
 	
 	public AID getAgentByType(String agentType) {
 		return (AID)getAgentByType(agentType, 1).get(0);
@@ -255,5 +270,5 @@ public class Agent_Manager extends PikaterAgent {
 		
 		return Agents;
 		
-	} // end getAgentByType
+	}
 }

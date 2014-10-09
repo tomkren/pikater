@@ -361,10 +361,11 @@ public class Parser {
     }
 
     private ComputationNode parseDataProcessing(DataProcessing dataProcessing,
-    		ComputationNode child, int batchID, int userID, String connectionName,
-    		String connectionOutName) {
+    		ComputationNode child, int batchID, int userID,
+    		String connectionName, String connectionOutName) {
     	
-        List<DataSourceDescription> dataSources= dataProcessing.getDataSources();
+        List<DataSourceDescription> dataSources =
+        		dataProcessing.getDataSources();
         
         ComputationNode parent;
         if (alreadyProcessed.containsKey(dataProcessing.getId())) {
@@ -376,10 +377,12 @@ public class Parser {
             experiment.setBatchID(batchID);
             experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
             
-            int experimentID = DataManagerService.saveExperiment(agent, experiment);
+            int experimentID =
+            		DataManagerService.saveExperiment(agent, experiment);
             
-            DataProcessingComputationNode dpNode = new DataProcessingComputationNode(
-            		computationGraph, agent, experimentID);
+            DataProcessingComputationNode dpNode =
+            		new DataProcessingComputationNode(computationGraph,
+            				agent, experimentID);
             parent = dpNode;
             String agentType = dataProcessing.getAgentType();
             
@@ -411,8 +414,9 @@ public class Parser {
             alreadyProcessed.put(dataProcessing.getId(),parent);  
             
             for (DataSourceDescription datasourceI : dataSources){            	
-            	parseDataSourceDescription(datasourceI, batchID, userID, parent,
-            			datasourceI.getInputType(), datasourceI.getOutputType());
+            	parseDataSourceDescription(datasourceI, batchID, userID,
+            			parent, datasourceI.getInputType(),
+            			datasourceI.getOutputType());
             }
         }
         
@@ -443,7 +447,8 @@ public class Parser {
         }
         if (validationData != null) {
             parseDataSourceDescription(validationData, batchID, userID, node,
-            		validationData.getInputType(), validationData.getOutputType());
+            		validationData.getInputType(),
+            		validationData.getOutputType());
         }
     }
 
@@ -461,6 +466,6 @@ public class Parser {
         OptionEdge option = new OptionEdge();
         option.setOptions(options);
         OneShotBuffer optionBuffer = new OneShotBuffer(option);
-        node.addInput("options",optionBuffer);
+        node.addInput("options", optionBuffer);
     }    
 }

@@ -34,10 +34,12 @@ public class AgentDataSourceBehavior extends CyclicBehaviour
      */
     public AgentDataSourceBehavior(Codec codec,Ontology ontology,AgentDataSource agent) {
         super(agent);
-        dsAgent=agent;
-        this.codec=codec;
-        this.ontology=ontology;
-        this.registerDSTemplate = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+        dsAgent = agent;
+        this.codec = codec;
+        this.ontology = ontology;
+        this.registerDSTemplate =
+        		MessageTemplate.and(
+        				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
                 MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
                         MessageTemplate.MatchOntology(ontology.getName())));
         MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),

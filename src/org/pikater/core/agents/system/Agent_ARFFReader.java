@@ -86,6 +86,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 		return CoreAgents.ARFF_READER.getName();
 	}
 
+	/**
+	 * Agent setup
+	 */
 	@Override
 	protected void setup() {
 		initDefault();
@@ -138,7 +141,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 			ArrayList<Integer> types = new ArrayList<Integer>();
 
 			for (int i = 0; i < data.numAttributes(); i++) {
-				Attribute a = data.attribute(i);
+				Attribute attributeI = data.attribute(i);
 
 				int index;
 				if (data.classIndex() >= 0) {
@@ -147,8 +150,8 @@ public class Agent_ARFFReader extends PikaterAgent {
 					index = data.numAttributes() - 1;
 				}
 				
-				if ( (i != index) && (!types.contains(a.type())) ) {
-					types.add(a.type());
+				if ( (i != index) && (!types.contains(attributeI.type())) ) {
+					types.add(attributeI.type());
 				}
 			}
 

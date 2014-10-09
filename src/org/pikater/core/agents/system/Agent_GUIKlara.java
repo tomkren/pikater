@@ -234,8 +234,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 	 * @param input - input line
 	 */
 	private void killBatch(String input) {
-		String[] cmd=input.split(" ");
-		int batchID=-1;
+		String[] cmd = input.split(" ");
+		int batchID = -1;
 		try{
 			batchID=Integer.parseInt(cmd[cmd.length-1]);
 			
