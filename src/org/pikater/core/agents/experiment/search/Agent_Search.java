@@ -7,6 +7,7 @@ import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.SearchOntology;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
@@ -46,14 +47,14 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	private Codec codec = new SLCodec();
 	private Ontology ontology = SearchOntology.getInstance();
 	
-	protected int query_block_size = 1;	
+	protected int queryBlockSize = 1;	
 
 	private String conversationID;	
-	private List<NewOption> search_options = null;
+	private List<NewOption> searchOptions = null;
 	private List<SearchItem> schema = null;
 	
 	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
-	protected abstract boolean finished();
+	protected abstract boolean isFinished();
 	protected abstract float updateFinished(float[][] evaluations);
 	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
 	
@@ -90,12 +91,12 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		}
 		
 	}
-	protected List<NewOption> getSearchOptions() {
+	protected NewOptions getSearchOptions() {
 
-		if(search_options != null) {
-			return search_options;
+		if(searchOptions != null) {
+			return new NewOptions(searchOptions);
 		} else {
-			return new ArrayList<NewOption>();
+			return new NewOptions();
 		}
 	}
 	
@@ -209,7 +210,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 								updateFinished(evaluations);
 							}
 
-							if (finished()) {
+							if (isFinished()) {
 								//konec vsech evaluaci
 								// System.out.println("OK: Pars - Ukoncovani");
 								solutions_new = null;
@@ -345,7 +346,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 				} else if (((Action) content).getAction() instanceof GetParameters){
 					get_next_parameters_action = (GetParameters) ((Action) content).getAction();
 					//zacatek - nastaveni optionu
-					search_options = get_next_parameters_action.getSearchOptions();
+					searchOptions = get_next_parameters_action.getSearchOptions();
 					schema = get_next_parameters_action.getSchema();														
 					loadSearchOptions();
 					
@@ -353,7 +354,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							
 					ACLMessage agree = request.createReply();
 					agree.setPerformative(ACLMessage.AGREE);
-					agree.setContent(Integer.toString(query_block_size));
+					agree.setContent(Integer.toString(queryBlockSize));
 					return agree; //or REFUSE, sometimes
 					//return null;
 				}				
