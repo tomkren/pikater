@@ -39,7 +39,7 @@ import java.util.Map;
  * Date: 18.5.2014
  * Time: 11:13
  */
-public class SearchStartComputationStrategy implements StartComputationStrategy{
+public class SearchStartComputationStrategy implements StartComputationStrategy {
 	Agent_Manager myAgent;
 	int batchID;
 	SearchComputationNode computationNode;
@@ -49,13 +49,14 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
     AID searchAID;
 
     /**
+     * Constructor
      *
      * @param manager Manager agent that will receive StartGettingParametersFromSearch behavior
      * @param batchID  Id of the batch that this computation belongs to
      * @param computationNode Parent computation node
      */
 	public SearchStartComputationStrategy (Agent_Manager manager,
-			int batchID, SearchComputationNode computationNode){
+			int batchID, SearchComputationNode computationNode) {
 		myAgent = manager;
         this.batchID = batchID;
         this.computationNode = computationNode;
@@ -65,26 +66,36 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
      *
      * @param computation Computation node with this strategy
      */
-	public void execute(ComputationNode computation){
-		ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
-        if (searchAID==null) {
+	public void execute(ComputationNode computation) {
+		
+		ACLMessage originalRequest =
+				myAgent.getComputation(batchID).getMessage();
+		
+        if (searchAID == null) {
             Agent search = getSearchFromNode();
-            searchAID= myAgent.createAgent(search.getType(), search.getName(), null);
+            searchAID = myAgent.createAgent(search.getType(),
+            		search.getName(), null);
         }
 
 		inputs = computationNode.getInputs();
 		
 		if (inputs.get("error").isBlocked()){
 			// start new parameter search
-			myAgent.addBehaviour(new StartGettingParametersFromSearch(myAgent, originalRequest, prepareRequest(searchAID), this));
+			
+			StartGettingParametersFromSearch startSearch =
+					new StartGettingParametersFromSearch( myAgent,
+							originalRequest, prepareRequest(searchAID), this);
+			
+			myAgent.addBehaviour(startSearch);
 			inputs.get("error").unblock();
-		}
-		else{
+		
+		} else {
 			// send results (errors) to search
 			ErrorEdge errorEdge = (ErrorEdge)(inputs.get("error").getNext());
 			
+			String conversationID = batchID + "_" + computationNode.getId() +
+					"_" + Integer.toString(errorEdge.getComputationId());
 			
-			String conversationID = batchID+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId());
 			ACLMessage query = myAgent.searchMessages.get(conversationID); 
 			//remove from search messages, we wont need this anymore
             myAgent.searchMessages.remove(conversationID);
@@ -93,9 +104,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 			try {			
 			
-				Action a = (Action)myAgent.getContentManager().extractContent(query);								
+				Action action = (Action)
+						myAgent.getContentManager().extractContent(query);								
 				
-				Result result = new Result(a, errorEdge.getEvaluation());			
+				Result result = new Result(action, errorEdge.getEvaluation());			
 
 				myAgent.getContentManager().fillContent(inform, result);
 			} catch (CodecException | OntologyException e) {
@@ -116,7 +128,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
      * @param receiver AID of the receiver
      * @return Request
      */
-	private ACLMessage prepareRequest(AID receiver){
+	private ACLMessage prepareRequest(AID receiver) {
 		// prepare request for the search agent
 
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
@@ -126,22 +138,23 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msg.setConversationId(Integer.toString(batchID)+"_"+Integer.toString(computationNode.getId()));
 
-		GetParameters gp = new GetParameters();
-        if (childOptions==null)
-        {
+		GetParameters getParameter = new GetParameters();
+        if (childOptions == null) {
             childOptions = (OptionEdge)inputs.get("childoptions").getNext();
             inputs.get("childoptions").block();
         }
-		List<SearchItem> schema = convertOptionsToSchema(childOptions.getOptions());
-		gp.setSchema(schema);
-		gp.setSearchOptions(options.getOptions());
+        
+		List<SearchItem> schema =
+				convertOptionsToSchema(childOptions.getOptions());
+		getParameter.setSchema(schema);
+		getParameter.setSearchOptions(options.getOptions());
 
-        Action a = new Action();
-		a.setAction(gp);
-		a.setActor(myAgent.getAID());
+        Action action = new Action();
+		action.setAction(getParameter);
+		action.setActor(myAgent.getAID());
 
 		try {
-			myAgent.getContentManager().fillContent(msg, a);
+			myAgent.getContentManager().fillContent(msg, action);
 		} catch (CodecException | OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
@@ -156,13 +169,15 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
      */
 	private Agent getSearchFromNode(){
 
-		Map<String,ComputationOutputBuffer> nodeInputs = computationNode.getInputs();
+		Map<String,ComputationOutputBuffer> nodeInputs =
+				computationNode.getInputs();
 
 		Agent agent = new Agent();
-//		agent.setName(computationNode.);
 		agent.setType(computationNode.getModelClass());
-       if (options==null) {
-           OptionEdge optionEdge = (OptionEdge) nodeInputs.get("options").getNext();
+		
+       if (options == null) {
+           OptionEdge optionEdge = (OptionEdge)
+        		   nodeInputs.get("options").getNext();
            nodeInputs.get("options").block();
            options = new NewOptions(optionEdge.getOptions());
        }
@@ -181,18 +196,20 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
         ValuesForOption values = opt.getValuesWrapper();
 		for (Value value:values.getValues()) {
             IValueData typedValue = value.getCurrentValue();
-            if (typedValue instanceof QuestionMarkRange)
-            {
-                QuestionMarkRange questionMarkRange = (QuestionMarkRange) typedValue;
+            
+            if (typedValue instanceof QuestionMarkRange) {
+            	
+                QuestionMarkRange questionMarkRange =
+                		(QuestionMarkRange) typedValue;
                 IntervalSearchItem itm = new IntervalSearchItem();
                 itm.setName(opt.getName());
                 itm.setNumberOfValuesToTry(questionMarkRange.getCountOfValuesToTry());
                 itm.setMin(questionMarkRange.getUserDefinedRestriction().getMinValue());
                 itm.setMax(questionMarkRange.getUserDefinedRestriction().getMaxValue());
                 schema.add(itm);
-            }
-            else if (typedValue instanceof QuestionMarkSet)
-            {
+            
+            } else if (typedValue instanceof QuestionMarkSet) {
+            	
                 QuestionMarkSet questionMarkSet = (QuestionMarkSet) typedValue;
                 SetSItem itm = new SetSItem();
                 itm.setName(opt.getName());
@@ -211,11 +228,13 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	private List<SearchItem> convertOptionsToSchema(List<NewOption> options){
 		List<SearchItem> result = new ArrayList<>();
 
-		if(options==null)
+		if (options == null) {
 			return result;
-        for (NewOption opt : options) {
-            if (opt.isMutable()) {
-                addOptionToSchema(opt, result);
+		}
+		
+        for (NewOption optionI : options) {
+            if (optionI.isMutable()) {
+                addOptionToSchema(optionI, result);
             }
         }
 		return result;
