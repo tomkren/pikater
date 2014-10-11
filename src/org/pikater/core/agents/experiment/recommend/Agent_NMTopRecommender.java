@@ -84,8 +84,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             this.d = d;
         }
         
-        private Agent_NMTopRecommender getOuterType()
-		{
+        private Agent_NMTopRecommender getOuterType() {
 			return Agent_NMTopRecommender.this;
 		}
 
@@ -98,8 +97,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         }
 
 		@Override
-		public int hashCode()
-		{
+		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + getOuterType().hashCode();
@@ -111,8 +109,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 		}
 
 		@Override
-		public boolean equals(Object obj)
-		{
+		public boolean equals(Object obj) {
 			if (this == obj)
 				return true;
 			if (obj == null)
@@ -215,10 +212,10 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         ArrayList<Agent> bestAgents = new ArrayList<Agent>();
 
-        for (Agent a : agents) {
+        for (Agent agentI : agents) {
 
-            if (a.getType().equals(bestAgentType)) {
-                bestAgents.add(a);
+            if (agentI.getType().equals(bestAgentType)) {
+                bestAgents.add(agentI);
             }
         }
 
@@ -262,11 +259,11 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            double avg = sum/count;
 	            
 	            double stdDev = 0;
-	            for (Agent agent : bestAgents) {
-	            	if (agent.getOptionByName(optionName) != null) {
+	            for (Agent agentI : bestAgents) {
+	            	if (agentI.getOptionByName(optionName) != null) {
 	            		
 	            		NewOption optionOfAgentI =
-	            				agent.getOptionByName(optionName);
+	            				agentI.getOptionByName(optionName);
 	            		IValueData valueI =
 	            				optionOfAgentI.toSingleValue().getCurrentValue();
 	            		

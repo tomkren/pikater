@@ -115,7 +115,15 @@ public class Agent_Basic extends Agent_Recommender {
 			agent.setType(Agent_Recommender.DEFAULT_AGENT.getName());
 			agent.setName(Agent_Recommender.DEFAULT_AGENT.getName());
 			
-			logInfo("No results in database for file " + ((mBest!=null)?mBest.getExternalName():"no file")+" ... Using default agent: "+agent.getType());
+			String externalName;
+			if (mBest != null) {
+				externalName = mBest.getExternalName();
+			} else {
+				externalName = "no file";
+			}
+			
+			logInfo("No results in database for file " + externalName +
+					" ... Using default agent: " + agent.getType());
 			
 		}
 		
@@ -167,7 +175,7 @@ public class Agent_Basic extends Agent_Recommender {
 		
 		return matrix;
 		
-	} // end distanceMatrix
+	}
 
 	/**
 	 * Compute distance between two datasets (use metadata)

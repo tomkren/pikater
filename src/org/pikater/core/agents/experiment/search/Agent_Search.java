@@ -37,7 +37,8 @@ import jade.proto.AchieveREResponder;
 
 /**
  * 
- * Abstract Searcher class, gives interface and skeleton of implementation 
+ * Abstract class that gives interface and skeleton of implementation
+ * for all another Searchers 
  *
  */
 public abstract class Agent_Search extends Agent_AbstractExperiment {	

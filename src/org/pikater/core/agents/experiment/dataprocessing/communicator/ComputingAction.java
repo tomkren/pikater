@@ -145,7 +145,7 @@ public class ComputingAction extends FSMBehaviour {
 				}
 				cont = false;
 				if (!agent.resurrected) {
-					agent.state = Agent_ComputingAgent.states.NEW;
+					agent.state = Agent_ComputingAgent.States.NEW;
 				}
 				// Set options
 				agent.setOptions(executeAction.getTask());
@@ -352,7 +352,7 @@ public class ComputingAction extends FSMBehaviour {
 					eval.setEvaluations(new ArrayList<Eval>());
 
 					Date start = null;
-					if (agent.state != Agent_ComputingAgent.states.TRAINED) {
+					if (agent.state != Agent_ComputingAgent.States.TRAINED) {
 						start = agent.train(eval);
 					}
 					else if (!agent.resurrected && !mode.equals("test_only"))
@@ -361,7 +361,7 @@ public class ComputingAction extends FSMBehaviour {
 					}
 					eval.setStart(start);
 
-					if (agent.state == Agent_ComputingAgent.states.TRAINED) {
+					if (agent.state == Agent_ComputingAgent.States.TRAINED) {
 						EvaluationMethod evaluation_method = executeAction
 								.getTask().getEvaluationMethod();
 
@@ -415,7 +415,7 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			public boolean done() {
-				return (agent.state == Agent_ComputingAgent.states.TRAINED)
+				return (agent.state == Agent_ComputingAgent.States.TRAINED)
 						|| !success;
 			}
 		}, TRAINTEST_STATE);
@@ -437,8 +437,8 @@ public class ComputingAction extends FSMBehaviour {
 							!agent.resurrected) {
 						
 						try {
-							ComputingCommunicator communicator = new ComputingCommunicator();
-							String objectFilename = communicator.saveAgentToFile(agent);
+							String objectFilename =
+									ComputingCommunicator.saveAgentToFile(agent);
 							eval.setObjectFilename(objectFilename);
 
 						} catch (CodecException e) {

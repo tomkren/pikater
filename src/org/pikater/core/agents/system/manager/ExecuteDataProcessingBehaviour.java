@@ -22,24 +22,26 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 	private static final long serialVersionUID = -2044738642107219180L;
 
 	private Agent_Manager myAgent;
-	// private DataProcessingStrategy strategy; // unused
     private final ComputationNode node;
-    private ACLMessage msg; // original message sent by whoever wants to
-	 						// compute the task (either search agent or
-							// gui agent);
-							// to be able to send a reply
 
+    // Original message sent by whoever wants to compute the Task
+    // (either search agent or gui agent); to be able to send a reply
+    private ACLMessage msg;
+    
     /**
-     *  @param a Agent manager that will receive this behavior
+     * Constructor
+     * 
+     * @param agentManager Agent manager that will receive this behavior
      * @param req Request to send
      * @param msg Original request
      * @param node Node that created the behavior
      */
-	public ExecuteDataProcessingBehaviour(Agent_Manager a, ACLMessage req,
-                                          ACLMessage msg, ComputationNode node) {
-		super(a, req);
+	public ExecuteDataProcessingBehaviour(Agent_Manager agentManager,
+			ACLMessage req, ACLMessage msg, ComputationNode node) {
 		
-		this.myAgent = a;
+		super(agentManager, req);
+		
+		this.myAgent = agentManager;
         this.msg = msg;
         this.node = node;
         
@@ -47,21 +49,24 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
     }
 
 	protected void handleRefuse(ACLMessage refuse) {
-		myAgent.logSevere("Agent "+refuse.getSender().getName()+" refused.");
+		myAgent.logSevere("Agent " + refuse.getSender().getName() +
+				" refused.");
 	}
 	
 	protected void handleFailure(ACLMessage failure) {
+		
 		if (failure.getSender().equals(myAgent.getAMS())) {
 			myAgent. logSevere("Responder does not exist");
-		}
-		else {
-			myAgent.logSevere("Agent "+failure.getSender().getName()+" failed.");	            
+		
+		} else {
+			myAgent.logSevere("Agent " + failure.getSender().getName() +
+					" failed.");	            
 		}
 	}
 	
 	protected void handleInform(ACLMessage inform) {
-		myAgent.logInfo("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
-
+		myAgent.logInfo("Agent " + inform.getSender().getName() +
+				" successfully performed the requested action.");
 		
 		ContentElement content;
 		try {
@@ -69,8 +74,8 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 			if (content instanceof Result) {
 				// get the original task from msg
 				Result result = (Result) content;					
-				Task t = (Task) result.getValue();
-                ArrayList<TaskOutput> outputs = t.getOutput();
+				Task task = (Task) result.getValue();
+                ArrayList<TaskOutput> outputs = task.getOutput();
                 for (TaskOutput output : outputs) {
                     DataSourceEdge edge = new DataSourceEdge();
                     edge.setDataSourceId(output.getName());
@@ -90,6 +95,8 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
         // send subscription to the original agent after each received task
 		myAgent.sendSubscription(inform, msg);
 	}
-} // end of ExecuteTask ("send request to planner agent") bahavior
+	
+	// end of ExecuteTask ("send request to planner agent") behavior
+}
 
 

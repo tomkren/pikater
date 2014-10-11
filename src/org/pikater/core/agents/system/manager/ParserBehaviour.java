@@ -11,7 +11,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationGraph;
 import org.pikater.core.agents.system.computation.graph.events.LoggerObserver;

@@ -21,7 +21,8 @@ public class ManagerService {
 	/*
 	 * Sends ID of new batch as inform to agent Manager
 	 */
-	public static void sendNewBatchInfoToManager(PikaterAgent agent, int userID, int newBatchID) {
+	public static void sendNewBatchInfoToManager(PikaterAgent agent,
+			int userID, int newBatchID) {
 		
 		NewBatch newBatch = new NewBatch();
 		newBatch.setUserId(userID);
@@ -37,13 +38,13 @@ public class ManagerService {
         msg.setLanguage(new SLCodec().getName());
         msg.setOntology(ontology.getName());
 
-		Action a = new Action();
-		a.setAction(newBatch);
-		a.setActor(agent.getAID());
+		Action action = new Action();
+		action.setAction(newBatch);
+		action.setActor(agent.getAID());
 
 		try {
 			// Let JADE convert from Java objects to string
-			agent.getContentManager().fillContent(msg, a);
+			agent.getContentManager().fillContent(msg, action);
 
 		} catch (CodecException ce) {
 			agent.logException(ce.getMessage(), ce);

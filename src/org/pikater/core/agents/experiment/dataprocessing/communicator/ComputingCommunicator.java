@@ -28,17 +28,31 @@ import org.pikater.core.ontology.subtrees.management.SaveAgent;
 import org.pikater.core.ontology.subtrees.result.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Task;
 
-public class ComputingCommunicator {
+/**
+ * 
+ * Computing agent communicator
+ *
+ */
+public abstract class ComputingCommunicator {
 
-	public ACLMessage executeTask(Agent_ComputingAgent agent, ACLMessage req) {
+	/**
+	 * Handles the incoming Task
+	 * 
+	 * @param agent
+	 * @param requestMsg
+	 * @return
+	 */
+	public static ACLMessage handleTask(Agent_ComputingAgent agent,
+			ACLMessage requestMsg) {
 		
-		ACLMessage resultMsg = req.createReply();
+		ACLMessage resultMsg = requestMsg.createReply();
 		if (agent.acceptTask()) {
 			resultMsg.setPerformative(ACLMessage.AGREE);
-			agent.taskFIFO.addLast(req);
+			agent.taskFIFO.addLast(requestMsg);
 
-			if ((agent.taskFIFO.size() == 1) && !agent.executionBehaviour.isRunnable())
-			{
+			if ((agent.taskFIFO.size() == 1) &&
+				(!agent.executionBehaviour.isRunnable())) {
+				
 				agent.executionBehaviour.restart();
 			}
 
@@ -49,15 +63,24 @@ public class ComputingCommunicator {
 		return resultMsg;
 	}
 	
-	public ACLMessage executeDurationTask(Agent_ComputingAgent agent, ACLMessage req) {
+	/**
+	 * Executes a Duration Task
+	 * 
+	 * @param agent
+	 * @param requestMsq
+	 * @return
+	 */
+	public static ACLMessage executeDurationTask(Agent_ComputingAgent agent,
+			ACLMessage requestMsq) {
 		
-		ACLMessage resultMsg = req.createReply();
+		ACLMessage resultMsg = requestMsq.createReply();
 		if (agent.acceptTask()) {
 			resultMsg.setPerformative(ACLMessage.PROPOSE);
-			agent.taskFIFO.addFirst(req);
+			agent.taskFIFO.addFirst(requestMsq);
 
-			if ((agent.taskFIFO.size() == 1) && !agent.executionBehaviour.isRunnable())
-			{
+			if ((agent.taskFIFO.size() == 1) &&
+				(!agent.executionBehaviour.isRunnable())) {
+				
 				agent.executionBehaviour.restart();
 			}
 
@@ -68,47 +91,59 @@ public class ComputingCommunicator {
 		return resultMsg;
 	}
 	
-	public void sendLastDuration(Agent_ComputingAgent agent){
-		SetDuration gd=new SetDuration();
-		Duration duration=new Duration();
+	/**
+	 * Sends a last duration
+	 * 
+	 * @param agent
+	 */
+	public static void sendLastDuration(Agent_ComputingAgent agent) {
+		
+		Duration duration = new Duration();
 		duration.setStart(agent.getLastStartDate());
 		duration.setDurationMiliseconds(agent.getLastDuration());
 		
-		gd.setDuration(duration);
+		SetDuration setDuration = new SetDuration();
+		setDuration.setDuration(duration);
 		
-		ACLMessage durationMessage=new ACLMessage(ACLMessage.REQUEST);
+		AID aidDuration = new AID(CoreAgents.DURATION.getName(), false);
+		
+		ACLMessage durationMessage = new ACLMessage(ACLMessage.REQUEST);
 		durationMessage.setOntology(DurationOntology.getInstance().getName());
-		durationMessage.addReceiver(new AID(CoreAgents.DURATION.getName(), false));
+		durationMessage.addReceiver(aidDuration);
 		durationMessage.setLanguage(agent.getCodec().getName());
 		
-		Action a =new Action();
-		a.setAction(gd);
-		a.setActor(agent.getAID());
+		Action action = new Action();
+		action.setAction(setDuration);
+		action.setActor(agent.getAID());
 		
 		try {
-			agent.getContentManager().fillContent(durationMessage, a);
+			agent.getContentManager().fillContent(durationMessage, action);
 		} catch (CodecException | OntologyException e) {
-			agent.logException("Codec/Ontology exception in Computing Communicator", e);
+			agent.logException("Codec/Ontology exception in "
+					+ "Computing Communicator", e);
 		}
 		agent.send(durationMessage);
 	}
 	
-	/*
+	/**
 	 * Send partial results to the GUI Agent(s) call it after training or during
 	 * training?
 	 */
-	protected void sendResultsToGUI(Agent_ComputingAgent agent,
-			Boolean first_time, Task _task, List _evaluations) {
+	public static void sendResultsToGUI(Agent_ComputingAgent agent,
+			Boolean firstTime, Task task, List evaluations) {
 
-		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
 		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(CoreAgents.GUI_AGENT.getName());
-		template.addServices(sd);
+		
+		ServiceDescription serviceDuration = new ServiceDescription();
+		serviceDuration.setType(CoreAgents.GUI_AGENT.getName());
+		template.addServices(serviceDuration);
+		
+		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
+		
 		try {
-			DFAgentDescription[] gui_agents = DFService.search(agent, template);
-			for (int i = 0; i < gui_agents.length; ++i) {
-				msgOut.addReceiver(gui_agents[i].getName());
+			DFAgentDescription[] guiAgents = DFService.search(agent, template);
+			for (int i = 0; i < guiAgents.length; ++i) {
+				msgOut.addReceiver(guiAgents[i].getName());
 			}
 		} catch (FIPAException fe) {
 			agent.logException(fe.getMessage(), fe);
@@ -117,10 +152,10 @@ public class ComputingCommunicator {
 		msgOut.setConversationId("partial-results");
 
 		PartialResults content = new PartialResults();
-		content.setResults(_evaluations);
+		content.setResults(evaluations);
 
-		if (first_time) {
-			content.setTask(_task);
+		if (firstTime) {
+			content.setTask(task);
 		}
 		try {
 			agent.getContentManager().fillContent(msgOut, content);
@@ -133,13 +168,20 @@ public class ComputingCommunicator {
 		agent.send(msgOut);
 	}
 
-	public ACLMessage sendOptions(Agent_ComputingAgent agent, ACLMessage request) {
+	/**
+	 * Sends options of the agent
+	 * 
+	 * @param agent
+	 * @param request
+	 * @return
+	 */
+	public static ACLMessage sendOptions(Agent_ComputingAgent agent, ACLMessage request) {
 		ACLMessage msgOut = request.createReply();
 		msgOut.setPerformative(ACLMessage.INFORM);
 		try {
 			// Prepare the content
 			ContentElement content = agent.getContentManager().extractContent(
-					request); // TODO exception block?
+					request);
 			Result result = new Result((Action) content, agent.agentOptions);
 
 			try {
@@ -160,28 +202,40 @@ public class ComputingCommunicator {
 
 	}
 
-	public String saveAgentToFile(Agent_ComputingAgent agent ) throws IOException, CodecException,
-			OntologyException, FIPAException {
+	/**
+	 * Save this agent to file
+	 * 
+	 * @param agent
+	 * @return
+	 * @throws IOException
+	 * @throws CodecException
+	 * @throws OntologyException
+	 * @throws FIPAException
+	 */
+	public static String saveAgentToFile(Agent_ComputingAgent agent
+			) throws IOException, CodecException, OntologyException,
+			FIPAException {
 
 		Agent agentOnt = agent.currentTask.getAgent();
 		agentOnt.setObject(agent.getAgentObject());
 		
 		
 		SaveAgent saveAgent = new SaveAgent();
-
 		saveAgent.setAgent(agentOnt);
 
+		AID managerAID = new AID(CoreAgents.MANAGER_AGENT.getName(), false);
+		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID(CoreAgents.MANAGER_AGENT.getName(), false));
+		request.addReceiver(managerAID);
 		request.setOntology(TaskOntology.getInstance().getName());
 		request.setLanguage(agent.getCodec().getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-		Action a = new Action();
-		a.setActor(agent.getAID());
-		a.setAction(saveAgent);
+		Action action = new Action();
+		action.setActor(agent.getAID());
+		action.setAction(saveAgent);
 
-		agent.getContentManager().fillContent(request, a);
+		agent.getContentManager().fillContent(request, action);
 		ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
 
 		return reply.getContent();

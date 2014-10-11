@@ -15,9 +15,8 @@ public class Agent_WekaDurationLinearRegression extends
 	
 	@Override
 	public Date train(Evaluation evaluation) throws Exception {
-		Date date= super.train(evaluation);
-		ComputingCommunicator cc=new ComputingCommunicator();
-		cc.sendLastDuration(this);
+		Date date = super.train(evaluation);
+		ComputingCommunicator.sendLastDuration(this);
 		return date;
 	}
 	
