@@ -873,7 +873,7 @@ public class Agent_DataManager extends PikaterAgent {
 	 * </ul>
 	 * 
 	 * @param request {@link ACLMessage} received with the request.
-	 * @param a {@link Actiong} containing {@link UpdateBatchStatus} action.
+	 * @param a {@link Action} containing {@link UpdateBatchStatus} action.
 	 * @return {@link ACLMessage} confirming the batch status update.
 	 */
 	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request, Action a) {

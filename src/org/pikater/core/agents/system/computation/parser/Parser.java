@@ -51,13 +51,7 @@ public class Parser {
 
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
-            FileSaverNode saverNode=new FileSaverNode(computationGraph);
-
-            //saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),batchID,saverNode));
-
-            //computationGraph.addNode(saverNode);
-            //alreadyProcessed.put(dataSaver.getId(),saverNode);
-            parseDataSourceDescription(dataSource, batchID, userID, saverNode, "file");
+            parseDataSourceDescription(dataSource, batchID, userID);
         } else {
             agent.logSevere("Ontology Parser - Error unknown IDataSaver");
         }
@@ -74,9 +68,9 @@ public class Parser {
     }
     
     private void parseDataSourceDescription(DataSourceDescription dataSource,
-    		int batchID, int userID, ComputationNode child, String connectionName){
-    	parseDataSourceDescription(dataSource, batchID, userID, child, 
-    			connectionName, null);
+    		int batchID, int userID){
+    	parseDataSourceDescription(dataSource, batchID, userID, null,
+    			null, null);
     }
     
     private void parseDataProvider(IDataProvider dataProvider, int batchID,
@@ -113,12 +107,14 @@ public class Parser {
             agent.logInfo("Ontology Matched - Error unknown IDataProvider");
             return;
         }
-        //handle parent - set him as file receiver
-        ComputationOutputBuffer<EdgeValue> fileBuffer =
-        		new StandardBuffer<>(parent,child);
-        fileBuffer.setData(true);        
-        parent.addBufferToOutput(connectionName, fileBuffer);
-        child.addInput(connectionName, fileBuffer);
+        if (child!=null) {
+            //handle parent - set him as file receiver
+            ComputationOutputBuffer<EdgeValue> fileBuffer =
+                    new StandardBuffer<>(parent, child);
+            fileBuffer.setData(true);
+            parent.addBufferToOutput(connectionName, fileBuffer);
+            child.addInput(connectionName, fileBuffer);
+        }
     }
 
 
@@ -174,7 +170,7 @@ public class Parser {
      */
     private void parseFileDataProvider(FileDataProvider file,
     		ComputationNode child, String connectionName) {
-    	
+
         agent.logInfo("Ontology Parser - FileDataProvider");
         if (!alreadyProcessed.containsKey(file.getId())) {
             alreadyProcessed.put(file.getId(), null);
@@ -184,12 +180,14 @@ public class Parser {
         fileEdge = new DataSourceEdge();
         fileEdge.setFile(true);
         fileEdge.setDataSourceId(file.getFileURI());
-        
-        ComputationOutputBuffer<EdgeValue> buffer =
-        		new NeverEndingBuffer<EdgeValue>(fileEdge);
-        buffer.setData(true);
-        buffer.setTarget(child);
-        child.addInput(connectionName, buffer);
+
+        if (child != null) {
+            ComputationOutputBuffer<EdgeValue> buffer =
+                    new NeverEndingBuffer<EdgeValue>(fileEdge);
+            buffer.setData(true);
+            buffer.setTarget(child);
+            child.addInput(connectionName, buffer);
+        }
     }
 
     private ModelComputationNode parseComputing(IComputingAgent computingAgent,
@@ -404,16 +402,18 @@ public class Parser {
             		agent, batchID, experimentID, userID, dpNode);
             
             parent.setStartBehavior(strategy);
-            NeverEndingBuffer<DataSourceEdge> buffer =
-            		new NeverEndingBuffer<>();
-            buffer.setTarget(child);
-            buffer.setSource(parent);
-            buffer.setTargetInput(connectionOutName);
-            parent.addBufferToOutput(connectionName,buffer);
-            child.addInput(connectionName,buffer);
+            if (child!=null) {
+                NeverEndingBuffer<DataSourceEdge> buffer =
+                        new NeverEndingBuffer<>();
+                buffer.setTarget(child);
+                buffer.setSource(parent);
+                buffer.setTargetInput(connectionOutName);
+                parent.addBufferToOutput(connectionName, buffer);
+                child.addInput(connectionName, buffer);
+            }
 
             computationGraph.addNode(parent);
-            alreadyProcessed.put(dataProcessing.getId(),parent);  
+            alreadyProcessed.put(dataProcessing.getId(), parent);
             
             for (DataSourceDescription datasourceI : dataSources){            	
             	parseDataSourceDescription(datasourceI, batchID, userID,
