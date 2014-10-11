@@ -40,9 +40,9 @@ Changes in database schema are rare and should be less common in production envi
 **PostgreSQL** 
 We considered three database management systems before we decided for our final choice: MySQL, PostgreSQL and HyperSQL DB (HSQLDB). All of these DBMS have some versions that are available free of charge.  
 The chosen DBMS must fulfilled several criteria, as follows:
-- support of multiple platforms
-- support of transactional queries
-- support of larger files (cca. hundreds of MiBs)
+- support for multiple platforms
+- support for transactional queries
+- support for larger files (cca. hundreds of MiBs)
 The last criteria is result of our analysis, when we searched for the best way, how can we optimally store the input data files for experiments.
 The following table shows summary about important properties of considered DBMSs:
 
@@ -56,7 +56,7 @@ Despite the fact that MySQL supports transactional queries, we can't use this fe
 
 Choice between HSQLDB and PostgreSQL was mainly based on their approach to binary objects. Current DBMSs support storing byte array in the fields of database records. These byte arrays are ideal place to store files. The only problem - in the way of effectiveness rather than availability - can cause the access to these byte arrays.
 PostgreSQL uses its own way to access particular byte arrays, that supports copying from and to the database with streams. Using HSQLDB we have to use setters and getters to access these records, that work with standard Java class java.lang.Object. Considering the fact, that we are planning operations with larger files, we made decision in favour of PostgreSQL.
-Moreover - but a bit subjective point of view -, PostgreSQL is more widely used, that theoretically can mean better availability of information for it and thus more simple solution of problems.
+Moreover, from a bit subjective point of view, PostgreSQL is more widely used, that theoretically can mean better availability of information for it and thus more simple solution of problems.
 
 
 
@@ -69,13 +69,13 @@ The main advantage of JPA is, that objects prepared to work with JPA don't have 
 
 ### Choice of JPA Connector
 
-Decision for JPA meant, that we not just needed a database and technology to access it, but also something that connects the world of Java with the world of database. Practically, that means translation of operations in JPA to SQL queries with the same semantics. In opposite way, this is translation of results to queries to entity objects. All of these translations are tackled by some JPA connector. Choice of this connector doesn't have direct influence to the application development, except to some special features. Two most widespread JPA connectors are Hibernate and Eclipselink. We decided for Eclipselink, because it supports changing properties of the database connection from source code - not using external configuration files -, that can be useful in the future.
+Decision for JPA meant, that we not just needed a database and technology to access it, but also something that connects the world of Java with the world of database. Practically, that means translation of operations in JPA to SQL queries with the same semantics. In opposite way, this is translation of results to queries to entity objects. All of these translations are tackled by some JPA connector. Choice of this connector doesn't have direct influence to the application development, except to some special features. Two most widespread JPA connectors are Hibernate and Eclipselink. We decided for Eclipselink, because it supports changing properties of the database connection from source code without using external configuration files, that can be useful in the future.
 
 ### Configuration
 
 Old version of Pikater used only file `Beans.xml` for configuration of database connection and using library Spring the object of database connection was injected into the application. This object was retrieved using function `ApplicationContext.getBean`.
 
-Pikater still needs native access to the database - mainly because of existence of Postgre's Large Objects -,and this is the reason we decided to preserve file `Beans.xml` and for less painful transition we left it on its original location in the root folder of the source code.
+Pikater still needs native access to the database, mainly because Postgre's Large Objects are used, and this is the reason we decided to preserve file `Beans.xml`. For less painful transition we left it in original location in root folder of the source code.
 
 Part of file `Beans.xml` that contains data necessary to establish a connection to the database: 
 ```xml
@@ -150,7 +150,7 @@ After the decision that PosgtreSQL would be the DBMS we use in Pikater, we had t
 
 Files are stored using PostgreSQL Large Objects (PgLOBs or simply LOBs). These LOBs are saves as records in the `pg_largeobject` system table of particular database. For each file several records of byte arrays are created, where parts of files are copied. We need the ID of the PgLOB - which is called OID in Postgre's nomenclature, that is abbreviation for Object ID - to retrieve or store the content of file. As an example I can mention entity `JPADatasetLO`, where we have one variable dedicated for OID.
 
-Despite the fact, that we can use annotation `@Lob` in JPA entities - which annotation usually maps variable to byte array in database record -, using it for large files is not recommended. In the worst case, it can happen, that the whole file is copied to memory before it's stored in database.
+Despite the fact, that we can use annotation `@Lob` in JPA entities, that usually maps variable to byte array in database record, using it for large files is not recommended. In the worst case, it can happen, that the whole file is copied to memory before it's stored in database.
 
 Classes working with PostgreSQL Large Objects can be found in package `org.pikater.shared.database.postgre.largeobject`.
 
