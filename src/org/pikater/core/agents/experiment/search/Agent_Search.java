@@ -344,8 +344,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					
 				} else if (((Action) content).getAction() instanceof GetParameters){
 					get_next_parameters_action = (GetParameters) ((Action) content).getAction();
-					//zacatek - nastavani optionu
-					search_options = get_next_parameters_action.getSearch_options();
+					//zacatek - nastaveni optionu
+					search_options = get_next_parameters_action.getSearchOptions();
 					schema = get_next_parameters_action.getSchema();														
 					loadSearchOptions();
 					
