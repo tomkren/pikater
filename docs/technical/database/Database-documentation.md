@@ -34,8 +34,8 @@ Java class object, that is prepared to work with Java Persistence API
 ## Choice of Database Management System
 
 Version of Pikater before our project team has started working on it used to use MySQL as the main storage of created data. Access to the the DBMS run through MySQL's JDBC driver and querying was tackled by dynamic generation of SQL queries. Results of these queries were classic ResultSet objects implemented in Java's database framework.
-The main reason we decided to change this approach was its bound to the specific version of DBMS. Moreover, we could face incompatibility of current queries when we wanted to change the database scheme.
-Changes in database scheme are rare and should be less common in production environment - it's really bad practice to do major changes in a system, that is actively being used, but Pikater's production environment will be more like experimental - however, changes of scheme in the old version could lead to inconsistency between the queries and the database, that should have been tackled by massive debugging and code rewriting. 
+The main reason we decided to change this approach was its bound to the specific version of DBMS. Moreover, we could face incompatibility of current queries when we wanted to change the database schema.
+Changes in database schema are rare and should be less common in production environment - it's really bad practice to do major changes in a system, that is actively being used, but Pikater's production environment will be more like experimental - however, changes of schema in the old version could lead to inconsistency between the queries and the database, that should have been tackled by massive debugging and code rewriting. 
 
 **PostgreSQL** 
 We considered three database management systems before we decided for our final choice: MySQL, PostgreSQL and HyperSQL DB (HSQLDB). All of these DBMS have some versions that are available free of charge.  
@@ -119,21 +119,21 @@ For initial creation of configuration files can be used program `org.pikater.sha
 
 ## Database
 
-### Database Scheme
+### Database Schema
 
-#### Original DB Scheme
+#### Original DB Schema
 
-The following picture shows visualisation of the old database scheme used in original version of Pikater. 
+The following picture shows visualisation of the old database schema used in original version of Pikater. 
 
 [[original_db_schema.png|alt=Original DB schema]]
 
-#### Actual DB Scheme
+#### Actual DB Schema
 
 If we use Java Persistence API to access the database, it automatically creates database tables that reflect the entities. The following picture shows structure of database for entities used in Pikater.  
 
 [[schemaspy_output/diagrams/summary/relationships.real.large.png|alt=Current DB schema]]
 
-#### Differences between Original and Actual Scheme
+#### Differences between Original and Actual Schema
 
 When we created the structure of JPA entities, we wanted that the final table structure is similar to the original one. On the other hand, some changes were inevitable to reflect relations between entities (e.g. experiment can have several subexperiments) and create basic elements for new functions (e.g. saving of datasets requires at least records about OIDs).
 
