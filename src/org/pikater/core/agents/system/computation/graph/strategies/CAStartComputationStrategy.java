@@ -115,9 +115,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 	 * Create new options from solution with filled ?
 	 * values (convert solution->options)
 	 *  
-	 * @param options
-	 * @param solution
-	 * @return
+	 * @param options Options
+	 * @param solution Sollution to be filled
+	 * @return NewOptions list
 	 */
 	private NewOptions fillOptionsWithSolution(List<NewOption> options,
 			SearchSolution solution) {
@@ -132,7 +132,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 			return result;
 		
 		} else {
-			List<NewOption> resultList = new ArrayList<NewOption>();
+			List<NewOption> resultList = new ArrayList<>();
 			int currentSearchOptionNr = 0;
 	        for (NewOption option : options) {
 	            if (option.isImmutable()) {
@@ -164,7 +164,11 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		}
 	}
 
-	
+
+    /**
+     * Gte task for CA from the buffers of this node
+     * @return Task describing ML/DM experiment
+     */
 	private Task getTaskFromNode() {
 		
 		Map<String, ComputationOutputBuffer> inputs =
@@ -247,8 +251,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 	/**
 	 * Creates ACLMessage from Execute ontology action
 	 * 
-	 * @param executeTask
-	 * @return
+	 * @param executeTask Ontology execute Task
+	 * @return Execute message - request to CA
 	 */
 	private ACLMessage execute2Message(ExecuteTask executeTask) {
 		
@@ -265,9 +269,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 
 		try {
 			myAgent.getContentManager().fillContent(request, action);
-		} catch (CodecException e) {
-			myAgent.logException(e.getMessage(), e);
-		} catch (OntologyException e) {
+		} catch (CodecException | OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
 		}
 

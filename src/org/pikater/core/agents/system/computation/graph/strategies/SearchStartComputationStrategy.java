@@ -98,15 +98,12 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 				Result result = new Result(a, errorEdge.getEvaluation());			
 
 				myAgent.getContentManager().fillContent(inform, result);
-			} catch (CodecException e) {
-				myAgent.logException(e.getMessage(), e);
-				e.printStackTrace();
-			} catch (OntologyException e) {
+			} catch (CodecException | OntologyException e) {
 				myAgent.logException(e.getMessage(), e);
 				e.printStackTrace();
 			}
-			
-			myAgent.send(inform);
+
+            myAgent.send(inform);
 
 			computationNode.computationFinished();
 
@@ -114,6 +111,11 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	
     }
 
+    /**
+     * Preperes request
+     * @param receiver AID of the receiver
+     * @return Request
+     */
 	private ACLMessage prepareRequest(AID receiver){
 		// prepare request for the search agent
 
@@ -140,17 +142,18 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 		try {
 			myAgent.getContentManager().fillContent(msg, a);
-		} catch (CodecException e) {
-			myAgent.logException(e.getMessage(), e);
-			e.printStackTrace();
-		} catch (OntologyException e) {
+		} catch (CodecException | OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
-		return msg;		
+        return msg;
 	}
 
+    /**
+     * Gets search agent from node buffers
+     * @return Serach agent
+     */
 	private Agent getSearchFromNode(){
 
 		Map<String,ComputationOutputBuffer> nodeInputs = computationNode.getInputs();
@@ -169,6 +172,11 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	}
 
 
+    /**
+     * Adds options to schema
+     * @param opt New option
+     * @param schema Options to search
+     */
 	private void addOptionToSchema(NewOption opt, List<SearchItem> schema){
         ValuesForOption values = opt.getValuesWrapper();
 		for (Value value:values.getValues()) {
@@ -195,11 +203,13 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
         }
 	}
 
-
-	//Create schema of solutions from options (Convert options->schema)
-
+    /**
+     * Create schema of solutions from options (Convert options->schema)
+     * @param options List of new options
+     * @return Items that will be searched
+     */
 	private List<SearchItem> convertOptionsToSchema(List<NewOption> options){
-		List<SearchItem> result = new ArrayList<SearchItem>();
+		List<SearchItem> result = new ArrayList<>();
 
 		if(options==null)
 			return result;

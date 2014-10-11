@@ -73,6 +73,10 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         computationNode.computationFinished();
     }
 
+    /**
+     * Prepares the request
+     * @return Request
+     */
     private ACLMessage prepareRequest() {
         ExecuteTask ex = new ExecuteTask();
         Task task = getTaskFromNode();
@@ -82,6 +86,10 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         return execute2Message(ex);
     }
 
+    /**
+     * Get the task from buffers of the computation node
+     * @return Processing task
+     */
     private Task getTaskFromNode() {
 
         Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
@@ -112,25 +120,24 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         agent.setOptions(usedoptions.getOptions());
 
         Datas datas = new Datas();
-        
-        Iterator it = inputs.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, ComputationOutputBuffer> pairs = (Map.Entry)it.next();
 
-            ComputationOutputBuffer cob = (ComputationOutputBuffer) pairs.getValue();
-            
-            if (cob.isData() ){
-            	// add to Datas
-            	String dataName = ((DataSourceEdge) cob.getNext()).getDataSourceId();
+        for (Object o : inputs.entrySet()) {
+            Map.Entry<String, ComputationOutputBuffer> pairs = (Map.Entry) o;
 
-            	String internalFileName = DataManagerService
-                		.translateExternalFilename(myAgent, userID, dataName);
+            ComputationOutputBuffer cob = pairs.getValue();
+
+            if (cob.isData()) {
+                // add to Datas
+                String dataName = ((DataSourceEdge) cob.getNext()).getDataSourceId();
+
+                String internalFileName = DataManagerService
+                        .translateExternalFilename(myAgent, userID, dataName);
 
                 datas.addData(
                         new Data(dataName,
-                        		internalFileName,
+                                internalFileName,
                                 pairs.getKey()
-                        ));            	
+                        ));
             }
         }
        
@@ -151,8 +158,12 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         return task;
     }
 
+    /**
+     *  create ACLMessage from Execute ontology action
+     * @param ex ExecuteTask ontology
+     * @return Message
+     */
     private ACLMessage execute2Message(ExecuteTask ex) {
-        // create ACLMessage from Execute ontology action
 
         ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
         request.setLanguage(myAgent.getCodec().getName());
@@ -168,9 +179,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
 
         try {
             myAgent.getContentManager().fillContent(request, a);
-        } catch (Codec.CodecException e) {
-            myAgent.logException(e.getMessage(), e);
-        } catch (OntologyException e) {
+        } catch (Codec.CodecException | OntologyException e) {
             myAgent.logException(e.getMessage(), e);
         }
         return request;

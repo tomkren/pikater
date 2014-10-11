@@ -19,13 +19,20 @@ import java.util.Map;
 public class ComputationNode {
     private boolean idle=true;
     private int id;
+    /**
+     * The Number of tasks in progress.
+     */
     protected int numberOfTasksInProgress;
     private Map<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs = new HashMap<>();
     private Map<String, ComputationOutputBuffer> inputs = new HashMap<>();
     private StartComputationStrategy startBehavior;
+    /**
+     * The Computation graph.
+     */
     protected ComputationGraph computationGraph;
 
     /**
+     * Instantiates a new Computation node.
      *
      * @param computationGraph Owning computation graph
      */
@@ -36,6 +43,7 @@ public class ComputationNode {
     }
 
     /**
+     * Instantiates a new Computation node.
      *
      * @param executeStrategy Strategy that will be executed if the inputs are filled
      */
@@ -201,16 +209,23 @@ public class ComputationNode {
 
     /**
      * Sets startegz that will be executed on computation start
+     * @param startBehavior the start behavior
      */
     public void setStartBehavior(StartComputationStrategy startBehavior) {
         this.startBehavior = startBehavior;
     }
 
+    /**
+     * Inits default settings
+     */
     private void initDefault()
     {
         id = CoreConfiguration.getGUIDGenerator().getAndAllocateGUID();
     }
 
+    /**
+     * Number of tasks have changed - update state
+     */
     public void numberOfTasksChanged()
     {
         if (numberOfTasksInProgress==0)
@@ -219,37 +234,52 @@ public class ComputationNode {
         }
     }
 
+    /**
+     * Decrease number of tasks
+     */
     public void decreaseNumberOfOutstandingTask()
     {
         numberOfTasksInProgress--;
         numberOfTasksChanged();
     }
 
+    /**
+     * Increase number of tasks
+     */
     public void increaseNumberOfOutstandingTask()
     {
         numberOfTasksInProgress++;
         numberOfTasksChanged();
     }
 
+    /**
+     * Any tasks running?
+     * @return the boolean
+     */
     public boolean existsUnfinishedTasks()
     {
         return numberOfTasksInProgress > 0 || !idle;
     }
-    
+
+    /**
+     * Find output.
+     *
+     * @param in output name
+     * @return the list
+     */
     public List<String> findOutput(String in){
     	List<String> keys = new ArrayList<>();
-    	
-    	Iterator it = outputs.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> pairs = (Map.Entry)it.next();
-        	Iterator it1 = pairs.getValue().iterator();
+
+        for (Object o : outputs.entrySet()) {
+            Map.Entry<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> pairs = (Map.Entry) o;
+            Iterator it1 = pairs.getValue().iterator();
             while (it1.hasNext()) {
-            	ComputationOutputBuffer<EdgeValue> cob = (ComputationOutputBuffer<EdgeValue>)it1.next();
+                ComputationOutputBuffer<EdgeValue> cob = (ComputationOutputBuffer<EdgeValue>) it1.next();
                 String target = cob.getTargetInput();
-                if (target != null && target.equals(in)){ 
-                	keys.add(pairs.getKey());            	
+                if (target != null && target.equals(in)) {
+                    keys.add(pairs.getKey());
                 }
-            }            
+            }
         }
     	return keys; 
     }

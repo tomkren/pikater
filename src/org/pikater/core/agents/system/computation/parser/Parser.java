@@ -45,6 +45,12 @@ public class Parser {
         parseSaver(dataSaver, batchID, userID);
     }
 
+    /**
+     *  Parses saver
+     * @param dataSaver Ontology dataSaver
+     * @param batchID Id of the batch
+     * @param userID Id of the owner
+     */
     private void parseSaver(IDataSaver dataSaver, int batchID, int userID) {
         if (dataSaver instanceof FileDataSaver) {
             agent.logInfo("Ontology Matched - FileDataSaver");
@@ -57,6 +63,15 @@ public class Parser {
         }
     }
 
+    /**
+     *  Parses dataSource description
+     * @param dataSource Datasource in the workflow
+     * @param batchID Id of the batch
+     * @param userID Id of the owner
+     * @param child Child in the computation workflow
+     * @param connectionName Name of the buffer
+     * @param connectionOutName Name of the output connection
+     */
     private void parseDataSourceDescription(DataSourceDescription dataSource,
     		int batchID, int userID, ComputationNode child, String connectionName, 
     		String connectionOutName) {
@@ -66,13 +81,28 @@ public class Parser {
         this.parseDataProvider(dataProvider, batchID, userID, child, 
         		connectionName, connectionOutName);
     }
-    
+
+    /**
+     *  Parses data source description
+     * @param dataSource Datasource in the workflow
+     * @param batchID Id of the batch
+     * @param userID Id of the owner
+     */
     private void parseDataSourceDescription(DataSourceDescription dataSource,
     		int batchID, int userID){
     	parseDataSourceDescription(dataSource, batchID, userID, null,
     			null, null);
     }
-    
+
+    /**
+     *  Parses data provider
+     * @param dataProvider Data provider
+     * @param batchID Id of the batch
+     * @param userID Id of the owner
+     * @param child Child in the computation workflow
+     * @param connectionName Name of the buffer
+     * @param connectionOutName Name of the output connection
+     */
     private void parseDataProvider(IDataProvider dataProvider, int batchID,
     		int userID, ComputationNode child, String connectionName,
     		String connectionOutName) {
@@ -117,7 +147,11 @@ public class Parser {
         }
     }
 
-
+    /**
+     * Parses error provider
+     * @param errorDescription Error provider
+     * @param child Child in the computation workflow
+     */
     private void parseErrors(ErrorSourceDescription errorDescription,
     		ComputationNode child) {
     	
@@ -164,9 +198,9 @@ public class Parser {
     /**
      * Processes a node that is in the beginning of computation - reads file
      * 
-     * @param file
-     * @param child
-     * @param connectionName
+     * @param file File provider
+     * @param child Child in the computation workflow
+     * @param connectionName Name of the buffer
      */
     private void parseFileDataProvider(FileDataProvider file,
     		ComputationNode child, String connectionName) {
@@ -190,6 +224,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Parse CA
+     * @param computingAgent Computing agent
+     * @param batchID Id of the batch
+     * @param userID Id of the owner
+     * @param addOptions If options buffer should be added
+     * @return Computation node of the error description
+     */
     private ModelComputationNode parseComputing(IComputingAgent computingAgent,
     		int batchID, int userID, Boolean addOptions) {
     	
@@ -241,6 +283,13 @@ public class Parser {
         return computingNode;
     }
 
+    /**
+     * Parse CA, search and recommender
+     * @param complex CA+Search+Recommender
+     * @param batchID Id of the batch
+     * @param userID Id of the owner
+     * @return Computation node of CA+Search+Recommender
+     */
     private ComputationNode parseComplex(CARecSearchComplex complex,
     		int batchID, int userID) {
         agent.logInfo("Ontology Parser - CARecSearchComplex");
@@ -282,6 +331,15 @@ public class Parser {
         return computingNode;
     }
 
+    /**
+     * Parse search
+     * @param search Search
+     * @param child Child in the computation workflow
+     * @param errors List of error source providers
+     * @param childOptions Options of child
+     * @param batchID Id of the batch
+     * @return Computation node
+     */
     private SearchComputationNode parseSearch(Search search, ComputationNode child,
     		List<ErrorSourceDescription> errors, List<NewOption> childOptions,
     		int batchID) {
@@ -320,6 +378,12 @@ public class Parser {
         return searchNode;
     }
 
+    /**
+     * Parse recommender
+     * @param recommender Recommender
+     * @param child Child in the computation workflow
+     * @param userID Id of the user
+     */
     private void parseRecommender(Recommend recommender, ComputationNode child,
                                  int userID) {
         agent.logInfo("Ontology Parser - Recommender");
@@ -360,6 +424,16 @@ public class Parser {
         recNode.setRecommenderClass(recommender.getAgentType());
     }
 
+    /**
+     * Parse data pre/post processing
+     * @param dataProcessing Data processing
+     * @param child Child in the computation workflow
+     * @param batchID Id of the batch
+     * @param userID Id of the user
+     * @param connectionName Name of the buffer
+     * @param connectionOutName Name of the output connection
+     * @return Computation node
+     */
     private ComputationNode parseDataProcessing(DataProcessing dataProcessing,
     		ComputationNode child, int batchID, int userID,
     		String connectionName, String connectionOutName) {
@@ -421,17 +495,26 @@ public class Parser {
             			datasourceI.getOutputType());
             }
         }
-        
-        NeverEndingBuffer<DataSourceEdge> buffer = new NeverEndingBuffer<>();
-        buffer.setTarget(child);
-        buffer.setSource(parent);
-        buffer.setTargetInput(connectionOutName);
-        parent.addBufferToOutput(connectionName,buffer);
-        child.addInput(connectionName,buffer);
+
+        if (child !=null) {
+            NeverEndingBuffer<DataSourceEdge> buffer = new NeverEndingBuffer<>();
+            buffer.setTarget(child);
+            buffer.setSource(parent);
+            buffer.setTargetInput(connectionOutName);
+            parent.addBufferToOutput(connectionName, buffer);
+            child.addInput(connectionName, buffer);
+        }
 
         return parent;
     }
-    
+
+    /**
+     * Fill all data sources
+     * @param compAgent CA
+     * @param batchID Id of the batch
+     * @param userID Id of the user
+     * @param node Computation node
+     */
     private void fillDataSources(ComputingAgent compAgent,
     		int batchID, int userID, ComputationNode node) {
     	
@@ -462,6 +545,11 @@ public class Parser {
         return computationGraph;
     }
 
+    /**
+     * Adds options to input buffer list
+     * @param node Computation node
+     * @param options Options to add
+     */
     private void addOptionsToInputs(ComputationNode node,
     		List<NewOption> options) {
     	
