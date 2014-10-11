@@ -8,6 +8,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
+ * Logger observer - on batch finish logs this event
  * User: Kuba
  * Date: 16.8.2014
  * Time: 18:41
@@ -15,6 +16,11 @@ import java.util.Observer;
 public class LoggerObserver implements Observer{
     private PikaterAgent agent;
 
+    /**
+     * Instantiates a new Logger observer.
+     *
+     * @param agent the agent
+     */
     public LoggerObserver(PikaterAgent agent) {
         this.agent = agent;
     }

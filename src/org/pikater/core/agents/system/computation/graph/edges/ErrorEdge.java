@@ -14,6 +14,7 @@ public class ErrorEdge extends EdgeValue  {
     private int computationId;
 
     /**
+     * Instantiates a new Error edge.
      *
      * @param evaluation Evaluation results
      * @param computationId Id of the computation
@@ -31,6 +32,11 @@ public class ErrorEdge extends EdgeValue  {
         return evaluation;
     }
 
+    /**
+     * Sets evaluation.
+     *
+     * @param evaluation the evaluation
+     */
     public void setEvaluation(Evaluation evaluation) {
         this.evaluation = evaluation;
     }

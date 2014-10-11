@@ -3,14 +3,12 @@ package org.pikater.core.agents.system.manager;
 import jade.content.Concept;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationGraph;
 import org.pikater.core.agents.system.computation.graph.events.LoggerObserver;
@@ -22,12 +20,20 @@ import org.pikater.core.ontology.subtrees.batch.NewBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
+/**
+ * The type Parser behaviour.
+ */
 public class ParserBehaviour extends AchieveREResponder {
 	
 	private static final long serialVersionUID = 4754473043512463873L;
 	
 	private Agent_Manager agent;
 
+    /**
+     * Instantiates a new Parser behaviour.
+     *
+     * @param agent_Manager the agent _ manager
+     */
     public ParserBehaviour(Agent_Manager agent_Manager) {
     	super(agent_Manager, MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
     	
@@ -42,14 +48,9 @@ public class ParserBehaviour extends AchieveREResponder {
  
     	try {
             concept = ((Action)(agent.getContentManager().extractContent(request))).getAction();
-        } catch (UngroundedException e) {
-			agent.logException(e.getMessage(), e);
-		} catch (CodecException e) {
-			agent.logException(e.getMessage(), e);
-		} catch (OntologyException e) {
+        } catch (CodecException | OntologyException e) {
 			agent.logException(e.getMessage(), e);
 		}
-           
     	
     	/*
     	 * ExecuteBatchDebug is deprecated
@@ -89,7 +90,15 @@ public class ParserBehaviour extends AchieveREResponder {
 		
 		return failure;
     }
-    
+
+    /**
+     * Handles new batches - parses them and instantiates computatio graph
+     * @param comDescription Ontology description of te new batch
+     * @param batchID Batch Id
+     * @param userID  Batch owner Id
+     * @param request Original request
+     * @return Response to request
+     */
     private ACLMessage respondToNewBatch(ComputationDescription comDescription,
     		int batchID, int userID, ACLMessage request) {
 

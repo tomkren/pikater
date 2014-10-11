@@ -3,29 +3,52 @@ package org.pikater.core.agents.system.computation.graph;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Experiment graph.
+ */
 public class ExperimentGraph {
-	protected Integer id;
+    /**
+     * The Id.
+     */
+    protected Integer id;
 	
 	/*
 	 * Top layer of problem tree
 	 */
-	private List<ExperimentItem> problems = new ArrayList<ExperimentItem>();
+	private List<ExperimentItem> problems = new ArrayList<>();
 
-	public List<ExperimentItem> getProblems() {
+    /**
+     * Gets problems.
+     *
+     * @return the problems
+     */
+    public List<ExperimentItem> getProblems() {
 		return problems;
 	}
-	public void setProblems(ArrayList<ExperimentItem> problems) {
+
+    /**
+     * Sets problems.
+     *
+     * @param problems the problems
+     */
+    public void setProblems(ArrayList<ExperimentItem> problems) {
 		this.problems = problems;
 	}
-	public void addRootProblem(ExperimentItem problem) {
+
+    /**
+     * Add root problem.
+     *
+     * @param problem the problem
+     */
+    public void addRootProblem(ExperimentItem problem) {
 		this.problems.add(problem);
 	}
-	
-	public int getProblemsCount() {
-		return this.problems.size();
-	}
-	
-	// Test if all problemItems in dependency graph are finished
+
+    /**
+     * Test if all problemItems in dependency graph are finished
+     *
+     * @return the boolean
+     */
 	public boolean areAllProblemsFinished() {
 		
 		// if exists some rootItem which is not finished
@@ -37,21 +60,4 @@ public class ExperimentGraph {
 		}
 		return true;
 	}
-
-	public List<ExperimentItem> getAllIndependentWaitingProblems() {
-		
-		List<ExperimentItem> result =
-				new ArrayList<ExperimentItem>();
-		
-		for (ExperimentItem problemI : result) {
-			
-			List<ExperimentItem> problemsI =
-					problemI.getIndependentItems();
-			
-			result.addAll(problemsI);
-		}
-		
-		return result;
-	}
-
 }

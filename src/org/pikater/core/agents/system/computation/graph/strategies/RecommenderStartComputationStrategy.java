@@ -2,7 +2,6 @@ package org.pikater.core.agents.system.computation.graph.strategies;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
@@ -10,7 +9,6 @@ import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
-
 import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationNode;
@@ -61,7 +59,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
      * @param computation Computation node with this strategy
      */
 	public void execute(ComputationNode computation){
-		Agent recommendedAgent = null;
+		Agent recommendedAgent;
 		
 		inputs = computationNode.getInputs();
 		
@@ -89,18 +87,12 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		} catch (FIPAException e) {
 			myAgent.logException(e.getMessage(), e);
 			return;
-		} catch (UngroundedException e) {
-			myAgent.logException(e.getMessage(), e);
-			return;
-		} catch (CodecException e) {
-			myAgent.logException(e.getMessage(), e);
-			return;
-		} catch (OntologyException e) {
+		} catch (CodecException | OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
 			return;
 		}
-		
-		// fill in the queues of CA
+
+        // fill in the queues of CA
 		AgentTypeEdge re = new AgentTypeEdge(recommendedAgent.getType());
 		computationNode.addToOutputAndProcess(re, "agenttype", true, false);
 		
@@ -110,6 +102,11 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
         computationNode.computationFinished();
     }
 
+    /**
+     * Prepares recommending request
+     * @param receiver Receiver of request
+     * @return Request
+     */
 	private ACLMessage prepareRequest(AID receiver){
 		// send task to recommender:
 		ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
@@ -155,15 +152,17 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		try {
 			myAgent.getContentManager().fillContent(req, a);
 			
-		} catch (CodecException ce) {
+		} catch (CodecException | OntologyException ce) {
 			myAgent.logException(ce.getMessage(), ce);
-		} catch (OntologyException ce) {
-			myAgent.logException(ce.getMessage(), ce);			
 		}
 
         return req;
 	}
 
+    /**
+     * Gets recommender agent from node buffers
+     * @return Recommender
+     */
 	private Agent getRecommenderFromNode()
 	{
 		Map<String,ComputationOutputBuffer> nodeInputs = computationNode.getInputs();

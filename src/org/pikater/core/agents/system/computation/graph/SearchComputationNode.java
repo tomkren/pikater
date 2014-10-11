@@ -13,21 +13,37 @@ public class SearchComputationNode extends ComputationNode {
     private String defaultPackagePrefix= Agent_Search.class.getPackage().getName() + ".";
 
     /**
+     * Instantiates a new Search computation node.
      *
-      * @param executeStrategy Strategy to execute
+     * @param executeStrategy Strategy to execute
      */
 	public SearchComputationNode(StartComputationStrategy executeStrategy) {
         super(executeStrategy);
     }
 
+    /**
+     * Instantiates a new Search computation node.
+     *
+     * @param computationGraph the computation graph
+     */
     public SearchComputationNode(ComputationGraph computationGraph) {
         super(computationGraph);
     }
-    
+
+    /**
+     * Gets model class.
+     *
+     * @return the model class
+     */
     public String getModelClass() {
         return modelClass;
     }
 
+    /**
+     * Sets model class.
+     *
+     * @param newModelClass the new model class
+     */
     public void setModelClass(String newModelClass)
     {
         this.modelClass = !newModelClass.contains(".") ? defaultPackagePrefix + newModelClass : newModelClass;
