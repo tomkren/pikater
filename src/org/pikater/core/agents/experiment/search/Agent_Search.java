@@ -34,6 +34,12 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
 
+/**
+ * An abstract class for search agents.
+ * 
+ * @author Ondra, Klara
+ *
+ */
 public abstract class Agent_Search extends Agent_AbstractExperiment {	
 
 	private static final long serialVersionUID = 8637677510056974015L;
@@ -93,10 +99,18 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		}
 	}
 	
-	/*Converts List of Evals to an array of values - at the moment only error_rate*/
+	/**
+	 * Converts List of Evals to an array of values (used when dealing 
+	 * with fitness function) 
+	 * - at the moment only error rate, root mean squared error 
+	 * and kappa statistic.
+	 *
+	 * @param named_evals
+	 * @return				array of values without names (in a fixed order)
+	 */
 	private float[] namedEvalsToFitness(List<Eval> named_evals) {
 		
-		float[] res = new float[3];//named_evals.size...
+		float[] res = new float[3]; //named_evals.size...
 		
 		for (Eval e : named_evals) {
 
@@ -114,6 +128,19 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	}
 
 	
+	/**
+	 * Converts the array of float values used for fitness to a list 
+	 * of named Evals 
+	 * - at the moment only error rate, root mean squared error 
+	 * and kappa statistic.
+	 *
+	 * @param fitness	an array of size 3 of fitness values 
+	 * 					in the fixed order:
+	 * 					error rate, 
+	 * 					root mean squared error 
+	 * 					and kappa statistic.
+	 * @return			List of Evals with the appropriate names
+	 */
 	private List<Eval> fitnessToNamedEvals(float[] fitness) {
 		List<Eval> evals = new ArrayList<Eval>();
 		
@@ -341,9 +368,15 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		}
 
 	}
-		
 
-	
+
+	/**
+	 * Prepares an ACLMessage with search parameters in a response
+	 * to a request containing GetParameters ontology.
+	 * 
+	 * @param request
+	 * @return			ACLMessage containing parameters
+	 */
 	protected ACLMessage getParameters(ACLMessage request) {
 		
 		org.pikater.core.ontology.subtrees.management.Agent agent = null;
@@ -358,7 +391,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		try {
 			// Prepare the content
 			ContentElement content = getContentManager()
-					.extractContent(request); // TODO exception block?
+					.extractContent(request);
 			Result result = new Result((Action) content, agent);
 
 			getContentManager().fillContent(reply, result);
