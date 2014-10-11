@@ -1,4 +1,4 @@
-package org.pikater.shared;
+package org.pikater.shared.unused;
 
 import java.util.Collections;
 import java.util.HashSet;

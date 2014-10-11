@@ -3,6 +3,11 @@ package org.pikater.shared.quartz.jobs.base;
 import org.quartz.InterruptableJob;
 import org.quartz.UnableToInterruptJobException;
 
+/**
+ * A {@link ImmediateOneTimeJob} that is also interruptible.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class InterruptibleImmediateOneTimeJob extends ImmediateOneTimeJob implements InterruptableJob
 {
 	private boolean interrupted;

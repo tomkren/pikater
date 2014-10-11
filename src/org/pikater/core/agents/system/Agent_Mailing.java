@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system;
 
 import jade.content.Concept;
+import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -22,15 +23,28 @@ import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 import org.pikater.shared.util.Mailing;
 
-/** Agent, ktery resi komunikaci s mistnim SMTP serverem, tj. odesilani ruznych e-mailu i jejich tvorbu. */
+/**
+ * 
+ * Agent, which solves the communication with the local SMTP server, ie.
+ * Sending various e-mail and their formation.
+ *
+ */
 public class Agent_Mailing extends PikaterAgent {
+	
 	private static final long serialVersionUID = -2734321127446793005L;
-
-	/** Podporovane typy e-mailu */
+	
+	/**
+	 * 
+	 * Supported e-mail types
+	 *
+	 */
 	public static enum EmailType {
 		TEST, RESULT
 	}
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 
@@ -40,54 +54,87 @@ public class Agent_Mailing extends PikaterAgent {
 		return ontologies;
 	}
 
+	/**
+	 * Agent setup
+	 */
 	@Override
 	protected void setup() {
 		initDefault();
 		registerWithDF(CoreAgents.MAILING.getName());
 
-		addBehaviour(new AchieveREResponder(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)) {
+		MessageTemplate template =
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+				
+		addBehaviour(new AchieveREResponder(this, template) {
 			private static final long serialVersionUID = 746138569142900592L;
 
 			@Override
-			protected ACLMessage handleRequest(final ACLMessage request) throws NotUnderstoodException, RefuseException {
+			protected ACLMessage handleRequest(final ACLMessage request
+					) throws NotUnderstoodException, RefuseException {
+				
 				try {
-					Concept action = ((Action) (getContentManager().extractContent(request))).getAction();
-					if (action instanceof SendEmail)
+					ContentElement element =
+							getContentManager().extractContent(request);
+					Concept action = ((Action) element).getAction();
+					
+					if (action instanceof SendEmail) {
 						return respondToSendEmailAction(request);
-					else
+					} else {
 						throw new RefuseException("Invalid action requested");
+					}
 				} catch (OntologyException e) {
 					Agent_Mailing.this.logException(e.getMessage(), e);
-					throw new NotUnderstoodException("Unknown ontology: " + e.getMessage());
+					throw new NotUnderstoodException(
+							"Unknown ontology: " + e.getMessage());
+					
 				} catch (CodecException e) {
 					Agent_Mailing.this.logException(e.getMessage(), e);
-					throw new NotUnderstoodException("Unknown codec: " + e.getMessage());
+					throw new NotUnderstoodException(
+							"Unknown codec: " + e.getMessage());
 				}
 
 			}
 		});
 	}
 
-	/** Provede pozadavek typu SendEmail a vrati odpoved */
-	private ACLMessage respondToSendEmailAction(ACLMessage request) throws NotUnderstoodException, CodecException, OntologyException {
+	/**
+	 * Handle a request {@link SendEmail} and send back a answer
+	 * @throws NotUnderstoodException
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
+	private ACLMessage respondToSendEmailAction(ACLMessage request
+			) throws NotUnderstoodException, CodecException,
+			OntologyException {
+		
 		ACLMessage reply = request.createReply();
-		SendEmail mailAction = (SendEmail) ((Action) (getContentManager().extractContent(request))).getAction();
-		String to = mailAction.getTo_address();
+		
+		ContentElement element = getContentManager().extractContent(request);
+		Action action = (Action) element;
+		
+		SendEmail sendEmail = (SendEmail) action.getAction();
+		
+		String to = sendEmail.getToAddress();
 
-		EmailType type = getEmailType(mailAction);
+		EmailType type = getEmailType(sendEmail);
 		try {
 			switch (type) {
 			case TEST:
-				Mailing.sendEmail(to, "Test message", "Example message from pikater MailAgent");
+				Mailing.sendEmail(to, "Test message",
+						"Example message from pikater MailAgent");
+				
 				logInfo("sent e-mail to " + to);
 				break;
 			case RESULT:
-				//log("would send mail with results to "+to+", best error rate: "+mailAction.getResult());
-				String body = "Dear user, your batch with ID " + mailAction.getBatch_id() + " is now finished.";
-				if (mailAction.getResult() != null) {
-					body += "\n\nThe best error rate achieved was " + String.format("%.2f %%", mailAction.getResult() * 100);
+				String body = "Dear user, your batch with ID " +
+					sendEmail.getBatchId() + " is now finished.";
+				
+				if (sendEmail.getResult() != null) {
+					body += "\n\nThe best error rate achieved was " +
+						String.format("%.2f %%", sendEmail.getResult() * 100);
 				}
-				String subj = "Pikater batch finished (" + mailAction.getBatch_id() + ")";
+				String subj = "Pikater batch finished (" +
+					sendEmail.getBatchId() + ")";
 				Mailing.sendEmail(to, subj, body);
 				logInfo("sent e-mail to " + to);
 				break;
@@ -95,7 +142,8 @@ public class Agent_Mailing extends PikaterAgent {
 				throw new UnsupportedOperationException();
 			}
 		} catch (MessagingException e) {
-			String error = "Failed to dispatch e-mail for " + to + " : " + e.getMessage();
+			String error = "Failed to dispatch e-mail for " +
+				to + " : " + e.getMessage();
 			logException(error, e);
 
 			reply.setPerformative(ACLMessage.FAILURE);
@@ -108,12 +156,19 @@ public class Agent_Mailing extends PikaterAgent {
 		return reply;
 	}
 
-	/** Pomocna funkce pro vytazeni Enum hodnoty odpovidajici typu pozadovaneho mailu */
-	private EmailType getEmailType(SendEmail mailAction) throws NotUnderstoodException {
+	/**
+	 * A help function for conversion Enum values
+	 * ​​corresponding to the desired type of mail
+	 * 
+	 * @throws NotUnderstoodException
+	 */
+	private EmailType getEmailType(SendEmail mailAction
+			) throws NotUnderstoodException {
 		try {
-			return EmailType.valueOf(mailAction.getEmail_type());
+			return EmailType.valueOf(mailAction.getEmailType());
 		} catch (IllegalArgumentException e) {
-			throw new NotUnderstoodException("Unknown e-mail type " + mailAction.getEmail_type());
+			throw new NotUnderstoodException(
+					"Unknown e-mail type " + mailAction.getEmailType());
 		}
 	}
 }

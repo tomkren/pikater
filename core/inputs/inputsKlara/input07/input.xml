@@ -79,7 +79,7 @@
             <durationType>MINUTES</durationType>
           </duration>
           <evaluationMethod>
-            <id>3</id>
+            <id>4</id>
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
@@ -190,7 +190,7 @@
                 <durationType>MINUTES</durationType>
               </duration>
               <evaluationMethod>
-                <id>3</id>
+                <id>4</id>
                 <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                 <errors/>
                 <dataSources/>
@@ -230,7 +230,7 @@
               </evaluationMethod>
               <trainingData>
                 <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                  <id>4</id>
+                  <id>3</id>
                   <options/>
                   <errors/>
                   <dataSources/>
@@ -241,7 +241,7 @@
               </trainingData>
               <testingData>
                 <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                  <id>4</id>
+                  <id>3</id>
                   <options/>
                   <errors/>
                   <dataSources/>
@@ -250,6 +250,17 @@
                 <outputType>fileData</outputType>
                 <inputType>testingData</inputType>
               </testingData>
+              <validationData>
+                <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                  <id>3</id>
+                  <options/>
+                  <errors/>
+                  <dataSources/>
+                  <fileURI>weather.arff</fileURI>
+                </dataProvider>
+                <outputType>fileData</outputType>
+                <inputType>validationData</inputType>
+              </validationData>
             </dataProvider>
             <outputType>computedData</outputType>
             <inputType>trainingData</inputType>
@@ -327,7 +338,7 @@
                 <durationType>MINUTES</durationType>
               </duration>
               <evaluationMethod>
-                <id>3</id>
+                <id>4</id>
                 <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                 <errors/>
                 <dataSources/>
@@ -367,7 +378,7 @@
               </evaluationMethod>
               <trainingData>
                 <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                  <id>4</id>
+                  <id>3</id>
                   <options/>
                   <errors/>
                   <dataSources/>
@@ -378,7 +389,7 @@
               </trainingData>
               <testingData>
                 <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                  <id>4</id>
+                  <id>3</id>
                   <options/>
                   <errors/>
                   <dataSources/>
@@ -387,10 +398,32 @@
                 <outputType>fileData</outputType>
                 <inputType>testingData</inputType>
               </testingData>
+              <validationData>
+                <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                  <id>3</id>
+                  <options/>
+                  <errors/>
+                  <dataSources/>
+                  <fileURI>weather.arff</fileURI>
+                </dataProvider>
+                <outputType>fileData</outputType>
+                <inputType>validationData</inputType>
+              </validationData>
             </dataProvider>
             <outputType>computedData</outputType>
             <inputType>testingData</inputType>
           </testingData>
+          <validationData>
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+              <id>3</id>
+              <options/>
+              <errors/>
+              <dataSources/>
+              <fileURI>weather.arff</fileURI>
+            </dataProvider>
+            <outputType>fileData</outputType>
+            <inputType>validationData</inputType>
+          </validationData>
         </dataProvider>
         <outputType>computedData</outputType>
       </dataSource>

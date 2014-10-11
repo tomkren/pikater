@@ -26,6 +26,8 @@ public class SearchOnly {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
+        ca.setTestingData(dsd);
+        ca.setValidationData(dsd);
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         ca.setEvaluationMethod(new EvaluationMethod(CrossValidation.class.getName()));
         //"whatever.mlp.is.in.MLP"

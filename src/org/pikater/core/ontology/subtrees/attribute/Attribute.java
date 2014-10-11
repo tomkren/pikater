@@ -33,7 +33,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param dateFormat
 	 *            the date_format to set
 	 */
 	public void setDate_format(String dateFormat) {
@@ -48,7 +47,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param name
 	 *            the name to set
 	 */
 	public void setName(String name) {
@@ -63,7 +61,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param type
 	 *            the type to set
 	 */
 	public void setType(String type) {
@@ -78,7 +75,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param values
 	 *            the values to set
 	 */
 	public void setValues(List values) {

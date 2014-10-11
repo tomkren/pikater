@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
+import org.pikater.core.agents.experiment.virtual.Agent_VirtualNotSpecifiedComputingAgent;
 import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
@@ -15,11 +16,13 @@ import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData
 
 import jade.content.Concept;
 
+/**
+ * Ontology contains {@link List<AgentInfo>},
+ * list of informations about PikaterAgents
+ * 
+ */
 public class AgentInfos implements Concept {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4635414687017805968L;
 
 	private List<AgentInfo> agentInfos;
@@ -61,7 +64,8 @@ public class AgentInfos implements Concept {
 			
 			String agentClassNameI = agentInfoI.getAgentClassName();
 			if (agentClassNameI == null) {
-				if (agentClass.getAgentClass() == null) {
+				if (agentClass.getAgentClass().equals(
+						Agent_VirtualNotSpecifiedComputingAgent.class.getName())) {
 					return true;
 				}
 			} else if ( agentClassNameI.equals(agentClass.getAgentClass()) ) {

@@ -14,6 +14,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPAModel} represents record about a trained agent - model.
+ * This model is stored as a byte stream rather than in large object, so it's
+ * fully compatible with JPA.
+ */
 @Entity
 @Table(name="Model")
 @NamedQueries({

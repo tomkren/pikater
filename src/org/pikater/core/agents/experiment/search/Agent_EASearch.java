@@ -103,7 +103,7 @@ public class Agent_EASearch extends Agent_Search {
 	}
 
     @Override
-    protected boolean finished() {
+    protected boolean isFinished() {
         //number of generations, best error rate
         
         if (genNumber >= maxGeneration) {
@@ -121,7 +121,8 @@ public class Agent_EASearch extends Agent_Search {
     }
     
     @Override
-    protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
+    protected List<SearchSolution> generateNewSolutions(
+    		List<SearchSolution> solutions, float[][] evaluations) {
 
         offspring = new Population();
         offspring.setPopulationSize(popSize);
@@ -145,14 +146,30 @@ public class Agent_EASearch extends Agent_Search {
             }
                 
             operators.add(new OnePtXOver(xOverProb));
-            operators.add(new SearchItemIndividualMutation(mutProb, mutProbPerField, 0.3));
+            
+            SearchItemIndividualMutation mutationOperator =
+            		new SearchItemIndividualMutation(
+            				mutProb, mutProbPerField, 0.3);
+            operators.add(mutationOperator);
             
             if (surrogate && !multiobjective) {
-                operators.add(new SurrogateMutationOperator(archive, 0.25, new FitnessModelValueProvider(), new IdentityNormalizer()));
+            	SurrogateMutationOperator operator =
+            			new SurrogateMutationOperator(
+            					archive, 0.25,
+            					new FitnessModelValueProvider(),
+            					new IdentityNormalizer()
+            					);
+                operators.add(operator);
             }
             
             if (surrogate && multiobjective) {
-                operators.add(new SurrogateMutationOperator(archive, 0.25, new ASMMOMAModelValueProvider(), new LogarithmicNormalizer()));
+            	SurrogateMutationOperator operator =
+            			new SurrogateMutationOperator(
+            					archive, 0.25,
+            					new ASMMOMAModelValueProvider(),
+            					new LogarithmicNormalizer()
+            					);
+                operators.add(operator);
             }
             
             parents = new Population();
@@ -160,7 +177,8 @@ public class Agent_EASearch extends Agent_Search {
             
             List<SearchItem> schema = getSchema();
             
-            SearchItemIndividual sampleIndividual = new SearchItemIndividual(schema.size());
+            SearchItemIndividual sampleIndividual =
+            		new SearchItemIndividual(schema.size());
             
             for (int i = 0; i < schema.size(); i++) {
                 sampleIndividual.set(i, new StringValue(""));
@@ -187,14 +205,17 @@ public class Agent_EASearch extends Agent_Search {
                 matingPool.addAll((Population)sel.clone());
             }
 
-            int missing = parents.getPopulationSize() - matingPool.getPopulationSize();
+            int missing = parents.getPopulationSize()
+            		-matingPool.getPopulationSize();
+            
             if (missing > 0) {
                 Population sel = new Population();
-                matingSelectors.get(matingSelectors.size()-1).select(toSelect, parents, sel);
+                Selector selector =
+                		matingSelectors.get(matingSelectors.size()-1);
+                selector.select(toSelect, parents, sel);
                 matingPool.addAll((Population)sel.clone());
             }
-        } else
-        {
+        } else {
             matingPool = (Population)parents.clone();
         }
         
@@ -210,7 +231,12 @@ public class Agent_EASearch extends Agent_Search {
         
         for (int i = 0; i < offspring.getPopulationSize(); i++) {
             if (archive.contains((SearchItemIndividual)offspring.get(i))) {
-                offspring.get(i).setFitnessValue(archive.getFitness((SearchItemIndividual)offspring.get(i)));
+            	
+            	SearchItemIndividual itemI =
+            			(SearchItemIndividual) offspring.get(i);
+            	double fitness = archive.getFitness(itemI);
+            	
+                offspring.get(i).setFitnessValue(fitness);
                 evaluated.add(offspring.get(i));
                 continue;
             }
@@ -253,7 +279,10 @@ public class Agent_EASearch extends Agent_Search {
         if (genNumber == 0) {
             for (int i = 0; i < evaluations.length; i++) {
                 parents.get(i).setFitnessValue(evaluations[i][0]);
-                ((SearchItemIndividual)parents.get(i)).setObjectives(evaluations[i]);
+                
+                SearchItemIndividual itemI =
+                		(SearchItemIndividual)parents.get(i);		
+                itemI.setObjectives(evaluations[i]);
                 if (evaluations[i][0] < bestError) {
                     bestError = evaluations[i][0];
                 }
@@ -264,7 +293,10 @@ public class Agent_EASearch extends Agent_Search {
         
         for (int i = 0; i < evaluations.length; i++) {
             toEvaluate.get(i).setFitnessValue(evaluations[i][0]);
-            ((SearchItemIndividual)toEvaluate.get(i)).setObjectives(evaluations[i]);
+            
+            SearchItemIndividual itemI =
+            		(SearchItemIndividual)toEvaluate.get(i);
+            itemI.setObjectives(evaluations[i]);
             if (evaluations[i][0] < bestError) {
                 bestError = evaluations[i][0];
             }
@@ -290,7 +322,8 @@ public class Agent_EASearch extends Agent_Search {
         }
         
         int envSel = environmentalSelectors.size();
-        int toSelect = (parents.getPopulationSize() - selected.getPopulationSize())/envSel;
+        int toSelect = (parents.getPopulationSize()
+        		-selected.getPopulationSize())/envSel;
         for (int i = 0; i < environmentalSelectors.size(); i++) {
             Population sel = new Population();
             environmentalSelectors.get(i).select(toSelect, combined, sel);
@@ -300,7 +333,10 @@ public class Agent_EASearch extends Agent_Search {
         int missing = parents.getPopulationSize() - selected.getPopulationSize();
         if (missing > 0) {
             Population sel = new Population();
-            environmentalSelectors.get(environmentalSelectors.size() - 1).select(toSelect, combined, sel);
+            
+            Selector selector = environmentalSelectors
+            		.get(environmentalSelectors.size() - 1);
+            selector.select(toSelect, combined, sel);
             selected.addAll((Population)sel.clone());
         }
 
@@ -319,58 +355,59 @@ public class Agent_EASearch extends Agent_Search {
         maxGeneration = 5;
         goalError = 0.02;
 
-        NewOptions options = new NewOptions(getSearchOptions());
+        NewOptions options = getSearchOptions();
         
         if (options.containsOptionWithName("E")) {
 	        NewOption optionE = options.fetchOptionByName("E");
-	        FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
+	        FloatValue valueE =
+	        		(FloatValue) optionE.toSingleValue().getCurrentValue();
 	        goalError = valueE.getValue();
         }
         if (options.containsOptionWithName("M")) {
 	        NewOption optionM = options.fetchOptionByName("M");
-	        IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
+	        IntegerValue valueM =
+	        		(IntegerValue) optionM.toSingleValue().getCurrentValue();
 	        maxGeneration = valueM.getValue();
         }
         if (options.containsOptionWithName("T")) {
 	        NewOption optionT = options.fetchOptionByName("T");
-	        FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
+	        FloatValue valueT =
+	        		(FloatValue) optionT.toSingleValue().getCurrentValue();
 	        mutProb = valueT.getValue();
         }
         if (options.containsOptionWithName("X")) {
 	        NewOption optionX = options.fetchOptionByName("X");
-	        FloatValue valueX = (FloatValue) optionX.toSingleValue().getCurrentValue();
+	        FloatValue valueX =
+	        		(FloatValue) optionX.toSingleValue().getCurrentValue();
 	        xOverProb = valueX.getValue();
         }
         if (options.containsOptionWithName("P")) {
 	        NewOption optionP = options.fetchOptionByName("P");
-	        IntegerValue valueP = (IntegerValue) optionP.toSingleValue().getCurrentValue();
+	        IntegerValue valueP =
+	        		(IntegerValue) optionP.toSingleValue().getCurrentValue();
 	        popSize = valueP.getValue();
         }
         if (options.containsOptionWithName("I")) {
 	        NewOption optionI = options.fetchOptionByName("I");
-	        IntegerValue valueI = (IntegerValue) optionI.toSingleValue().getCurrentValue();
+	        IntegerValue valueI =
+	        		(IntegerValue) optionI.toSingleValue().getCurrentValue();
 	        maxEval = valueI.getValue();
         }
         if (options.containsOptionWithName("F")) {
 	        NewOption optionF = options.fetchOptionByName("F");
-	        FloatValue valueF = (FloatValue) optionF.toSingleValue().getCurrentValue();
+	        FloatValue valueF =
+	        		(FloatValue) optionF.toSingleValue().getCurrentValue();
 	        mutProbPerField = valueF.getValue();
         }
 
         if (options.containsOptionWithName("L")) {
 	        NewOption optionL = options.fetchOptionByName("L");
-	        FloatValue valueL = (FloatValue) optionL.toSingleValue().getCurrentValue();
+	        FloatValue valueL =
+	        		(FloatValue) optionL.toSingleValue().getCurrentValue();
 	        eliteSize = valueL.getValue();
         }
-
-        //if (next.getName().equals("S")) {
-        //    surrogate = Boolean.parseBoolean(next.getValue());
-        //}
-        //if (next.getName().equals("O")) {
-        //    multiobjective = Boolean.parseBoolean(next.getValue());
-        //}
         
-        query_block_size = popSize;
+        queryBlockSize = popSize;
 
     }
 

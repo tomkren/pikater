@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * Strategy for data pre and post processing
  * User: Kuba
  * Date: 10.8.2014
  * Time: 16:00
@@ -44,6 +45,14 @@ public class DataProcessingStrategy implements StartComputationStrategy {
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
 
+    /**
+     *
+     * @param manager Manager agent
+     * @param batchID  Id of the batch that this computation belongs to
+     * @param experimentID Id of the experiment that this computation belongs to
+     * @param userID User id of the owner of this experiemtn
+     * @param computationNode Parent computation node
+     */
     public DataProcessingStrategy(Agent_Manager manager, int batchID,
     		int experimentID, int userID, DataProcessingComputationNode computationNode) {
         myAgent = manager;
@@ -53,13 +62,21 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         this.computationNode = computationNode;
     }
 
+    /**
+     *
+     * @param computation Computation node with this strategy
+     */
     @Override
     public void execute(ComputationNode computation) {
         ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
-        myAgent.addBehaviour(new ExecuteDataProcessingBehaviour(myAgent, prepareRequest(), originalRequest, this,computationNode));
+        myAgent.addBehaviour(new ExecuteDataProcessingBehaviour(myAgent, prepareRequest(), originalRequest, computationNode));
         computationNode.computationFinished();
     }
 
+    /**
+     * Prepares the request
+     * @return Request
+     */
     private ACLMessage prepareRequest() {
         ExecuteTask ex = new ExecuteTask();
         Task task = getTaskFromNode();
@@ -69,6 +86,10 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         return execute2Message(ex);
     }
 
+    /**
+     * Get the task from buffers of the computation node
+     * @return Processing task
+     */
     private Task getTaskFromNode() {
 
         Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
@@ -99,25 +120,24 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         agent.setOptions(usedoptions.getOptions());
 
         Datas datas = new Datas();
-        
-        Iterator it = inputs.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, ComputationOutputBuffer> pairs = (Map.Entry)it.next();
 
-            ComputationOutputBuffer cob = (ComputationOutputBuffer) pairs.getValue();
-            
-            if (cob.isData() ){
-            	// add to Datas
-            	String dataName = ((DataSourceEdge) cob.getNext()).getDataSourceId();
+        for (Object o : inputs.entrySet()) {
+            Map.Entry<String, ComputationOutputBuffer> pairs = (Map.Entry) o;
 
-            	String internalFileName = DataManagerService
-                		.translateExternalFilename(myAgent, userID, dataName);
+            ComputationOutputBuffer cob = pairs.getValue();
+
+            if (cob.isData()) {
+                // add to Datas
+                String dataName = ((DataSourceEdge) cob.getNext()).getDataSourceId();
+
+                String internalFileName = DataManagerService
+                        .translateExternalFilename(myAgent, userID, dataName);
 
                 datas.addData(
                         new Data(dataName,
-                        		internalFileName,
+                                internalFileName,
                                 pairs.getKey()
-                        ));            	
+                        ));
             }
         }
        
@@ -138,8 +158,12 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         return task;
     }
 
-    public ACLMessage execute2Message(ExecuteTask ex) {
-        // create ACLMessage from Execute ontology action
+    /**
+     *  create ACLMessage from Execute ontology action
+     * @param ex ExecuteTask ontology
+     * @return Message
+     */
+    private ACLMessage execute2Message(ExecuteTask ex) {
 
         ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
         request.setLanguage(myAgent.getCodec().getName());
@@ -155,9 +179,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
 
         try {
             myAgent.getContentManager().fillContent(request, a);
-        } catch (Codec.CodecException e) {
-            myAgent.logException(e.getMessage(), e);
-        } catch (OntologyException e) {
+        } catch (Codec.CodecException | OntologyException e) {
             myAgent.logException(e.getMessage(), e);
         }
         return request;

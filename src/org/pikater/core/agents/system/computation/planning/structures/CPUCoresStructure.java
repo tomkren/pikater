@@ -14,12 +14,21 @@ import org.pikater.core.agents.system.computation.planning.PlannerCommunicator;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.task.Task;
 
+/**
+ * 
+ * Data-model represents sets of CPU Cores
+ *
+ */
 public class CPUCoresStructure {
 	private Map <CPUCore, TaskToSolve> busyCores =
 			new HashMap<CPUCore, TaskToSolve>();
 	private List<CPUCore> untappedCores =
 			new ArrayList<CPUCore>();
 	
+	/**
+	 * CPU Cores initialization
+	 * 
+	 */
 	public void initNewCPUCores(Agent_Planner agent,
 			List<AID> slaveServers) {
 
@@ -38,20 +47,28 @@ public class CPUCoresStructure {
 		}
 		
 	}
+	
+	/**
+	 * Deletes dead CPU Cores - all cores in the dead servers
+	 * 
+	 * @param agent - {@link Agent_Planner}
+	 */
 	public Set<TaskToSolve> deleteDeadCPUCores(Agent_Planner agent,
 			List<AID> deadSlaveServers) {
 		
-		List<CPUCore> busyCoresKeys =
-				new ArrayList<CPUCore>(this.busyCores.keySet());
-		
 		// delete untapped cores
+		List<CPUCore> cpuCoresToDelete = new ArrayList<CPUCore>();
 		for (CPUCore untappedCoreI : untappedCores) {
 			AID aidI = untappedCoreI.getAID();
 			
 			if (deadSlaveServers.contains(aidI)) {
-				this.busyCores.remove(untappedCoreI);
+				cpuCoresToDelete.add(untappedCoreI);
 			}
 		}
+		untappedCores.removeAll(cpuCoresToDelete);
+		
+		List<CPUCore> busyCoresKeys =
+				new ArrayList<CPUCore>(this.busyCores.keySet());
 		
 		Set<TaskToSolve> notFinishedTasks = new HashSet<TaskToSolve>();
 		
@@ -72,6 +89,10 @@ public class CPUCoresStructure {
 	}
 	
 	
+	/**
+	 * Sets a concrete CPU as free
+	 *  
+	 */
 	public TaskToSolve setCPUCoreAsFree(CPUCore cpuCore) {
 		
 		if (cpuCore == null) {
@@ -90,6 +111,10 @@ public class CPUCoresStructure {
 		return taskToSolve;
 	}
 	
+	/**
+	 * Sets a concrete CPU as busy
+	 * 
+	 */
 	public void setCPUCoreAsBusy(CPUCore selectedCore, TaskToSolve task) {
 		
 		if (selectedCore == null) {
@@ -105,7 +130,12 @@ public class CPUCoresStructure {
 		this.busyCores.put(selectedCore, task);
 		this.untappedCores.remove(selectedCore);
 	}
-	
+
+	/**
+	 * Get the best CPU Core for the Task
+	 * 
+	 * @param task - Task to solve
+	 */
 	public CPUCore getTheBestCPUCoreForTask(TaskToSolve task,
 			DataFiles dataLocations) {
 		
@@ -113,8 +143,7 @@ public class CPUCoresStructure {
 			throw new IllegalArgumentException("Argument task can't be null");
 		}
 		
-		if (untappedCores.isEmpty())
-		{
+		if (untappedCores.isEmpty()) {
 			return null;
 		}
 		
@@ -133,6 +162,10 @@ public class CPUCoresStructure {
 		return untappedCores.get(0);
 	}
 	
+	/**
+	 * Get CPU Core which is computing concrete Task (TaskID)
+	 * 
+	 */
 	public CPUCore getCPUCoreOfComputingTask(Task task) {
 		
 		List<CPUCore> cpuCores = new ArrayList<CPUCore>();
@@ -148,6 +181,10 @@ public class CPUCoresStructure {
 		return null;
 	}
 
+	/**
+	 * Get {@link TaskToSolve} for the concrete {@link Task}
+	 * 
+	 */
 	public TaskToSolve getTaskToSolveOfComputingTask(Task task) {
 		
 		List<CPUCore> cpuCores = new ArrayList<CPUCore>();
@@ -164,6 +201,10 @@ public class CPUCoresStructure {
 		return null;
 	}
 	
+	/**
+	 * Get {@link TaskToSolve} by the taskID
+	 * 
+	 */
 	public TaskToSolve getComputingTask(int taskID) {
 	
 		for (TaskToSolve taskToSolveI : this.busyCores.values()) {
@@ -174,13 +215,25 @@ public class CPUCoresStructure {
 		return null;
 	}
 
+	/**
+	 * Get number of busy CPU Cores in the structure
+	 * 
+	 */
 	public int getNumOfBusyCores() {
 		return this.busyCores.size();
 	}
+	
+	/**
+	 * Get number of untapped CPU Cores in the structure
+	 * 
+	 */
 	public int getNumOfUntappedCores() {
 		return this.untappedCores.size();
 	}
 	
+	/**
+	 * Check existence of a untapped CPU Core
+	 */
 	public boolean isExistingUntappedCore() {
 		return getNumOfUntappedCores() > 0;
 	}

@@ -185,6 +185,40 @@
             <outputType>sunnyOutput</outputType>
             <inputType>testingData</inputType>
           </testingData>
+          <validationData>
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+              <id>2</id>
+              <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
+              <options/>
+              <errors/>
+              <dataSources>
+                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                    <id>4</id>
+                    <options/>
+                    <errors/>
+                    <dataSources/>
+                    <fileURI>weather.arff</fileURI>
+                  </dataProvider>
+                  <outputType>fileData</outputType>
+                  <inputType>firstInput</inputType>
+                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                    <id>5</id>
+                    <options/>
+                    <errors/>
+                    <dataSources/>
+                    <fileURI>weather.arff</fileURI>
+                  </dataProvider>
+                  <outputType>fileData</outputType>
+                  <inputType>secondInput</inputType>
+                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+              </dataSources>
+            </dataProvider>
+            <outputType>sunnyOutput</outputType>
+            <inputType>validationData</inputType>
+          </validationData>
         </dataProvider>
         <outputType>computedData</outputType>
       </dataSource>

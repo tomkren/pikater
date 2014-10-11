@@ -107,7 +107,6 @@ public class UniversalComputationDescription
 	/**
 	 * Determines whether this experiment is ready to be scheduled and should not
 	 * end up with needless errors.
-	 * @return
 	 */
 	public boolean isValid()
 	{

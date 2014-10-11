@@ -68,6 +68,7 @@ public final class Input09 {
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent.setTrainingData(dataSourceSunny);
 		comAgent.setTestingData(dataSourceRainy);
+		comAgent.setValidationData(dataSourceRainy);
 		comAgent.setEvaluationMethod(evaluationMethod);
 		
         //Labeled data labeled by our CA are the new datasource

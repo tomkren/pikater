@@ -7,7 +7,6 @@ import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
-
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationNode;
 import org.pikater.core.agents.system.computation.graph.SearchComputationNode;
@@ -31,11 +30,11 @@ import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * Startegy for searching - adds to manager StartGettingParametersFromSearch
  * User: Klara
  * Date: 18.5.2014
  * Time: 11:13
@@ -49,6 +48,12 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
     OptionEdge childOptions;
     AID searchAID;
 
+    /**
+     *
+     * @param manager Manager agent that will receive StartGettingParametersFromSearch behavior
+     * @param batchID  Id of the batch that this computation belongs to
+     * @param computationNode Parent computation node
+     */
 	public SearchStartComputationStrategy (Agent_Manager manager,
 			int batchID, SearchComputationNode computationNode){
 		myAgent = manager;
@@ -56,6 +61,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
         this.computationNode = computationNode;
 	}
 
+    /**
+     *
+     * @param computation Computation node with this strategy
+     */
 	public void execute(ComputationNode computation){
 		ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
         if (searchAID==null) {
@@ -89,15 +98,12 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 				Result result = new Result(a, errorEdge.getEvaluation());			
 
 				myAgent.getContentManager().fillContent(inform, result);
-			} catch (CodecException e) {
-				myAgent.logException(e.getMessage(), e);
-				e.printStackTrace();
-			} catch (OntologyException e) {
+			} catch (CodecException | OntologyException e) {
 				myAgent.logException(e.getMessage(), e);
 				e.printStackTrace();
 			}
-			
-			myAgent.send(inform);
+
+            myAgent.send(inform);
 
 			computationNode.computationFinished();
 
@@ -105,6 +111,11 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	
     }
 
+    /**
+     * Preperes request
+     * @param receiver AID of the receiver
+     * @return Request
+     */
 	private ACLMessage prepareRequest(AID receiver){
 		// prepare request for the search agent
 
@@ -123,7 +134,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
         }
 		List<SearchItem> schema = convertOptionsToSchema(childOptions.getOptions());
 		gp.setSchema(schema);
-		gp.setSearch_options(options.getOptions());
+		gp.setSearchOptions(options.getOptions());
 
         Action a = new Action();
 		a.setAction(gp);
@@ -131,17 +142,18 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 		try {
 			myAgent.getContentManager().fillContent(msg, a);
-		} catch (CodecException e) {
-			myAgent.logException(e.getMessage(), e);
-			e.printStackTrace();
-		} catch (OntologyException e) {
+		} catch (CodecException | OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
-		return msg;		
+        return msg;
 	}
 
+    /**
+     * Gets search agent from node buffers
+     * @return Serach agent
+     */
 	private Agent getSearchFromNode(){
 
 		Map<String,ComputationOutputBuffer> nodeInputs = computationNode.getInputs();
@@ -160,6 +172,11 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	}
 
 
+    /**
+     * Adds options to schema
+     * @param opt New option
+     * @param schema Options to search
+     */
 	private void addOptionToSchema(NewOption opt, List<SearchItem> schema){
         ValuesForOption values = opt.getValuesWrapper();
 		for (Value value:values.getValues()) {
@@ -169,7 +186,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
                 QuestionMarkRange questionMarkRange = (QuestionMarkRange) typedValue;
                 IntervalSearchItem itm = new IntervalSearchItem();
                 itm.setName(opt.getName());
-                itm.setNumber_of_values_to_try(questionMarkRange.getCountOfValuesToTry());
+                itm.setNumberOfValuesToTry(questionMarkRange.getCountOfValuesToTry());
                 itm.setMin(questionMarkRange.getUserDefinedRestriction().getMinValue());
                 itm.setMax(questionMarkRange.getUserDefinedRestriction().getMaxValue());
                 schema.add(itm);
@@ -179,33 +196,35 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
                 QuestionMarkSet questionMarkSet = (QuestionMarkSet) typedValue;
                 SetSItem itm = new SetSItem();
                 itm.setName(opt.getName());
-                itm.setNumber_of_values_to_try(questionMarkSet.getCountOfValuesToTry());
+                itm.setNumberOfValuesToTry(questionMarkSet.getCountOfValuesToTry());
                 itm.setSet(questionMarkSet.getUserDefinedRestriction().getValues());
                 schema.add(itm);
             }
         }
 	}
 
-
-	//Create schema of solutions from options (Convert options->schema)
-
+    /**
+     * Create schema of solutions from options (Convert options->schema)
+     * @param options List of new options
+     * @return Items that will be searched
+     */
 	private List<SearchItem> convertOptionsToSchema(List<NewOption> options){
-		List<SearchItem> result = new ArrayList<SearchItem>();
+		List<SearchItem> result = new ArrayList<>();
 
 		if(options==null)
 			return result;
-		Iterator<NewOption> itr = options.iterator();
-		while (itr.hasNext())
-		{
-			NewOption opt = itr.next();
-			if(opt.isMutable())
-			{
-				addOptionToSchema(opt, result);
-			}
-		}
+        for (NewOption opt : options) {
+            if (opt.isMutable()) {
+                addOptionToSchema(opt, result);
+            }
+        }
 		return result;
 	}
 
+    /**
+     * Get computation node of this strategy
+     * @return COmputationNode containing this strategy instance
+     */
     public SearchComputationNode getComputationNode() {
         return computationNode;
     }

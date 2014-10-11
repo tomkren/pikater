@@ -2,6 +2,12 @@ package org.pikater.core.ontology.subtrees.account;
 
 import jade.content.AgentAction;
 
+/**
+ * Request for a {@link User} object that contains account details for
+ * the user ID specified in this request.
+ * 
+ * @author stepan
+ */
 public class GetUser implements AgentAction {
 
 	/**

@@ -5,6 +5,12 @@ import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.quartz.JobKey;
 
+/**
+ * Utility class encapsulating interruptible jobs and providing
+ * convenience interface.
+ * 
+ * @author SkyCrawl
+ */
 public class InterruptibleJobHelper
 {
 	private JobKey jobKey;
@@ -14,11 +20,23 @@ public class InterruptibleJobHelper
 		this.jobKey = null;
 	}
 	
-	public void startJob(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Exception
+	/**
+	 * Define and schedule an interruptible job with the given
+	 * arguments.
+	 * 
+	 * @param jobClass
+	 * @param jobArgs
+	 * @throws Exception
+	 */
+	public void start(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Exception
 	{
 		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(jobClass, jobArgs);
 	}
 	
+	/**
+	 * Abort the job defined by {@link #start(Class, Object[])}.
+	 * @throws {@link IllegalStateException}
+	 */
 	public void abort()
 	{
 		if(jobKey == null)

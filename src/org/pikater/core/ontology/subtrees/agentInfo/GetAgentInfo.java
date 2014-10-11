@@ -2,6 +2,12 @@ package org.pikater.core.ontology.subtrees.agentInfo;
 
 import jade.content.AgentAction;
 
+/**
+ * Request for a {@link AgentInfo} object of the given agent specified
+ * by the {@link #agentClassName} field.
+ * 
+ * @author stepan
+ */
 public class GetAgentInfo implements AgentAction {
 
 	/**

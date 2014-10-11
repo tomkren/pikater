@@ -16,8 +16,15 @@ import xmlGenerator.Input03;
 import xmlGenerator.Input05;
 import xmlGenerator.Input06;
 import xmlGenerator.Input07;
+import xmlGenerator.Input08;
+import xmlGenerator.Input09;
 import xmlGenerator.Input10;
 
+/**
+ * 
+ * Tests of BatchDescription an Universal format
+ *
+ */
 public class TestBatchDescription {
 
 	public static void test() {
@@ -61,6 +68,14 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input07.createDescription(),
 				"Input07");
+
+		testComputatingDescription(
+				Input08.createDescription(),
+				"Input08");
+
+		testComputatingDescription(
+				Input09.createDescription(),
+				"Input09");
 		
 		testComputatingDescription(
 				Input10.createDescription(),
@@ -68,6 +83,14 @@ public class TestBatchDescription {
 
 	}
 
+	/**
+	 * Tests to convert {@link ComputationDescription} to universal format
+	 * and back.
+	 * 
+	 *  @param comDescription {@link  ComputationDescription} batch to test
+	 *  @param note
+	 * 
+	 */
 	private static void testComputatingDescription(
 			ComputationDescription comDescription, String note) {
 

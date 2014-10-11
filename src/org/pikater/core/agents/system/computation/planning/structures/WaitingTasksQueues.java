@@ -12,11 +12,19 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+/**
+ * 
+ * Set of queues for waiting Tasks
+ *
+ */
 public class WaitingTasksQueues {
 	
 	private Queue<TaskToSolve> shortTimeDurationQueue;
 	private Queue<TaskToSolve> longTermDurationQueue;
 	
+	/**
+	 * Constructor - queues initialization
+	 */
 	public WaitingTasksQueues() {
 		
 		Comparator<TaskToSolve> comparator = new PlannerComparator();
@@ -25,6 +33,10 @@ public class WaitingTasksQueues {
 		longTermDurationQueue = new PriorityQueue<TaskToSolve>(10, comparator);
 	}
 	
+	/**
+	 * Add all Task to queues
+	 * 
+	 */
 	public void addTasks(Set<TaskToSolve> taskToSolve) {
 		List<TaskToSolve> tasks = new ArrayList<TaskToSolve>(taskToSolve);
 		
@@ -33,6 +45,10 @@ public class WaitingTasksQueues {
 		}
 	}
 	
+	/**
+	 * Add a Task to queue
+	 * 
+	 */
 	public void addTask(TaskToSolve taskToSolve) {
 		
 		ExpectedDuration expectedDuration =
@@ -48,6 +64,10 @@ public class WaitingTasksQueues {
 		}
 	}
 	
+	/**
+	 * Change priority for all Tasks with concrete batchID
+	 * 
+	 */
 	public void updateTaskPriority(int batchID, int newPriority) {
 
 		Comparator<TaskToSolve> comparator = new PlannerComparator();
@@ -79,25 +99,35 @@ public class WaitingTasksQueues {
 		longTermDurationQueue = newLongTermDurationQueue;
 	}
 	
+	/**
+	 * Removes and returns Task with highest priority
+	 * 
+	 */
 	public TaskToSolve removeTaskWithHighestPriority() {
 		
-		if (!this.shortTimeDurationQueue.isEmpty())
-		{
+		if (!this.shortTimeDurationQueue.isEmpty()) {
 			return this.shortTimeDurationQueue.remove();
-		}
-		else if (this.longTermDurationQueue.size() != 0)
-		{
+		
+		} else if (!this.longTermDurationQueue.isEmpty()) {
 			return this.longTermDurationQueue.remove();
 		}
 		
 		return null;
 	}
 
+	/**
+	 * Exists some Task to solve
+	 * 
+	 */
 	public boolean isExistingTaskToSolve() {
 		
-		return getNumberOfTasksInQueue() > 0;
+		return getNumberOfTasksInStructure() > 0;
 	}
 	
+	/**
+	 * Removes all Tasks with batchID
+	 * 
+	 */
 	public void removeTasks(int batchID) {
 
 		Comparator<TaskToSolve> comparator = new PlannerComparator();
@@ -127,7 +157,11 @@ public class WaitingTasksQueues {
 		longTermDurationQueue = newLongTermDurationQueue;
 	}
 
-	public int getNumberOfTasksInQueue() {
+	/**
+	 * Get number of all Tasks in the structure
+	 * 
+	 */
+	public int getNumberOfTasksInStructure() {
 		return shortTimeDurationQueue.size() +
 				longTermDurationQueue.size();
 	}

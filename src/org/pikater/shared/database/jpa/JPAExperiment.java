@@ -20,6 +20,12 @@ import javax.persistence.Transient;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 
+/**
+ * Class {@link JPAExperiment} represents record about the experiment, that
+ * is part of a batch.
+ * <p>
+ * This class also contains a list of results, that were created by the certain experiment.
+ */
 @Entity
 @Table(name="Experiment")
 @NamedQueries({

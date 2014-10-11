@@ -43,7 +43,6 @@ public class ValueType implements Concept, IValidated, ICloneable
 	}
 	/** 
 	 * @param defaultValue Seriously, don't try to pass in a null...
-	 * @param rangeRestriction
 	 */
 	public ValueType(IValueData defaultValue, RangeRestriction rangeRestriction)
 	{
@@ -51,7 +50,6 @@ public class ValueType implements Concept, IValidated, ICloneable
 	}
 	/** 
 	 * @param defaultValue Seriously, don't try to pass in a null...
-	 * @param setRestriction
 	 */
 	public ValueType(IValueData defaultValue, SetRestriction setRestriction)
 	{
@@ -59,9 +57,6 @@ public class ValueType implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * Full constructor for internal use.
-	 * @param defaultValue
-	 * @param rangeRestriction
-	 * @param setRestriction
 	 */
 	private ValueType(IValueData defaultValue, RangeRestriction rangeRestriction, SetRestriction setRestriction)
 	{
@@ -76,7 +71,6 @@ public class ValueType implements Concept, IValidated, ICloneable
 	}
 	/**
 	 * Use only if you really know what you're doing.
-	 * @param defaultValue
 	 */
 	public void setDefaultValue(IValueData defaultValue)
 	{
@@ -168,7 +162,6 @@ public class ValueType implements Concept, IValidated, ICloneable
 	/**
 	 * Conditions checked in this method are assumed in web package, so
 	 * don't change them lightly:
-	 * @return 
 	 */
 	@Override
 	public boolean isValid()

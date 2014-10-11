@@ -49,8 +49,13 @@ import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
+import org.pikater.core.utilities.CoreUtilities;
 
-
+/**
+ * 
+ * Agent performs the function of Planner Task to distributed slave servers
+ * 
+ */
 public class Agent_Planner extends PikaterAgent {
 	
 	private static final long serialVersionUID = 820846175393846627L;
@@ -66,6 +71,9 @@ public class Agent_Planner extends PikaterAgent {
 	private DataRegistry dataRegistry =
 			new DataRegistry(this, cpuCoresStructure);
 	
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
@@ -77,6 +85,9 @@ public class Agent_Planner extends PikaterAgent {
 		return ontologies;
 	}
 	
+	/**
+	 * Agent setup
+	 */
 	protected void setup() {
 		initDefault();
 
@@ -87,7 +98,8 @@ public class Agent_Planner extends PikaterAgent {
 		
 		
 		Ontology taskOntontology = TaskOntology.getInstance();
-		Ontology agentManagementOntontology = AgentManagementOntology.getInstance();
+		Ontology agentManagementOntontology =
+				AgentManagementOntology.getInstance();
 		
 		MessageTemplate reqMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(
@@ -97,8 +109,10 @@ public class Agent_Planner extends PikaterAgent {
 						MessageTemplate.and(
 							MessageTemplate.MatchLanguage(codec.getName()),
 							MessageTemplate.or(
-								MessageTemplate.MatchOntology(taskOntontology.getName()),
-								MessageTemplate.MatchOntology(agentManagementOntontology.getName())
+								MessageTemplate.MatchOntology(
+										taskOntontology.getName()),
+								MessageTemplate.MatchOntology(
+										agentManagementOntontology.getName())
 							))));
 
 		addBehaviour(new AchieveREResponder(this, reqMsgTemplate) {
@@ -132,7 +146,8 @@ public class Agent_Planner extends PikaterAgent {
 					}
 					
 				} catch (OntologyException e) {
-					logException("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " +
+						e.getMessage(), e);
 				} catch (CodecException e) {
 					logException("Codec problem: " + e.getMessage(), e);
 				}
@@ -146,9 +161,15 @@ public class Agent_Planner extends PikaterAgent {
 
 		});
 
-		//dataRegistry.updateDataSets();
 	}
 	
+	/**
+	 * Handle respond to {@link ExecuteTask}
+	 * 
+	 * @param request {@link ACLMessage} - received message
+	 * @param a {@link Action} - {@link ExecuteTask} action
+	 * @return {@link ACLMessage}
+	 */
 	protected ACLMessage respondToExecuteTask(ACLMessage request, Action a) {
 
 		ExecuteTask executeTask = (ExecuteTask) a.getAction();
@@ -174,13 +195,22 @@ public class Agent_Planner extends PikaterAgent {
 		return null;
 	}
 
-	protected ACLMessage respondToBatchPriorityChanged(ACLMessage request, Action a) {
+	/**
+	 * Handle respond to {@link BatchPriorityChanged}
+	 * 
+	 * @param request {@link ACLMessage} - received message
+	 * @param a {@link Action} - {@link BatchPriorityChanged} action
+	 * @return {@link ACLMessage} - OK inform message
+	 */
+	protected ACLMessage respondToBatchPriorityChanged(ACLMessage request,
+			Action a) {
 		
 		BatchPriorityChanged batchPriorityChanged =
 				(BatchPriorityChanged) a.getAction();
 		int batchID = batchPriorityChanged.getBatchID();
 		
-		int newBatchPriority = DataManagerService.getBatchPriority(this, batchID);
+		int newBatchPriority =
+				DataManagerService.getBatchPriority(this, batchID);
 		
 		try {
 			lock.lock();
@@ -198,7 +228,15 @@ public class Agent_Planner extends PikaterAgent {
 		return reply;
 	}
 	
-	protected ACLMessage respondToGetSystemLoad(ACLMessage request, Action a) {
+	/**
+	 * Handle respond to {@link GetSystemLoad}
+	 * 
+	 * @param request {@link ACLMessage} - received message
+	 * @param a {@link Action} - {@link BatchPriorityChanged} action
+	 * @return {@link ACLMessage} - contains actual  {@link SystemLoad}
+	 */
+	protected ACLMessage respondToGetSystemLoad(ACLMessage request,
+			Action a) {
 
 		SystemLoad systemLoad = getSystemLoad();
 		
@@ -218,7 +256,12 @@ public class Agent_Planner extends PikaterAgent {
 		
 		return msgSystemLoad;
 	}
-	
+
+	/**
+	 * Get system CPU load, contains load of all distributed slave servers
+	 * 
+	 * @return {@link SystemLoad}
+	 */
 	private SystemLoad getSystemLoad() {
 		
 		SystemLoad systemLoad = new SystemLoad();
@@ -227,12 +270,17 @@ public class Agent_Planner extends PikaterAgent {
 		systemLoad.setNumberOfUntappedCores(
 				cpuCoresStructure.getNumOfUntappedCores());
 		systemLoad.setNumberOfTasksInQueue(
-				waitingToStartComputingTasks.getNumberOfTasksInQueue());
+				waitingToStartComputingTasks.getNumberOfTasksInStructure());
 		systemLoad.print();
 		
 		return systemLoad;
 	}
 	
+	/**
+	 * Get system CPU load, contains load of all distributed slave servers
+	 * 
+	 * @return {@link SystemLoad}
+	 */
 	public void respondToFinishedTask(ACLMessage finishedTaskMsg) {
 
 		Result result = null;
@@ -251,7 +299,8 @@ public class Agent_Planner extends PikaterAgent {
 		}
 		
 		Task finishedTask = (Task) result.getValue();
-		finishedTask.setFinish(Agent_DataManager.getCurrentPikaterDateString());
+		finishedTask.setFinish(
+				CoreUtilities.getCurrentPikaterDateString());
 
 		CPUCore cpuCore = cpuCoresStructure.
 				getCPUCoreOfComputingTask(finishedTask);
@@ -272,13 +321,13 @@ public class Agent_Planner extends PikaterAgent {
 			plan();
 		lock.unlock();
 		
-		/////
 		ACLMessage msgToManager = taskToSolve.getMsg().createReply();
 		msgToManager.setPerformative(ACLMessage.INFORM);
 		msgToManager.setLanguage(new SLCodec().getName());
 		msgToManager.setOntology(TaskOntology.getInstance().getName());
 		
-		Result executeResult = new Result(taskToSolve.getAction(), finishedTask);
+		Result executeResult =
+				new Result(taskToSolve.getAction(), finishedTask);
 		try {
 			getContentManager().fillContent(msgToManager, executeResult);
 		} catch (CodecException e) {
@@ -290,13 +339,19 @@ public class Agent_Planner extends PikaterAgent {
 		if (taskToSolve.isSendResultToManager()) {
 			send(msgToManager);
 		}
-		/////
 		
 		//ACLMessage reply = finishedTaskMsg.createReply();
 		//reply.setPerformative(ACLMessage.INFORM);
 		//reply.setContent("OK - FinishedTask msg recieved");
 	}
 
+	/**
+	 * Send a message to save output of {@link Task}, receiver is agent
+	 * {@link Agent_DataManager}
+	 * 
+	 * @param task {@link Task}
+	 * @param node - slave server description
+	 */
 	private void saveDataToDB(Task task, String node) {
 		String dataManagerName = CoreAgents.DATA_MANAGER.getName();
 		if (node != null) {
@@ -308,13 +363,22 @@ public class Agent_Planner extends PikaterAgent {
 		
 		int userID = task.getUserID();
 		
-		for (TaskOutput t : task.getOutput()) {
-			logInfo("requesting save of data "+t.getName());
+		for (TaskOutput taskOutputI : task.getOutput()) {
+			logInfo("requesting save of data " + taskOutputI.getName());
 			SaveDataset sd = new SaveDataset();
 			sd.setUserID(task.getUserID());
-			String savedFileName = CoreConfiguration.getDataFilesPath()+System.getProperty("file.separator")+t.getName();
+			
+			String savedFileName =
+					CoreConfiguration.getDataFilesPath() +
+					System.getProperty("file.separator") +
+					taskOutputI.getName();
+			
 			sd.setSourceFile(savedFileName);			
-			sd.setDescription("Output from batch "+task.getBatchID()+ " ("+t.getType().toString()+")");
+			sd.setDescription(
+					"Output from batch " +
+					task.getBatchID() +
+					" ("+taskOutputI.getType().toString()+")");
+			
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 			request.addReceiver(dataManager);
 			request.setLanguage(getCodec().getName());
@@ -322,11 +386,13 @@ public class Agent_Planner extends PikaterAgent {
 			ACLMessage reply = null;
 			int computedDataID;
 			try {
-				getContentManager().fillContent(request, new Action(dataManager, sd));
+				Action actionI = new Action(dataManager, sd);
+				getContentManager().fillContent(request, actionI);
 				reply = FIPAService.doFipaRequestClient(this, request);
 				if (reply == null) {
-					logSevere("Failed to save output data in DB - reply not received."
-							 +" (Source file: "+savedFileName+")");
+					logSevere("Failed to save output data in DB "
+							+ "- reply not received."
+							+ " (Source file: " + savedFileName+")");
 					return;
 				}
 				computedDataID = (Integer)reply.getContentObject();
@@ -339,10 +405,15 @@ public class Agent_Planner extends PikaterAgent {
 			}
 			MetadataService.requestMetadataForComputedData(this,
 					computedDataID, userID);
-			logInfo("saved output to DB: "+t.getName());
+			logInfo("saved output to DB: "+taskOutputI.getName());
 		}
 	}
 
+	/**
+	 * Convert {@link AID} to node name
+	 * @param aid {@link AID}
+	 * @return String - name of node 
+	 */
 	private static String nodeName(AID aid) {
 		String name = aid.getLocalName();
 		if (name.contains("-")) {
@@ -352,6 +423,12 @@ public class Agent_Planner extends PikaterAgent {
 		}
 	}
 
+	/**
+	 * Handle respond to kill all {@link Task} with concrete BatchID
+	 * @param request {@link ACLMessage}
+	 * @param a {@link Action} - action {@link KillTasks}
+	 * @return {@link ACLMessage}
+	 */
 	private ACLMessage respondToKillTasks(ACLMessage request, Action a) {
 		
 		KillTasks killTasks = (KillTasks) a.getAction();
@@ -371,6 +448,10 @@ public class Agent_Planner extends PikaterAgent {
 		return reply;
 	}
 	
+	
+	/**
+	 * Scheduling of incoming Tasks to free distributed CPUs
+	 */
 	private void plan() {
 
 		// test if some task is available
@@ -383,7 +464,7 @@ public class Agent_Planner extends PikaterAgent {
 				removeTaskWithHighestPriority();
 		
 		Task task = taskToSolve.getTask();
-		task.setStart(Agent_DataManager.getCurrentPikaterDateString());
+		task.setStart(CoreUtilities.getCurrentPikaterDateString());
 		
 		// update number of cores
 		List<AID> newSlaveServers =
@@ -406,7 +487,7 @@ public class Agent_Planner extends PikaterAgent {
 		}
 
 
-		//delete CPU cores from dataRegistry
+		// delete CPU cores from dataRegistry
 		dataRegistry.deleteDeadCPUCores(deadSlaveServers);
 		dataRegistry.updateDataSets();
 		// get location of all files needed to solve the Task

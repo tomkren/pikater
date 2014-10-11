@@ -1,5 +1,6 @@
 package org.pikater.core.options.evaluation;
 
+import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxCrossvalidationEvaluationMethod;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -22,7 +23,7 @@ public class CrossvalidationEvaluationMethod_Box {
 		agentInfo.setName("EM_XValidation");
 		agentInfo.setDescription("Evaluation Method");
 		agentInfo.addOption(optionF);
-		agentInfo.importAgentClass(CrossValidation.class);
+		agentInfo.importAgentClass(Agent_VirtualBoxCrossvalidationEvaluationMethod.class);
 		agentInfo.importOntologyClass(EvaluationMethod.class);
 				
 		agentInfo.setOutputSlots(

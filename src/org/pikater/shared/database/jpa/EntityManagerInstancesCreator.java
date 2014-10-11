@@ -8,6 +8,12 @@ import javax.persistence.Persistence;
 
 import org.pikater.shared.logging.database.PikaterDBLogger;
 
+/**
+ * EntityManagerInstancesCreater is a class, that is used to create {@link EntityManager}
+ * objects used by Data Access Objects.
+ *
+ * @see org.pikater.shared.database.jpa.daos
+ */
 public class EntityManagerInstancesCreator
 {
 	/**

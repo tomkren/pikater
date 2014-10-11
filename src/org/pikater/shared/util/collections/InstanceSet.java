@@ -7,11 +7,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * This implementation of the Set interface fundamentally differs from the standard Set implementations - it uses
- * instance comparison only (e.g. o1 == o2) instead of equals method comparison to determine whether 2 objects equal
- * each other.
- * While this breaks the Set interface conduct, it works, serves its purpose and allows the use of all standard Set methods
- * with no custom implementations whatsoever. 
+ * <p>This implementation of the {@link Set} interface fundamentally differs
+ * from the standard implementations. It uses instance comparison (e.g. o1 == o2)
+ * instead of the {@link Object#equals(Object)} method.</p>
+ * 
+ * <p>While this breaks the {@link Set} interface conduct, it works, serves its
+ * purpose and allows the use of all standard {@link Set} methods with no
+ * custom implementations whatsoever. Use with caution however.</p> 
  */
 public class InstanceSet<E> implements Set<E>
 {

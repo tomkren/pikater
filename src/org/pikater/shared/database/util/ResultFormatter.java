@@ -10,7 +10,6 @@ public class ResultFormatter<T> {
 	
 	/**
 	 * Creates an instance of ResultFormatter for the given list of results
-	 * @param resultList
 	 */
 	public ResultFormatter(List<T> resultList){
 		this.resList=resultList;

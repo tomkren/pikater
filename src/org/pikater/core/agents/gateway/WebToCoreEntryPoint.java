@@ -20,7 +20,6 @@ public class WebToCoreEntryPoint {
 	/**
 	 * Gets required and relevant information about all agents used in the core
 	 * system that can act as "boxes" in web's experiment editor.
-	 * @return
 	 * @throws PikaterGatewayException
 	 */
 	public static AgentInfos getAgentInfosVisibleForUser(int userID) throws PikaterGatewayException {
@@ -57,7 +56,6 @@ public class WebToCoreEntryPoint {
 
 	/**
 	 * Notifies the core system about a new user-uploaded dataset. 
-	 * @param IDnewDataset
 	 * @throws PikaterGatewayException
 	 */
 	public static void notify_newDataset(int IDnewDataset) throws PikaterGatewayException {

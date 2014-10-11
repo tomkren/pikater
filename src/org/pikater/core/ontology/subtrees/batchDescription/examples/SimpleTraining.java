@@ -29,6 +29,8 @@ public class SimpleTraining {
         
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
+        ca.setTestingData(dsd);
+        ca.setValidationData(dsd);
         ca.setDuration(expectedDuration);
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"

@@ -6,6 +6,10 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPAAttributeCategoricalMetaData} represents a record about
+ * metadata of dataset's one categorical attribute.
+ */
 @Entity
 @Table(name="AttributeCategoricalMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)

@@ -6,6 +6,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+/**
+ * A simple bidirectional map that consists of a "key to value"
+ * and "value to key" map.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <K>
+ * @param <V>
+ */
 public class BidiMap<K,V> implements Serializable
 {
 	private static final long serialVersionUID = 5011484513683193827L;

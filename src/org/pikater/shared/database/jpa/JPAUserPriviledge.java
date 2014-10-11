@@ -9,6 +9,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPAUserPriviledge} represents record about the user priviledge.
+ */
 @Entity
 @Table(name="UserPriviledge")
 @NamedQueries({

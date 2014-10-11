@@ -7,6 +7,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * Class {@link JPAFilemapping} represents record about mappings of external filenames
+ * to internal filenames.
+ */
 @Entity
 @Table(
 		name="FileMapping",

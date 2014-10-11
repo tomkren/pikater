@@ -32,23 +32,25 @@ public class DurationService extends FIPAService {
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-		Action a = new Action();
-		a.setActor(agent.getAID());
-		a.setAction(gd);
+		Action action = new Action();
+		action.setActor(agent.getAID());
+		action.setAction(gd);
 
 		try {
-			agent.getContentManager().fillContent(request, a);
+			agent.getContentManager().fillContent(request, action);
 		} catch (CodecException | OntologyException e) {
 			agent.logException(e.getMessage(), e);
 		}
 
-		Duration duration=new Duration();
+		Duration duration = new Duration();
 		
 		try {
-			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
+			ACLMessage reply =
+					FIPAService.doFipaRequestClient(agent, request);
 
 			// get Duration from the received message
-			ContentElement content = agent.getContentManager().extractContent(reply);
+			ContentElement content =
+					agent.getContentManager().extractContent(reply);
 
 			duration = (Duration) (((Result) content).getValue());
 

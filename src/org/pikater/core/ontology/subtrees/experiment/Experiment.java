@@ -2,6 +2,11 @@ package org.pikater.core.ontology.subtrees.experiment;
 
 import jade.content.Concept;
 
+/**
+ * Represents a part of a batch. Experiments are created by {@link Parser}.
+ * 
+ * @author stepan
+ */
 public class Experiment implements Concept {
 
 	/**

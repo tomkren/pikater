@@ -9,24 +9,36 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class Mailing {
-	/** Adresa, ktera bude uvedena ve FROM u vsech mailu */
+/**
+ * Utility class for sending emails.
+ * 
+ * @author krajj7
+ */
+public class Mailing
+{
+	/**
+	 * All emails will be sent with this "from" address.
+	 */
 	private static final String SENDER_EMAIL = "pikater@noreply.cz";
 
-	/** Odesle plaintext e-mail dle parametru pomoci lokalniho SMTP serveru, nebo vyhodi vyjimku. */
-	public static void sendEmail(String to, String subject, String body) throws MessagingException {
+	/**
+	 * Sends a plain text email defined by the arguments. Local SMTP
+	 * server needs to be running for this method to work.
+	 * 
+	 * @param to
+	 * @param subject
+	 * @param body
+	 * @throws MessagingException if the email could not be sent
+	 */
+	public static void sendEmail(String to, String subject, String body) throws MessagingException
+	{
 		Properties properties = new Properties();
-		// predpokladam funkcni SMTP server na localhostu
-		properties.setProperty("mail.smtp.host", "localhost");
+		properties.setProperty("mail.smtp.host", "localhost"); // local SMTP server is required to be running
 
 		MimeMessage message = new MimeMessage(Session.getDefaultInstance(properties));
-		// od koho
 		message.setFrom(new InternetAddress(SENDER_EMAIL));
-		// komu
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-		// predmet
-		message.setSubject(subject);
-		// telo
+		message.setSubject(subject); 
 		message.setText(body);
 
 		Transport.send(message);

@@ -11,7 +11,7 @@ public class UpdateBatchStatus implements AgentAction {
 
 	private int batchID;
 	private String status;
-
+	
 	public int getBatchID() {
 		return batchID;
 	}

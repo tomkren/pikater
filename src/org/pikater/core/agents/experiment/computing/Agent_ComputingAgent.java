@@ -46,30 +46,34 @@ import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
 
+/**
+ * 
+ * Abstract class that gives interface and skeleton of implementation
+ * for all another Computing agents
+ *
+ */
 public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -7927583436579620995L;
 
-	public enum states {
+	public enum States {
 		NEW, TRAINED
 	}
 
 	private static final String CLASS_NAME = "className";
 
-	/* common properties for all computing agents */
+	// common properties for all computing agents
 	public String trainFileName;
 	public String testFileName;
 	public String labelFileName = "";
 
-	public states state = states.NEW;
+	public States state = States.NEW;
 	public boolean hasGotRightData = false;
 
-	// protected Vector<MyWekaOption> Options;
 	public Agent agentOptions = null;
 
-	protected Instances data; // data read from fileName file
+	// data read from fileName file
+	protected Instances data;
 	public Instances train;
 	public DataInstances ontoTrain;
 	public Instances test;
@@ -128,6 +132,9 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		return ontologies;
 	}
 
+	/**
+	 * Setup of agent
+	 */
 	@Override
 	protected void setup() {
 		super.setup();
@@ -136,8 +143,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
             className = getArgumentValue(CLASS_NAME);
         }
         if (isArgumentValueTrue("load")) {
-            // TODO loadAgent(getLocalName());
-            // args = new String[0]; // arguments are empty
         }
 
 		// register with the DF
@@ -147,7 +152,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 			descr.add(getLocalName());
 	
 			String typeDesc;
-			if (state == states.TRAINED) { // add fileName to service description
+			if (state == States.TRAINED) { // add fileName to service description
 				typeDesc = getAgentType() + " trained on " + trainFileName;
 			} else {
 				typeDesc = getAgentType();
@@ -162,28 +167,31 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 			logInfo("was resurrected");
 			taskFIFO = new LinkedList<ACLMessage>();
 			executionBehaviour.reset();
-			state = states.TRAINED;
+			state = States.TRAINED;
 			return;
 		}
 		newAgent = false;
 
 		MessageTemplate reqMsgTemplate = 
-					MessageTemplate.and(
-							MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-							MessageTemplate.and(
-								MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-								MessageTemplate.MatchOntology(TaskOntology.getInstance().getName()
-												)
-							)
-					);
+				MessageTemplate.and(
+						MessageTemplate.MatchProtocol(
+								FIPANames.InteractionProtocol.FIPA_REQUEST),
+						MessageTemplate.and(
+								MessageTemplate.MatchPerformative(
+										ACLMessage.REQUEST),
+								MessageTemplate.MatchOntology(
+										TaskOntology.getInstance().getName())
+						)
+				);
 		
 		MessageTemplate cfpMsgTemplate = 
 				MessageTemplate.and(
-						MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
+						MessageTemplate.MatchProtocol(
+							FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
 						MessageTemplate.and(
 							MessageTemplate.MatchPerformative(ACLMessage.CFP),
-							MessageTemplate.MatchOntology(TaskOntology.getInstance().getName()
-											)
+							MessageTemplate.MatchOntology(
+									TaskOntology.getInstance().getName())
 						)
 				);
 	
@@ -193,20 +201,20 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		addBehaviour(new CFPResponder(this, cfpMsgTemplate));
 		addBehaviour(executionBehaviour);
 		
-	} // end setup
-
-	protected void getParameters() {
-
-		// AgentInfo agentInfo = getAgentInfo();
-		// TODO: transformation from agentInfo to parameters + send to old
-		// guiAgent
 	}
 
+	/**
+	 * Get parameters
+	 */
+	protected void getParameters() {
+	}
+
+	/**
+	 * Set options
+	 * @param task
+	 * @return
+	 */
 	public boolean setOptions(Task task) {
-		/*
-		 * INPUT: task with weka options Fills the OPTIONS array and
-		 * current_task.
-		 */
 		
 		NewOptions taskOptions = new NewOptions(task.getAgent().getOptions());
 		taskOptions.removeOptionByName(CoreConstant.Mode.DEFAULT.name());
@@ -221,8 +229,11 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		return true;
 	}
 
+	/**
+	 * Get options
+	 * @return
+	 */
 	public String getOptions() {
-		// write out OPTIONS
 
 		String strOPTIONS = "";
 		strOPTIONS += "OPTIONS:";
@@ -232,41 +243,39 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		return strOPTIONS;
 	}
 
-	// TODO: will we accept or refuse the request? (working, size of
-	// taksFIFO, latency time...)
+	/**
+	 * Will we accept or refuse the request? (working,
+	 * size of taksFIFO, latency time...)
+	 * @return
+	 */
 	public boolean acceptTask() {
-		return true/* taskFIFO.size()<=MAX_TASKS */;
+		return true;
 	}
 	
-	public static byte[] toBytes(Object object) throws Exception {
-		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(baos);
-		oos.writeObject(object);
-
-		return baos.toByteArray();
-	}
-
 	protected class RequestServer extends AchieveREResponder {
 		
-		public RequestServer(Agent_ComputingAgent agent, MessageTemplate mt) {
-			super(agent, mt);
+		public RequestServer(Agent_ComputingAgent agent,
+				MessageTemplate msgTemplate) {
+			super(agent, msgTemplate);
 			
 		}
 
 		private static final long serialVersionUID = 1074564968341084444L;
 
 		@Override
-		protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+		protected ACLMessage handleRequest(ACLMessage request
+				) throws NotUnderstoodException, RefuseException {
+			
 			ACLMessage resultMsg = request.createReply();
 			try {
-				Action a = (Action) getContentManager().extractContent(request);
+				Action action = (Action)
+						getContentManager().extractContent(request);
 					
-					if (a.getAction() instanceof GetOptions) {
-						return respondToGetOptions(request, a);
+					if (action.getAction() instanceof GetOptions) {
+						return respondToGetOptions(request, action);
 
-					} else if (a.getAction() instanceof ExecuteTask) {
-						return respondExecuteTask(request, a);
+					} else if (action.getAction() instanceof ExecuteTask) {
+						return respondExecuteTask(request, action);
 					}
 
 					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
@@ -279,34 +288,37 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 			
 			return resultMsg;
 		}
-		
 
 	}
 	
 	private ACLMessage respondToGetOptions(ACLMessage request, Concept concept) {
 		
-		ComputingCommunicator communicator = new ComputingCommunicator();
-		return communicator.sendOptions(Agent_ComputingAgent.this, request);
+		return ComputingCommunicator.sendOptions(
+				Agent_ComputingAgent.this, request);
 	}
 	
 	private ACLMessage respondExecuteTask(ACLMessage request, Action a) {
 		
-		ComputingCommunicator communicator = new ComputingCommunicator();
-		return communicator.executeTask(this, request);
+		return ComputingCommunicator.handleTask(this, request);
 	}
 
-	protected class CFPResponder extends ContractNetResponder{
+	protected class CFPResponder extends ContractNetResponder {
 		private static final long serialVersionUID = -7855318009388214053L;
 
-		public CFPResponder(jade.core.Agent a, MessageTemplate mt) {
-			super(a, mt);
+		public CFPResponder(jade.core.Agent agent,
+				MessageTemplate messageTemplate) {
+			
+			super(agent, messageTemplate);
 		}
 
 		@Override
 		protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException,
 				FailureException, NotUnderstoodException {
-			ComputingCommunicator communicator = new ComputingCommunicator();
-			return communicator.executeDurationTask((Agent_ComputingAgent)this.getAgent(), cfp);
+			
+			Agent_ComputingAgent agent =
+					(Agent_ComputingAgent)this.getAgent();
+			
+			return ComputingCommunicator.executeDurationTask(agent, cfp);
 		}
 		
 	}

@@ -33,6 +33,7 @@ public final class Input03 {
 		comAgent1.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent1.setTrainingData(fileDataSource);
 		comAgent1.setTestingData(fileDataSource);
+		comAgent1.setValidationData(fileDataSource);
 		comAgent1.setModel(null);
 		comAgent1.setEvaluationMethod(evaluationMethod1);
 		
@@ -62,6 +63,7 @@ public final class Input03 {
 		comAgent2.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent2.setTrainingData(computingDataSource1);
 		comAgent2.setTestingData(computingDataSource1);
+		comAgent2.setValidationData(fileDataSource);
 		comAgent2.setModel(null);
 		comAgent2.setEvaluationMethod(evaluationMethod2);
 
