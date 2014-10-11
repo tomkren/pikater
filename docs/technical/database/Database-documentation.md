@@ -53,7 +53,7 @@ Therefore, the first step towards the new goals was introduction of a DBMS-indep
 
 Once we decided to use JPA, we also needed to pick a JPA connector - low-level JPA implementation that actually handles all of the SQL and object mapping under the hood (something that connects the world of Java with the world of databases).
 
-The most widespread JPA connectors are Hibernate and Eclipselink. Picking either of them wouldn't have deep development impacts because they can be compared to each quite well. Both of them have some special features, however, and we decided to use Eclipselink because it allows runtime configuration of database connectivity. Currently, configuration files are used but the feature may still come in handy in future.
+The most widespread JPA connectors are Hibernate and Eclipselink. Picking either of them wouldn't have deep development impacts because they are quite comparable. Both of them have some special features, however, and we decided to use Eclipselink because it allows runtime configuration of database connectivity. Currently, configuration files are used but the feature may still come in handy in future.
 
 #### PostgreSQL
 
