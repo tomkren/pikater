@@ -48,7 +48,8 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
      * @param computationNode Parent computation node
      */
     public RecommenderStartComputationStrategy(Agent_Manager manager,
-                                               int userID, RecommenderComputationNode computationNode){
+    		int userID, RecommenderComputationNode computationNode) {
+    	
 		this.myAgent = manager;
         this.userID = userID;
         this.computationNode = computationNode;
@@ -64,26 +65,33 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		inputs = computationNode.getInputs();
 		
 		// create recommender agent
-        if (recommender==null) {
-            recommender = myAgent.createAgent(computationNode.getRecommenderClass());
+        if (recommender == null) {
+            recommender = myAgent.createAgent(
+            		computationNode.getRecommenderClass());
         }
 
-        if (inputs.get(CoreConstant.SlotContent.ERRORS.name()).isBlocked()){
-			inputs.get(CoreConstant.SlotContent.ERRORS.name()).unblock();
+		String errorSlotName =
+				CoreConstant.SlotContent.ERRORS.getSlotName();
+		
+        if (inputs.get(errorSlotName).isBlocked()){
+			inputs.get(errorSlotName).unblock();
 		}
 		
 		// send message to recommender
 		ACLMessage inform;
 		try {
-			inform = FIPAService.doFipaRequestClient(myAgent, prepareRequest(recommender));
-			if (inform.getContent().equals("finished")){
+			inform = FIPAService.doFipaRequestClient(myAgent,
+					prepareRequest(recommender));
+			
+			if (inform.getContent().equals("finished")) {
 				this.computationNode.computationFinished();
 				return;
 			}
 			
-			Result r = (Result) myAgent.getContentManager().extractContent(inform);			
+			Result result = (Result)
+					myAgent.getContentManager().extractContent(inform);			
 			
-			recommendedAgent = (Agent) r.getItems().get(0);
+			recommendedAgent = (Agent) result.getItems().get(0);
 		} catch (FIPAException e) {
 			myAgent.logException(e.getMessage(), e);
 			return;
@@ -118,14 +126,26 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		req.setOntology(RecommendOntology.getInstance().getName());
 		// request.setReplyByDate(new Date(System.currentTimeMillis() + 200));
 		
+		String trainingSlotName =
+				CoreConstant.SlotContent.TRAINING_DATA.getSlotName();
+		String tesingSlotName =
+				CoreConstant.SlotContent.TESTING_DATA.getSlotName();
+		String errorSlotName =
+				CoreConstant.SlotContent.ERRORS.getSlotName();
+		
 		Datas datas = new Datas();
-		String training = ((DataSourceEdge)inputs.get(CoreConstant.SlotContent.TRAINING_DATA.name()).getNext()).getDataSourceId();
+		DataSourceEdge trainingEdge = (DataSourceEdge)
+				inputs.get(trainingSlotName).getNext();
+		String training = trainingEdge.getDataSourceId();
+		
 		String testing;
-		if( inputs.get(CoreConstant.SlotContent.TESTING_DATA.name()) == null){
-			testing = training;							
-		}
-		else{
-			testing = ((DataSourceEdge) inputs.get(CoreConstant.SlotContent.TESTING_DATA.name()).getNext()).getDataSourceId();
+		if( inputs.get(tesingSlotName) == null){
+			testing = training;
+
+		} else {
+			DataSourceEdge testingEdge =
+					(DataSourceEdge) inputs.get(tesingSlotName).getNext();
+			testing = testingEdge.getDataSourceId();
 		}
 		
         String internalTrainFileName = DataManagerService
@@ -141,16 +161,19 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		Recommend recommend = new Recommend();
 		recommend.setDatas(datas);
 		recommend.setRecommender(getRecommenderFromNode());
-        if (inputs.get(CoreConstant.SlotContent.ERRORS.name()).hasNext()) {
-            recommend.setPreviousError(((ErrorEdge) inputs.get(CoreConstant.SlotContent.ERRORS.name()).getNext()).getEvaluation());
+		
+        if (inputs.get(errorSlotName).hasNext()) {
+        	ErrorEdge errorEdge =
+        			(ErrorEdge) inputs.get(errorSlotName).getNext();
+            recommend.setPreviousError(errorEdge.getEvaluation());
         }
 
-		Action a = new Action();
-		a.setAction(recommend);
-		a.setActor(myAgent.getAID());
+		Action action = new Action();
+		action.setAction(recommend);
+		action.setActor(myAgent.getAID());
 
 		try {
-			myAgent.getContentManager().fillContent(req, a);
+			myAgent.getContentManager().fillContent(req, action);
 			
 		} catch (CodecException | OntologyException ce) {
 			myAgent.logException(ce.getMessage(), ce);
@@ -165,13 +188,14 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
      */
 	private Agent getRecommenderFromNode()
 	{
-		Map<String,ComputationOutputBuffer> nodeInputs = computationNode.getInputs();
+		Map<String,ComputationOutputBuffer> nodeInputs =
+				computationNode.getInputs();
 
 		Agent agent = new Agent();
 		agent.setType(computationNode.getRecommenderClass());
-        if (options==null)
-        {
-        	OptionEdge optionEdge = (OptionEdge) nodeInputs.get("options").getNext();
+        if (options == null) {
+        	OptionEdge optionEdge = (OptionEdge)
+        			nodeInputs.get("options").getNext();
             nodeInputs.get("options").block();
             options = new NewOptions(optionEdge.getOptions());
         }
