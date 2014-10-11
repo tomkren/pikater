@@ -141,7 +141,7 @@ Entity representing metadata for an attribute (column) of a dataset, for instanc
 	* class of entropy.
 
 4. **JPAAttributeCategoricalMetadata**  
-Entity representing metadata for a categorical attribute (column) - in other words, values of this column items from a finite and enumerated set.
+Entity representing metadata for a categorical attribute (column) - in other words, values of this column are items from a finite and enumerated set.
 
 5. **JPAAttributeNumericalMetadata**  
 Entity representing metadata for a numerical attribute (column). Values of this column are floating point numbers.
