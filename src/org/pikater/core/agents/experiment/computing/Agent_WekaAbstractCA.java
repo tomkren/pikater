@@ -20,11 +20,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-
+/**
+ * 
+ * Abstract class for implementation Computing Weka Agent
+ *
+ */
 public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private static final long serialVersionUID = -3594051562022044000L;
 
+	// Weka classifier
 	protected Classifier classifier;
 
 	/**
@@ -36,8 +41,17 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		return RBFNetwork.class.getName();
 	}
 	
+	/**
+	 * Get Weka classifier
+	 * @return
+	 */
 	protected abstract Classifier createClassifier();
 
+	/**
+	 * Training process of the Machine Learning
+	 * 
+	 * @param evaluation
+	 */
 	@Override
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
@@ -104,7 +118,16 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	}
 
 
-	private Evaluation test(EvaluationMethod evaluationMethod) throws Exception{
+	/**
+	 * Testing process of the Machine Learning
+	 * 
+	 * @param evaluationMethod
+	 * @return
+	 * @throws Exception
+	 */
+	private Evaluation test(EvaluationMethod evaluationMethod
+			) throws Exception {
+		
 		working = true;
 		logInfo("Testing...");
 
@@ -112,13 +135,15 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		Evaluation eval = new Evaluation(train);
         logInfo("Evaluation method: \t");
 		
-		if (evaluationMethod.getAgentType().equals(CrossValidation.class.getName()) ) {
+        String agentType = evaluationMethod.getAgentType();
+		if (agentType.equals(CrossValidation.class.getName()) ) {
 			
 			// TODO read default value from file (if necessary)
 			int folds = 5;
 			if (evaluationMethod.getOptions() != null) {
 				
-				NewOptions options = new NewOptions(evaluationMethod.getOptions());
+				NewOptions options =
+						new NewOptions(evaluationMethod.getOptions());
 				NewOption optionF = options.fetchOptionByName("F");
 				if (optionF != null) {
 					IntegerValue valueF = (IntegerValue)

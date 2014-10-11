@@ -8,13 +8,14 @@ import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.computation.graph.events.BatchFinished;
 
 /**
- * Computation graph - describes batch holding sets of nodes representing each part of the graph
+ * Describes batch holding sets of nodes representing each part of the graph
  * Is observable
  * User: Kuba
  * Date: 11.5.2014
  * Time: 21:27
  */
 public class ComputationGraph extends Observable {
+	
     private Map<Integer,ComputationNode> nodes = new HashMap<>();
     private int id;
     private int batchID;

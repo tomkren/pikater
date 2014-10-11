@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class for parsing COmputation Graph from ontology
+ * Class for parsing Computation Graph from ontology
  */
 public class Parser {
     private ComputationGraph computationGraph =
@@ -168,6 +168,9 @@ public class Parser {
     /**
      * Processes a node that is in the beginning of computation - reads file
      * 
+     * @param file
+     * @param child
+     * @param connectionName
      */
     private void parseFileDataProvider(FileDataProvider file,
     		ComputationNode child, String connectionName) {
@@ -190,8 +193,8 @@ public class Parser {
     }
 
     private ModelComputationNode parseComputing(IComputingAgent computingAgent,
-    		int batchID, int userID, Boolean addOptions)
-    {
+    		int batchID, int userID, Boolean addOptions) {
+    	
         agent.logInfo("Ontology Parser - Computing Agent Simple");
 
         if (!alreadyProcessed.containsKey(computingAgent.getId())) {
@@ -221,8 +224,7 @@ public class Parser {
         String agentType = computingAgentO.getAgentType();
         Integer model = computingAgentO.getModel();
 
-        if (agentType != null)
-        {
+        if (agentType != null) {
             NeverEndingBuffer<AgentTypeEdge> typeBuffer =
             		new NeverEndingBuffer<>(new AgentTypeEdge(agentType, model));
             typeBuffer.setTarget(computingNode);

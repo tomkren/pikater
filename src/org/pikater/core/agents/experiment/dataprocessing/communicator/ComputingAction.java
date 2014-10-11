@@ -63,84 +63,25 @@ public class ComputingAction extends FSMBehaviour {
 
 	private Agent_ComputingAgent agent;
 
-	/* Resulting message: FAILURE */
-
-	void failureMsg(String desc) {
-		List<Eval> evaluations = new ArrayList<Eval>();
-
-		Eval er = new Eval();
-		er.setName("error_rate");
-		er.setValue(Float.MAX_VALUE);
-		evaluations.add(er);
-
-		// set duration to max_float
-		Eval du = new Eval();
-		du.setName("duration");
-		du.setValue(Integer.MAX_VALUE);
-		evaluations.add(du);
-
-		// set start to now
-		Eval st = new Eval();
-		st.setName("start");
-		st.setValue(System.currentTimeMillis());
-		evaluations.add(st);
-
-		eval.setEvaluations(evaluations);
-		eval.setStatus(desc);
-	}
-
-	/* Get a message from the FIFO of tasks */
-	boolean getRequest() {
-		if (!agent.taskFIFO.isEmpty())
-		{
-			incomingRequest = agent.taskFIFO.removeFirst();
-			try {
-				ContentElement content = agent.getContentManager()
-						.extractContent(incomingRequest);
-				executeAction = (ExecuteTask) ((Action) content)
-						.getAction();
-				return true;
-			} catch (CodecException ce) {
-				agent.logException(ce.getMessage(), ce);
-			} catch (OntologyException oe) {
-				agent.logException(oe.getMessage(), oe);
-			}
-		} else {
-			block();
-		}
-
-		return false;
-	}
-
 	public ComputingAction(final Agent_ComputingAgent agent) {
 		super(agent);
 		this.agent = agent;
 
 		/* FSM: register states */
 		registerFirstState(new Behaviour(agent) {
-			/**
-			 * 
-			 */
+
 			private static final long serialVersionUID = -4607390644948524477L;
 
 			boolean cont;
 
 			@Override
 			public void action() {
-/*				
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-*/				
+			
 				resultMsg = null;
 				executeAction = null;
 				if (!getRequest()) {
 					// no task to execute
 					cont = true;
-					// block();
 					return;
 				}
 				cont = false;
@@ -348,25 +289,23 @@ public class ComputingAction extends FSMBehaviour {
 					List<DataInstances> labeledData = new ArrayList<DataInstances>();
 
 					eval = new Evaluation();
-
 					eval.setEvaluations(new ArrayList<Eval>());
 
 					Date start = null;
 					if (agent.state != Agent_ComputingAgent.States.TRAINED) {
 						start = agent.train(eval);
-					}
-					else if (!agent.resurrected && !mode.equals("test_only"))
-					{
+					
+					} else if (!agent.resurrected && !mode.equals("test_only")) {
 						start = agent.train(eval);
 					}
 					eval.setStart(start);
 
 					if (agent.state == Agent_ComputingAgent.States.TRAINED) {
-						EvaluationMethod evaluation_method = executeAction
+						EvaluationMethod evaluationMethod = executeAction
 								.getTask().getEvaluationMethod();
 
 						if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.name())) {
-							agent.evaluateCA(evaluation_method, eval);
+							agent.evaluateCA(evaluationMethod, eval);
 
 							if (output.equals(CoreConstant.Output.PREDICTION.name())) {
 								DataInstances di = new DataInstances();
@@ -422,9 +361,7 @@ public class ComputingAction extends FSMBehaviour {
 
 		// send results state
 		registerState(new OneShotBehaviour(agent) {
-			/**
-			 * 
-			 */
+
 			private static final long serialVersionUID = -7838676822707371053L;
 
 			@Override
@@ -497,8 +434,7 @@ public class ComputingAction extends FSMBehaviour {
 
 				agent.send(resultMsg);
 				
-				if (!agent.taskFIFO.isEmpty())
-				{
+				if (!agent.taskFIFO.isEmpty()) {
 					agent.executionBehaviour.restart();
 				} else {
 					agent.logFinishedTask();
@@ -532,18 +468,77 @@ public class ComputingAction extends FSMBehaviour {
 				GETLABELDATA_STATE, TRAINTEST_STATE, SENDRESULTS_STATE });
 	}
 
-	private String addTaskOutput(InOutType type, String dataType, Instances inst) {
+	/**
+	 * Resulting message: FAILURE
+	 * 
+	 * @param desc
+	 */
+	private void failureMsg(String desc) {
+		List<Eval> evaluations = new ArrayList<Eval>();
+
+		// set error_rate
+		Eval errorRateEval = new Eval();
+		errorRateEval.setName("error_rate");
+		errorRateEval.setValue(Float.MAX_VALUE);
+		evaluations.add(errorRateEval);
+
+		// set duration to max_float
+		Eval durationEval = new Eval();
+		durationEval.setName("duration");
+		durationEval.setValue(Integer.MAX_VALUE);
+		evaluations.add(durationEval);
+
+		// set start to now
+		Eval startEval = new Eval();
+		startEval.setName("start");
+		startEval.setValue(System.currentTimeMillis());
+		evaluations.add(startEval);
+
+		eval.setEvaluations(evaluations);
+		eval.setStatus(desc);
+	}
+
+	/**
+	 * Get a message from the FIFO of tasks
+	 * 
+	 * @return
+	 */
+	private boolean getRequest() {
+		if (!agent.taskFIFO.isEmpty()) {
+			incomingRequest = agent.taskFIFO.removeFirst();
+			try {
+				ContentElement content = agent.getContentManager()
+						.extractContent(incomingRequest);
+				executeAction = (ExecuteTask) ((Action) content)
+						.getAction();
+				return true;
+			} catch (CodecException ce) {
+				agent.logException(ce.getMessage(), ce);
+			} catch (OntologyException oe) {
+				agent.logException(oe.getMessage(), oe);
+			}
+		} else {
+			block();
+		}
+
+		return false;
+	}
+	
+	private String addTaskOutput(InOutType type, String dataType,
+			Instances inst) {
+		
 		if (inst != null) {
 			String md5 = agent.saveArff(inst);
 			agent.logInfo("Saved "+type+" to " + md5);
-			TaskOutput to = new TaskOutput();
-			to.setType(type);
-			to.setName(md5);
+			
+			TaskOutput taskOutput = new TaskOutput();
+			taskOutput.setType(type);
+			taskOutput.setName(md5);
 			
 			if (agent.currentTask.getOutput() == null) {
 				agent.currentTask.setOutput(new ArrayList<TaskOutput>());
 			}
-			agent.currentTask.getOutput().add(to);
+			agent.currentTask.getOutput().add(taskOutput);
 			return md5;
 		} else {
 			return null;
