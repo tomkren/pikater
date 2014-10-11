@@ -1,4 +1,4 @@
-<!-- --- title: Technical documentation - part I: Documentation of Database -->
+<!-- --- title: Technical Documentation - Part I: Documentation of Database -->
 
 [[_TOC_]]
 
@@ -38,7 +38,7 @@ The main reason we decided to change this approach was its bound to the specific
 Changes in database scheme are rare and should be less common in production environment - it's really bad practice to do major changes in a system, that is actively being used, but Pikater's production environment will be more like experimental - however, changes of scheme in the old version could lead to inconsistency between the queries and the database, that should have been tackled by massive debugging and code rewriting. 
 
 **PostgreSQL** 
-We considered three database management systems before we decided for our final choice: MySQL, PostgreSQL and HyperSLQ DB (HSQLDB). All of these DBMS have some versions that are available free of charge.  
+We considered three database management systems before we decided for our final choice: MySQL, PostgreSQL and HyperSQL DB (HSQLDB). All of these DBMS have some versions that are available free of charge.  
 The chosen DBMS must fulfilled several criteria, as follows:
 - support of multiple platforms
 - support of transactional queries
@@ -52,7 +52,7 @@ The following table shows summary about important properties of considered DBMSs
 | files (LOBs)  | yes             | yes (64TiB for all)| yes (4TiB for each file)|
 | other         | used in original project, widespread | Java  | widespread usage     |
 
-Despite the fact that MySQL supports transactional queries, we can't use this feature, beacuase transactional queries require using InnoDB engine, that is not available in the free version of MySQL.
+Despite the fact that MySQL supports transactional queries, we can't use this feature, because transactional queries require using InnoDB engine, that is not available in the free version of MySQL.
 
 Choice between HSQLDB and PostgreSQL was mainly based on their approach to binary objects. Current DBMSs support storing byte array in the fields of database records. These byte arrays are ideal place to store files. The only problem - in the way of effectiveness rather than availability - can cause the access to these byte arrays.
 PostgreSQL uses its own way to access particular byte arrays, that supports copying from and to the database with streams. Using HSQLDB we have to use setters and getters to access these records, that work with standard Java class java.lang.Object. Considering the fact, that we are planning operations with larger files, we made decision in favour of PostgreSQL.
@@ -67,13 +67,13 @@ As we mentioned before, the old version of Pikater used access to database, that
 
 The main advantage of JPA is, that objects prepared to work with JPA don't have to be changed if the underlying DBMS is changed. These prepared objects are called entities and they are recognisable by tag `@Entity` before the java class definition.
 
-### Choice of JPA connector
+### Choice of JPA Connector
 
 Decision for JPA meant, that we not just needed a database and technology to access it, but also something that connects the world of Java with the world of database. Practically, that means translation of operations in JPA to SQL queries with the same semantics. In opposite way, this is translation of results to queries to entity objects. All of these translations are tackled by some JPA connector. Choice of this connector doesn't have direct influence to the application development, except to some special features. Two most widespread JPA connectors are Hibernate and Eclipselink. We decided for Eclipselink, because it supports changing properties of the database connection from source code - not using external configuration files -, that can be useful in the future.
 
 ### Configuration
 
-Old version of Pikater used onnly file `Beans.xml` for configuration of database connection and using library Spring the object of database connection was injected into the application. This object was retrieved using function `ApplicationContext.getBean`.
+Old version of Pikater used only file `Beans.xml` for configuration of database connection and using library Spring the object of database connection was injected into the application. This object was retrieved using function `ApplicationContext.getBean`.
 
 Pikater still needs native access to the database - mainly because of existence of Postgre's Large Objects -,and this is the reason we decided to preserve file `Beans.xml` and for less painful transition we left it on its original location in the root folder of the source code.
 
@@ -144,7 +144,7 @@ When we created the structure of JPA entities, we wanted that the final table st
 
 ### PostgreSQL Specific Features
 
-#### Pestgre Large Objects
+#### Postgre Large Objects
 
 After the decision that PosgtreSQL would be the DBMS we use in Pikater, we had to implement the access to the files stored in database.
 
@@ -172,7 +172,7 @@ Users are mainly created using the web interface and these entities represent a 
 Entity of a user. Each entity having some owner is referencing an instance of this entity. It contains user's login name, their password in hashed format, e-mail address for notification mails, user's maximal priority, date and time information about creation and last login. Each user is active or suspended.  
 
 2. **JPAUserPriviledge**  
-Entity representing privileges available in system. Despite haveing priviledges hard-coded in enum `org.pikater.shared.database.jpa.PikaterPriviledge`, we decided for also creating JPA entities, because it can be useful to have privileges stored in the database. 
+Entity representing privileges available in system. Despite having privileges hard-coded in enum `org.pikater.shared.database.jpa.PikaterPriviledge`, we decided for also creating JPA entities, because it can be useful to have privileges stored in the database. 
 
 3. **JPARole**  
 Different subsets of privileges can be attached to some role, that is connected to user. 
@@ -246,9 +246,9 @@ JPQL has got syntax very similar to SQL. We can dynamically create such queries 
 
 ##### Named Queries
 
-Named queries are pre-prepared queries written in JPQL language, which are stored in entity's source code or in an external configuration file. One can say, that this is rather unflexible, but named queries can contain parameters, which can be replaced by some value during the runtime.
+Named queries are prepared queries written in JPQL language, which are stored in entity's source code or in an external configuration file. One can say, that this is rather rigid way how querying is done, but named queries can contain parameters, which can be replaced by some value during the runtime.
 
-Large portion of Pikater's queries is tackled using named queries, that can always be found in entites marked with tags `@NamedQueries` and `@NamedQuery`.
+Large portion of Pikater's queries is tackled using named queries, that can always be found in entities marked with tags `@NamedQueries` and `@NamedQuery`.
 
 The following code snippet can serve as an example how to use named queries. This query returns all `JPADataSetLO` objects that have been stored by user `:owner` :
 ```java
@@ -258,7 +258,7 @@ Object `DataSetDAO` uses function `AbstractDAO.getByTypedNamedQuery("DataSetLO.g
 
 ##### Criteria Queries
 
-Criteria API is the third way to create queries on JPA entities. While one named query must have all parameters filled, queries created by Criteria API are very flexible. The whole query can be dynamically generated during the runtime, that is very similar to create a String represenation of JPQL query, but Criteria Queries maintain full type correctness.   
+Criteria API is the third way to create queries on JPA entities. While one named query must have all parameters filled, queries created by Criteria API are very flexible. The whole query can be dynamically generated during the runtime, that is very similar to create a String representation of JPQL query, but Criteria Queries maintain full type correctness.   
 The following code snippet can serve as an example, that returns all datasets, that have hash value different from any value in the list `hashesToBeExcluded`:
 
 ```java
@@ -280,7 +280,7 @@ Queries using Criteria API were created mainly for web interface, where it is ne
 ### Notes for JPA
 
 Documentation for JPA and for annotations can be found in link above. For better clarity we add some notes to some annotations used in Pikater:
-* `@Lob` - as we mentioned before, we solved storage of large files using PostgreSQL Large Objects, but smaller files can be stored using this JPA annotation. In this case the variable containing the content of file is serialized and saved to a byte array - or other compatible type - in the database. This approach is used for saving computation models or XML documents.
-* `@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS` alebo `InheritanceType.JOINED`) - this annotation is used to mark the way tables are created for classes in inheritance tree. Setting `TABLE_PER_CLASS` implies, that each class gets its table with all - inherited and implemented in particular class -variables in the class. Setting `JOINED` implies, that only one table is created for root class and classes inherited from this root, meaning, that some values might be empty.
-* `@Enumerated(EnumType.STRING)` - for variables of type `java.lang.Enum` we can define, how their value is saved to the database. We can choose between string (`EnumType.STRING`) or ordinal (`EnumType.ORDINAL`) representation. We found string representation more robust, because later creation of a new value can't damage conditions on enum's value. Removing some item can cause exception when retrieving data for the database, which can be ommited by using `EnumType.ORDINAL`. However, this could lead to more obscure errors, when seemingly everything is fine, but the enum values are wrongly mapped.
+* `@Lob` - as we mentioned before, we solved storage of large files using PostgreSQL Large Objects, but smaller files can be stored using this JPA annotation. In this case the variable containing the content of file is serialised and saved to a byte array - or other compatible type - in the database. This approach is used for saving computation models or XML documents.
+* `@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS` or `InheritanceType.JOINED`) - this annotation is used to mark the way tables are created for classes in inheritance tree. Setting `TABLE_PER_CLASS` implies, that each class gets its table with all - inherited and implemented in particular class -variables in the class. Setting `JOINED` implies, that only one table is created for root class and classes inherited from this root, meaning, that some values might be empty.
+* `@Enumerated(EnumType.STRING)` - for variables of type `java.lang.Enum` we can define, how their value is saved to the database. We can choose between string (`EnumType.STRING`) or ordinal (`EnumType.ORDINAL`) representation. We found string representation more robust, because later creation of a new value can't damage conditions on enum's value. Removing some item can cause exception when retrieving data for the database, which can be omitted by using `EnumType.ORDINAL`. However, this could lead to more obscure errors, when seemingly everything is fine, but the enum values are wrongly mapped.
 
