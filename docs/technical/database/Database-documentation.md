@@ -262,9 +262,9 @@ Original Pikater used Spring framework to provide database credentials/connectiv
 
 #### Current
 
-Since Spring framework is not needed for the application at all, we considered removing it. Eventually, we decided to keep it, because the original Pikater's authors use it. The aforementioned `Beans.xml` file can be located in source root directory.
+Since Spring framework is not needed for the application at all, we considered removing it. Eventually, we decided to keep it, because the original Pikater's authors use it. The aforementioned `Beans.xml` file is located in the source root directory.
 
-Unlike the original authors, however, Spring framework was useless for us and we needed to develop a central statically accessed database framework built on JPA, more specifically JPA entity manager. For that reason, we implemented an object-based native access to PostgreSQL.
+For us, however, Spring framework was useless because we needed to develop a central statically accessed database framework built on JPA, more specifically JPA entity manager. For that reason, we implemented an object-based native access to PostgreSQL.
 
 Also, JPA has a configuration of its own so we needed to define a custom `persistence.xml` within `META-INF` directory, located in the source root folder. This file should at least contain a declaration of used JPA entities (java objects), e.g.:  
 ```xml
@@ -284,7 +284,7 @@ To be more precise, for every interface implemented by a particular bean, new `P
 
 For the very same reason we decided not to inject `EntityManager` (created by `EntityManagerFactory`) instances neither.
 
-To create and initialize both of the aforementioned configuration files, use may use the following command line utility:  
+To create and initialize both of the aforementioned configuration files, you may use the following command line utility:  
 `org.pikater.shared.database.util.initialisation.DatabaseInitialisation`
 
 ### PostgreSQL specifics
