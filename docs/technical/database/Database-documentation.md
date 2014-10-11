@@ -130,7 +130,7 @@ Entity representing a set of privileges for a particular user. Currently, there 
 ##### Dataset related
 
 1. **JPADataSetLO**  
-Entity representing datasets (mainly input data for experiments). Beside an OID discussed above, it also contains an MD5 hash of the dataset. While multiple instances of this entity with identical hash may be stored in database, the system will consider the underlying datasets as equal to each other (it just copies OID of the original instance to the new one), potentially using a different instance of `JPADataSetLO` than may be intended. Metadata are also very important as they allow seamless similarity comparison for two given datasets without inspecting actual content.
+Entity representing datasets (mainly input data for experiments). Beside an OID discussed above, it also contains an MD5 hash of the dataset. While multiple instances of this entity with identical hash may be stored in database, the system will consider the underlying datasets as equal to each other (it just copies OID of the original instance to the new one), so application logic may in some cases use an unintended instance of `JPADataSetLO`. Metadata are also very important as they allow seamless similarity comparison for two given datasets without inspecting actual content.
 
 2. **JPAGlobalMetaData**  
 Entity representing metadata common for all dataset types, e.g. how many entries (data rows) they contain and what kinds of attributes (columns) they define.
