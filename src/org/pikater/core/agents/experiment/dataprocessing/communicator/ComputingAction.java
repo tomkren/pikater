@@ -36,10 +36,13 @@ import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
 import weka.core.Instances;
 
+/**
+ * 
+ * Behavior which process training a testing part of Machine Learning 
+ *
+ */
 public class ComputingAction extends FSMBehaviour {
-	/**
-	 * 
-     */
+
 	private static final long serialVersionUID = 7417933314402310322L;
 
 	private static final String INIT_STATE = "Init";
@@ -63,6 +66,11 @@ public class ComputingAction extends FSMBehaviour {
 
 	private Agent_ComputingAgent agent;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param agent - computing agent
+	 */
 	public ComputingAction(final Agent_ComputingAgent agent) {
 		super(agent);
 		this.agent = agent;
@@ -246,7 +254,8 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances labelDataInstances = agent.processGetDataResponse(inform);
+				DataInstances labelDataInstances =
+						agent.processGetDataResponse(inform);
 				if (labelDataInstances != null) {
 					agent.labelFileName = labelFn;
 					agent.ontoLabel = labelDataInstances;
@@ -256,7 +265,8 @@ public class ComputingAction extends FSMBehaviour {
 					return;
 				} else {
 					next = LAST_JMP;
-					failureMsg("No label data received from the reader agent: Wrong content.");
+					failureMsg("No label data received from the reader"
+							+ "agent: Wrong content.");
 					return;
 				}
 			}
@@ -277,70 +287,38 @@ public class ComputingAction extends FSMBehaviour {
 		// Train&test&label state
 		registerState(new Behaviour(agent) {
 
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1479579948554502568L;
 
 			@Override
 			public void action() {
 				try {
 
-					List<DataInstances> labeledData = new ArrayList<DataInstances>();
+					List<DataInstances> labeledData =
+							new ArrayList<DataInstances>();
 
 					eval = new Evaluation();
 					eval.setEvaluations(new ArrayList<Eval>());
 
-					Date start = null;
+					Date startDate = null;
 					if (agent.state != Agent_ComputingAgent.States.TRAINED) {
-						start = agent.train(eval);
+						startDate = agent.train(eval);
 					
 					} else if (!agent.resurrected && !mode.equals("test_only")) {
-						start = agent.train(eval);
+						startDate = agent.train(eval);
 					}
-					eval.setStart(start);
+					eval.setStart(startDate);
 
 					if (agent.state == Agent_ComputingAgent.States.TRAINED) {
-						EvaluationMethod evaluationMethod = executeAction
-								.getTask().getEvaluationMethod();
+						EvaluationMethod evaluationMethod =
+								executeAction.getTask().getEvaluationMethod();
 
-						if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.name())) {
+						if (! mode.equals(
+								CoreConstant.Mode.TRAIN_ONLY.name())) {
 							agent.evaluateCA(evaluationMethod, eval);
 
-							if (output.equals(CoreConstant.Output.PREDICTION.name())) {
-								DataInstances di = new DataInstances();
-								di.fillWekaInstances(agent.test);
-								DataInstances labeledTest = agent
-										.getPredictions(agent.test, di);
-								labeledData.add(labeledTest);
-								// Save datasource and inform datasource
-								// manager about this particular datasource
-								AgentDataSource.SerializeFile(labeledTest,
-										resultMsg.getConversationId()
-												+ ".labeledtest");
-								AgentDataSourceCommunicator dsCom = new AgentDataSourceCommunicator(
-										(PikaterAgent) myAgent, true);
-								dsCom.registerDataSources(
-										resultMsg.getConversationId(),
-										new String[] { "labeledtest" });
-								if (!agent.labelFileName.equals("")) {
-									di = new DataInstances();
-									di.fillWekaInstances(agent.label);
-									DataInstances labeledPredictions = agent
-											.getPredictions(agent.label, di);
-									// Save datasource and inform datasource
-									// manager about this particular
-									// datasource
-									AgentDataSource.SerializeFile(
-											labeledPredictions,
-											resultMsg.getConversationId()
-													+ ".labeledpredictions");
-									dsCom.registerDataSources(
-											resultMsg.getConversationId(),
-											new String[] { "labeledpredictions" });
-									labeledData.add(labeledPredictions);
-								}
-								eval.setLabeledData(labeledData);
+							if (output.equals(
+									CoreConstant.Output.PREDICTION.name())) {
+								saveDataSource(labeledData);
 							}
 						}
 					}
@@ -352,6 +330,58 @@ public class ComputingAction extends FSMBehaviour {
 				}
 			}
 
+			/**
+			 * Save DataSources
+			 * 
+			 * @param labeledData
+			 * @throws Exception
+			 */
+			private void saveDataSource (List<DataInstances> labeledData) throws Exception {
+				
+				DataInstances dataInstance = new DataInstances();
+				dataInstance.fillWekaInstances(agent.test);
+				
+				DataInstances labeledTest =
+						agent.getPredictions(agent.test, dataInstance);
+				labeledData.add(labeledTest);
+				
+				// Save datasource and inform datasource
+				// manager about this particular datasource
+				AgentDataSource.SerializeFile(labeledTest,
+						resultMsg.getConversationId() + ".labeledtest");
+				
+				PikaterAgent pikaterAgent = (PikaterAgent) myAgent;
+				AgentDataSourceCommunicator dsCom =
+						new AgentDataSourceCommunicator(pikaterAgent, true);
+				
+				dsCom.registerDataSources(
+						resultMsg.getConversationId(),
+						new String[] { "labeledtest" });
+				
+				if (!agent.labelFileName.equals("")) {
+					dataInstance = new DataInstances();
+					dataInstance.fillWekaInstances(agent.label);
+					
+					DataInstances labeledPredictions =
+							agent.getPredictions(agent.label, dataInstance);
+					
+					// Save dataSource and inform dataSource manager about
+					// this particular DataSource
+					
+					AgentDataSource.SerializeFile(
+							labeledPredictions,
+							resultMsg.getConversationId()
+									+ ".labeledpredictions");
+					
+					dsCom.registerDataSources(
+							resultMsg.getConversationId(),
+							new String[] { "labeledpredictions" });
+					labeledData.add(labeledPredictions);
+				}
+				
+				eval.setLabeledData(labeledData);
+			}
+			
 			@Override
 			public boolean done() {
 				return (agent.state == Agent_ComputingAgent.States.TRAINED)

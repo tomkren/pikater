@@ -198,8 +198,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {
         //TODO: get rid of this, probable te information will be taken form somewhere else
-        if (true)
-        {
+        if (true) {
             return;
         }
 		// Prepare the subscription message to the request originator
@@ -240,7 +239,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	public List<AID> getAgentByType(String agentType, int n) {
 		
-		List<AID> Agents = new ArrayList<AID>(); // List of AIDs
+		List<AID> Agents = new ArrayList<AID>();
 		
 		// Make the list of agents of given type
 		DFAgentDescription template = new DFAgentDescription();

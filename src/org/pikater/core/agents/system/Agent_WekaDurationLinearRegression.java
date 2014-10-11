@@ -6,6 +6,12 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingCommunicator;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
+/**
+ * 
+ * Computing agent used for a performance measuring,
+ * solves a Linear Regression Task
+ *
+ */
 public class Agent_WekaDurationLinearRegression extends
 		Agent_WekaLinearRegression {
 	
