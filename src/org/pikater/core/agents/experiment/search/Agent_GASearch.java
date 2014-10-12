@@ -15,30 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
+/**
+ * Implementation of Genetic algorithm search.
+ * Half uniform crossover, tournament selection.
+ * <p>
+ * Options:
+ * <ul>
+ *  <li>-E float    Minimum error rate (default 0.1)
+ *  <li>-M int      Maximum number of generations (default 10)
+ *  <li>-T float    Mutation rate (default 0.2)
+ *  <li>-X float    Crossover probability (default 0.5)
+ *  <li>-P int      Population size (default 5)
+ *  <li>-S int      Size of tournament in selection (default 2)
+ * </ul> 
+ */
 public class Agent_GASearch extends Agent_Search {
-	/*
-	 * Implementation of Genetic algorithm search
-	 * Half uniform crossover, tournament selection
-	 * Options:
-	 * -E float
-	 * minimum error rate (default 0.1)
-	 * 
-	 * -M int 
-	 * maximal number of generations (default 10)
-	 * 
-	 * -T float
-	 * Mutation rate (default 0.2)
-	 * 
-	 * -X float
-	 * Crossover probability (default 0.5)
-	 * 
-	 * -P int
-	 * population size (default 5)
-	 * 
-	 * -S int
-	 * Size of tournament in selection (default 2)
-	 */
+	
 	private ArrayList<SearchSolution> population;
 	//fitness is the error rate - the lower, the better!
 	float[] fitnesses;
@@ -53,9 +45,6 @@ public class Agent_GASearch extends Agent_Search {
 	int tournamentSize = 2;
 	protected Random rndGen = new Random(1);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -387458001824777077L;
 	
 	
@@ -70,6 +59,13 @@ public class Agent_GASearch extends Agent_Search {
 		return GASearch_Box.get();
 	}
 
+
+	/**
+	 * @return	<code>true</code> if the current best error_rate is lower
+	 * 			than the set threshold, or if the maximum number
+	 *			of generations has been exceeded, 
+	 *			<code>false</code> otherwise. 
+	 */
 	@Override
 	protected boolean isFinished() {
 		//number of generation, best error rate
@@ -84,6 +80,19 @@ public class Agent_GASearch extends Agent_Search {
 
 	}
 	
+	/**
+	 * Generates a new population of the given size (for the first time), 
+	 * or uses the individuals from the old population to create a new one.
+	 * <p>
+	 * Uses a selection {@link selectIndividual} with 
+	 * elitism (the single best individual is kept), 
+	 * mutation {@link mutateIndividual} 
+	 * and crossover {@link xoverIndividuals}.
+	 * 
+	 * @param solutions     last solutions
+	 * @param evaluations   last evaluations of above solutions
+	 * @return              new solutions
+	 */
 	@Override
 	protected List<SearchSolution> generateNewSolutions(
 			List<SearchSolution> solutions, float[][] evaluations) {
@@ -144,9 +153,13 @@ public class Agent_GASearch extends Agent_Search {
 		return population;
 	}
 
+	/**
+	 * Assigns evaluations to the population as fitnesses.
+	 * 
+	 * @return   The best (minimum) fitness in the current population. 
+	 */
 	@Override
-	protected float updateFinished(float[][] evaluations) {
-		//assign evaluations to the population as fitnesses		
+	protected float updateFinished(float[][] evaluations) {				
 		if(evaluations == null){
 			for(int i = 0; i < popSize; i++){
 				fitnesses[i]=1;
@@ -165,6 +178,20 @@ public class Agent_GASearch extends Agent_Search {
 		return (float) bestErrorRate;
 	}
 
+	
+	/**
+	 * Loads the parameters of the genetic algorithm search from its options.
+	 * If the options are not set, sets the values to defaults:
+	 * 
+	 *  <ul>
+	 *	 <li>popSize = 5 ... the same as queryBlockSize
+	 *	 <li>mutProb = 0.2
+	 *	 <li>xoverProb = 0.5
+	 *	 <li>maximumGenerations = 10
+	 *	 <li>finalErrorRate = 0.1
+	 *	 <li>tournamentSize = 2
+	 *  </ul>
+	 */	
 	@Override
 	protected void loadSearchOptions() {
 		popSize = 5;
@@ -218,7 +245,9 @@ public class Agent_GASearch extends Agent_Search {
 
 	}
 
-	//new random options
+	/**
+	 * Generates a new random options.
+	 */
 	private SearchSolution randomIndividual() {
 		
 		List<IValueData> newSolution = new ArrayList<IValueData>();
@@ -231,7 +260,11 @@ public class Agent_GASearch extends Agent_Search {
 		return res_sol;
 	}
 	
-	//tournament selection (minimization)
+	/**
+	 * Tournament selection (minimization).
+	 * 
+	 * @return   the best SearchSolution in the population.
+	 */
 	private SearchSolution selectIndividual(){
 		float best_fit = Float.MAX_VALUE;
 		int bestIndex = -1;
@@ -246,7 +279,15 @@ public class Agent_GASearch extends Agent_Search {
 		return (SearchSolution) population.get(bestIndex);
 	}
 	
-	//Half uniform crossover
+	/**
+	 * Crossover of the sol1 an sol2 solutions. Changes the given solutions.
+	 * Half uniform crossover.
+	 * 
+	 * @param sol1  solution 1 to be x-overed
+	 * @param sol2  solution 2 to be x-overed
+	 * 
+	 */
+
 	private void xoverIndividuals(SearchSolution sol1, SearchSolution sol2) {
 		List<IValueData> newSolution1 = new ArrayList<IValueData>();
 		List<IValueData> newSolution2 = new ArrayList<IValueData>();
@@ -268,7 +309,11 @@ public class Agent_GASearch extends Agent_Search {
 		sol2.setValues(newSolution2);
 	}
 	
-	//mutation of the option
+	/** 
+	 * Mutation of the option. Changes the given solution.
+	 * 
+	 * @param solution     a solution to be mutated.
+	 */
 	private void mutateIndividual(SearchSolution solution){
 		
 		List<IValueData> newSolution = new ArrayList<IValueData>();
@@ -284,7 +329,12 @@ public class Agent_GASearch extends Agent_Search {
 	}
 	
 	
-	//Clone options
+	/**
+	 * Clone options.
+	 * 
+	 * @param solution   a solution to be cloned.
+	 * @return           a cloned solution.
+	 */
 	private SearchSolution cloneSolution(SearchSolution solution){
 		List<IValueData> newSolution = solution.getValues();
 		SearchSolution resSolution = new SearchSolution();

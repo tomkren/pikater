@@ -14,6 +14,15 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.search.RandomSearch_Box;
 
+/**
+ * Implementation of Random search.
+ * <p>
+ * Options:
+ * <ul>
+ *   <li>-E float   Minimum error rate (default 0.1)
+ *   <li>-M int     Maximum number of generations (default 10)
+ * </ul>  
+ */
 public class Agent_RandomSearch extends Agent_Search {
 
 	private static final long serialVersionUID = 2777277001533605329L;
@@ -36,6 +45,12 @@ public class Agent_RandomSearch extends Agent_Search {
 		return RandomSearch_Box.get();
 	}
 
+	/**
+	 * @return	<code>true</code> if the current error_rate is lower
+	 * 			than the set threshold, or if the maximum number
+	 *			of tries has been exceeded, 
+	 *			<code>false</code> otherwise. 
+	 */
 	@Override
 	protected boolean isFinished() {
 		if (numberOfTries >= maximumTries) {
@@ -48,6 +63,15 @@ public class Agent_RandomSearch extends Agent_Search {
 		return false;
 	}
 
+	/**
+	 * Loads the parameters of random search from search's options.
+	 * If the options are not set, sets the values to defaults:
+	 * 
+	 *  <ul>
+	 *	 <li>maximumTries = 10;
+	 *   <li>finalErrorRate = 0.01;
+	 *  </ul>
+	 */
 	@Override
 	protected void loadSearchOptions(){
 		
@@ -92,8 +116,12 @@ public class Agent_RandomSearch extends Agent_Search {
 		return errorRate;
 	}
 	
+	/**
+	 * Goes through the solutions list, generates random values.
+	 * 
+	 * @return SearchSolution   a new random solution to try.
+	 */
 	private SearchSolution genRandomSolution(){
-		// go through the solutions Vector, generate random values
 		List<IValueData> new_solution = new ArrayList<IValueData>();
         List<String> names = new ArrayList<String>();
 		for (SearchItem si : getSchema() ) {
@@ -105,6 +133,15 @@ public class Agent_RandomSearch extends Agent_Search {
 		return sol;
 	}
 		
+	
+	/**
+	 * Generates a list of new random solutions. 
+	 * The size of the list (number of solutions) is the queryBlockSize.
+	 * 
+	 * @param solutions     last solutions
+	 * @param evaluations   last evaluations of above solutions
+	 * @return              a list of newly generated solutions.
+	 */
 	@Override
 	protected List<SearchSolution> generateNewSolutions(
 			List<SearchSolution> solutions, float[][] evaluations) {

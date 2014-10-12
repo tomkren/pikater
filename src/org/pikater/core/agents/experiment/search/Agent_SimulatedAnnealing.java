@@ -14,22 +14,19 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.search.SimulatedAnnealing_Box;
 
+/**
+ * Implementation of Simulated Annealing search.
+ * <p>
+ * Options:
+ * <ul>
+ *   <li>-E float   Minimum error rate (default 0.1)
+ *   <li>-M int     Maximum number of generations (default 10)
+ *   <li>-T float   Initial temperature (default 1.0)
+ *   <li>-S float   Stability of generation of new option - probability of keeping an option (default 0.5)
+ * </ul>  
+ */
 public class Agent_SimulatedAnnealing extends Agent_Search {
-	/*
-	 * Implementation of Simulated Annealing search
-	 * Options:
-	 * -E float
-	 * minimum error rate (default 0.1)
-	 * 
-	 * -M int 
-	 * maximal number of generations (default 10)
-	 * 
-	 * -T float
-	 * Initial temperature (default 1.0)
-	 * 
-	 * -S float
-	 * Stability of generation of new option - probability of keeping of option (default 0.5)
-	 */
+
 	private static final long serialVersionUID = -5087231723984887596L;
 
 	private SearchSolution solution = null;
@@ -43,18 +40,26 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	private double finalErrorRate = 0.1;
 	private boolean minimization = true;
 	protected Random rndGen = new Random(1);
-
+	
 	@Override
 	protected String getAgentType() {
+
 		return "SimulatedAnnealing";
 	}
-	
+
 	@Override
 	protected AgentInfo getAgentInfo() {
 
 		return SimulatedAnnealing_Box.get();
 	}
 
+	
+	/**
+	 * @return	<code>true</code> if the current error_rate is lower
+	 * 			than the set threshold, or if the maximum number
+	 *			of tries has been exceeded, 
+	 *			<code>false</code> otherwise. 
+	 */
 	@Override
 	protected boolean isFinished() {
 		//n>=nmax
@@ -67,7 +72,17 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		return false;
 	}
 	
-
+	/**
+	 * Loads the parameters of annealing from search's options.
+	 * If the options are not set, sets the values to defaults:
+	 * 
+	 *  <ul>
+	 *   <li>temperature = 1.0;
+	 *	 <li>maximumTries = 50;
+	 *   <li>stability = 0.5;
+	 *   <li>finalErrorRate = 0.01;
+	 *  </ul>
+	 */	
 	@Override
 	protected void loadSearchOptions() {
 		temperature = 1.0;
@@ -99,6 +114,10 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		
 	}
 
+	/**
+	 * Generates a new solution (uses the {@link neighbor} method).
+	 * If it is the first solution to generate, initialize the search first.
+	 */	
 	@Override
 	protected List<SearchSolution> generateNewSolutions(
 			List<SearchSolution> solutions, float[][] evaluations) {
@@ -161,7 +180,8 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	}
 	
 	/**
-	 * Random solutions in case of beginning, or mutation of existing
+	 * Generates random solutions in the beginning,
+	 * or changes the existing solution.
 	 * 
 	 */
 	private SearchSolution neighbor(SearchSolution solution) {
@@ -195,9 +215,10 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	
 	/**
 	 * Acceptance probability of annealed solutions
-	 *   -the better values are accepted
-	 *   -the worse with probability exp((e-e_new)/temperature)
-	 *   
+	 *   <ul>
+	 *     <li>best values are always accepted
+	 *     <li>worse with probability exp((e-e_new)/temperature)
+	 *   </ul>
 	 */
 	private double acceptanceProb(double delta, double temperature){
 		
@@ -217,7 +238,6 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 			} else {
 				return Math.exp(-delta/temperature);
 			}
-
 		}
 	}
 	
