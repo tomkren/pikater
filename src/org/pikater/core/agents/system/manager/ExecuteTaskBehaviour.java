@@ -35,15 +35,15 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
     /**
      * Constructor
      * 
-     * @param a Owning manager
-     * @param req Request to send
+     * @param agent Owning manager
+     * @param request Request to send
      * @param msg Original request message
      * @param node Computation node with the behavior
      */
-	public ExecuteTaskBehaviour(Agent_Manager a, ACLMessage req,
+	public ExecuteTaskBehaviour(Agent_Manager agent, ACLMessage request,
                                 ACLMessage msg, ModelComputationNode node) {
-		super(a, req);
-		myAgent = a;
+		super(agent, request);
+		myAgent = agent;
         this.msg = msg;
         this.node = node;
         node.increaseNumberOfOutstandingTask();

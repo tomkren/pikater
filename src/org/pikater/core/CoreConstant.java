@@ -10,7 +10,8 @@ public class CoreConstant {
 	/**
 	 * Private constructors hide the public ones.
 	 */
-	private CoreConstant()  {}
+	private CoreConstant()  {
+	}
 	
 	/**
 	 * 

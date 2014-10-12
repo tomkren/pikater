@@ -154,7 +154,7 @@ public class Agent_Duration extends PikaterAgent {
                         Duration duration = sd.getDuration();
                         durations.add(duration);
  
-                        duration.setLR_duration(
+                        duration.setdurationLR(
                         		countDuration(
                         				duration.getStart(),
                         				duration.getDurationMiliseconds()));

@@ -15,18 +15,26 @@ import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-public class OptionsHelper
-{
-	public static List<NewOption> getCAOptions()
-	{
+/**
+ * 
+ * Abstract class which helps with the definition of options in the new Box.
+ *
+ */
+public class OptionsHelper {
+	
+	/**
+	 * Get the options for the Computing Agent
+	 * @return
+	 */
+	public static List<NewOption> getCAOptions() {
 		List<NewOption> options = OptionsHelper.getNotSpecifiedCAOptions();
 		
 		Value defaultValue = new Value(new NullValue());
 		
 		NewOption optModel = new NewOption(CoreConstant.MODEL, defaultValue, 
 				defaultValue.getType(),
-				new ValueType(new IntegerValue(-1), // WEB requires -1
-						new RangeRestriction(new IntegerValue(-1), null)) // WEB requires -1
+				new ValueType(new IntegerValue(-1),
+						new RangeRestriction(new IntegerValue(-1), null))
 		);
 
 		options.add(optModel);
@@ -34,6 +42,10 @@ public class OptionsHelper
 		return options;
 	}
 	
+	/**
+	 * Get the options for the non-specific Computing Agent
+	 * @return
+	 */
 	public static List<NewOption> getNotSpecifiedCAOptions() {
 
 		List<IValueData> durationValues = new ArrayList<IValueData>();
@@ -50,9 +62,12 @@ public class OptionsHelper
 				new SetRestriction(false, durationValues));
 		
 		List<IValueData> modeValues = new ArrayList<IValueData>();
-		modeValues.add(new StringValue(CoreConstant.Mode.TRAIN_ONLY.name()));
-		modeValues.add(new StringValue(CoreConstant.Mode.TEST_ONLY.name()));
-		modeValues.add(new StringValue(CoreConstant.Mode.TRAIN_TEST.name()));
+		modeValues.add(
+				new StringValue(CoreConstant.Mode.TRAIN_ONLY.name()));
+		modeValues.add(
+				new StringValue(CoreConstant.Mode.TEST_ONLY.name()));
+		modeValues.add(
+				new StringValue(CoreConstant.Mode.TRAIN_TEST.name()));
 
 		NewOption optMode = new NewOption(
 				CoreConstant.Mode.DEFAULT.name(),
@@ -61,8 +76,10 @@ public class OptionsHelper
 		
 		
 		List<IValueData> outputValues = new ArrayList<IValueData>();
-		outputValues.add(new StringValue(CoreConstant.Output.EVALUATION_ONLY.name()));
-		outputValues.add(new StringValue(CoreConstant.Output.PREDICTION.name()));
+		outputValues.add(
+				new StringValue(CoreConstant.Output.EVALUATION_ONLY.name()));
+		outputValues.add(
+				new StringValue(CoreConstant.Output.PREDICTION.name()));
 
 		NewOption optOutput = new NewOption(
 				CoreConstant.Output.DEFAULT.name(),

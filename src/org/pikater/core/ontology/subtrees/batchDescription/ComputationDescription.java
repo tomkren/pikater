@@ -22,7 +22,10 @@ import org.pikater.shared.util.collections.CollectionUtils;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * Created by Martin Pilat on 28.12.13.
+ * Represents one Batch
+ * 
+ * @author Martin Pilat
+ * @date 28.12.13.
  */
 public class ComputationDescription implements Concept {
 
@@ -32,14 +35,25 @@ public class ComputationDescription implements Concept {
 
 	private List<FileDataSaver> rootElements;
 	
+	/**
+	 * Constructor
+	 */
 	public ComputationDescription() {
 		this.globalOptions = new ArrayList<NewOption>();
 		this.rootElements = new ArrayList<FileDataSaver>();
 	}
 
+	/**
+	 * Get the global options
+	 * @return
+	 */
 	public List<NewOption> getGlobalOptions() {
 		return globalOptions;
 	}
+	/**
+	 * Set the global Options
+	 * @param globalOptions
+	 */
 	public void setGlobalOptions(List<NewOption> globalOptions) {
 		if (globalOptions == null) {
 			throw new IllegalArgumentException(
@@ -48,9 +62,17 @@ public class ComputationDescription implements Concept {
 		this.globalOptions = globalOptions;
 	}
 
+	/**
+	 * Get the root elements - {@link FileSaver}
+	 * @return
+	 */
 	public List<FileDataSaver> getRootElements() {
 		return rootElements;
 	}
+	/**
+	 * Set the root elements - {@link FileSaver}
+	 * @param rootElements
+	 */
 	public void setRootElements(List<FileDataSaver> rootElements) {
 		
 		if (rootElements == null) {
@@ -59,6 +81,10 @@ public class ComputationDescription implements Concept {
 		}
 		this.rootElements = rootElements;
 	}
+	/**
+	 * Add the root element - {@link FileSaver}
+	 * @param rootElement
+	 */
 	public void addRootElement(FileDataSaver rootElement) {
 		
 		if (rootElement == null) {
@@ -68,6 +94,9 @@ public class ComputationDescription implements Concept {
 		this.rootElements.add(rootElement);
 	}
 
+	/**
+	 * Generate IDs for all elements
+	 */
 	public void generateIDs() {
 		
 		List<IComputationElement> fifo = new ArrayList<IComputationElement>();
@@ -93,11 +122,20 @@ public class ComputationDescription implements Concept {
 
 	}
 	
-	private List<IComputationElement> notNullElements(IComputationElement dataProcessing) {
+	/**
+	 * Get the not null elements
+	 * @param dataProcessing
+	 * @return
+	 */
+	private List<IComputationElement> notNullElements(
+			IComputationElement dataProcessing) {
 		
-		List<IComputationElement> elements = new ArrayList<IComputationElement>();
+		List<IComputationElement> elements =
+				new ArrayList<IComputationElement>();
 		
-		List<ISourceDescription> sources = new ArrayList<ISourceDescription>();
+		List<ISourceDescription> sources =
+				new ArrayList<ISourceDescription>();
+		
 		sources.addAll(dataProcessing.exportAllDataSourceDescriptions());
 		sources.addAll(dataProcessing.exportAllErrors());
 		
@@ -138,13 +176,21 @@ public class ComputationDescription implements Concept {
 
 	}
 	
-	public UniversalComputationDescription exportUniversalComputationDescription()
-	{
+	/**
+	 * Exports the {@link UniversalComputationDescription}
+	 * @return
+	 */
+	public UniversalComputationDescription exportUniversalComputationDescription() {
+		
 		generateIDs();
 		gene();
+				
+		HashSet<NewOption> hashSet = new HashSet<NewOption>(
+				CollectionUtils.deepCopy(getGlobalOptions()));
 		
-		UniversalComputationDescription uModel = new UniversalComputationDescription();
-		uModel.addGlobalOptions(new HashSet<NewOption>(CollectionUtils.deepCopy(getGlobalOptions())));
+		UniversalComputationDescription uModel =
+				new UniversalComputationDescription();
+		uModel.addGlobalOptions(hashSet);
 		
 		// map - id x ontology
 		Map<Integer, UniversalOntology> finishedtUniOntologys =
@@ -168,7 +214,8 @@ public class ComputationDescription implements Concept {
 				continue;
 			}
 			
-			if (! finishedDataProcessings.containsKey(dataProcessing.getId()) ) {
+			if (! finishedDataProcessings.containsKey(
+					dataProcessing.getId()) ) {
 				
 				UniversalOntology uOntology =
 						dataProcessing.exportUniversalOntology();
@@ -178,7 +225,8 @@ public class ComputationDescription implements Concept {
 				finishedDataProcessings.put(
 						dataProcessing.getId(), dataProcessing);
 				
-				for (DataSourceDescription descrI : dataProcessing.exportAllDataSourceDescriptions()) {
+				for (DataSourceDescription descrI :
+						dataProcessing.exportAllDataSourceDescriptions()) {
 					fifo.add( descrI.getDataProvider());
 				}
 			}
@@ -229,6 +277,11 @@ public class ComputationDescription implements Concept {
 		return uModel;
 	}
 
+	/**
+	 * Imports the {@link UniversalComputationDescription}
+	 * @param uDescription
+	 * @return
+	 */
 	public static ComputationDescription importUniversalComputationDescription(
 			UniversalComputationDescription uDescription) {
 
@@ -265,7 +318,8 @@ public class ComputationDescription implements Concept {
 				finishedDataProcessings.put(
 						uOntology.getId(), ontology);
 				
-				for (UniversalConnector connectorI : uElement.getOntologyInfo().getInputDataSlots()) {
+				for (UniversalConnector connectorI :
+					uElement.getOntologyInfo().getInputDataSlots()) {
 					fifo.add( connectorI.getFromElement());
 				}
 			}
@@ -274,17 +328,21 @@ public class ComputationDescription implements Concept {
 		// connecting to graph
 		for ( Integer keyI : finishedDataProcessings.keySet()) {
 
-			DataProcessing processI = (DataProcessing) finishedDataProcessings.get(keyI);
+			DataProcessing processI = (DataProcessing)
+					finishedDataProcessings.get(keyI);
 			UniversalOntology uOntoI = finishedtUniOntologys.get(keyI);
 			
-			List<DataSourceDescription> inputDataSources = new ArrayList<DataSourceDescription>();
-			List<ErrorSourceDescription> inputErrorSources = new ArrayList<ErrorSourceDescription>();
+			List<DataSourceDescription> inputDataSources =
+					new ArrayList<DataSourceDescription>();
+			List<ErrorSourceDescription> inputErrorSources =
+					new ArrayList<ErrorSourceDescription>();
 			
 			for (UniversalConnector slotIJ : uOntoI.getInputDataSlots()) {
 				
 				UniversalElement uElement = slotIJ.getFromElement();
+				int uElementID = uElement.getOntologyInfo().getId();
 				IDataProvider dataProvider =  (IDataProvider)
-						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
+						finishedDataProcessings.get(uElementID);
 				
 				DataSourceDescription dataSourceDesc = new DataSourceDescription();
 				dataSourceDesc.setInputType(slotIJ.getInputDataIdentifier());
@@ -292,14 +350,6 @@ public class ComputationDescription implements Concept {
 				dataSourceDesc.importSource(dataProvider);
 				
 				inputDataSources.add(dataSourceDesc);
-				
-				// TODO:
-				/*
-				if(slotIJ.isFullySpecified())
-				{
-					
-				}
-				*/
 			}
 
 			for (UniversalConnector slotIJ : uOntoI.getInputErrorSlots()) {
@@ -327,6 +377,10 @@ public class ComputationDescription implements Concept {
 		return description;
 	}
 
+	/**
+	 * Exports to the XML String
+	 * @return
+	 */
 	public String exportXML() {
 
 		generateIDs();
@@ -344,6 +398,11 @@ public class ComputationDescription implements Concept {
 		return xstream.toXML(this);
 	}
 
+	/**
+	 * Exports structure as the XML String to the file
+	 * @param fileName
+	 * @throws FileNotFoundException
+	 */
 	public void exportXML(String fileName) throws FileNotFoundException {
 
 		String xml = exportXML();
@@ -353,6 +412,12 @@ public class ComputationDescription implements Concept {
 		file.close();
 	}
 
+	/**
+	 * Import the {@link ComputationDescription} from the file
+	 * @param file
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static ComputationDescription importXML(File file)
 			throws FileNotFoundException {
 
@@ -363,6 +428,11 @@ public class ComputationDescription implements Concept {
 		return importXML(xml);
 	}
 	
+	/**
+	 * Import the {@link ComputationDescription} from the String
+	 * @param xml
+	 * @return
+	 */
 	public static ComputationDescription importXML(String xml) {
 
 		XStream xstream = new XStream();

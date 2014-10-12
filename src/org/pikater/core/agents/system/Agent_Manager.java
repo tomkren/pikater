@@ -182,12 +182,13 @@ public class Agent_Manager extends PikaterAgent {
 				searchMessages.put(query.getConversationId(), query);				
 				
 				try {
-					ContentElement content = getContentManager().extractContent(query);
+					ContentElement content =
+							getContentManager().extractContent(query);
 					Concept action = ((Action) content).getAction();
 					
 					if (action instanceof ExecuteParameters) {
 						// manager received new options from search to execute
-						ExecuteParameters ep = (ExecuteParameters) (((Action) content).getAction());
+						ExecuteParameters ep = (ExecuteParameters) action;
 
 						// => fill CA's queue
 						String[] ids = query.getConversationId().split("_");
@@ -196,9 +197,9 @@ public class Agent_Manager extends PikaterAgent {
 						int computationId = Integer.parseInt(ids[2]);
 											
 						SearchComputationNode searchNode = 
-								(SearchComputationNode) computationCollection.get(batchID)
-									.getProblemGraph().getNode(nodeId); 
-
+								(SearchComputationNode) computationCollection
+								.get(batchID).getProblemGraph()
+								.getNode(nodeId); 
 
                         for (SearchSolution searchSolutionI : ep.getSolutions()) {
                             SolutionEdge se = new SolutionEdge();
@@ -209,6 +210,7 @@ public class Agent_Manager extends PikaterAgent {
 				    } else {
 						logSevere("unknown message received.");
 					}
+					
 				} catch (UngroundedException e1) {
 					logException(e1.getMessage(), e1);
 				} catch (CodecException e1) {
@@ -251,6 +253,7 @@ public class Agent_Manager extends PikaterAgent {
 		
 		// copy content of inform message to a subscription
 		try {
+			@SuppressWarnings("unused")
             ContentElement content = getContentManager().extractContent(result);
 
 			//getContentManager().fillContent(msgOut, content );

@@ -10,17 +10,22 @@ import jade.content.AgentAction;
  */
 public class GetUser implements AgentAction {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4116937510862858239L;
 
 	private int userID;
 
+	/**
+	 * Get the {@link User} ID
+	 * @return
+	 */
 	public int getUserID() {
 		return userID;
 	}
 
+	/**
+	 * Set the {@link User} ID
+	 * @param userID
+	 */
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}
