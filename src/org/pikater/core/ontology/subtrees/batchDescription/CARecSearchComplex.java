@@ -200,8 +200,10 @@ public class CARecSearchComplex extends DataProcessing implements
 			List<DataSourceDescription> dataSourceDescriptions) {
 		
 		String searchSlot = CoreConstant.SlotContent.SEARCH.getSlotName();
-		String recommenderSlot = CoreConstant.SlotContent.RECOMMEND.getSlotName();
-		String comAgentSlot = CoreConstant.SlotContent.RECOMMEND.getSlotName();
+		String recommenderSlot =
+				CoreConstant.SlotContent.RECOMMEND.getSlotName();
+		String comAgentSlot =
+				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName();
 		
 		for (DataSourceDescription slotI : dataSourceDescriptions) {
 			

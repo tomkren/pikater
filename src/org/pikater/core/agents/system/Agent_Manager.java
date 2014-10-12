@@ -292,7 +292,8 @@ public class Agent_Manager extends PikaterAgent {
 			}
 		}
 		
-	} // end sendSubscription
+	}
+	// end sendSubscription
 	
 	
 	/**
@@ -317,7 +318,8 @@ public class Agent_Manager extends PikaterAgent {
 	 */
 	public List<AID> getAgentByType(String agentType, int n) {
 		
-		List<AID> Agents = new ArrayList<AID>(); // List of AIDs
+		// List of AIDs
+		List<AID> Agents = new ArrayList<AID>();
 		
 		// Make the list of agents of given type
 		DFAgentDescription template = new DFAgentDescription();
@@ -347,5 +349,6 @@ public class Agent_Manager extends PikaterAgent {
 		
 		return Agents;
 		
-	} // end getAgentByType
+	}
+	// end getAgentByType
 }
