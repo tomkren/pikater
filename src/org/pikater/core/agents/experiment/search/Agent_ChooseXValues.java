@@ -12,10 +12,15 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.search.ChooseXValue_Box;
 
-/*
+/**
+ * Implementation of simple tabulation search of the parameter space.
+ * Uses the uniform distribution in the given interval for all provided 
+ * (mutable) parameters.
  * 
- * Implementation of simple tabulation of solutions
+ * It tries all possible combinations of the generated parameters values.
  * 
+ * Options:
+ * -N number of values to try. 
  */
 public class Agent_ChooseXValues extends Agent_Search {
 
@@ -37,6 +42,10 @@ public class Agent_ChooseXValues extends Agent_Search {
 		return ChooseXValue_Box.get();
 	}
 
+	/**
+	 * @return   <code>true</code> if there are no more values to be generated,
+	 *           <code>false</code> otherwise.
+	 */
 	@Override
 	protected boolean isFinished() {
 		if (ni < n) {
@@ -46,9 +55,8 @@ public class Agent_ChooseXValues extends Agent_Search {
 		}
 	}
 
-
 	/**
-	 * Generate solution
+	 * Recursive method for generating all possible combinations of solutions.
 	 * 
 	 */
 	private void generate(List<IValueData> curSolutionPart,
@@ -87,8 +95,8 @@ public class Agent_ChooseXValues extends Agent_Search {
 	}
 
 	/**
-	 * Generate solutions
-	 * 
+	 * Starts to generate solutions 
+	 * (uses the recursive method {@link generate}). 
 	 */
 	private void generateSolutionsList(List<SearchItem> schema) {
 		List<List<IValueData>> possibleSolutions =
@@ -104,6 +112,12 @@ public class Agent_ChooseXValues extends Agent_Search {
 		n = solutionsList.size();
 	}
 
+	
+	/**
+	 * Returns all generated solutions at once.
+	 * (Doesn't use input parameters, as there is no need to 
+	 * check the results of the previous solutions.)
+	 */
 	@Override
 	protected List<SearchSolution> generateNewSolutions(
 			List<SearchSolution> solutions, float[][] evaluations) {
@@ -111,15 +125,16 @@ public class Agent_ChooseXValues extends Agent_Search {
 		if (n == 0) {
 			return new ArrayList<SearchSolution>();
 		}
-		/*SearchSolution new_solution = (SearchSolution)solutions_list.get(ni++);
-		new ArrayList();
-		res_solutions.add(new_solution);*/
 		ni += n;
 		
 		return solutionsList;
 	}
 
 
+	/**
+	 * Loads the parameters of ChooseXValues search from its options.
+	 * Initializes the search.
+	 */	
 	@Override
 	protected void loadSearchOptions() {
 		
@@ -140,6 +155,10 @@ public class Agent_ChooseXValues extends Agent_Search {
 		queryBlockSize = n;
 	}
 
+	/**
+	 * Does not use the input parameter.
+	 * Never finishes until all possible values are tried. 
+	 */
 	@Override	
 	protected float updateFinished(float[][] evaluations) {
 		return 1;

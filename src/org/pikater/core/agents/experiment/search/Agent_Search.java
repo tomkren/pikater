@@ -7,6 +7,7 @@ import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.SearchOntology;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
@@ -46,18 +47,46 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	private Codec codec = new SLCodec();
 	private Ontology ontology = SearchOntology.getInstance();
 	
-	protected int query_block_size = 1;	
+	protected int queryBlockSize = 1;	
 
 	private String conversationID;	
-	private List<NewOption> search_options = null;
+	private List<NewOption> searchOptions = null;
 	private List<SearchItem> schema = null;
 	
+	/**
+	 * Generates new solutions according to the parameters space search type.
+	 * 
+	 * @param solutions     last solutions
+	 * @param evaluations   last evaluations of above solutions
+	 * @return              new solutions
+	 */
+	
 	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
-	protected abstract boolean finished();
+	
+	/**
+	 * 
+	 * @return <code>true</code> if the search of parmeters is finished, 
+	 *         <code>false</code> otherwise 
+	 */
+	protected abstract boolean isFinished();
+		
+	/**
+	 *  Checks the evaluations and searches for the best
+	 *  error_rate.
+	 *  
+	 *  @returns best error rate so far.
+	 */
 	protected abstract float updateFinished(float[][] evaluations);
-	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
-	
-	
+		
+	/**
+	 * Loads the appropriate options of the specific search agent 
+	 * before sending the first parameters.
+	 */
+	protected abstract void loadSearchOptions(); 
+		
+    /**
+     * Returns list of ontologies that are used by the specific search agent.
+     */
 	@Override
 	public java.util.List<Ontology> getOntologies() {
 			
@@ -69,6 +98,16 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		return ontologies;
 	}
 	
+	
+	/**
+	 * Initializes Agent_Manager agent.
+	 * <p>
+	 * Registers the search agent with yellow pages and starts its behaviours:
+	 *   <ul>
+	 *     <li>RequestServer behaviour that deals with requests from manager agent
+	 *     <li>addAgentInfoBehaviour
+	 *   </ul>     
+	 */
 	protected void setup() {
 
 		initDefault();
@@ -82,31 +121,44 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	} // end setup()
 
 	
+	/**
+	 * Returns a schema (a list of {@link SearchItem}s) that is worked with in
+	 * search agents. 
+	 * 
+	 * @return a schema or an empty list.
+	 */
 	protected List<SearchItem> getSchema() {
 		if(schema != null) {
 			return schema;
 		} else {
 			return new ArrayList<SearchItem>();
-		}
-		
+		}		
 	}
-	protected List<NewOption> getSearchOptions() {
+	
+	
+	/**
+	 * Returns options of the search agent itself.
+	 * 
+	 * @return option list or an empty list.
+	 */
+	protected NewOptions getSearchOptions() {
 
-		if(search_options != null) {
-			return search_options;
+		if(searchOptions != null) {
+			return new NewOptions(searchOptions);
 		} else {
-			return new ArrayList<NewOption>();
+			return new NewOptions();
 		}
 	}
 	
+	
 	/**
-	 * Converts List of Evals to an array of values (used when dealing 
+	 * Converts List of {@link Eval}s to an array of values (used when dealing 
 	 * with fitness function) 
 	 * - at the moment only error rate, root mean squared error 
 	 * and kappa statistic.
 	 *
 	 * @param named_evals
-	 * @return				array of values without names (in a fixed order)
+	 * @return array of values without names (in a fixed order)
 	 */
 	private float[] namedEvalsToFitness(List<Eval> named_evals) {
 		
@@ -162,6 +214,14 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		return evals;
 	}
 	
+	
+	/**
+	 * AchieveREResponder behaviour that handles the request to generate new
+	 * options for a computation agent.
+	 *  
+	 * @author Ondra
+	 *
+	 */
 	private class RequestServer extends AchieveREResponder {
 		private static final long serialVersionUID = 6214306716273574418L;
 		GetOptions get_option_action;
@@ -179,9 +239,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 													.getName())))));
 			
 			this.registerPrepareResultNotification(new Behaviour(a) {
-				/**
-				 * 
-				 */
+
 				private static final long serialVersionUID = -5801676857376453194L;
 
 				boolean cont;
@@ -199,32 +257,30 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					else if(get_next_parameters_action!=null){
 						cont = true;
 						ACLMessage requestMsg = (ACLMessage)getDataStore().get(REQUEST_KEY);
-						if(queriesToProcess == 0){//skoncili jsme nebo zacali jeden cyklus query
+						if(queriesToProcess == 0){// we have ended or started one cycle of query
 							
 							if(solutions_new == null){
-								// System.out.println("OK: Pars - Nove solutiony vygenerovat");
+								// generate new solutions
 							}else{
-								//postprocess
-								// System.out.println("OK: Pars - Update");
+								// postprocess
+								// update the state
 								updateFinished(evaluations);
 							}
 
-							if (finished()) {
-								//konec vsech evaluaci
-								// System.out.println("OK: Pars - Ukoncovani");
+							if (isFinished()) {
+								// all evaluations finished
 								solutions_new = null;
 								evaluations = null;
 								cont = false;
 								
 								// send the best error back to manager and 
-								// to a recommender, if recommender's present
+								// to a recommender, if recommender is present
 
 								ACLMessage originalRequest =(ACLMessage)getDataStore().get(REQUEST_KEY); 
 								ACLMessage reply = originalRequest.createReply();
 								reply.setPerformative(ACLMessage.INFORM);
 								
 								try {			
-
 									Action a = (Action)myAgent.getContentManager().extractContent(originalRequest);								
 									
 									Evaluation evaluation = new Evaluation();
@@ -244,8 +300,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 																								
 								getDataStore().put(RESULT_NOTIFICATION_KEY, reply);
 							}else{
-								//nova vlna evaluaci - generovani query
-								// System.out.println("OK: Pars - nove solutiony poslat");
+								// new wave of evaluations - generating queries
+								// -> send new solutions
 								solutions_new = generateNewSolutions(solutions_new, evaluations);
 								if(solutions_new != null) {
 									evaluations = new float[solutions_new.size()][];
@@ -253,10 +309,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									solutions_new = new ArrayList<>();
 								queriesToProcess = solutions_new.size();
 								for(int i = 0; i < solutions_new.size(); i++){
-									//posli queries
+									// send queries
 									ExecuteParameters ep = new ExecuteParameters();
 
-									//TODO zmena ExecuteParameters na jeden prvek
 									List<SearchSolution> solution_list = new ArrayList<SearchSolution>(1);
 									solution_list.add(solutions_new.get(i));
 									ep.setSolutions(solution_list);
@@ -265,13 +320,12 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									action.setAction(ep);
 									action.setActor(getAID());
 
-									//nedalo by se to klonovat?
 									ACLMessage query = new ACLMessage(ACLMessage.QUERY_REF);
 									query.addReceiver(requestMsg.getSender());
 									query.setLanguage(codec.getName());
 									query.setOntology(ontology.getName());
 									query.setProtocol(FIPANames.InteractionProtocol.FIPA_QUERY);
-									//identifikace query a jeho odpovedi!!!
+									// identify query and its replies
 									query.setConversationId(conversationID + "_" + Integer.toString(i));
 									try {
 										getContentManager().fillContent(query, action);
@@ -281,24 +335,20 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 										logException(e.getMessage(), e);
 									}
 									myAgent.send(query);
-
 								}
 							}
 							
-						}else{//Cekame na vypocty - odpovedi na QUERY
-							//TODO: FAILURE
-							//and protocol FIPANames.InteractionProtocol.FIPA_QUERY???
+						}else{// wait for the computation results - replies to QUERY
 							ACLMessage response = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));													
 							if(response == null)
-								block();//elseif zadna zprava inform - cekej
+								block();//elseif no inform message - wait
 							else {
 								if (response.getConversationId().split("_").length <= 2){
 									// other informs than containing CA results (error)
 									return;
 								}
-								// System.out.println("!OK: Pars - Prisla evaluace");
-								//prisla evaluace - odpoved na QUERY
-								//prirad inform ke spravnemu query
+								// evaluation received - a reply to a QUERY
+								// assign inform to the correct query
 								int id = Integer.parseInt(response.getConversationId().split("_")[2]);
 								Result res;
 								try {
@@ -317,9 +367,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							}
 						}
 					}
-					//handle informs as query results
 				}
-
 
 				@Override
 				public boolean done() {
@@ -329,6 +377,16 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			});
 		}
 		
+		/**
+		 * Handles a request from the request server.
+		 * <p>
+		 * Understands two ontologies:
+		 *   <ul>
+		 *     <li> {@link GetOptions} in a request for search's own options
+		 *     <li> {@link GetParameters} request to start generating options
+		 *          for a computational agent
+		 *   </ul>
+		 */
 		@Override
 		protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException{
 			
@@ -344,8 +402,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					
 				} else if (((Action) content).getAction() instanceof GetParameters){
 					get_next_parameters_action = (GetParameters) ((Action) content).getAction();
-					//zacatek - nastaveni optionu
-					search_options = get_next_parameters_action.getSearchOptions();
+					// start - set the options
+					searchOptions = get_next_parameters_action.getSearchOptions();
 					schema = get_next_parameters_action.getSchema();														
 					loadSearchOptions();
 					
@@ -353,9 +411,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							
 					ACLMessage agree = request.createReply();
 					agree.setPerformative(ACLMessage.AGREE);
-					agree.setContent(Integer.toString(query_block_size));
-					return agree; //or REFUSE, sometimes
-					//return null;
+					agree.setContent(Integer.toString(queryBlockSize));
+					return agree; 
 				}				
 			} catch (UngroundedException e) {
 				logException(e.getMessage(), e);
@@ -366,7 +423,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			}
 			throw new NotUnderstoodException("Not understood");
 		}
-
 	}
 
 
@@ -412,5 +468,5 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		
 		return reply;
 	}
-
+	
 }

@@ -54,14 +54,25 @@ public class Agent_Manager extends PikaterAgent {
 	public HashMap<String, ACLMessage> searchMessages =
 			new HashMap<String, ACLMessage>();
 	
+	/**
+	 * Returns the specific {@link ComputationCollectionItem} given id.
+	*/
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
 	}
+	
+	
+	/**
+	 * Adds a {@link ComputationCollectionItem} to computationCollection.
+	*/	
     public void addComputation(ComputationCollectionItem item)
     {
         computationCollection.put(item.getBatchID(),item);
     }
 
+    /**
+     * Returns list of all ontologies that are used by manager agent.
+     */
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -80,6 +91,17 @@ public class Agent_Manager extends PikaterAgent {
 	}
 	
 	
+	/**
+	 * Initializes Agent_Manager agent.
+	 * <p>
+	 * Registers manager with yellow pages and starts its three behaviours:
+	 *   <ul>
+	 *     <li>{@link ParserBehaviour} that deals with requests from GUI agents
+	 *     <li>{@link SubscriptionResponder} behaviour (for sending subscriptions messages about
+	 *       the results to registered subscribers)
+	 *     <li>{@link ReceiveQuery} behaviour that receives queries from search agents
+	 *   </ul>    
+	 */
 	protected void setup() {
 
     	initDefault();
@@ -135,6 +157,12 @@ public class Agent_Manager extends PikaterAgent {
 			super(agent);
 		}
 
+		/**
+		 * The core method of the ReceiveQuery behaviour. It receives a query
+		 * from a search agent and processes it, i.e. assigns the requested 
+		 * task to the right computation node (the node is identified by the 
+		 * conversation ID of the message received) and fills the queues. 
+		 */
 		@Override 
 		public void action() {
 			ACLMessage query = receive(getSchemaFromSearchTemplate);
@@ -184,13 +212,7 @@ public class Agent_Manager extends PikaterAgent {
 				block();
 			}
 
-			/*
-			ACLMessage result_msg = request.createReply();
-			result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-			send(result_msg);
-			*/
 			return;
-
 		}
 	}
 
