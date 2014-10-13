@@ -12,21 +12,18 @@ import com.vaadin.ui.Image;
  * @author SkyCrawl
  */
 @StyleSheet("iconButton.css")
-public class IconButton extends CustomComponent
-{
+public class IconButton extends CustomComponent {
 	private static final long serialVersionUID = 4029033501431550617L;
-	
+
 	private final Image img;
 
-	public IconButton(Resource source)
-	{
+	public IconButton(Resource source) {
 		this.img = new Image(null, source);
 		this.img.setStyleName("icon-button");
 		setCompositionRoot(this.img);
 	}
-	
-	public void addClickListener(ClickListener clickListener)
-	{
+
+	public void addClickListener(ClickListener clickListener) {
 		img.addClickListener(clickListener);
 	}
 }

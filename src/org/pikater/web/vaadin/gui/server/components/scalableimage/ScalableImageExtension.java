@@ -10,21 +10,17 @@ import com.vaadin.server.AbstractExtension;
  * 
  * @author SkyCrawl
  */
-public class ScalableImageExtension extends AbstractExtension
-{
+public class ScalableImageExtension extends AbstractExtension {
 	private static final long serialVersionUID = 8278201529558658998L;
-	
-	public ScalableImageExtension(ScalableImage scalableImageComponent)
-	{
-		registerRpc(new ScalableImageExtensionServerRpc()
-		{
+
+	public ScalableImageExtension(ScalableImage scalableImageComponent) {
+		registerRpc(new ScalableImageExtensionServerRpc() {
 			private static final long serialVersionUID = 6572754997353185232L;
 		});
 		extend(scalableImageComponent);
 	}
-	
-	public ScalableImageExtensionClientRpc getClientRPC()
-	{
-		return getRpcProxy(ScalableImageExtensionClientRpc.class); 
+
+	public ScalableImageExtensionClientRpc getClientRPC() {
+		return getRpcProxy(ScalableImageExtensionClientRpc.class);
 	}
 }

@@ -21,26 +21,22 @@ import de.steinwedel.messagebox.MessageBoxListener;
  * 
  * @author SkyCrawl
  */
-public class DialogCommons
-{
+public class DialogCommons {
 	/**
 	 * Applies general messagebox settings.
 	 * @param enterButton which button to bind with the ENTER key
 	 * @param closeWithAnyButton whether the dialog should close after clicking ANY of its buttons
 	 */
-	protected static void setupGeneralDialog(MessageBox box, boolean closeWithAnyButton)
-	{
+	protected static void setupGeneralDialog(MessageBox box, boolean closeWithAnyButton) {
 		box.getWindow().setResizable(false);
 		box.getWindow().setDraggable(false);
-		if(!closeWithAnyButton)
-		{
+		if (!closeWithAnyButton) {
 			box.setAutoClose(closeWithAnyButton);
 		}
 		UI.getCurrent().setFocusedComponent(box.getWindow());
 	}
-	
-	protected static void setupWizardDialog(MessageBox box, WizardForDialog<?> wizard)
-	{
+
+	protected static void setupWizardDialog(MessageBox box, WizardForDialog<?> wizard) {
 		box.getWindow().setClosable(true);
 		box.getWindow().setResizable(true);
 		box.getWindow().setDraggable(true);
@@ -55,83 +51,70 @@ public class DialogCommons
 	 * </ul>
 	 *   
 	 */
-	protected static void bindActionsToKeyboard(MessageBox box, Button enterButton, boolean escapeToClose)
-	{
-		if(enterButton != null)
-		{
+	protected static void bindActionsToKeyboard(MessageBox box, Button enterButton, boolean escapeToClose) {
+		if (enterButton != null) {
 			enterButton.setClickShortcut(KeyCodes.KEY_ENTER, null);
 		}
-		if(escapeToClose)
-		{
+		if (escapeToClose) {
 			box.getWindow().setCloseShortcut(KeyCode.ESCAPE, null);
 		}
 	}
-	
+
 	// ---------------------------------------------------------------------------------------------------------
 	// PROTECTED TYPES - HANDLING BUTTON CLICKS, INTEGRATION WITH RESULT HANDLING AND PREPARATION TO IT
-	
-	protected abstract static class MyMessageBoxListener implements MessageBoxListener
-	{
+
+	protected abstract static class MyMessageBoxListener implements MessageBoxListener {
 		private final IDialogResultHandler resultHandler;
 		private final List<Object> arguments;
 		private MessageBox parentBox;
 
-		public MyMessageBoxListener(IDialogResultHandler resultHandler)
-		{
+		public MyMessageBoxListener(IDialogResultHandler resultHandler) {
 			this.resultHandler = resultHandler;
 			this.arguments = new ArrayList<Object>();
 			this.parentBox = null;
 		}
-		
-		public void setParentBox(MessageBox parentBox)
-		{
+
+		public void setParentBox(MessageBox parentBox) {
 			this.parentBox = parentBox;
 		}
-		
+
 		@Override
-		public void buttonClicked(ButtonId button)
-		{
-			switch(button)
-			{
-				case OK:
-				case YES:
-				case SAVE:
-					if(allowOKHandle())
-					{
-						addArgs(arguments);
-						if(resultHandler.handleResult(arguments.toArray()))
-						{
-							parentBox.close();
-						}
-						else
-						{
-							arguments.clear();
-						}
+		public void buttonClicked(ButtonId button) {
+			switch (button) {
+			case OK:
+			case YES:
+			case SAVE:
+				if (allowOKHandle()) {
+					addArgs(arguments);
+					if (resultHandler.handleResult(arguments.toArray())) {
+						parentBox.close();
+					} else {
+						arguments.clear();
 					}
-					break;
-				
-				case ABORT:
-				case CANCEL:
-				case CLOSE:
-				case NO:
-					handleClose();
-					break;
-					
-				default:
-					if(!handleCustomButton(button))
-					{
-						throw new IllegalStateException(String.format("No action is mapped to the '%s' button.", parentBox.getButton(button).getCaption()));
-					}
-					break;
+				}
+				break;
+
+			case ABORT:
+			case CANCEL:
+			case CLOSE:
+			case NO:
+				handleClose();
+				break;
+
+			default:
+				if (!handleCustomButton(button)) {
+					throw new IllegalStateException(String.format("No action is mapped to the '%s' button.", parentBox.getButton(button).getCaption()));
+				}
+				break;
 			}
 		}
-		
+
 		/**
 		 * This method is called after the "ok" button is clicked on the dialog.
 		 * @return whether {@link #handleOK()} method should be called next
 		 */
 		protected abstract boolean allowOKHandle();
-		
+
 		/**
 		 * This method is called to gather the dialog result arguments/variables before
 		 * being passed to {@link IDialogResultHandler#handleResult(Object[])}.</br>
@@ -139,15 +122,14 @@ public class DialogCommons
 		 * @param arguments the list to add arguments to
 		 */
 		protected abstract void addArgs(List<Object> arguments);
-		
+
 		/**
 		 * Method to close the dialog when it's no longer needed.
 		 */
-		protected void handleClose()
-		{
+		protected void handleClose() {
 			parentBox.close();
 		}
-		
+
 		/**
 		 * The super implementation does nothing and is called for any button clicks that are not handled
 		 * by default.
@@ -155,29 +137,24 @@ public class DialogCommons
 		 * @return True whether the button has been successfully processed. If not, an exception is 
 		 * thrown to indicate that no action is mapped to a button.
 		 */
-		protected boolean handleCustomButton(ButtonId button)
-		{
+		protected boolean handleCustomButton(ButtonId button) {
 			return false;
 		}
-		
-		public static MyMessageBoxListener getDefault(IDialogResultHandler resultHandler)
-		{
-			return new MyMessageBoxListener(resultHandler)
-			{
+
+		public static MyMessageBoxListener getDefault(IDialogResultHandler resultHandler) {
+			return new MyMessageBoxListener(resultHandler) {
 				@Override
-				protected boolean allowOKHandle()
-				{
+				protected boolean allowOKHandle() {
 					return true;
 				}
-				
+
 				@Override
-				protected void addArgs(List<Object> arguments)
-				{
+				protected void addArgs(List<Object> arguments) {
 				}
 			};
 		}
 	}
-	
+
 	/**
 	 * Provides a way for dialogs to pass button click event handling
 	 * to external code.
@@ -187,30 +164,26 @@ public class DialogCommons
 	 * @param <T> The dialog content type that prepares conditions
 	 * for a button click of the dialog.
 	 */
-	protected static class MyComponentMessageBoxListenerWithExternalResultHandler<T extends Component & IDialogResultPreparer> extends MyMessageBoxListener
-	{
-		private final T component; 
+	protected static class MyComponentMessageBoxListenerWithExternalResultHandler<T extends Component & IDialogResultPreparer> extends MyMessageBoxListener {
+		private final T component;
 
-		public MyComponentMessageBoxListenerWithExternalResultHandler(T component, IDialogResultHandler externalResultHandler)
-		{
+		public MyComponentMessageBoxListenerWithExternalResultHandler(T component, IDialogResultHandler externalResultHandler) {
 			super(externalResultHandler);
-			
+
 			this.component = component;
 		}
-		
+
 		@Override
-		protected boolean allowOKHandle()
-		{
+		protected boolean allowOKHandle() {
 			return component.isResultReadyToBeHandled();
 		}
-		
+
 		@Override
-		protected void addArgs(List<Object> arguments)
-		{
+		protected void addArgs(List<Object> arguments) {
 			component.addArgs(arguments);
 		}
 	}
-	
+
 	/**
 	 * Provides a way for dialogs to handle button clicks through the content component.
 	 * 
@@ -219,30 +192,26 @@ public class DialogCommons
 	 * @param <T> The dialog content type that prepares conditions
 	 * for a button click of the dialog and also handles the click event.
 	 */
-	protected static class MyComponentMessageBoxListener<T extends Component & IDialogComponent> extends MyMessageBoxListener
-	{
-		private final T component; 
+	protected static class MyComponentMessageBoxListener<T extends Component & IDialogComponent> extends MyMessageBoxListener {
+		private final T component;
 
-		public MyComponentMessageBoxListener(T component)
-		{
+		public MyComponentMessageBoxListener(T component) {
 			super(component);
-			
+
 			this.component = component;
 		}
-		
+
 		@Override
-		protected boolean allowOKHandle()
-		{
+		protected boolean allowOKHandle() {
 			return component.isResultReadyToBeHandled();
 		}
-		
+
 		@Override
-		protected void addArgs(List<Object> arguments)
-		{
+		protected void addArgs(List<Object> arguments) {
 			component.addArgs(arguments);
 		}
 	}
-	
+
 	// -------------------------------------------------------------------------
 	// PUBLIC TYPES - GENERAL DIALOG RESULT HANDLING AND PREPARATION TO IT
 
@@ -251,8 +220,7 @@ public class DialogCommons
 	 * 
 	 * @author SkyCrawl
 	 */
-	public static interface IDialogResultValidator extends Component
-	{
+	public static interface IDialogResultValidator extends Component {
 		/**
 		 * This method is called when the "OK" button is clicked in the dialog. Use
 		 * it to indicate whether conditions are prepared for handling the dialog result. 
@@ -267,8 +235,7 @@ public class DialogCommons
 	 * 
 	 * @author SkyCrawl
 	 */
-	public static interface IDialogResultPreparer extends IDialogResultValidator
-	{
+	public static interface IDialogResultPreparer extends IDialogResultValidator {
 		/**
 		 * This method is called to gather the dialog result arguments/variables before
 		 * being passed to {@link IDialogResultHandler#handleResult(Object[])}.</br>
@@ -285,8 +252,7 @@ public class DialogCommons
 	 * 
 	 * @author SkyCrawl
 	 */
-	public static interface IDialogResultHandler
-	{
+	public static interface IDialogResultHandler {
 		/**
 		 * Custom action to be called when the dialog's main accept button is clicked.
 		 * @return true if the dialog is no longer needed and should close
@@ -299,7 +265,6 @@ public class DialogCommons
 	 * @see {@link IDialogResultPreparer}
 	 * @see {@link IDialogResultHandler}
 	 */
-	public static interface IDialogComponent extends IDialogResultPreparer, IDialogResultHandler
-	{
+	public static interface IDialogComponent extends IDialogResultPreparer, IDialogResultHandler {
 	}
 }

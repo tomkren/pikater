@@ -21,49 +21,41 @@ import com.vaadin.ui.UI;
  * 
  * @author SkyCrawl
  */
-public class MyNotifications
-{
+public class MyNotifications {
 	//----------------------------------------------------------------
 	// GENERAL USE NOTIFICATIONS
-	
-	public static void showSuccess(String title, String description)
-	{
+
+	public static void showSuccess(String title, String description) {
 		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationSuccessIcon);
 	}
-	
-	public static void showInfo(String title, String description)
-	{
+
+	public static void showInfo(String title, String description) {
 		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationInfoIcon);
 	}
-	
-	public static void showWarning(String title, String description)
-	{
+
+	public static void showWarning(String title, String description) {
 		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationWarnIcon);
 	}
-	
-	public static void showError(String title, String description)
-	{
+
+	public static void showError(String title, String description) {
 		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationErrorIcon);
 	}
-	
+
 	//----------------------------------------------------------------
 	// SPECIFIC USE NOTIFICATIONS
-	
-	public static void showApplicationError()
-	{
+
+	public static void showApplicationError() {
 		showApplicationError("Please contact the administrators.");
 	}
-	
-	public static void showApplicationError(String message)
-	{
+
+	public static void showApplicationError(String message) {
 		getCurrentNotificationsManager().showNotification(null, "Application error", message, ThemeResources.img_notificationErrorIcon);
 	}
-	
+
 	//----------------------------------------------------------------
 	// PRIVATE INTERFACE
-	
-	private static MyFancyNotifications getCurrentNotificationsManager()
-	{
+
+	private static MyFancyNotifications getCurrentNotificationsManager() {
 		/*
 		 * This is one of the reasons why notifications need to operate
 		 * on a thread-local pattern - they require to have a special
@@ -71,16 +63,12 @@ public class MyNotifications
 		 */
 		return ((CustomConfiguredUI) UI.getCurrent()).getNotificationsComponent();
 	}
-    
+
 	@SuppressWarnings("unused")
-    private static void showHTMLNotification(String title, String message, String styleName)
-    {
-    	FancyNotification notif = new FancyNotification(null,
-                "Hello <span style=\"text-decoration: underline;\">World</span>",
-                "Lorem <span style=\"font-size: 80%;\">ipsum.</span>"
-        );
-        notif.getTitleLabel().setContentMode(ContentMode.HTML);
-        notif.getDescriptionLabel().setContentMode(ContentMode.HTML);
-        getCurrentNotificationsManager().showNotification(notif);
-    }
+	private static void showHTMLNotification(String title, String message, String styleName) {
+		FancyNotification notif = new FancyNotification(null, "Hello <span style=\"text-decoration: underline;\">World</span>", "Lorem <span style=\"font-size: 80%;\">ipsum.</span>");
+		notif.getTitleLabel().setContentMode(ContentMode.HTML);
+		notif.getDescriptionLabel().setContentMode(ContentMode.HTML);
+		getCurrentNotificationsManager().showNotification(notif);
+	}
 }

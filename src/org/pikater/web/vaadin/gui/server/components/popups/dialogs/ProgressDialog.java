@@ -26,28 +26,24 @@ import de.steinwedel.messagebox.ResourceFactory;
  * 
  * @author SkyCrawl
  */
-public class ProgressDialog extends DialogCommons
-{
+public class ProgressDialog extends DialogCommons {
 	/**
 	 * The main method of this class, showing the given progress dialog.
 	 */
-	public static ProgressDialogContext show(String title, final IProgressDialogTaskHandler progressDialogEvents)
-	{
+	public static ProgressDialogContext show(String title, final IProgressDialogTaskHandler progressDialogEvents) {
 		ProgressBar progress = new ProgressBar(0);
 		progress.setSizeFull();
-		
-		Label lbl_percentage = new Label()
-		{
+
+		Label lbl_percentage = new Label() {
 			private static final long serialVersionUID = 4092396095417883900L;
 
-			public void setValue(String newStringValue)
-			{
+			public void setValue(String newStringValue) {
 				super.setValue(newStringValue + " %");
 			}
 		};
 		lbl_percentage.setValue("0");
 		lbl_percentage.setSizeUndefined();
-		
+
 		HorizontalLayout hLayout = new HorizontalLayout();
 		hLayout.setSizeFull();
 		hLayout.setSpacing(true);
@@ -55,56 +51,41 @@ public class ProgressDialog extends DialogCommons
 		hLayout.addComponent(lbl_percentage);
 		hLayout.addComponent(progress);
 		hLayout.setExpandRatio(progress, 1);
-		
-		MyMessageBoxListener listener = new MyMessageBoxListener(null)
-		{
+
+		MyMessageBoxListener listener = new MyMessageBoxListener(null) {
 			/*
 			 * IMPORTANT: the 'null' argument can easily cause errors if modifications are
 			 * made to the enclosing class.
 			 */
-			
+
 			@Override
-			protected boolean allowOKHandle()
-			{
+			protected boolean allowOKHandle() {
 				return true;
 			}
 
 			@Override
-			protected void addArgs(List<Object> arguments)
-			{
+			protected void addArgs(List<Object> arguments) {
 			}
-			
+
 			@Override
-			protected void handleClose()
-			{
-				try
-				{
+			protected void handleClose() {
+				try {
 					progressDialogEvents.abortTask();
-				}
-				catch (Exception t)
-				{
+				} catch (Exception t) {
 					PikaterWebLogger.logThrowable("Could not abort underlying task.", t);
-				}
-				finally
-				{
+				} finally {
 					super.handleClose(); // automatically and always close the dialog
 				}
 			}
 		};
-		MessageBox mb = MessageBox.showCustomized(
-				Icon.NONE,
-				title == null ? "Progress" : title,
-				hLayout,
-				listener,
-				ButtonId.ABORT
-		);
+		MessageBox mb = MessageBox.showCustomized(Icon.NONE, title == null ? "Progress" : title, hLayout, listener, ButtonId.ABORT);
 		listener.setParentBox(mb); // don't forget this!
 		mb.getWindow().setWidth("250px");
 		mb.getWindow().setStyleName("progressDialog"); // stretch the component area to maximum width...
 		setupGeneralDialog(mb, false);
 		return new ProgressDialogContext(mb, progress, lbl_percentage, progressDialogEvents);
 	}
-	
+
 	// -------------------------------------------------------------------------
 	// PUBLIC TYPES - PROGRESS BAR DIALOG
 
@@ -114,8 +95,7 @@ public class ProgressDialog extends DialogCommons
 	 * 
 	 * @author SkyCrawl
 	 */
-	public static interface IProgressDialogTaskHandler
-	{
+	public static interface IProgressDialogTaskHandler {
 		/**
 		 * Signal used to start the underlying task.
 		 * <ul>
@@ -150,7 +130,7 @@ public class ProgressDialog extends DialogCommons
 		 */
 		void onTaskFinish(IProgressDialogTaskResult result);
 	}
-	
+
 	/**
 	 * Classes implementing this object are supposed to handle 
 	 * the underlying tracked task's progress, whether successful
@@ -158,33 +138,31 @@ public class ProgressDialog extends DialogCommons
 	 * 
 	 * @author SkyCrawl
 	 */
-	public static interface IProgressDialogResultHandler
-	{
+	public static interface IProgressDialogResultHandler {
 		/**
 		 * @param percentage value must be between 0.0 and 1.0
 		 */
 		void updateProgress(float percentage);
-		
+
 		/**
 		 * Call this method when the underlying task fails to
 		 * notify the dialog.
 		 */
 		void failed();
-		
+
 		/**
 		 * Call this method when the underlying task finishes to
 		 * notify the dialog.
 		 */
 		void finished(IProgressDialogTaskResult result);
 	}
-	
+
 	/**
 	 * A base interface for objects that hold the underlying task's results.
 	 * 
 	 * @author SkyCrawl
 	 */
-	public static interface IProgressDialogTaskResult
-	{
+	public static interface IProgressDialogTaskResult {
 	}
 
 	/**
@@ -193,8 +171,7 @@ public class ProgressDialog extends DialogCommons
 	 * 
 	 * @author SkyCrawl
 	 */
-	public static class ProgressDialogContext implements IProgressDialogResultHandler
-	{
+	public static class ProgressDialogContext implements IProgressDialogResultHandler {
 		private static final int POLL_INTERVAL = 500;
 
 		/**
@@ -215,15 +192,14 @@ public class ProgressDialog extends DialogCommons
 		 */
 		private final IProgressDialogTaskHandler taskHandler;
 
-		public ProgressDialogContext(MessageBox box, ProgressBar progress, Label lbl_percentage, IProgressDialogTaskHandler taskHandler) 
-		{
+		public ProgressDialogContext(MessageBox box, ProgressBar progress, Label lbl_percentage, IProgressDialogTaskHandler taskHandler) {
 			this.currentUI = UI.getCurrent();
 			this.box = box;
 			this.progress = progress;
 			this.lbl_percentage = lbl_percentage;
 			this.taskHandler = taskHandler;
 
-			if(this.currentUI.getPollInterval() == -1) // polling is not set yet
+			if (this.currentUI.getPollInterval() == -1) // polling is not set yet
 			{
 				/*
 				 * Start polling the UI for changes (from client).
@@ -241,21 +217,16 @@ public class ProgressDialog extends DialogCommons
 				 * definitely implement a poll listener to display notifications about
 				 * the task's status, namely the FAILED status.
 				 */
-			}
-			else
-			{
+			} else {
 				throw new IllegalStateException("Polling was already enabled.");
 			}
 
 			/*
 			 * Start the underlying task.
 			 */
-			try
-			{
+			try {
 				taskHandler.startTask(this);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				/*
 				 * We need the dialog to not be created (so as not to close it just afterwards).
 				 * As such, silence the IDE using a RuntimeException, which will be caught
@@ -266,13 +237,10 @@ public class ProgressDialog extends DialogCommons
 		}
 
 		@Override
-		public void updateProgress(final float percentage)
-		{
-			executeInLock(new Runnable()
-			{
+		public void updateProgress(final float percentage) {
+			executeInLock(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					// updates component state on the server side - will be propagated to client when a poll request arrives
 					progress.setValue(percentage);
 					lbl_percentage.setValue(String.valueOf(Math.round(percentage * 100)));
@@ -281,33 +249,23 @@ public class ProgressDialog extends DialogCommons
 		}
 
 		@Override
-		public void finished(final IProgressDialogTaskResult result)
-		{
-			executeInLock(new Runnable()
-			{
+		public void finished(final IProgressDialogTaskResult result) {
+			executeInLock(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					box.getButton(ButtonId.ABORT).setCaption("Finished - click to open result");
 					box.getButton(ButtonId.ABORT).setIcon(new ResourceFactory().getIcon(ButtonId.YES));
-					box.getButton(ButtonId.ABORT).addClickListener(new Button.ClickListener()
-					{
+					box.getButton(ButtonId.ABORT).addClickListener(new Button.ClickListener() {
 						private static final long serialVersionUID = 5823278457271773907L;
 
 						@Override
-						public void buttonClick(ClickEvent event)
-						{
-							try
-							{
+						public void buttonClick(ClickEvent event) {
+							try {
 								taskHandler.onTaskFinish(result); // simply forward
-							}
-							catch (Exception t)
-							{
+							} catch (Exception t) {
 								PikaterWebLogger.logThrowable("Something went wrong in progress dialog's onFinish event.", t);
 								MyNotifications.showApplicationError();
-							}
-							finally
-							{
+							} finally {
 								cleanup(true);
 							}
 						}
@@ -317,21 +275,16 @@ public class ProgressDialog extends DialogCommons
 		}
 
 		@Override
-		public void failed()
-		{
-			executeInLock(new Runnable()
-			{
+		public void failed() {
+			executeInLock(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					box.getButton(ButtonId.ABORT).setCaption("Failed - click to close");
-					box.getButton(ButtonId.ABORT).addClickListener(new Button.ClickListener()
-					{
+					box.getButton(ButtonId.ABORT).addClickListener(new Button.ClickListener() {
 						private static final long serialVersionUID = 5823278457271773907L;
 
 						@Override
-						public void buttonClick(ClickEvent event)
-						{
+						public void buttonClick(ClickEvent event) {
 							cleanup(false);
 						}
 					});
@@ -344,39 +297,29 @@ public class ProgressDialog extends DialogCommons
 		 * previous updates is being written. Use this method to update components
 		 * from background threads to avoid accidental concurrent access issues.
 		 */
-		private void executeInLock(Runnable command)
-		{
+		private void executeInLock(Runnable command) {
 			Lock lock = currentUI.getSession().getLockInstance();
-			try
-			{
+			try {
 				lock.lock();
 
 				command.run();
-			}
-			finally
-			{
+			} finally {
 				lock.unlock();
 			}
 		}
 
-		private void cleanup(boolean finished)
-		{
-			try
-			{
+		private void cleanup(boolean finished) {
+			try {
 				// let the UI have a chance to poll for the changes made by task finish or task fail event
 				Thread.sleep(POLL_INTERVAL * 2);
-			}
-			catch (InterruptedException e)
-			{
+			} catch (InterruptedException e) {
 				/*
 				 * This is not really serious as any client to server request will
 				 * download the GUI changes made, but still the user may have to 
 				 * trigger such request manually and it might now be always possible.
 				 */
 				PikaterWebLogger.log(Level.WARNING, "UI polling will be disabled a bit earlier than expected - thread was interrupted.");
-			}
-			finally
-			{
+			} finally {
 				// and then disable polling, whatever happens
 				this.currentUI.setPollInterval(-1);
 				this.box.close();

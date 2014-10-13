@@ -22,38 +22,32 @@ import com.vaadin.ui.TextField;
  * 
  * @author SkyCrawl
  */
-public class UserProfileForm extends CustomFormLayout
-{
+public class UserProfileForm extends CustomFormLayout {
 	private static final long serialVersionUID = 1654056604776473039L;
-	
+
 	private final TextField loginField;
-	private final PasswordField passwordField; 
+	private final PasswordField passwordField;
 	private final TextField emailField;
-	
+
 	private final Button btn_changePassword;
-	
-	public UserProfileForm()
-	{
+
+	public UserProfileForm() {
 		super("Save changes");
-		
+
 		this.loginField = FormFieldFactory.getLoginField(null, false, true); // not required since completely read-only
 		this.passwordField = FormFieldFactory.createPasswordField("Password:", null, true, true);
 		this.emailField = FormFieldFactory.getEmailField(null, true, false);
-		
-		this.btn_changePassword = new Button("Change password", new ClickListener()
-		{
+
+		this.btn_changePassword = new Button("Change password", new ClickListener() {
 			private static final long serialVersionUID = -8548997603012122979L;
 
 			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				GeneralDialogs.componentDialog("Change password", new ChangePasswordForm()
-				{
+			public void buttonClick(ClickEvent event) {
+				GeneralDialogs.componentDialog("Change password", new ChangePasswordForm() {
 					private static final long serialVersionUID = -6536658886477204213L;
 
 					@Override
-					public boolean handleResult(Object[] args)
-					{
+					public boolean handleResult(Object[] args) {
 						setValueAndIgnoreReadOnly(passwordField, (String) args[0]);
 						return true;
 					}
@@ -61,42 +55,37 @@ public class UserProfileForm extends CustomFormLayout
 			}
 		});
 	}
-	
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		JPAUser currentUser = UserAuth.getUserEntity(VaadinSession.getCurrent());
-		
+
 		setValueAndIgnoreReadOnly(loginField, currentUser.getLogin());
 		setCommitted(loginField);
 		setValueAndIgnoreReadOnly(passwordField, currentUser.getPassword());
 		setCommitted(passwordField);
 		emailField.setValue(currentUser.getEmail());
 		setCommitted(emailField);
-		
+
 		addField("login", loginField);
 		addField("password", passwordField);
 		addField("email", emailField);
-		
+
 		attachToButtonInterface(btn_changePassword);
 	}
-	
+
 	@Override
-	public IOnSubmit getSubmitAction()
-	{
-		return new IOnSubmit()
-		{
+	public IOnSubmit getSubmitAction() {
+		return new IOnSubmit() {
 			@Override
-			public boolean onSubmit()
-			{
+			public boolean onSubmit() {
 				JPAUser currentUser = UserAuth.getUserEntity(VaadinSession.getCurrent());
-				if(!WebAppConfiguration.avoidUsingDBForNow())
-				{
+				if (!WebAppConfiguration.avoidUsingDBForNow()) {
 					currentUser.setPassword(passwordField.getValue());
 					currentUser.setEmail(emailField.getValue());
 					DAOs.userDAO.updateEntity(currentUser);
 				}
-				
+
 				MyNotifications.showSuccess(null, "Changes were successfully saved.");
 				return true;
 			}

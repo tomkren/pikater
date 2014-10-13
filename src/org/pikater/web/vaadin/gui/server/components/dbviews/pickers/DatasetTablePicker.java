@@ -10,12 +10,10 @@ import org.pikater.web.vaadin.gui.server.components.dbviews.base.TableRowPicker;
  * 
  * @author SkyCrawl
  */
-public class DatasetTablePicker extends TableRowPicker
-{
+public class DatasetTablePicker extends TableRowPicker {
 	private static final long serialVersionUID = -417558814086758389L;
 
-	public DatasetTablePicker(String caption)
-	{
+	public DatasetTablePicker(String caption) {
 		super(caption);
 		setView(new DatasetDBViewRoot<DatasetTableDBViewMin>(new DatasetTableDBViewMin()));
 	}
