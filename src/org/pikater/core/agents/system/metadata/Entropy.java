@@ -7,68 +7,83 @@ package org.pikater.core.agents.system.metadata;
 import java.util.*;
 
 /**
- *
+ * Counts the entropy for the universal values
  * @author Kuba
  */
 public class Entropy {
-    public static double CountEntropy(List<Object> values)
-    {
-        double n=values.size();
-        double result=0;
-        Map<Object,Integer> hash=new HashMap<Object,Integer>();
-        for (Object o:values)
-        {
-            if (hash.containsKey(o))
-            {
-                int current=hash.get(o);
-                hash.put(o, current+1);
-            }
-            else
-            {
-                hash.put(o, 1);
+	
+	/**
+	 * Counts the entropy
+	 * @param values
+	 * @return
+	 */
+    public static double countEntropy(List<Object> values) {
+    	
+        double n = values.size();
+        double result = 0;
+        Map<Object,Integer> hash =
+        		new HashMap<Object,Integer>();
+        
+        for (Object valueI : values) {
+            if (hash.containsKey(valueI)) {
+                int current = hash.get(valueI);
+                hash.put(valueI, current+1);
+            } else {
+                hash.put(valueI, 1);
             }            
         }
-        for (Object o: hash.keySet())
-        {
-            int count=hash.get(o);
-            double pt=count/n;
-            double logpt=Math.log(pt)/Math.log(2);
-            result+=pt*logpt;
+        for (Object keyI : hash.keySet()) {
+            int count = hash.get(keyI);
+            double pt = count/n;
+            double logpt = Math.log(pt)/Math.log(2);
+            result += pt*logpt;
         }
-        result=result*-1;
+        result = result*-1;
         return result;
     }
     
-    public static double CountEntropyClassAttribute(List<Object> attributeValues, List<Object> classValues)
-    {   
+    /**
+     * Count entropy for the attribute values
+     * @param attributeValues
+     * @param classValues
+     * @return
+     */
+    public static double countEntropyClassAttribute(
+    		List<Object> attributeValues, List<Object> classValues) {
+    	
         double result = 0;
         HashSet<Object> targetValues = new HashSet<Object>();
         HashSet<Object> sourceValues = new HashSet<Object>();
 
-        for (Object o : classValues) {
+        for (Object classValueI : classValues) {
 
-            if (!targetValues.contains(o)) {
-                targetValues.add(o);
+            if (!targetValues.contains(classValueI)) {
+                targetValues.add(classValueI);
             }            
         }
-        for (Object o : attributeValues) {
+        for (Object attributeValueI : attributeValues) {
         	
-            if (!sourceValues.contains(o)) {
-                sourceValues.add(o);
+            if (!sourceValues.contains(attributeValueI)) {
+                sourceValues.add(attributeValueI);
             }            
         }
         //count H(A(v))
         
         double n = attributeValues.size();
-        for (Object o : sourceValues)
-        {
-            double nav = getNumberOfInstancesWithSpecifiedAttributeValue(attributeValues, o);
+        for (Object sourceValueI : sourceValues) {
+        	
+            double nav = getNumberOfInstancesWithSpecifiedAttributeValue(
+            		attributeValues, sourceValueI);
             double hav = 0;
-            for (Object target:targetValues)
-            {
-                double ntav=getNumberOfInstancesWithSpecifiedAttributeClassValue(attributeValues, classValues, o, target);
+            for (Object target : targetValues) {
+                double ntav =
+                		getNumberOfInstancesWithSpecifiedAttributeClassValue(
+                				attributeValues, classValues, sourceValueI,
+                				target);
                 double ratio=ntav/nav;
-                if (ratio==0) continue;
+                if (ratio == 0) {
+                	continue;
+                }
                 hav+=(ratio)*Math.log(ratio)/Math.log(2);
             }
             hav = hav*-1;         
@@ -77,23 +92,26 @@ public class Entropy {
         return result;
     }
     
-    private static double getNumberOfInstancesWithSpecifiedAttributeValue(List<Object> attributeValues,Object fixedValue)
-    {
+    private static double getNumberOfInstancesWithSpecifiedAttributeValue(
+    		List<Object> attributeValues,Object fixedValue) {
         double result=0;
-        for (Object o:attributeValues)
-        {
-            if (o.equals(fixedValue)) result ++;
+        for (Object attributeValueI : attributeValues) {
+        	
+            if (attributeValueI.equals(fixedValue)) {
+            	result ++;
+            }
         }
         return result;
     }
     
-    private static double getNumberOfInstancesWithSpecifiedAttributeClassValue(List<Object> attributeValues,List<Object> classValues,Object fixedAttributeValue,Object fixedClassValue)
-    {
-        double result=0;
-        for (int i=0;i<attributeValues.size();i++)
-        {
-            if (attributeValues.get(i).equals(fixedAttributeValue) && classValues.get(i).equals(fixedClassValue))
-            {
+    private static double getNumberOfInstancesWithSpecifiedAttributeClassValue(
+    		List<Object> attributeValues, List<Object> classValues,
+    		Object fixedAttributeValue, Object fixedClassValue) {
+    	
+        double result = 0;
+        for (int i = 0 ; i < attributeValues.size(); i++) {
+            if (attributeValues.get(i).equals(fixedAttributeValue) &&
+            		classValues.get(i).equals(fixedClassValue)) {
             	result++;
             }
         }

@@ -26,7 +26,7 @@ public class Parser {
     private Agent_Manager agent = null;
 
     /**
-     *
+     * Constructor
      * @param agent Owner manager
      */
     public Parser(Agent_Manager agent) {
@@ -46,7 +46,7 @@ public class Parser {
     }
 
     /**
-     *  Parses saver
+     * Parses saver
      * @param dataSaver Ontology dataSaver
      * @param batchID Id of the batch
      * @param userID Id of the owner
@@ -64,7 +64,7 @@ public class Parser {
     }
 
     /**
-     *  Parses dataSource description
+     * Parses dataSource description
      * @param dataSource Datasource in the workflow
      * @param batchID Id of the batch
      * @param userID Id of the owner
@@ -83,7 +83,7 @@ public class Parser {
     }
 
     /**
-     *  Parses data source description
+     * Parses data source description
      * @param dataSource Datasource in the workflow
      * @param batchID Id of the batch
      * @param userID Id of the owner
@@ -95,7 +95,7 @@ public class Parser {
     }
 
     /**
-     *  Parses data provider
+     * Parses data provider
      * @param dataProvider Data provider
      * @param batchID Id of the batch
      * @param userID Id of the owner
@@ -340,9 +340,10 @@ public class Parser {
      * @param batchID Id of the batch
      * @return Computation node
      */
-    private SearchComputationNode parseSearch(Search search, ComputationNode child,
-    		List<ErrorSourceDescription> errors, List<NewOption> childOptions,
-    		int batchID) {
+    private SearchComputationNode parseSearch(Search search,
+    		ComputationNode child, List<ErrorSourceDescription> errors,
+    		List<NewOption> childOptions, int batchID) {
+    	
         agent.logInfo("Ontology Parser - Search");
 
         if (!alreadyProcessed.containsKey(search.getId())) {
@@ -358,18 +359,20 @@ public class Parser {
         
         OptionEdge option = new OptionEdge();
         option.setOptions(childOptions);
-        OneShotBuffer optionBuffer=new OneShotBuffer(option);
-        searchNode.addInput("childoptions",optionBuffer);
+        
+        OneShotBuffer optionBuffer = new OneShotBuffer(option);
+        searchNode.addInput("childoptions", optionBuffer);
         
         SearchStartComputationStrategy strategy =
         		new SearchStartComputationStrategy(agent, batchID, searchNode);
         
         searchNode.setStartBehavior(strategy);
         StandardBuffer searchBuffer = new StandardBuffer(searchNode,child);
+        
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
-        child.addInput("searchedoptions",searchBuffer);
+        child.addInput("searchedoptions", searchBuffer);
         computationGraph.addNode(searchNode);
-        alreadyProcessed.put(search.getId(),searchNode);
+        alreadyProcessed.put(search.getId(), searchNode);
         addOptionsToInputs(searchNode, search.getOptions());
         for (ErrorSourceDescription error:errors) {
             parseErrors(error,searchNode);
@@ -398,11 +401,12 @@ public class Parser {
         recNode.addBufferToOutput("agenttype",recBuffer);
         child.addInput("agenttype",recBuffer);
 
-        StandardBuffer<OptionEdge> optionsBuffer=new StandardBuffer<>(recNode,child);
+        StandardBuffer<OptionEdge> optionsBuffer =
+        		new StandardBuffer<>(recNode, child);
         recNode.addBufferToOutput("options",optionsBuffer);
         child.addInput("options",optionsBuffer);
         computationGraph.addNode(recNode);
-        alreadyProcessed.put(recommender.getId(),recNode);
+        alreadyProcessed.put(recommender.getId(), recNode);
 
         ComputationOutputBuffer buffer = child.getInputs().get(
         		CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
@@ -411,9 +415,13 @@ public class Parser {
         DataSourceEdge copy = new DataSourceEdge();
         copy.setDataSourceId(ds.getDataSourceId());
         copy.setFile(ds.isFile());
+        
         NeverEndingBuffer<DataSourceEdge> training = new NeverEndingBuffer<>(copy);
         training.setTarget(recNode);
-        recNode.addInput(CoreConstant.SlotContent.TRAINING_DATA.getSlotName(), training);
+        
+        String trainingSlot =
+        		CoreConstant.SlotContent.TRAINING_DATA.getSlotName();
+        recNode.addInput(trainingSlot, training);
 
         for (ErrorSourceDescription error : recommender.getErrors()) {
             parseErrors(error, recNode);
@@ -476,7 +484,7 @@ public class Parser {
             		agent, batchID, experimentID, userID, dpNode);
             
             parent.setStartBehavior(strategy);
-            if (child!=null) {
+            if (child != null) {
                 NeverEndingBuffer<DataSourceEdge> buffer =
                         new NeverEndingBuffer<>();
                 buffer.setTarget(child);
@@ -496,7 +504,7 @@ public class Parser {
             }
         }
 
-        if (child !=null) {
+        if (child != null) {
             NeverEndingBuffer<DataSourceEdge> buffer = new NeverEndingBuffer<>();
             buffer.setTarget(child);
             buffer.setSource(parent);

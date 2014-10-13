@@ -151,8 +151,9 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 			descr.add(CoreAgents.COMPUTING_AGENT.getName());
 			descr.add(getLocalName());
 	
+			// add fileName to service description
 			String typeDesc;
-			if (state == States.TRAINED) { // add fileName to service description
+			if (state == States.TRAINED) {
 				typeDesc = getAgentType() + " trained on " + trainFileName;
 			} else {
 				typeDesc = getAgentType();

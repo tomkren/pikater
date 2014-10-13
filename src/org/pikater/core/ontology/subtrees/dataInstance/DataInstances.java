@@ -10,14 +10,13 @@ import org.pikater.core.ontology.subtrees.attribute.Attribute;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 
 public class DataInstances implements Concept {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 4166896666680482675L;
+	
 	private List<Attribute> attributes;
 	private List<Instance> instances;
 	private String name;
-	private int class_index;
+	private int classIndex;
 
 	/**
 	 * @return the name
@@ -27,7 +26,7 @@ public class DataInstances implements Concept {
 	}
 
 	/**
-	 *            the name to set
+	 * The name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -41,7 +40,7 @@ public class DataInstances implements Concept {
 	}
 
 	/**
-	 *            the attributes to set
+	 * The attributes to set
 	 */
 	public void setAttributes(List<Attribute> attributes) {
 		this.attributes = attributes;
@@ -55,7 +54,7 @@ public class DataInstances implements Concept {
 	}
 
 	/**
-	 *            the instaces to set
+	 * The instaces to set
 	 */
 	public void setInstances(List<Instance> instances) {
 		this.instances = instances;
@@ -63,12 +62,27 @@ public class DataInstances implements Concept {
 
 	// =============================
 
-	public int getClass_index() {
-		return class_index == -1 ? getAttributes().size() - 1 : class_index;
+	/**
+	 * Get the index of Class
+	 * @return
+	 */
+	public int getClassIndex() {
+		int index;
+		if (classIndex == -1) {
+			index = getAttributes().size() - 1;
+		} else {
+			index = classIndex;
+		}
+		
+		return index;
 	}
 
-	public void setClass_index(int classIndex) {
-		class_index = classIndex;
+	/**
+	 * Set Class-Index
+	 * @param classIndex
+	 */
+	public void setClassIndex(int classIndex) {
+		this.classIndex = classIndex;
 	}
 
 	public weka.core.Instances toWekaInstances() {
@@ -81,12 +95,12 @@ public class DataInstances implements Concept {
 		weka.core.Instances winsts = new weka.core.Instances(name, wattrs,
 				instances.size());
 
-		for (Instance inst : instances) {
+		for (Instance instanceI : instances) {
 
 			double[] vals = new double[wattrs.size()];
 			for (int i = 0; i < wattrs.size(); i++) {
-				double val = inst.getValues().get(i);
-				if ( inst.getMissing().get(i) ) {
+				double val = instanceI.getValues().get(i);
+				if ( instanceI.getMissing().get(i) ) {
 					vals[i] = weka.core.Instance.missingValue();
 				} else {
 					vals[i] = val;
@@ -96,7 +110,7 @@ public class DataInstances implements Concept {
 			winst.setDataset(winsts);
 			winsts.add(winst);
 		}
-		winsts.setClassIndex(this.class_index);
+		winsts.setClassIndex(this.classIndex);
 		return winsts;
 	}
 
@@ -104,16 +118,16 @@ public class DataInstances implements Concept {
 		// set name
 		setName(winsts.relationName());
 		// set attributes
-		List<Attribute> onto_attrs = new ArrayList<Attribute>();
+		List<Attribute> ontoAttrs = new ArrayList<Attribute>();
 		for (int i = 0; i < winsts.numAttributes(); i++) {
 			Attribute a = new Attribute();
 			a.fillWekaAttribute(winsts.attribute(i));
-			onto_attrs.add(a);
+			ontoAttrs.add(a);
 		}
-		setAttributes(onto_attrs);
+		setAttributes(ontoAttrs);
 
 		// set instances
-		List<Instance> onto_insts = new ArrayList<Instance>();
+		List<Instance> ontoInsts = new ArrayList<Instance>();
 		for (int i = 0; i < winsts.numInstances(); i++) {
 			Instance inst = new Instance();
 			weka.core.Instance winst = winsts.instance(i);
@@ -132,15 +146,15 @@ public class DataInstances implements Concept {
 
 			inst.setValues(instvalues);
 			inst.setMissing(instmis);
-			onto_insts.add(inst);
+			ontoInsts.add(inst);
 		}
-		setInstances(onto_insts);
-		setClass_index(winsts.classIndex());
+		setInstances(ontoInsts);
+		setClassIndex(winsts.classIndex());
 
 	}
 
-	/*
-	 * returns all instances as a multi-line string
+	/**
+	 * Returns all instances as a multi-line string
 	 */
 	@Override
 	public String toString() {
@@ -156,7 +170,12 @@ public class DataInstances implements Concept {
 		return text.toString();
 	}
 
-	/* returns a value in the table on the row and index */
+	/**
+	 * Returns a value in the table on the row and index
+	 * @param row
+	 * @param index
+	 * @return
+	 */
 	public String toString(int row, int index) {
 		if (instances == null) {
 			return "";
