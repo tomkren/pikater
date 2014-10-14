@@ -14,17 +14,17 @@ public class LinearColorer implements Colorer {
 
 	private double min;
 	private double max;
-	
-	public LinearColorer(){
-		this.min=0.0;
-		this.max=10.0;
+
+	public LinearColorer() {
+		this.min = 0.0;
+		this.max = 10.0;
 	}
-	
-	public LinearColorer(double min,double max){
-		this.min=min;
-		this.max=max;
+
+	public LinearColorer(double min, double max) {
+		this.min = min;
+		this.max = max;
 	}
-	
+
 	/**
 	 * <p>Returns color for the value and the color's Saturation in HSB color space is based on the value.
 	 * Hue and Brightness are 1.0f except for some extreme cases.</p>
@@ -38,29 +38,28 @@ public class LinearColorer implements Colorer {
 	 */
 	@Override
 	public Color getColor(double value) {
-		if(Double.isNaN(value))
+		if (Double.isNaN(value))
 			return Color.BLACK;
-		if(Double.isInfinite(value))
+		if (Double.isInfinite(value))
 			return Color.GRAY;
-		float saturation = (float) (0.0 + ((value-min)/(max-min))*1.0);
+		float saturation = (float) (0.0 + ((value - min) / (max - min)) * 1.0);
 		return Color.getHSBColor(1.0f, saturation, 1.0f);
 	}
 
 	@Override
-	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException
-	{
-		if(colorer instanceof LinearColorer){
-			LinearColorer linCol=(LinearColorer)colorer;
-			if(linCol.min<this.min){
-				this.min=linCol.min;
+	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException {
+		if (colorer instanceof LinearColorer) {
+			LinearColorer linCol = (LinearColorer) colorer;
+			if (linCol.min < this.min) {
+				this.min = linCol.min;
 			}
-			
-			if(linCol.max>this.max){
-				this.max=linCol.max;
+
+			if (linCol.max > this.max) {
+				this.max = linCol.max;
 			}
-			
+
 			return this;
-		}else{
+		} else {
 			throw new ColorerNotMergeableException();
 		}
 	}

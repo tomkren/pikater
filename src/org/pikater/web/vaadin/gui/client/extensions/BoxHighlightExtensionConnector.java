@@ -20,13 +20,11 @@ import com.vaadin.shared.ui.Connect;
  * @see {@link BoxHighlightExtension}
  */
 @Connect(BoxHighlightExtension.class)
-public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
-{
+public class BoxHighlightExtensionConnector extends AbstractExtensionConnector {
 	private static final long serialVersionUID = -699537664178182240L;
-	
+
 	@Override
-	protected void extend(ServerConnector target)
-	{
+	protected void extend(ServerConnector target) {
 		/*
 		 * Extends the given component/connector with a mouseover/mouseout
 		 * handler that turns on/off highlighting of the given boxes of
@@ -36,38 +34,30 @@ public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 		 * of performance penalties and impacts. As such, this extension
 		 * makes a VERY nice workaround.
 		 */
-		
-		final Widget extendedWidget = ((ComponentConnector) target).getWidget(); 
-		extendedWidget.addDomHandler(new MouseOverHandler()
-		{
+
+		final Widget extendedWidget = ((ComponentConnector) target).getWidget();
+		extendedWidget.addDomHandler(new MouseOverHandler() {
 			@Override
-			public void onMouseOver(MouseOverEvent event)
-			{
-				extendedWidget.getElement().getStyle().setBackgroundColor(
-						KineticBoxSettings.getColor(VisualStyle.HIGHLIGHTED_SLOT).toString()
-				);
+			public void onMouseOver(MouseOverEvent event) {
+				extendedWidget.getElement().getStyle().setBackgroundColor(KineticBoxSettings.getColor(VisualStyle.HIGHLIGHTED_SLOT).toString());
 				getKineticConnectorByID(getState().kineticConnectorID).getWidget().highlightBoxes(getState().boxIDs);
 			}
 		}, MouseOverEvent.getType());
-		extendedWidget.addDomHandler(new MouseOutHandler()
-		{
+		extendedWidget.addDomHandler(new MouseOutHandler() {
 			@Override
-			public void onMouseOut(MouseOutEvent event)
-			{
+			public void onMouseOut(MouseOutEvent event) {
 				extendedWidget.getElement().getStyle().clearBackgroundColor();
 				getKineticConnectorByID(getState().kineticConnectorID).getWidget().cancelBoxHighlight();
 			}
 		}, MouseOutEvent.getType());
 	}
-	
+
 	@Override
-	public BoxHighlightExtensionSharedState getState()
-	{
+	public BoxHighlightExtensionSharedState getState() {
 		return (BoxHighlightExtensionSharedState) super.getState();
 	}
-	
-	private KineticComponentConnector getKineticConnectorByID(String id)
-	{
+
+	private KineticComponentConnector getKineticConnectorByID(String id) {
 		return (KineticComponentConnector) getConnection().getConnector(id, 0);
 	}
 }

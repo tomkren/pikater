@@ -23,74 +23,59 @@ import com.vaadin.ui.Button;
  * @param <T> The wizard's "state" class.
  */
 @StyleSheet("wizards.css")
-public class WizardWithOutput<T extends IWizardCommon> extends Wizard
-{
+public class WizardWithOutput<T extends IWizardCommon> extends Wizard {
 	private static final long serialVersionUID = -673702186069757491L;
-	
+
 	private final T output;
 	private boolean refreshActivatedSteps;
 
-	public WizardWithOutput(T output)
-	{
+	public WizardWithOutput(T output) {
 		super();
 		setSizeUndefined();
 		setStyleName("myWizard");
-		
+
 		this.output = output;
 		this.refreshActivatedSteps = false;
-		
-		addListener(new WizardProgressListener()
-		{
+
+		addListener(new WizardProgressListener() {
 			@Override
-			public void wizardCompleted(WizardCompletedEvent event)
-			{
+			public void wizardCompleted(WizardCompletedEvent event) {
 			}
-			
+
 			@Override
-			public void wizardCancelled(WizardCancelledEvent event)
-			{
+			public void wizardCancelled(WizardCancelledEvent event) {
 			}
-			
+
 			@Override
-			public void stepSetChanged(WizardStepSetChangedEvent event)
-			{
+			public void stepSetChanged(WizardStepSetChangedEvent event) {
 			}
-			
+
 			@Override
-			public void activeStepChanged(WizardStepActivationEvent event)
-			{
-				if(refreshActivatedSteps && (event.getActivatedStep() instanceof RefreshableWizardStep<?, ?>))
-				{
+			public void activeStepChanged(WizardStepActivationEvent event) {
+				if (refreshActivatedSteps && (event.getActivatedStep() instanceof RefreshableWizardStep<?, ?>)) {
 					((RefreshableWizardStep<?, ?>) event.getActivatedStep()).refresh();
 				}
 			}
 		});
 	}
-	
-	public T getOutput()
-	{
+
+	public T getOutput() {
 		return output;
 	}
-	
-	public void setRefreshActivatedSteps(boolean refresh)
-	{
+
+	public void setRefreshActivatedSteps(boolean refresh) {
 		this.refreshActivatedSteps = refresh;
 	}
-	
-	public void setContentPadding(boolean enabled)
-	{
-		if(enabled)
-		{
+
+	public void setContentPadding(boolean enabled) {
+		if (enabled) {
 			addStyleName("contentPadding");
-		}
-		else
-		{
+		} else {
 			removeStyleName("contentPadding");
 		}
 	}
-	
-	protected static void setButtonUsed(Button btn, boolean used)
-	{
+
+	protected static void setButtonUsed(Button btn, boolean used) {
 		btn.setEnabled(used);
 		btn.setVisible(used);
 	}

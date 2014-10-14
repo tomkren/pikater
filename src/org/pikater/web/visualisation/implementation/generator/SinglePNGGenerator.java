@@ -13,35 +13,35 @@ import org.pikater.web.visualisation.implementation.generator.base.ChartGenerato
 import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
 
 public class SinglePNGGenerator extends SingleGenerator {
-	
-	public SinglePNGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo,PrintStream output, int XIndex, int YIndex, int ColorIndex){
-		super(progressListener,dslo,output,XIndex,YIndex,ColorIndex);
+
+	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
+		super(progressListener, dslo, output, XIndex, YIndex, ColorIndex);
 		initRenderer();
 	}
-	
-	public SinglePNGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo,PrintStream output, String XName, String YName, String ColorName){
-		super(progressListener,dslo,output,XName,YName,ColorName);
+
+	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, String XName, String YName, String ColorName) {
+		super(progressListener, dslo, output, XName, YName, ColorName);
 		initRenderer();
 	}
-	
-	public SinglePNGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo,File datasetCachedFile, PrintStream output, int XIndex, int YIndex, int ColorIndex){
-		super(progressListener,dslo, datasetCachedFile, output,XIndex,YIndex,ColorIndex);
+
+	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
+		super(progressListener, dslo, datasetCachedFile, output, XIndex, YIndex, ColorIndex);
 		initRenderer();
 	}
-	
-	public SinglePNGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, String XName, String YName, String ColorName) {
+
+	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, String XName, String YName, String ColorName) {
 		super(progressListener, dslo, datasetCachedFile, output, XName, YName, ColorName);
 		initRenderer();
 	}
 
-	private void initRenderer(){
-		this.renderer=new ImageRenderer(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+	private void initRenderer() {
+		this.renderer = new ImageRenderer(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 	}
 
 	@Override
 	public void create() throws IOException {
 		super.create();
-		BufferedImage outIm=((ImageRenderer)renderer).getImage();
+		BufferedImage outIm = ((ImageRenderer) renderer).getImage();
 		ImageIO.write(outIm, "PNG", output);
 		output.close();
 		dataset.close();

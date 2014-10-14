@@ -16,48 +16,39 @@ import com.vaadin.shared.ui.Connect;
  * @author SkyCrawl 
  */
 @Connect(ExpEditorExtension.class)
-public class ExpEditorExtensionConnector extends AbstractExtensionConnector
-{
+public class ExpEditorExtensionConnector extends AbstractExtensionConnector {
 	private static final long serialVersionUID = 6766120104518020715L;
-	
+
 	// private final ExpEditorExtensionServerRpc serverRPC = RpcProxy.create(ExpEditorExtensionServerRpc.class, this);
-	
-	public ExpEditorExtensionConnector()
-	{
-		registerRpc(ExpEditorExtensionClientRpc.class, new ExpEditorExtensionClientRpc()
-		{
+
+	public ExpEditorExtensionConnector() {
+		registerRpc(ExpEditorExtensionClientRpc.class, new ExpEditorExtensionClientRpc() {
 			private static final long serialVersionUID = 560120982576334694L;
-			
+
 			@Override
-			public void command_cacheBoxPictures(final String[] pictureURLs)
-			{
+			public void command_cacheBoxPictures(final String[] pictureURLs) {
 				// built-in image widget does exactly what we want, we only need to create an instance
 				final Image[] imageWidgets = new Image[pictureURLs.length];
-				for(int i = 0; i < pictureURLs.length; i++)
-				{
+				for (int i = 0; i < pictureURLs.length; i++) {
 					imageWidgets[i] = new Image(pictureURLs[i]);
 				}
 			}
 
 			@Override
-			public void command_resizeSelectedKineticComponent()
-			{
+			public void command_resizeSelectedKineticComponent() {
 				resizeSelectedKineticComponent();
 			}
 		});
 	}
-	
+
 	//------------------------------------------------------------
 	// INHERITED INTERFACE
-	
+
 	@Override
-	protected void extend(ServerConnector target)
-	{
+	protected void extend(ServerConnector target) {
 		// then prevent accidental loss of work
-		Window.addWindowClosingHandler(new Window.ClosingHandler()
-		{
-			public void onWindowClosing(Window.ClosingEvent closingEvent)
-			{
+		Window.addWindowClosingHandler(new Window.ClosingHandler() {
+			public void onWindowClosing(Window.ClosingEvent closingEvent) {
 				/*
 				 * TODO: currently unsupported feature
 				if(getState().modifiedTabsCount > 0)
@@ -65,50 +56,42 @@ public class ExpEditorExtensionConnector extends AbstractExtensionConnector
 					closingEvent.setMessage("There's unsaved content in the editor. Really leave?");
 				}
 				*/
-				
+
 				closingEvent.setMessage("Really leave? Unsaved content will be lost.");
 			}
 		});
-		
+
 		// and finally, handle resize events
-		Window.addResizeHandler(new ResizeHandler()
-		{
-			Timer resizeTimer = new Timer()
-			{
+		Window.addResizeHandler(new ResizeHandler() {
+			Timer resizeTimer = new Timer() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					resizeSelectedKineticComponent();
 				}
 			};
-			  
+
 			@Override
-			public void onResize(ResizeEvent event)
-			{
+			public void onResize(ResizeEvent event) {
 				resizeTimer.cancel();
-			    resizeTimer.schedule(250); // only actually resize when the window resize ends
+				resizeTimer.schedule(250); // only actually resize when the window resize ends
 			}
 		});
 	}
-	
+
 	@Override
-	public ExpEditorExtensionSharedState getState()
-	{
+	public ExpEditorExtensionSharedState getState() {
 		return (ExpEditorExtensionSharedState) super.getState();
 	}
-	
+
 	//------------------------------------------------------------
 	// THE ACTUAL RESIZE RELATED INTERFACE
-	
-	private KineticComponentConnector getKineticConnectorByID(String id)
-	{
+
+	private KineticComponentConnector getKineticConnectorByID(String id) {
 		return (KineticComponentConnector) getConnection().getConnector(id, 0);
 	}
-	
-	private void resizeSelectedKineticComponent()
-	{
-		if(getState().currentlySelectedKineticConnectorID != null)
-		{
+
+	private void resizeSelectedKineticComponent() {
+		if (getState().currentlySelectedKineticConnectorID != null) {
 			getKineticConnectorByID(getState().currentlySelectedKineticConnectorID).getWidget().doResize();
 		}
 	}

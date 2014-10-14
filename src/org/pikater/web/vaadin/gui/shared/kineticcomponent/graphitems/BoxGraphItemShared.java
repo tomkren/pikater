@@ -11,62 +11,54 @@ import org.pikater.web.experiment.IBoxInfoCommon;
  * 
  * @author SkyCrawl
  */
-public class BoxGraphItemShared implements Serializable, IBoxInfoCommon<Integer>
-{
+public class BoxGraphItemShared implements Serializable, IBoxInfoCommon<Integer> {
 	private static final long serialVersionUID = -7700316337241284638L;
-	
+
 	public Integer boxID;
 	public int positionX;
 	public int positionY;
-	
+
 	/**
 	 * Default public constructor keeps Vaadin happy.
 	 */
 	@Deprecated
-	public BoxGraphItemShared()
-	{
+	public BoxGraphItemShared() {
 		this(0, 0, 0);
 	}
-	public BoxGraphItemShared(Integer boxID, int positionX, int positionY)
-	{
+
+	public BoxGraphItemShared(Integer boxID, int positionX, int positionY) {
 		this.boxID = boxID;
 		this.positionX = positionX;
 		this.positionY = positionY;
 	}
 
 	@Override
-	public Integer getID()
-	{
+	public Integer getID() {
 		return boxID;
 	}
 
 	@Override
-	public void setID(Integer id)
-	{
+	public void setID(Integer id) {
 		boxID = id;
 	}
 
 	@Override
-	public int getPosX()
-	{
+	public int getPosX() {
 		return positionX;
 	}
 
 	@Override
-	public void setPosX(int posX)
-	{
+	public void setPosX(int posX) {
 		this.positionX = posX;
 	}
 
 	@Override
-	public int getPosY()
-	{
+	public int getPosY() {
 		return positionY;
 	}
 
 	@Override
-	public void setPosY(int posY)
-	{
+	public void setPosY(int posY) {
 		this.positionY = posY;
 	}
 }

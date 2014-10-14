@@ -19,23 +19,20 @@ import com.vaadin.ui.UI;
  * 
  * @author SkyCrawl
  */
-public class ContentArea extends Panel
-{
+public class ContentArea extends Panel {
 	private static final long serialVersionUID = 7642456908975377869L;
-	
+
 	private final Navigator navigator;
-	
-	public ContentArea()
-	{
+
+	public ContentArea() {
 		super();
 		setSizeFull();
 		setStyleName("contentArea");
-		
+
 		this.navigator = new Navigator(UI.getCurrent(), this);
-		this.navigator.addViewChangeListener(new ViewChangeListener()
-		{
+		this.navigator.addViewChangeListener(new ViewChangeListener() {
 			private static final long serialVersionUID = -6954284010979732570L;
-			
+
 			private boolean result;
 
 			/**
@@ -44,89 +41,70 @@ public class ContentArea extends Panel
 			 * {@link ContentArea#setContent(IWebFeature feature)} method.
 			 */
 			@Override
-			public boolean beforeViewChange(ViewChangeEvent event)
-			{
+			public boolean beforeViewChange(ViewChangeEvent event) {
 				result = false; // block the change by default
-				if((event.getOldView() != null) && (event.getOldView() instanceof IContentComponent))
-				{
+				if ((event.getOldView() != null) && (event.getOldView() instanceof IContentComponent)) {
 					final IContentComponent currentView = (IContentComponent) event.getOldView();
-					if(!currentView.isReadyToClose())
-					{
-						GeneralDialogs.confirm("Navigate away?", currentView.getCloseMessage(), new GeneralDialogs.IDialogResultHandler()
-						{
+					if (!currentView.isReadyToClose()) {
+						GeneralDialogs.confirm("Navigate away?", currentView.getCloseMessage(), new GeneralDialogs.IDialogResultHandler() {
 							@Override
-							public boolean handleResult(Object[] args)
-							{
+							public boolean handleResult(Object[] args) {
 								currentView.beforeClose();
 								result = true;
 								return true; // close the dialog
 							}
 						});
-					}
-					else
-					{
+					} else {
 						result = true;
 					}
-				}
-				else
-				{
+				} else {
 					result = true;
 				}
 				return result;
 			}
-			
+
 			@Override
-			public void afterViewChange(ViewChangeEvent event)
-			{
+			public void afterViewChange(ViewChangeEvent event) {
 			}
 		});
-		
+
 		/*
 		 * Register all available views so that navigator will always know what view to create.
 		 */
-		for(Class<? extends IWebFeature> featureSetClass : ReflectionUtils.getSubtypesFromPackage(ContentProvider.class.getPackage(), IWebFeature.class))
-		{
+		for (Class<? extends IWebFeature> featureSetClass : ReflectionUtils.getSubtypesFromPackage(ContentProvider.class.getPackage(), IWebFeature.class)) {
 			registerAllViewsFromFeatureSet(featureSetClass);
 		}
 	}
-	
+
 	/**
 	 * @deprecated Use {@link #setContentView(IWebFeature)} instead.
 	 */
 	@Deprecated
 	@Override
-	public void setContent(Component content)
-	{
+	public void setContent(Component content) {
 		super.setContent(content);
 	}
-	
+
 	//---------------------------------------------------------------
 	// PUBLIC INTERFACE
-	
+
 	/**
 	 * The main routine for setting the content component.
 	 */
-	public void setContentView(IWebFeature feature)
-	{
-		if(feature.accessAllowed(VaadinSession.getCurrent()))
-		{
+	public void setContentView(IWebFeature feature) {
+		if (feature.accessAllowed(VaadinSession.getCurrent())) {
 			navigator.navigateTo(feature.toNavigatorName());
-		}
-		else
-		{
+		} else {
 			GeneralDialogs.error("Access denied", "Contact the administrators.");
 		}
 	}
-	
+
 	//---------------------------------------------------------------
 	// PRIVATE INTERFACE
-	
-	private void registerAllViewsFromFeatureSet(Class<? extends IWebFeature> clazz)
-	{
-		for(IWebFeature feature : clazz.getEnumConstants())
-		{
-			if(feature.accessAllowed(VaadinSession.getCurrent()) && (feature.toComponentClass() != null))
-			{
+
+	private void registerAllViewsFromFeatureSet(Class<? extends IWebFeature> clazz) {
+		for (IWebFeature feature : clazz.getEnumConstants()) {
+			if (feature.accessAllowed(VaadinSession.getCurrent()) && (feature.toComponentClass() != null)) {
 				navigator.addView(feature.toNavigatorName(), feature.toComponentClass());
 			}
 		}

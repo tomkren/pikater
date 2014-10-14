@@ -12,57 +12,47 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
  * 
  * @author SkyCrawl
  */
-public class MyUploadStateWindow extends UploadStateWindow
-{
+public class MyUploadStateWindow extends UploadStateWindow {
 	private static final long serialVersionUID = -1630660423984992697L;
-	
+
 	private final List<UploadStatePanel> panels;
 	private final Object lock_object;
-	
+
 	// TODO: edit and attach a network activity graph to display upload speed history?
-	
-	public MyUploadStateWindow()
-	{
+
+	public MyUploadStateWindow() {
 		super();
 		this.panels = new ArrayList<UploadStatePanel>();
 		this.lock_object = new Object();
 	}
 
 	@Override
-	public void addPanel(UploadStatePanel panel)
-	{
-		synchronized(lock_object)
-		{
+	public void addPanel(UploadStatePanel panel) {
+		synchronized (lock_object) {
 			super.addPanel(panel);
 			this.panels.add(panel);
 		}
 	}
-	
+
 	@Override
-	public void removePanel(UploadStatePanel panel)
-	{
-		synchronized(lock_object)
-		{
+	public void removePanel(UploadStatePanel panel) {
+		synchronized (lock_object) {
 			super.removePanel(panel);
 			this.panels.remove(panel);
 		}
 	}
-	
+
 	/**
 	 * Note: on any UI. 
 	 */
-	public boolean isAFileBeingUploaded()
-	{
+	public boolean isAFileBeingUploaded() {
 		/*
 		 * Works across all instances in all UIs, if panels are always
 		 * added.
 		 */
-		synchronized(lock_object)
-		{
-			for(UploadStatePanel panel : panels)
-			{
-				if(panel.hasUploadInProgress())
-				{
+		synchronized (lock_object) {
+			for (UploadStatePanel panel : panels) {
+				if (panel.hasUploadInProgress()) {
 					return true;
 				}
 			}

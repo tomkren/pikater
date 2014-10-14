@@ -16,51 +16,43 @@ import com.vaadin.server.AbstractExtension;
  * 
  * @author SkyCrawl
  */
-public class ExpEditorExtension extends AbstractExtension
-{
+public class ExpEditorExtension extends AbstractExtension {
 	private static final long serialVersionUID = 8278201529558658998L;
-	
+
 	private final Set<KineticComponent> modifiedContent;
-	
-	public ExpEditorExtension()
-	{
+
+	public ExpEditorExtension() {
 		this.modifiedContent = new HashSet<KineticComponent>();
-		registerRpc(new ExpEditorExtensionServerRpc()
-		{
+		registerRpc(new ExpEditorExtensionServerRpc() {
 			private static final long serialVersionUID = 216446786216335413L;
 		});
 	}
-	
+
 	@Override
-	public ExpEditorExtensionSharedState getState()
-	{
+	public ExpEditorExtensionSharedState getState() {
 		return (ExpEditorExtensionSharedState) super.getState();
 	}
-	
+
 	/**
 	 * Exposing the inherited API.
 	 */
-	public void extend(ExpEditor expEditor)
-    {
-        super.extend(expEditor);
-    }
-	
+	public void extend(ExpEditor expEditor) {
+		super.extend(expEditor);
+	}
+
 	/**
 	 * Get handle to client commands.
 	 */
-	public ExpEditorExtensionClientRpc getClientRPC()
-	{
+	public ExpEditorExtensionClientRpc getClientRPC() {
 		return getRpcProxy(ExpEditorExtensionClientRpc.class);
 	}
-	
+
 	/**
 	 * @deprecated Not supported at the moment.
 	 */
 	@Deprecated
-	public void setKineticContentModified(KineticComponent content, boolean modified)
-	{
-		if(modified ? modifiedContent.add(content) : modifiedContent.remove(content))
-		{
+	public void setKineticContentModified(KineticComponent content, boolean modified) {
+		if (modified ? modifiedContent.add(content) : modifiedContent.remove(content)) {
 			// modified content size changed
 			getState().modifiedTabsCount = modifiedContent.size();
 		}

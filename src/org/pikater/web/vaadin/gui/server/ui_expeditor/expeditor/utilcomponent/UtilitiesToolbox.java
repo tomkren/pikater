@@ -12,15 +12,13 @@ import com.vaadin.ui.Label;
  * @author SkyCrawl
  */
 @StyleSheet("utilitiesToolbox.css")
-public class UtilitiesToolbox extends Toolbox
-{
+public class UtilitiesToolbox extends Toolbox {
 	private static final long serialVersionUID = 1668816947520512948L;
 
-	public UtilitiesToolbox(String caption, ClickListener minimizeAction)
-	{
+	public UtilitiesToolbox(String caption, ClickListener minimizeAction) {
 		super(caption, minimizeAction);
 		setSizeFull();
-		
+
 		setToolboxContent(new Label("Poliket"));
 	}
 }

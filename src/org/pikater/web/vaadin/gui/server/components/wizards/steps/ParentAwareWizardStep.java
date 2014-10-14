@@ -10,22 +10,18 @@ import org.vaadin.teemu.wizards.WizardStep;
  * @author SkyCrawl
  *
  */
-public abstract class ParentAwareWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithOutput<OUTPUT>> implements WizardStep
-{
+public abstract class ParentAwareWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithOutput<OUTPUT>> implements WizardStep {
 	private final WIZARD parentWizard;
 
-	public ParentAwareWizardStep(WIZARD parentWizard)
-	{
+	public ParentAwareWizardStep(WIZARD parentWizard) {
 		this.parentWizard = parentWizard;
 	}
-	
-	public WIZARD getParentWizard()
-	{
+
+	public WIZARD getParentWizard() {
 		return parentWizard;
 	}
-	
-	public OUTPUT getOutput()
-	{
+
+	public OUTPUT getOutput() {
 		return parentWizard.getOutput();
 	}
 }

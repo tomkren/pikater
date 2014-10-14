@@ -7,46 +7,32 @@ import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorder
  * 
  * @author SkyCrawl
  */
-public class BorderLayoutUtil
-{
-	public enum Border
-	{
-		NORTH,
-		EAST,
-		WEST,
-		SOUTH,
-		CENTER;
-		
-		public Row toRow()
-		{
+public class BorderLayoutUtil {
+	public enum Border {
+		NORTH, EAST, WEST, SOUTH, CENTER;
+
+		public Row toRow() {
 			return Row.valueOf(this.name());
 		}
-		
-		public Column toColumn()
-		{
+
+		public Column toColumn() {
 			return Column.valueOf(this.name());
 		}
 	}
-	
-	public enum Row
-	{
+
+	public enum Row {
 		/*
 		 * Note: don't alter the order - it is assumed in other classes.
 		 */
-		
-		NORTH,
-		CENTER,
-		SOUTH
+
+		NORTH, CENTER, SOUTH
 	}
-	
-	public enum Column
-	{
+
+	public enum Column {
 		/*
 		 * Note: don't alter the order - it is assumed in other classes.
 		 */
-		
-		WEST,
-		CENTER,
-		EAST
+
+		WEST, CENTER, EAST
 	}
 }

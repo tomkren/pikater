@@ -12,10 +12,12 @@ import org.pikater.web.experiment.server.BoxInfoServer;
  * 
  * @author SkyCrawl
  */
-public interface IOptionViewDataSource
-{
+public interface IOptionViewDataSource {
 	BoxInfoServer getBox();
+
 	NewOption getOption();
+
 	Value getValue();
+
 	TypeRestriction getAllowedTypes();
 }

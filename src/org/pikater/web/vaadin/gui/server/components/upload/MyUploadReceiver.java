@@ -30,78 +30,69 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.receiver.UploadReceiver;
  * 
  * @author SkyCrawl
  */
-public class MyUploadReceiver implements UploadReceiver
-{
+public class MyUploadReceiver implements UploadReceiver {
 	/**
 	 * One of the fields was removed, one remained.
 	 */
-    private File file;
-    
-    //-------------------------------------------------------
-    // ORIGINAL INTERFACE
-    
-    /**
-     * Original implementation, internal creation of temporary files was outsourced,
-     * as stated in this class's javadoc.
-     * Used to create an output stream to write pieces of uploaded file to.
-     */
-    @Override
-	public OutputStream receiveUpload()
-	{
-    	try
-    	{
-    		file = IOUtils.createTemporaryFile("upload");
-            return new FileOutputStream(file);
-        }
-    	catch (IOException e)
-    	{
-    		throw new RuntimeException(e);
-    	}
-	}
-    
-    /**
-     * <ul>
-     * <li>ORIGINAL USE-CASE:</br>
-     * called to get a stream on the uploaded file and pass it to a 
-     * {@link com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler UploadFinishedHandler}
-     * before calling {@link #deleteTempFile()}.
-     * <li>OUR USE-CASE:</br>
-     * this method has to return null to unbind uploaded file handling from Vaadin. The original
-     * implementation contains a safety null check and doesn't throw exceptions so it should be fine. 
-     * </ul>
-     */
-    @Override
-	public InputStream getStream()
-	{
-    	return null;
+	private File file;
+
+	//-------------------------------------------------------
+	// ORIGINAL INTERFACE
+
+	/**
+	 * Original implementation, internal creation of temporary files was outsourced,
+	 * as stated in this class's javadoc.
+	 * Used to create an output stream to write pieces of uploaded file to.
+	 */
+	@Override
+	public OutputStream receiveUpload() {
+		try {
+			file = IOUtils.createTemporaryFile("upload");
+			return new FileOutputStream(file);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-    /**
-     * <ul>
-     * <li>ORIGINAL USE-CASE:</br>
-     * Called if {@link #getStream()} returns a non-null stream or when the upload fails. 
-     * <li>OUR USE-CASE:</br>
-     * Called by the plugin, when the upload fails.
-     * </ul>
-     */
+	/**
+	 * <ul>
+	 * <li>ORIGINAL USE-CASE:</br>
+	 * called to get a stream on the uploaded file and pass it to a 
+	 * {@link com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler UploadFinishedHandler}
+	 * before calling {@link #deleteTempFile()}.
+	 * <li>OUR USE-CASE:</br>
+	 * this method has to return null to unbind uploaded file handling from Vaadin. The original
+	 * implementation contains a safety null check and doesn't throw exceptions so it should be fine. 
+	 * </ul>
+	 */
 	@Override
-	public void deleteTempFile()
-	{
-		if (file != null && file.exists())
-		{
+	public InputStream getStream() {
+		return null;
+	}
+
+	/**
+	 * <ul>
+	 * <li>ORIGINAL USE-CASE:</br>
+	 * Called if {@link #getStream()} returns a non-null stream or when the upload fails. 
+	 * <li>OUR USE-CASE:</br>
+	 * Called by the plugin, when the upload fails.
+	 * </ul>
+	 */
+	@Override
+	public void deleteTempFile() {
+		if (file != null && file.exists()) {
 			file.delete();
 			file = null;
-        }
+		}
 	}
-	
+
 	//-------------------------------------------------------
-    // INTERFACE ADDED BY US
-	
-    /**
-     * The method we are doing all this for. See this class's Javadoc.
-     */
-	public File getUploadedFileHandler()
-	{
+	// INTERFACE ADDED BY US
+
+	/**
+	 * The method we are doing all this for. See this class's Javadoc.
+	 */
+	public File getUploadedFileHandler() {
 		return file;
 	}
 }

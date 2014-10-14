@@ -33,63 +33,54 @@ import com.vaadin.ui.Component;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class BatchesView extends ExpandableView
-{
+public class BatchesView extends ExpandableView {
 	private static final long serialVersionUID = 5847910505253647132L;
 
-	public BatchesView()
-	{
+	public BatchesView() {
 		super();
 		setSizeUndefined();
 		setWidth("100%");
 	}
-	
+
 	//----------------------------------------------------
 	// VIEW INTERFACE
-	
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		super.finishInit(); // don't forget to!
 	}
 
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return true;
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
-	
+
 	//----------------------------------------------------
 	// OTHER INTERFACE
 
 	@Override
-	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep()
-	{
-		return new BatchStep(this, new BatchTableDBViewAll()); 
+	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep() {
+		return new BatchStep(this, new BatchTableDBViewAll());
 	}
-	
+
 	//----------------------------------------------------------------------------
 	// INDIVIDUAL STEPS OF THIS VIEW
-	
-	protected class BatchStep extends ExpandableViewStep
-	{
+
+	protected class BatchStep extends ExpandableViewStep {
 		private final DBTableLayout innerLayout;
-		
-		public BatchStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, BatchTableDBView dbView)
-		{
+
+		public BatchStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, BatchTableDBView dbView) {
 			super(parentWizard, false);
-			
+
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.getTable().setMultiSelect(false); // this is required below
 			this.innerLayout.setView(new BatchDBViewRoot<BatchTableDBView>(dbView));
@@ -97,27 +88,21 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public String getCaption()
-		{
+		public String getCaption() {
 			return "Batches overview";
 		}
 
 		@Override
-		public Component getContent()
-		{
+		public Component getContent() {
 			return innerLayout;
 		}
 
 		@Override
-		public ExpandableViewStep constructNextStep()
-		{
-			if(!innerLayout.getTable().isARowSelected())
-			{
+		public ExpandableViewStep constructNextStep() {
+			if (!innerLayout.getTable().isARowSelected()) {
 				MyNotifications.showWarning(null, "No table row (batch) is selected.");
 				return null;
-			}
-			else
-			{
+			} else {
 				// this assumes single select mode
 				AbstractTableRowDBView[] selectedRowsViews = innerLayout.getTable().getViewsOfSelectedRows();
 				return constructNextStepFromView(selectedRowsViews[0]);
@@ -125,21 +110,18 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
-		{
-			BatchTableDBRow specificView = (BatchTableDBRow) view; 
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
+			BatchTableDBRow specificView = (BatchTableDBRow) view;
 			return new ExperimentStep(BatchesView.this, specificView.getBatch());
 		}
 	}
-	
-	protected class ExperimentStep extends ExpandableViewStep
-	{
+
+	protected class ExperimentStep extends ExpandableViewStep {
 		private final DBTableLayout innerLayout;
-		
-		public ExperimentStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPABatch batch)
-		{
+
+		public ExperimentStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPABatch batch) {
 			super(parentWizard, false);
-			
+
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.getTable().setMultiSelect(false); // this is required below
 			this.innerLayout.setReadOnly(true);
@@ -148,27 +130,21 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public String getCaption()
-		{
+		public String getCaption() {
 			return "Experiments overview";
 		}
 
 		@Override
-		public Component getContent()
-		{
+		public Component getContent() {
 			return innerLayout;
 		}
 
 		@Override
-		public ExpandableViewStep constructNextStep()
-		{
-			if(!innerLayout.getTable().isARowSelected())
-			{
+		public ExpandableViewStep constructNextStep() {
+			if (!innerLayout.getTable().isARowSelected()) {
 				MyNotifications.showWarning(null, "No table row (experiment) is selected.");
 				return null;
-			}
-			else
-			{
+			} else {
 				// this assumes single select mode
 				AbstractTableRowDBView[] selectedRowsViews = innerLayout.getTable().getViewsOfSelectedRows();
 				return constructNextStepFromView(selectedRowsViews[0]);
@@ -176,21 +152,18 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
-		{
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
 			ExperimentTableDBRow selectedExperimentView = (ExperimentTableDBRow) view;
 			return new ResultStep(BatchesView.this, selectedExperimentView.getExperiment());
 		}
 	}
-	
-	protected class ResultStep extends ExpandableViewStep
-	{
+
+	protected class ResultStep extends ExpandableViewStep {
 		private final DBTableLayout innerLayout;
-		
-		public ResultStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPAExperiment experiment)
-		{
+
+		public ResultStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPAExperiment experiment) {
 			super(parentWizard, true);
-			
+
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.setReadOnly(true);
 			this.innerLayout.setView(new ResultDBViewRoot<ResultTableDBViewExperiment>(new ResultTableDBViewExperiment(experiment)));
@@ -198,26 +171,22 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public String getCaption()
-		{
+		public String getCaption() {
 			return "Results overview";
 		}
 
 		@Override
-		public Component getContent()
-		{
+		public Component getContent() {
 			return innerLayout;
 		}
 
 		@Override
-		public ExpandableViewStep constructNextStep()
-		{
+		public ExpandableViewStep constructNextStep() {
 			return null;
 		}
 
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
-		{
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
 			return null;
 		}
 	}

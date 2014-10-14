@@ -38,120 +38,96 @@ import com.vaadin.ui.VerticalLayout;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class TestView extends VerticalLayout implements IContentComponent
-{
+public class TestView extends VerticalLayout implements IContentComponent {
 	private static final long serialVersionUID = -6639847503623900929L;
 
-	public TestView()
-	{
+	public TestView() {
 		super();
 		setSizeFull();
-		
+
 		// testJSCH();
 		// testAnchor();
 		// dummyDBTableLayout();
 		dummyExpandableDBTableLayout();
 	}
-	
+
 	//----------------------------------------------------
 	// VIEW INTERFACE
 
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 	}
 
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return false;
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
-	
+
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
-	
-	public void dummyDBTableLayout()
-	{
+
+	public void dummyDBTableLayout() {
 		DBTableLayout dbTableLayout = new DBTableLayout();
 		dbTableLayout.setReadOnly(true);
 		// dbTableLayout.setCommitImmediately(false);
 		dbTableLayout.setView(new TestDBViewRoot(new TestTableDBView()));
 		addComponent(dbTableLayout);
 	}
-	
-	public void dummyExpandableDBTableLayout()
-	{
+
+	public void dummyExpandableDBTableLayout() {
 		addComponent(new TestExpandableView());
 	}
-	
-	public void testAnchor()
-	{
-		addComponent(new Anchor("test1", new ClickListener() 
-		{
+
+	public void testAnchor() {
+		addComponent(new Anchor("test1", new ClickListener() {
 			private static final long serialVersionUID = -485684054380631770L;
 
 			@Override
-			public void click(com.vaadin.event.MouseEvents.ClickEvent event)
-			{
+			public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
 				MyNotifications.showInfo("Yay", "yay");
 			}
 		}));
 		addComponent(new Anchor("test2", "function() { alert(42); }"));
 	}
-	
-	public void testJSCH()
-	{
-		addComponent(new SimpleConsoleComponent(new SSHSession(
-				"nassoftwerak.ms.mff.cuni.cz",
-				"e2:dc:09:34:e5:94:11:7f:fd:ee:00:09:b8:1e:f5:d4",
-				"softwerak",
-				"SrapRoPy",
-				new ISSHSessionNotificationHandler()
-				{
+
+	public void testJSCH() {
+		addComponent(new SimpleConsoleComponent(new SSHSession("nassoftwerak.ms.mff.cuni.cz", "e2:dc:09:34:e5:94:11:7f:fd:ee:00:09:b8:1e:f5:d4", "softwerak", "SrapRoPy",
+				new ISSHSessionNotificationHandler() {
 					@Override
-					public void notifySessionClosed()
-					{
+					public void notifySessionClosed() {
 						// TODO Auto-generated method stub
 					}
-					
+
 					@Override
-					public void notifyChannelClosed(int exitStatus)
-					{
+					public void notifyChannelClosed(int exitStatus) {
 						// TODO Auto-generated method stub
 					}
-					
+
 					@Override
-					public void handleError(String description, Throwable t)
-					{
+					public void handleError(String description, Throwable t) {
 						// TODO Auto-generated method stub
 					}
-				})
-		));
+				})));
 	}
-	
+
 	// -------------------------------------------------------------------
 	// TIPS AND TRICKS
-	
-	protected static void callJSFunctionOnTheClient()
-	{
-		JavaScript.getCurrent().addFunction("pikater_setAppMode", new JavaScriptFunction()
-		{
+
+	protected static void callJSFunctionOnTheClient() {
+		JavaScript.getCurrent().addFunction("pikater_setAppMode", new JavaScriptFunction() {
 			private static final long serialVersionUID = 4291049321598205127L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException
-			{
+			public void call(JSONArray arguments) throws JSONException {
 				// this is called on the server when the function is called on the client
 				System.out.println(arguments.length());
 				System.out.println(arguments.getBoolean(0));
@@ -159,34 +135,28 @@ public class TestView extends VerticalLayout implements IContentComponent
 		});
 		JavaScript.getCurrent().execute("window.pikater_setAppMode(true)"); // calls the function on the client
 	}
-	
-	protected static void callJSNIAddedFunctionOnTheClient()
-	{
+
+	protected static void callJSNIAddedFunctionOnTheClient() {
 		JavaScript.getCurrent().execute("window.ns_pikater.setAppMode(\"DEBUG\");"); // calls the function on the client
 	}
-	
+
 	protected static void backgroundThreadDoingSomeJobPeriodically() // quartz could be used too...
 	{
-	    // The background thread that updates clock times once every second.
-        new Timer().scheduleAtFixedRate(new TimerTask()
-		{
+		// The background thread that updates clock times once every second.
+		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
-			public void run()
-			{
+			public void run() {
 				// TODO Auto-generated method stub
 			}
 		}, new Date(), 1000);
 	}
-	
-	protected static void redirectToCustomServletWithoutChangingURL()
-	{
-		new Button.ClickListener()
-		{
+
+	protected static void redirectToCustomServletWithoutChangingURL() {
+		new Button.ClickListener() {
 			private static final long serialVersionUID = -3016596327398677231L;
 
 			@Override
-			public void buttonClick(ClickEvent event)
-			{
+			public void buttonClick(ClickEvent event) {
 				// getUI().getPage().setLocation("/NewPikater/static/hokus_pokus.txt"); // ./WEB-INF/static/hokus_pokus.txt
 				// getUI().getPage().setLocation("/Pikater/staticDownload"); // servlet mapped to /staticDownload
 			}

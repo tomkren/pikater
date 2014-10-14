@@ -5,8 +5,7 @@ import com.vaadin.shared.communication.ClientRpc;
 /** 
  * @author SkyCrawl 
  */
-public interface ExpEditorExtensionClientRpc extends ClientRpc
-{
+public interface ExpEditorExtensionClientRpc extends ClientRpc {
 	/**
 	 * These pictures will not be used directly in Vaadin but rather in the Kinetic environment
 	 * on the client. When drawing boxes in the Kinetic stage, images need to be already loaded
@@ -14,7 +13,7 @@ public interface ExpEditorExtensionClientRpc extends ClientRpc
 	 * That is what this method aims to do.
 	 */
 	void command_cacheBoxPictures(String[] pictureURLs);
-	
+
 	/**
 	 * Called on events that might change the kinetic component's parent's size.
 	 * If this happens, the underlying kinetic {@link net.edzard.kinetic.Stage}

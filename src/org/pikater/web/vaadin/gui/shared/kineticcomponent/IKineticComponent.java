@@ -10,25 +10,24 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBox
  * 
  * @author SkyCrawl
  */
-public interface IKineticComponent
-{
+public interface IKineticComponent {
 	/**
 	 * Highlights the given boxes in the kinetic canvas according to
 	 * the {@link KineticBoxSettings visual style} specified.
 	 */
 	void highlightBoxes(Integer[] boxIDs);
-	
+
 	/**
 	 * Cancels any highlights made with the {@link #highlightBoxes(Integer[])}
 	 * method.
 	 */
 	void cancelBoxHighlight();
-	
+
 	/**
 	 * Deselects all selected boxes in the client kinetic canvas.
 	 */
 	void cancelSelection();
-	
+
 	/**
 	 * Clears the client kinetic canvas's content and resets inner state.
 	 */

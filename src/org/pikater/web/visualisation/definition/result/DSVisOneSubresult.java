@@ -10,31 +10,26 @@ import org.pikater.web.visualisation.definition.AttrMapping;
  * 
  * @author SkyCrawl
  */
-public class DSVisOneSubresult extends AbstractDSVisSubresult<JPAAttributeMetaData>
-{
+public class DSVisOneSubresult extends AbstractDSVisSubresult<JPAAttributeMetaData> {
 	private final AttrMapping attrInfo;
 
-	public DSVisOneSubresult(AttrMapping attrInfo, ImageType imageType)
-	{
+	public DSVisOneSubresult(AttrMapping attrInfo, ImageType imageType) {
 		super(imageType);
-		
+
 		this.attrInfo = attrInfo;
 	}
 
-	public AttrMapping getAttrInfo()
-	{
+	public AttrMapping getAttrInfo() {
 		return attrInfo;
 	}
 
 	@Override
-	public JPAAttributeMetaData toLeftIndex()
-	{
+	public JPAAttributeMetaData toLeftIndex() {
 		return attrInfo.getAttrY();
 	}
 
 	@Override
-	public JPAAttributeMetaData toTopIndex()
-	{
+	public JPAAttributeMetaData toTopIndex() {
 		return attrInfo.getAttrX();
 	}
 }

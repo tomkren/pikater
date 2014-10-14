@@ -8,24 +8,20 @@ import com.vaadin.ui.CustomLayout;
  * 
  * @author SkyCrawl
  */
-public class SimplePanel extends CustomLayout
-{
+public class SimplePanel extends CustomLayout {
 	private static final long serialVersionUID = -4653502684891551427L;
-	
-	public SimplePanel()
-	{
+
+	public SimplePanel() {
 		super("simplePanel");
 		setPrimaryStyleName("simplePanel");
 	}
 
-	public SimplePanel(Component content)
-	{
+	public SimplePanel(Component content) {
 		this();
 		setContent(content);
 	}
-	
-	public void setContent(Component content)
-	{
+
+	public void setContent(Component content) {
 		addComponent(content, "CONTAINER");
 	}
 }

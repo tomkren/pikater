@@ -10,31 +10,26 @@ import org.pikater.web.visualisation.definition.AttrMapping;
  * 
  * @author SkyCrawl
  */
-public class DSVisTwoSubresult extends AbstractDSVisSubresult<AttrMapping>
-{
+public class DSVisTwoSubresult extends AbstractDSVisSubresult<AttrMapping> {
 	private final Tuple<AttrMapping, AttrMapping> attrInfo;
-	
-	public DSVisTwoSubresult(ImageType imageType, Tuple<AttrMapping, AttrMapping> attrInfo)
-	{
+
+	public DSVisTwoSubresult(ImageType imageType, Tuple<AttrMapping, AttrMapping> attrInfo) {
 		super(imageType);
-		
+
 		this.attrInfo = attrInfo;
 	}
 
-	public Tuple<AttrMapping, AttrMapping> getAttrInfo()
-	{
+	public Tuple<AttrMapping, AttrMapping> getAttrInfo() {
 		return attrInfo;
 	}
 
 	@Override
-	public AttrMapping toLeftIndex()
-	{
+	public AttrMapping toLeftIndex() {
 		return attrInfo.getValue1();
 	}
 
 	@Override
-	public AttrMapping toTopIndex()
-	{
+	public AttrMapping toTopIndex() {
 		return attrInfo.getValue2();
 	}
 }

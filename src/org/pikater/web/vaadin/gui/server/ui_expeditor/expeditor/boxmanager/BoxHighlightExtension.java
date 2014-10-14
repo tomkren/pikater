@@ -12,33 +12,29 @@ import com.vaadin.server.AbstractExtension;
  * 
  * @author SkyCrawl
  */
-public class BoxHighlightExtension extends AbstractExtension
-{
+public class BoxHighlightExtension extends AbstractExtension {
 	private static final long serialVersionUID = 3081925647057133214L;
 
-	public BoxHighlightExtension(String kineticConnectorID, Integer[] boxesToBeHighlighted)
-	{
+	public BoxHighlightExtension(String kineticConnectorID, Integer[] boxesToBeHighlighted) {
 		/*
 		registerRpc(new BoxHighlightExtensionServerRpc()
 		{
 		});
 		*/
-		
+
 		getState().kineticConnectorID = kineticConnectorID;
 		getState().boxIDs = boxesToBeHighlighted;
 	}
-	
+
 	@Override
-	protected BoxHighlightExtensionSharedState getState()
-	{
+	protected BoxHighlightExtensionSharedState getState() {
 		return (BoxHighlightExtensionSharedState) super.getState();
 	}
-	
+
 	/**
 	 * Exposing the inherited API.
 	 */
-	public void extend(HorizontalFlowLayout component)
-    {
-        super.extend(component);
-    }
+	public void extend(HorizontalFlowLayout component) {
+		super.extend(component);
+	}
 }

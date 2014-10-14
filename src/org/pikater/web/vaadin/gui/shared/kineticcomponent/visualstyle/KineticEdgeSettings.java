@@ -10,61 +10,51 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.IGraphItemSettings;
  * 
  * @author SkyCrawl
  */
-public class KineticEdgeSettings implements IGraphItemSettings
-{
+public class KineticEdgeSettings implements IGraphItemSettings {
 	/*
 	 * Parameters defining the looks of the arrowhead (how "sharp" it is).
 	 * In this case, it is a little bit longer than wider, which makes for a bit "sharper" arrowhead.
 	 */
-	
-	public int getArrowHeight()
-	{
+
+	public int getArrowHeight() {
 		return 7;
 	}
-	
-	public int getArrowWidth()
-	{
+
+	public int getArrowWidth() {
 		return 6;
 	}
-	
+
 	/*
 	 * Parameter defining the looks of drag marks.
 	 */
-	
-	public Vector2d getDragMarkSize()
-	{
+
+	public Vector2d getDragMarkSize() {
 		return new Vector2d(12, 12);
 	}
-	
-	public Colour getDragMarkFill()
-	{
+
+	public Colour getDragMarkFill() {
 		return Colour.darkorchid;
 	}
-	
+
 	// private static final Vector2d dragMarkHalfSize = new Vector2d(dragMarkDimensionInPixels >> 1, dragMarkDimensionInPixels >> 1).;
-	
+
 	//--------------------------------------------------------------
 	// INSTANCE COMPARING
-	
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return 31;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
+	public boolean equals(Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (obj == null)
-		{
+		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass())
-		{
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		// KineticEdgeSettings other = (KineticEdgeSettings) obj;

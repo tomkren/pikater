@@ -12,8 +12,8 @@ import com.vaadin.shared.communication.ClientRpc;
  * 
  * @author SkyCrawl
  */
-public interface KineticComponentClientRpc extends ClientRpc, IKineticComponent
-{
+public interface KineticComponentClientRpc extends ClientRpc, IKineticComponent {
 	void receiveExperimentToLoad(ExperimentGraphClient experiment);
+
 	void createBox(BoxInfoClient info);
 }

@@ -12,8 +12,7 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
  * 
  * @author SkyCrawl
  */
-public interface IDSVisOne
-{
+public interface IDSVisOne {
 	/**
 	 * Triggers single dataset visualization with the given parameters.
 	 * @throws Exception

@@ -9,21 +9,21 @@ import org.pikater.web.visualisation.implementation.generator.base.ChartGenerato
 import org.pikater.web.visualisation.implementation.renderer.SVGRenderer;
 
 public class SingleSVGGenerator extends SingleGenerator {
-	
-	public SingleSVGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo,PrintStream output, int XIndex, int YIndex, int ColorIndex){
-		super(progressListener,dslo,output,XIndex,YIndex,ColorIndex);
+
+	public SingleSVGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
+		super(progressListener, dslo, output, XIndex, YIndex, ColorIndex);
 		initRenderer();
 	}
-	
-	public SingleSVGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo,PrintStream output, String XName, String YName, String ColorName){
-		super(progressListener,dslo,output,XName,YName,ColorName);
+
+	public SingleSVGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, String XName, String YName, String ColorName) {
+		super(progressListener, dslo, output, XName, YName, ColorName);
 		initRenderer();
 	}
-	
-	private void initRenderer(){
-		this.renderer=new SVGRenderer(output, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+
+	private void initRenderer() {
+		this.renderer = new SVGRenderer(output, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 	}
-	
+
 	@Override
 	public void create() throws IOException {
 		super.create();

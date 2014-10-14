@@ -8,10 +8,9 @@ import com.vaadin.shared.communication.SharedState;
 /** 
  * @author SkyCrawl 
  */
-public class ExpEditorExtensionSharedState extends SharedState
-{
+public class ExpEditorExtensionSharedState extends SharedState {
 	private static final long serialVersionUID = -7743696126483421775L;
-	
+
 	/**
 	 * @deprecated Related feature is not supported at the moment.
 	 * 
@@ -20,7 +19,7 @@ public class ExpEditorExtensionSharedState extends SharedState
 	 */
 	@Deprecated
 	public int modifiedTabsCount;
-	
+
 	/**
 	 * <p>Since {@link ExpEditor} is a tabbed component, we need to remember
 	 * what tab is currently selected for some custom actions to work.</p>

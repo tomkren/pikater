@@ -16,53 +16,46 @@ import com.vaadin.ui.Component;
  * 
  * @author SkyCrawl
  */
-public class HorizontalFlowLayout extends AbstractFlowLayout
-{
+public class HorizontalFlowLayout extends AbstractFlowLayout {
 	private static final long serialVersionUID = 6951568571587805444L;
-	
+
 	private final Set<Component> innerComponents;
 
 	/**
 	 * Creates a horizontal flow layout with the given style provider for
 	 * inner components.
 	 */
-	public HorizontalFlowLayout(IFlowLayoutStyleProvider styleProvider)
-	{
+	public HorizontalFlowLayout(IFlowLayoutStyleProvider styleProvider) {
 		super(styleProvider);
-		
+
 		this.innerComponents = new HashSet<Component>();
 	}
-	
+
 	/**
 	 * Adds the specified component to the right (applies a float: right property).
 	 */
-	public void addComponentToRight(Component c)
-	{
+	public void addComponentToRight(Component c) {
 		super.addComponent(c);
 		innerComponents.add(c);
 	}
-	
+
 	@Override
-	public void removeComponent(Component c)
-	{
+	public void removeComponent(Component c) {
 		// TODO: this is not resistant to multiple addition
 		super.removeComponent(c);
 		innerComponents.remove(c);
 	}
-	
+
 	@Override
-	public void removeAllComponents()
-	{
+	public void removeAllComponents() {
 		super.removeAllComponents();
 		innerComponents.clear();
 	}
-	
+
 	@Override
-	protected String getCss(Component c)
-	{
+	protected String getCss(Component c) {
 		StyleBuilder builder = new StyleBuilder();
-		if(getStyleProvider() != null)
-		{
+		if (getStyleProvider() != null) {
 			getStyleProvider().setStylesForInnerComponent(c, builder);
 		}
 		builder.setProperty("float", innerComponents.contains(c) ? "right" : "left");

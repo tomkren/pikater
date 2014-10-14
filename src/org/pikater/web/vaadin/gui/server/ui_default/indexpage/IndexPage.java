@@ -21,21 +21,19 @@ import com.vaadin.annotations.StyleSheet;
  * @author SkyCrawl
  */
 @StyleSheet("indexPage.css")
-public class IndexPage extends AutoVerticalBorderLayout
-{
+public class IndexPage extends AutoVerticalBorderLayout {
 	private static final long serialVersionUID = -5286072324040828820L;
-	
+
 	private final ContentArea contentArea;
-	
-	public IndexPage()
-	{
+
+	public IndexPage() {
 		/*
 		 * A new tab was created or a browser refresh occured.  
 		 */
 		super();
-		
+
 		this.contentArea = new ContentArea();
-		
+
 		setBorderSpacing(0);
 		setCellPadding(0);
 		setCellSpacing(0);
@@ -46,43 +44,35 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setRowHeight(Row.CENTER, new Dimension(DimensionMode.MAX));
 		setColumnInvisible(Column.EAST, Column.CENTER);
 		setFixedLayout(new Dimension(200, DimensionUnit.PX), new Dimension(DimensionMode.AUTO), new Dimension(DimensionMode.AUTO));
-		
+
 		/*
 		 * Display the content depicted by URL fragment or display default content if no fragment is defined.
 		 */
-		if(CustomConfiguredUI.isURIFragmentDefined())
-		{
+		if (CustomConfiguredUI.isURIFragmentDefined()) {
 			// try to preserve the original content being displayed
 			IWebFeature featureFromRequest = ContentProvider.getFeatureFromNavigatorName(CustomConfiguredUI.getURIFragment());
-			if(featureFromRequest == null)
-			{
+			if (featureFromRequest == null) {
 				// default to our basic content
 				openContent(getDefaultContent());
-			}
-			else
-			{
+			} else {
 				// original content successfully preserved
 				openContent(featureFromRequest);
 			}
-		}
-		else
-		{
+		} else {
 			// default to our basic content
 			openContent(getDefaultContent());
 		}
 	}
-	
+
 	/**
 	 * Index page's content can only be a predefined component
 	 * bound with a certain feature in {@link ContentProvider}.
 	 */
-	public void openContent(IWebFeature feature)
-	{
+	public void openContent(IWebFeature feature) {
 		this.contentArea.setContentView(feature);
 	}
-	
-	private IWebFeature getDefaultContent()
-	{
+
+	private IWebFeature getDefaultContent() {
 		return DefaultFeature.WELCOME;
 		// return DefaultFeature.TEST;
 	}

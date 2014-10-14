@@ -21,13 +21,13 @@ import org.pikater.web.visualisation.implementation.renderer.SVGRenderer;
 
 public class ChartGenerator {
 
-	public static int SINGLE_CHART_SIZE=1000;
+	public static int SINGLE_CHART_SIZE = 1000;
 	/**
 	 * Obsolete.
 	 */
 	@Deprecated
-	public static int MATRIX_CHART_SIZE=2000;
-	
+	public static int MATRIX_CHART_SIZE = 2000;
+
 	/**
 	 * Creates an <b>SVG</b> encoded chart for dataset for the {@link JPADataSetLO JPADataSetLO} object.
 	 * <p>
@@ -44,22 +44,22 @@ public class ChartGenerator {
 	 * @param ColorIndex The index of the attribute used for the Colorer.
 	 * @throws IOException
 	 */
-	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex) throws IOException{
-		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input, PrintStream output, int XIndex, int YIndex, int ColorIndex) throws IOException {
+		SVGRenderer svgr = new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
-		generateSingleDatasetChart(input,svgr, XIndex, YIndex, ColorIndex,null);
+		generateSingleDatasetChart(input, svgr, XIndex, YIndex, ColorIndex, null);
 		svgr.end();
 		output.close();
 	}
-	
-	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex, AbstractDSVisResult<?,?> listener) throws IOException{
-		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input, PrintStream output, int XIndex, int YIndex, int ColorIndex, AbstractDSVisResult<?, ?> listener) throws IOException {
+		SVGRenderer svgr = new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
-		generateSingleDatasetChart(input,svgr, XIndex, YIndex, ColorIndex,listener);
+		generateSingleDatasetChart(input, svgr, XIndex, YIndex, ColorIndex, listener);
 		svgr.end();
 		output.close();
 	}
-	
+
 	/**
 	 * Creates an <b>SVG</b> encoded chart for dataset for the {@link JPADataSetLO JPADataSetLO} object.
 	 * <p>
@@ -76,22 +76,22 @@ public class ChartGenerator {
 	 * @param ColorName The name of the attribute used for the Colorer.
 	 * @throws IOException
 	 */
-	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName) throws IOException{
-		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input, PrintStream output, String XName, String YName, String ColorName) throws IOException {
+		SVGRenderer svgr = new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
-		generateSingleDatasetChart(input,svgr, XName, YName, ColorName,null);
+		generateSingleDatasetChart(input, svgr, XName, YName, ColorName, null);
 		svgr.end();
 		output.close();
 	}
-	
-	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, AbstractDSVisResult<?,?> listener) throws IOException{
-		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input, PrintStream output, String XName, String YName, String ColorName, AbstractDSVisResult<?, ?> listener) throws IOException {
+		SVGRenderer svgr = new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
-		generateSingleDatasetChart(input,svgr, XName, YName, ColorName,listener);
+		generateSingleDatasetChart(input, svgr, XName, YName, ColorName, listener);
 		svgr.end();
 		output.close();
 	}
-	
+
 	/**
 	 * Creates an <b>PNG</b> encoded chart for dataset for the {@link JPADataSetLO JPADataSetLO} object.
 	 * <p>
@@ -108,26 +108,26 @@ public class ChartGenerator {
 	 * @param ColorIndex The index of the attribute used for the Colorer.
 	 * @throws IOException
 	 */
-	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex) throws IOException{
-		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input, PrintStream output, int XIndex, int YIndex, int ColorIndex) throws IOException {
+		ImageRenderer ir = new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
-		generateSingleDatasetChart(input,ir, XIndex, YIndex, ColorIndex,null);
+		generateSingleDatasetChart(input, ir, XIndex, YIndex, ColorIndex, null);
 		ir.end();
-		
+
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
 	}
-	
-	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex,AbstractDSVisResult<?,?> listener) throws IOException{
-		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input, PrintStream output, int XIndex, int YIndex, int ColorIndex, AbstractDSVisResult<?, ?> listener) throws IOException {
+		ImageRenderer ir = new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
-		generateSingleDatasetChart(input,ir, XIndex, YIndex, ColorIndex,listener);
+		generateSingleDatasetChart(input, ir, XIndex, YIndex, ColorIndex, listener);
 		ir.end();
-		
+
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
 	}
-	
+
 	/**
 	 * Creates an <b>PNG</b> encoded chart for dataset for the {@link JPADataSetLO JPADataSetLO} object.
 	 * <p>
@@ -144,54 +144,42 @@ public class ChartGenerator {
 	 * @param ColorName The name of the attribute used for the Colorer.
 	 * @throws IOException
 	 */
-	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName) throws IOException{
-		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input, PrintStream output, String XName, String YName, String ColorName) throws IOException {
+		ImageRenderer ir = new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
-		generateSingleDatasetChart(input,ir, XName, YName, ColorName,null);
+		generateSingleDatasetChart(input, ir, XName, YName, ColorName, null);
 		ir.end();
-		
-		ImageIO.write(ir.getImage(), "PNG", output);
-		output.close();
-	}
-	
-	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, AbstractDSVisResult<?,?> listener) throws IOException{
-		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
-		ir.begin();
-		generateSingleDatasetChart(input,ir, XName, YName, ColorName,listener);
-		ir.end();
-		
-		ImageIO.write(ir.getImage(), "PNG", output);
-		output.close();
-	}
-	
-	
-	
-	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,int XIndex,int YIndex,int ColorIndex, AbstractDSVisResult<?,?> listener) throws IOException
-	{
-		SingleArffDataset dataset=new SingleArffDataset(
-				input,
-				XIndex, 
-				YIndex,
-				ColorIndex);
-		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
-	}
-	
-	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,String XName,String YName,String ColorName, AbstractDSVisResult<?,?> listener) throws IOException
-	{
-		SingleArffDataset dataset=new SingleArffDataset(
-				input,
-				XName, 
-				YName,
-				ColorName);
-		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
-	}
-	
-	private static void generateSingleDatasetChartFromDataset(SingleArffDataset dataset,RendererInterface renderer, AbstractDSVisResult<?,?> listener) throws IOException{
-		Axis yAxis=dataset.getYAxis();
-		Axis xAxis=dataset.getXAxis();
-		Colorer colorer=dataset.getZColorer();
 
-		SingleChart sch=new SingleChart(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE, renderer, xAxis, yAxis);
+		ImageIO.write(ir.getImage(), "PNG", output);
+		output.close();
+	}
+
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input, PrintStream output, String XName, String YName, String ColorName, AbstractDSVisResult<?, ?> listener) throws IOException {
+		ImageRenderer ir = new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+		ir.begin();
+		generateSingleDatasetChart(input, ir, XName, YName, ColorName, listener);
+		ir.end();
+
+		ImageIO.write(ir.getImage(), "PNG", output);
+		output.close();
+	}
+
+	private static void generateSingleDatasetChart(JPADataSetLO input, RendererInterface renderer, int XIndex, int YIndex, int ColorIndex, AbstractDSVisResult<?, ?> listener) throws IOException {
+		SingleArffDataset dataset = new SingleArffDataset(input, XIndex, YIndex, ColorIndex);
+		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
+	}
+
+	private static void generateSingleDatasetChart(JPADataSetLO input, RendererInterface renderer, String XName, String YName, String ColorName, AbstractDSVisResult<?, ?> listener) throws IOException {
+		SingleArffDataset dataset = new SingleArffDataset(input, XName, YName, ColorName);
+		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
+	}
+
+	private static void generateSingleDatasetChartFromDataset(SingleArffDataset dataset, RendererInterface renderer, AbstractDSVisResult<?, ?> listener) throws IOException {
+		Axis yAxis = dataset.getYAxis();
+		Axis xAxis = dataset.getXAxis();
+		Colorer colorer = dataset.getZColorer();
+
+		SingleChart sch = new SingleChart(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE, renderer, xAxis, yAxis);
 		sch.setMargin(50);
 		sch.setLabelSize(150);
 		sch.setBackGroundColor(Color.getHSBColor(0.0f, 0.0f, 0.95f));
@@ -201,28 +189,28 @@ public class ChartGenerator {
 
 		sch.startChart();
 
-		ArffXYZPoint next=null;
-		
-		int instNum=dataset.getNumberOfInstances();
-		int lastPercentage=-1;
-		int percentage=0;
-		int count=0;
-		
-		while((next=dataset.getNext())!=null){
+		ArffXYZPoint next = null;
+
+		int instNum = dataset.getNumberOfInstances();
+		int lastPercentage = -1;
+		int percentage = 0;
+		int count = 0;
+
+		while ((next = dataset.getNext()) != null) {
 			sch.renderPoint(next.getX(), next.getY(), next.getZ(), 15, colorer);
 			count++;
-			
-			percentage=100*count/instNum;
-			
-			if((listener!=null)&&(percentage>lastPercentage)){
+
+			percentage = 100 * count / instNum;
+
+			if ((listener != null) && (percentage > lastPercentage)) {
 				listener.updateProgress(percentage / new Float(100));
-				lastPercentage=percentage;
+				lastPercentage = percentage;
 			}
 		}
 
 		dataset.close();
 	}
-	
+
 	/**
 	 * Generates a Comparison Chart for two given datasets in <b>SVG</b> format.
 	 * <p>
@@ -247,16 +235,15 @@ public class ChartGenerator {
 	 * @throws AxisNotJoinableException Exception thrown when the attributes for the same axis can't be joined e.g. because they're of different types
 	 * @throws ColorerNotMergeableException Exception thrown when the attributes for colorer can't be joined e.g. because they're of different types
 	 */
-	public static void generateSVGComparisonDatasetChart(JPADataSetLO input1,JPADataSetLO input2,PrintStream output,int XIndex1,int XIndex2,int YIndex1,int YIndex2,int ColorIndex1,int ColorIndex2) throws IOException, ChartException
-	{
-		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generateSVGComparisonDatasetChart(JPADataSetLO input1, JPADataSetLO input2, PrintStream output, int XIndex1, int XIndex2, int YIndex1, int YIndex2, int ColorIndex1,
+			int ColorIndex2) throws IOException, ChartException {
+		SVGRenderer svgr = new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
 		generateComparisonDatasetChart(input1, input2, svgr, XIndex1, XIndex2, YIndex1, YIndex2, ColorIndex1, ColorIndex2);
 		svgr.end();
 		output.close();
 	}
-	
-	
+
 	/**
 	 * Generates a Comparison Chart for two given datasets in <b>SVG</b> format.
 	 * <p>
@@ -281,16 +268,15 @@ public class ChartGenerator {
 	 * @throws AxisNotJoinableException Exception thrown when the attributes for the same axis can't be joined e.g. because they're of different types
 	 * @throws ColorerNotMergeableException Exception thrown when the attributes for colorer can't be joined e.g. because they're of different types
 	 */
-	public static void generateSVGComparisonDatasetChart(JPADataSetLO input1,JPADataSetLO input2,PrintStream output,String XName1,String XName2,String YName1,String YName2,String ColorName1,String ColorName2) throws IOException, ChartException
-	{
-		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generateSVGComparisonDatasetChart(JPADataSetLO input1, JPADataSetLO input2, PrintStream output, String XName1, String XName2, String YName1, String YName2, String ColorName1,
+			String ColorName2) throws IOException, ChartException {
+		SVGRenderer svgr = new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
 		generateComparisonDatasetChart(input1, input2, svgr, XName1, XName2, YName1, YName2, ColorName1, ColorName2);
 		svgr.end();
 		output.close();
 	}
-	
-	
+
 	/**
 	 * Generates a Comparison Chart for two given datasets in <b>PNG</b> format.
 	 * <p>
@@ -315,9 +301,9 @@ public class ChartGenerator {
 	 * @throws AxisNotJoinableException Exception thrown when the attributes for the same axis can't be joined e.g. because they're of different types
 	 * @throws ColorerNotMergeableException Exception thrown when the attributes for colorer can't be joined e.g. because they're of different types
 	 */
-	public static void generatePNGComparisonDatasetChart(JPADataSetLO input1,JPADataSetLO input2,PrintStream output,int XIndex1,int XIndex2,int YIndex1,int YIndex2,int ColorIndex1,int ColorIndex2) throws IOException, ChartException
-	{
-		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generatePNGComparisonDatasetChart(JPADataSetLO input1, JPADataSetLO input2, PrintStream output, int XIndex1, int XIndex2, int YIndex1, int YIndex2, int ColorIndex1,
+			int ColorIndex2) throws IOException, ChartException {
+		ImageRenderer ir = new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
 		generateComparisonDatasetChart(input1, input2, ir, XIndex1, XIndex2, YIndex1, YIndex2, ColorIndex1, ColorIndex2);
 		ir.end();
@@ -325,8 +311,7 @@ public class ChartGenerator {
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
 	}
-	
-	
+
 	/**
 	 * Generates a Comparison Chart for two given datasets in <b>PNG</b> format.
 	 * <p>
@@ -351,9 +336,9 @@ public class ChartGenerator {
 	 * @throws AxisNotJoinableException Exception thrown when the attributes for the same axis can't be joined e.g. because they're of different types
 	 * @throws ColorerNotMergeableException Exception thrown when the attributes for colorer can't be joined e.g. because they're of different types
 	 */
-	public static void generatePNGComparisonDatasetChart(JPADataSetLO input1,JPADataSetLO input2,PrintStream output,String XName1,String XName2,String YName1,String YName2,String ColorName1,String ColorName2) throws IOException, ChartException
-	{
-		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+	public static void generatePNGComparisonDatasetChart(JPADataSetLO input1, JPADataSetLO input2, PrintStream output, String XName1, String XName2, String YName1, String YName2, String ColorName1,
+			String ColorName2) throws IOException, ChartException {
+		ImageRenderer ir = new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
 		generateComparisonDatasetChart(input1, input2, ir, XName1, XName2, YName1, YName2, ColorName1, ColorName2);
 		ir.end();
@@ -361,56 +346,35 @@ public class ChartGenerator {
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
 	}
-	
-	
-	private static void generateComparisonDatasetChart(JPADataSetLO input1,JPADataSetLO input2,RendererInterface renderer,int XIndex1,int XIndex2,int YIndex1,int YIndex2,int ColorIndex1,int ColorIndex2) throws IOException, ChartException
-	{
-		SingleArffDataset dataset1=new SingleArffDataset(
-				input1,
-				XIndex1, 
-				YIndex1,
-				ColorIndex1);
-		
-		SingleArffDataset dataset2=new SingleArffDataset(
-				input2,
-				XIndex2, 
-				YIndex2,
-				ColorIndex2);
+
+	private static void generateComparisonDatasetChart(JPADataSetLO input1, JPADataSetLO input2, RendererInterface renderer, int XIndex1, int XIndex2, int YIndex1, int YIndex2, int ColorIndex1,
+			int ColorIndex2) throws IOException, ChartException {
+		SingleArffDataset dataset1 = new SingleArffDataset(input1, XIndex1, YIndex1, ColorIndex1);
+
+		SingleArffDataset dataset2 = new SingleArffDataset(input2, XIndex2, YIndex2, ColorIndex2);
 		generateComparisonDatasetChartFromDataset(dataset1, dataset2, renderer);
-		
+
 	}
-	
-	
-	private static void generateComparisonDatasetChart(JPADataSetLO input1,JPADataSetLO input2,RendererInterface renderer,String XName1,String XName2,String YName1,String YName2,String ColorName1,String ColorName2) throws IOException, ChartException
-	{
-		
-		SingleArffDataset dataset1=new SingleArffDataset(
-				input1,
-				XName1, 
-				YName1,
-				ColorName1);
-		
-		SingleArffDataset dataset2=new SingleArffDataset(
-				input2,
-				XName2, 
-				YName2,
-				ColorName2);
+
+	private static void generateComparisonDatasetChart(JPADataSetLO input1, JPADataSetLO input2, RendererInterface renderer, String XName1, String XName2, String YName1, String YName2,
+			String ColorName1, String ColorName2) throws IOException, ChartException {
+
+		SingleArffDataset dataset1 = new SingleArffDataset(input1, XName1, YName1, ColorName1);
+
+		SingleArffDataset dataset2 = new SingleArffDataset(input2, XName2, YName2, ColorName2);
 		generateComparisonDatasetChartFromDataset(dataset1, dataset2, renderer);
-		
+
 	}
-	
-	
-	
-	private static void generateComparisonDatasetChartFromDataset(SingleArffDataset dataset1,SingleArffDataset dataset2,RendererInterface renderer) throws IOException, ChartException
-	{
-		Axis yAxis=Axis.join(dataset1.getYAxis(), dataset2.getYAxis());
-		Axis xAxis=Axis.join(dataset1.getXAxis(), dataset2.getXAxis());
-		Colorer colorer1=dataset1.getZColorer();
-		Colorer colorer2=dataset2.getZColorer();
-		
-		Colorer colorer=colorer1.merge(colorer2);
-		
-		SingleChart sch=new SingleChart(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE, renderer, xAxis, yAxis);
+
+	private static void generateComparisonDatasetChartFromDataset(SingleArffDataset dataset1, SingleArffDataset dataset2, RendererInterface renderer) throws IOException, ChartException {
+		Axis yAxis = Axis.join(dataset1.getYAxis(), dataset2.getYAxis());
+		Axis xAxis = Axis.join(dataset1.getXAxis(), dataset2.getXAxis());
+		Colorer colorer1 = dataset1.getZColorer();
+		Colorer colorer2 = dataset2.getZColorer();
+
+		Colorer colorer = colorer1.merge(colorer2);
+
+		SingleChart sch = new SingleChart(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE, renderer, xAxis, yAxis);
 		sch.setMargin(50);
 		sch.setLabelSize(150);
 		sch.setBackGroundColor(Color.getHSBColor(0.0f, 0.0f, 0.95f));
@@ -420,18 +384,18 @@ public class ChartGenerator {
 
 		sch.startChart();
 
-		ArffXYZPoint next=null;
+		ArffXYZPoint next = null;
 
-		while((next=dataset1.getNext())!=null){
+		while ((next = dataset1.getNext()) != null) {
 			sch.renderPoint(next.getX(), next.getY(), next.getZ(), 17, colorer);
 		}
 		dataset1.close();
-		
-		while((next=dataset2.getNext())!=null){
+
+		while ((next = dataset2.getNext()) != null) {
 			sch.renderPoint(next.getX(), next.getY(), next.getZ(), 12, colorer);
 		}
 
 		dataset2.close();
-		
+
 	}
 }

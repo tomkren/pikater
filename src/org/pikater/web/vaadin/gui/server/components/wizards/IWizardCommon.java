@@ -6,6 +6,5 @@ package org.pikater.web.vaadin.gui.server.components.wizards;
  * 
  * @author SkyCrawl
  */
-public interface IWizardCommon
-{
+public interface IWizardCommon {
 }

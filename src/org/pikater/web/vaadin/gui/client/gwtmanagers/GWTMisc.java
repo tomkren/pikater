@@ -10,29 +10,25 @@ import com.google.gwt.user.client.Window;
  * 
  * @author SkyCrawl
  */
-public class GWTMisc
-{
+public class GWTMisc {
 	// *************************************************************************************
 	// PUBLIC FIELDS
-	
+
 	/**
 	 * Just something to avoid bug/implementation confusion.
 	 */
-	public static final Command alertNotImplemented = new Command()
-	{
+	public static final Command alertNotImplemented = new Command() {
 		@Override
-		public void execute()
-		{
+		public void execute() {
 			Window.alert("Not implemented yet.");
 		}
 	};
-	
+
 	/**
 	 * Basic attributes to print when calling node serialization into JSON.
 	 */
 	public static final JsArrayString jsonAttrsToSerialize = (JsArrayString) JsArrayString.createArray();
-	static
-	{
+	static {
 		jsonAttrsToSerialize.push("attrs");
 		jsonAttrsToSerialize.push("x");
 		jsonAttrsToSerialize.push("y");
@@ -40,19 +36,18 @@ public class GWTMisc
 		jsonAttrsToSerialize.push("className");
 		jsonAttrsToSerialize.push("children");
 	}
-	
+
 	// *************************************************************************************
 	// PUBLIC METHODS
-	
+
 	/**
 	 * GWT compatible version of getting simple class names.
 	 */
-	public static String getSimpleName(Class<? extends Object> cls)
-	{
-		String name = cls.getName(); 
+	public static String getSimpleName(Class<? extends Object> cls) {
+		String name = cls.getName();
 		return name.substring(name.lastIndexOf('.') + 1);
 	}
-	
+
 	/*
 	// just a backup if it ever needs to be used
 	public static String getImageResource(String relativePathToResources)

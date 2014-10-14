@@ -16,15 +16,12 @@ import org.pikater.web.visualisation.definition.AttrMapping;
  * 
  * @author SkyCrawl
  */
-public class DSVisTwoResult extends AbstractDSVisResult<AttrMapping, DSVisTwoSubresult>
-{
-	public DSVisTwoResult(IProgressDialogResultHandler taskResult, int imageWidth, int imageHeight)
-	{
+public class DSVisTwoResult extends AbstractDSVisResult<AttrMapping, DSVisTwoSubresult> {
+	public DSVisTwoResult(IProgressDialogResultHandler taskResult, int imageWidth, int imageHeight) {
 		super(taskResult, imageWidth, imageHeight);
 	}
-	
-	public DSVisTwoSubresult createAndRegisterSubresult(Tuple<AttrMapping, AttrMapping> attrInfo, ImageType imageType)
-	{
+
+	public DSVisTwoSubresult createAndRegisterSubresult(Tuple<AttrMapping, AttrMapping> attrInfo, ImageType imageType) {
 		DSVisTwoSubresult newImageResult = new DSVisTwoSubresult(imageType, attrInfo);
 		registerSubresult(newImageResult.toLeftIndex(), newImageResult.toTopIndex(), newImageResult);
 		return newImageResult;

@@ -13,25 +13,21 @@ import com.vaadin.ui.Component;
  * 
  * @author SkyCrawl
  */
-public class VerticalFlowLayout extends AbstractFlowLayout
-{
+public class VerticalFlowLayout extends AbstractFlowLayout {
 	private static final long serialVersionUID = 7467817672610031711L;
 
 	/**
 	 * Creates a vertical flow layout with the given style provider for
 	 * inner components.
 	 */
-	public VerticalFlowLayout(IFlowLayoutStyleProvider styleProvider)
-	{
+	public VerticalFlowLayout(IFlowLayoutStyleProvider styleProvider) {
 		super(styleProvider);
 	}
-	
+
 	@Override
-	protected String getCss(Component c)
-	{
+	protected String getCss(Component c) {
 		StyleBuilder builder = new StyleBuilder();
-		if(getStyleProvider() != null)
-		{
+		if (getStyleProvider() != null) {
 			getStyleProvider().setStylesForInnerComponent(c, builder);
 		}
 		builder.setProperty("display", "block");

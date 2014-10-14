@@ -27,52 +27,47 @@ import com.vaadin.ui.VerticalLayout;
  * @author SkyCrawl
  */
 @StyleSheet("boxBrowserToolbox.css")
-public class BoxBrowserToolbox extends Toolbox
-{
+public class BoxBrowserToolbox extends Toolbox {
 	private static final long serialVersionUID = -1349487568799323284L;
 
-	public BoxBrowserToolbox(String caption, KnownCoreAgents agentInfoProvider, ClickListener minimizeAction)
-	{
+	public BoxBrowserToolbox(String caption, KnownCoreAgents agentInfoProvider, ClickListener minimizeAction) {
 		super(caption, minimizeAction);
 		setSizeFull();
-		
+
 		Accordion content = new Accordion();
 		content.setStyleName("boxBrowserToolbox-accordion");
-		for(BoxType type : BoxType.values())
-		{
+		for (BoxType type : BoxType.values()) {
 			VerticalLayout vLayout = new VerticalLayout();
 			vLayout.setSizeFull();
 			vLayout.setStyleName("boxBrowserToolbox-accordion-content");
-			
+
 			Map<String, DragAndDropWrapper> boxNameToComponentMapping = new HashMap<String, DragAndDropWrapper>();
-			for(AgentInfo agentInfo : agentInfoProvider.getAllByType(type))
-			{
+			for (AgentInfo agentInfo : agentInfoProvider.getAllByType(type)) {
 				Label lbl = new Label(agentInfo.getName());
 				lbl.setSizeUndefined();
 				lbl.setData(agentInfo);
-				
+
 				DragAndDropWrapper dndWrapper = new DragAndDropWrapper(lbl);
 				dndWrapper.setSizeFull();
 				dndWrapper.setStyleName("boxBrowserToolbox-accordion-content-draggable");
 				dndWrapper.setDescription(agentInfo.getDescription());
 				dndWrapper.setDragStartMode(DragStartMode.COMPONENT);
 				dndWrapper.setData(agentInfo);
-				
+
 				boxNameToComponentMapping.put(agentInfo.getName(), dndWrapper);
 			}
-			
+
 			// sort box names and add the component representing them in the sorted order
-			List<String> sortedBoxNames = new ArrayList<String>(boxNameToComponentMapping.keySet()); 
+			List<String> sortedBoxNames = new ArrayList<String>(boxNameToComponentMapping.keySet());
 			Collections.sort(sortedBoxNames);
-			for(String boxName : sortedBoxNames)
-			{
+			for (String boxName : sortedBoxNames) {
 				vLayout.addComponent(boxNameToComponentMapping.get(boxName));
 			}
-			
+
 			// Tab newTab = content.addTab(vLayout, type.name());
 			content.addTab(vLayout, String.format("%s (%d)", type.name(), vLayout.getComponentCount()));
 		}
-		
+
 		setToolboxContent(content);
 	}
 }

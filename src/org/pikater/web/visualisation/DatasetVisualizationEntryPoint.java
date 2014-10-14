@@ -17,36 +17,20 @@ import org.pikater.web.visualisation.definition.task.IDSVisTwo;
  * 
  * @author SkyCrawl
  */
-public class DatasetVisualizationEntryPoint extends InterruptibleJobHelper implements IDSVisOne, IDSVisTwo
-{
+public class DatasetVisualizationEntryPoint extends InterruptibleJobHelper implements IDSVisOne, IDSVisTwo {
 	private final IProgressDialogResultHandler context;
-	
-	public DatasetVisualizationEntryPoint(IProgressDialogResultHandler context)
-	{
+
+	public DatasetVisualizationEntryPoint(IProgressDialogResultHandler context) {
 		this.context = context;
 	}
-	
+
 	@Override
-	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Exception
-	{
-		startJob(DSVisOneGeneratorJob.class, new Object[]
-		{
-			dataset,
-			attrs,
-			attrTarget,
-			context
-		});
+	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Exception {
+		startJob(DSVisOneGeneratorJob.class, new Object[] { dataset, attrs, attrTarget, context });
 	}
-	
+
 	@Override
-	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare) throws Exception
-	{
-		startJob(DSVisTwoGeneratorJob.class, new Object[]
-		{
-			dataset1,
-			dataset2,
-			attrsToCompare,
-			context
-		});
+	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare) throws Exception {
+		startJob(DSVisTwoGeneratorJob.class, new Object[] { dataset1, dataset2, attrsToCompare, context });
 	}
 }

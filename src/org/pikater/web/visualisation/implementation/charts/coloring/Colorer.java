@@ -17,6 +17,7 @@ public interface Colorer {
 	 * @return {@link Color} object of the computed color
 	 */
 	public Color getColor(double value);
+
 	/**
 	 * Merges the given colorer to the actual colorer 
 	 * @param colorer the colorer to be merged into the actual one

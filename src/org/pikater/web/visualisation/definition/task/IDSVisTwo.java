@@ -12,8 +12,7 @@ import org.pikater.web.visualisation.definition.AttrComparisons;
  * 
  * @author SkyCrawl
  */
-public interface IDSVisTwo
-{
+public interface IDSVisTwo {
 	/**
 	 * Triggers dataset comparison with the given parameters.
 	 * @throws Exception

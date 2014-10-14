@@ -11,8 +11,7 @@ import com.vaadin.ui.Component;
  * 
  * @author SkyCrawl
  */
-public interface IFlowLayoutStyleProvider
-{
+public interface IFlowLayoutStyleProvider {
 	/**
 	 * Sets styles to be applied to the given compoment via
 	 * a {@link StyleBuilder} instance.

@@ -8,36 +8,30 @@ import com.vaadin.ui.Label;
  * 
  * @author SkyCrawl
  */
-public class UnimplementedView extends Label implements IContentComponent
-{
+public class UnimplementedView extends Label implements IContentComponent {
 	private static final long serialVersionUID = -7610583075707286907L;
 
-	public UnimplementedView()
-	{
+	public UnimplementedView() {
 		// super("<font color=\"red\">Unimplemented yet.</font>", ContentMode.HTML);
 		super("Unimplemented yet");
 		setStyleName("errorLabel");
 	}
-	
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 	}
 
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return true;
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
 }

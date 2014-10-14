@@ -9,37 +9,33 @@ import com.vaadin.ui.CssLayout;
  * @author SkyCrawl
  */
 @StyleSheet("flowLayout.css")
-public abstract class AbstractFlowLayout extends CssLayout 
-{
+public abstract class AbstractFlowLayout extends CssLayout {
 	private static final long serialVersionUID = -6039020584387592993L;
-	
+
 	/**
 	 * Provides styles for inner components.
 	 */
 	private final IFlowLayoutStyleProvider styleProvider;
-	
-	public AbstractFlowLayout()
-	{
+
+	public AbstractFlowLayout() {
 		this(null);
 	}
-	
+
 	/**
 	 * Creates a flow layout with the given style provider for
 	 * inner components.
 	 */
-	public AbstractFlowLayout(IFlowLayoutStyleProvider styleProvider)
-	{
+	public AbstractFlowLayout(IFlowLayoutStyleProvider styleProvider) {
 		super();
 		setPrimaryStyleName("flowLayout");
-		
+
 		this.styleProvider = styleProvider;
 	}
-	
+
 	/**
 	 * Gets the style provider for inner components associated with this flow layout.
 	 */
-	protected IFlowLayoutStyleProvider getStyleProvider()
-	{
+	protected IFlowLayoutStyleProvider getStyleProvider() {
 		return styleProvider;
 	}
 }

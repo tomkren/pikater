@@ -7,21 +7,19 @@ package org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems;
  * 
  * @author SkyCrawl
  */
-public class AbstractGraphItemShared
-{
+public class AbstractGraphItemShared {
 	/**
 	 * Registration operation type (for client kinetic canvas and a particular item
 	 * or set of items).
 	 * 
 	 * @author SkyCrawl
 	 */
-	public enum RegistrationOperation
-	{
+	public enum RegistrationOperation {
 		/**
 		 * Register and display items immediately.
 		 */
 		REGISTER,
-		
+
 		/**
 		 * Remove items from the graph immediately but don't destroy or disconnect them.
 		 */

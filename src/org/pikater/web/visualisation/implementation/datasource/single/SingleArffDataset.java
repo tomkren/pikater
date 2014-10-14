@@ -15,12 +15,12 @@ import org.pikater.web.visualisation.implementation.datasource.ArffDataset;
  * @author siposp
  *
  */
-public class SingleArffDataset extends ArffDataset{
-	
+public class SingleArffDataset extends ArffDataset {
+
 	private int attrXIndex;
 	private int attrYIndex;
 	private int attrColorIndex;
-	
+
 	/**
 	 * Creates a new Dataset for an ARFF dataset stream, that can be used for {@link SingleChart} generation.
 	 * @param stream The source inputstream for the ARFF Dataset
@@ -28,12 +28,12 @@ public class SingleArffDataset extends ArffDataset{
 	 * @param YName The name of attribute, that contains data for Y axis
 	 * @param ZName The name of attribute, that contains data for point coloring
 	 */
-	public SingleArffDataset(InputStream stream,String XName,String YName,String ColorName){
+	public SingleArffDataset(InputStream stream, String XName, String YName, String ColorName) {
 		super(stream);
 
-		this.attrXIndex=this.translateAttributeNameToIndex(XName);
-		this.attrYIndex=this.translateAttributeNameToIndex(YName);
-		this.attrColorIndex=this.translateAttributeNameToIndex(ColorName);
+		this.attrXIndex = this.translateAttributeNameToIndex(XName);
+		this.attrYIndex = this.translateAttributeNameToIndex(YName);
+		this.attrColorIndex = this.translateAttributeNameToIndex(ColorName);
 	}
 
 	/**
@@ -43,14 +43,14 @@ public class SingleArffDataset extends ArffDataset{
 	 * @param YIndex The index of attribute, that contains data for Y axis
 	 * @param ColorIndex The index of attribute, that contains data for point coloring
 	 */
-	public SingleArffDataset(InputStream stream,int XIndex,int YIndex,int ColorIndex){
+	public SingleArffDataset(InputStream stream, int XIndex, int YIndex, int ColorIndex) {
 		super(stream);
 
-		this.attrXIndex=XIndex;
-		this.attrYIndex=YIndex;
-		this.attrColorIndex=ColorIndex;
+		this.attrXIndex = XIndex;
+		this.attrYIndex = YIndex;
+		this.attrColorIndex = ColorIndex;
 	}
-	
+
 	/**
 	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
 	 * @param dslo The JPADataSetLO entity of the dataset
@@ -58,51 +58,50 @@ public class SingleArffDataset extends ArffDataset{
 	 * @param YIndex The index of attribute, that contains data for Y axis
 	 * @param ColorIndex The index of attribute, that contains data for point coloring
 	 */
-	public SingleArffDataset(JPADataSetLO dslo,int XIndex,int YIndex,int ColorIndex){
+	public SingleArffDataset(JPADataSetLO dslo, int XIndex, int YIndex, int ColorIndex) {
 		super(dslo);
-		
-		this.attrXIndex=XIndex;
-		this.attrYIndex=YIndex;
-		this.attrColorIndex=ColorIndex;
+
+		this.attrXIndex = XIndex;
+		this.attrYIndex = YIndex;
+		this.attrColorIndex = ColorIndex;
 	}
-	
+
 	/**
 	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
 	 * @param dslo The JPADataSetLO entity of the dataset
 	 */
-	public SingleArffDataset(JPADataSetLO dslo,String XName,String YName,String ColorName){
+	public SingleArffDataset(JPADataSetLO dslo, String XName, String YName, String ColorName) {
 		super(dslo);
 
-		this.attrXIndex=this.translateAttributeNameToIndex(XName);
-		this.attrYIndex=this.translateAttributeNameToIndex(YName);
-		this.attrColorIndex=this.translateAttributeNameToIndex(ColorName);
+		this.attrXIndex = this.translateAttributeNameToIndex(XName);
+		this.attrYIndex = this.translateAttributeNameToIndex(YName);
+		this.attrColorIndex = this.translateAttributeNameToIndex(ColorName);
 	}
-	
+
 	/**
 	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
 	 * Dataset should be pre-cached to file datasetCachedFile and the JPA entity is used only for accessing metadata
 	 * @param dslo The JPADataSetLO entity of the dataset
 	 */
-	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile,int XIndex,int YIndex,int ColorIndex){
-		super(dslo,datasetCachedFile);
+	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile, int XIndex, int YIndex, int ColorIndex) {
+		super(dslo, datasetCachedFile);
 
-		this.attrXIndex=XIndex;
-		this.attrYIndex=YIndex;
-		this.attrColorIndex=ColorIndex;
+		this.attrXIndex = XIndex;
+		this.attrYIndex = YIndex;
+		this.attrColorIndex = ColorIndex;
 	}
-	
+
 	/**
 	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
 	 * Dataset should be pre-cached to file datasetCachedFile and the JPA entity is used only for accessing metadata
 	 * @param dslo The JPADataSetLO entity of the dataset
 	 */
-	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile,
-			String XName, String YName, String ColorName) {
-		super(dslo,datasetCachedFile);
-		
-		this.attrXIndex=this.translateAttributeNameToIndex(XName);
-		this.attrYIndex=this.translateAttributeNameToIndex(YName);
-		this.attrColorIndex=this.translateAttributeNameToIndex(ColorName);
+	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile, String XName, String YName, String ColorName) {
+		super(dslo, datasetCachedFile);
+
+		this.attrXIndex = this.translateAttributeNameToIndex(XName);
+		this.attrYIndex = this.translateAttributeNameToIndex(YName);
+		this.attrColorIndex = this.translateAttributeNameToIndex(ColorName);
 	}
 
 	/**
@@ -112,42 +111,38 @@ public class SingleArffDataset extends ArffDataset{
 	 * @throws IOException
 	 */
 	public ArffXYZPoint getNext() throws IOException {
-		if(this.next()){
-			return new ArffXYZPoint(
-					currentInstance.value(this.attrXIndex),
-					currentInstance.value(this.attrYIndex),
-					currentInstance.value(this.attrColorIndex)
-			);
-		}else{
+		if (this.next()) {
+			return new ArffXYZPoint(currentInstance.value(this.attrXIndex), currentInstance.value(this.attrYIndex), currentInstance.value(this.attrColorIndex));
+		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns the X axis for the dataset.
 	 * @return {@link Axis} object
 	 * @see org.pikater.web.visualisation.implementation.datasource.ArffDataset#getAxis(int)
 	 */
-	public Axis getXAxis(){
+	public Axis getXAxis() {
 		return this.getAxis(attrXIndex);
 	}
-	
+
 	/**
 	 * Returns the Y axis for the dataset.
 	 * @return {@link Axis} object
 	 * @see org.pikater.web.visualisation.implementation.datasource.ArffDataset#getAxis(int)
 	 */
-	public Axis getYAxis(){
+	public Axis getYAxis() {
 		return this.getAxis(attrYIndex);
 	}
-	
+
 	/**
 	 * Returns the Colorer for the Z axis.
 	 * @return {@link Colorer} object
 	 * @see org.pikater.web.visualisation.implementation.datasource.ArffDataset#getColorer(int)
 	 */
-	public Colorer getZColorer(){
+	public Colorer getZColorer() {
 		return this.getColorer(attrColorIndex);
 	}
-	
+
 }

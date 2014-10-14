@@ -24,124 +24,105 @@ import com.vaadin.ui.CustomLayout;
  * @author SkyCrawl
  */
 @StyleSheet("autoVerticalBorderLayout.css")
-public class AutoVerticalBorderLayout extends CustomLayout implements AutoVerticalBorderLayoutExtensionClientRpc
-{
+public class AutoVerticalBorderLayout extends CustomLayout implements AutoVerticalBorderLayoutExtensionClientRpc {
 	private static final long serialVersionUID = 2971241997257911489L;
-	
+
 	private final AutoVerticalBorderLayoutExtension extension;
-	
-	public AutoVerticalBorderLayout()
-	{
+
+	public AutoVerticalBorderLayout() {
 		super("autoVerticalBorderLayout");
-		
+
 		this.extension = new AutoVerticalBorderLayoutExtension();
 		this.extension.extend(this);
 	}
-	
+
 	/**
 	 * Set content to the given area.
 	 */
-	public void setComponent(Border border, AbstractComponent component)
-	{
-		if(component == null)
-		{
+	public void setComponent(Border border, AbstractComponent component) {
+		if (component == null) {
 			throw new NullPointerException("The new component can not be null.");
 		}
 		addComponent(component, border.name());
 	}
-	
+
 	/**
 	 * Get content of the given area.
 	 */
-	public Component getComponent(Border border)
-	{
+	public Component getComponent(Border border) {
 		return getComponent(border.name());
 	}
-	
+
 	//------------------------------------------------------------------
 	// CLIENT COMMANDS FORWARDED
-	
+
 	@Override
-	public void setRowHeight(Row row, Dimension dimension)
-	{
+	public void setRowHeight(Row row, Dimension dimension) {
 		extension.getClientRPC().setRowHeight(row, dimension);
 	}
 
 	@Override
-	public void setColumnWidth(Column designatedColumn, Dimension dimension)
-	{
+	public void setColumnWidth(Column designatedColumn, Dimension dimension) {
 		extension.getClientRPC().setColumnWidth(designatedColumn, dimension);
 	}
-	
+
 	@Override
-	public void addRowStyleName(Row row, String styleName)
-	{
+	public void addRowStyleName(Row row, String styleName) {
 		extension.getClientRPC().addRowStyleName(row, styleName);
 	}
 
 	@Override
-	public void removeRowStyleName(Row row, String styleName)
-	{
+	public void removeRowStyleName(Row row, String styleName) {
 		extension.getClientRPC().removeRowStyleName(row, styleName);
 	}
-	
+
 	@Override
-	public void addColumnStyleName(Column column, String styleName)
-	{
+	public void addColumnStyleName(Column column, String styleName) {
 		extension.getClientRPC().addColumnStyleName(column, styleName);
 	}
 
 	@Override
-	public void removeColumnStyleName(Column column, String styleName)
-	{
+	public void removeColumnStyleName(Column column, String styleName) {
 		extension.getClientRPC().removeColumnStyleName(column, styleName);
 	}
 
 	@Override
-	public void setRowInvisible(Row affectedRow, Row rowToTakeUpTheAffectedRowsSpace)
-	{
+	public void setRowInvisible(Row affectedRow, Row rowToTakeUpTheAffectedRowsSpace) {
 		extension.getClientRPC().setRowInvisible(affectedRow, rowToTakeUpTheAffectedRowsSpace);
 	}
 
 	@Override
-	public void setRowVisible(Row affectedRow)
-	{
+	public void setRowVisible(Row affectedRow) {
 		extension.getClientRPC().setRowVisible(affectedRow);
 	}
 
 	@Override
-	public void setColumnInvisible(Column affectedColumn, Column columnToTakeUpTheAffectedColumnsSpace)
-	{
+	public void setColumnInvisible(Column affectedColumn, Column columnToTakeUpTheAffectedColumnsSpace) {
 		extension.getClientRPC().setColumnInvisible(affectedColumn, columnToTakeUpTheAffectedColumnsSpace);
 	}
 
 	@Override
-	public void setColumnVisible(Column affectedColumn)
-	{
+	public void setColumnVisible(Column affectedColumn) {
 		extension.getClientRPC().setColumnVisible(affectedColumn);
-	}
-	
-	@Override
-	public void setBorderSpacing(int pixels)
-	{
-		extension.getClientRPC().setBorderSpacing(pixels);
-	}
-	
-	@Override
-	public void setCellSpacing(int pixels)
-	{
-		extension.getClientRPC().setCellSpacing(pixels);	
 	}
 
 	@Override
-	public void setCellPadding(int pixels)
-	{
+	public void setBorderSpacing(int pixels) {
+		extension.getClientRPC().setBorderSpacing(pixels);
+	}
+
+	@Override
+	public void setCellSpacing(int pixels) {
+		extension.getClientRPC().setCellSpacing(pixels);
+	}
+
+	@Override
+	public void setCellPadding(int pixels) {
 		extension.getClientRPC().setCellPadding(pixels);
 	}
-	
+
 	@Override
-	public void setFixedLayout(Dimension westDimension, Dimension centerDimension, Dimension eastDimension)
-	{
+	public void setFixedLayout(Dimension westDimension, Dimension centerDimension, Dimension eastDimension) {
 		extension.getClientRPC().setFixedLayout(westDimension, centerDimension, eastDimension);
 	}
 }

@@ -24,18 +24,17 @@ import com.vaadin.server.StreamVariable.StreamingStartEvent;
  * 
  * @author SkyCrawl
  */
-public interface IFileUploadEvents
-{
+public interface IFileUploadEvents {
 	/**
 	 * Whenever an upload starts.
 	 */
 	void uploadStarted(StreamingStartEvent event);
-	
+
 	/**
 	 * Whenever an upload fails.
 	 */
 	void uploadFailed(StreamingErrorEvent event);
-	
+
 	/**
 	 * When an upload is successfully finished. 
 	 */

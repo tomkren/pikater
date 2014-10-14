@@ -18,135 +18,115 @@ import com.vaadin.ui.Component;
  * 
  * @author SkyCrawl
  */
-public class TestExpandableView extends ExpandableView
-{
+public class TestExpandableView extends ExpandableView {
 	private static final long serialVersionUID = 5513288294724671701L;
-	
+
 	private final DBTableLayout mainTestLayout;
-	
-	public TestExpandableView()
-	{
+
+	public TestExpandableView() {
 		super();
 		setSizeUndefined();
 		setWidth("100%");
-		
+
 		this.mainTestLayout = new DBTableLayout();
 		this.mainTestLayout.setSizeFull();
 		this.mainTestLayout.getTable().setMultiSelect(false); // this is required below
 		this.mainTestLayout.setReadOnly(true);
 	}
-	
+
 	//-----------------------------------------------------------
 	// VIEW INTERFACE
-	
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		// always call these last, when you're absolutely ready to display the content
 		this.mainTestLayout.setView(new TestDBViewRoot(new TestTableDBView()));
 		super.finishInit(); // don't forget to!
 	}
-	
+
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return true;
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
-	
+
 	//-----------------------------------------------------------
 	// OTHER INTERFACE
-	
+
 	@Override
-	public void attach()
-	{
+	public void attach() {
 		super.attach();
 		enter(null);
 	}
 
 	@Override
-	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep()
-	{
+	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep() {
 		return new Step1(this);
 	}
-	
+
 	//-----------------------------------------------------------
 	// INDIVIDUAL STEPS
-	
-	private class Step1 extends ExpandableViewStep
-	{
-		public Step1(WizardWithDynamicSteps<IWizardCommon> parentWizard)
-		{
+
+	private class Step1 extends ExpandableViewStep {
+		public Step1(WizardWithDynamicSteps<IWizardCommon> parentWizard) {
 			super(parentWizard, false);
-			
+
 			registerDBViewLayout(mainTestLayout);
 		}
 
 		@Override
-		public String getCaption()
-		{
+		public String getCaption() {
 			return "TestTableView1";
 		}
-		
+
 		@Override
-		public Component getContent()
-		{
+		public Component getContent() {
 			return mainTestLayout;
 		}
-		
+
 		@Override
-		public ExpandableViewStep constructNextStep()
-		{
+		public ExpandableViewStep constructNextStep() {
 			return constructNextStepFromView(null);
 		}
-		
+
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
-		{
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
 			return new Step2(getParentWizard());
 		}
 	}
-	
-	private class Step2 extends ExpandableViewStep
-	{
-		public Step2(WizardWithDynamicSteps<IWizardCommon> parentWizard)
-		{
+
+	private class Step2 extends ExpandableViewStep {
+		public Step2(WizardWithDynamicSteps<IWizardCommon> parentWizard) {
 			super(parentWizard, true);
-			
+
 			// registerDBViewLayout(mainTestLayout);
 		}
 
 		@Override
-		public String getCaption()
-		{
+		public String getCaption() {
 			return "TestTableView2";
 		}
 
 		@Override
-		public Component getContent()
-		{
+		public Component getContent() {
 			return mainTestLayout;
 		}
 
 		@Override
-		public ExpandableViewStep constructNextStep()
-		{
+		public ExpandableViewStep constructNextStep() {
 			return null;
 		}
 
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
-		{
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
 			return null;
 		}
 	}

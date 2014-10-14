@@ -32,163 +32,140 @@ import com.vaadin.ui.TabSheet;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class DatasetsView extends ExpandableView
-{
+public class DatasetsView extends ExpandableView {
 	private static final long serialVersionUID = -1564809345462937610L;
-	
+
 	private final DBTableLayout mainDatasetsLayout;
-	
-	public DatasetsView()
-	{
+
+	public DatasetsView() {
 		super();
 		setSizeUndefined();
 		setWidth("100%");
-		
+
 		this.mainDatasetsLayout = new DBTableLayout();
 		this.mainDatasetsLayout.setSizeFull();
 		this.mainDatasetsLayout.getTable().setMultiSelect(false); // this is required below
 	}
-	
+
 	//----------------------------------------------------
 	// VIEW INTERFACE
 
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		// always call these last, when you're absolutely ready to display the content
 		this.mainDatasetsLayout.setView(new DatasetDBViewRoot<DataSetTableDBView>(new DataSetTableDBView()));
 		super.finishInit(); // don't forget to!
 	}
 
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return true; // datasets are completely read-only, except for adding new datasets which is independent of Vaadin anyway
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
-	
+
 	//----------------------------------------------------
 	// OTHER INTERFACE
-	
+
 	@Override
-	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep()
-	{
+	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep() {
 		// this is called in the constructor via super
 		return new DatasetOverviewStep(this);
 	}
-	
-	protected DBTableLayout getMainLayout()
-	{
+
+	protected DBTableLayout getMainLayout() {
 		return mainDatasetsLayout;
 	}
-	
+
 	//----------------------------------------------------------------------------
 	// INDIVIDUAL STEPS OF THIS VIEW
-	
-	protected class DatasetOverviewStep extends ExpandableViewStep
-	{
-		public DatasetOverviewStep(WizardWithDynamicSteps<IWizardCommon> parentWizard)
-		{
+
+	protected class DatasetOverviewStep extends ExpandableViewStep {
+		public DatasetOverviewStep(WizardWithDynamicSteps<IWizardCommon> parentWizard) {
 			super(parentWizard, false);
-			
+
 			registerDBViewLayout(mainDatasetsLayout);
 		}
 
 		@Override
-		public String getCaption()
-		{
+		public String getCaption() {
 			return "Datasets overview";
 		}
 
 		@Override
-		public DBTableLayout getContent()
-		{
+		public DBTableLayout getContent() {
 			return mainDatasetsLayout;
 		}
-		
+
 		@Override
-		public ExpandableViewStep constructNextStep()
-		{
-			if(!mainDatasetsLayout.getTable().isARowSelected())
-			{
+		public ExpandableViewStep constructNextStep() {
+			if (!mainDatasetsLayout.getTable().isARowSelected()) {
 				MyNotifications.showWarning(null, "No table row (dataset) is selected.");
 				return null;
-			}
-			else
-			{
+			} else {
 				// this assumes single select mode
 				AbstractTableRowDBView[] selectedRowsViews = mainDatasetsLayout.getTable().getViewsOfSelectedRows();
 				return constructNextStepFromView(selectedRowsViews[0]);
 			}
 		}
-		
+
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
-		{
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
 			DataSetTableDBRow selectedDatasetView = (DataSetTableDBRow) view;
 			return new DatasetDetailStep(getParentWizard(), selectedDatasetView.getDataset());
 		}
 	}
-	
-	protected class DatasetDetailStep extends ExpandableViewStep
-	{
+
+	protected class DatasetDetailStep extends ExpandableViewStep {
 		private final SimplePanel panel;
 
-		public DatasetDetailStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPADataSetLO dataset)
-		{
+		public DatasetDetailStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPADataSetLO dataset) {
 			super(parentWizard, true);
-			
+
 			DBTableLayout categoricalMetadataTable = new DBTableLayout();
 			categoricalMetadataTable.setReadOnly(true);
 			categoricalMetadataTable.setPagingPadding(true);
 			categoricalMetadataTable.setView(new CategoricalMetadataDBViewRoot(new CategoricalMetaDataTableDBView(dataset)));
-			
+
 			DBTableLayout numericalMetadataTable = new DBTableLayout();
 			numericalMetadataTable.setReadOnly(true);
 			numericalMetadataTable.setPagingPadding(true);
 			numericalMetadataTable.setView(new NumericalMetadataDBViewRoot(new NumericalMetaDataTableDBView(dataset)));
-			
+
 			TabSheet tabSheet = new TabSheet();
 			tabSheet.setSizeFull();
 			tabSheet.setImmediate(true);
 			tabSheet.addTab(categoricalMetadataTable, "Categorical");
 			tabSheet.addTab(numericalMetadataTable, "Numerical");
-			
+
 			this.panel = new SimplePanel(tabSheet);
 			this.panel.setSizeFull();
 		}
-		
+
 		@Override
-		public String getCaption()
-		{
+		public String getCaption() {
 			return "Dataset metadata";
 		}
 
 		@Override
-		public Component getContent()
-		{
+		public Component getContent() {
 			return this.panel;
 		}
-		
+
 		@Override
-		public ExpandableViewStep constructNextStep()
-		{
+		public ExpandableViewStep constructNextStep() {
 			return null;
 		}
 
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
-		{
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
 			return null;
 		}
 	}

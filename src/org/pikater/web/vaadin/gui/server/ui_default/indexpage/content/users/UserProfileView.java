@@ -16,42 +16,36 @@ import com.vaadin.ui.CustomComponent;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class UserProfileView extends CustomComponent implements IContentComponent
-{
+public class UserProfileView extends CustomComponent implements IContentComponent {
 	private static final long serialVersionUID = -5751678204210363235L;
-	
+
 	private final UserProfileForm innerForm;
-	
-	public UserProfileView()
-	{
+
+	public UserProfileView() {
 		super();
-		
+
 		this.innerForm = new UserProfileForm();
 		this.innerForm.setSizeUndefined();
-		
+
 		setCompositionRoot(this.innerForm);
 	}
-	
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		innerForm.enter(event);
 	}
-	
+
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return !innerForm.isFormUpdated();
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return "Changes were not stored yet. Discard them and continue?";
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
 }

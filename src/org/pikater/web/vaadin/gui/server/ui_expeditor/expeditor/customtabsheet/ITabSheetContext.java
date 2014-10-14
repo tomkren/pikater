@@ -5,8 +5,8 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet;
  * 
  * @author SkyCrawl
  */
-public interface ITabSheetContext
-{
+public interface ITabSheetContext {
 	void addEmptyTab();
+
 	void onTabSelectionChange();
 }

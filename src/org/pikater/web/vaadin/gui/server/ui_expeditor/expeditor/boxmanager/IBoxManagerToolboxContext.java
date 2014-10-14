@@ -9,7 +9,6 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent
  * 
  * @author SkyCrawl
  */
-public interface IBoxManagerToolboxContext
-{
+public interface IBoxManagerToolboxContext {
 	KineticComponent getCurrentComponent();
 }

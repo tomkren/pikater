@@ -28,74 +28,61 @@ import de.steinwedel.messagebox.MessageBox;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class UserDatasetsView extends DatasetsView
-{
+public class UserDatasetsView extends DatasetsView {
 	private static final long serialVersionUID = 5568928739598297585L;
-	
+
 	/**
 	 * This should be a constant reference across all UI instances.
 	 */
 	private UserUploads uploadManager;
-	
+
 	/**
 	 * One upload manager per UI instance.
 	 */
 	private MyUploadStateWindow uploadInfoProvider;
-	
-	public UserDatasetsView()
-	{
+
+	public UserDatasetsView() {
 		super();
-		
-		getMainLayout().addCustomActionComponent(new Button("Upload a new dataset", new Button.ClickListener()
-		{
+
+		getMainLayout().addCustomActionComponent(new Button("Upload a new dataset", new Button.ClickListener() {
 			private static final long serialVersionUID = -1045335713385385849L;
 
 			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				try
-				{
+			public void buttonClick(ClickEvent event) {
+				try {
 					MessageBox mb = GeneralDialogs.wizardDialog("Dataset upload guide", new DatasetUploadWizard(uploadManager, uploadInfoProvider));
 					mb.setWidth("600px");
 					mb.setHeight("500px");
-				}
-				catch (UploadLimitReachedException e)
-				{
+				} catch (UploadLimitReachedException e) {
 					MyNotifications.showWarning("Try later", "Only 3 concurrent uploads allowed.");
 					return;
 				}
 			}
 		}));
 	}
-	
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		this.uploadManager = UserSession.getUserUploadManager(VaadinSession.getCurrent());
 		this.uploadInfoProvider = uploadManager.createUploadInfoProvider();
-			
+
 		// always call these last, when you're absolutely ready to display the content
-		getMainLayout().setView(new DatasetDBViewRoot<DataSetTableDBView>(new DataSetTableDBView(
-				UserAuth.getUserEntity(VaadinSession.getCurrent()
-		))));
+		getMainLayout().setView(new DatasetDBViewRoot<DataSetTableDBView>(new DataSetTableDBView(UserAuth.getUserEntity(VaadinSession.getCurrent()))));
 		super.finishInit(); // don't forget to!
 	}
-	
+
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return !uploadInfoProvider.isAFileBeingUploaded(); // only inspect uploads in this UI instance
 	}
-	
+
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return "Uploads will be interrupted. Continue?";
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 		super.beforeClose();
 		this.uploadInfoProvider.interruptAll(); // only interrupt uploads originated in this UI instance
 	}

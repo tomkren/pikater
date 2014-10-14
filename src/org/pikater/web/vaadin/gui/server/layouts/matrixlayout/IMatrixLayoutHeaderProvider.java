@@ -9,8 +9,7 @@ import com.vaadin.ui.Label;
  *
  * @param <I> The index type of the matrix.
  */
-public interface IMatrixLayoutHeaderProvider<I extends Object>
-{
+public interface IMatrixLayoutHeaderProvider<I extends Object> {
 	/**
 	 * Gets caption for the given index of {@link MatrixLayout}.
 	 */

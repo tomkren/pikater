@@ -5,6 +5,5 @@ import com.vaadin.shared.communication.ServerRpc;
 /** 
  * @author SkyCrawl 
  */
-public interface ScalableImageExtensionServerRpc extends ServerRpc
-{
+public interface ScalableImageExtensionServerRpc extends ServerRpc {
 }

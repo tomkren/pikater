@@ -10,10 +10,9 @@ import com.vaadin.shared.AbstractComponentState;
  * 
  * @author SkyCrawl
  */
-public class KineticComponentState extends AbstractComponentState
-{
+public class KineticComponentState extends AbstractComponentState {
 	private static final long serialVersionUID = 7400546695911691608L;
-	
+
 	/*
 	 * Toolbar settings.
 	 */
@@ -21,47 +20,41 @@ public class KineticComponentState extends AbstractComponentState
 	public boolean boxManagerBoundWithSelection;
 	public boolean box_iconsVisible;
 	public double box_scale;
-	
+
 	/*
 	 * Other programmatic fields shared. 
 	 */
 	// public boolean serverThinksThatSchemaIsModified; // currently not used
-	
-	public KineticComponentState()
-	{
+
+	public KineticComponentState() {
 		this.clickMode = getDefaultClickMode();
 		this.boxManagerBoundWithSelection = getBoxManagerBoundWithSelectionByDefault();
 		this.box_iconsVisible = getBoxIconsVisibleByDefault();
 		this.box_scale = getDefaultScale();
-		
+
 		// this.serverThinksThatSchemaIsModified = false;
 	}
-	
-	public KineticBoxSettings toBoxVisualSettings()
-	{
+
+	public KineticBoxSettings toBoxVisualSettings() {
 		return new KineticBoxSettings(box_iconsVisible, box_scale);
 	}
-	
+
 	//----------------------------------------------------
 	// DEFAULT VALUE DECLARATION
-	
-	public static ClickMode getDefaultClickMode()
-	{
+
+	public static ClickMode getDefaultClickMode() {
 		return ClickMode.SELECTION;
 	}
-	
-	public static boolean getBoxManagerBoundWithSelectionByDefault()
-	{
+
+	public static boolean getBoxManagerBoundWithSelectionByDefault() {
 		return true;
 	}
-	
-	public static boolean getBoxIconsVisibleByDefault()
-	{
+
+	public static boolean getBoxIconsVisibleByDefault() {
 		return true;
 	}
-	
-	public static double getDefaultScale()
-	{
+
+	public static double getDefaultScale() {
 		return 1;
 	}
 }

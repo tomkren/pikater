@@ -18,46 +18,37 @@ import com.vaadin.ui.Label;
  * 
  * @author SkyCrawl
  */
-public class WelcomeView extends Label implements IContentComponent
-{
+public class WelcomeView extends Label implements IContentComponent {
 	private static final long serialVersionUID = 9077723300509194087L;
 
-	public WelcomeView()
-	{
+	public WelcomeView() {
 		super("", ContentMode.HTML);
 		setSizeFull();
 	}
-	
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
-		if(WebAppConfiguration.avoidUsingDBForNow())
-		{
+	public void enter(ViewChangeEvent event) {
+		if (WebAppConfiguration.avoidUsingDBForNow()) {
 			setValue("Welcome to Pikatorium.");
-		}
-		else
-		{
+		} else {
 			JPAUser user = UserAuth.getUserEntity(VaadinSession.getCurrent());
 			setValue(String.format("Welcome to Pikatorium.</br>Your last visit was: %s", user.getLastLogin()));
 			user.setLastLogin(new Date());
 			DAOs.userDAO.updateEntity(user);
 		}
 	}
-	
+
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return true;
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
 }

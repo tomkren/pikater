@@ -18,13 +18,11 @@ import com.vaadin.server.VaadinSession;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class UserBatchesView extends BatchesView
-{
+public class UserBatchesView extends BatchesView {
 	private static final long serialVersionUID = 7065648546694118987L;
 
 	@Override
-	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep()
-	{
+	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep() {
 		return new BatchStep(this, new BatchTableDBViewUser(UserAuth.getUserEntity(VaadinSession.getCurrent())));
 	}
 }

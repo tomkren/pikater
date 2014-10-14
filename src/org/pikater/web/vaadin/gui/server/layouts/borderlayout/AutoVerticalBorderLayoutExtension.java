@@ -12,28 +12,23 @@ import com.vaadin.ui.CustomLayout;
  * 
  * @author SkyCrawl
  */
-public class AutoVerticalBorderLayoutExtension extends AbstractExtension
-{
+public class AutoVerticalBorderLayoutExtension extends AbstractExtension {
 	private static final long serialVersionUID = 8278201529558658998L;
-	
-	public AutoVerticalBorderLayoutExtension()
-	{
-		registerRpc(new AutoVerticalBorderLayoutExtensionServerRpc()
-		{
+
+	public AutoVerticalBorderLayoutExtension() {
+		registerRpc(new AutoVerticalBorderLayoutExtensionServerRpc() {
 			private static final long serialVersionUID = -2652556748569844059L;
 		});
 	}
-	
-	public AutoVerticalBorderLayoutExtensionClientRpc getClientRPC()
-	{
+
+	public AutoVerticalBorderLayoutExtensionClientRpc getClientRPC() {
 		return getRpcProxy(AutoVerticalBorderLayoutExtensionClientRpc.class);
 	}
-	
+
 	/**
 	 * Exposing the inherited API.
 	 */
-	public void extend(CustomLayout layout)
-    {
-        super.extend(layout);
-    }
+	public void extend(CustomLayout layout) {
+		super.extend(layout);
+	}
 }

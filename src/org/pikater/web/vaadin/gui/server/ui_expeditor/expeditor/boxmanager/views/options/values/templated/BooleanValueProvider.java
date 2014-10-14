@@ -15,24 +15,15 @@ import com.vaadin.data.Property.ValueChangeEvent;
  * 
  * @author SkyCrawl
  */
-public class BooleanValueProvider extends AbstractFieldProviderForValue
-{
+public class BooleanValueProvider extends AbstractFieldProviderForValue {
 	@Override
-	protected void doGenerateFields(final Value value)
-	{
-		CustomFormCheckBox chb_value = FormFieldFactory.createCheckBox(
-				"Value:",
-				"",
-				(Boolean) value.getCurrentValue().hackValue(),
-				false
-		);
-		chb_value.addValueChangeListener(new Property.ValueChangeListener()
-		{
+	protected void doGenerateFields(final Value value) {
+		CustomFormCheckBox chb_value = FormFieldFactory.createCheckBox("Value:", "", (Boolean) value.getCurrentValue().hackValue(), false);
+		chb_value.addValueChangeListener(new Property.ValueChangeListener() {
 			private static final long serialVersionUID = -2288402102482210410L;
 
 			@Override
-			public void valueChange(ValueChangeEvent event)
-			{
+			public void valueChange(ValueChangeEvent event) {
 				value.setCurrentValue(new BooleanValue((Boolean) event.getProperty().getValue()));
 			}
 		});

@@ -11,13 +11,12 @@ import com.vaadin.ui.Component;
  * 
  * @author SkyCrawl
  */
-public interface IContentComponent extends View, Component
-{
+public interface IContentComponent extends View, Component {
 	/**
 	 * Programmatic check whether the view can be closed.
 	 */
 	boolean isReadyToClose();
-	
+
 	/**
 	 * If {@link #isReadyToClose()} returns true, this method is
 	 * called and should return the message that will be shown
@@ -25,7 +24,7 @@ public interface IContentComponent extends View, Component
 	 * as well. 
 	 */
 	String getCloseMessage();
-	
+
 	/**
 	 * If close is confirmed in the dialog, this method will be
 	 * called prior to closing the view.

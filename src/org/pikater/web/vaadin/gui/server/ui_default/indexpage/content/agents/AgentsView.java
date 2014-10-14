@@ -17,40 +17,34 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class AgentsView extends DBTableLayout implements IContentComponent
-{
+public class AgentsView extends DBTableLayout implements IContentComponent {
 	private static final long serialVersionUID = -4608720645535772140L;
-	
-	public AgentsView()
-	{
+
+	public AgentsView() {
 		super();
 		setSizeUndefined();
 		setWidth("100%");
 	}
-	
+
 	//----------------------------------------------------
 	// VIEW INTERFACE
 
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		setView(new AgentsDBViewRoot(new ExternalAgentTableDBView())); // required to be executed after initializing DB view
 	}
 
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return true;
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
 }

@@ -16,35 +16,33 @@ import com.vaadin.ui.VerticalLayout;
  * method needs to be called.</p>
  */
 @StyleSheet("thumbnail.css")
-public abstract class Thumbnail extends VerticalLayout
-{
+public abstract class Thumbnail extends VerticalLayout {
 	private static final long serialVersionUID = -308511560261756785L;
-	
-	public Thumbnail()
-	{
+
+	public Thumbnail() {
 		super();
 		setSizeUndefined();
 		setStyleName("thumbnail");
 	}
-	
+
 	/**
 	 * Initializes the thumbnail, asks the subclass for content
 	 * component and caption.
 	 */
-	protected void init()
-	{
+	protected void init() {
 		Component content = getContent();
 		content.setSizeUndefined();
 		content.addStyleName("itemContent");
-		
+
 		Label lbl_caption = new Label(getContentCaption());
 		lbl_caption.setDescription(lbl_caption.getValue());
-		
+
 		addComponent(lbl_caption);
 		addComponent(content);
 		setExpandRatio(content, 1);
 	}
-	
+
 	protected abstract String getContentCaption();
+
 	protected abstract Component getContent();
 }

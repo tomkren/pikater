@@ -27,62 +27,45 @@ import com.vaadin.ui.Label;
  * 
  * @author SkyCrawl
  */
-public abstract class ChartThumbnail extends Thumbnail
-{
+public abstract class ChartThumbnail extends Thumbnail {
 	private static final long serialVersionUID = 8481225003085234704L;
-	
+
 	private String downloadURL;
 	private final int imageWidth;
-	private final int imageHeight; 
-	
-	public ChartThumbnail(AbstractDSVisSubresult<?> imageResult, final int imageWidth, final int imageHeight)
-	{
+	private final int imageHeight;
+
+	public ChartThumbnail(AbstractDSVisSubresult<?> imageResult, final int imageWidth, final int imageHeight) {
 		super();
-		
+
 		// data source
-		try
-		{
-			this.downloadURL = ResourceRegistrar.getDownloadURL(ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new ImageDownloadResource(
-					imageResult.getFile(),
-					ResourceExpiration.ON_SESSION_END,
-					imageResult.getImageType().toMimeType(),
-					imageWidth,
-					imageHeight
-					)));
-		}
-		catch(Exception e)
-		{
+		try {
+			this.downloadURL = ResourceRegistrar.getDownloadURL(ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new ImageDownloadResource(imageResult.getFile(),
+					ResourceExpiration.ON_SESSION_END, imageResult.getImageType().toMimeType(), imageWidth, imageHeight)));
+		} catch (Exception e) {
 			// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
 			PikaterWebLogger.logThrowable("Could not create the resource thumbnail because:", e);
 			this.downloadURL = null;
 		}
 		this.imageWidth = imageWidth;
 		this.imageHeight = imageHeight;
-		
+
 		// must be called
 		init();
 	}
 
 	@Override
-	protected Component getContent()
-	{
-		if(downloadURL == null)
-		{
+	protected Component getContent() {
+		if (downloadURL == null) {
 			return new Label("Unavailable");
-		}
-		else
-		{
+		} else {
 			Image result = new Image(null, new ExternalResource(downloadURL));
 			result.setDescription("Double click to enlarge.");
-			result.addClickListener(new MouseEvents.ClickListener()
-			{
+			result.addClickListener(new MouseEvents.ClickListener() {
 				private static final long serialVersionUID = 5830107000487540250L;
 
 				@Override
-				public void click(ClickEvent event)
-				{
-					if(event.isDoubleClick())
-					{
+				public void click(ClickEvent event) {
+					if (event.isDoubleClick()) {
 						ImageViewer viewer = new ImageViewer(downloadURL, imageWidth, imageHeight);
 						viewer.setSizeFull();
 

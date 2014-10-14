@@ -17,40 +17,34 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
  * @see {@link DefaultUI}
  * @see {@link ContentProvider}
  */
-public class UsersView extends DBTableLayout implements IContentComponent
-{
+public class UsersView extends DBTableLayout implements IContentComponent {
 	private static final long serialVersionUID = -6440037882833424701L;
-	
-	public UsersView()
-	{
+
+	public UsersView() {
 		super();
 		setSizeUndefined();
 		setWidth("100%");
 	}
-	
+
 	//----------------------------------------------------
 	// VIEW INTERFACE
 
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
+	public void enter(ViewChangeEvent event) {
 		setView(new UsersDBViewRoot(new UsersTableDBView())); // required to be executed after initializing DB view
 	}
 
 	@Override
-	public boolean isReadyToClose()
-	{
+	public boolean isReadyToClose() {
 		return true;
 	}
 
 	@Override
-	public String getCloseMessage()
-	{
+	public String getCloseMessage() {
 		return null;
 	}
-	
+
 	@Override
-	public void beforeClose()
-	{
+	public void beforeClose() {
 	}
 }

@@ -10,10 +10,8 @@ import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithOutput;
  * @author SkyCrawl
  *
  */
-public abstract class RefreshableWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithOutput<OUTPUT>> extends ParentAwareWizardStep<OUTPUT, WIZARD>
-{
-	public RefreshableWizardStep(WIZARD parentWizard)
-	{
+public abstract class RefreshableWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithOutput<OUTPUT>> extends ParentAwareWizardStep<OUTPUT, WIZARD> {
+	public RefreshableWizardStep(WIZARD parentWizard) {
 		super(parentWizard);
 	}
 

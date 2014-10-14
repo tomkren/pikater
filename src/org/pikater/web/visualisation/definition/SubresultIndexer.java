@@ -21,63 +21,48 @@ import org.pikater.web.visualisation.definition.result.AbstractDSVisSubresult;
  * @param <I> The type to index subresults with.
  * @param <R> The subresult type.
  */
-public class SubresultIndexer<I, R extends AbstractDSVisSubresult<I>> implements 
-	IMatrixDataSource<I, R>, Iterable<R>
-{
+public class SubresultIndexer<I, R extends AbstractDSVisSubresult<I>> implements IMatrixDataSource<I, R>, Iterable<R> {
 	private final Set<I> leftIndexSet;
 	private final Set<I> topIndexSet;
 	private final Map<Tuple<I, I>, R> indexesToSubresult;
-	
-	public SubresultIndexer()
-	{
+
+	public SubresultIndexer() {
 		this.leftIndexSet = new LinkedHashSet<I>(); // LinkedHashSet - hash, don't use comparing and keep the insertion order
 		this.topIndexSet = new LinkedHashSet<I>(); // LinkedHashSet - hash, don't use comparing and keep the insertion order
 		this.indexesToSubresult = new HashMap<Tuple<I, I>, R>();
 	}
-	
+
 	@Override
-	public Iterator<R> iterator()
-	{
+	public Iterator<R> iterator() {
 		return indexesToSubresult.values().iterator();
 	}
-	
-	public boolean isSubresultRegistered(I leftIndex, I topIndex)
-	{
+
+	public boolean isSubresultRegistered(I leftIndex, I topIndex) {
 		return this.indexesToSubresult.containsKey(new Tuple<I, I>(leftIndex, topIndex));
 	}
-	
-	public void registerSubresult(I leftIndex, I topIndex, R subresult)
-	{
-		if(!isSubresultRegistered(leftIndex, topIndex))
-		{
+
+	public void registerSubresult(I leftIndex, I topIndex, R subresult) {
+		if (!isSubresultRegistered(leftIndex, topIndex)) {
 			leftIndexSet.add(leftIndex);
 			topIndexSet.add(topIndex);
 			indexesToSubresult.put(new Tuple<I, I>(leftIndex, topIndex), subresult);
-		}
-		else
-		{
-			throw new IllegalArgumentException(String.format("Result for '%s' (left) and '%s' (top) was already registered.",
-					leftIndex.toString(),
-					topIndex.toString()
-			));
+		} else {
+			throw new IllegalArgumentException(String.format("Result for '%s' (left) and '%s' (top) was already registered.", leftIndex.toString(), topIndex.toString()));
 		}
 	}
 
 	@Override
-	public Collection<I> getLeftIndexSet()
-	{
+	public Collection<I> getLeftIndexSet() {
 		return leftIndexSet;
 	}
 
 	@Override
-	public Collection<I> getTopIndexSet()
-	{
+	public Collection<I> getTopIndexSet() {
 		return topIndexSet;
 	}
 
 	@Override
-	public R getElement(I leftIndex, I topIndex)
-	{
+	public R getElement(I leftIndex, I topIndex) {
 		return indexesToSubresult.get(new Tuple<I, I>(leftIndex, topIndex));
 	}
 }

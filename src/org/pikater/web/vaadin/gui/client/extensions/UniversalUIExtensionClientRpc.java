@@ -5,6 +5,5 @@ import com.vaadin.shared.communication.ClientRpc;
 /** 
  * @author SkyCrawl 
  */
-public interface UniversalUIExtensionClientRpc extends ClientRpc
-{
+public interface UniversalUIExtensionClientRpc extends ClientRpc {
 }

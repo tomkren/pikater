@@ -10,17 +10,13 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views
  * 
  * @author SkyCrawl
  */
-public class IntegerValueProvider extends AbstractFieldProviderForValue
-{
+public class IntegerValueProvider extends AbstractFieldProviderForValue {
 	@Override
-	protected void doGenerateFields(final Value value)
-	{
+	protected void doGenerateFields(final Value value) {
 		IFieldContext<Integer> context = getFieldContextFrom(value);
-		addField("value", createNumericField("Value:", context, new IOnValueChange<Integer>()
-		{
+		addField("value", createNumericField("Value:", context, new IOnValueChange<Integer>() {
 			@Override
-			public void valueChanged(Integer number)
-			{
+			public void valueChanged(Integer number) {
 				value.setCurrentValue(new IntegerValue(number));
 			}
 		}));

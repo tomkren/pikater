@@ -5,6 +5,5 @@ import com.vaadin.shared.communication.ServerRpc;
 /** 
  * @author SkyCrawl 
  */
-public interface ExpEditorExtensionServerRpc extends ServerRpc
-{
+public interface ExpEditorExtensionServerRpc extends ServerRpc {
 }

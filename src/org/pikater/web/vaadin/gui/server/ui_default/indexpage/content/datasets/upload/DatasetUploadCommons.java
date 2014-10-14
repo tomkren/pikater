@@ -8,13 +8,11 @@ import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
  * 
  * @author SkyCrawl
  */
-public class DatasetUploadCommons implements IWizardCommon
-{
+public class DatasetUploadCommons implements IWizardCommon {
 	public String optionalARFFHeaders;
 	public String optionalDatasetDescription;
-	
-	public DatasetUploadCommons()
-	{
+
+	public DatasetUploadCommons() {
 		this.optionalARFFHeaders = null;
 		this.optionalDatasetDescription = null;
 	}

@@ -26,109 +26,94 @@ import com.vaadin.ui.VerticalLayout;
  * 
  * @author SkyCrawl
  */
-public class LeftMenu extends Panel
-{
+public class LeftMenu extends Panel {
 	private static final long serialVersionUID = -3876199300842530858L;
-	
+
 	//----------------------------------------------------------
 	// COMPONENT FIELDS
-	
+
 	/**
 	 * The menu component. Constructed when this component is attached and first child
 	 * of inner layout.
 	 */
 	private Tree menu;
-	
+
 	//----------------------------------------------------------
 	// PROGRAMMATIC FIELDS
-	
+
 	private final SimpleIDGenerator idGenerator;
 	private final Map<Integer, IWebFeature> menuItemIDToFeature;
 
-	public LeftMenu(final IndexPage parent)
-	{
+	public LeftMenu(final IndexPage parent) {
 		super();
 		setStyleName("leftMenu-container");
-		
+
 		this.idGenerator = new SimpleIDGenerator();
 		this.menuItemIDToFeature = new HashMap<Integer, IWebFeature>();
-		
+
 		// define the topmost component
 		VerticalLayout innerLayout = new VerticalLayout();
 		innerLayout.setStyleName("leftMenu");
-		
+
 		// define the menu component
 		this.menu = new Tree();
 		this.menu.setImmediate(true);
-		this.menu.addValueChangeListener(new Property.ValueChangeListener()
-		{
+		this.menu.addValueChangeListener(new Property.ValueChangeListener() {
 			private static final long serialVersionUID = 6026687725039562858L;
 
 			@Override
-			public void valueChange(ValueChangeEvent event)
-			{
+			public void valueChange(ValueChangeEvent event) {
 				Integer menuItemID = (Integer) event.getProperty().getValue();
-				if(menuItemIDToFeature.containsKey(menuItemID))
-				{
+				if (menuItemIDToFeature.containsKey(menuItemID)) {
 					parent.openContent(menuItemIDToFeature.get(menuItemID));
 				}
 			}
 		});
-		
+
 		// define additional menu item, that is not directly part of it (internally)
-		Anchor anchor = new Anchor("Open experiment editor", String.format("window.open('%s', '_blank');", 
-				CustomConfiguredUI.getRedirectURLToUI(PikaterUI.EXP_EDITOR)));
+		Anchor anchor = new Anchor("Open experiment editor", String.format("window.open('%s', '_blank');", CustomConfiguredUI.getRedirectURLToUI(PikaterUI.EXP_EDITOR)));
 		anchor.setStyleName("v-tree-node-caption");
-		
+
 		// add leaf components
 		innerLayout.addComponent(this.menu);
 		innerLayout.addComponent(anchor);
-		
+
 		// add topmost component
 		setContent(innerLayout);
 	}
-	
+
 	@Override
-	public void attach()
-	{
+	public void attach() {
 		super.attach();
-		
-		if(WebAppConfiguration.avoidUsingDBForNow())
-		{
+
+		if (WebAppConfiguration.avoidUsingDBForNow()) {
 			buildMenu(true);
-		}
-		else
-		{
+		} else {
 			buildMenu(UserAuth.getUserEntity(getSession()).isAdmin());
 		}
 	}
-	
-	private void buildMenu(boolean withAdminMenu)
-	{
-		if(withAdminMenu)
-		{
+
+	private void buildMenu(boolean withAdminMenu) {
+		if (withAdminMenu) {
 			buildMenuCategory("Admin features", AdminFeature.class);
 		}
 		buildMenuCategory("User features", UserFeature.class);
 	}
-	
-	private void buildMenuCategory(String caption, Class<? extends IWebFeature> featureSetClass)
-	{
+
+	private void buildMenuCategory(String caption, Class<? extends IWebFeature> featureSetClass) {
 		Integer rootMenuID = addMenuItem(caption);
-		for(IWebFeature feature : featureSetClass.getEnumConstants())
-		{
+		for (IWebFeature feature : featureSetClass.getEnumConstants()) {
 			Integer subMenuID = addMenuItem(feature.toMenuCaption());
 			menu.setParent(subMenuID, rootMenuID);
 			menu.setChildrenAllowed(subMenuID, false);
-			
+
 			// only items registered like this will have custom action called on click
 			menuItemIDToFeature.put(subMenuID, feature);
 		}
 		menu.expandItem(rootMenuID);
 	}
-	
-	private Integer addMenuItem(String caption)
-	{
+
+	private Integer addMenuItem(String caption) {
 		Integer menuItemID = idGenerator.getAndIncrement();
 		menu.addItem(menuItemID);
 		menu.setItemCaption(menuItemID, caption);

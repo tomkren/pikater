@@ -9,22 +9,20 @@ import java.io.Serializable;
  * 
  * @author SkyCrawl
  */
-public class EdgeGraphItemShared implements Serializable
-{
+public class EdgeGraphItemShared implements Serializable {
 	private static final long serialVersionUID = 4411734178488130587L;
-	
+
 	public Integer fromBoxID;
 	public Integer toBoxID;
-	
+
 	/**
 	 * Default public constructor keeps Vaadin happy.
 	 */
 	@Deprecated
-	public EdgeGraphItemShared()
-	{
+	public EdgeGraphItemShared() {
 	}
-	public EdgeGraphItemShared(Integer fromBoxID, Integer toBoxID)
-	{
+
+	public EdgeGraphItemShared(Integer fromBoxID, Integer toBoxID) {
 		this.fromBoxID = fromBoxID;
 		this.toBoxID = toBoxID;
 	}

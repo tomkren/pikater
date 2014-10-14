@@ -8,6 +8,5 @@ import com.vaadin.shared.communication.ServerRpc;
  * @author SkyCrawl
  * @see {@link AutoVerticalBorderLayout}
  */
-public interface AutoVerticalBorderLayoutExtensionServerRpc extends ServerRpc
-{
+public interface AutoVerticalBorderLayoutExtensionServerRpc extends ServerRpc {
 }

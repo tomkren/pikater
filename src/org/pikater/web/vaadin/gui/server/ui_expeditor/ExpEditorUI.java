@@ -24,13 +24,11 @@ import com.vaadin.shared.communication.PushMode;
 @Title("Experiments")
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
-public class ExpEditorUI extends CustomConfiguredUI
-{
+public class ExpEditorUI extends CustomConfiguredUI {
 	private static final long serialVersionUID = -797960197800185978L;
-	
+
 	@Override
-	protected void init(VaadinRequest request)
-	{
+	protected void init(VaadinRequest request) {
 		/*
 		 * Don't forget to call this.
 		 * IMPORTANT:
@@ -41,72 +39,56 @@ public class ExpEditorUI extends CustomConfiguredUI
 		 */
 		super.init(request);
 	}
-	
+
 	@Override
-	protected void displayChildContent()
-	{
+	protected void displayChildContent() {
 		/*
 		 * Display index page if user is authenticated or make him authenticate first
 		 * and then display it.
 		 */
-		if(UserAuth.isUserAuthenticated(VaadinSession.getCurrent()))
-		{
+		if (UserAuth.isUserAuthenticated(VaadinSession.getCurrent())) {
 			displayExperimentEditor();
-		}
-		else
-		{
-			forceUserToAuthenticate(new CustomConfiguredUI.IAuthenticationSuccessful()
-			{
+		} else {
+			forceUserToAuthenticate(new CustomConfiguredUI.IAuthenticationSuccessful() {
 				@Override
-				public void onSuccessfulAuth()
-				{
+				public void onSuccessfulAuth() {
 					displayExperimentEditor();
 				}
 			});
 		}
 	}
-	
+
 	/**
 	 * Method displaying the content of this UI. We want each instance of this
 	 * UI to have its own copy of experiment "boxes". {@link #createAgentInfoProvider()}
 	 * is used to provide that.
 	 */
-	private void displayExperimentEditor()
-	{
+	private void displayExperimentEditor() {
 		final KnownCoreAgents agentInfoProvider = createAgentInfoProvider();
-		if(agentInfoProvider != null)
-		{
+		if (agentInfoProvider != null) {
 			// disable regular page layout
 			setPageCroppedAndHorizontallyCentered(false);
-			
+
 			// simply create a new empty editor and let the user handle the rest
 			ExpEditor editor = new ExpEditor(agentInfoProvider);
 			setContent(editor);
-			
+
 			// display an empty experiment by default
 			editor.addEmptyTab();
 		}
 	}
-	
-	private KnownCoreAgents createAgentInfoProvider()
-	{
+
+	private KnownCoreAgents createAgentInfoProvider() {
 		// fetch information about available agents from core or create dummy
 		KnownCoreAgents agentInfoProvider = null;
-		if(WebAppConfiguration.isCoreEnabled())
-		{
-			try
-			{
-				agentInfoProvider = KnownCoreAgents.getFrom(WebToCoreEntryPoint.getAgentInfosVisibleForUser(
-						UserAuth.getUserID(VaadinSession.getCurrent())));
-			}
-			catch (Exception t)
-			{
+		if (WebAppConfiguration.isCoreEnabled()) {
+			try {
+				agentInfoProvider = KnownCoreAgents.getFrom(WebToCoreEntryPoint.getAgentInfosVisibleForUser(UserAuth.getUserID(VaadinSession.getCurrent())));
+			} catch (Exception t) {
 				PikaterWebLogger.logThrowable("No information about agents received from core.", t);
 				GeneralDialogs.error("Not available at this moment", "Information about agents has not been received from core.");
 			}
-		}
-		else
-		{
+		} else {
 			agentInfoProvider = KnownCoreAgents.getDummy();
 		}
 		return agentInfoProvider;

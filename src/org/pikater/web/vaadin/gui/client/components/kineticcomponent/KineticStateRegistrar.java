@@ -10,17 +10,14 @@ import java.util.Map;
  * 
  * @author SkyCrawl
  */
-public class KineticStateRegistrar
-{
+public class KineticStateRegistrar {
 	private static final Map<String, KineticState> connectorIDToSavedState = new HashMap<String, KineticState>();
-	
-	public static void saveState(String connectorID, KineticState state)
-	{
+
+	public static void saveState(String connectorID, KineticState state) {
 		connectorIDToSavedState.put(connectorID, state);
 	}
-	
-	public static KineticState getSavedState(String connectorID)
-	{
+
+	public static KineticState getSavedState(String connectorID) {
 		return connectorIDToSavedState.get(connectorID);
 	}
 }

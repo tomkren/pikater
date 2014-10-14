@@ -24,26 +24,24 @@ import com.google.gwt.user.client.Element;
  * 
  * @author SkyCrawl
  */
-public class KineticState implements IKineticEngineContext
-{
+public class KineticState implements IKineticEngineContext {
 	private KineticComponentWidget parentWidget;
-	
+
 	/*
 	 * All-purpose kinetic engine components.
 	 */
 	private final KineticEngine engine;
 	private final GraphItemCreator itemCreator;
 	private final KineticUndoRedoManager historyManager;
-	
-	public KineticState(KineticComponentWidget parentWidget)
-	{
+
+	public KineticState(KineticComponentWidget parentWidget) {
 		this.engine = new KineticEngine();
 		this.itemCreator = new GraphItemCreator(this.engine);
 		this.historyManager = new KineticUndoRedoManager(parentWidget);
-		
+
 		setParentWidget(parentWidget); // requires engine to be set
 	}
-	
+
 	/**
 	 * This method is needed to be called after the client-side kinetic
 	 * state defined by this class is recreated (see the class's Javadoc).</br>
@@ -52,39 +50,33 @@ public class KineticState implements IKineticEngineContext
 	 * errors will pop up.
 	 * 
 	 */
-	public void setParentWidget(KineticComponentWidget parentWidget)
-	{
+	public void setParentWidget(KineticComponentWidget parentWidget) {
 		this.parentWidget = parentWidget;
 		this.engine.setWidgetContext(parentWidget);
 	}
 
 	@Override
-	public Element getStageDOMElement()
-	{
+	public Element getStageDOMElement() {
 		return parentWidget.getStageDOMElement();
 	}
-	
+
 	@Override
-	public KineticEngine getEngine()
-	{
+	public KineticEngine getEngine() {
 		return engine;
 	}
 
 	@Override
-	public GraphItemCreator getGraphItemCreator()
-	{
+	public GraphItemCreator getGraphItemCreator() {
 		return itemCreator;
 	}
 
 	@Override
-	public KineticUndoRedoManager getHistoryManager()
-	{
+	public KineticUndoRedoManager getHistoryManager() {
 		return historyManager;
 	}
 
 	@Override
-	public ClickMode getClickMode()
-	{
+	public ClickMode getClickMode() {
 		return parentWidget.getClickMode();
 	}
 }

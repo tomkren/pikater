@@ -12,14 +12,12 @@ import com.vaadin.shared.ui.Connect;
  * @author SkyCrawl 
  */
 @Connect(UniversalUIExtension.class)
-public class UniversalUIExtensionConnector extends AbstractExtensionConnector
-{
+public class UniversalUIExtensionConnector extends AbstractExtensionConnector {
 	private static final long serialVersionUID = 6766120104518020715L;
-	
+
 	private final UniversalUIExtensionServerRpc serverRPC = RpcProxy.create(UniversalUIExtensionServerRpc.class, this);
 
-	public UniversalUIExtensionConnector()
-	{
+	public UniversalUIExtensionConnector() {
 		/*
 		registerRpc(ClientLoggingExtensionClientRpc.class, new ClientLoggingExtensionClientRpc()
 		{
@@ -27,13 +25,11 @@ public class UniversalUIExtensionConnector extends AbstractExtensionConnector
 		});
 		*/
 	}
-	
+
 	@Override
-	protected void extend(ServerConnector target)
-	{
-		if(!GWTLogger.isLoggerSet())
-		{
-			GWTLogger.setRemoteLogger(serverRPC);			
+	protected void extend(ServerConnector target) {
+		if (!GWTLogger.isLoggerSet()) {
+			GWTLogger.setRemoteLogger(serverRPC);
 		}
 	}
 }
