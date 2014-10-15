@@ -27,10 +27,10 @@ public final class ItemRegistrationOperation extends BiDiOperation {
 		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
 		this.notifyServer = notifyServer;
 
-		for (BoxGraphItemClient box : boxes) {
+		for (BoxGraphItemClient box : this.boxes) {
 			kineticEngine.attachModuleHandlersTo(box);
 		}
-		for (EdgeGraphItemClient edge : edges) {
+		for (EdgeGraphItemClient edge : this.edges) {
 			kineticEngine.attachModuleHandlersTo(edge);
 		}
 	}
