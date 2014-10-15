@@ -8,28 +8,24 @@ import org.quartz.UnableToInterruptJobException;
  * 
  * @author SkyCrawl
  */
-public abstract class InterruptibleImmediateOneTimeJob extends ImmediateOneTimeJob implements InterruptableJob
-{
+public abstract class InterruptibleImmediateOneTimeJob extends ImmediateOneTimeJob implements InterruptableJob {
 	private boolean interrupted;
-	
-	public InterruptibleImmediateOneTimeJob(int numArgs)
-	{
+
+	public InterruptibleImmediateOneTimeJob(int numArgs) {
 		super(numArgs);
 		this.interrupted = false;
 	}
-	
+
 	@Override
-	public void interrupt() throws UnableToInterruptJobException
-	{
+	public void interrupt() throws UnableToInterruptJobException {
 		/*
 		 * Quartz doesn't automatically interrupt the jobs' threads - we must do it ourselves.
 		 */
-		
+
 		this.interrupted = true;
 	}
-	
-	protected boolean isInterrupted()
-	{
+
+	protected boolean isInterrupted() {
 		return interrupted;
 	}
 }

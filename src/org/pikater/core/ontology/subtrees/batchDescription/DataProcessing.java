@@ -8,7 +8,7 @@ import java.util.List;
 import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.experiment.UniversalElementOntology;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 /**
@@ -114,9 +114,9 @@ public class DataProcessing implements IDataProvider {
 		return getId();
 	}
 
-	public UniversalOntology exportUniversalOntology() {
+	public UniversalElementOntology exportUniversalOntology() {
 		
-		UniversalOntology ontologyInfo = new UniversalOntology();
+		UniversalElementOntology ontologyInfo = new UniversalElementOntology();
 		ontologyInfo.setId(getId());
 		ontologyInfo.setOntologyClass(getClass());
 		if (getAgentType() == null) {
@@ -128,7 +128,7 @@ public class DataProcessing implements IDataProvider {
 		
 		return ontologyInfo;
 	}
-	public static DataProcessing importUniversalOntology(UniversalOntology uOntology) {
+	public static DataProcessing importUniversalOntology(UniversalElementOntology uOntology) {
 		
 		Constructor<?> cons = null;
 		try {

@@ -43,14 +43,12 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	
 	/**
 	 * Get Weka classifier
-	 * @return
 	 */
 	protected abstract Classifier createClassifier();
 
 	/**
 	 * Training process of the Machine Learning
 	 * 
-	 * @param evaluation
 	 */
 	@Override
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
@@ -121,8 +119,6 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	/**
 	 * Testing process of the Machine Learning
 	 * 
-	 * @param evaluationMethod
-	 * @return
 	 * @throws Exception
 	 */
 	private Evaluation test(EvaluationMethod evaluationMethod

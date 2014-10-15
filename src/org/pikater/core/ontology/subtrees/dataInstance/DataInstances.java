@@ -64,7 +64,6 @@ public class DataInstances implements Concept {
 
 	/**
 	 * Get the index of Class
-	 * @return
 	 */
 	public int getClassIndex() {
 		int index;
@@ -79,7 +78,6 @@ public class DataInstances implements Concept {
 
 	/**
 	 * Set Class-Index
-	 * @param classIndex
 	 */
 	public void setClassIndex(int classIndex) {
 		this.classIndex = classIndex;
@@ -172,9 +170,6 @@ public class DataInstances implements Concept {
 
 	/**
 	 * Returns a value in the table on the row and index
-	 * @param row
-	 * @param index
-	 * @return
 	 */
 	public String toString(int row, int index) {
 		if (instances == null) {

@@ -129,7 +129,7 @@ import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.shared.database.util.DatabaseUtilities;
 import org.pikater.shared.database.util.ResultFormatter;
-import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalExperiment;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.google.common.io.Files;
@@ -331,9 +331,12 @@ public class Agent_DataManager extends PikaterAgent {
 					}
 					
 					/*
-					 * Deprecated Files actions
-					 * TODO: maybe better to throw appropriate exception like this
-					 * so that the problem can be better noticed?
+					 * Deprecated Files actions, that should not be used by any agent.
+					 * Unfortunately may exist some agents, that might still use these
+					 * actions.
+					 * 
+					 * To inform about such behaviour {@link UnsupportedOperationException} is
+					 * thrown.
 					 */
 					if (action.getAction() instanceof GetFileInfo) {
 						throw new UnsupportedOperationException();
@@ -761,7 +764,7 @@ public class Agent_DataManager extends PikaterAgent {
 	
 	/**
 	 * Saves a new batch wrapped in {@link SaveBatch} to database,
-	 * after it is first converted to a {@link UniversalComputationDescription
+	 * after it is first converted to a {@link UniversalExperiment
 	 * database-compatible batch format} and then to XML. Some metadata are 
 	 * also stored - e.g. name of the batch.
 	 * 
@@ -777,7 +780,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Batch batch = saveBatch.getBatch();
 		ComputationDescription description = batch.getDescription();
 
-		UniversalComputationDescription uDescription =
+		UniversalExperiment uDescription =
 				description.exportUniversalComputationDescription();
 
 		JPAUser user = DAOs.userDAO.getByID(batch.getOwnerID());
@@ -830,8 +833,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
 
-		UniversalComputationDescription uDescription =
-				UniversalComputationDescription.fromXML(batchJPA.getXML());
+		UniversalExperiment uDescription =
+				UniversalExperiment.fromXML(batchJPA.getXML());
 
 		ComputationDescription compDescription =
 				ComputationDescription
@@ -864,7 +867,9 @@ public class Agent_DataManager extends PikaterAgent {
 	 * Requests a notification e-mail be sent to the owner of
 	 * the given {@link JPABatch}.
 	 * 
-	 * TODO: What is this email about?
+	 * Some experiments can be executed for quite a long time. After
+	 * the execution is finished, user can be about the results of the
+	 * long-lasting experiment.
 	 *  
 	 */
 	private void requestMailNotification(final JPABatch batchJPA) {
@@ -1827,11 +1832,15 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	/**
-	 * TODO: no Javadoc? :)
+	 * Prepares the necessary actions, needed to perform file uploading
+	 * from other agents to this {@link Agent_DataManager}.
 	 * 
-	 * @param request
-	 * @param action
-	 * @return
+	 * It opens a {@link ServerSocket}, thus permission in the firewall
+	 * rules can be necessary.
+	 * 
+	 * @param request {@link ACLMessage} received with request
+	 * @param action {@link Action} that was used to determine which function should be called
+	 * @return {@link ACLMessage} of the reply
 	 * @throws CodecException
 	 * @throws OntologyException
 	 * @throws IOException

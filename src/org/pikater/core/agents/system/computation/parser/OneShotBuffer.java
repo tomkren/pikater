@@ -9,45 +9,42 @@ import org.pikater.core.agents.system.computation.graph.edges.EdgeValue;
  * Time: 12:44
  */
 public class OneShotBuffer extends AbstractComputationBuffer<EdgeValue> {
-    private EdgeValue shot;
-    private boolean data; 
-    private String targetInput;
+	private EdgeValue shot;
+	private boolean data;
 
-    /**
-     *
-     * @param shot Single element
-     */
-    public OneShotBuffer(EdgeValue shot)
-    {
-         this.shot=shot;
-    }
+	/**
+	 *
+	 * @param shot Single element
+	 */
+	public OneShotBuffer(EdgeValue shot) {
+		this.shot = shot;
+	}
 
-    @Override
-    public boolean hasNext() {
-        return shot!=null;
-    }
+	@Override
+	public boolean hasNext() {
+		return shot != null;
+	}
 
-    @Override
-    public void insert(EdgeValue element) {
-        shot=element;
-    }
+	@Override
+	public void insert(EdgeValue element) {
+		shot = element;
+	}
 
-    @Override
-    public EdgeValue getNext() {
-        EdgeValue current=shot;
-        shot=null;
-        return current;
-    }
+	@Override
+	public EdgeValue getNext() {
+		EdgeValue current = shot;
+		shot = null;
+		return current;
+	}
 
-    @Override
-    public int size() {
-        if (shot!=null)
-        {
-            return 1;
-        }
-        return 0;
-    }
-    
+	@Override
+	public int size() {
+		if (shot != null) {
+			return 1;
+		}
+		return 0;
+	}
+
 	@Override
 	public boolean isData() {
 		return data;
@@ -58,8 +55,8 @@ public class OneShotBuffer extends AbstractComputationBuffer<EdgeValue> {
 		this.data = data;
 	}
 
-    @Override
+	@Override
 	public String getTargetInput() {
-		return targetInput;
+		return null;
 	}
 }

@@ -25,9 +25,6 @@ public class DataTransferService extends FIPAService {
 	/**
 	 * Connects to a DataManager listening on given host+port and loads
 	 * the data into the file with the given hash
-	 * @param hash
-	 * @param host
-	 * @param port
 	 * @throws IOException
 	 */
 	public static void doClientFileTransfer(String hash, String host, int port
@@ -56,8 +53,6 @@ public class DataTransferService extends FIPAService {
 	/**
 	 * Waits for a connection to the given serverSocket (blocking), uploads the
 	 * file with the given hash to it and closes the socket.
-	 * @param serverSocket
-	 * @param hash
 	 * @throws IOException
 	 */
 	public static void handleUploadConnection(ServerSocket serverSocket,

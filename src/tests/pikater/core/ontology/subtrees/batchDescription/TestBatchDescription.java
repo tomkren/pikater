@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
-import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalExperiment;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
 import xmlGenerator.Input01;
@@ -94,7 +94,7 @@ public class TestBatchDescription {
 	private static void testComputatingDescription(
 			ComputationDescription comDescription, String note) {
 
-		UniversalComputationDescription udescriptinSimpleTraining = comDescription.exportUniversalComputationDescription();
+		UniversalExperiment udescriptinSimpleTraining = comDescription.exportUniversalComputationDescription();
 		ComputationDescription comDescription2 =
 				ComputationDescription.importUniversalComputationDescription(
 						udescriptinSimpleTraining);

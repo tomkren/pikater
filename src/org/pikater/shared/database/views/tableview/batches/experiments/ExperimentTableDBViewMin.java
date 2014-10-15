@@ -8,27 +8,18 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.base.ITableColumn;
 
-public class ExperimentTableDBViewMin extends ExperimentTableDBView
-{
-	public ExperimentTableDBViewMin(JPAUser user, JPABatch batch)
-	{
+public class ExperimentTableDBViewMin extends ExperimentTableDBView {
+	public ExperimentTableDBViewMin(JPAUser user, JPABatch batch) {
 		super(user, batch);
 	}
-	
+
 	@Override
-	public Set<ITableColumn> getAllColumns()
-	{
-		return new LinkedHashSet<ITableColumn>(EnumSet.of(
-				Column.STATUS,
-				Column.STARTED,
-				Column.FINISHED,
-				Column.MODEL_STRATEGY
-		));
+	public Set<ITableColumn> getAllColumns() {
+		return new LinkedHashSet<ITableColumn>(EnumSet.of(Column.STATUS, Column.STARTED, Column.FINISHED, Column.MODEL_STRATEGY));
 	}
-	
+
 	@Override
-	public Set<ITableColumn> getDefaultColumns()
-	{
+	public Set<ITableColumn> getDefaultColumns() {
 		return getAllColumns();
 	}
 }

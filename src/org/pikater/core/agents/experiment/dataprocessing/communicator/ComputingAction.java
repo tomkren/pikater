@@ -333,7 +333,6 @@ public class ComputingAction extends FSMBehaviour {
 			/**
 			 * Save DataSources
 			 * 
-			 * @param labeledData
 			 * @throws Exception
 			 */
 			private void saveDataSource (List<DataInstances> labeledData) throws Exception {
@@ -501,7 +500,6 @@ public class ComputingAction extends FSMBehaviour {
 	/**
 	 * Resulting message: FAILURE
 	 * 
-	 * @param desc
 	 */
 	private void failureMsg(String desc) {
 		List<Eval> evaluations = new ArrayList<Eval>();
@@ -531,7 +529,6 @@ public class ComputingAction extends FSMBehaviour {
 	/**
 	 * Get a message from the FIFO of tasks
 	 * 
-	 * @return
 	 */
 	private boolean getRequest() {
 		if (!agent.taskFIFO.isEmpty()) {

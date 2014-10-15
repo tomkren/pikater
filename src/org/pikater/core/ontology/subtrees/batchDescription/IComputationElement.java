@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.experiment.UniversalElementOntology;
 import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;
@@ -25,7 +25,7 @@ public interface IComputationElement extends Concept, ICloneable
 	public List<DataSourceDescription> exportAllDataSourceDescriptions();
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions);
 	
-	public UniversalOntology exportUniversalOntology();
+	public UniversalElementOntology exportUniversalOntology();
 	//public void importUniversalOntology(UniversalOntology uOntology);
 	
 	public boolean equalsElement(IComputationElement element);
