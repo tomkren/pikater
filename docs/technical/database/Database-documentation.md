@@ -147,8 +147,8 @@ Entity representing metadata for a categorical attribute (column) - in other wor
 Entity representing metadata for a numerical attribute (column). Values of this column are floating point numbers.
 
 6. **JPATaskType**  
-<font color="red">TODO: hmm... Default experiment? Default action? Wakaranai! :D</font>  
-Each dataset has a default experiment. We presumed, that the list of default experiments will grow in future, thus we decided for using an entity describing these experiments. When new dataset has yet unknown default action, we can create a new entity for it.
+Unfortunately, experiments can't provide equivalent performance on every dataset. Some datasets suits more for certain experiments, thus choosing the optimal one can be difficult. Making this task easier we use this particular entity, that stores entry about a default task (experiment), which perform well on that dataset, but usage of this experiment is not obligatory. 
+We presumed, that the list of default experiments will grow in future, thus we decided for using an entity describing these experiments. When new dataset has yet unknown default action, we can create a new entity for it.
 
 ##### Experiment related
 
