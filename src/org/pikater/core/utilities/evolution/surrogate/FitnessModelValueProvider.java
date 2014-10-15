@@ -1,12 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.pikater.core.utilities.evolution.surrogate;
 
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 
 /**
+ * Provides the fitness of the individual from the archive as the fitness value. Can be
+ * used in single-objective case to model the fitness directly without any transformations.
  *
  * @author Martin Pilat
  */

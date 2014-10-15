@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.pikater.core.utilities.evolution.surrogate;
 
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
@@ -15,7 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Computes the target value for individuals as in the ASM-MOMA [1] algorithm. The non-dominated front
+ * is extracted from the archive and the distance to the closest non-dominated individual is used as the 
+ * target value.
+ * 
+ * [1] M. Pilat and R. Neruda. ASM-MOMA: Multiobjective memetic algorithm with aggregate
+ * surrogate model. In Evolutionary Computation (CEC), 2011 IEEE Congress on, pages 1202-
+ * 1208. IEEE, 2011.
+ *      
  * @author Martin Pilat
  */
 public class ASMMOMAModelValueProvider implements ModelValueProvider{
@@ -24,6 +27,11 @@ public class ASMMOMAModelValueProvider implements ModelValueProvider{
     SearchItemIndividualArchive archive = null;
     ModelInputNormalizer norm = null;
     
+    /**
+     * Computes the target value for individuals as in the ASM-MOMA algorithm. The non-dominated front
+     * is extracted from the archive and the distance to the closest non-dominated individual is used as the 
+     * target value.
+     */
     @Override
     public double getModelValue(SearchItemIndividual si, SearchItemIndividualArchive archive, ModelInputNormalizer norm) {
         if (this.archive == null) {
@@ -48,6 +56,11 @@ public class ASMMOMAModelValueProvider implements ModelValueProvider{
         return distanceToClosestNondominated(si);
     }
 
+    /**
+     * Computes the distance to the closes non-dominated individual.
+     * @param si The individual for which the distance is computed
+     * @return Distance of {@code si} to the non-dominated front.
+     */
     double distanceToClosestNondominated(SearchItemIndividual si) {
         
         double min = Double.MAX_VALUE;
@@ -59,6 +72,16 @@ public class ASMMOMAModelValueProvider implements ModelValueProvider{
         return min;
     }
     
+    
+    /**
+     * Computes the distance between to individuals. Euclidean distance is used for integer and double 
+     * values (normalized to 0-1) and a binary distance is used for booleans (0 if both have the same value,
+     * 1 otherwise)
+     * 
+     * @param i1 The first individual
+     * @param i2 The second individual
+     * @return The distance between {@code s1} and {@code s2}
+     */
     double distance(SearchItemIndividual i1, SearchItemIndividual i2) {
         double dist = 0;
         

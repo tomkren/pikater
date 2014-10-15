@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.pikater.core.utilities.evolution.surrogate;
 
 import org.pikater.core.utilities.evolution.FitnessFunction;
@@ -13,7 +9,8 @@ import weka.classifiers.Classifier;
 import weka.core.Instance;
 
 /**
- *
+ * Fitness function which uses a model to predict the value instead of evaluating it directly.
+ * 
  * @author Martin Pilat
  */
 public class SurrogateFitnessFunction implements FitnessFunction {
@@ -21,6 +18,12 @@ public class SurrogateFitnessFunction implements FitnessFunction {
     Classifier surrogate;
     ModelInputNormalizer norm;
     
+    /**
+     * Creates an instance of this class with two parameters - the surrogate model and normalizer.s
+     * 
+     * @param surrogate The surrogate model
+     * @param norm The normalizer
+     */
     public SurrogateFitnessFunction(Classifier surrogate, ModelInputNormalizer norm)  {
         this.surrogate = surrogate;
         this.norm = norm;
