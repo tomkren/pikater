@@ -26,6 +26,9 @@ public class MetadataService {
 	/**
 	 * Sends a request to generate {@link Metadata} for the DataSet
 	 * to {@link Agent_MetadataQueen}
+	 * @param agent Sender {@link PikaterAgent} of the message 
+	 * @param dataSetID ID of the dataset we request computation of metadata for
+	 * @param userID ID of user requesting metadata computation
 	 */
 	public static void requestMetadataForDataset(PikaterAgent agent,
 			int dataSetID, int userID) {
@@ -41,6 +44,9 @@ public class MetadataService {
 		try {
 			Ontology ontology = MetadataOntology.getInstance();
 
+			/*
+			 * Message composition
+			 */
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 			request.addReceiver(receiver);
 			request.setLanguage(agent.getCodec().getName());
@@ -67,6 +73,10 @@ public class MetadataService {
 	/**
 	 * Sends a request to generate {@link Metadata} for the computed data
 	 * to {@link Agent_MetadataQueen}
+	 * @param agent {@link PikaterAgent} sending the message
+	 * @param computedDataID ID of the dataset, that have been created by som {@link PikaterAgent}
+	 * @param userID ID of user requesting metadata computation (in this case should be the owner
+	 * of the experiment)
 	 */
 	public static void requestMetadataForComputedData(PikaterAgent agent,
 			int computedDataID, int userID) {
@@ -83,6 +93,9 @@ public class MetadataService {
 		try {
 			Ontology ontology = MetadataOntology.getInstance();
 
+			/*
+			 * Message composition 
+			 */
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 			request.addReceiver(receiver);
 			request.setLanguage(agent.getCodec().getName());
