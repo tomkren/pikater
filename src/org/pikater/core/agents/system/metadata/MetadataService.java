@@ -26,9 +26,6 @@ public class MetadataService {
 	/**
 	 * Sends a request to generate {@link Metadata} for the DataSet
 	 * to {@link Agent_MetadataQueen}
-	 * @param agent
-	 * @param dataSetID
-	 * @param userID
 	 */
 	public static void requestMetadataForDataset(PikaterAgent agent,
 			int dataSetID, int userID) {
@@ -70,9 +67,6 @@ public class MetadataService {
 	/**
 	 * Sends a request to generate {@link Metadata} for the computed data
 	 * to {@link Agent_MetadataQueen}
-	 * @param agent
-	 * @param computedDataID
-	 * @param userID
 	 */
 	public static void requestMetadataForComputedData(PikaterAgent agent,
 			int computedDataID, int userID) {

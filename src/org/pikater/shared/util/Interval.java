@@ -7,28 +7,23 @@ package org.pikater.shared.util;
  *
  * @param <N> Integer, Float or Double.
  */
-public class Interval<N extends Number>
-{
+public class Interval<N extends Number> {
 	private final N min;
 	private final N max;
-	
-	public Interval(N min, N max)
-	{
+
+	public Interval(N min, N max) {
 		this.min = min;
 		this.max = max;
-		if((min != null) && (max != null) && (min.doubleValue() > max.doubleValue()))
-		{
+		if ((min != null) && (max != null) && (min.doubleValue() > max.doubleValue())) {
 			throw new IllegalArgumentException("Minimum exceeds maximum");
 		}
 	}
 
-	public N getMin()
-	{
+	public N getMin() {
 		return min;
 	}
 
-	public N getMax()
-	{
+	public N getMax() {
 		return max;
 	}
 }

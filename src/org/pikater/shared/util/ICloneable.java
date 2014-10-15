@@ -16,7 +16,6 @@ package org.pikater.shared.util;
  * 
  * @author SkyCrawl
  */
-public interface ICloneable extends Cloneable
-{
-	ICloneable clone(); 
+public interface ICloneable extends Cloneable {
+	ICloneable clone();
 }

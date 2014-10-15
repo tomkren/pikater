@@ -17,8 +17,7 @@ import org.pikater.shared.util.ICloneable;
  * 
  * @author SkyCrawl
  */
-public class CollectionUtils
-{
+public class CollectionUtils {
 	/**
 	 * Always returns a non-null list - either the argument list or
 	 * a new empty list.
@@ -26,59 +25,46 @@ public class CollectionUtils
 	 * @param list for which we want safe access
 	 * @return a non-null list
 	 */
-	public static <O extends Object> List<O> nullSafeList(List<O> list)
-	{
-		return list != null ? list : Collections.<O>emptyList();
+	public static <O extends Object> List<O> nullSafeList(List<O> list) {
+		return list != null ? list : Collections.<O> emptyList();
 	}
-	
-	public static Set<String> enumSetToStringSet(EnumSet<?> enumSet)
-	{
+
+	public static Set<String> enumSetToStringSet(EnumSet<?> enumSet) {
 		Set<String> result = new HashSet<String>();
-		for(Enum<?> enumValue : enumSet)
-		{
+		for (Enum<?> enumValue : enumSet) {
 			result.add(enumValue.name());
 		}
 		return result;
 	}
-	
-	public static Set<String> rangeToStringSet(int fromIncl, int toIncl)
-	{
+
+	public static Set<String> rangeToStringSet(int fromIncl, int toIncl) {
 		Set<String> result = new LinkedHashSet<String>(); // LinkedHashSet preserves insertion order
-		for(int i = fromIncl; i <= toIncl; i++)
-		{
+		for (int i = fromIncl; i <= toIncl; i++) {
 			result.add(String.valueOf(i));
 		}
 		return result;
 	}
-	
-	public static String join(Collection<String> collection, String delim)
-	{
+
+	public static String join(Collection<String> collection, String delim) {
 		StringBuilder result = new StringBuilder();
 		Iterator<String> it = collection.iterator();
-		if(it.hasNext())
-		{
+		if (it.hasNext()) {
 			result.append(it.next());
 		}
-		while(it.hasNext())
-		{
+		while (it.hasNext()) {
 			result.append(delim);
 			result.append(it.next());
 		}
 		return result.toString();
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public static <C extends ICloneable> List<C> deepCopy(List<C> source)
-	{
-		if(source == null)
-		{
+	public static <C extends ICloneable> List<C> deepCopy(List<C> source) {
+		if (source == null) {
 			return null;
-		}
-		else
-		{
+		} else {
 			List<C> copy = new ArrayList<C>(source.size());
-			for(C item : source)
-			{
+			for (C item : source) {
 				ICloneable itemCopy = ((ICloneable) item).clone();
 				copy.add((C) itemCopy);
 			}

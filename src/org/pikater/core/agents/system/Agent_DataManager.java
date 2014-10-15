@@ -129,7 +129,7 @@ import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.shared.database.util.DatabaseUtilities;
 import org.pikater.shared.database.util.ResultFormatter;
-import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalExperiment;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.google.common.io.Files;
@@ -764,7 +764,7 @@ public class Agent_DataManager extends PikaterAgent {
 	
 	/**
 	 * Saves a new batch wrapped in {@link SaveBatch} to database,
-	 * after it is first converted to a {@link UniversalComputationDescription
+	 * after it is first converted to a {@link UniversalExperiment
 	 * database-compatible batch format} and then to XML. Some metadata are 
 	 * also stored - e.g. name of the batch.
 	 * 
@@ -780,7 +780,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Batch batch = saveBatch.getBatch();
 		ComputationDescription description = batch.getDescription();
 
-		UniversalComputationDescription uDescription =
+		UniversalExperiment uDescription =
 				description.exportUniversalComputationDescription();
 
 		JPAUser user = DAOs.userDAO.getByID(batch.getOwnerID());
@@ -833,8 +833,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
 
-		UniversalComputationDescription uDescription =
-				UniversalComputationDescription.fromXML(batchJPA.getXML());
+		UniversalExperiment uDescription =
+				UniversalExperiment.fromXML(batchJPA.getXML());
 
 		ComputationDescription compDescription =
 				ComputationDescription

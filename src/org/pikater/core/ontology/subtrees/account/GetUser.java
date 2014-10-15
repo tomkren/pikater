@@ -16,7 +16,6 @@ public class GetUser implements AgentAction {
 
 	/**
 	 * Get the {@link User} ID
-	 * @return
 	 */
 	public int getUserID() {
 		return userID;
@@ -24,7 +23,6 @@ public class GetUser implements AgentAction {
 
 	/**
 	 * Set the {@link User} ID
-	 * @param userID
 	 */
 	public void setUserID(int userID) {
 		this.userID = userID;

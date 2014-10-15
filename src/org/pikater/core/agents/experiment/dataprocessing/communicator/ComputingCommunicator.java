@@ -38,9 +38,6 @@ public abstract class ComputingCommunicator {
 	/**
 	 * Handles the incoming Task
 	 * 
-	 * @param agent
-	 * @param requestMsg
-	 * @return
 	 */
 	public static ACLMessage handleTask(Agent_ComputingAgent agent,
 			ACLMessage requestMsg) {
@@ -66,9 +63,6 @@ public abstract class ComputingCommunicator {
 	/**
 	 * Executes a Duration Task
 	 * 
-	 * @param agent
-	 * @param requestMsq
-	 * @return
 	 */
 	public static ACLMessage executeDurationTask(Agent_ComputingAgent agent,
 			ACLMessage requestMsq) {
@@ -94,7 +88,6 @@ public abstract class ComputingCommunicator {
 	/**
 	 * Sends a last duration
 	 * 
-	 * @param agent
 	 */
 	public static void sendLastDuration(Agent_ComputingAgent agent) {
 		
@@ -171,9 +164,6 @@ public abstract class ComputingCommunicator {
 	/**
 	 * Sends options of the agent
 	 * 
-	 * @param agent
-	 * @param request
-	 * @return
 	 */
 	public static ACLMessage sendOptions(Agent_ComputingAgent agent, ACLMessage request) {
 		ACLMessage msgOut = request.createReply();
@@ -205,8 +195,6 @@ public abstract class ComputingCommunicator {
 	/**
 	 * Save this agent to file
 	 * 
-	 * @param agent
-	 * @return
 	 * @throws IOException
 	 * @throws CodecException
 	 * @throws OntologyException

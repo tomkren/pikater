@@ -10,24 +10,20 @@ import org.pikater.shared.util.DateUtils;
 
 public class ExperimentTableDBRow extends AbstractTableRowDBView {
 
-	private JPAExperiment experiment=null;
+	private JPAExperiment experiment = null;
 
-	public ExperimentTableDBRow(JPAExperiment experiment)
-	{
-		this.experiment=experiment;
+	public ExperimentTableDBRow(JPAExperiment experiment) {
+		this.experiment = experiment;
 	}
-	
-	public JPAExperiment getExperiment()
-	{
+
+	public JPAExperiment getExperiment() {
 		return experiment;
 	}
-	
+
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column) {
 		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
-		switch(specificColumn)
-		{
+		switch (specificColumn) {
 		/*
 		 * First the read-only properties.
 		 */
@@ -39,38 +35,34 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(experiment.getStatus().name());
 		case MODEL_STRATEGY:
 			return new StringReadOnlyDBViewValue(experiment.getModelStrategy().name());
-			
-		/*
-		 * And then custom actions.
-		 */
+
+			/*
+			 * And then custom actions.
+			 */
 		case BEST_MODEL:
 		case RESULTS:
 			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
-			{	
+			{
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return (experiment.getResults() != null) && !experiment.getResults().isEmpty();
 				}
 
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
 
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
-		
+
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}
 	}
 
 	@Override
-	public void commitRow()
-	{
+	public void commitRow() {
 	}
 }

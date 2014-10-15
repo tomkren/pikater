@@ -13,37 +13,30 @@ import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 public class LargeObjectInputStreamTest {
 
 	public static void main(String[] args) {
-		
-		long oid=30783;
-		InputStream is=null;
-		FileOutputStream fos=null;
-		try
-		{
+
+		long oid = 30783;
+		InputStream is = null;
+		FileOutputStream fos = null;
+		try {
 			is = PGLargeObjectReader.getForLargeObject(oid).getInputStream();
 			fos = new FileOutputStream(new File("core/datasets/test_from_DB.arff"));
-						
+
 			System.out.println("Retrieving dataset content...");
-			byte[] buffer=new byte[1000];
-			int size=0;
-			int c=0;
-			while((c=is.read(buffer))>0){
+			byte[] buffer = new byte[1000];
+			int size = 0;
+			int c = 0;
+			while ((c = is.read(buffer)) > 0) {
 				fos.write(buffer, 0, c);
-				size+=c;
+				size += c;
 			}
-			System.out.println("Copied "+size+" bytes");
+			System.out.println("Copied " + size + " bytes");
 			fos.close();
 			is.close();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			Log.error(e.getMessage(), e);
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			Log.error(e.getMessage(), e);
-		}
-		finally
-		{
+		} finally {
 			IOUtils.closeQuietly(fos);
 			IOUtils.closeQuietly(is);
 		}
