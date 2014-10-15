@@ -10,18 +10,13 @@ import org.quartz.Trigger;
  * 
  * @author SkyCrawl
  */
-public abstract class ImmediateOneTimeJob extends AbstractJobWithArgs
-{
-	public ImmediateOneTimeJob(int numArgs)
-	{
+public abstract class ImmediateOneTimeJob extends AbstractJobWithArgs {
+	public ImmediateOneTimeJob(int numArgs) {
 		super(numArgs);
 	}
 
 	@Override
-	public Trigger getJobTrigger()
-	{
-		return newTrigger()
-		        .startNow()
-		        .build();
+	public Trigger getJobTrigger() {
+		return newTrigger().startNow().build();
 	}
 }

@@ -7,9 +7,10 @@ import java.util.logging.Level;
  * 
  * @author SkyCrawl
  */
-public interface IPikaterLogger
-{
-    void log(Level logLevel, String source, String message);
+public interface IPikaterLogger {
+	void log(Level logLevel, String source, String message);
+
 	void logThrowable(String message, Throwable t);
+
 	void log(Level logLevel, String message);
 }

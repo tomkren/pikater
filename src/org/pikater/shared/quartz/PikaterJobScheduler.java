@@ -12,13 +12,12 @@ import org.quartz.SchedulerException;
  * 
  * @author SkyCrawl
  */
-public class PikaterJobScheduler
-{
+public class PikaterJobScheduler {
 	private static MyJobScheduler staticScheduler = null;
-	
+
 	//-----------------------------------------------------------
 	// SCHEDULER HANDLING
-	
+
 	/**
 	 * Initialize and start the cron job scheduler. Your application will not
 	 * terminate until you call the {@link #shutdownStaticScheduler} method,
@@ -27,55 +26,41 @@ public class PikaterJobScheduler
 	 * @param quartzConfAbsPath
 	 * @throws {@link IllegalStateException}
 	 */
-	public static synchronized void initStaticScheduler(String quartzConfAbsPath)
-	{
-		if(staticScheduler != null)
-		{
+	public static synchronized void initStaticScheduler(String quartzConfAbsPath) {
+		if (staticScheduler != null) {
 			throw new IllegalStateException("Another instance of scheduler is running. Use the 'shutdown' method instead.");
-		}
-		else
-		{
+		} else {
 			PikaterJobScheduler.staticScheduler = new MyJobScheduler(quartzConfAbsPath);
-			try
-			{
+			try {
 				PikaterJobScheduler.staticScheduler.start();
-			}
-			catch (SchedulerException se)
-			{
+			} catch (SchedulerException se) {
 				throw new IllegalStateException("Could not initialize the application's static quartz scheduler.", se);
 			}
 		}
 	}
-	
+
 	/**
 	 * Shutdown the scheduler.
 	 * 
 	 * @return whether there was an error shutting down the scheduler
 	 */
-	public static synchronized boolean shutdownStaticScheduler()
-	{
-		if(staticScheduler != null)
-		{
-			try
-			{
+	public static synchronized boolean shutdownStaticScheduler() {
+		if (staticScheduler != null) {
+			try {
 				staticScheduler.shutdown();
-	        }
-			catch (SchedulerException se)
-			{
+			} catch (SchedulerException se) {
 				PikaterDBLogger.logThrowable("Could not shutdown the application's static quartz scheduler.", se);
 				return false;
-	        }
-			finally
-			{
+			} finally {
 				staticScheduler = null;
 			}
 		}
 		return true;
 	}
-	
+
 	//-----------------------------------------------------------
 	// CONVENIENCE ROUTINES
-	
+
 	/**
 	 * Gets the scheduler or throws an exception if {@link #initStaticScheduler(String)}
 	 * has not been called.
@@ -83,40 +68,28 @@ public class PikaterJobScheduler
 	 * @return
 	 * @throws {@link IllegalStateException} 
 	 */
-	public static MyJobScheduler getJobScheduler()
-	{
-		if(staticScheduler == null)
-		{
+	public static MyJobScheduler getJobScheduler() {
+		if (staticScheduler == null) {
 			throw new IllegalStateException("Scheduler has not been initialized. First call {@link #initStaticScheduler}.");
-		}
-		else
-		{
+		} else {
 			return staticScheduler;
 		}
 	}
-	
+
 	/**
 	 * One method to automatically schedule all cron jobs defined in the
 	 * './jobs/crons' package.
 	 */
 	@SuppressWarnings("unchecked")
-	public static void defineCronJobs()
-	{
-		for(Class<? extends Object> clazz : ReflectionUtils.getTypesFromPackage(RemoveExpiredTrainedModels.class.getPackage()))
-		{
-			if(!clazz.isInterface() && ZeroArgJob.class.isAssignableFrom(clazz))
-			{
-				try
-				{
+	public static void defineCronJobs() {
+		for (Class<? extends Object> clazz : ReflectionUtils.getTypesFromPackage(RemoveExpiredTrainedModels.class.getPackage())) {
+			if (!clazz.isInterface() && ZeroArgJob.class.isAssignableFrom(clazz)) {
+				try {
 					staticScheduler.defineJob((Class<? extends ZeroArgJob>) clazz);
-				}
-				catch (Exception t)
-				{
+				} catch (Exception t) {
 					PikaterDBLogger.logThrowable(String.format("Could not define the '%s' cron.", clazz.getName()), t);
 				}
-			}
-			else
-			{
+			} else {
 				throw new IllegalArgumentException(String.format("The '%s' cron does not inherit from '%s'.", clazz.getName(), ZeroArgJob.class.getName()));
 			}
 		}

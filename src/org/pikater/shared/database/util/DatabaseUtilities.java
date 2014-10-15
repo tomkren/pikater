@@ -17,8 +17,7 @@ import org.pikater.shared.logging.database.PikaterDBLogger;
  * 
  * @author SkyCrawl
  */
-public class DatabaseUtilities
-{
+public class DatabaseUtilities {
 	/**
 	 * Does the given list contain an entity with the given ID?
 	 * 
@@ -26,12 +25,9 @@ public class DatabaseUtilities
 	 * @param item the item we are searching for
 	 * @return true if item is in the list or false 
 	 */
-	public static <T extends JPAAbstractEntity> boolean containsID(List<T> list, int entityID)
-	{
-		for(T i : list)
-		{
-			if(i.getId() == entityID)
-			{
+	public static <T extends JPAAbstractEntity> boolean containsID(List<T> list, int entityID) {
+		for (T i : list) {
+			if (i.getId() == entityID) {
 				return true;
 			}
 		}
@@ -45,29 +41,21 @@ public class DatabaseUtilities
 	 * @return
 	 * @throws IOException
 	 */
-	public static String getMD5Hash(File file) throws IOException
-	{
-		if(file == null)
-		{
+	public static String getMD5Hash(File file) throws IOException {
+		if (file == null) {
 			throw new NullPointerException("Who has ever heard of feeding nulls to a hashing function?");
-		}
-		else
-		{
+		} else {
 			String res = null;
-			try (FileInputStream fis = new FileInputStream(file))
-			{
+			try (FileInputStream fis = new FileInputStream(file)) {
 				MessageDigest md = MessageDigest.getInstance("MD5");
 				byte[] buf = new byte[2048];
 				int s;
-				while ((s = fis.read(buf, 0, 2048)) > 0)
-				{
+				while ((s = fis.read(buf, 0, 2048)) > 0) {
 					md.update(buf, 0, s);
 				}
 				byte[] dig = md.digest();
 				res = DatatypeConverter.printHexBinary(dig).toLowerCase();
-			}
-			catch (NoSuchAlgorithmException nsae)
-			{
+			} catch (NoSuchAlgorithmException nsae) {
 				PikaterDBLogger.logThrowable("Unexpected error occured:", nsae);
 			}
 			return res;

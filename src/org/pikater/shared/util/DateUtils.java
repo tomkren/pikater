@@ -8,8 +8,7 @@ import java.util.Date;
  * 
  * @author SkyCrawl
  */
-public class DateUtils
-{
+public class DateUtils {
 	/**
 	 * Returns a string representation of the given date, in the following
 	 * format: "dd.MM. yyyy".
@@ -17,16 +16,12 @@ public class DateUtils
 	 * @param date
 	 * @return
 	 */
-	public static String toCzechDate(Date date)
-	{
+	public static String toCzechDate(Date date) {
 		SimpleDateFormat czechDateFormatter = new SimpleDateFormat("dd.MM. yyyy");
-	
-		if(date == null)
-		{
+
+		if (date == null) {
 			return "";
-		}
-		else
-		{
+		} else {
 			return czechDateFormatter.format(date);
 		}
 	}

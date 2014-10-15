@@ -15,87 +15,71 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public class BidiMap<K,V> implements Serializable
-{
+public class BidiMap<K, V> implements Serializable {
 	private static final long serialVersionUID = 5011484513683193827L;
-	
-	private final Map<K,V> keyToValue;
-	private final Map<V,K> valueToKey;
 
-	public BidiMap()
-	{
-		this.keyToValue = new HashMap<K,V>();
-		this.valueToKey = new HashMap<V,K>();
+	private final Map<K, V> keyToValue;
+	private final Map<V, K> valueToKey;
+
+	public BidiMap() {
+		this.keyToValue = new HashMap<K, V>();
+		this.valueToKey = new HashMap<V, K>();
 	}
-	
-	public int size()
-	{
+
+	public int size() {
 		return keyToValue.size();
 	}
 
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return keyToValue.isEmpty();
 	}
-	
-	public V getValue(K key)
-	{
+
+	public V getValue(K key) {
 		return keyToValue.get(key);
 	}
-	
-	public K getKey(V value)
-	{
+
+	public K getKey(V value) {
 		return valueToKey.get(value);
 	}
-	
-	public void put(K key, V value)
-	{
+
+	public void put(K key, V value) {
 		valueToKey.put(value, key);
 		keyToValue.put(key, value);
 	}
-	
-	public void putAll(Map<? extends K, ? extends V> m)
-	{
-		for(Entry<? extends K, ? extends V> entry : m.entrySet())
-		{
+
+	public void putAll(Map<? extends K, ? extends V> m) {
+		for (Entry<? extends K, ? extends V> entry : m.entrySet()) {
 			put(entry.getKey(), entry.getValue());
 		}
 	}
-	
-	public void remove(K key)
-	{
+
+	public void remove(K key) {
 		valueToKey.remove(getValue(key));
 		keyToValue.remove(key);
 	}
-	
-	public void clear()
-	{
+
+	public void clear() {
 		keyToValue.clear();
 		valueToKey.clear();
 	}
-	
-	public boolean containsKey(K key)
-	{
+
+	public boolean containsKey(K key) {
 		return keyToValue.containsKey(key);
 	}
 
-	public boolean containsValue(V value)
-	{
+	public boolean containsValue(V value) {
 		return valueToKey.containsKey(value);
 	}
 
-	public Set<K> keySet()
-	{
+	public Set<K> keySet() {
 		return keyToValue.keySet();
 	}
-	
-	public Set<V> valueSet()
-	{
+
+	public Set<V> valueSet() {
 		return valueToKey.keySet();
 	}
 
-	public Set<Entry<K, V>> entrySet()
-	{
+	public Set<Entry<K, V>> entrySet() {
 		return keyToValue.entrySet();
 	}
 }

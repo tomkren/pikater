@@ -11,15 +11,13 @@ import org.quartz.JobKey;
  * 
  * @author SkyCrawl
  */
-public class InterruptibleJobHelper
-{
+public class InterruptibleJobHelper {
 	private JobKey jobKey;
-	
-	public InterruptibleJobHelper()
-	{
+
+	public InterruptibleJobHelper() {
 		this.jobKey = null;
 	}
-	
+
 	/**
 	 * Define and schedule an interruptible job with the given
 	 * arguments.
@@ -28,31 +26,23 @@ public class InterruptibleJobHelper
 	 * @param jobArgs
 	 * @throws Exception
 	 */
-	public void start(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Exception
-	{
+	public void start(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Exception {
 		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(jobClass, jobArgs);
 	}
-	
+
 	/**
 	 * Abort the job defined by {@link #start(Class, Object[])}.
 	 * @throws {@link IllegalStateException}
 	 */
-	public void abort()
-	{
-		if(jobKey == null)
-		{
+	public void abort() {
+		if (jobKey == null) {
 			throw new IllegalStateException("Can not abort a task that has not started.");
-		}
-		else
-		{
+		} else {
 			// InterruptibleImmediateOneTimeJob is assumed here
 			// TODO: check if started, unschedule
-			try
-			{
+			try {
 				PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
-			}
-			catch (Exception t)
-			{
+			} catch (Exception t) {
 				PikaterDBLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
 			}
 		}

@@ -24,19 +24,18 @@ import org.quartz.impl.StdSchedulerFactory;
  * 
  * @author SkyCrawl 
  */
-public class MyJobScheduler extends PropertiesHandler
-{
+public class MyJobScheduler extends PropertiesHandler {
 	/**
 	 * Reference to the '.properties' file used as configuration
 	 * for {@link #scheduler}.
 	 */
 	private final Properties quartzConf;
-	
+
 	/**
 	 * The underlying scheduled used to schedule jobs.
 	 */
 	private Scheduler scheduler;
-	
+
 	/**
 	 * By default, {@link StdSchedulerFactory} loads a ".properties" configuration
 	 * file named "quartz.properties" from the 'current working directory'. If that fails,
@@ -45,70 +44,59 @@ public class MyJobScheduler extends PropertiesHandler
 	 * 
 	 * @param quartzConfAbsPath
 	 */
-	public MyJobScheduler(String quartzConfAbsPath)
-	{
+	public MyJobScheduler(String quartzConfAbsPath) {
 		String quartzConfPath = quartzConfAbsPath;
-		if(!quartzConfAbsPath.endsWith(System.getProperty("file.separator")))
-		{
+		if (!quartzConfAbsPath.endsWith(System.getProperty("file.separator"))) {
 			quartzConfPath = quartzConfAbsPath + System.getProperty("file.separator");
 		}
-		
+
 		this.quartzConf = openProperties(new File(quartzConfPath + "quartz-configuration.properties"));
 		this.scheduler = null;
 	}
-	
+
 	//--------------------------------------------------------
 	// SCHEDULER RELATED INTERFACE
-	
+
 	/**
 	 * Start the scheduler. No jobs are defined after this call.
 	 * 
 	 * @throws SchedulerException
 	 */
-	public void start() throws SchedulerException
-	{
-		if(scheduler != null)
-		{
+	public void start() throws SchedulerException {
+		if (scheduler != null) {
 			throw new IllegalStateException("Scheduler is already running. Use the 'shutdown' method instead.");
-		}
-		else
-		{
+		} else {
 			StdSchedulerFactory quartzFactory = new StdSchedulerFactory(quartzConf);
 			scheduler = quartzFactory.getScheduler();
 			scheduler.start();
-			
+
 			// scheduler.getMetaData(). // might be useful sometimes
 		}
 	}
-	
+
 	/**
 	 * Shuts down the scheduler. All defined jobs are lost.
 	 * 
 	 * @throws SchedulerException
 	 */
-	public void shutdown() throws SchedulerException
-	{
-		if(scheduler != null)
-		{
+	public void shutdown() throws SchedulerException {
+		if (scheduler != null) {
 			scheduler.shutdown();
 			scheduler = null;
-		}
-		else
-		{
+		} else {
 			throw new IllegalStateException("Scheduler has not been started. Use the 'start' method instead.");
 		}
 	}
-	
+
 	//--------------------------------------------------------
 	// JOB SCHEDULLING/INTERRUPTING INTERFACE
-	
+
 	/**
 	 * Defines a zero-argument job - builds it, creates it and schedules it.
 	 * 
 	 * @throws Exception
 	 */
-	public JobKey defineJob(Class<? extends ZeroArgJob> clazz) throws Exception
-	{
+	public JobKey defineJob(Class<? extends ZeroArgJob> clazz) throws Exception {
 		return defineJob(clazz, null);
 	}
 
@@ -120,54 +108,44 @@ public class MyJobScheduler extends PropertiesHandler
 	 * @return
 	 * @throws Exception
 	 */
-	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Exception
-	{
-		if(scheduler == null)
-		{
+	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Exception {
+		if (scheduler == null) {
 			throw new IllegalStateException("Scheduler has not been started. Use the 'start' method instead.");
-		}
-		else if(Modifier.isAbstract(jobClass.getModifiers()))
-		{
+		} else if (Modifier.isAbstract(jobClass.getModifiers())) {
 			throw new IllegalArgumentException("Provided class is abstract - no instances can be created.");
-		}
-		else
-		{
+		} else {
 			// abstract job building
 			JobBuilder jobBuilder = newJob(jobClass);
 			JobDetail detail = jobBuilder.build();
-			
+
 			// pass arguments
 			AbstractJobWithArgs helperJobInstance = jobClass.newInstance();
 			helperJobInstance.buildJob(jobBuilder);
 			setArguments(detail, helperJobInstance, args);
-			
+
 			// tell quartz to schedule the job using our trigger
 			scheduler.scheduleJob(detail, helperJobInstance.getJobTrigger());
-			
+
 			// and return
 			return detail.getKey();
 		}
 	}
-	
+
 	/**
 	 * Interrupts the given job.
 	 * @param key
 	 */
-	public void interruptJob(JobKey key)
-	{
-		try
-		{
+	public void interruptJob(JobKey key) {
+		try {
 			scheduler.interrupt(key);
-		}
-		catch (UnableToInterruptJobException e)
-		{
+		} catch (UnableToInterruptJobException e) {
 			PikaterDBLogger.logThrowable("Could not interrupt job with key: " + key.toString(), e);
 		}
 	}
-	
+
 	//--------------------------------------------------------
 	// OTHER INTERFACE
-	
+
 	/**
 	 * Sets arguments to a job defined by the arguments. This method
 	 * should be used prior to scheduling the job.
@@ -177,23 +155,14 @@ public class MyJobScheduler extends PropertiesHandler
 	 * @param args
 	 * @throws Exception
 	 */
-	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args) throws Exception  
-	{
-		if(args.length != helperJobInstance.getNumberOfArguments())
-		{
-			throw new IllegalArgumentException(String.format("This class requires exactly %d arguments. You provided %d.", 
-					helperJobInstance.getNumberOfArguments(), args.length));
-		}
-		else
-		{
-			for(int i = 0; i < args.length; i++)
-			{
-				if(helperJobInstance.argumentCorrect(args[i], i))
-				{
+	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args) throws Exception {
+		if (args.length != helperJobInstance.getNumberOfArguments()) {
+			throw new IllegalArgumentException(String.format("This class requires exactly %d arguments. You provided %d.", helperJobInstance.getNumberOfArguments(), args.length));
+		} else {
+			for (int i = 0; i < args.length; i++) {
+				if (helperJobInstance.argumentCorrect(args[i], i)) {
 					detail.getJobDataMap().put(String.valueOf(i), args[i]);
-				}
-				else
-				{
+				} else {
 					throw new IllegalArgumentException(String.format("Argument %d not correct.", i));
 				}
 			}

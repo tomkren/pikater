@@ -15,96 +15,80 @@ import java.util.Set;
  * purpose and allows the use of all standard {@link Set} methods with no
  * custom implementations whatsoever. Use with caution however.</p> 
  */
-public class InstanceSet<E> implements Set<E>
-{
+public class InstanceSet<E> implements Set<E> {
 	private final Set<E> instanceSet;
-	
-	public InstanceSet()
-	{
-		this.instanceSet = Collections.newSetFromMap(new IdentityHashMap<E,Boolean>());
+
+	public InstanceSet() {
+		this.instanceSet = Collections.newSetFromMap(new IdentityHashMap<E, Boolean>());
 	}
-	
-	public InstanceSet(InstanceSet<E> source)
-	{
-		this.instanceSet = Collections.newSetFromMap(new IdentityHashMap<E,Boolean>());
+
+	public InstanceSet(InstanceSet<E> source) {
+		this.instanceSet = Collections.newSetFromMap(new IdentityHashMap<E, Boolean>());
 		this.instanceSet.addAll(source);
 	}
-	
+
 	@Override
-	public int size()
-	{
+	public int size() {
 		return instanceSet.size();
 	}
 
 	@Override
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return instanceSet.isEmpty();
 	}
 
 	@Override
-	public boolean contains(Object o)
-	{
+	public boolean contains(Object o) {
 		return instanceSet.contains(o);
 	}
 
 	@Override
-	public Iterator<E> iterator()
-	{
+	public Iterator<E> iterator() {
 		return instanceSet.iterator();
 	}
 
 	@Override
-	public Object[] toArray()
-	{
+	public Object[] toArray() {
 		return instanceSet.toArray();
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a)
-	{
+	public <T> T[] toArray(T[] a) {
 		return instanceSet.toArray(a);
 	}
 
 	@Override
-	public boolean add(E e)
-	{
+	public boolean add(E e) {
 		return instanceSet.add(e);
 	}
 
 	@Override
-	public boolean remove(Object o)
-	{
+	public boolean remove(Object o) {
 		return instanceSet.remove(o);
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c)
-	{
+	public boolean containsAll(Collection<?> c) {
 		return instanceSet.containsAll(c);
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends E> c)
-	{
+	public boolean addAll(Collection<? extends E> c) {
 		return instanceSet.addAll(c);
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c)
-	{
+	public boolean retainAll(Collection<?> c) {
 		return instanceSet.retainAll(c);
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c)
-	{
+	public boolean removeAll(Collection<?> c) {
 		return instanceSet.removeAll(c);
 	}
 
 	@Override
-	public void clear()
-	{
+	public void clear() {
 		instanceSet.clear();
 	}
 }
