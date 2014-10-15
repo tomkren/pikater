@@ -1,35 +1,65 @@
 package org.pikater.shared.experiment;
 
+/**
+ * <p>Instances of this class are logical "parts" of the parent 
+ * {@link UniversalExperiment experiment} that correspond to
+ * boxes of the web application's experiment editor.</p>
+ * 
+ * <p>They are connected among themselves with instances of
+ * {@link UniversalElementConnector} that are stored in the
+ * {@link #ontologyInfo} field.</p> 
+ * 
+ * @author stepan
+ */
 public class UniversalElement
 {
-	private UniversalOntology ontologyInfo;
-	private UniversalGui guiInfo;
+	/**
+	 * Additional experiment related information about this element. For example,
+	 * connections to other elements.
+	 */
+	private UniversalElementOntology ontologyInfo;
+	
+	/**
+	 * Additional presentation related information about this element.
+	 */
+	private UniversalElementPresentation presentationInfo;
 	
 	public UniversalElement()
 	{
-		this.ontologyInfo = new UniversalOntology();
-		this.guiInfo = new UniversalGui();
+		this.ontologyInfo = new UniversalElementOntology();
+		this.presentationInfo = new UniversalElementPresentation();
 	}
 
-	public UniversalOntology getOntologyInfo()
+	/**
+	 * Gets {@link #ontologyInfo ontology information}.
+	 * @return
+	 */
+	public UniversalElementOntology getOntologyInfo()
 	{
 		return ontologyInfo;
 	}
-	public void setOntologyInfo(UniversalOntology ontologyInfo)
+	/**
+	 * Sets {@link #ontologyInfo ontology information}.
+	 * @return
+	 */
+	public void setOntologyInfo(UniversalElementOntology ontologyInfo)
 	{
 		this.ontologyInfo = ontologyInfo;
 	}
-	public UniversalGui getGuiInfo()
+	/**
+	 * Gets {@link #presentationInfo presentation information}.
+	 * @return
+	 */
+	public UniversalElementPresentation getPresentationInfo()
 	{
-		return guiInfo;
+		return presentationInfo;
 	}
-	public void setGuiInfo(UniversalGui guiInfo)
+	/**
+	 * Sets {@link #presentationInfo presentation information}.
+	 * @return
+	 */
+	public void setPresentationInfo(UniversalElementPresentation presentationInfo)
 	{
-		this.guiInfo = guiInfo;
-	}
-	
-	public boolean isOntologyDefined()
-	{
-		return this.ontologyInfo != null;
+		this.presentationInfo = presentationInfo;
 	}
 }

@@ -5,6 +5,15 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.pikater.shared.logging.database.PikaterDBLogger;
+
+/**
+ * This class is the first towards unified logging in the whole application.
+ * See {@link PikaterDBLogger} for an example of how to create an application
+ * wide static logger.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class GeneralPikaterLogger
 {
 	protected static IPikaterLogger createPikaterLogger(final Logger logger)

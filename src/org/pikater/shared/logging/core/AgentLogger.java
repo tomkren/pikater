@@ -4,6 +4,12 @@ import java.util.logging.Level;
 
 import org.pikater.core.agents.PikaterAgent;
 
+/**
+ * A special logger wrapped made for Jade agents used in core system.
+ * Currently, the wrapper redirects logging to {@link ConsoleLogger}.
+ * 
+ * @author SkyCrawl
+ */
 public class AgentLogger
 {
 	private final String source;

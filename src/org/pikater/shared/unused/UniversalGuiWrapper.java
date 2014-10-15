@@ -1,8 +1,10 @@
-package org.pikater.shared.experiment;
+package org.pikater.shared.unused;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.pikater.shared.experiment.UniversalElement;
 
 public class UniversalGuiWrapper
 {

@@ -7,16 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.shared.experiment.UniversalComputationDescription;
-import org.pikater.shared.experiment.UniversalConnector;
+import org.pikater.shared.experiment.UniversalExperiment;
+import org.pikater.shared.experiment.UniversalElementConnector;
 import org.pikater.shared.experiment.UniversalElement;
-import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.experiment.UniversalElementOntology;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.thoughtworks.xstream.XStream;
@@ -177,24 +176,21 @@ public class ComputationDescription implements Concept {
 	}
 	
 	/**
-	 * Exports the {@link UniversalComputationDescription}
+	 * Exports the {@link UniversalExperiment}
 	 * @return
 	 */
-	public UniversalComputationDescription exportUniversalComputationDescription() {
+	public UniversalExperiment exportUniversalComputationDescription() {
 		
 		generateIDs();
 		gene();
-				
-		HashSet<NewOption> hashSet = new HashSet<NewOption>(
-				CollectionUtils.deepCopy(getGlobalOptions()));
 		
-		UniversalComputationDescription uModel =
-				new UniversalComputationDescription();
-		uModel.addGlobalOptions(hashSet);
+		UniversalExperiment uModel =
+				new UniversalExperiment();
+		uModel.getGlobalOptions().addAll(CollectionUtils.deepCopy(getGlobalOptions()));
 		
 		// map - id x ontology
-		Map<Integer, UniversalOntology> finishedtUniOntologys =
-				new HashMap<Integer, UniversalOntology>();
+		Map<Integer, UniversalElementOntology> finishedtUniOntologys =
+				new HashMap<Integer, UniversalElementOntology>();
 		Map<Integer, IComputationElement> finishedDataProcessings =
 				new HashMap<Integer, IComputationElement>();
 		
@@ -217,7 +213,7 @@ public class ComputationDescription implements Concept {
 			if (! finishedDataProcessings.containsKey(
 					dataProcessing.getId()) ) {
 				
-				UniversalOntology uOntology =
+				UniversalElementOntology uOntology =
 						dataProcessing.exportUniversalOntology();
 				
 				finishedtUniOntologys.put(
@@ -235,18 +231,18 @@ public class ComputationDescription implements Concept {
 		// connecting to graph
 		for ( Integer keyI : finishedtUniOntologys.keySet()) {
 			
-			UniversalOntology ontoI = finishedtUniOntologys.get(keyI);
+			UniversalElementOntology ontoI = finishedtUniOntologys.get(keyI);
 			IComputationElement processI = finishedDataProcessings.get(keyI);
 			
 			for (ISourceDescription slotIJ :
 				processI.exportAllDataSourceDescriptions()) {
 	
 				UniversalElement uniElement = new UniversalElement();
-				UniversalOntology uniOntology =
+				UniversalElementOntology uniOntology =
 						finishedtUniOntologys.get(slotIJ.exportSource().getId());
 				uniElement.setOntologyInfo(uniOntology);
 				
-				UniversalConnector connector = new UniversalConnector();
+				UniversalElementConnector connector = new UniversalElementConnector();
 				connector.setInputDataIdentifier(slotIJ.getInputType());
 				connector.setOutputDataIdentifier(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
@@ -257,11 +253,11 @@ public class ComputationDescription implements Concept {
 			for (ISourceDescription slotIJ : processI.exportAllErrors()) {
 				
 				UniversalElement uniElement = new UniversalElement();
-				UniversalOntology uniOntology =
+				UniversalElementOntology uniOntology =
 						finishedtUniOntologys.get(slotIJ.exportSource().getId());
 				uniElement.setOntologyInfo(uniOntology);
 				
-				UniversalConnector connector = new UniversalConnector();
+				UniversalElementConnector connector = new UniversalElementConnector();
 				connector.setInputDataIdentifier(slotIJ.getInputType());
 				connector.setOutputDataIdentifier(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
@@ -278,20 +274,20 @@ public class ComputationDescription implements Concept {
 	}
 
 	/**
-	 * Imports the {@link UniversalComputationDescription}
+	 * Imports the {@link UniversalExperiment}
 	 * @param uDescription
 	 * @return
 	 */
 	public static ComputationDescription importUniversalComputationDescription(
-			UniversalComputationDescription uDescription) {
+			UniversalExperiment uDescription) {
 
 		ComputationDescription description = new ComputationDescription();
 		description.setGlobalOptions(
 				new ArrayList<NewOption>(uDescription.getGlobalOptions()) );
 
 		// map - id x ontology
-		Map<Integer, UniversalOntology> finishedtUniOntologys =
-				new HashMap<Integer, UniversalOntology>();
+		Map<Integer, UniversalElementOntology> finishedtUniOntologys =
+				new HashMap<Integer, UniversalElementOntology>();
 		Map<Integer, IComputationElement> finishedDataProcessings =
 				new HashMap<Integer, IComputationElement>();
 		
@@ -307,7 +303,7 @@ public class ComputationDescription implements Concept {
 			UniversalElement uElement = fifo.get(0);
 			fifo.remove(0);
 			
-			UniversalOntology uOntology = uElement.getOntologyInfo();
+			UniversalElementOntology uOntology = uElement.getOntologyInfo();
 			if (! finishedDataProcessings.containsKey(uOntology.getId()) ) {
 				
 				DataProcessing ontology =
@@ -318,7 +314,7 @@ public class ComputationDescription implements Concept {
 				finishedDataProcessings.put(
 						uOntology.getId(), ontology);
 				
-				for (UniversalConnector connectorI :
+				for (UniversalElementConnector connectorI :
 					uElement.getOntologyInfo().getInputDataSlots()) {
 					fifo.add( connectorI.getFromElement());
 				}
@@ -330,14 +326,14 @@ public class ComputationDescription implements Concept {
 
 			DataProcessing processI = (DataProcessing)
 					finishedDataProcessings.get(keyI);
-			UniversalOntology uOntoI = finishedtUniOntologys.get(keyI);
+			UniversalElementOntology uOntoI = finishedtUniOntologys.get(keyI);
 			
 			List<DataSourceDescription> inputDataSources =
 					new ArrayList<DataSourceDescription>();
 			List<ErrorSourceDescription> inputErrorSources =
 					new ArrayList<ErrorSourceDescription>();
 			
-			for (UniversalConnector slotIJ : uOntoI.getInputDataSlots()) {
+			for (UniversalElementConnector slotIJ : uOntoI.getInputDataSlots()) {
 				
 				UniversalElement uElement = slotIJ.getFromElement();
 				int uElementID = uElement.getOntologyInfo().getId();
@@ -352,7 +348,7 @@ public class ComputationDescription implements Concept {
 				inputDataSources.add(dataSourceDesc);
 			}
 
-			for (UniversalConnector slotIJ : uOntoI.getInputErrorSlots()) {
+			for (UniversalElementConnector slotIJ : uOntoI.getInputErrorSlots()) {
 				
 				UniversalElement uElement = slotIJ.getFromElement();
 				IDataProvider dataProvider =  (IDataProvider)

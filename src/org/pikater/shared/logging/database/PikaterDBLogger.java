@@ -6,6 +6,11 @@ import java.util.logging.Logger;
 import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.IPikaterLogger;
 
+/**
+ * Special logger wrapped to be used by the database framework.
+ * 
+ * @author SkyCrawl
+ */
 public class PikaterDBLogger extends GeneralPikaterLogger
 {
 	private static final IPikaterLogger innerLogger = createPikaterLogger(Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName()));
