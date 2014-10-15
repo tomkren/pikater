@@ -78,11 +78,17 @@ import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
+/**
+ * 
+ * Class offers possibility to call the most used
+ * requests to the {@link Agent_DataManger}
+ *
+ */
 public class DataManagerService extends FIPAService {
 
 	static final Codec codec = new SLCodec();
 
-	/*
+	/**
 	 * Sends the request to userID to the Agent_DataManger Returns User-ID
 	 */
 	public static int getUserID(PikaterAgent agent, String login) {
@@ -146,11 +152,25 @@ public class DataManagerService extends FIPAService {
 		return -1;
 	}
 
+	/**
+	 * Translates internal file name to the external file name
+	 * @param agent
+	 * @param userID
+	 * @param internalFilename
+	 * @return
+	 */
 	public static String translateInternalFilename(PikaterAgent agent, int userID,
 			String internalFilename) {
 		return DataManagerService.translateFilename(agent, userID,
 				null, internalFilename);
 	}
+	/**
+	 * Translates external file name to the internal file name
+	 * @param agent
+	 * @param userID
+	 * @param externalFilename
+	 * @return
+	 */
 	public static String translateExternalFilename(PikaterAgent agent, int userID,
 			String externalFilename) {
 		return DataManagerService.translateFilename(agent, userID,
@@ -198,6 +218,11 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
+	/**
+	 * Saves {@link AgentInfo} to the database
+	 * @param agent
+	 * @param agentInfo
+	 */
 	public static void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo) {
 
 		SaveAgentInfo saveAgentInfo = new SaveAgentInfo();
@@ -229,6 +254,12 @@ public class DataManagerService extends FIPAService {
 
 	}
 
+	/**
+	 * Saves results of one task to the database
+	 * @param agent
+	 * @param task
+	 * @param experimentID
+	 */
 	public static void saveResult(PikaterAgent agent, Task task,
 			int experimentID) {
 
@@ -291,10 +322,17 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
-	public static Model getModel(PikaterAgent agent, int model) {
-		agent.logInfo("getting model " + model + " from DataManager");
+	
+	/**
+	 * Get {@link Model} by model ID
+	 * @param agent
+	 * @param modelID
+	 * @return
+	 */
+	public static Model getModel(PikaterAgent agent, int modelID) {
+		agent.logInfo("getting model " + modelID + " from DataManager");
 		GetModel act = new GetModel();
-		act.setModelID(model);
+		act.setModelID(modelID);
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
@@ -308,7 +346,7 @@ public class DataManagerService extends FIPAService {
 					request, 10000);
 			if (response == null) {
 				agent.logSevere("did not receive GetModel response for model "
-						+ model + " in time");
+						+ modelID + " in time");
 				return null;
 			}
 
@@ -321,7 +359,7 @@ public class DataManagerService extends FIPAService {
 					return (Model) result.getValue();
 				} else {
 					agent.logSevere("did not receive expected GetModel response for model "
-							+ model);
+							+ modelID);
 				}
 			}
 		} catch (CodecException e) {
@@ -334,6 +372,11 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
+	/**
+	 * Get the all {@link Model}s
+	 * @param agent
+	 * @return
+	 */
 	public static Models getAllModels(PikaterAgent agent) {
 
 		AID receiver = new AID(CoreAgents.DATA_MANAGER.getName(), false);
@@ -379,9 +422,14 @@ public class DataManagerService extends FIPAService {
 		return models;
 	}
 
-	public static void saveMetadata(PikaterAgent agent, Metadata m) {
+	/**
+	 * Saves {@link Metadata} 
+	 * @param agent
+	 * @param metadata
+	 */
+	public static void saveMetadata(PikaterAgent agent, Metadata metadata) {
 		SaveMetadata saveMetadata = new SaveMetadata();
-		saveMetadata.setMetadata(m);
+		saveMetadata.setMetadata(metadata);
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
@@ -407,6 +455,12 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
+	/**
+	 * Get the all {@link Metadata}s 
+	 * @param agent
+	 * @param gm
+	 * @return
+	 */
 	public static Metadatas getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
@@ -415,17 +469,17 @@ public class DataManagerService extends FIPAService {
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-		Action a = new Action();
-		a.setActor(agent.getAID());
-		a.setAction(gm);
+		Action action = new Action();
+		action.setActor(agent.getAID());
+		action.setAction(gm);
 
 		try {
-			agent.getContentManager().fillContent(request, a);
+			agent.getContentManager().fillContent(request, action);
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
-			Result r = (Result) agent.getContentManager()
+			Result result = (Result) agent.getContentManager()
 					.extractContent(inform);
-			return (Metadatas) r.getValue(); // all metadata
+			return (Metadatas) result.getValue(); // all metadata
 
 		} catch (CodecException e) {
 			agent.logException(e.getMessage(), e);
@@ -437,7 +491,14 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
-	public static Metadata getMetadata(PikaterAgent agent, GetMetadata gm) {
+	/**
+	 * Get {@link Metadata}
+	 * @param agent
+	 * @param getMetadata
+	 * @return
+	 */
+	public static Metadata getMetadata(PikaterAgent agent,
+			GetMetadata getMetadata) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
@@ -445,17 +506,17 @@ public class DataManagerService extends FIPAService {
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-		Action a = new Action();
-		a.setActor(agent.getAID());
-		a.setAction(gm);
+		Action action = new Action();
+		action.setActor(agent.getAID());
+		action.setAction(getMetadata);
 
 		try {
-			agent.getContentManager().fillContent(request, a);
+			agent.getContentManager().fillContent(request, action);
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
-			Result r = (Result) agent.getContentManager()
+			Result result = (Result) agent.getContentManager()
 					.extractContent(inform);
-			return (Metadata) r.getValue();
+			return (Metadata) result.getValue();
 
 		} catch (CodecException e) {
 			agent.logException(e.getMessage(), e);
@@ -467,6 +528,13 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
+	/**
+	 * Get N Best computing agents for the specified file
+	 * @param agent
+	 * @param fileName
+	 * @param count
+	 * @return
+	 */
 	public static Agents getNBestAgents(PikaterAgent agent, String fileName,
 			int count) {
 
@@ -480,12 +548,12 @@ public class DataManagerService extends FIPAService {
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-		Action a = new Action();
-		a.setActor(agent.getAID());
-		a.setAction(g);
+		Action action = new Action();
+		action.setActor(agent.getAID());
+		action.setAction(g);
 
 		try {
-			agent.getContentManager().fillContent(request, a);
+			agent.getContentManager().fillContent(request, action);
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
 			if (inform.getPerformative() == ACLMessage.FAILURE) {
@@ -507,9 +575,9 @@ public class DataManagerService extends FIPAService {
 	}
 
 	public static Agent getTheBestAgent(PikaterAgent agent, String fileName) {
+		
 		Agents agents = DataManagerService.getNBestAgents(agent, fileName, 1);
-		if ((agents != null) && !agents.getAgents().isEmpty())
-		{
+		if ((agents != null) && !agents.getAgents().isEmpty()) {
 			return agents.getAgents().get(0);
 		} else {
 			return null;

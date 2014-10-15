@@ -21,6 +21,11 @@ import org.pikater.core.ontology.subtrees.metadata.attributes.*;
 public class MetadataReader {
     private double defValue = 0;
     
+    /**
+     * Constructor
+     * @param data
+     * @return
+     */
 	public Metadata computeMetadata(DataInstances data) {
 		
 		Metadata metadata = new Metadata();		
@@ -29,7 +34,7 @@ public class MetadataReader {
 		metadata.setNumberOfInstances(data.getInstances().size());
 		
 		// number of attributes
-                // we do not count targer attribute
+		// we do not count targer attribute
 		metadata.setNumberOfAttributes(data.getAttributes().size());
 
 		// missing values
@@ -77,8 +82,7 @@ public class MetadataReader {
     	
         if (data.getAttributes().get(index).getType().equals("Numeric")) {
             metadata.setDefaultTask("Regression");
-        }
-        else {
+        } else {
             metadata.setDefaultTask("Classification");
         }
     }
@@ -128,6 +132,12 @@ public class MetadataReader {
         setRatioMissingValues(data, attributeNumber, metadata);
     }
     
+    /**
+     * Counts entropy for the {@link DataInstances}
+     * @param data
+     * @param metadata
+     * @param attributeNumber
+     */
     private void countEntropies(DataInstances data,
     		AttributeMetadata metadata, int attributeNumber){
     	
@@ -198,8 +208,7 @@ public class MetadataReader {
         
         if (!values.isEmpty()) {
         	met.setMedian(values.get(half));
-        }
-        else {
+        } else {
         	met.setMedian(defValue);
         }
     }
@@ -238,7 +247,7 @@ public class MetadataReader {
     private AttributeType getAttributeType(DataInstances data,
     		int attributeNumber) {
     	
-        Attribute attribute = (Attribute)
+    	Attribute attribute = (Attribute)
         		data.getAttributes().get(attributeNumber);
         
         if (attribute.getType().equals("NOMINAL")) {
@@ -263,11 +272,13 @@ public class MetadataReader {
                     return AttributeType.Categorical;
                 }
             }
-                }          
-          if (canBeInt) {
-        	  return AttributeType.Integer;
-          } else {
-        	  return AttributeType.Real;
-          }
+        }
+		
+		if (canBeInt) {
+			return AttributeType.Integer;
+		} else {
+			return AttributeType.Real;
+		}
+		
     }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
  * Time: 12:35
  */
 public class ComputationNode {
-    private boolean idle=true;
+    private boolean idle = true;
     private int id;
     /**
      * The Number of tasks in progress.
@@ -36,8 +36,7 @@ public class ComputationNode {
      *
      * @param computationGraph Owning computation graph
      */
-    public ComputationNode(ComputationGraph computationGraph)
-    {
+    public ComputationNode(ComputationGraph computationGraph) {
         this.computationGraph = computationGraph;
         initDefault();
     }
@@ -47,8 +46,7 @@ public class ComputationNode {
      *
      * @param executeStrategy Strategy that will be executed if the inputs are filled
      */
-    public ComputationNode(StartComputationStrategy executeStrategy)
-    {
+    public ComputationNode(StartComputationStrategy executeStrategy) {
         initDefault();
         startBehavior=executeStrategy;
     }
@@ -58,8 +56,7 @@ public class ComputationNode {
      * @param outputName Name of the output
      * @return True if present
      */
-    public Boolean containsOutput(String outputName)
-    {
+    public Boolean containsOutput(String outputName) {
         return outputs.containsKey(outputName);
     }
 
@@ -67,8 +64,7 @@ public class ComputationNode {
      * Gte all inputs
      * @return All inputs defined in this node
      */
-    public Map<String,ComputationOutputBuffer> getInputs()
-    {
+    public Map<String,ComputationOutputBuffer> getInputs() {
          return inputs;
     }
 
@@ -76,17 +72,15 @@ public class ComputationNode {
      * Can computation starts - inputs filled, is not blocked, etc.
      * @return True if all prerequisities satisifed
      */
-    public boolean canComputationStart()
-    {
-        if (!idle)
-        {
+    public boolean canComputationStart() {
+    	
+        if (!idle) {
             //another computation is running
             return false;
         }
-        for (ComputationOutputBuffer input : inputs.values())
-        {
-            if (input.size()==0 && !input.isBlocked())
-            {
+        for (ComputationOutputBuffer inputI : inputs.values()) {
+        	
+            if ((inputI.size() == 0) && (!inputI.isBlocked())) {
                 return false;
             }
         }
@@ -98,8 +92,7 @@ public class ComputationNode {
      * @param inputName name of the new inputs
      * @param buffer Buffer of the input
      */
-    public void addInput(String inputName,ComputationOutputBuffer buffer)
-    {        
+    public void addInput(String inputName, ComputationOutputBuffer buffer) {        
         if (! inputs.containsKey(inputName) ) {
         	inputs.put(inputName,buffer);
         }
@@ -109,10 +102,11 @@ public class ComputationNode {
      * Add ouputt to outputs
      * @param outputName Name of the new output
      */
-    public void addOutput(String outputName)
-    {   
+    public void addOutput(String outputName) {   
         if (! outputs.containsKey(outputName) ) {
-        	outputs.put(outputName, new ArrayList<ComputationOutputBuffer<EdgeValue>>());
+        	
+        	outputs.put(outputName,
+        			new ArrayList<ComputationOutputBuffer<EdgeValue>>());
         }
 
     }
@@ -122,8 +116,8 @@ public class ComputationNode {
      * @param outputName name of the output receiving the buffer
      * @param buffer Buffer to add
      */
-    public void addBufferToOutput(String outputName,ComputationOutputBuffer buffer)
-    {
+    public void addBufferToOutput(String outputName,
+    		ComputationOutputBuffer buffer) {
         addOutput(outputName);
         outputs.get(outputName).add(buffer);
     }
@@ -134,8 +128,7 @@ public class ComputationNode {
      * @param o New edge value that will be added to the output
      * @param outputName Name of the output
      */
-    public void addToOutputAndProcess(EdgeValue o, String outputName)
-    {
+    public void addToOutputAndProcess(EdgeValue o, String outputName) {
     	addToOutputAndProcess(o, outputName, false, false);
     }
 
@@ -146,25 +139,25 @@ public class ComputationNode {
      * @param unblock If output should be unblocked
      * @param isData Mark as data
      */
-    public void addToOutputAndProcess(EdgeValue o, String outputName, Boolean unblock, Boolean isData)
-    {
-    	if (outputs.get(outputName)==null){
+    public void addToOutputAndProcess(EdgeValue o, String outputName,
+    		Boolean unblock, Boolean isData) {
+    	
+    	if (outputs.get(outputName) == null) {
     		return;
     	}
-        List<ComputationOutputBuffer<EdgeValue>> outs = outputs.get(outputName);
-        for (ComputationOutputBuffer<EdgeValue> out:outs)
-        {
-        	if (unblock)
-        	{
-        		out.unblock();
+        List<ComputationOutputBuffer<EdgeValue>> outs =
+        		outputs.get(outputName);
+        for (ComputationOutputBuffer<EdgeValue> outI : outs) {
+        	if (unblock) {
+        		outI.unblock();
         	}
 
-        	out.setData(isData);
+        	outI.setData(isData);
         	
-        	out.insert(o);
-            if ((out.size() == 1) && out.getTarget().canComputationStart()) // was zero before - check for computation start
-            {
-            	out.getTarget().startComputation();
+        	outI.insert(o);
+        	// was zero before - check for computation start
+            if ((outI.size() == 1) && outI.getTarget().canComputationStart()) {
+            	outI.getTarget().startComputation();
             }
         }
     }
@@ -172,8 +165,7 @@ public class ComputationNode {
     /**
      * Starts computation - will be busy and execute appropriate behavior
      */
-    public void startComputation()
-    {
+    public void startComputation() {
         idle = false;
         startBehavior.execute(this);
     }
@@ -181,12 +173,10 @@ public class ComputationNode {
     /**
      * Computation finished, not busy, will check if computation can start and execute if possible
      */
-    public void computationFinished()
-    {
+    public void computationFinished() {
         idle = true;
         numberOfTasksChanged();
-        if (canComputationStart())
-        {
+        if (canComputationStart()) {
             startComputation();
         }
     }
@@ -218,18 +208,15 @@ public class ComputationNode {
     /**
      * Inits default settings
      */
-    private void initDefault()
-    {
+    private void initDefault() {
         id = CoreConfiguration.getGUIDGenerator().getAndAllocateGUID();
     }
 
     /**
      * Number of tasks have changed - update state
      */
-    public void numberOfTasksChanged()
-    {
-        if (numberOfTasksInProgress==0)
-        {
+    public void numberOfTasksChanged() {
+        if (numberOfTasksInProgress==0) {
             computationGraph.updateState();
         }
     }

@@ -45,7 +45,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
     AgentTypeEdge agentTypeEdge;
 
     /**
-     *
+     * Constructor
      * @param manager Manager agent
      * @param batchID  Id of the batch that this computation belongs to
      * @param experimentID Id of the experiment that this computation belongs to
@@ -160,7 +160,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
     }
 
     /**
-     *  create ACLMessage from Execute ontology action
+     * Create ACLMessage from Execute ontology action
      * @param executeTask ExecuteTask ontology
      * @return Message
      */

@@ -15,6 +15,12 @@ import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.metadata.NewComputedData;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 
+/**
+ * 
+ * Class offers possibility to call the most used
+ * requests to the {@link Agent_MetadataQueen}
+ *
+ */
 public class MetadataService {
 	
 	/**

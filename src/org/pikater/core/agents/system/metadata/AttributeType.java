@@ -5,7 +5,7 @@
 package org.pikater.core.agents.system.metadata;
 
 /**
- *
+ * Types of attribute
  * @author Kuba
  */
 public enum AttributeType {
