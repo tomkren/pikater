@@ -12,28 +12,23 @@ import java.util.TreeSet;
  * 
  * @author SkyCrawl
  *
- * @param <T>
  */
-public class CustomOrderSet<T> extends TreeSet<T>
-{
+public class CustomOrderSet<T> extends TreeSet<T> {
 	private static final long serialVersionUID = -7363544833191937694L;
-	
+
 	/**
 	 * Creates an empty set sorting by natural order (the element type has
 	 * to implement {@link Comparable}).
 	 */
-	public CustomOrderSet()
-	{
+	public CustomOrderSet() {
 		super();
 	}
-	
+
 	/**
 	 * Creates an empty set sorting with the given comparator.
 	 * 
-	 * @param comp
 	 */
-	public CustomOrderSet(Comparator<T> comp)
-	{
+	public CustomOrderSet(Comparator<T> comp) {
 		super(comp);
 	}
 
@@ -41,21 +36,16 @@ public class CustomOrderSet<T> extends TreeSet<T>
 	 * Creates a duplicate of the given collection that sorts using natural
 	 * ordering (the element type has to implement {@link Comparable}).
 	 * 
-	 * @param unsortedCollection
 	 */
-	public CustomOrderSet(Collection<T> unsortedCollection)
-	{
+	public CustomOrderSet(Collection<T> unsortedCollection) {
 		super(unsortedCollection);
 	}
 
 	/** 
 	 * Creates a duplicate of the given collection that sorts using the given comparator.
 	 * 
-	 * @param unsortedCollection
-	 * @param comp
 	 */
-	public CustomOrderSet(Collection<T> unsortedCollection, Comparator<T> comp)
-	{
+	public CustomOrderSet(Collection<T> unsortedCollection, Comparator<T> comp) {
 		super(comp);
 		addAll(unsortedCollection);
 	}

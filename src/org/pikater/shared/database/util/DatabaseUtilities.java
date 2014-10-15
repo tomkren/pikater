@@ -41,8 +41,6 @@ public class DatabaseUtilities
 	/**
 	 * Computes an MD5 hash of the given local file.
 	 * 
-	 * @param file
-	 * @return
 	 * @throws IOException
 	 */
 	public static String getMD5Hash(File file) throws IOException

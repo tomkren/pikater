@@ -17,35 +17,27 @@ import org.quartz.Trigger;
  * @author SkyCrawl
  */
 @DisallowConcurrentExecution
-public class RemoveExpiredTrainedModels extends ZeroArgJob
-{
+public class RemoveExpiredTrainedModels extends ZeroArgJob {
 	@Override
-	public void buildJob(JobBuilder builder)
-	{
+	public void buildJob(JobBuilder builder) {
 		// builder.withIdentity("RemoveExpiredTrainedModels", "Jobs");
 	}
 
 	@Override
-	public Trigger getJobTrigger()
-	{
-	    return newTrigger()
-	        // .withIdentity("TestJobTrigger", "Triggers")
-	        .startNow()
-	        .withSchedule(
-	        		simpleSchedule()
-	                .withIntervalInHours(24 * 7) // 1 week
-	                .repeatForever())
-	        .build();
+	public Trigger getJobTrigger() {
+		return newTrigger()
+		// .withIdentity("TestJobTrigger", "Triggers")
+				.startNow().withSchedule(simpleSchedule().withIntervalInHours(24 * 7) // 1 week
+						.repeatForever()).build();
 	}
-	
+
 	@Override
-	public void execute() throws JobExecutionException
-	{
+	public void execute() throws JobExecutionException {
 		//TODO: is this OK? Deleting models associated with experiments, but leaving the experiment statistic untouched
 		//(apart from removing model ID)
-		try{
+		try {
 			DAOs.modelDAO.removeOldModels((short) 90);//remove models older than 90 days
-		}catch(Exception e){
+		} catch (Exception e) {
 			throw new JobExecutionException("Error while trying to delete old models.");
 		}
 	}

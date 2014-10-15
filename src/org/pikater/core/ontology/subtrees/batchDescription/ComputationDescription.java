@@ -44,14 +44,12 @@ public class ComputationDescription implements Concept {
 
 	/**
 	 * Get the global options
-	 * @return
 	 */
 	public List<NewOption> getGlobalOptions() {
 		return globalOptions;
 	}
 	/**
 	 * Set the global Options
-	 * @param globalOptions
 	 */
 	public void setGlobalOptions(List<NewOption> globalOptions) {
 		if (globalOptions == null) {
@@ -63,14 +61,12 @@ public class ComputationDescription implements Concept {
 
 	/**
 	 * Get the root elements - {@link FileSaver}
-	 * @return
 	 */
 	public List<FileDataSaver> getRootElements() {
 		return rootElements;
 	}
 	/**
 	 * Set the root elements - {@link FileSaver}
-	 * @param rootElements
 	 */
 	public void setRootElements(List<FileDataSaver> rootElements) {
 		
@@ -82,7 +78,6 @@ public class ComputationDescription implements Concept {
 	}
 	/**
 	 * Add the root element - {@link FileSaver}
-	 * @param rootElement
 	 */
 	public void addRootElement(FileDataSaver rootElement) {
 		
@@ -123,8 +118,6 @@ public class ComputationDescription implements Concept {
 	
 	/**
 	 * Get the not null elements
-	 * @param dataProcessing
-	 * @return
 	 */
 	private List<IComputationElement> notNullElements(
 			IComputationElement dataProcessing) {
@@ -177,7 +170,6 @@ public class ComputationDescription implements Concept {
 	
 	/**
 	 * Exports the {@link UniversalExperiment}
-	 * @return
 	 */
 	public UniversalExperiment exportUniversalComputationDescription() {
 		
@@ -275,8 +267,6 @@ public class ComputationDescription implements Concept {
 
 	/**
 	 * Imports the {@link UniversalExperiment}
-	 * @param uDescription
-	 * @return
 	 */
 	public static ComputationDescription importUniversalComputationDescription(
 			UniversalExperiment uDescription) {
@@ -375,7 +365,6 @@ public class ComputationDescription implements Concept {
 
 	/**
 	 * Exports to the XML String
-	 * @return
 	 */
 	public String exportXML() {
 
@@ -396,7 +385,6 @@ public class ComputationDescription implements Concept {
 
 	/**
 	 * Exports structure as the XML String to the file
-	 * @param fileName
 	 * @throws FileNotFoundException
 	 */
 	public void exportXML(String fileName) throws FileNotFoundException {
@@ -410,8 +398,6 @@ public class ComputationDescription implements Concept {
 
 	/**
 	 * Import the {@link ComputationDescription} from the file
-	 * @param file
-	 * @return
 	 * @throws FileNotFoundException
 	 */
 	public static ComputationDescription importXML(File file)
@@ -426,8 +412,6 @@ public class ComputationDescription implements Concept {
 	
 	/**
 	 * Import the {@link ComputationDescription} from the String
-	 * @param xml
-	 * @return
 	 */
 	public static ComputationDescription importXML(String xml) {
 

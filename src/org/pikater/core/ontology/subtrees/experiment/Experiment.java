@@ -19,14 +19,12 @@ public class Experiment implements Concept {
 
 	/**
 	 * Get the {@link Experiment} ID
-	 * @return
 	 */
 	public int getId() {
 		return id;
 	}
 	/**
 	 * Set the {@link Experiment} ID
-	 * @param id
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -34,7 +32,6 @@ public class Experiment implements Concept {
 
 	/**
 	 * Get the Status
-	 * @return
 	 */
 	public String getStatus() {
 		return status;
@@ -45,14 +42,12 @@ public class Experiment implements Concept {
 
 	/**
 	 * Get the {@link Batch} ID
-	 * @return
 	 */
 	public int getBatchID() {
 		return batchID;
 	}
 	/**
 	 * Set the {@link Batch} ID
-	 * @return
 	 */
 	public void setBatchID(int batchID) {
 		this.batchID = batchID;
@@ -60,14 +55,12 @@ public class Experiment implements Concept {
 
 	/**
 	 * Get the workflow
-	 * @return
 	 */
 	public int getWorkflow() {
 		return workflow;
 	}
 	/**
 	 * Set the workflow
-	 * @param workflow
 	 */
 	public void setWorkflow(int workflow) {
 		this.workflow = workflow;
@@ -75,14 +68,12 @@ public class Experiment implements Concept {
 
 	/**
 	 * Get the model ID
-	 * @return
 	 */
 	public Integer getModel() {
 		return model;
 	}
 	/**
 	 * Set the model ID
-	 * @param model
 	 */
 	public void setModel(Integer model) {
 		this.model = model;

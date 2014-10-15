@@ -8,8 +8,7 @@ import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 /**
  * A generic view for tables displaying information on batches (experiments).  
  */
-public abstract class BatchTableDBView extends AbstractTableDBView
-{
+public abstract class BatchTableDBView extends AbstractTableDBView {
 	/**
 	 * This enum is also used to create Criteria API queries in following functions:
 	 * {@link BatchDAO#getAll(int, int, ITableColumn)},
@@ -20,8 +19,7 @@ public abstract class BatchTableDBView extends AbstractTableDBView
 	 * <p>
 	 * If you want to change the columns' names showed in views please redefine function {@link BatchTableDBView.Column#getDisplayName()} 
 	 */
-	public enum Column implements ITableColumn
-	{
+	public enum Column implements ITableColumn {
 		/*
 		 * First the read-only properties.
 		 */
@@ -29,50 +27,41 @@ public abstract class BatchTableDBView extends AbstractTableDBView
 		STATUS, // and whether they are yet finished or not
 		TOTAL_PRIORITY, // exclusive for admins, editable
 		USER_PRIORITY, // exclusive for regular users, readonly
-		CREATED,
-		OWNER,
-		NAME,
-		NOTE,
-		ABORT,
-		RESULTS;
+		CREATED, OWNER, NAME, NOTE, ABORT, RESULTS;
 
 		@Override
-		public String getDisplayName()
-		{
-			switch(this)
-			{
-				case TOTAL_PRIORITY:
-				case USER_PRIORITY:
-					return "PRIORITY";
-					
-				default:
-					return name();
+		public String getDisplayName() {
+			switch (this) {
+			case TOTAL_PRIORITY:
+			case USER_PRIORITY:
+				return "PRIORITY";
+
+			default:
+				return name();
 			}
 		}
 
 		@Override
-		public DBViewValueType getColumnType()
-		{
-			switch(this)
-			{
-				case OWNER:
-				case NAME:
-				case NOTE:
-				case CREATED:
-				case FINISHED:
-				case STATUS:
-					return DBViewValueType.STRING;
-					
-				case TOTAL_PRIORITY:
-				case USER_PRIORITY:
-					return DBViewValueType.REPRESENTATIVE;
-					
-				case ABORT:
-				case RESULTS:
-					return DBViewValueType.NAMED_ACTION;
-					
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
+		public DBViewValueType getColumnType() {
+			switch (this) {
+			case OWNER:
+			case NAME:
+			case NOTE:
+			case CREATED:
+			case FINISHED:
+			case STATUS:
+				return DBViewValueType.STRING;
+
+			case TOTAL_PRIORITY:
+			case USER_PRIORITY:
+				return DBViewValueType.REPRESENTATIVE;
+
+			case ABORT:
+			case RESULTS:
+				return DBViewValueType.NAMED_ACTION;
+
+			default:
+				throw new IllegalStateException("Unknown state: " + name());
 			}
 		}
 	}

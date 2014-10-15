@@ -24,7 +24,6 @@ public class OptionsHelper {
 	
 	/**
 	 * Get the options for the Computing Agent
-	 * @return
 	 */
 	public static List<NewOption> getCAOptions() {
 		List<NewOption> options = OptionsHelper.getNotSpecifiedCAOptions();
@@ -44,7 +43,6 @@ public class OptionsHelper {
 	
 	/**
 	 * Get the options for the non-specific Computing Agent
-	 * @return
 	 */
 	public static List<NewOption> getNotSpecifiedCAOptions() {
 

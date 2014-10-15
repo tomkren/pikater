@@ -45,7 +45,6 @@ public class CARecSearchComplex extends DataProcessing implements
     
     /**
      * Set errors
-     * @param errors
      */
     public void setErrors(List<ErrorSourceDescription> errors) {
     	if (errors == null) {
@@ -56,7 +55,6 @@ public class CARecSearchComplex extends DataProcessing implements
     
     /**
      * Add a error
-     * @param error
      */
     public void addError(ErrorSourceDescription error) {
     	if (error == null) {
@@ -74,7 +72,6 @@ public class CARecSearchComplex extends DataProcessing implements
     
     /**
      * Set the {@link ComputingAgent}
-     * @param computingAgent
      */
     public void setComputingAgent(IComputingAgent computingAgent) {
         this.computingAgent = computingAgent;
@@ -82,7 +79,6 @@ public class CARecSearchComplex extends DataProcessing implements
     
     /**
      * Get the {@link Search}
-     * @return
      */
     public Search getSearch() {
         return search;
@@ -90,7 +86,6 @@ public class CARecSearchComplex extends DataProcessing implements
     
     /**
      * Set the {@link Search}
-     * @param search
      */
     public void setSearch(Search search) {
         this.search = search;
@@ -98,14 +93,12 @@ public class CARecSearchComplex extends DataProcessing implements
 
     /**
      * Get the {@link Recommender}
-     * @return
      */
     public Recommend getRecommender() {
         return recommender;
     }
     /**
      * Set the {@link Recommender}
-     * @param recommender
      */
     public void setRecommender(Recommend recommender) {
         this.recommender = recommender;
@@ -113,21 +106,18 @@ public class CARecSearchComplex extends DataProcessing implements
 
     /**
      * Get the {@link Options}
-     * @return
      */
     public List<NewOption> getOptions() {
         return options;
     }
     /**
      * Set the {@link Options}
-     * @param options
      */
     public void setOptions(List<NewOption> options) {
         this.options = options;
     }
     /**
      * Add the {@link Option}
-     * @param option
      */
     public void addOption(NewOption option) {
     	if (option == null) {

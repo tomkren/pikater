@@ -13,7 +13,6 @@ public class AgentTypeDefinition {
     /**
      * Constructor
      * 
-     * @param name
      * @param typeName - agent class
      */
     public AgentTypeDefinition(String name, String typeName) {
@@ -23,7 +22,6 @@ public class AgentTypeDefinition {
 
     /**
      * Get agent name
-     * @return
      */
     public String getName() {
         return name;
@@ -31,7 +29,6 @@ public class AgentTypeDefinition {
 
     /**
      * Set agent name
-     * @param name
      */
     public void setName(String name) {
         this.name = name;
@@ -39,7 +36,6 @@ public class AgentTypeDefinition {
 
     /**
      * Get agent type
-     * @return
      */
     public String getTypeName() {
         return typeName;
@@ -47,7 +43,6 @@ public class AgentTypeDefinition {
 
     /**
      * Set agent type
-     * @param typeName
      */
     public void setTypeName(String typeName) {
         this.typeName = typeName;

@@ -25,13 +25,12 @@ import org.pikater.shared.util.SimpleIDGenerator;
  * 
  * @author stepan
  */
-public class UniversalExperiment
-{
+public class UniversalExperiment {
 	/**
 	 * Top-level ({@link UniversalElement element} independent) options for this experiment.
 	 */
 	private final Set<NewOption> globalOptions;
-	
+
 	/**
 	 * Root {@link UniversalElement elements} of the whole experiment. Should only contain
 	 * elements representing {@link FileDataSaver}.
@@ -42,31 +41,29 @@ public class UniversalExperiment
 	 * All {@link UniversalElement elements} of the experiment.
 	 */
 	private final Set<UniversalElement> allElements;
-	
+
 	/**
 	 * Central object generating IDs for instances of {@link UniversalElementOntology}
 	 * within {@link UniversalElement experiment elements}.
 	 */
 	private final SimpleIDGenerator idGenerator;
 
-	public UniversalExperiment()
-	{
+	public UniversalExperiment() {
 		this.globalOptions = new HashSet<NewOption>();
 		this.rootElements = new HashSet<UniversalElement>();
 		this.allElements = new HashSet<UniversalElement>();
 		this.idGenerator = new SimpleIDGenerator();
 	}
-	
+
 	// ----------------------------------------------------------
 	// SOME BASIC INTERFACE
-	
+
 	/**
 	 * Gets top-level ({@link UniversalElement element} independent) options
 	 * for this experiment.
 	 * Changes to the returned collection are propagated inside this class.
 	 */
-	public Set<NewOption> getGlobalOptions()
-	{
+	public Set<NewOption> getGlobalOptions() {
 		return globalOptions;
 	}
 
@@ -76,16 +73,14 @@ public class UniversalExperiment
 	 * another type is present, this object was most likely deserialized from XML
 	 * which already contained the bad reference.
 	 */
-	public Set<UniversalElement> getRootElements()
-	{
+	public Set<UniversalElement> getRootElements() {
 		return rootElements;
 	}
 
 	/**
 	 * Gets all {@link UniversalElement elements} of the experiment.
 	 */
-	public Set<UniversalElement> getAllElements()
-	{
+	public Set<UniversalElement> getAllElements() {
 		return allElements;
 	}
 
@@ -95,16 +90,12 @@ public class UniversalExperiment
 	 * @throws IllegalArgumentException if the given element doesn't associate itself to
 	 * an ontology
 	 */
-	public void addElement(UniversalElement element)
-	{
-		if(element.getOntologyInfo() == null)
-		{
+	public void addElement(UniversalElement element) {
+		if (element.getOntologyInfo() == null) {
 			throw new IllegalArgumentException("The given element didn't have ontology defined.");
-		}
-		else
-		{
+		} else {
 			element.getOntologyInfo().setId(idGenerator.getAndIncrement());
-			
+
 			/*
 			 * ALTERNATIVE CONDITION IMPLEMENTATION USING A CLASS DEFINED IN THE WEB APPLICATION:
 			 * - it is more modular and clear but:
@@ -113,67 +104,49 @@ public class UniversalExperiment
 			 * 
 			 * if (BoxType.fromOntologyClass(element.getOntologyInfo().getOntologyClass()) == BoxType.OUTPUT)
 			 */
-			if (element.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
-			{
+			if (element.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class)) {
 				rootElements.add(element);
 			}
 			allElements.add(element);
 		}
 	}
-	
+
 	/**
 	 * Can this experiment be shown in the experiment editor? In other words,
 	 * can it be converted to the web format?
 	 */
-	public boolean isPresentationCompatible()
-	{
-		for (UniversalElement elementI : this.allElements)
-		{
-			if (elementI.getPresentationInfo() == null)
-			{
+	public boolean isPresentationCompatible() {
+		for (UniversalElement elementI : this.allElements) {
+			if (elementI.getPresentationInfo() == null) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Is this experiment ready to be queued for execution and is it not likely
 	 * to end up with needless errors? If not, the reason is logged.
-	 * @return
 	 */
-	public boolean isValid()
-	{
-		for(UniversalElement rootElem : rootElements)
-		{
-			if(!rootElem.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
-			{
+	public boolean isValid() {
+		for (UniversalElement rootElem : rootElements) {
+			if (!rootElem.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class)) {
 				PikaterDBLogger.logThrowable("Invalid element processing", new IllegalStateException("Some root elements are not file savers."));
 				return false;
 			}
 		}
-		for(UniversalElement element : allElements)
-		{
-			for(UniversalElementConnector connector : element.getOntologyInfo().getInputDataSlots())
-			{
-				if(connector.getFromElement() == null)
-				{
+		for (UniversalElement element : allElements) {
+			for (UniversalElementConnector connector : element.getOntologyInfo().getInputDataSlots()) {
+				if (connector.getFromElement() == null) {
 					PikaterDBLogger.logThrowable("Required information not defined", new IllegalStateException("Some connectors don't have the 'fromElement' field defined."));
 					return false;
-				}
-				else if(!allElements.contains(connector.getFromElement()))
-				{
+				} else if (!allElements.contains(connector.getFromElement())) {
 					PikaterDBLogger.logThrowable("Invalid element binding", new IllegalStateException("Some connectors' 'fromElement' fields are not registered in the root class."));
 					return false;
-				}
-				else
-				{
-					try
-					{
+				} else {
+					try {
 						connector.validate();
-					}
-					catch (Exception t)
-					{
+					} catch (Exception t) {
 						PikaterDBLogger.logThrowable("Invalid connector", t);
 						return false;
 					}
@@ -182,23 +155,17 @@ public class UniversalExperiment
 		}
 		return true;
 	}
-	
-	public String toXML()
-	{
-		return XStreamHelper.serializeToXML(this, 
-        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
+
+	public String toXML() {
+		return XStreamHelper.serializeToXML(this, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
 	}
-	
-	public static UniversalExperiment fromXML(String xml)
-	{
-		return XStreamHelper.deserializeFromXML(UniversalExperiment.class, xml, 
-        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
+
+	public static UniversalExperiment fromXML(String xml) {
+		return XStreamHelper.deserializeFromXML(UniversalExperiment.class, xml, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
 	}
-	
-	public static void main(String[] args) throws CloneNotSupportedException
-	{
+
+	public static void main(String[] args) throws CloneNotSupportedException {
 		UniversalExperiment uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
-		System.out.println(XStreamHelper.serializeToXML(uDescription, 
-				XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class)));
+		System.out.println(XStreamHelper.serializeToXML(uDescription, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class)));
 	}
 }

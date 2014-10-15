@@ -14,8 +14,6 @@ public class Entropy {
 	
 	/**
 	 * Counts the entropy
-	 * @param values
-	 * @return
 	 */
     public static double countEntropy(List<Object> values) {
     	
@@ -44,9 +42,6 @@ public class Entropy {
     
     /**
      * Count entropy for the attribute values
-     * @param attributeValues
-     * @param classValues
-     * @return
      */
     public static double countEntropyClassAttribute(
     		List<Object> attributeValues, List<Object> classValues) {

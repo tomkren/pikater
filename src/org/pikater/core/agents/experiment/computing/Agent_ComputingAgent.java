@@ -212,8 +212,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 	/**
 	 * Set options
-	 * @param task
-	 * @return
 	 */
 	public boolean setOptions(Task task) {
 		
@@ -232,7 +230,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 	/**
 	 * Get options
-	 * @return
 	 */
 	public String getOptions() {
 
@@ -247,7 +244,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	/**
 	 * Will we accept or refuse the request? (working,
 	 * size of taksFIFO, latency time...)
-	 * @return
 	 */
 	public boolean acceptTask() {
 		return true;

@@ -5,16 +5,13 @@ package org.pikater.shared.quartz.jobs.base;
  * 
  * @author SkyCrawl
  */
-public abstract class ZeroArgJob extends AbstractJobWithArgs
-{
-	public ZeroArgJob()
-	{
+public abstract class ZeroArgJob extends AbstractJobWithArgs {
+	public ZeroArgJob() {
 		super(0);
 	}
 
 	@Override
-	public boolean argumentCorrect(Object argument, int argIndex)
-	{
+	public boolean argumentCorrect(Object argument, int argIndex) {
 		return true;
 	}
 }

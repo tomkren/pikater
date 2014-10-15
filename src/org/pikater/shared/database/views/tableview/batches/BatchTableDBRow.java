@@ -14,49 +14,40 @@ import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
 
-public class BatchTableDBRow extends AbstractTableRowDBView
-{
-	private static final Set<String> allowedTotalPriorities = new LinkedHashSet<String>()
-	{
+public class BatchTableDBRow extends AbstractTableRowDBView {
+	private static final Set<String> allowedTotalPriorities = new LinkedHashSet<String>() {
 		private static final long serialVersionUID = -7303124181497778648L;
 		{
-			for(int i = 0; i < 100; i++)
-			{
+			for (int i = 0; i < 100; i++) {
 				add(String.valueOf(i));
 			}
 		}
 	};
-	private static final Set<String> allowedUserPriorities = new LinkedHashSet<String>()
-	{
+	private static final Set<String> allowedUserPriorities = new LinkedHashSet<String>() {
 		private static final long serialVersionUID = -7303124181497778648L;
 		{
-			for(int i = 0; i < 10; i++)
-			{
+			for (int i = 0; i < 10; i++) {
 				add(String.valueOf(i));
 			}
 		}
 	};
-	
+
 	private final JPABatch batch;
 	private final boolean adminMode;
 
-	public BatchTableDBRow(JPABatch batch, boolean adminMode)
-	{
+	public BatchTableDBRow(JPABatch batch, boolean adminMode) {
 		this.batch = batch;
 		this.adminMode = adminMode;
 	}
-	
-	public JPABatch getBatch()
-	{
+
+	public JPABatch getBatch() {
 		return batch;
 	}
 
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column) {
 		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
-		switch(specificColumn)
-		{
+		switch (specificColumn) {
 		/*
 		 * First the read-only properties.
 		 */
@@ -72,92 +63,79 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 			return new StringReadOnlyDBViewValue(batch.getStatus().name());
 		case NOTE:
 			return new StringReadOnlyDBViewValue(batch.getNote());
-			
-		/*
-		 * Then priority properties. 
-		 */
+
+			/*
+			 * Then priority properties. 
+			 */
 		case TOTAL_PRIORITY:
-			if(adminMode)
-			{
-				return new RepresentativeDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority()))
-				{
+			if (adminMode) {
+				return new RepresentativeDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority())) {
 					@Override
-					public boolean isReadOnly()
-					{
+					public boolean isReadOnly() {
 						return !batch.isBeingExecuted();
 					}
-					
-					@SuppressWarnings("deprecation") // we know what we're doing here
+
+					@SuppressWarnings("deprecation")
+					// we know what we're doing here
 					@Override
-					protected void updateEntities(String newValue)
-					{
+					protected void updateEntities(String newValue) {
 						batch.setTotalPriority(Integer.parseInt(newValue));
 					}
-					
+
 					@Override
-					protected void commitEntities()
-					{
+					protected void commitEntities() {
 						commitRow();
 					}
 				};
-			}
-			else
-			{
+			} else {
 				return new RepresentativeReadonlyDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority()));
 			}
 		case USER_PRIORITY:
 			return new RepresentativeReadonlyDBViewValue(allowedUserPriorities, String.valueOf(batch.getUserAssignedPriority()));
-			
-		/*
-		 * And then actions. 
-		 */
+
+			/*
+			 * And then actions. 
+			 */
 		case ABORT:
 			return new NamedActionDBViewValue("Abort") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return batch.isBeingExecuted();
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
 		case RESULTS:
 			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return batch.isFinishedOrFailed();
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
-			}; 
-			
+			};
+
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}
 	}
 
 	@Override
-	public void commitRow()
-	{
+	public void commitRow() {
 		DAOs.batchDAO.updateEntity(batch);
 	}
 }

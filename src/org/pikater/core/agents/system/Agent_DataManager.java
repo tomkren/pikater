@@ -1829,9 +1829,6 @@ public class Agent_DataManager extends PikaterAgent {
 	/**
 	 * TODO: no Javadoc? :)
 	 * 
-	 * @param request
-	 * @param action
-	 * @return
 	 * @throws CodecException
 	 * @throws OntologyException
 	 * @throws IOException

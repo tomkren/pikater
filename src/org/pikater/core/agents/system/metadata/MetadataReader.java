@@ -23,8 +23,6 @@ public class MetadataReader {
     
     /**
      * Constructor
-     * @param data
-     * @return
      */
 	public Metadata computeMetadata(DataInstances data) {
 		
@@ -134,9 +132,6 @@ public class MetadataReader {
     
     /**
      * Counts entropy for the {@link DataInstances}
-     * @param data
-     * @param metadata
-     * @param attributeNumber
      */
     private void countEntropies(DataInstances data,
     		AttributeMetadata metadata, int attributeNumber){

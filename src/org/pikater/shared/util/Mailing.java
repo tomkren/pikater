@@ -14,8 +14,7 @@ import javax.mail.internet.MimeMessage;
  * 
  * @author krajj7
  */
-public class Mailing
-{
+public class Mailing {
 	/**
 	 * All emails will be sent with this "from" address.
 	 */
@@ -25,20 +24,16 @@ public class Mailing
 	 * Sends a plain text email defined by the arguments. Local SMTP
 	 * server needs to be running for this method to work.
 	 * 
-	 * @param to
-	 * @param subject
-	 * @param body
 	 * @throws MessagingException if the email could not be sent
 	 */
-	public static void sendEmail(String to, String subject, String body) throws MessagingException
-	{
+	public static void sendEmail(String to, String subject, String body) throws MessagingException {
 		Properties properties = new Properties();
 		properties.setProperty("mail.smtp.host", "localhost"); // local SMTP server is required to be running
 
 		MimeMessage message = new MimeMessage(Session.getDefaultInstance(properties));
 		message.setFrom(new InternetAddress(SENDER_EMAIL));
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-		message.setSubject(subject); 
+		message.setSubject(subject);
 		message.setText(body);
 
 		Transport.send(message);

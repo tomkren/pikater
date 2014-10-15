@@ -39,8 +39,6 @@ public class PlannerService {
 	
 	/**
 	 * Get the system load
-	 * @param agent
-	 * @return
 	 */
 	public static SystemLoad getSystemLoad(PikaterAgent agent) {
 		
@@ -101,8 +99,6 @@ public class PlannerService {
 	
 	/**
 	 * Sends request to kill all Tasks with batchID
-	 * @param agent
-	 * @param batchID
 	 */
 	public static void sendKillTasks(PikaterAgent agent, int batchID) {
 		

@@ -154,10 +154,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Translates internal file name to the external file name
-	 * @param agent
-	 * @param userID
-	 * @param internalFilename
-	 * @return
 	 */
 	public static String translateInternalFilename(PikaterAgent agent, int userID,
 			String internalFilename) {
@@ -166,10 +162,6 @@ public class DataManagerService extends FIPAService {
 	}
 	/**
 	 * Translates external file name to the internal file name
-	 * @param agent
-	 * @param userID
-	 * @param externalFilename
-	 * @return
 	 */
 	public static String translateExternalFilename(PikaterAgent agent, int userID,
 			String externalFilename) {
@@ -220,8 +212,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Saves {@link AgentInfo} to the database
-	 * @param agent
-	 * @param agentInfo
 	 */
 	public static void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo) {
 
@@ -256,9 +246,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Saves results of one task to the database
-	 * @param agent
-	 * @param task
-	 * @param experimentID
 	 */
 	public static void saveResult(PikaterAgent agent, Task task,
 			int experimentID) {
@@ -325,9 +312,6 @@ public class DataManagerService extends FIPAService {
 	
 	/**
 	 * Get {@link Model} by model ID
-	 * @param agent
-	 * @param modelID
-	 * @return
 	 */
 	public static Model getModel(PikaterAgent agent, int modelID) {
 		agent.logInfo("getting model " + modelID + " from DataManager");
@@ -374,8 +358,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Get the all {@link Model}s
-	 * @param agent
-	 * @return
 	 */
 	public static Models getAllModels(PikaterAgent agent) {
 
@@ -424,8 +406,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Saves {@link Metadata} 
-	 * @param agent
-	 * @param metadata
 	 */
 	public static void saveMetadata(PikaterAgent agent, Metadata metadata) {
 		SaveMetadata saveMetadata = new SaveMetadata();
@@ -457,9 +437,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Get the all {@link Metadata}s 
-	 * @param agent
-	 * @param gm
-	 * @return
 	 */
 	public static Metadatas getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
 
@@ -493,9 +470,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Get {@link Metadata}
-	 * @param agent
-	 * @param getMetadata
-	 * @return
 	 */
 	public static Metadata getMetadata(PikaterAgent agent,
 			GetMetadata getMetadata) {
@@ -530,10 +504,6 @@ public class DataManagerService extends FIPAService {
 
 	/**
 	 * Get N Best computing agents for the specified file
-	 * @param agent
-	 * @param fileName
-	 * @param count
-	 * @return
 	 */
 	public static Agents getNBestAgents(PikaterAgent agent, String fileName,
 			int count) {
