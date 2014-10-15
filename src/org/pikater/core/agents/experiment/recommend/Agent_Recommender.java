@@ -37,34 +37,39 @@ import org.pikater.core.ontology.subtrees.recommend.Recommend;
 
 
 /**
- * 
- * Base recommender class for meta-learning recommendation
- * 
+ * The base class for all recommender agents. Provides the basic interface and setup.
  */
 public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	private static final long serialVersionUID = 1314060594137998065L;
 
 	/**
-	 * Choose the best agent type for this type of data
+	 * The abstract method which provides the recommendation of the best agent based on the
+	 * input data.
 	 * 
+	 * @param data The data, for which the agent is recommended
+	 * @return The description of the recommended agent
 	 */
 	protected abstract org.pikater.core.ontology.subtrees.management.Agent
 		chooseBestAgent(Datas data);
 	
 	/**
-	 * Get agent type
+	 * Returns the type of this agent.
+	 * 
+	 * @return The type of the recommendation agent
 	 */
 	protected abstract String getAgentType();
 	
 	/**
-	 * Detects if the recommendation is finished
+	 * Check whether the recommendation is finished
 	 * 
+	 * @return <code>true</code> if the recommendation is finished, <code>false</code> otherwise
+	 *  
 	 */
 	protected abstract boolean finished();
 	
 	/**
-	 * Updates status finished
+	 * Updates the finished status
 	 */
 	protected abstract void updateFinished();
     
@@ -76,7 +81,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 
 	/**
-	 * Get ontologies which is using this agent
+	 * Returns the list of ontologies used by all recommender agents
+	 * 
+	 * @return List of ontologies used by the recommender agents
 	 */
     @Override
 	public List<Ontology> getOntologies() {
@@ -93,7 +100,10 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	}
 	
 	/**
-	 * Agent setup
+	 * Setup for the recommender agents. 
+	 * 
+	 * Registers the agent to the DF and sets the ontologies. Adds a message template to only receive
+	 * REQUESTs. Also adds the basic recommend behaviour.
 	 */
     @Override
     protected void setup() {
@@ -117,9 +127,8 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
          
 	
     /**
-     * 
-     * Recommender behavior
-     *
+     * Basic recommender behaviour. Message handling, option setting and callbacks to the actual
+     * recommending methods of the particular recommenders. 
      */
 	protected class RecommendBehaviour extends AchieveREResponder {
 
@@ -132,11 +141,13 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		}
 
 		/**
-		 * Handles request - receive Recommend ontology
-		 * @param request - message
-		 * @return - OK message
-		 * @throws NotUnderstoodException
-		 * @throws RefuseException
+		 * Processes the REQUEST message, extracts the options of the recommender agent 
+		 * and calls the <code>chooseBestAgent</code> method.
+     * 
+		 * @param The {@link ACLMessage} with the request.
+		 * @return {@link ACLMessage} with the description of the recommended agent
+		 * @throws NotUnderstoodException if the <code>request</code> is in an unsupported ontology
+		 * @throws RefuseException if the agent decides to refuse the request
 		 */
         @Override
         protected ACLMessage handleRequest(ACLMessage request)
@@ -222,11 +233,12 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     }				        
     
 	/**
-	 * Options merging
+	 * Merges two sets of options. One of them are the actual option, the other contains the default
+	 * options
 	 * 
-	 * @param options1CA - options of Computing Agent
-	 * @param options2 - second options
-	 * @return - merged options
+	 * @param options1CA options specified by the user
+	 * @param options2 default options of the recommender agent
+	 * @return list of all options, those not specified by the user are set to the default values
 	 */
 	private List<NewOption> mergeOptions(List<NewOption> options1CA,
 			List<NewOption> options2) {
@@ -264,7 +276,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	}
 
 	/**
-	 * Get options of the concrete agent type
+	 * Get options for the particular recommender agent based on its type
+	 * 
+	 * @return The list of options all the agent's options
 	 * 
 	 */
 	public List<NewOption> getAgentOptions(String agentType) {
@@ -276,6 +290,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	/**
 	 * Creates a agent by using agent {@link Agent_ManagerAgent}
+	 * 
+	 * @return The {@link AID} of the newly created agent.
+	 * 
 	 */
 	public AID createAgent(String type, String name, Arguments arguments) {
 		
@@ -283,7 +300,10 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	}
 	
 	/**
-	 * Get parameters - merged options with default
+	 * Returns the parameters of the recommeder agent. Merges the user specified options and the
+	 * default options.
+	 * 
+	 * @return The list of the agent's paramters.
 	 */
 	protected List<NewOption> getParameters() {
 		List<NewOption> optFileOptions =
@@ -291,6 +311,17 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	
+	/**
+	 * 
+	 * Computes the distance between two double values scaled to 0-1 by using the <code>min</code> and 
+	 * <code>max</code> values.
+	 * 
+	 * @param v1 The first value
+	 * @param v2 The second value
+	 * @param min Minimum possible value for the first two parameters
+	 * @param max Maximum possible value for the first two parameters
+	 * @return The distance between {@code v1} and {@code v2} mapped to the 0-1 interval.
+	 */
 	protected double d(double v1, double v2, double min, double max) {
         // map the value to the 0,1 interval; 0 - the same, 1 - the most
         // different
@@ -298,6 +329,14 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         return Math.abs(v1 - v2) / (max - min);
     }
 	
+	/**
+	 * Computes distance between categories. It is 0 in case both the categories are the same and
+	 * 1 otherwise.
+	 * 
+	 * @param v1 The first category
+	 * @param v2 The second category
+	 * @return The distance between the categories
+	 */
 	protected int dCategory(String v1, String v2) {
 		
 		if ((v1 == null) && (v2 == null)) {
@@ -314,6 +353,14 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		}
 	}
 	
+	/**
+	 * Computes the distance between two boolean values. It is 0 of both the values are the same and
+	 * 1 otherwise.
+	 *  
+	 * @param v1 The first value
+	 * @param v2 The second value
+	 * @return The distance between the two values
+	 */
 	protected int dBoolean(Boolean v1, Boolean v2) {
 		if (v1 == v2) {
 			return 0;

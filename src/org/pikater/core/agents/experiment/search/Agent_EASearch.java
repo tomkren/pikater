@@ -30,37 +30,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Search agent based on evolutionary algorithms. Has the following options:
+ * 
+ * <ul>
+ * 	<li> {@code -E float} minimum error rate (default 0.1)
+ *  <li> {@code -M int} maximal number of generations (default 10)
+ *  <li> {@code -I int} maximal number of evaluated configurations (default 100)
+ *  <li> {@code -T float} Mutation rate (default 0.2)
+ *  <li> {@code -F float} Mutation rate per field in individual (default 0.2)
+ *  <li> {@code -X float} Crossover probability (default 0.5)
+ *  <li> {@code -P int} population size (default 10)
+ *  <li> {@code -L float} The percentage of elite individuals (default 0.1)
+ * </ul>
+ * 
+ * It uses one point crossover and a radnom mutation (it generates new random value for selected variables, 
+ * the generation depends on the type of the variable).
+ * 
+ * @author Martin Pilat
+ *
+ */
 public class Agent_EASearch extends Agent_Search {
-    /*
-     * Implementation of Genetic algorithm search
-     * Half uniform crossover, tournament selection
-     * Options:
-     * -E float
-     * minimum error rate (default 0.1)
-     * 
-     * -M int 
-     * maximal number of generations (default 10)
-     * 
-     * -I int
-     * maximal number of evaluated configurations (default 100)
-     * 
-     * -T float
-     * Mutation rate (default 0.2)
-     * 
-     * -F float
-     * Mutation rate per field in individual (default 0.2)
-     * 
-     * -X float
-     * Crossover probability (default 0.5)
-     * 
-     * -P int
-     * population size (default 10)
-     * 
-     * -L float
-     * The percentage of elite individuals (default 0.1)
-     * 
-     * 
-     */
 
     //fitness is the error rate - the lower, the better!
     SearchItemIndividualArchive archive = new SearchItemIndividualArchive();
@@ -120,6 +110,16 @@ public class Agent_EASearch extends Agent_Search {
         return false;
     }
     
+    /**
+     * Generates new solutions. In fact, it runs a single iteration of the evolutionary algorithm and 
+     * returns the list of offspring for evaluation.
+     * 
+     * @param solutions The list of solutions which were evaluated
+     * @param evaluations The objective values of the solutions, there can be more than one value in 
+     * 	{@code evaluations[i]} - multi-objective optimization is performed
+     * 
+     * @return The list of offpring for evaluation
+     */
     @Override
     protected List<SearchSolution> generateNewSolutions(
     		List<SearchSolution> solutions, float[][] evaluations) {
@@ -247,6 +247,12 @@ public class Agent_EASearch extends Agent_Search {
         
     }
 
+    /**
+     * Converts the population to a list of {@link SearchItem}s for evaluation.
+     * 
+     * @param pop The population of the evolutionary algorithm
+     * @return The population transformed to a list of {@link SearchItem}s
+     */
     private List<SearchSolution> populationToList(Population pop) {
         
         List<SearchSolution> ret = new ArrayList<SearchSolution>();
@@ -265,6 +271,13 @@ public class Agent_EASearch extends Agent_Search {
         return ret;
     }
     
+    /**
+     * Performs the rest of the iteration after the evaluations are finished. Assigns the evaluations 
+     * as the fitness values to the individuals in the population and performs the environmental selection.
+     * 
+     * @param evaluations The evaluated objective values for each individual
+     * @return The lowest error found so far
+     */
     @Override
     protected float updateFinished(float[][] evaluations) {        
         //assign evaluations to the population as fitnesses		
@@ -346,6 +359,9 @@ public class Agent_EASearch extends Agent_Search {
         return (float) bestError;
     }
 
+    /**
+     * Loads the options of the EASearch. Sets defaults in case an option is not specified.
+     */
     @Override
     protected void loadSearchOptions() {
     	
