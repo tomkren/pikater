@@ -3,6 +3,12 @@ package org.pikater.shared.util;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+/**
+ * Utility class providing locale-related formatting
+ * to primitive types. 
+ * 
+ * @author siposp
+ */
 public class LocaleUtils
 {
 	public static String formatInteger(Locale locale,int value)

@@ -16,7 +16,7 @@ public class Interval<N extends Number>
 	{
 		this.min = min;
 		this.max = max;
-		if((min != null) && (max != null))
+		if((min != null) && (max != null) && (min.doubleValue() > max.doubleValue()))
 		{
 			throw new IllegalArgumentException("Minimum exceeds maximum");
 		}

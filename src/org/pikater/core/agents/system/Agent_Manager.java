@@ -1,5 +1,6 @@
 package org.pikater.core.agents.system;
 
+import jade.content.Concept;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -33,6 +34,16 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import java.util.*;
 
 
+/**
+ * Agent Manager is a central control unit of the system.
+ * It handles requests to compute batches from GUI agents (ParserBehaviour),
+ * recommender agents (ParserBehaviour), queries from search agents 
+ * (receiveQuery behaviour). It also receives the computations' results 
+ * from Planner agent (ParserBehaviour).
+ * 
+ * @author Klara
+ *
+ */
 public class Agent_Manager extends PikaterAgent {
 
 	private static final long serialVersionUID = -5140758757320827589L;
@@ -44,14 +55,25 @@ public class Agent_Manager extends PikaterAgent {
 	public HashMap<String, ACLMessage> searchMessages =
 			new HashMap<String, ACLMessage>();
 	
+	/**
+	 * Returns the specific {@link ComputationCollectionItem} given id.
+	*/
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
 	}
+	
+	
+	/**
+	 * Adds a {@link ComputationCollectionItem} to computationCollection.
+	*/	
     public void addComputation(ComputationCollectionItem item)
     {
         computationCollection.put(item.getBatchID(),item);
     }
 
+    /**
+     * Returns list of all ontologies that are used by manager agent.
+     */
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -70,6 +92,17 @@ public class Agent_Manager extends PikaterAgent {
 	}
 	
 	
+	/**
+	 * Initializes Agent_Manager agent.
+	 * <p>
+	 * Registers manager with yellow pages and starts its three behaviours:
+	 *   <ul>
+	 *     <li>{@link ParserBehaviour} that deals with requests from GUI agents
+	 *     <li>{@link SubscriptionResponder} behaviour (for sending subscriptions messages about
+	 *       the results to registered subscribers)
+	 *     <li>{@link ReceiveQuery} behaviour that receives queries from search agents
+	 *   </ul>    
+	 */
 	protected void setup() {
 
     	initDefault();
@@ -85,25 +118,29 @@ public class Agent_Manager extends PikaterAgent {
 				
 		addBehaviour(new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
 		
-		addBehaviour(new RequestServer(this)); // TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
+		addBehaviour(new ReceiveQuery(this));
 		
 	} // end setup
-		
-			
-	public class subscriptionManager implements SubscriptionManager {
-		public boolean register(Subscription s) {
-			subscriptions.add(s);
-			return true;
-		}
-
-		public boolean deregister(Subscription s) {
-			subscriptions.remove(s);
-			return true;
-		}
-	}
+					
 	
-	
-	protected class RequestServer extends CyclicBehaviour {
+	/**
+	 * A JADE behaviour that handles a requests (query messages) made by
+	 * search agents. 
+	 * <p>
+	 * A FIPA_QUERY protocol is used, a QUERY_REF message with 
+	 * ExecuteParameters ontology is expected.
+	 * IDs used in the graph held inside the Manager are coded 
+	 * into the conversationId in the following order and are split by "_":
+	 * <ol>
+	 * <li>batchID
+	 * <li>nodeId
+	 * <li>computationId
+	 * </ol>	
+	 * 
+	 * @author Klara
+	 *
+	 */
+	protected class ReceiveQuery extends CyclicBehaviour {
 
 		private static final long serialVersionUID = -6257623790759885083L;
 
@@ -117,10 +154,16 @@ public class Agent_Manager extends PikaterAgent {
 				MessageTemplate.MatchOntology(ontology.getName()))));
 
 		
-		public RequestServer(Agent agent) {			
+		public ReceiveQuery(Agent agent) {			
 			super(agent);
 		}
 
+		/**
+		 * The core method of the ReceiveQuery behaviour. It receives a query
+		 * from a search agent and processes it, i.e. assigns the requested 
+		 * task to the right computation node (the node is identified by the 
+		 * conversation ID of the message received) and fills the queues. 
+		 */
 		@Override 
 		public void action() {
 			ACLMessage query = receive(getSchemaFromSearchTemplate);
@@ -131,10 +174,15 @@ public class Agent_Manager extends PikaterAgent {
 				searchMessages.put(query.getConversationId(), query);				
 				
 				try {
-					ContentElement content = getContentManager().extractContent(query);
-					if (((Action) content).getAction() instanceof ExecuteParameters) {
+					
+					ContentElement content =
+							getContentManager().extractContent(query);
+					Concept action = ((Action) content).getAction();
+					
+					if (action instanceof ExecuteParameters) {
+
 						// manager received new options from search to execute
-						ExecuteParameters ep = (ExecuteParameters) (((Action) content).getAction());
+						ExecuteParameters ep = (ExecuteParameters) action;
 
 						// => fill CA's queue
 						String[] ids = query.getConversationId().split("_");
@@ -143,9 +191,9 @@ public class Agent_Manager extends PikaterAgent {
 						int computationId = Integer.parseInt(ids[2]);
 											
 						SearchComputationNode searchNode = 
-								(SearchComputationNode) computationCollection.get(batchID)
-									.getProblemGraph().getNode(nodeId); 
-
+								(SearchComputationNode) computationCollection
+								.get(batchID).getProblemGraph()
+								.getNode(nodeId); 
 
                         for (SearchSolution ss : ep.getSolutions())
                         {
@@ -158,6 +206,7 @@ public class Agent_Manager extends PikaterAgent {
 					else{
 						logSevere("unknown message received.");
 					}
+					
 				} catch (UngroundedException e1) {
 					logException(e1.getMessage(), e1);
 				} catch (CodecException e1) {
@@ -170,23 +219,48 @@ public class Agent_Manager extends PikaterAgent {
 				block();
 			}
 
-			/*
-			ACLMessage result_msg = request.createReply();
-			result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-			send(result_msg);
-			*/
 			return;
-
 		}
 	}
 
 	
+	/**
+	 * A JADE class for registering to receiving "subscription" messages 
+	 * about the (partial) computation results. 
+	 * A typical subscriber is a GUI agent.
+	 * 
+	 */
+	public class subscriptionManager implements SubscriptionManager {
+		public boolean register(Subscription s) {
+			subscriptions.add(s);
+			return true;
+		}
+
+		public boolean deregister(Subscription s) {
+			subscriptions.remove(s);
+			return true;
+		}
+	}
+
+	
+	/**
+	 * A method for sending "subscription" messages about the (partial) 
+	 * computation results to whoever is subscribed to it. 
+	 * Typically the subscriber is a GUI agent. 
+	 * <p>
+	 * Note that it is also possible for an agent to get the results directly
+	 * from the database, where they are being stored as soon as the single 
+	 * computations are finished. 
+	 * In this case a subscription can be used as a cue that there have been 
+	 * a progress in a processing of a batch.
+	 *  
+	 * @param result			the message containing a result of 
+	 * 							a computation
+	 * @param originalMessage	the message that the subscriber originally 
+	 * 							sent to the Manager, used to create 
+	 * 							a subscription message
+	 */
 	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {
-        //TODO: get rid of this, probable te information will be taken form somewhere else
-        if (true)
-        {
-            return;
-        }
 		// Prepare the subscription message to the request originator
 		@SuppressWarnings("unused")
 		ACLMessage msgOut = originalMessage.createReply();
@@ -194,9 +268,11 @@ public class Agent_Manager extends PikaterAgent {
 		
 		// copy content of inform message to a subscription
 		try {
-            ContentElement content= getContentManager().extractContent(result);
-            //TODO: bad ontology
-			getContentManager().fillContent(msgOut, content );
+			@SuppressWarnings("unused")
+            ContentElement content = getContentManager().extractContent(result);
+
+			//getContentManager().fillContent(msgOut, content );
+
 		} catch (UngroundedException e) {
 			logException(e.getMessage(), e);
 		} catch (CodecException e) {
@@ -216,16 +292,34 @@ public class Agent_Manager extends PikaterAgent {
 			}
 		}
 		
-	} // end sendSubscription
+	}
+	// end sendSubscription
 	
+	
+	/**
+	 * Returns an agent of the required type.
+	 * If the agent doesn't exist, it is created.
+ 
+	 * @param agentType		agent type to be created
+	 * @return				AID of an agent of the required type 
+	 */
 	public AID getAgentByType(String agentType) {
 		return (AID)getAgentByType(agentType, 1).get(0);
 	}
 
 	
+	/**
+	 * Returns a list of agents of the required type.
+	 * If the agents don't exist, they are created.
+	 * 
+	 * @param agentType		agent type to be created
+	 * @param n				the number of agents that are required
+	 * @return 				list of AIDs of agents
+	 */
 	public List<AID> getAgentByType(String agentType, int n) {
 		
-		List<AID> Agents = new ArrayList<AID>(); // List of AIDs
+		// List of AIDs
+		List<AID> Agents = new ArrayList<AID>();
 		
 		// Make the list of agents of given type
 		DFAgentDescription template = new DFAgentDescription();
@@ -255,5 +349,6 @@ public class Agent_Manager extends PikaterAgent {
 		
 		return Agents;
 		
-	} // end getAgentByType
+	}
+	// end getAgentByType
 }

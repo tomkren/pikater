@@ -45,7 +45,7 @@ public final class Input01 {
 		comAgent.addOption(optionM);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
-		comAgent.setEvaluationMethod(new EvaluationMethod(CrossValidation.class.getName()));
+		comAgent.setValidationData(fileDataSource);
 		comAgent.setEvaluationMethod(evaluationMethod);
 		//comAgent.setModel(70704);
 		comAgent.setModel(null);

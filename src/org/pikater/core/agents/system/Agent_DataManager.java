@@ -24,7 +24,6 @@ import java.net.ServerSocket;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -107,8 +106,8 @@ import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
+import org.pikater.core.utilities.CoreUtilities;
 import org.pikater.shared.database.exceptions.NoResultException;
-import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -128,19 +127,33 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
+import org.pikater.shared.database.util.DatabaseUtilities;
 import org.pikater.shared.database.util.ResultFormatter;
-import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalExperiment;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.google.common.io.Files;
 
+/**
+ * <p>This agent implementation is used to commit database
+ * changes made from the core system and also provides
+ * database entities to other agents.</p>
+ * 
+ * <p>Each method corresponds to a particular use case.</p>
+ * 
+ * @author siposp
+ */
 public class Agent_DataManager extends PikaterAgent {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
-	public java.util.List<Ontology> getOntologies() {
+	public List<Ontology> getOntologies() {
 
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(ResultOntology.getInstance());
@@ -159,169 +172,180 @@ public class Agent_DataManager extends PikaterAgent {
 
 	@Override
 	protected void setup() {
+		
 		initDefault();
 		registerWithDF();
 
 		File data = new File(CoreConfiguration.getDataFilesPath() + "temp");
+		
 		if (!data.exists()) {
-			logInfo("Creating directory: " + CoreConfiguration.getDataFilesPath());
+			logInfo("Creating directory: " +
+					CoreConfiguration.getDataFilesPath());
 			if (data.mkdirs()) {
-				logInfo("Succesfully created directory: " + CoreConfiguration.getDataFilesPath());
+				logInfo("Succesfully created directory: " +
+						CoreConfiguration.getDataFilesPath());
 			} else {
-				logSevere("Error creating directory: " + CoreConfiguration.getDataFilesPath());
+				logSevere("Error creating directory: " +
+						CoreConfiguration.getDataFilesPath());
 			}
 		}
 
-		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+		MessageTemplate mesTemplate =
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 
-		addBehaviour(new AchieveREResponder(this, mt) {
+		addBehaviour(new AchieveREResponder(this, mesTemplate) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+			protected ACLMessage handleRequest(ACLMessage request)
+					throws NotUnderstoodException, RefuseException {
+				
 				try {
-					Action a = (Action) getContentManager().extractContent(request);
+					Action action = (Action)
+							getContentManager().extractContent(request);
 
-					/**
+					/*
 					 * Acount action
 					 */
-					if (a.getAction() instanceof GetUserID) {
-						return respondToGetUserID(request, a);
+					if (action.getAction() instanceof GetUserID) {
+						return respondToGetUserID(request, action);
 					}
-					if (a.getAction() instanceof GetUser) {
-						return respondToGetUser(request, a);
+					if (action.getAction() instanceof GetUser) {
+						return respondToGetUser(request, action);
 					}
 
-					/**
+					/*
 					 * LogicalNameTraslate actions
 					 */
-					if (a.getAction() instanceof TranslateFilename) {
-						return respondToTranslateFilename(request, a);
+					if (action.getAction() instanceof TranslateFilename) {
+						return respondToTranslateFilename(request, action);
 					}
 
-					/**
+					/*
 					 * AgentInfo actions
 					 */
-					if (a.getAction() instanceof SaveAgentInfo) {
-						return respondToSaveAgentInfo(request, a);
+					if (action.getAction() instanceof SaveAgentInfo) {
+						return respondToSaveAgentInfo(request, action);
 					}
-					if (a.getAction() instanceof GetAgentInfo) {
-						return respondToGetAgentInfo(request, a);
+					if (action.getAction() instanceof GetAgentInfo) {
+						return respondToGetAgentInfo(request, action);
 					}
-					if (a.getAction() instanceof GetAgentInfos) {
-						return respondToGetAgentInfos(request, a);
+					if (action.getAction() instanceof GetAgentInfos) {
+						return respondToGetAgentInfos(request, action);
 					}
-					if (a.getAction() instanceof GetAllAgentInfos) {
-						return respondToGetAllAgentInfos(request, a);
+					if (action.getAction() instanceof GetAllAgentInfos) {
+						return respondToGetAllAgentInfos(request, action);
 					}
-					if (a.getAction() instanceof GetExternalAgentNames) {
-						return respondToGetExternalAgentNames(request, a);
+					if (action.getAction() instanceof GetExternalAgentNames) {
+						return respondToGetExternalAgentNames(request, action);
 					}
 
-					/**
+					/*
 					 * Batch actions
 					 */
-					if (a.getAction() instanceof SaveBatch) {
-						return respondToSaveBatch(request, a);
+					if (action.getAction() instanceof SaveBatch) {
+						return respondToSaveBatch(request, action);
 					}
-					if (a.getAction() instanceof LoadBatch) {
-						return respondToLoadBatch(request, a);
+					if (action.getAction() instanceof LoadBatch) {
+						return respondToLoadBatch(request, action);
 					}
-					if (a.getAction() instanceof UpdateBatchStatus) {
-						return respondToUpdateBatchStatus(request, a);
+					if (action.getAction() instanceof UpdateBatchStatus) {
+						return respondToUpdateBatchStatus(request, action);
 					}
-					if (a.getAction() instanceof GetBatchPriority) {
-						return respondToGetBatchPriority(request, a);
+					if (action.getAction() instanceof GetBatchPriority) {
+						return respondToGetBatchPriority(request, action);
 					}
 
-					/**
+					/*
 					 * Experiment actions
 					 */
-					if (a.getAction() instanceof SaveExperiment) {
-						return respondToSaveExperiment(request, a);
+					if (action.getAction() instanceof SaveExperiment) {
+						return respondToSaveExperiment(request, action);
 					}
-					if (a.getAction() instanceof UpdateExperimentStatus) {
-						return respondToUpdateExperimentStatus(request, a);
+					if (action.getAction() instanceof UpdateExperimentStatus) {
+						return respondToUpdateExperimentStatus(request, action);
 					}
 
-					/**
+					/*
 					 * Results actions
 					 */
-					if (a.getAction() instanceof SaveResults) {
-						return respondToSaveResults(request, a);
+					if (action.getAction() instanceof SaveResults) {
+						return respondToSaveResults(request, action);
 					}
-					if (a.getAction() instanceof LoadResults) {
+					if (action.getAction() instanceof LoadResults) {
 						logSevere("Not Implemented");
 					}
 
-					/**
+					/*
 					 * Dataset actions
 					 */
-					if (a.getAction() instanceof SaveDataset) {
-						return respondToSaveDatasetMessage(request, a);
+					if (action.getAction() instanceof SaveDataset) {
+						return respondToSaveDatasetMessage(request, action);
 					}
 
-					/**
+					/*
 					 * Metadata actions
 					 */
-					if (a.getAction() instanceof SaveMetadata) {
-						return respondToSaveMetadataMessage(request, a);
+					if (action.getAction() instanceof SaveMetadata) {
+						return respondToSaveMetadataMessage(request, action);
 					}
-					if (a.getAction() instanceof GetMetadata) {
-						return replyToGetMetadata(request, a);
+					if (action.getAction() instanceof GetMetadata) {
+						return replyToGetMetadata(request, action);
 					}
-					if (a.getAction() instanceof GetAllMetadata) {
-						return respondToGetAllMetadata(request, a);
+					if (action.getAction() instanceof GetAllMetadata) {
+						return respondToGetAllMetadata(request, action);
 					}
-					if (a.getAction() instanceof GetMultipleBestAgents) {
-						return respondToGetTheBestAgent(request, a);
+					if (action.getAction() instanceof GetMultipleBestAgents) {
+						return respondToGetTheBestAgent(request, action);
 					}
 
-					/**
+					/*
 					 * Model actions
 					 */
-					if (a.getAction() instanceof SaveModel) {
-						return respondToSaveModel(request, a);
+					if (action.getAction() instanceof SaveModel) {
+						return respondToSaveModel(request, action);
 					}
-					if (a.getAction() instanceof GetModel) {
-						return respondToGetModel(request, a);
+					if (action.getAction() instanceof GetModel) {
+						return respondToGetModel(request, action);
 					}
-					if (a.getAction() instanceof GetModels) {
-						return respondToGetModels(request, a);
+					if (action.getAction() instanceof GetModels) {
+						return respondToGetModels(request, action);
 					}
 
-					/**
+					/*
 					 * Files actions
 					 */
-					if (a.getAction() instanceof GetExternalAgentJar) {
-						return respondToGetExternalAgentJar(request, a);
+					if (action.getAction() instanceof GetExternalAgentJar) {
+						return respondToGetExternalAgentJar(request, action);
 					}
-					if (a.getAction() instanceof PrepareFileUpload) {
-						return respondToPrepareFileUpload(request, a);
+					if (action.getAction() instanceof PrepareFileUpload) {
+						return respondToPrepareFileUpload(request, action);
 					}
 
-					if (a.getAction() instanceof GetFile) {
-						return respondToGetFile(request, a);
+					if (action.getAction() instanceof GetFile) {
+						return respondToGetFile(request, action);
 					}
-					if (a.getAction() instanceof GetAllDatasetInfo) {
-						return respondToGetAllDatasetInfo(request, a);
+					if (action.getAction() instanceof GetAllDatasetInfo) {
+						return respondToGetAllDatasetInfo(request, action);
 					}
 					
-					/**
+					/*
 					 * Deprecated Files actions
+					 * TODO: maybe better to throw appropriate exception like this
+					 * so that the problem can be better noticed?
 					 */
-					if (a.getAction() instanceof GetFileInfo) {
-						logSevere("Not Implemented - Deprecated");
+					if (action.getAction() instanceof GetFileInfo) {
+						throw new UnsupportedOperationException();
 					}
-					if (a.getAction() instanceof ImportFile) {
-						logSevere("Not Implemented - Deprecated");
+					if (action.getAction() instanceof ImportFile) {
+						throw new UnsupportedOperationException();
 					}
-					if (a.getAction() instanceof GetFiles) {
-						logSevere("Not Implemented - Deprecated");
+					if (action.getAction() instanceof GetFiles) {
+						throw new UnsupportedOperationException();
 					}
-					if (a.getAction() instanceof DeleteTempFiles) {
-						logSevere("Not Implemented - Deprecated");
+					if (action.getAction() instanceof DeleteTempFiles) {
+						throw new UnsupportedOperationException();
 					}
 
 				} catch (OntologyException e) {
@@ -343,11 +367,24 @@ public class Agent_DataManager extends PikaterAgent {
 		cleanupAbortedBatches();
 	}
 
+	/**
+	 * <p>Cleans up all records related to a batch that was interrupted while
+	 * in execution from database.</p>
+	 * 
+	 * <p>This method is currently only called when the system starts.</p>
+	 */
 	private void cleanupAbortedBatches() {
 		DAOs.batchDAO.cleanUp();
 		DAOs.experimentDAO.cleanUp();
 	}
 
+	/**
+	 * Creates a respond to a {@link GetUserID} request message.
+	 * 
+	 * @param request {@link ACLMessage} of the request.
+	 * @param a {@link Action} containing {@link GetUserID} action
+	 * @return {@link ACLMessage} containing the requested ID or a FAILURE message.
+	 */
 	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {
 
 		logInfo("respondToGetUserID");
@@ -355,8 +392,8 @@ public class Agent_DataManager extends PikaterAgent {
 		GetUserID getUserID = (GetUserID) a.getAction();
 
 		JPAUser userJPA = DAOs.userDAO.getByLogin(getUserID.getLogin()).get(0);
-
 		if (userJPA == null) {
+			// received request links to a non-existing user account - respond with a FAILURE message
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
 			logSevere("UserLogin " + getUserID.getLogin() + " doesn't exist");
@@ -379,6 +416,13 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Creates a respond to the {@link GetUser} action.
+	 * 
+	 * @param request {@link ACLMessage} of the request.
+	 * @param a {@link GetUser} action
+	 * @return {@link ACLMessage} containing the requested {@link User} object
+	 */
 	private ACLMessage respondToGetUser(ACLMessage request, Action a) {
 
 		logInfo("respondToGetUser");
@@ -386,8 +430,8 @@ public class Agent_DataManager extends PikaterAgent {
 		GetUser getUser = (GetUser) a.getAction();
 
 		JPAUser userJPA = DAOs.userDAO.getByID(getUser.getUserID());
-
 		if (userJPA == null) {
+			// received request links to a non-existing user account - respond with a FAILURE message
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
 			logSevere("UserID " + getUser.getUserID() + " doesn't exist");
@@ -417,68 +461,116 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws CodecException, OntologyException {
+	/**
+	 * <p>Creates a respond to the {@link TranslateFilename} action requesting
+	 * filename conversions in database. Conversions always succeed. 
+	 * 
+	 * TODO: If the action is always successful, why is there a need for errors?
+	 * "Error state is representing by returning 'error' as the translated filename."
+	 * 
+	 * TODO: wouldn't it be better to return null if something went wrong? Lets hard-code
+	 * a little less :).
+	 * 
+	 * @param request {@link ACLMessage} received with the request. 
+	 * @param action {@link Action} containing {@link TranslateFilename} action 
+	 * @return {@link ACLMessage} containing String of the translated filename or value 'error'
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
+	private ACLMessage respondToTranslateFilename(ACLMessage request,
+			Action action) throws CodecException, OntologyException {
 
-		TranslateFilename transtateFile = (TranslateFilename) a.getAction();
+		TranslateFilename translateFile =
+				(TranslateFilename) action.getAction();
 
 		String translatedName = "error";
 
-		if (transtateFile.getExternalFilename() != null && transtateFile.getInternalFilename() == null) {
+		// external to internal filename translation was requested
+		if ((translateFile.getExternalFilename() != null) &&
+				(translateFile.getInternalFilename() == null)) {
 
-			logInfo("respondToTranslateFilename External File Name " + transtateFile.getExternalFilename());
+			logInfo("respondToTranslateFilename External File Name " +
+					translateFile.getExternalFilename());
 
-			java.util.List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getExternalFilename());
-			if (!files.isEmpty())
-			{
+			List<JPAFilemapping> files = 
+					DAOs.filemappingDAO.getByExternalFilename(
+							translateFile.getExternalFilename());
+			if (!files.isEmpty()) {
 				translatedName = files.get(0).getInternalfilename();
 			} else {
-				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.getDataFilesPath() +
+						"temp" + System.getProperty("file.separator");
 
-				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
-				if (new File(tempFileName).exists())
-					translatedName = "temp" + System.getProperty("file.separator") + transtateFile.getExternalFilename();
+				String tempFileName = pathPrefix +
+						translateFile.getExternalFilename();
+				
+				if (new File(tempFileName).exists()) {
+					translatedName = "temp" +
+							System.getProperty("file.separator") +
+							translateFile.getExternalFilename();
+				}
 			}
 
-		} else if (transtateFile.getInternalFilename() != null && transtateFile.getExternalFilename() == null) {
+		// internal to external filename translation was requested
+		} else if ((translateFile.getInternalFilename() != null) &&
+				(translateFile.getExternalFilename() == null)) {
 
-			logInfo("respondToTranslateFilename Internal File Name " + transtateFile.getInternalFilename());
+			logInfo("respondToTranslateFilename Internal File Name " +
+					translateFile.getInternalFilename());
 
-			List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getInternalFilename());
-			if (!files.isEmpty())
-			{
+			List<JPAFilemapping> files =
+					DAOs.filemappingDAO.getByExternalFilename(
+							translateFile.getInternalFilename());
+			
+			if (!files.isEmpty()) {
 				translatedName = files.get(0).getExternalfilename();
 			} else {
-				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.getDataFilesPath() +
+						"temp" + System.getProperty("file.separator");
 
-				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
-				if (new File(tempFileName).exists())
-					translatedName = "temp" + System.getProperty("file.separator") + transtateFile.getExternalFilename();
+				String tempFileName = pathPrefix +
+						translateFile.getExternalFilename();
+				
+				if (new File(tempFileName).exists()) {
+					translatedName = "temp" +
+							System.getProperty("file.separator") +
+							translateFile.getExternalFilename();
+				}
 			}
 		}
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result result = new Result(transtateFile, translatedName);
+		Result result = new Result(translateFile, translatedName);
 		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
 
-	protected ACLMessage respondToGetAgentInfo(ACLMessage request, Action a) {
+	/**
+	 * Creates a respond to {@link GetAgentInfo} action.
+	 *  
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link GetAgentInfo} action.
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo} object
+	 */
+	protected ACLMessage respondToGetAgentInfo(ACLMessage request, Action action) {
 
-		GetAgentInfo getAgentInfo = (GetAgentInfo) a.getAction();
+		GetAgentInfo getAgentInfo = (GetAgentInfo) action.getAction();
 		String agentClass = getAgentInfo.getAgentClassName();
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getByAgentClass(agentClass);
+		List<JPAAgentInfo> agentInfoList =
+				DAOs.agentInfoDAO.getByAgentClass(agentClass);
 		JPAAgentInfo agentInfoJPA = agentInfoList.get(0);
 
-		AgentInfo agentInfo = AgentInfo.importXML(agentInfoJPA.getInformationXML());
+		AgentInfo agentInfo =
+				AgentInfo.importXML(agentInfoJPA.getInformationXML());
 
-		Result result = new Result(a, agentInfo);
+		Result result = new Result(action, agentInfo);
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
@@ -491,32 +583,45 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
-	protected ACLMessage respondToGetAgentInfos(ACLMessage request, Action a) {
+	/**
+	 * Creates a respond to {@link GetAgentInfos} action.
+	 *   
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link GetAgentInfos} action.
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo} objects
+	 * wrapped in {@link AgentInfos} or a FAILURE message.
+	 */
+	protected ACLMessage respondToGetAgentInfos(ACLMessage request,
+			Action action) {
 
-		GetAgentInfos getAgentInfos = (GetAgentInfos) a.getAction();
+		GetAgentInfos getAgentInfos = (GetAgentInfos) action.getAction();
 		int userID = getAgentInfos.getUserID();
 		
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
+		reply.setPerformative(ACLMessage.FAILURE);
 
 		JPAUser user = DAOs.userDAO.getByID(userID);
 		
-		List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getByExternalAgentOwner(user);
+		List<JPAAgentInfo> agentInfoList =
+				DAOs.agentInfoDAO.getByExternalAgentOwner(user);
 
 		AgentInfos agentInfos = new AgentInfos();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
 			
-			if((jpaAgentInfoI.getExternalAgent() == null) // global agent... always approved
-					|| jpaAgentInfoI.getExternalAgent().isApproved()) // external agent for a user... check if approved
-			{
-				AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
+			// global agent... always approved
+			// external agent for a user... check if approved
+			if((jpaAgentInfoI.getExternalAgent() == null) ||
+					jpaAgentInfoI.getExternalAgent().isApproved()) {
+				AgentInfo agentInfoI =
+						AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
 				agentInfos.addAgentInfo(agentInfoI);
 			}
 		}
 
-		Result result = new Result(a, agentInfos);
+		Result result = new Result(action, agentInfos);
 		try {
 			getContentManager().fillContent(reply, result);
+			reply.setPerformative(ACLMessage.INFORM);
 		} catch (CodecException e) {
 			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
@@ -526,8 +631,17 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 
 	}
-
-	protected ACLMessage respondToGetAllAgentInfos(ACLMessage request, Action a) {
+	
+	/**
+	 * Creates a respond to {@link GetAllAgentInfos} action.
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link GetAllAgentInfos} action.
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo}
+	 * objects wrapped in {@link AgentInfos}.
+	 */
+	protected ACLMessage respondToGetAllAgentInfos(ACLMessage request,
+			Action action) {
 		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
@@ -537,11 +651,12 @@ public class Agent_DataManager extends PikaterAgent {
 		AgentInfos agentInfos = new AgentInfos();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
 
-			AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
+			AgentInfo agentInfoI =
+					AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
 			agentInfos.addAgentInfo(agentInfoI);
 		}
 
-		Result result = new Result(a, agentInfos);
+		Result result = new Result(action, agentInfos);
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
@@ -553,7 +668,16 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 	
-	protected ACLMessage respondToGetExternalAgentNames(ACLMessage request, Action a) throws CodecException, OntologyException {
+	/**
+	 * Creates a respond to {@link GetExternalAgentNames} action.
+	 *   
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link GetExternalAgentNames} action.
+	 * @return {@link ACLMessage} containing the requested {@link AgentInfo} objects
+	 * wrapped in {@link ExternalAgentNames} or a FAILURE message.
+	 */
+	protected ACLMessage respondToGetExternalAgentNames(ACLMessage request,
+			Action action) {
 
 		logInfo("getting external agent names");
 
@@ -566,35 +690,62 @@ public class Agent_DataManager extends PikaterAgent {
 			
 			agentNames.add(agentClass);
 		}
-		ExternalAgentNames externalAgentNames = new ExternalAgentNames(agentNames);
+		ExternalAgentNames externalAgentNames =
+				new ExternalAgentNames(agentNames);
 
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		Result result = new Result(a, externalAgentNames);
-		getContentManager().fillContent(reply, result);
+		reply.setPerformative(ACLMessage.FAILURE);
+		try{
+			Result result = new Result(action, externalAgentNames);
+			getContentManager().fillContent(reply, result);
+			reply.setPerformative(ACLMessage.INFORM);
+		}catch(CodecException e){
+			logSevere(e.getMessage());
+		}catch(OntologyException e){
+			logSevere(e.getMessage());
+		}
 
 		return reply;
 	}
 
-	protected ACLMessage respondToSaveAgentInfo(ACLMessage request, Action a) {
+	/**
+	 * Attempts to save an instance of {@link AgentInfo} wrapped in
+	 * {@link SaveAgentInfo} to database and responds with the result:
+	 * <ul>
+	 * <li> If there is no record about the agent (class name) in database yet, 
+	 * the object is stored successfully.
+	 * <li> If such record already exists, FAILURE message is returned. 
+	 * </ul>
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} providing the {@link AgentInfo} object wrapped
+	 * in {@link SaveAgentInfo}.
+	 * @return see above
+	 */
+	protected ACLMessage respondToSaveAgentInfo(ACLMessage request,
+			Action action) {
 
 		logInfo("RespondToSaveAgentInfo");
 
-		SaveAgentInfo saveAgentInfo = (SaveAgentInfo) a.getAction();
+		SaveAgentInfo saveAgentInfo = (SaveAgentInfo) action.getAction();
 		AgentInfo newAgentInfo = saveAgentInfo.getAgentInfo();
 
 		String agentClassName = newAgentInfo.getAgentClassName();
-		JPAExternalAgent externalAgent = DAOs.externalAgentDAO.getByAgentClass(agentClassName);
+		JPAExternalAgent externalAgent =
+				DAOs.externalAgentDAO.getByAgentClass(agentClassName);
 		
 		ACLMessage reply = request.createReply();
 
-		java.util.List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
+		java.util.List<JPAAgentInfo> agentInfoList =
+				DAOs.agentInfoDAO.getAll();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
 
-			AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
+			AgentInfo agentInfoI =
+					AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
 			if (agentInfoI.equals(newAgentInfo)) {
 				reply.setPerformative(ACLMessage.FAILURE);
-				reply.setContent("AgentInfo has been  already stored in the database");
+				reply.setContent(
+						"AgentInfo has been  already stored in the database");
 				return reply;
 			}
 		}
@@ -607,15 +758,27 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToSaveBatch(ACLMessage request, Action a) {
+	
+	/**
+	 * Saves a new batch wrapped in {@link SaveBatch} to database,
+	 * after it is first converted to a {@link UniversalExperiment
+	 * database-compatible batch format} and then to XML. Some metadata are 
+	 * also stored - e.g. name of the batch.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param action {@link Action} containing a {@link SaveBatch} action
+	 * @return {@link ACLMessage} of the reply
+	 */
+	private ACLMessage respondToSaveBatch(ACLMessage request, Action action) {
 
 		logInfo("RespondToSaveBatch");
 
-		SaveBatch saveBatch = (SaveBatch) a.getAction();
+		SaveBatch saveBatch = (SaveBatch) action.getAction();
 		Batch batch = saveBatch.getBatch();
 		ComputationDescription description = batch.getDescription();
 
-		UniversalComputationDescription uDescription = description.exportUniversalComputationDescription();
+		UniversalExperiment uDescription =
+				description.exportUniversalComputationDescription();
 
 		JPAUser user = DAOs.userDAO.getByID(batch.getOwnerID());
 
@@ -639,7 +802,7 @@ public class Agent_DataManager extends PikaterAgent {
 		savedBatch.setSavedBatchId(batchJpa.getId());
 		savedBatch.setMessage("OK");
 
-		Result result = new Result(a, savedBatch);
+		Result result = new Result(action, savedBatch);
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
@@ -651,17 +814,28 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToLoadBatch(ACLMessage request, Action a) {
+	/**
+	 * Creates a respond to {@link LoadBatch} request. {@link LoadBatch} contains the ID
+	 * of the batch to be loaded.
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link LoadBatch} action.
+	 * @return {@link ACLMessage} containing {@link Batch} object defining the batch.
+	 */
+	private ACLMessage respondToLoadBatch(ACLMessage request, Action action) {
 
 		logInfo("respondToLoadBatch");
 
-		LoadBatch loadBatch = (LoadBatch) a.getAction();
+		LoadBatch loadBatch = (LoadBatch) action.getAction();
 
 		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
 
-		UniversalComputationDescription uDescription = UniversalComputationDescription.fromXML(batchJPA.getXML());
+		UniversalExperiment uDescription =
+				UniversalExperiment.fromXML(batchJPA.getXML());
 
-		ComputationDescription compDescription = ComputationDescription.importUniversalComputationDescription(uDescription);
+		ComputationDescription compDescription =
+				ComputationDescription
+				.importUniversalComputationDescription(uDescription);
 
 		Batch batch = new Batch();
 		batch.setId(batchJPA.getId());
@@ -674,7 +848,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result result = new Result(a, batch);
+		Result result = new Result(action, batch);
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
@@ -686,19 +860,29 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Requests a notification e-mail be sent to the owner of
+	 * the given {@link JPABatch}.
+	 * 
+	 * TODO: What is this email about?
+	 *  
+	 */
 	private void requestMailNotification(final JPABatch batchJPA) {
 		addBehaviour(new OneShotBehaviour() {
+			
 			private static final long serialVersionUID = -6987340128342367505L;
 
 			@Override
 			public void action() {
+				
 				String mailAddr = batchJPA.getOwner().getEmail();
-				SendEmail action = new SendEmail(Agent_Mailing.EmailType.RESULT, mailAddr);
-				action.setBatch_id(batchJPA.getId());
+				SendEmail action = new SendEmail(
+						Agent_Mailing.EmailType.RESULT, mailAddr);
+				action.setBatchId(batchJPA.getId());
 				List<JPAExperiment> exps = batchJPA.getExperiments();
-				// when there was more than 1 sub-experiment, don't send the best result 
-				if (exps.size() == 1 && !exps.get(0).getResults().isEmpty())
-				{
+				
+				// when there was more than 1 sub-experiment, send the best result 
+				if (exps.size() == 1 && !exps.get(0).getResults().isEmpty()) {
 					double bestErrorRate = 200;
 					for (JPAResult r : exps.get(0).getResults()) {
 						if (r.getErrorRate() < bestErrorRate) {
@@ -715,9 +899,11 @@ public class Agent_DataManager extends PikaterAgent {
 				request.setLanguage(getCodec().getName());
 				request.setOntology(ontology.getName());
 				try {
-					getContentManager().fillContent(request, new Action(receiver, action));
+					Action requestAction = new Action(receiver, action);
+					getContentManager().fillContent(request, requestAction);
 					logInfo("Sending notification request to mailAgent");
-					ACLMessage reply = FIPAService.doFipaRequestClient(this.myAgent, request, 10000);
+					ACLMessage reply = FIPAService.doFipaRequestClient(
+							this.myAgent, request, 10000);
 					if (reply == null)
 						logSevere("Reply not received.");
 				} catch (CodecException | OntologyException | FIPAException e) {
@@ -727,17 +913,39 @@ public class Agent_DataManager extends PikaterAgent {
 		});
 	}
 
-	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request, Action a) {
+	/**
+	 * <p>Updates the given batch's status with the given status. Both of them
+	 * are specified by {@link UpdateBatchStatus} object wrapped within
+	 * the action.</p>
+	 * 
+	 * As a side effect:
+	 * <ul>
+	 * <li> If the given status is {@link JPABatchStatus#COMPUTING}, sets the start
+	 * time for the given batch.
+	 * <li> If the given status is {@link JPABatchStatus#FAILED} or
+	 * {@link JPABatchStatus#FINISHED}, sets the finish time for the given batch. 
+	 * </ul>
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link UpdateBatchStatus} action.
+	 * @return {@link ACLMessage} confirming the batch status update.
+	 */
+	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request,
+			Action action) {
 
 		logInfo("respondToUpdateBatchStatus");
 
-		UpdateBatchStatus updateBatchStatus = (UpdateBatchStatus) a.getAction();
+		UpdateBatchStatus updateBatchStatus = (UpdateBatchStatus)
+				action.getAction();
 		
 		logInfo("****** " + updateBatchStatus.getBatchID());
 
 
-		JPABatch batchJPA = DAOs.batchDAO.getByID(updateBatchStatus.getBatchID());
-		JPABatchStatus batchStatus = JPABatchStatus.valueOf(updateBatchStatus.getStatus());
+		JPABatch batchJPA =
+				DAOs.batchDAO.getByID(updateBatchStatus.getBatchID());
+		JPABatchStatus batchStatus =
+				JPABatchStatus.valueOf(updateBatchStatus.getStatus());
+		
 		switch (batchStatus) {
 		case COMPUTING:
 			batchJPA.setStarted(new Date());
@@ -752,7 +960,8 @@ public class Agent_DataManager extends PikaterAgent {
 		batchJPA.setStatus(batchStatus);
 		DAOs.batchDAO.updateEntity(batchJPA);
 
-		if (batchStatus == JPABatchStatus.FINISHED && batchJPA.isSendEmailAfterFinish()) {
+		if ((batchStatus == JPABatchStatus.FINISHED) &&
+				(batchJPA.isSendEmailAfterFinish())) {
 			requestMailNotification(batchJPA);
 		} else {
 			logInfo("not sending mail notification - option not set");
@@ -765,10 +974,22 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToGetBatchPriority(ACLMessage request, Action a) {
+	/**
+	 * Creates a respond containing priority of the batch specified
+	 * in incoming {@link GetBatchPriority} object.
+	 *  
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing the {@link GetBatchPriority} object.
+	 * @return {@link ACLMessage} of the reply or FAILURE message if no such batch
+	 * exists in the database. 
+	 */
+	private ACLMessage respondToGetBatchPriority(ACLMessage request,
+			Action action) {
+		
 		logInfo("respondToGetBatchPriority");
 
-		GetBatchPriority getBatchPriority = (GetBatchPriority) a.getAction();
+		GetBatchPriority getBatchPriority = (GetBatchPriority)
+				action.getAction();
 		int batchID = getBatchPriority.getBatchID();
 
 		JPABatch batchJPA = DAOs.batchDAO.getByID(batchID);
@@ -780,7 +1001,7 @@ public class Agent_DataManager extends PikaterAgent {
 		} else {
 			reply.setPerformative(ACLMessage.INFORM);
 
-			Result result = new Result(a, batchJPA.getTotalPriority());
+			Result result = new Result(action, batchJPA.getTotalPriority());
 			try {
 				getContentManager().fillContent(reply, result);
 			} catch (CodecException e) {
@@ -791,20 +1012,27 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 
 		return reply;
-
 	}
 
-	private ACLMessage respondToSaveExperiment(ACLMessage request, Action a) {
+	/**
+	 * Stores a new {@link Experiment experiment}, wrapped in {@link SavedExperiment}, to the database.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param action {@link Action} containing the {@link SavedExperiment} action.
+	 * @return {@link ACLMessage} of the reply
+	 */
+	private ACLMessage respondToSaveExperiment(ACLMessage request,
+			Action action) {
 
 		logInfo("respondToSaveExperiment");
 
-		SaveExperiment saveExperiment = (SaveExperiment) a.getAction();
+		SaveExperiment saveExperiment = (SaveExperiment)
+				action.getAction();
 		Experiment experiment = saveExperiment.getExperiment();
 
-		/**TODO: Parser sends SaveExperiment message, when experiment is
-		* created and computation has begun
-		* DAO now sets current date for created and started, but maybe the created can be ommited...
-		* */
+		/* Computation begins when experiment is created by Parser
+		 *  and SaveExperiment message is sent. 
+		 */
 		int savedID = DAOs.batchDAO.addExperimentToBatch(experiment);
 
 		ACLMessage reply = request.createReply();
@@ -818,7 +1046,7 @@ public class Agent_DataManager extends PikaterAgent {
 			savedExperiment.setSavedExperimentId(savedID);
 			savedExperiment.setMessage("OK");
 
-			Result result = new Result(a, savedExperiment);
+			Result result = new Result(action, savedExperiment);
 			try {
 				getContentManager().fillContent(reply, result);
 			} catch (CodecException e) {
@@ -831,14 +1059,33 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	protected ACLMessage respondToUpdateExperimentStatus(ACLMessage request, Action a) {
+	/**
+	 * Changes status of the given experiment to the given value, wrapped in
+	 * {@link UpdateExperimentStatus}. As a side effect:
+	 * <ul>
+	 * <li> If the new status is COMPUTING, start time of the experiment is reset to now.
+	 * <li> If the new status is FAILED or FINISHED, finish time of the experiment is reset to now. 
+	 * </ul> 
+	 *
+	 * @param request {@link ACLMessage} of the request.
+	 * @param action {@link Action} containing the {@link UpdateExperimentStatus}
+	 * @return {@link ACLMessage} of the reply
+	 */
+	protected ACLMessage respondToUpdateExperimentStatus(ACLMessage request,
+			Action action) {
 
 		logInfo("respondToUpdateExperimentStatus");
 
-		UpdateExperimentStatus updateExperimentStatus = (UpdateExperimentStatus) a.getAction();
+		UpdateExperimentStatus updateExperimentStatus = (UpdateExperimentStatus)
+				action.getAction();
 
-		JPAExperiment experimentJPA = DAOs.experimentDAO.getByID(updateExperimentStatus.getExperimentID());
-		JPAExperimentStatus experimentStatus = JPAExperimentStatus.valueOf(updateExperimentStatus.getStatus());
+		JPAExperiment experimentJPA =
+				DAOs.experimentDAO.getByID(
+						updateExperimentStatus.getExperimentID());
+		JPAExperimentStatus experimentStatus =
+				JPAExperimentStatus.valueOf(
+						updateExperimentStatus.getStatus());
+		
 		experimentJPA.setStatus(experimentStatus);
 		switch (experimentStatus) {
 		case COMPUTING:
@@ -861,21 +1108,21 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private <T extends JPAAbstractEntity> boolean containsID(List<T> list, T item ){
-		for(T i : list){
-			if(i.getId()==item.getId()){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private <E> List<E> safe(List<E> list){
-		return (list!=null)?list:Collections.<E>emptyList();
-	}
-	
-	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
-		SaveResults saveResult = (SaveResults) a.getAction();
+	/**
+	 * Stores the given {@link SaveResults results/statistics} to database
+	 * and as a side effect, links other database entities like datasets
+	 * with them.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param action {@link Action} containing action {@link SaveResults}
+	 * @return {@link ACLMessage} of the reply
+	 */
+	private ACLMessage respondToSaveResults(ACLMessage request,
+			Action action) {
+		
+		SaveResults saveResult = (SaveResults)
+				action.getAction();
+		
 		Task task = saveResult.getTask();
 		NewOptions options = new NewOptions(task.getAgent().getOptions());
 
@@ -885,103 +1132,143 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setAgentName(task.getAgent().getType());
 		logInfo("Adding result for Agent Type: " + task.getAgent().getType());
 		jparesult.setOptions(options.exportXML());
-		logInfo("Saving result for hash: " + task.getDatas().exportInternalTrainFileName());
-		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
+		logInfo("Saving result for hash: " +
+				task.getDatas().exportInternalTrainFileName());
+		
+		String inernalTrainFileName =
+				task.getDatas().exportInternalTrainFileName();
+		jparesult.setSerializedFileName(inernalTrainFileName);
 
-		for(Data data : safe(task.getDatas().getDatas())){
-			if(data==null)
+		//Associating input datasets with the result
+		for (Data dataI : CollectionUtils.nullSafeList(task.getDatas().getDatas())) {
+			if (dataI == null) {
 				continue;
+			}
 			
-			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(data.getInternalFileName())).getSingleResultWithNull();
-			if(dslo!=null){
-				if(!this.containsID(jparesult.getInputs(), dslo)){
+			List<JPADataSetLO> daoSets =
+					DAOs.dataSetDAO.getByHash(dataI.getInternalFileName());
+			ResultFormatter<JPADataSetLO> resultFormartter =
+					new ResultFormatter<JPADataSetLO>(daoSets);
+			
+			JPADataSetLO dslo = resultFormartter.getSingleResultWithNull();
+			if (dslo != null) {
+				if (!DatabaseUtilities.containsID(jparesult.getInputs(), dslo.getId())) {
 					jparesult.getInputs().add(dslo);
-					logInfo("Adding input " + data.getInternalFileName() + " to result." );
-				}else{
-					logInfo("Adding input " + data.getInternalFileName() + " skipped. Duplicate value.");
+					logInfo("Adding input " + dataI.getInternalFileName() +
+							" to result." );
+				} else {
+					logInfo("Adding input " + dataI.getInternalFileName() +
+							" skipped. Duplicate value.");
 				}
-			}else{
-				logSevere("Failed to add output " + data.getInternalFileName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			} else {
+				logSevere("Failed to add output " +
+						dataI.getInternalFileName() +
+						" to result for train dataset " +
+						task.getDatas().exportInternalTrainFileName());
 			}
 		}
 		
-		for (TaskOutput output : task.getOutput()) {
-			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(output.getName())).getSingleResultWithNull();
-			if(dslo!=null){
-				if(!this.containsID(jparesult.getOutputs(), dslo)){
+		//Associating output datasets with the result
+		for (TaskOutput outputI : task.getOutput()) {
+			
+			List<JPADataSetLO> dataSets =
+					DAOs.dataSetDAO.getByHash(outputI.getName());
+			ResultFormatter<JPADataSetLO> resultFormatter =
+					new ResultFormatter<JPADataSetLO>(dataSets);
+			
+			JPADataSetLO dslo = resultFormatter.getSingleResultWithNull();
+			if (dslo != null) {
+				if (!DatabaseUtilities.containsID(jparesult.getOutputs(), dslo.getId())) {
 					jparesult.getOutputs().add(dslo);
-					logInfo("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
-				}else{
-					logInfo("Adding output " + output.getName() + " skipped. Duplicate value.");
+					
+					logInfo("Adding output " + outputI.getName() +
+							" to result for train dataset " +
+							task.getDatas().exportInternalTrainFileName());
+				} else {
+					logInfo("Adding output " + outputI.getName() +
+							" skipped. Duplicate value.");
 				}
-			}else{
-				logSevere("Failed to add output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			} else {
+				logSevere("Failed to add output " + outputI.getName() +
+						" to result for train dataset " +
+						task.getDatas().exportInternalTrainFileName());
 			}
 		}
 
 		float errorRate = Float.MAX_VALUE;
-		float kappa_statistic = Float.MAX_VALUE;
-		float mean_absolute_error = Float.MAX_VALUE;
-		float root_mean_squared_error = Float.MAX_VALUE;
-		float relative_absolute_error = Float.MAX_VALUE; // percent
-		float root_relative_squared_error = Float.MAX_VALUE; // percent
-		int duration = Integer.MAX_VALUE; // miliseconds
+		float kappaStatistic = Float.MAX_VALUE;
+		float meanAbsoluteError = Float.MAX_VALUE;
+		float rootMeanSquaredError = Float.MAX_VALUE;
+		// percent
+		float relativeAbsoluteError = Float.MAX_VALUE;
+		// percent
+		float rootRelativeSquaredError = Float.MAX_VALUE;
+		// miliseconds
+		int duration = Integer.MAX_VALUE;
 		float durationLR = Float.MAX_VALUE;
 
 		Evaluation evaluation = task.getResult();
 
-		Eval errorRateEval = evaluation.exportEvalByName(CoreConstant.Error.ERROR_RATE.name());
+		Eval errorRateEval = evaluation.exportEvalByName(
+				CoreConstant.Error.ERROR_RATE.name());
 		if (errorRateEval != null) {
 			errorRate = errorRateEval.getValue();
 		}
 
-		Eval kappaStatisticEval = evaluation.exportEvalByName(CoreConstant.Error.KAPPA_STATISTIC.name());
+		Eval kappaStatisticEval = evaluation.exportEvalByName(
+				CoreConstant.Error.KAPPA_STATISTIC.name());
 		if (kappaStatisticEval != null) {
-			kappa_statistic = kappaStatisticEval.getValue();
+			kappaStatistic = kappaStatisticEval.getValue();
 		}
 
-		Eval meanAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.MEAN_ABSOLUTE.name());
+		Eval meanAbsoluteEval = evaluation.exportEvalByName(
+				CoreConstant.Error.MEAN_ABSOLUTE.name());
 		if (meanAbsoluteEval != null) {
-			mean_absolute_error = meanAbsoluteEval.getValue();
+			meanAbsoluteError = meanAbsoluteEval.getValue();
 		}
 
-		Eval rootMeanSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());
+		Eval rootMeanSquaredEval = evaluation.exportEvalByName(
+				CoreConstant.Error.ROOT_MEAN_SQUARED.name());
 		if (rootMeanSquaredEval != null) {
-			root_mean_squared_error = rootMeanSquaredEval.getValue();
+			rootMeanSquaredError = rootMeanSquaredEval.getValue();
 		}
 
-		Eval relativeAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.RELATIVE_ABSOLUTE.name());
+		Eval relativeAbsoluteEval = evaluation.exportEvalByName(
+				CoreConstant.Error.RELATIVE_ABSOLUTE.name());
 		if (relativeAbsoluteEval != null) {
-			relative_absolute_error = relativeAbsoluteEval.getValue();
+			relativeAbsoluteError = relativeAbsoluteEval.getValue();
 		}
 
-		Eval rootRelativeSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
+		Eval rootRelativeSquaredEval = evaluation.exportEvalByName(
+				CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
 		if (rootRelativeSquaredEval != null) {
-			root_relative_squared_error = rootRelativeSquaredEval.getValue();
+			rootRelativeSquaredError = rootRelativeSquaredEval.getValue();
 		}
 
-		Eval durationEval = evaluation.exportEvalByName(CoreConstant.DURATION);
+		Eval durationEval = evaluation.exportEvalByName(
+				CoreConstant.DURATION);
 		if (durationEval != null) {
 			duration = (int) durationEval.getValue();
 		}
 
-		Eval durationLREval = evaluation.exportEvalByName(CoreConstant.DURATIONLR);
+		Eval durationLREval = evaluation.exportEvalByName(
+				CoreConstant.DURATIONLR);
 		if (durationLREval != null) {
 			durationLR = (float) durationLREval.getValue();
 		}
 
 		jparesult.setErrorRate(errorRate);
-		jparesult.setKappaStatistic(kappa_statistic);
-		jparesult.setMeanAbsoluteError(mean_absolute_error);
-		jparesult.setRootMeanSquaredError(root_mean_squared_error);
-		jparesult.setRelativeAbsoluteError(relative_absolute_error);
-		jparesult.setRootRelativeSquaredError(root_relative_squared_error);
+		jparesult.setKappaStatistic(kappaStatistic);
+		jparesult.setMeanAbsoluteError(meanAbsoluteError);
+		jparesult.setRootMeanSquaredError(rootMeanSquaredError);
+		jparesult.setRelativeAbsoluteError(relativeAbsoluteError);
+		jparesult.setRootRelativeSquaredError(rootRelativeSquaredError);
 		jparesult.setDuration(duration);
 		jparesult.setDurationLR(durationLR);
 
 		Date start = new Date();
 		if (task.getStart() != null) {
-			start = Agent_DataManager.getDateFromPikaterDateString(task.getStart());
+			start = CoreUtilities.getDateFromPikaterDateString(task.getStart());
 		} else {
 			logSevere("Result start date isn't set. Using current DateTime");
 		}
@@ -990,7 +1277,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		Date finish = new Date();
 		if (task.getFinish() != null) {
-			finish = Agent_DataManager.getDateFromPikaterDateString(task.getFinish());
+			finish = CoreUtilities.getDateFromPikaterDateString(task.getFinish());
 		} else {
 			logSevere("Result finish date isn't set. Using current DateTime");
 		}
@@ -999,9 +1286,12 @@ public class Agent_DataManager extends PikaterAgent {
 
 		jparesult.setNote(task.getNote());
 		logInfo("JPA Result    " + jparesult.getErrorRate());
-		int resultID = DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
+		int resultID = DAOs.experimentDAO.addResultToExperiment(
+				experimentID, jparesult);
 		if (resultID != -1) {
-			logInfo("Persisted JPAResult for experiment ID " + experimentID + " with ID: " + resultID);
+			logInfo("Persisted JPAResult for experiment ID " +
+					experimentID + " with ID: " + resultID);
+			
 			if (task.getResult().getObject() != null) {
 				saveResultModel(task, resultID);
 			}
@@ -1014,20 +1304,37 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToSaveDatasetMessage(ACLMessage request, Action a) {
-		SaveDataset sd = (SaveDataset) a.getAction();
+	/**
+	 * Stores a dataset containing an experiment's result data. The location of the file
+	 * is encapsulated in the {@link SaveDataset} action.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param action {@link Action} containing {@link SaveDataset} action
+	 * @return {@link ACLMessage} of the reply containing the ID of stored dataset or with
+	 * FAILURE flag set after unsuccessful operation.
+	 */
+	private ACLMessage respondToSaveDatasetMessage(ACLMessage request,
+			Action action) {
+		
+		SaveDataset savedataset = (SaveDataset) action.getAction();
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
 		try {
-			File f = new File(sd.getSourceFile());
-			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(f, f.getName(), sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
+			File file = new File(savedataset.getSourceFile());
+			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(file,
+					file.getName(), savedataset.getDescription(),
+					savedataset.getUserID(),JPADatasetSource.EXPERIMENT);
 
 			reply.setContentObject(new Integer(jpadsloID));
-			logInfo("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());
+			logInfo("Saved Dataset with ID: " + jpadsloID +
+					" for sourcefile "+savedataset.getSourceFile());
+			
 		} catch (NoResultException e) {
-			logException("No user found with login: " + sd.getUserID(), e);
+			logException("No user found with login: " +
+					savedataset.getUserID(), e);
+			
 			reply.setPerformative(ACLMessage.FAILURE);
 		} catch (IOException e) {
 			logException("File can't be read.", e);
@@ -1037,6 +1344,12 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	/**
+	 * Associates the given agent model with the given experiment result.
+	 *  
+	 * @param task {@link Task} containing data about the model.
+	 * @param resultId ID of the result
+	 */
 	private void saveResultModel(Task task, int resultId) {
 		Model m = new Model();
 		m.setAgentClassName(task.getAgent().getType());
@@ -1044,13 +1357,29 @@ public class Agent_DataManager extends PikaterAgent {
 		m.setSerializedAgent(task.getResult().getObject());
 		int savedModelID = DAOs.resultDAO.setModelForResult(m);
 		if (savedModelID == -1) {
-			logSevere("Failed to persist model for result with ID " + resultId);
+			logSevere("Failed to persist model for result with ID " +
+					resultId);
 		} else {
 			logInfo("Persisted JPAModel " + savedModelID);
 		}
 	}
 
-	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) {
+	/**
+	 * Stores metadata wrapped in {@link SaveMetadata} to the given dataset. Dataset
+	 * is looked up by a hash and so:
+	 * <ul>
+	 * <li> If it already contains all metadata, no actions is taken.
+	 * <li> If it doesn't contain all metadata (or contains none), they are merged
+	 * with the given metadata.
+	 * </ul>
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param a {@link Action} containing {@link SaveMetadata} action
+	 * @return {@link ACLMessage} with the reply
+	 */
+	private ACLMessage respondToSaveMetadataMessage(ACLMessage request,
+			Action a) {
+		
 		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
 		Metadata metadata = saveMetadata.getMetadata();
 		int dataSetID = saveMetadata.getDataSetID();
@@ -1061,13 +1390,15 @@ public class Agent_DataManager extends PikaterAgent {
 
 			String currentHash = dslo.getHash();
 
-			List<JPADataSetLO> equalDataSets = DAOs.dataSetDAO.getByHash(currentHash);
+			List<JPADataSetLO> equalDataSets =
+					DAOs.dataSetDAO.getByHash(currentHash);
 			logInfo("Hash of new dataset: " + currentHash);
 			//we search for a dataset entry with the same hash and with already generated metadata
 			JPADataSetLO dsloWithMetaData = null;
-			for (JPADataSetLO candidate : equalDataSets) {
-				if ((candidate.getAttributeMetaData() != null) && (candidate.getGlobalMetaData() != null)) {
-					dsloWithMetaData = candidate;
+			for (JPADataSetLO candidateI : equalDataSets) {
+				if ((candidateI.getAttributeMetaData() != null) &&
+						(candidateI.getGlobalMetaData() != null)) {
+					dsloWithMetaData = candidateI;
 					break;
 				}
 			}
@@ -1077,7 +1408,8 @@ public class Agent_DataManager extends PikaterAgent {
 				dslo.setGlobalMetaData(readr.getJPAGlobalMetaData());
 				dslo.setAttributeMetaData(readr.getJPAAttributeMetaData());
 			} else {
-				dslo.setAttributeMetaData(dsloWithMetaData.getAttributeMetaData());
+				dslo.setAttributeMetaData(
+						dsloWithMetaData.getAttributeMetaData());
 				dslo.setGlobalMetaData(dsloWithMetaData.getGlobalMetaData());
 			}
 			DAOs.dataSetDAO.updateEntity(dslo);
@@ -1092,51 +1424,86 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
-		GetMetadata gm = (GetMetadata) a.getAction();
+	/**
+	 * Retrieves metadata for the given dataset. Dataset is looked by a hash.
+	 * 
+	 * @param request {@link ACLMessage} received with the request/
+	 * @param action {@link Action} containing {@link GetMetadata} action
+	 * @return {@link ACLMessage} reply containing the retrieved {@link Metadata} object
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
+	private ACLMessage replyToGetMetadata(ACLMessage request,
+			Action action) throws CodecException, OntologyException {
+		
+		GetMetadata getMetadata = (GetMetadata) action.getAction();
 
-		Metadata m = new Metadata();
+		Metadata metadata = new Metadata();
 		ACLMessage reply = request.createReply();
-		logInfo("Retrieving metadata for hash " + gm.getInternal_filename());
-		JPADataSetLO dslo = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getInternal_filename())).getSingleResultWithNull();
+		logInfo("Retrieving metadata for hash " +
+				getMetadata.getInternal_filename());
+		
+		List<JPADataSetLO> dataSets =
+				DAOs.dataSetDAO.getByHash(getMetadata.getInternal_filename());
+		ResultFormatter<JPADataSetLO> resultFormatter =
+				new ResultFormatter<JPADataSetLO>(dataSets);
+		JPADataSetLO dslo = resultFormatter.getSingleResultWithNull();
 
-		if ((dslo != null)
-			&&(dslo.getGlobalMetaData()!=null)
-			&&(dslo.getAttributeMetaData()!=null)
-			){
-			m = this.convertJPADatasetToOntologyMetadata(dslo);
+		if ((dslo != null) &&
+			(dslo.getGlobalMetaData() != null) &&
+			(dslo.getAttributeMetaData() != null)) {
+			
+			metadata = this.convertJPADatasetToOntologyMetadata(dslo);
 			reply.setPerformative(ACLMessage.INFORM);
 		} else {
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 
-		Result result = new Result(a.getAction(), m);
+		Result result = new Result(action.getAction(), metadata);
 		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
 
-	private AttributeMetadata convertJPAAttributeMetadataToOntologyMetadata(JPAAttributeMetaData amd) {
+	/**
+	 * Creates an {@link AttributeMetadata} object from a {@link JPAAttributeMetaData} object.
+	 * 
+	 * @param amd {@link JPAAttributeMetaData} object
+	 * @return {@link AttributeMetadata} object representing the input {@link JPAAttributeMetaData}
+	 */
+	private AttributeMetadata convertJPAAttributeMetadataToOntologyMetadata(
+			JPAAttributeMetaData amd) {
+		
 		AttributeMetadata attributeMetadata;
 
 		if (amd instanceof JPAAttributeNumericalMetaData) {
 
-			JPAAttributeNumericalMetaData jpaAttrnum = (JPAAttributeNumericalMetaData) amd;
+			JPAAttributeNumericalMetaData jpaAttrnum =
+					(JPAAttributeNumericalMetaData) amd;
+			
+			NumericalAttributeMetadata numAttributeMetadata =
+					new NumericalAttributeMetadata();
 
-			attributeMetadata = new NumericalAttributeMetadata();
+			numAttributeMetadata.setAvg(jpaAttrnum.getAvarage());
+			numAttributeMetadata.setMax(jpaAttrnum.getMax());
+			numAttributeMetadata.setMin(jpaAttrnum.getMin());
+			numAttributeMetadata.setMedian(jpaAttrnum.getMedian());
+			numAttributeMetadata.setStandardDeviation(jpaAttrnum.getVariance());
 
-			((NumericalAttributeMetadata) attributeMetadata).setAvg(jpaAttrnum.getAvarage());
-			((NumericalAttributeMetadata) attributeMetadata).setMax(jpaAttrnum.getMax());
-			((NumericalAttributeMetadata) attributeMetadata).setMin(jpaAttrnum.getMin());
-			((NumericalAttributeMetadata) attributeMetadata).setMedian(jpaAttrnum.getMedian());
-			((NumericalAttributeMetadata) attributeMetadata).setStandardDeviation(jpaAttrnum.getVariance());
-
+			attributeMetadata = numAttributeMetadata;
+			
 		} else if (amd instanceof JPAAttributeCategoricalMetaData) {
-			JPAAttributeCategoricalMetaData jpaAttrCat = (JPAAttributeCategoricalMetaData) amd;
+			
+			JPAAttributeCategoricalMetaData jpaAttrCat =
+					(JPAAttributeCategoricalMetaData) amd;
 
-			attributeMetadata = new CategoricalAttributeMetadata();
+			CategoricalAttributeMetadata catAttributeMetadata =
+					new CategoricalAttributeMetadata();
 
-			((CategoricalAttributeMetadata) attributeMetadata).setNumberOfCategories(jpaAttrCat.getNumberOfCategories());
+			catAttributeMetadata.setNumberOfCategories(
+					jpaAttrCat.getNumberOfCategories());
+			
+			attributeMetadata = catAttributeMetadata;
 
 		} else {
 			attributeMetadata = new AttributeMetadata();
@@ -1152,16 +1519,27 @@ public class Agent_DataManager extends PikaterAgent {
 		return attributeMetadata;
 	}
 
+	/**
+	 * Creates a {@link Metadata} ontology representing metadata of the given
+	 * {@link JPADataSetLO}.
+	 *  
+	 * @param dslo {@link JPADataSetLO} object containing the metadata.
+	 * @return {@link Metadata} object
+	 */
 	private Metadata convertJPADatasetToOntologyMetadata(JPADataSetLO dslo) {
 		JPAGlobalMetaData gmd = dslo.getGlobalMetaData();
 
 		Metadata globalMetaData = new Metadata();
 
-		JPAFilemapping fm = new ResultFormatter<JPAFilemapping>(DAOs.filemappingDAO.getByInternalFilename(dslo.getHash())).getSingleResultWithNull();
+		List<JPAFilemapping> fileMappings =
+				DAOs.filemappingDAO.getByInternalFilename(dslo.getHash());
+		ResultFormatter<JPAFilemapping> resultFormatter =
+				new ResultFormatter<JPAFilemapping>(fileMappings);
+		JPAFilemapping filemap = resultFormatter.getSingleResultWithNull();
 
-		if (fm != null) {
-			globalMetaData.setExternalName(fm.getExternalfilename());
-			globalMetaData.setInternalName(fm.getInternalfilename());
+		if (filemap != null) {
+			globalMetaData.setExternalName(filemap.getExternalfilename());
+			globalMetaData.setInternalName(filemap.getInternalfilename());
 		} else {
 			globalMetaData.setInternalName(dslo.getHash());
 			globalMetaData.setExternalName(dslo.getDescription());
@@ -1178,10 +1556,11 @@ public class Agent_DataManager extends PikaterAgent {
 
 		boolean missingValues = false;
 
-		for (JPAAttributeMetaData amd : attrMDs) {
-			AttributeMetadata attributeMetadata = this.convertJPAAttributeMetadataToOntologyMetadata(amd);
+		for (JPAAttributeMetaData amdI : attrMDs) {
+			AttributeMetadata attributeMetadata =
+					this.convertJPAAttributeMetadataToOntologyMetadata(amdI);
 
-			missingValues = missingValues || (amd.getRatioOfMissingValues() > 0);
+			missingValues = missingValues || (amdI.getRatioOfMissingValues() > 0);
 
 			globalMetaData.getAttributeMetadataList().add(attributeMetadata);
 		}
@@ -1192,24 +1571,37 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
-	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
-		GetAllMetadata gm = (GetAllMetadata) a.getAction();
+	/**
+	 * Retrieves all metadata for the datasets specified in {@link GetAllMetadata}.
+	 *  
+	 * @param request {@link ACLMessage} received with the request
+	 * @param action {@link Action} containing {@link GetAllMetadata} action
+	 * @return {@link ACLMessage} reply containing metadata for the datasets.
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
+	private ACLMessage respondToGetAllMetadata(ACLMessage request,
+			Action action) throws CodecException, OntologyException {
+		
+		GetAllMetadata getMetadata = (GetAllMetadata) action.getAction();
 
 		logInfo("Agent_DataManager.respondToGetAllMetadata");
 
 		List<String> exHash = new java.util.LinkedList<String>();
-		for (Metadata metadataI : gm.getExceptions()) {
+		for (Metadata metadataI : getMetadata.getExceptions()) {
 			exHash.add(metadataI.getInternalName());
 		}
 		
 		List<JPADataSetLO> datasets = null;
 		
-		if (gm.getResultsRequired()) {
+		if (getMetadata.getResultsRequired()) {
 			logInfo("DataManager.Results Required");
-			datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashesWithMetadata(exHash);
+			datasets = DAOs.dataSetDAO
+					.getAllWithResultsExcludingHashesWithMetadata(exHash);
 		} else {
 			logInfo("DataManager.Results NOT Required");
-			datasets = DAOs.dataSetDAO.getAllExcludingHashesWithMetadata(exHash);
+			datasets =
+					DAOs.dataSetDAO.getAllExcludingHashesWithMetadata(exHash);
 		}
 
 		if (datasets == null) {
@@ -1218,44 +1610,61 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		Metadatas metadatas = new Metadatas();
 
-		for (JPADataSetLO dslo : datasets) {
-			Metadata globalMetaData = this.convertJPADatasetToOntologyMetadata(dslo);
+		for (JPADataSetLO dsloI : datasets) {
+			Metadata globalMetaData =
+					this.convertJPADatasetToOntologyMetadata(dsloI);
 			metadatas.addMetadata(globalMetaData);
 		}
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result result = new Result(a.getAction(), metadatas);
+		Result result = new Result(action.getAction(), metadatas);
 		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
 
-	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws ClassNotFoundException, CodecException, OntologyException {
-		GetMultipleBestAgents g = (GetMultipleBestAgents) a.getAction();
+	/**
+	 * Retrieves the given amount of the best agents (ordered by result 
+	 * error rate) of a certain experiment for the given dataset.
+	 *   
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link GetMultipleBestAgents} action
+	 * @return {@link ACLMessage} containing the best agents for the dataset.
+	 * @throws ClassNotFoundException
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
+	private ACLMessage respondToGetTheBestAgent(ACLMessage request,
+			Action action) throws ClassNotFoundException, CodecException,
+			OntologyException {
+		
+		GetMultipleBestAgents g = (GetMultipleBestAgents) action.getAction();
 		String datasethash = g.getNearestInternalFileName();
 		int count = g.getNumberOfAgents();
 
 		logInfo("DataManager.GetTheBestAgent for datafile " + datasethash);
 
-		List<JPAResult> results = DAOs.resultDAO.getResultsByDataSetHashAscendingUponErrorRate(datasethash, count);
+		List<JPAResult> results =
+				DAOs.resultDAO.getResultsByDataSetHashAscendingUponErrorRate(
+						datasethash, count);
 
 		ACLMessage reply = request.createReply();
 
 		Agents foundAgents = new Agents();
-		if (!results.isEmpty())
-		{
-			for (JPAResult result : results) {
+		if (!results.isEmpty()) {
+			for (JPAResult resultI : results) {
 				NewOptions options = new NewOptions();
 				try{
-					options = NewOptions.importXML(result.getOptions());
+					options = NewOptions.importXML(resultI.getOptions());
 				}catch(Exception e){
-					logSevere("Incompatible options in result, using default options");
+					logSevere("Incompatible options in result, " +
+							"using default options");
 				}
 				Agent agent = new Agent();
-				agent.setName(result.getAgentName());
-				agent.setType(result.getAgentName());
+				agent.setName(resultI.getAgentName());
+				agent.setType(resultI.getAgentName());
 				agent.setOptions(options.getOptions());
 				foundAgents.add(agent);
 			}
@@ -1263,12 +1672,20 @@ public class Agent_DataManager extends PikaterAgent {
 
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result _result = new Result(a.getAction(), foundAgents);
-		getContentManager().fillContent(reply, _result);
+		Result result = new Result(action.getAction(), foundAgents);
+		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
 
+	/**
+	 * Stores the given model to the given result. Both are defined by {@link Model}
+	 * wrapped in {@link SaveModel}.
+	 * 
+	 * @param request {@link ACLMessage} of the request. 
+	 * @param a {@link Action} containing {@link SaveModel} action
+	 * @return {@link ACLMessage} of the reply indicating success or failure using flags INFORM or FAILURE
+	 */
 	private ACLMessage respondToSaveModel(ACLMessage request, Action a) {
 
 		SaveModel sm = (SaveModel) a.getAction();
@@ -1280,13 +1697,21 @@ public class Agent_DataManager extends PikaterAgent {
 			logInfo("Saved Model ID: " + savedModelID);
 			reply.setPerformative(ACLMessage.INFORM);
 		} else {
-			logSevere("Couldn't be saved model for experiment ID " + sm.getModel().getResultID());
+			logSevere("Couldn't be saved model for experiment ID " +
+					sm.getModel().getResultID());
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 
 		return reply;
 	}
 
+	/**
+	 * Retrieves the given model, defined by {@link GetModel}.
+	 *  
+	 * @param request {@link ACLMessage} of the request.
+	 * @param a {@link Action} containing {@link GetModel} action
+	 * @return {@link ACLMessage} of the reply
+	 */
 	private ACLMessage respondToGetModel(ACLMessage request, Action a) {
 		GetModel gm = (GetModel) a.getAction();
 
@@ -1312,10 +1737,18 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 		return reply;
 	}
-
-	private ACLMessage respondToGetModels(ACLMessage request, Action a) {
-		//GetModels gm=(GetModels)a.getAction();
-
+	
+	/**
+	 * Retrieves all models stored in the database.
+	 * 
+	 * @param request {@link ACLMessage} of the request
+	 * @param action {@link Action} containing {@link GetModels} so that action
+	 * handler calls this method. 
+	 * @return {@link ACLMessage} containing all models stored in the database.
+	 */
+	private ACLMessage respondToGetModels(ACLMessage request,
+			Action action) {
+		
 		List<JPAModel> savedModels = DAOs.modelDAO.getAll();
 
 		Models models = new Models();
@@ -1332,7 +1765,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result result = new Result(a, models);
+		Result result = new Result(action, models);
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
@@ -1344,14 +1777,33 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws FailureException, CodecException, OntologyException {
-		String type = ((GetExternalAgentJar) a.getAction()).getType();
+	/**
+	 * <p>Retrieves an external agent (.JAR), defined by class name in
+	 * {@link GetExternalAgentJar}, from database.</p>
+	 * 
+	 * <p>Content of the JAR is copied to a file on local filesystem
+	 * with path taken from {@link CoreConfiguration#getExtAgentsPath()}.</p>
+	 * 
+	 * @param request {@link ACLMessage} received with the request.
+	 * @param action {@link Action} containing {@link GetExternalAgentJar} action
+	 * @return {@link ACLMessage} indicating success if everything went well
+	 * @throws FailureException
+	 * @throws CodecException
+	 * @throws OntologyException
+	 */
+	private ACLMessage respondToGetExternalAgentJar(ACLMessage request,
+			Action action) throws FailureException, CodecException,
+			OntologyException {
+		
+		String type = ((GetExternalAgentJar) action.getAction()).getType();
 		logInfo("getting JAR for agent type " + type);
 
-		JPAExternalAgent ea = DAOs.externalAgentDAO.getByAgentClass(type);
+		JPAExternalAgent extAgent =
+				DAOs.externalAgentDAO.getByAgentClass(type);
 
-		if (ea == null) {
-			throw new FailureException("Agent jar for type " + type + " not found in DB");
+		if (extAgent == null) {
+			throw new FailureException("Agent jar for type " +
+					type + " not found in DB");
 		} else {
 			String jarname = type.replace(".", "_") + ".jar";
 			String jarpath = CoreConfiguration.getExtAgentsPath() + jarname;
@@ -1359,7 +1811,7 @@ public class Agent_DataManager extends PikaterAgent {
 			File dest = new File(jarpath);
 			File tmp = new File(jarpath + ".tmp");
 			try {
-				FileUtils.writeByteArrayToFile(tmp, ea.getJar());
+				FileUtils.writeByteArrayToFile(tmp, extAgent.getJar());
 				Files.move(tmp, dest);
 			} catch (IOException e) {
 				throw new FailureException("Failed to write/move agent JAR");
@@ -1368,15 +1820,27 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(a, "OK");
+		Result r = new Result(action, "OK");
 		getContentManager().fillContent(reply, r);
 
 		return reply;
 	}
 
-	@SuppressWarnings("serial")
-	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
-		final String hash = ((PrepareFileUpload) a.getAction()).getHash();
+	/**
+	 * TODO: no Javadoc? :)
+	 * 
+	 * @param request
+	 * @param action
+	 * @return
+	 * @throws CodecException
+	 * @throws OntologyException
+	 * @throws IOException
+	 */
+	private ACLMessage respondToPrepareFileUpload(ACLMessage request,
+			Action action) throws CodecException, OntologyException,
+			IOException {
+		
+		final String hash = ((PrepareFileUpload) action.getAction()).getHash();
 		logInfo("respondToPrepareFileUpload");
 
 		final ServerSocket serverSocket = new ServerSocket();
@@ -1384,11 +1848,15 @@ public class Agent_DataManager extends PikaterAgent {
 		serverSocket.bind(null);
 		logInfo("Listening on port: " + serverSocket.getLocalPort());
 
-		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
+		addBehaviour(
+				new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
+			private static final long serialVersionUID = -860154937392441937L;
+
 			@Override
 			public void action() {
 				try {
-					DataTransferService.handleUploadConnection(serverSocket, hash);
+					DataTransferService
+						.handleUploadConnection(serverSocket, hash);
 				} catch (IOException e) {
 					logException("Data upload failed", e);
 				}
@@ -1401,21 +1869,41 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException {
-		String hash = ((GetFile) a.getAction()).getHash();
+	/**
+	 * Retrieves a dataset, defined by a hash wrapped in {@link GetFile},
+	 * from database. Content of the dataset is copied to a file on local
+	 * filesystem with a path taken from 
+	 * {@link CoreConfiguration#getDataFilesPath()}.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param action {@link Action} containing {@link GetFile} action
+	 * @return {@link ACLMessage} of the reply
+	 * @throws CodecException
+	 * @throws OntologyException
+	 * @throws ClassNotFoundException
+	 */
+	private ACLMessage respondToGetFile(ACLMessage request, Action action)
+			throws CodecException, OntologyException, ClassNotFoundException {
+		
+		String hash = ((GetFile) action.getAction()).getHash();
 		logInfo(new Date().toString() + " DataManager.GetFile");
 
 		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getByHash(hash);
-		if (!dslos.isEmpty())
-		{
+		
+		if (!dslos.isEmpty()) {
 			try {
 				JPADataSetLO dslo = dslos.get(0);
-				logInfo(new Date().toString() + " Found DSLO: " + dslo.getDescription() + " - " + dslo.getOID() + " - " + dslo.getHash());
+				logInfo(new Date().toString() + " Found DSLO: " +
+						dslo.getDescription() + " - " + dslo.getOID() +
+						" - " + dslo.getHash());
 
-				PGLargeObjectReader reader = PGLargeObjectReader.getForLargeObject(dslo.getOID());
+				PGLargeObjectReader reader =
+						PGLargeObjectReader.getForLargeObject(dslo.getOID());
 				logInfo(reader.toString());
-				File temp = new File(CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator") + hash);
-				File target = new File(CoreConfiguration.getDataFilesPath() + hash);
+				File temp = new File(CoreConfiguration.getDataFilesPath() +
+						"temp" + System.getProperty("file.separator") + hash);
+				File target =
+						new File(CoreConfiguration.getDataFilesPath() + hash);
 
 				FileOutputStream out = new FileOutputStream(temp);
 				try {
@@ -1425,15 +1913,26 @@ public class Agent_DataManager extends PikaterAgent {
 						out.write(buf, 0, read);
 					}
 
-					logInfo(new Date() + " Moving file to: " + target.getAbsolutePath());
+					logInfo(new Date() + " Moving file to: " +
+							target.getAbsolutePath());
 					try {
-						java.nio.file.Files.move(temp.toPath(), target.toPath(), (CopyOption) StandardCopyOption.REPLACE_EXISTING);
+						CopyOption copyOption = (CopyOption)
+								StandardCopyOption.REPLACE_EXISTING;
+						
+						java.nio.file.Files.move(temp.toPath(),
+								target.toPath(), copyOption);
+						
 						logInfo(new Date() + "File was successfully moved");
+						
 					} catch (IOException ioe) {
-						logSevere(new Date() + "Error while moving file with hash " + dslo.getHash() + " to new location " + target.getAbsolutePath());
+						logSevere(new Date() +
+								"Error while moving file with hash " +
+								dslo.getHash() + " to new location " +
+								target.getAbsolutePath());
 					}
 				} catch (IOException ioe) {
-					logException("Error while downloading file with hash " + hash + " from database", ioe);
+					logException("Error while downloading file with hash " +
+							hash + " from database", ioe);
 				} finally {
 					reader.close();
 					out.close();
@@ -1448,13 +1947,23 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(a, "OK");
+		Result r = new Result(action, "OK");
 		getContentManager().fillContent(reply, r);
 
 		return reply;
 	}
-
-	public ACLMessage respondToGetAllDatasetInfo(ACLMessage request, Action a) {
+	
+	/**
+	 * Retrieves the ID, hash and filename triples for all datasets
+	 * uploaded by users.
+	 * 
+	 * @param request {@link ACLMessage} received with the request
+	 * @param action {@link Action} containing {@link GetAllDatasetInfo} so that action
+	 * handler calls this method. 
+	 * @return {@link ACLMessage} containing {@link DatasetsInfo} with the triples
+	 */
+	public ACLMessage respondToGetAllDatasetInfo(ACLMessage request,
+			Action action) {
 		
 		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getAllUserUploaded();
 		DatasetsInfo datasetsOnto = new DatasetsInfo();
@@ -1472,7 +1981,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result result = new Result(a, datasetsOnto);
+		Result result = new Result(action, datasetsOnto);
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
@@ -1483,22 +1992,4 @@ public class Agent_DataManager extends PikaterAgent {
 
 		return reply;
 	}
-	
-	public static String getPikaterDateString(Date date) {
-		return "" + date.getTime();
-	}
-
-	public static String getCurrentPikaterDateString() {
-		return Agent_DataManager.getPikaterDateString(new Date());
-	}
-
-	public static Date getDateFromPikaterDateString(String dateString) {
-		try {
-			long millis = Long.parseLong(dateString);
-			return new Date(millis);
-		} catch (NumberFormatException e) {
-			return new Date();
-		}
-	}
-
 }

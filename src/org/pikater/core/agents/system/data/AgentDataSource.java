@@ -16,22 +16,25 @@ import java.util.List;
  * User: Kuba
  * Date: 2.5.2014
  * Time: 11:38
- * AgentData source maintains a list of files in pathToLocals directory and provides a path to datasource on request.
- * If the datasource is not in the local the agent tries to get it from other containers(TODO).
+ * AgentData source maintains a list of files in pathToLocals directory
+ * and provides a path to datasource on request. If the datasource is
+ * not in the local the agent tries to get it from other containers(TODO).
  */
 public class AgentDataSource extends PikaterAgent {
-    /**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2175414070329509621L;
 
-	private static final String pathToLocalSources =
-            "core" + System.getProperty("file.separator") +
-                    "data" + System.getProperty("file.separator") +
-                    "dataSources" + System.getProperty("file.separator");
-    private HashSet<String> ownedDataSources=new HashSet<String>();
-    public static String SERVICE_TYPE ="AgentDataSource";
+	private static final String pathToLocalSources = "core" +
+			System.getProperty("file.separator") +
+			"data" + System.getProperty("file.separator") +
+			"dataSources" + System.getProperty("file.separator");
+	
+    private HashSet<String> ownedDataSources = new HashSet<String>();
+    public static String SERVICE_TYPE = "AgentDataSource";
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -42,14 +45,20 @@ public class AgentDataSource extends PikaterAgent {
 	}
 	
     //TODO: move to more appropriate location
-    public static  void SerializeFile(Serializable toSerialize,String fileName) throws IOException {
-        FileOutputStream fileOut = new FileOutputStream(pathToLocalSources+fileName);
+    public static  void SerializeFile(Serializable toSerialize,
+    		String fileName) throws IOException {
+    	
+        FileOutputStream fileOut =
+        		new FileOutputStream(pathToLocalSources+fileName);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
         out.writeObject(toSerialize);
         out.close();
         fileOut.close();
     }
 
+	/**
+	 * Agent setup
+	 */
     protected void setup() {
         try {
             initDefault();
@@ -60,27 +69,25 @@ public class AgentDataSource extends PikaterAgent {
         }
     }
 
-    public String getPathToDataSource(String dataSourceName)
-    {
-      if (ownedDataSources.contains(dataSourceName))
-      {
+    public String getPathToDataSource(String dataSourceName) {
+    	
+      if (ownedDataSources.contains(dataSourceName)) {
               return pathToLocalSources+dataSourceName;
-      }
-        else
-      {
+      } else {
           throw new IllegalArgumentException();
           //TODO: obtain from other containers
       }
     }
 
-    public void addDataSourceToOwned(String dataSourceName)
-    {
+    public void addDataSourceToOwned(String dataSourceName) {
           ownedDataSources.add(dataSourceName);
     }
 
     private void cleanup() throws IOException {
-        logInfo("Cleaning local datasources directory from the datasources of the previous run");
-        File localDataSourcesDirectory=new File(pathToLocalSources);
+        logInfo("Cleaning local datasources directory "
+        		+ "from the datasources of the previous run");
+        
+        File localDataSourcesDirectory = new File(pathToLocalSources);
         FileUtils.cleanDirectory(localDataSourcesDirectory);
     }
 

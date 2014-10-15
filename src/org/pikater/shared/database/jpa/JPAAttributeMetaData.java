@@ -7,6 +7,15 @@ import javax.persistence.Table;
 
 import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 
+/**
+ * Class {@link JPAAttributeMetaData} represents a record about dataset's attribute, containing
+ * data about common attribute properties (e.g. whether the attribute is target or not).
+ * <p>
+ * From this class are inherited classes, that store more specific properties based upon attributes type.
+ * 
+ * @see org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData
+ * @see org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData
+ */
 @Entity
 @Table(name="AttributeMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)

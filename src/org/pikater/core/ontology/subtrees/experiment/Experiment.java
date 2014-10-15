@@ -2,11 +2,13 @@ package org.pikater.core.ontology.subtrees.experiment;
 
 import jade.content.Concept;
 
+/**
+ * Represents a part of a batch. Experiments are created by {@link Parser}.
+ * 
+ * @author stepan
+ */
 public class Experiment implements Concept {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2725442756148463745L;
 
 	private int id;
@@ -15,13 +17,25 @@ public class Experiment implements Concept {
 	private int workflow;
 	private Integer model;
 
+	/**
+	 * Get the {@link Experiment} ID
+	 * @return
+	 */
 	public int getId() {
 		return id;
 	}
+	/**
+	 * Set the {@link Experiment} ID
+	 * @param id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * Get the Status
+	 * @return
+	 */
 	public String getStatus() {
 		return status;
 	}
@@ -29,23 +43,47 @@ public class Experiment implements Concept {
 		this.status = status;
 	}
 
+	/**
+	 * Get the {@link Batch} ID
+	 * @return
+	 */
 	public int getBatchID() {
 		return batchID;
 	}
+	/**
+	 * Set the {@link Batch} ID
+	 * @return
+	 */
 	public void setBatchID(int batchID) {
 		this.batchID = batchID;
 	}
 
+	/**
+	 * Get the workflow
+	 * @return
+	 */
 	public int getWorkflow() {
 		return workflow;
 	}
+	/**
+	 * Set the workflow
+	 * @param workflow
+	 */
 	public void setWorkflow(int workflow) {
 		this.workflow = workflow;
 	}
 
+	/**
+	 * Get the model ID
+	 * @return
+	 */
 	public Integer getModel() {
 		return model;
 	}
+	/**
+	 * Set the model ID
+	 * @param model
+	 */
 	public void setModel(Integer model) {
 		this.model = model;
 	}

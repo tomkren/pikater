@@ -15,16 +15,29 @@ import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.metadata.NewComputedData;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 
+/**
+ * 
+ * Class offers possibility to call the most used
+ * requests to the {@link Agent_MetadataQueen}
+ *
+ */
 public class MetadataService {
 	
+	/**
+	 * Sends a request to generate {@link Metadata} for the DataSet
+	 * to {@link Agent_MetadataQueen}
+	 * @param agent
+	 * @param dataSetID
+	 * @param userID
+	 */
 	public static void requestMetadataForDataset(PikaterAgent agent,
 			int dataSetID, int userID) {
 		
 		AID receiver = new AID(CoreAgents.METADATA_QUEEN.getName(), false);
 
-		NewDataset nds = new NewDataset();
-		nds.setUserID(userID);
-		nds.setDataSetID(dataSetID);
+		NewDataset newDataset = new NewDataset();
+		newDataset.setUserID(userID);
+		newDataset.setDataSetID(dataSetID);
 		
 		agent.logInfo("Sending request to store metadata for DataSetID: " + dataSetID);
 
@@ -35,13 +48,16 @@ public class MetadataService {
 			request.addReceiver(receiver);
 			request.setLanguage(agent.getCodec().getName());
 			request.setOntology(ontology.getName());
-			agent.getContentManager().fillContent(request, new Action(receiver, nds));
+			agent.getContentManager().fillContent(request, new Action(receiver, newDataset));
 
 			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request, 10000);
-			if (reply == null)
+			if (reply == null) {
 				agent.logSevere("Reply not received.");
-			else
-				agent.logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+			} else {
+				agent.logInfo("Reply received: " +
+						ACLMessage.getPerformative(reply.getPerformative()) +
+						" " + reply.getContent());
+			}
 		} catch (CodecException e) {
 			agent.logException("Codec error occurred: " + e.getMessage(), e);
 		} catch (OntologyException e) {
@@ -51,16 +67,24 @@ public class MetadataService {
 		}
 	}
 	
+	/**
+	 * Sends a request to generate {@link Metadata} for the computed data
+	 * to {@link Agent_MetadataQueen}
+	 * @param agent
+	 * @param computedDataID
+	 * @param userID
+	 */
 	public static void requestMetadataForComputedData(PikaterAgent agent,
 			int computedDataID, int userID) {
 
 		AID receiver = new AID(CoreAgents.METADATA_QUEEN.getName(), false);
 
-		NewComputedData ncd = new NewComputedData();
-		ncd.setUserID(userID);
-		ncd.setComputedDataID(computedDataID);
+		NewComputedData newComputedData = new NewComputedData();
+		newComputedData.setUserID(userID);
+		newComputedData.setComputedDataID(computedDataID);
 		
-		agent.logInfo("Sending request to store metadata for ComputedDataID: " + computedDataID);
+		agent.logInfo("Sending request to store metadata for "
+				+ "ComputedDataID: " + computedDataID);
 
 		try {
 			Ontology ontology = MetadataOntology.getInstance();
@@ -69,13 +93,18 @@ public class MetadataService {
 			request.addReceiver(receiver);
 			request.setLanguage(agent.getCodec().getName());
 			request.setOntology(ontology.getName());
-			agent.getContentManager().fillContent(request, new Action(receiver, ncd));
+			
+			Action action = new Action(receiver, newComputedData);
+			agent.getContentManager().fillContent(request, action);
 
 			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
-			if (reply == null)
+			if (reply == null) {
 				agent.logSevere("Reply not received.");
-			else
-				agent.logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+			} else {
+				agent.logInfo("Reply received: " +
+						ACLMessage.getPerformative(reply.getPerformative()) +
+						" " + reply.getContent());
+			}
 		} catch (CodecException e) {
 			agent.logException("Codec error occurred: " + e.getMessage(), e);
 		} catch (OntologyException e) {

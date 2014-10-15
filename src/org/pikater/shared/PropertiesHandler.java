@@ -10,10 +10,18 @@ import java.util.logging.Level;
 
 import org.pikater.shared.logging.database.PikaterDBLogger;
 
+/**
+ * Provides routines for subclasses to open a ".properties" file
+ * and fetch properties from it. All of the routines are properly
+ * handled and logged.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class PropertiesHandler
 {
 	/**
-	 * A routine for opening a .properties files.
+	 * Routine for opening a .properties files.
+	 * 
 	 * @param resource the desired .properties file
 	 * @param logger logger to use in case of problems
 	 * @return the properties file wrapper of null in case of missing file
@@ -63,10 +71,11 @@ public abstract class PropertiesHandler
 	}
 	
 	/**
-	 * Fetches a property from the supplied loaded properties or logs an error and returns null.
-	 * @param properties The loaded properties.
-	 * @param property Key of the property to be fetched.
-	 * @return Trimmed (side effect) value of the property to be fetched.
+	 * Returns the given property from the given loaded properties.
+	 * 
+	 * @param properties the loaded properties
+	 * @param property key of the property to be fetched
+	 * @return the designated result or null if the property was not found
 	 */
 	public static String getProperty(Properties properties, String property)
 	{

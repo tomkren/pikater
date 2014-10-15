@@ -1,7 +1,15 @@
 package org.pikater.core.ontology.subtrees.account;
 
+import org.pikater.core.agents.system.Agent_DataManager;
+
 import jade.content.AgentAction;
 
+/**
+ * A message sent to {@link Agent_DataManager} which should respond
+ * with the requested user ID.
+ * 
+ * @author stepan
+ */
 public class GetUserID implements AgentAction {
 
 	/**

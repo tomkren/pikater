@@ -32,21 +32,22 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 	public DSVisOneGeneratorJob() {
 		super(4);
 	}
-
+	
 	@Override
-	public boolean argumentCorrect(int index, Object arg) {
-		switch (index) {
-		case 0:
-			return arg instanceof JPADataSetLO;
-		case 1:
-			return arg instanceof JPAAttributeMetaData[];
-		case 2:
-			return arg instanceof JPAAttributeMetaData;
-		case 3:
-			return arg instanceof IProgressDialogResultHandler;
-		default:
-			return false;
-		}
+	public boolean argumentCorrect(Object argument, int argIndex)
+	{
+		switch (argIndex) {
+			case 0:
+				return argument instanceof JPADataSetLO;
+			case 1:
+				return argument instanceof JPAAttributeMetaData[];
+			case 2:
+				return argument instanceof JPAAttributeMetaData;
+			case 3:
+				return argument instanceof IProgressDialogResultHandler;
+			default:
+				return false;
+			}
 	}
 
 	@Override

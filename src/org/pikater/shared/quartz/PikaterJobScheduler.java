@@ -6,6 +6,12 @@ import org.pikater.shared.quartz.jobs.crons.RemoveExpiredTrainedModels;
 import org.pikater.shared.util.ReflectionUtils;
 import org.quartz.SchedulerException;
 
+/**
+ * Utility class encapsulating {@link MyJobScheduler}, providing static
+ * access to it and static (e.g.) init/destroy routines.
+ * 
+ * @author SkyCrawl
+ */
 public class PikaterJobScheduler
 {
 	private static MyJobScheduler staticScheduler = null;
@@ -14,8 +20,12 @@ public class PikaterJobScheduler
 	// SCHEDULER HANDLING
 	
 	/**
-	 * Initialize and start the cron job scheduler. Your application will not terminate until you call the
-	 * {@link #shutdown} method, because there will be active threads.
+	 * Initialize and start the cron job scheduler. Your application will not
+	 * terminate until you call the {@link #shutdownStaticScheduler} method,
+	 * because there will be active threads.
+	 * 
+	 * @param quartzConfAbsPath
+	 * @throws {@link IllegalStateException}
 	 */
 	public static synchronized void initStaticScheduler(String quartzConfAbsPath)
 	{
@@ -38,7 +48,9 @@ public class PikaterJobScheduler
 	}
 	
 	/**
-	 * Shutdown the scheduler. 
+	 * Shutdown the scheduler.
+	 * 
+	 * @return whether there was an error shutting down the scheduler
 	 */
 	public static synchronized boolean shutdownStaticScheduler()
 	{
@@ -64,6 +76,13 @@ public class PikaterJobScheduler
 	//-----------------------------------------------------------
 	// CONVENIENCE ROUTINES
 	
+	/**
+	 * Gets the scheduler or throws an exception if {@link #initStaticScheduler(String)}
+	 * has not been called.
+	 *  
+	 * @return
+	 * @throws {@link IllegalStateException} 
+	 */
 	public static MyJobScheduler getJobScheduler()
 	{
 		if(staticScheduler == null)
@@ -76,6 +95,10 @@ public class PikaterJobScheduler
 		}
 	}
 	
+	/**
+	 * One method to automatically schedule all cron jobs defined in the
+	 * './jobs/crons' package.
+	 */
 	@SuppressWarnings("unchecked")
 	public static void defineCronJobs()
 	{

@@ -22,17 +22,18 @@ public class ResourceExpirationJob extends AbstractJobWithArgs {
 	public ResourceExpirationJob() {
 		super(2);
 	}
-
+	
 	@Override
-	public boolean argumentCorrect(int index, Object arg) {
-		switch (index) {
-		case 0:
-			return arg instanceof UUID;
-		case 1:
-			return arg instanceof IRegistrarResource;
-		default:
-			return false;
-		}
+	public boolean argumentCorrect(Object argument, int argIndex)
+	{
+		switch (argIndex) {
+			case 0:
+				return argument instanceof UUID;
+			case 1:
+				return argument instanceof IRegistrarResource;
+			default:
+				return false;
+			}
 	}
 
 	@Override

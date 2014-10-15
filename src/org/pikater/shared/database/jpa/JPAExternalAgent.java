@@ -13,7 +13,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-
+/**
+ * Class {@link JPAExternalAgent} represents a record about external agents.
+ * The external agents are not stored as large objects, so this class is fully compatible
+ * with JPA implementation.
+ */
 @Entity	
 @Table(
 		name="ExternalAgent",

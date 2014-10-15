@@ -6,6 +6,14 @@ import java.util.logging.Logger;
 import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.IPikaterLogger;
 
+/**
+ * Primary logger for core system. This logger could be easily "extended"
+ * to send logged information to the web application, where it would be
+ * logged centrally. Either define your own servlets/RPC or use (for example)
+ * log4j which should provide such feature.
+ * 
+ * @author SkyCrawl
+ */
 public class ConsoleLogger extends GeneralPikaterLogger
 {
 	private static final IPikaterLogger innerLogger = createPikaterLogger(Logger.getAnonymousLogger());

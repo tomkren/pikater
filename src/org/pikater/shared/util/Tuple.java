@@ -1,5 +1,13 @@
 package org.pikater.shared.util;
 
+/**
+ * Standard tuple implementation. May be used in collections and sets.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <V1>
+ * @param <V2>
+ */
 public class Tuple<V1, V2>
 {
 	private V1 value1;

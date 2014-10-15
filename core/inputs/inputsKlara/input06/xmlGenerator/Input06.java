@@ -76,6 +76,7 @@ public final class Input06 {
 		comAgent.addOption(optionM);
 		comAgent.setTrainingData(dataSourceSunny);
 		comAgent.setTestingData(dataSourceRainy);
+		comAgent.setValidationData(dataSourceRainy);
 		comAgent.setEvaluationMethod(evaluationMethod);
 
 		DataSourceDescription computingAgentDataSource = new DataSourceDescription();

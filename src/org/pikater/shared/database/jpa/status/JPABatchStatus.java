@@ -1,5 +1,8 @@
 package org.pikater.shared.database.jpa.status;
 
+/**
+ * Enum used to define several statuses of an executed batch.
+ */
 public enum JPABatchStatus
 {
 	/*

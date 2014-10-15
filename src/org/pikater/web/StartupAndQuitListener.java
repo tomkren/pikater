@@ -56,7 +56,8 @@ public class StartupAndQuitListener implements ServletContextListener {
 			IOUtils.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
 
 			announceCheckOrAction("initializing task scheduler");
-			PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
+			PikaterJobScheduler.initStaticScheduler(IOUtils.joinPathComponents(
+					IOUtils.getAbsoluteWEBINFCLASSESPath(), IOUtils.getRelativePath(PikaterJobScheduler.class)));
 
 			if (WebAppConfiguration.isCoreEnabled()) {
 				announceCheckOrAction("checking core connection");

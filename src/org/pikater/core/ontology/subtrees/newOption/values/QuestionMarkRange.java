@@ -20,8 +20,6 @@ public class QuestionMarkRange implements IValidatedValueData
 	/**
 	 * Basic constructor, calls the other one & sets the {@link #countOfValuesToTry}
 	 * field to default.
-	 * @param min
-	 * @param max
 	 */
     public QuestionMarkRange(IComparableValueData min, IComparableValueData max)
     {
@@ -29,9 +27,6 @@ public class QuestionMarkRange implements IValidatedValueData
     }
     /**
      * Main constructor.
-     * @param min
-     * @param max
-     * @param countOfValuesToTry
      */
 	public QuestionMarkRange(IComparableValueData min, IComparableValueData max, int countOfValuesToTry)
 	{
@@ -39,9 +34,6 @@ public class QuestionMarkRange implements IValidatedValueData
 	}
 	/**
 	 * More or less a copy constructor. For internal use only.
-	 * @param min
-	 * @param max
-	 * @param countOfValuesToTry
 	 */
 	private QuestionMarkRange(int countOfValuesToTry, RangeRestriction userDefinedRestriction)
 	{

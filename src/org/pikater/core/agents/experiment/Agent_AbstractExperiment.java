@@ -52,7 +52,8 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					logException("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " +
+						e.getMessage(), e);
 				} catch (CodecException e) {
 					logException("Codec problem: " + e.getMessage(), e);
 				}
@@ -70,7 +71,8 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 	private ACLMessage respondToGetAgentInfo(ACLMessage request) {
 		
 		AgentInfo agentInfo = getAgentInfo();
-		AID receiver = new AID(CoreAgents.AGENTINFO_MANAGER.getName(), false);
+		AID receiver =
+				new AID(CoreAgents.AGENTINFO_MANAGER.getName(), false);
 		
 		ACLMessage agentInfoMsg = request.createReply();
 		agentInfoMsg.setPerformative(ACLMessage.INFORM);

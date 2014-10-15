@@ -17,6 +17,14 @@ import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.logging.database.PikaterDBLogger;
 
+/**
+ * Class {@link AbstractDAO} contains general functions to manipulate with entities.
+ * These general functions are used by classes, that are inherited from this class,
+ * in functions specific to that particular entity.
+ *  
+ *
+ * @param <T> class of entity, for which actions are performed.
+ */
 public abstract class AbstractDAO<T extends JPAAbstractEntity>
 {
 	private Class<T> ec;
@@ -50,6 +58,10 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 
 	public abstract String getEntityName();
 	
+	/**
+	 * Function retrieving all instances of that spicific entity.
+	 * @return list of all entities
+	 */
 	public List<T> getAll(){
 		return EntityManagerInstancesCreator
 				.getEntityManagerInstance()
@@ -58,7 +70,13 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 	}
 	
 	
-	
+	/**
+	 * Function retrieving an entity based upon the primary key. Currently primary
+	 * key is an integer generated at entity persistence.
+	 * @param ID of the searched entity
+	 * @param era type of action, that should be performed if no entity is found
+	 * @return the entity with the given ID
+	 */
 	public T getByID(int ID, EmptyResultAction era){
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		T item = null;
@@ -84,16 +102,35 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	/**
+	 * Function retrieving an entity based upon its ID. If no entity is found
+	 * null is returnd and error message is logged. 
+	 * @param ID of the searched entity 
+	 * @return the entity with the given ID
+	 */
 	public T getByID(int ID)
 	{
 		return getByID(ID, EmptyResultAction.LOG_NULL);
 	}
 	
+	/**
+	 * Checks whether the entity with the given ID is available
+	 * @param ID of the entity 
+	 * @return true if the entity is present
+	 */
 	public boolean existsByID(int ID){
 		return getByID(ID, EmptyResultAction.NULL)!=null;
 	}
 	
-	
+	/**
+	 * Updates the value of an entity with the values from the changedEntity variable.
+	 * <p>
+	 * This function is used due to the fact, that update operations should be done in 
+	 * persistence context.
+	 * <p>
+	 * To simplify the update process all variables of a particular entity are updated
+	 * @param changedEntity object with the new values
+	 */
 	public void updateEntity(T changedEntity){
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
@@ -109,6 +146,10 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}	
 	
+	/**
+	 * Stores a new - not yet persisted - entity to the database.
+	 * @param newEntity entity to be stored
+	 */
 	public void storeEntity(Object newEntity){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
@@ -123,6 +164,10 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	/**
+	 * Deletes an entity from the database.
+	 * @param entityToRemove Object to be removed.
+	 */
 	public void deleteEntity(T entityToRemove){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
@@ -138,6 +183,12 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	/**
+	 * This function should be used to run named queries that have one integer number
+	 * in result set. Usually usage of this function is call of count queries.
+	 * @param queryName name of named query
+	 * @return number that was query's result
+	 */
 	protected int getByCountQuery(String queryName){
 			return ((Long)EntityManagerInstancesCreator
 					.getEntityManagerInstance()
@@ -146,6 +197,14 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 					.intValue();
 	}
 	
+	/**
+	 * This function should be used to run named queries that have one integer number
+	 * in result set and they need one parameter to be set. Usually usage of this function is call of count queries.
+	 * @param queryName name of named query
+	 * @param paramName name of the parameter in the query
+	 * @param param value of the parameter
+	 * @return number that was query's result
+	 */
 	protected int getByCountQuery(String queryName, String paramName, Object param){
 		return ((Long)EntityManagerInstancesCreator
 				.getEntityManagerInstance()
@@ -155,6 +214,16 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.intValue();
 	}
 	
+	/**
+	 * This function should be used to run named queries that have one integer number
+	 * in result set and they need two parameters to be set. Usually usage of this function is call of count queries.
+	 * @param queryName name of named query
+	 * @param paramOneName name of the first parameter
+	 * @param paramOne value of the first parameter
+	 * @param paramTwoName name of the second parameter
+	 * @param paramTwo value of the second parameter
+	 * @return number that was query's result
+	 */
 	protected int getByCountQuery(String queryName, String paramOneName, Object paramOne, String paramTwoName, Object paramTwo){
 		return ((Long)EntityManagerInstancesCreator
 				.getEntityManagerInstance()
@@ -165,6 +234,11 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.intValue();
 	}
 	
+	/**
+	 * Runs a named query and returns a list of entities that satisfy the query
+	 * @param queryName name of named query
+	 * @return list of entities returned by the query
+	 */
 	protected List<T> getByTypedNamedQuery(String queryName){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -177,6 +251,13 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	/**
+	 * Runs a named query that needs one parameter to be set and returns a list of entities that satisfy the query. 
+	 * @param queryName name of named query
+	 * @param paramName name of the parameter in query
+	 * @param param value of the parameter
+	 * @return list of entities returned by the query
+	 */
 	protected List<T> getByTypedNamedQuery(String queryName,String paramName,Object param){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -190,6 +271,17 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	/**
+	 * Runs a named query that needs one parameter to be set. 
+	 * Returns a list of entities that satisfy the query starting from offset position
+	 * and in maximal amount specified.
+	 * @param queryName name of named query
+	 * @param paramName  name of the parameter in the query
+	 * @param param value of the parameter
+	 * @param offset starting position of entities
+	 * @param maxResultSize maximal number of entities returned
+	 * @return list of entities returned by the query
+	 */
 	protected List<T> getByTypedNamedQuery(String queryName,String paramName,Object param, int offset,int maxResultSize){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -205,6 +297,15 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	/**
+	 * Runs a named query that needs two parameters to be set and returns a list of entities that satisfy the query.
+	 * @param queryName name of named query
+	 * @param paramName1 name of the first parameter
+	 * @param param1 value of the first parameter
+	 * @param paramName2 name of the second parameter
+	 * @param param2 value of the second parameter
+	 * @return list of entities returned by the query
+	 */
 	protected List<T> getByTypedNamedQueryDouble(String queryName,String paramName1,Object param1,String paramName2,Object param2){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -219,6 +320,18 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}	
 	
+	/**
+	 * Runs a named query that needs two parameters to be set.
+	 * Returns a list of entities that satisfy the query, starting from offset position in specified maximal amount.
+	 * @param queryName name of named query
+	 * @param paramName1 name of the first parameter
+	 * @param param1 value of the first parameter
+	 * @param paramName2 name of the second parameter
+	 * @param param2 value of the second parameter
+	 * @param offset starting position of entities
+	 * @param maxResultCount maximal number of entities returned
+	 * @return list of entities returned by the query
+	 */
 	protected List<T> getByTypedNamedQueryDouble(String queryName,String paramName1,Object param1,String paramName2,Object param2, int offset, int maxResultCount){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -235,6 +348,13 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}	
 	
+	/**
+	 * Runs a named query and returns the first item returned by the query. If no entity is found null is returned.
+	 * @param queryName name of named query
+	 * @param paramName name of the parameter
+	 * @param param value of the parameter
+	 * @return first entity returned by the query
+	 */
 	protected T getSingleResultByTypedNamedQuery(String queryName,String paramName,Object param){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try {
@@ -251,6 +371,10 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	//----------------------------------------------
+	//-------Functions using Criteria API-----------
+	//----------------------------------------------
+	
 	protected CriteriaBuilder getCriteriaBuilder(){
 		return EntityManagerInstancesCreator
 				.getEntityManagerInstance()
@@ -259,6 +383,10 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 	
 	private Root<T> root=null;
 	
+	/**
+	 * Creates the new root element for query building specific for particular entity class.
+	 * @return root element for query building
+	 */
 	protected Root<T> getRoot(){
 		if(root==null){
 			root=getCriteriaBuilder().createQuery(ec).from(ec);
@@ -266,10 +394,19 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		return root;
 	}
 	
+	/**
+	 * Creates path to entity's corresponding columns (in database representation) based upon column used in views.
+	 * @param column of the table
+	 * @return path to entity's corresponding variable
+	 */
 	protected Path<Object> convertColumnToJPAParam(ITableColumn column){
 		return getRoot().get("id");
 	}
 	
+	/**
+	 * Function returning all entities using criteria query.
+	 * @return list of all entities
+	 */
 	protected List<T> getByCriteriaQuery(){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaQuery<T> query=getCriteriaBuilder().createQuery(ec);
@@ -282,6 +419,11 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.getResultList();
 	}
 	
+	/**
+	 * Performs a criteria query that returns entities satisfying the given predicate. 
+	 * @param wherePredicate predicate that must be satisfied by the returned entities
+	 * @return list of entities
+	 */
 	protected List<T> getByCriteriaQuery(Predicate wherePredicate){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaQuery<T> query=getCriteriaBuilder().createQuery(ec);
@@ -295,6 +437,11 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.getResultList();
 	}
 	
+	/**
+	 * Performs a criteria query that returns the number of entities satisfying the given predicate.
+	 * @param wherePredicate predicate that must be satisfied by the returned entities
+	 * @return number of entities satisfying the predicate
+	 */
 	protected int getByCriteriaQueryCount(Predicate wherePredicate){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaQuery<Long> query=getCriteriaBuilder().createQuery(Long.class);
@@ -309,6 +456,14 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.intValue();
 	}
 	
+	/**
+	 * Performs a criteria query that returns all entities from offset position in a specified maximum amount ordered according to the given column in the view.
+	 * @param sortColumn column defining the order of entities
+	 * @param sortOrder ascending or descending ordering
+	 * @param offset start position of the entities
+	 * @param maxResultCount maximum number of entities to be returned
+	 * @return list of entities
+	 */
 	protected List<T> getByCriteriaQuery(ITableColumn sortColumn, SortOrder sortOrder, int offset, int maxResultCount){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb=getCriteriaBuilder();
@@ -334,6 +489,16 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.getResultList();
 	}
 	
+	/**
+	 * Performs a criteria criteria that returns all entities satisfying the given predicate.
+	 * The result list contains entities sorted according to a given column in ascending or descending order.
+	 * @param wherePredicate predicate that must be satisfied by the returned entities
+	 * @param sortColumn column defining the order of entities
+	 * @param sortOrder ascending or descending ordering
+	 * @param offset start position of entities
+	 * @param maxResultCount maximum number of entities 
+	 * @return list of entities
+	 */
 	protected List<T> getByCriteriaQuery(Predicate wherePredicate, ITableColumn sortColumn, SortOrder sortOrder, int offset, int maxResultCount){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb=getCriteriaBuilder();
@@ -359,6 +524,10 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.getResultList();
 	}
 	
+	/**
+	 * Deletes an entity with the given ID from the database.
+	 * @param id of the entity to be removed
+	 */
 	public void deleteEntityByID(int id){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();

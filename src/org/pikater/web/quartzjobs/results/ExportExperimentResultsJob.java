@@ -22,20 +22,20 @@ public class ExportExperimentResultsJob extends InterruptibleImmediateOneTimeJob
 	public ExportExperimentResultsJob() {
 		super(3);
 	}
-
+	
 	@Override
-	public boolean argumentCorrect(int index, Object arg) {
-		switch (index) {
-		case 0:
-			return arg instanceof JPAExperiment;
-		case 1:
-			return arg instanceof File;
-		case 2:
-			return arg instanceof IProgressDialogResultHandler;
+	public boolean argumentCorrect(Object argument, int argIndex) {
+		switch (argIndex) {
+			case 0:
+				return argument instanceof JPAExperiment;
+			case 1:
+				return argument instanceof File;
+			case 2:
+				return argument instanceof IProgressDialogResultHandler;
 
-		default:
-			return false;
-		}
+			default:
+				return false;
+			}
 	}
 
 	@Override

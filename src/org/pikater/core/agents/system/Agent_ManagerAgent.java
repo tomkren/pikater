@@ -36,11 +36,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * 
+ * Agent which controls other agents
+ * performs creating, killing, loading...
+ *
+ */
 public class Agent_ManagerAgent extends PikaterAgent {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4898611781694963107L;
 
 	private Map<String, AgentController> agentsNames =
@@ -48,6 +51,9 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	private ManagerAgentRequestResponder responder =
 			new ManagerAgentRequestResponder(this);
 
+	/**
+	 * Get ontologies which is using this agent
+	 */
 	@Override
 	public List<Ontology> getOntologies() {
 
@@ -60,6 +66,9 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		return ontologies;
 	}
 
+	/**
+	 * Agent setup
+	 */
 	@Override
 	protected void setup() {
 		initDefault();
@@ -78,12 +87,12 @@ public class Agent_ManagerAgent extends PikaterAgent {
 
 
 		Ontology ontology = AgentManagementOntology.getInstance();
-		MessageTemplate mt = MessageTemplate.and(
+		MessageTemplate msgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchOntology(ontology.getName()),
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
 
-		addBehaviour(new AchieveREResponder(this, mt) {
+		addBehaviour(new AchieveREResponder(this, msgTemplate) {
 
 			private static final long serialVersionUID = 7L;
 
@@ -91,24 +100,25 @@ public class Agent_ManagerAgent extends PikaterAgent {
 			protected ACLMessage handleRequest(ACLMessage request)
 					throws NotUnderstoodException, RefuseException {
 				try {
-					Action a = (Action) getContentManager().extractContent(
-							request);
-					if (a.getAction() instanceof LoadAgent) {
+					Action action = (Action)
+							getContentManager().extractContent(request);
+					
+					if (action.getAction() instanceof LoadAgent) {
 						
 						return responder.respondToLoadAgent(request);
-					} else if (a.getAction() instanceof SaveAgent) {
+					} else if (action.getAction() instanceof SaveAgent) {
 
 						return responder.respondToSaveAgent(request);
-					} else if (a.getAction() instanceof CreateAgent) {
+					} else if (action.getAction() instanceof CreateAgent) {
 						
 						return responder.respondToCreateAgent(request);
-					} else if (a.getAction() instanceof KillAgent) {
+					} else if (action.getAction() instanceof KillAgent) {
 					
 						return responder.respondToKillAgent(request);
-					} else if (a.getAction() instanceof GetComputerInfo) {
+					} else if (action.getAction() instanceof GetComputerInfo) {
 						
 						return responder.respondToGetComputerInfo(request);
-					} else if (a.getAction() instanceof Ping) {
+					} else if (action.getAction() instanceof Ping) {
 						
 						return responder.respondToPing(request);
 					}
@@ -131,7 +141,14 @@ public class Agent_ManagerAgent extends PikaterAgent {
 
 	}
 
-	public String _createAgent(String type, String name, Arguments args) {
+	/**
+	 * Creates agent in this container
+	 * 
+	 * @param type - class of agent
+	 * @param name - agent name
+	 */
+	public String createAgentInMyContainer(String type, String name,
+			Arguments args) {
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
@@ -140,18 +157,21 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		if (args != null) {
 			args2 = new Argument[args.size()];
 			int i = 0;
-			for (Argument arg : args.getArguments()) {
-				args2[i] = arg;
+			for (Argument argI : args.getArguments()) {
+				args2[i] = argI;
 				i++;
 			}
 		}
 		
 		String generatedName = generateName(name == null ? type : name);
+		
 		try {
 			try {
 				doCreateAgent(generatedName, type, container, args2);
-			} catch (StaleProxyException e) { // we may have the class in DB
-				logInfo("agent creation failed, trying to get JAR for type " + type + " from DB");
+			} catch (StaleProxyException e) {
+				// we may have the class in DB
+				logInfo("agent creation failed, trying to get JAR for type " +
+						type + " from DB");
 				DataManagerService.getExternalAgent(this, type);
 				// DataManager will save the JAR to FS if it finds it so we can retry
 				doCreateAgent(generatedName, type, container, args2);
@@ -166,12 +186,27 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		return generatedName;
 	}
 	
-	private void doCreateAgent(String name, String type, PlatformController container, Argument[] args) throws ControllerException {
+	/**
+	 * Does agent creating in a selected container
+	 * 
+	 * @param name - agent name
+	 * @param type - class of agent
+	 * @throws ControllerException
+	 */
+	private void doCreateAgent(String name, String type,
+			PlatformController container,
+			Argument[] args) throws ControllerException {
+		
 		AgentController agent = container.createNewAgent(name, type, args);
 		agentsNames.put(name, agent);
 		agent.start();
 	}
 
+	/**
+	 * Generates a unused name for a new agent
+	 * 
+	 * @param name - root of the name
+	 */
 	public String generateName(String name) {
 		String result = name;
 		if (nodeName != null && !nodeName.isEmpty()) {
@@ -188,7 +223,6 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		for (Integer i = 0; i < 10000; i++) {
 			String currentName = name + i.toString();
 			try {
-				// TODO: write without exceptions
 				container.getAgent(currentName);
 			} catch (ControllerException exc) {
 				// agent with the same name does not exist, we are good

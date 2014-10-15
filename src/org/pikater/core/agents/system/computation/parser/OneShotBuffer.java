@@ -3,6 +3,7 @@ package org.pikater.core.agents.system.computation.parser;
 import org.pikater.core.agents.system.computation.graph.edges.EdgeValue;
 
 /**
+ * Buffer with single element
  * User: Kuba
  * Date: 18.5.2014
  * Time: 12:44
@@ -11,7 +12,11 @@ public class OneShotBuffer extends AbstractComputationBuffer<EdgeValue> {
     private EdgeValue shot;
     private boolean data; 
     private String targetInput;
-    
+
+    /**
+     *
+     * @param shot Single element
+     */
     public OneShotBuffer(EdgeValue shot)
     {
          this.shot=shot;
@@ -52,12 +57,8 @@ public class OneShotBuffer extends AbstractComputationBuffer<EdgeValue> {
 	public void setData(boolean data) {
 		this.data = data;
 	}
-	
-	@Override
-	public void setTargetInput(String targetInput) {
-		this.targetInput = targetInput;		
-	}	
-	@Override
+
+    @Override
 	public String getTargetInput() {
 		return targetInput;
 	}

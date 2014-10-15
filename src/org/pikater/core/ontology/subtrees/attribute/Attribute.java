@@ -33,7 +33,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param dateFormat
 	 *            the date_format to set
 	 */
 	public void setDate_format(String dateFormat) {
@@ -48,7 +47,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param name
 	 *            the name to set
 	 */
 	public void setName(String name) {
@@ -63,7 +61,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param type
 	 *            the type to set
 	 */
 	public void setType(String type) {
@@ -78,7 +75,6 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 * @param values
 	 *            the values to set
 	 */
 	public void setValues(List values) {
@@ -87,8 +83,7 @@ public class Attribute implements Concept {
 
 	// =======================================
 	public weka.core.Attribute toWekaAttribute() {
-		if (values != null && !values.isEmpty())
-		{
+		if (values != null && values.size() > 0) {
 			FastVector my_nominal_values = new FastVector();
 			Iterator itr = values.iterator();
 			while (itr.hasNext()) {
@@ -141,8 +136,7 @@ public class Attribute implements Concept {
 	}
 
 	String stringValue(double _dval) {
-		if (values != null && !values.isEmpty())
-		{
+		if (values != null && values.size() > 0) {
 			return Utils.quote((String) values.get((int) _dval));
 		} else if (type.equals(NUMERIC_TYPE)) {
 			return Utils.doubleToString(_dval, 6);

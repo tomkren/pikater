@@ -11,7 +11,7 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserSaved;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserScheduled;
-import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalExperiment;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.UserAuth;
@@ -302,7 +302,7 @@ public class Toolbar extends VerticalLayout {
 				private String experimentXML;
 
 				@Override
-				public void handleExperiment(final UniversalComputationDescription exportedExperiment, final IOnExperimentSaved experimentSavedCallback) {
+				public void handleExperiment(final UniversalExperiment exportedExperiment, final IOnExperimentSaved experimentSavedCallback) {
 					// first check for the right conditions
 					switch (saveMode) {
 					case SAVE_FOR_LATER:

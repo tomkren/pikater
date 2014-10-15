@@ -26,22 +26,22 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob {
 	public UploadedAgentHandler() {
 		super(5);
 	}
-
+	
 	@Override
-	public boolean argumentCorrect(int index, Object arg) {
-		switch (index) {
-		case 0:
-			return arg instanceof JPAUser;
-		case 1:
-		case 2:
-		case 3:
-			return arg instanceof String;
-		case 4:
-			return arg instanceof File;
+	public boolean argumentCorrect(Object argument, int argIndex) {
+		switch (argIndex) {
+			case 0:
+				return argument instanceof JPAUser;
+			case 1:
+			case 2:
+			case 3:
+				return argument instanceof String;
+			case 4:
+				return argument instanceof File;
 
-		default:
-			return false;
-		}
+			default:
+				return false;
+			}
 	}
 
 	@Override

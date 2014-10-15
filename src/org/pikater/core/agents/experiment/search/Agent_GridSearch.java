@@ -12,7 +12,6 @@ import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 import org.pikater.core.options.search.GridSearch_Box;
 
 import java.util.ArrayList;
@@ -25,9 +24,6 @@ import java.util.List;
  */
 public class Agent_GridSearch extends Agent_Search {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -5728853644752654450L;
 
 	int defaultTries = 10;
@@ -49,12 +45,13 @@ public class Agent_GridSearch extends Agent_Search {
 	}
 
     @Override
-    protected boolean finished() {
+    protected boolean isFinished() {
         return values != null;
     }
 
     @Override
-    protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
+    protected List<SearchSolution> generateNewSolutions(
+    		List<SearchSolution> solutions, float[][] evaluations) {
 
     	logInfo("is generating...");
 
@@ -68,7 +65,7 @@ public class Agent_GridSearch extends Agent_Search {
         for (int i = 0; i < values.size(); i++) {
             SearchSolution ss = new SearchSolution();
             List<IValueData> v = new ArrayList<IValueData>();
-            for (IValueData s: values) { // values.get(i).split(",")
+            for (IValueData s: values) {
             	v.add(s);
             }
             ss.setValues(v);
@@ -79,84 +76,16 @@ public class Agent_GridSearch extends Agent_Search {
     }
 
     private ArrayList<IValueData> generateValues() {
-        
+
         ArrayList<IValueData> vals = new ArrayList<IValueData>();
         
-        ArrayList<ArrayList<IValueData>> valsForOpts = new ArrayList<ArrayList<IValueData>>();
+        ArrayList<ArrayList<IValueData>> valsForOpts =
+        		new ArrayList<ArrayList<IValueData>>();
 
-        for (SearchItem si : schema ) {
-            Integer tries = si.getNumber_of_values_to_try();
-            if (tries == 0) {
-                tries = defaultTries;
-            }
-            ArrayList<IValueData> valsForItem = new ArrayList<IValueData>();
-            IntervalSearchItem searchItem = (IntervalSearchItem) si;
-            if (searchItem.getMin() instanceof BooleanValue)
-            {
-            	valsForItem.addAll(searchItem.possibleValues());
-            }
-            if (si instanceof IntervalSearchItem) {
-            	IntervalSearchItem isi = (IntervalSearchItem)si;
-            	if (isi.getMin() instanceof IntegerValue)
-            	{            		            	
-	            	int max = ((IntegerValue)isi.getMax()).getValue();
-	            	int min = ((IntegerValue)isi.getMin()).getValue();
-	            	if ( max - min < tries) {
-	                    for (int i = min; i <= max; i++) {
-	                        valsForItem.add(new IntegerValue(i));
-	                    }
-	                } else {
-	                    if (linearSteps) {
-	                        double stepSize = 1.0 * (max - min) / (tries - 1);
-	                        for (int i = 0; i < tries; i++) {
-                                IValueData add = new IntegerValue((int) Math.round(min + i * stepSize));
-	                            if (!valsForItem.contains(add)) {
-	                                valsForItem.add(add);
-	                            }
-	                        }
-	                    }
-	                    if (logSteps) {
-	                        double normalization = min < logZero ? min - logZero : 0.0;
-	                        double start = Math.log(min - normalization);
-	                        double range = Math.log(max - normalization) - Math.log(min - normalization);
-	                        double stepSize = range / (tries - 1);
-	                        for (int i = 0; i < tries; i++) {
-                                IValueData add = new IntegerValue((int) Math.round(Math.exp(start + i * stepSize) + normalization));
-	                            if (!valsForItem.contains(add)) {
-	                                valsForItem.add(add);
-	                            }
-	                        }
-	                    }
-	                }	            	
-            	}
-            	if (isi.getMin() instanceof FloatValue)
-            	{            		            	
+        for (SearchItem searchItemI : schema ) {
 
-	                float max = ((FloatValue)isi.getMax()).getValue();
-	            	int min = ((IntegerValue)isi.getMin()).getValue();
-	                if (linearSteps) {
-	                    double stepSize = 1.0 * (max - min) / (tries - 1);
-	                    for (int i = 0; i < tries; i++) {
-                            IValueData add = new DoubleValue(min + i * stepSize);
-	                        if (!valsForItem.contains(add)) {
-	                            valsForItem.add(add);
-	                        }
-	                    }
-	                }
-	                if (logSteps) {
-	                    double normalization = min < logZero ? min - logZero : 0.0;
-	                    double start = Math.log(min - normalization);
-	                    double range = Math.log(max - normalization) - Math.log(min - normalization);
-	                    double stepSize = range / (tries - 1);
-	                    for (int i = 0; i < tries; i++) {
-	                        DoubleValue add = new DoubleValue(Math.exp(start + i * stepSize) + normalization);
-	                        if (!valsForItem.contains(add)) {
-	                            valsForItem.add(add);
-	                        }
-	                    }
-	                }
-            	}
-            }
+            ArrayList<IValueData> valsForItem =
+            		generateValue(searchItemI);
             valsForOpts.add(valsForItem);
         }
         
@@ -168,24 +97,118 @@ public class Agent_GridSearch extends Agent_Search {
             ArrayList<IValueData> newVals = new ArrayList<IValueData>();
             for (int j = 0; j < vals.size(); j++) {
             	for (int k = 0; k < valsForOpts.get(i).size(); k++) {
-                    newVals.add(new StringValue(vals.get(j) + "," + valsForOpts.get(i).get(k)));
-                	// newVals.add(vals.get(j) + "," + valsForOpts.get(i).get(k));
-                    // System.err.println("VALUES: " + vals.get(j) + "," + valsForOpts.get(i).get(k));
+            		
+            		String value = vals.get(j) + "," +
+            				valsForOpts.get(i).get(k);
+                    newVals.add(new StringValue(value));
                 }
             }
             vals = newVals;
         }
         
-        /* for (String v : vals) {
-            System.err.println("VALUES: " + v);
-        }
-        */
-        
         return vals;
     }
 
-     
-    // TODO
+    private ArrayList<IValueData> generateValue(SearchItem searchInterval) {
+    	
+        Integer tries = searchInterval.getNumberOfValuesToTry();
+        if (tries == 0) {
+            tries = defaultTries;
+        }
+        ArrayList<IValueData> valsForItem = new ArrayList<IValueData>();
+        IntervalSearchItem searchItem = (IntervalSearchItem) searchInterval;
+        if (searchItem.getMin() instanceof BooleanValue) {
+        	valsForItem.addAll(searchItem.possibleValues());
+        }
+        
+        if (searchInterval instanceof IntervalSearchItem) {
+        	IntervalSearchItem isi = (IntervalSearchItem)searchInterval;
+        	if (isi.getMin() instanceof IntegerValue) {
+            	int max = ((IntegerValue)isi.getMax()).getValue();
+            	int min = ((IntegerValue)isi.getMin()).getValue();
+            	if ( max - min < tries) {
+                    for (int i = min; i <= max; i++) {
+                        valsForItem.add(new IntegerValue(i));
+                    }
+                } else {
+                    if (linearSteps) {
+                        double stepSize = 1.0 * (max - min) / (tries - 1);
+                        for (int i = 0; i < tries; i++) {
+                        	int addValue = (int)Math.round(min + i * stepSize);
+                            IValueData add = new IntegerValue(addValue);
+                            if (!valsForItem.contains(add)) {
+                                valsForItem.add(add);
+                            }
+                        }
+                    }
+                    if (logSteps) {
+                        double normalization;
+                        if (min < logZero) {
+                        	normalization = min - logZero;
+                        } else {
+                        	normalization = 0.0;
+                        }
+                        
+                        double start = Math.log(min - normalization);
+                        double range = Math.log(max - normalization)
+                        		-Math.log(min - normalization);
+                        
+                        double stepSize = range / (tries - 1);
+                        for (int i = 0; i < tries; i++) {
+                        	
+                        	int value = (int) Math.round(
+                        			Math.exp(start + i * stepSize) +
+                        			normalization);
+                            IValueData add = new IntegerValue(value);
+                            if (!valsForItem.contains(add)) {
+                                valsForItem.add(add);
+                            }
+                        }
+                    }
+                }	            	
+        	}
+        	
+        	if (isi.getMin() instanceof FloatValue) {
+
+                float max = ((FloatValue)isi.getMax()).getValue();
+            	int min = ((IntegerValue)isi.getMin()).getValue();
+                if (linearSteps) {
+                    double stepSize = 1.0 * (max - min) / (tries - 1);
+                    for (int i = 0; i < tries; i++) {
+                        IValueData add = new DoubleValue(min + i * stepSize);
+                        if (!valsForItem.contains(add)) {
+                            valsForItem.add(add);
+                        }
+                    }
+                }
+                if (logSteps) {
+                    double normalization;
+                    if (min < logZero) {
+                    	normalization = min - logZero;
+                    } else {
+                    	normalization = 0.0;
+                    }
+                    
+                    double start = Math.log(min - normalization);
+                    double range = Math.log(max - normalization)
+                    		-Math.log(min - normalization);
+                    
+                    double stepSize = range / (tries - 1);
+                    for (int i = 0; i < tries; i++) {
+                    	double value = Math.exp(start + i * stepSize) +
+                    			normalization;
+                        DoubleValue add = new DoubleValue(value);
+                        if (!valsForItem.contains(add)) {
+                            valsForItem.add(add);
+                        }
+                    }
+                }
+        	}
+        }
+        
+        return valsForItem;
+    }
+    
     @Override
     protected float updateFinished(float[][] evaluations) {
     	return 1;
@@ -194,29 +217,26 @@ public class Agent_GridSearch extends Agent_Search {
     @Override
     protected void loadSearchOptions() { 
         
-        NewOptions options = new NewOptions(getSearchOptions());
+        NewOptions options = getSearchOptions();
         
         if (options.containsOptionWithName("N")) {
         	NewOption optionN = options.fetchOptionByName("N");
-        	IntegerValue valueN = (IntegerValue) optionN.toSingleValue().getCurrentValue();
+        	IntegerValue valueN =
+        			(IntegerValue) optionN.toSingleValue().getCurrentValue();
         	defaultTries = valueN.getValue();
         }
         if (options.containsOptionWithName("B")) {
         	NewOption optionB = options.fetchOptionByName("B");
-        	IntegerValue valueB = (IntegerValue) optionB.toSingleValue().getCurrentValue();
-        	query_block_size = valueB.getValue();
+        	IntegerValue valueB =
+        			(IntegerValue) optionB.toSingleValue().getCurrentValue();
+        	queryBlockSize = valueB.getValue();
         }
         if (options.containsOptionWithName("Z")) {
         	NewOption optionZ = options.fetchOptionByName("Z");
-        	IntegerValue valueZ = (IntegerValue) optionZ.toSingleValue().getCurrentValue();
+        	IntegerValue valueZ =
+        			(IntegerValue) optionZ.toSingleValue().getCurrentValue();
         	logZero = valueZ.getValue();
         }
-        //if (next.getName().equals("L")) {
-        //   linearSteps = Boolean.parseBoolean(next.getValue());
-        //}
-        //if (next.getName().equals("G")) {
-        //    logSteps = Boolean.parseBoolean(next.getValue());
-        //}
         
         schema = getSchema();
     }

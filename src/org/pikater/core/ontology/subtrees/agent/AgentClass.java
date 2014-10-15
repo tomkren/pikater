@@ -24,4 +24,19 @@ public class AgentClass  implements AgentAction {
 		this.agentClass = agentClass;
 	}
 	
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof AgentClass){
+        	AgentClass toCompare = (AgentClass) o;
+            return agentClass.equals(toCompare.getAgentClass());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return agentClass.hashCode();
+    }
+	
 }

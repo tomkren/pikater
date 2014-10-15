@@ -60,7 +60,6 @@ public class HungarianAlgorithm {
     /**
      * Construct an instance of the algorithm.
      *
-     * @param costMatrix
      * the cost matrix, where matrix[i][j] holds the cost of
      * assigning worker i to job j, for all i, j. The cost matrix
      * must not be irregular in the sense that all rows must be the
@@ -251,7 +250,6 @@ public class HungarianAlgorithm {
      * workers and jobs sets and by initializing the slack arrays to the values
      * corresponding to the specified root worker.
      *
-     * @param w
      * the worker at which to root the next phase.
      */
     protected void initializePhase(int w) {

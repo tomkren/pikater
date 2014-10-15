@@ -20,22 +20,40 @@ import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
+/**
+ * 
+ * Data-model represents positions of the files in the distributed system
+ *
+ */
 public class DataRegistry {
-	/** data hash => Set(node AID) */
+	
+	/**
+	 * data hash => Set(node AID)
+	 */
 	private Map<String, DataFile> dataMap = new HashMap<>();
 	private PikaterAgent agent;
 
-	public DataRegistry(PikaterAgent agent, CPUCoresStructure cpuCoresStructure) {
+	/**
+	 * Constructor - initialization
+	 * 
+	 */
+	public DataRegistry(PikaterAgent agent,
+			CPUCoresStructure cpuCoresStructure) {
 		this.agent = agent;
 		// TODO initial load, currently presumes no data is anywhere initially
 	}
 
+	/**
+	 * Update Data-Sets locations in the structure 
+	 */
 	public void updateDataSets() {
 		
-		DatasetsInfo datasetsInfo = DataManagerService.getAllDatasetInfo(agent);
+		DatasetsInfo datasetsInfo =
+				DataManagerService.getAllDatasetInfo(agent);
 		for (DatasetInfo datasetInfo : datasetsInfo.getDatasets()) {
 			
-			AID managerAgentAID = new AID(CoreAgents.MANAGER_AGENT.getName(), false);
+			AID managerAgentAID =
+					new AID(CoreAgents.MANAGER_AGENT.getName(), false);
 			String hash = datasetInfo.getHash();
 
 			if (dataMap.get(hash) == null) {
@@ -50,14 +68,28 @@ public class DataRegistry {
 			}
 		}
 	}
+	/**
+	 * Save data to concrete location
+	 * 
+	 */
 	public void saveDataLocation(TaskToSolve taskToSolve, AID slaveServerAID) {
+		
 		for (TaskOutput outputTaskI : taskToSolve.getTask().getOutput()) {
 			String hash = outputTaskI.getName();
 			if (dataMap.get(hash) == null) {
+				
+				AID location;
+				if (slaveServerAID == null) {
+					location = agent.getAID();
+				} else {
+					location = slaveServerAID;
+				}
+				
 				DataFile file = new DataFile(DataFileType.COMPUTED_DATA);
 				file.setHash(hash);
 				file.setProducer(taskToSolve);
-				file.addLocation(slaveServerAID == null ? agent.getAID() : slaveServerAID);
+				file.addLocation(location);
+				
 				dataMap.put(hash, file);
 			} else {
 				dataMap.get(hash).addLocation(slaveServerAID);
@@ -66,6 +98,10 @@ public class DataRegistry {
 		printMap();
 	}
 
+	/**
+	 * Get Locations for the concrete Task
+	 * 
+	 */
 	public DataFiles getDataLocations(TaskToSolve task) {
 		
 		Datas data = task.getTask().getDatas();
@@ -86,7 +122,11 @@ public class DataRegistry {
 		
 		return dataFiles;
 	}
-	
+
+	/**
+	 * Delete dead CPU Cores
+	 * 
+	 */
 	public void deleteDeadCPUCores(List<AID> deadSlaveServers) {
 		
 		List<String> hashs = new ArrayList<String>(dataMap.keySet());
@@ -103,11 +143,12 @@ public class DataRegistry {
 		}
 	}
 	
-	private void printMap()
-	{
+	/**
+	 * Print the map of file location
+	 */
+	private void printMap() {
 		StringBuilder sb = new StringBuilder("Data map:\n");
-		for (String hash : dataMap.keySet())
-		{
+		for (String hash : dataMap.keySet()) {
 			sb.append("\t");
 			sb.append(hash);
 			sb.append(" ==> ");

@@ -20,20 +20,17 @@ public abstract class AbstractTableDBView
 	/**
 	 * Returns the enumeration of all columns this view supports, in
 	 * the order they will be displayed in GUI.
-	 * @return
 	 */
 	public abstract Set<ITableColumn> getAllColumns();
 	
 	/**
 	 * Returns the enumeration of all columns that will be displayed
 	 * by default in GUI.
-	 * @return
 	 */
 	public abstract Set<ITableColumn> getDefaultColumns();
 	
 	/**
 	 * Returns the column by which this view is sorted by default.
-	 * @return
 	 */
 	public abstract ITableColumn getDefaultSortOrder();
 	
@@ -52,8 +49,6 @@ public abstract class AbstractTableDBView
 	
 	/**
 	 * Returns a non-cached initialized collection of rows.
-	 * @param sortOrder
-	 * @return
 	 */
 	public QueryResult queryRows(QueryConstraints constraints)
 	{
@@ -73,7 +68,6 @@ public abstract class AbstractTableDBView
 	 * Returns a non-cached (with the exception of a handful of special cases) collection
 	 * of uninitialized rows as defined by the query given in the argument.
 	 * Initialization of the rows will be performed automatically.
-	 * @return
 	 */
 	protected abstract QueryResult queryUninitializedRows(QueryConstraints constraints);
 }

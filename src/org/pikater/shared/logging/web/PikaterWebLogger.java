@@ -6,6 +6,11 @@ import java.util.logging.Logger;
 import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.IPikaterLogger;
 
+/**
+ * Special logger wrapper to be used by the web application.
+ * 
+ * @author SkyCrawl
+ */
 public class PikaterWebLogger extends GeneralPikaterLogger
 {
 	private static final IPikaterLogger innerLogger = createPikaterLogger(Logger.getLogger("log4j"));

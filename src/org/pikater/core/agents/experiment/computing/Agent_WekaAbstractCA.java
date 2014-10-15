@@ -1,9 +1,5 @@
 package org.pikater.core.agents.experiment.computing;
 
-import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
-import jade.util.leap.List;
-
 import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
@@ -19,24 +15,43 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.functions.RBFNetwork;
 import weka.core.Instances;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
+/**
+ * 
+ * Abstract class for implementation Computing Weka Agent
+ *
+ */
 public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private static final long serialVersionUID = -3594051562022044000L;
 
+	// Weka classifier
 	protected Classifier classifier;
 
+	/**
+	 * Get the agent type - classifier
+	 */
 	@Override
-	public String getAgentType()
-	{
-		//TODO: get method and sets the classifier???
+	public String getAgentType() {
+		// get default classifier
 		return RBFNetwork.class.getName();
 	}
 	
+	/**
+	 * Get Weka classifier
+	 * @return
+	 */
 	protected abstract Classifier createClassifier();
 
+	/**
+	 * Training process of the Machine Learning
+	 * 
+	 * @param evaluation
+	 */
 	@Override
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
@@ -45,13 +60,13 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		
 		logInfo("Training...");
 		logInfo("Options: " + getOptions());
-        classifier=createClassifier();
-		if(classifier == null)
-		{
-			throw new IllegalStateException(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
+		
+        classifier = createClassifier();
+		if (classifier == null) {
+			throw new IllegalStateException(getLocalName() +
+					": Weka classifier class hasn't been created.");
 		}
-		if (options.length > 0)
-		{
+		if (options.length > 0) {
             //this is destructive, the options array will be emptied
 			classifier.setOptions(options);
 		}
@@ -60,25 +75,29 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		classifier.buildClassifier(train);
 		long end = System.currentTimeMillis();
 		long duration = end - start;
-		if (duration < 1) { duration = 1; } 
 		
-		List evals = new ArrayList();
+		if (duration < 1) {
+			duration = 1;
+		} 
 		
-		Eval s = new Eval();
-		s.setName("start");
-		s.setValue(start);
-		evals.add(s);
+		List<Eval> evals = new ArrayList<Eval>();
 		
-		Eval d = new Eval();
-		d.setName("duration");
-		d.setValue(duration);
-		evals.add(d);
+		Eval startEval = new Eval();
+		startEval.setName("start");
+		startEval.setValue(start);
+		evals.add(startEval);
+		
+		Eval durationEval = new Eval();
+		durationEval.setName("duration");
+		durationEval.setValue(duration);
+		evals.add(durationEval);
 
-		this.lastStartDate=new Date(start);
-		this.lastDuration=duration;
+		this.lastStartDate = new Date(start);
+		this.lastDuration = duration;
 		logInfo("start: " + new Date(start) + " : duration: " + duration);
 		
-		state = states.TRAINED; // change agent state
+		// change agent state
+		state = States.TRAINED;
 		options = classifier.getOptions();
 
 		// write out net parameters
@@ -86,22 +105,29 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		working = false;
 		
-		// add evals to Evaluation
-		java.util.List<Eval> evaluations_new = evaluation.getEvaluations();
+		// add eval to Evaluation
+		List<Eval> evaluationsNew = evaluation.getEvaluations();
 		
-		Iterator itr = evals.iterator();
-		while (itr.hasNext()) {
-			Eval eval = (Eval) itr.next();
-			evaluations_new.add(eval);
+		for (Eval evalI : evals) {
+			evaluationsNew.add(evalI);
 		}
 		
-		evaluation.setEvaluations(evaluations_new);
+		evaluation.setEvaluations(evaluationsNew);
 		
 		return new Date(start);
 	}
 
 
-	private Evaluation test(EvaluationMethod evaluation_method) throws Exception{
+	/**
+	 * Testing process of the Machine Learning
+	 * 
+	 * @param evaluationMethod
+	 * @return
+	 * @throws Exception
+	 */
+	private Evaluation test(EvaluationMethod evaluationMethod
+			) throws Exception {
+		
 		working = true;
 		logInfo("Testing...");
 
@@ -109,15 +135,21 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		Evaluation eval = new Evaluation(train);
         logInfo("Evaluation method: \t");
 		
-		if (evaluation_method.getAgentType().equals(CrossValidation.class.getName()) ){
+        String agentType = evaluationMethod.getAgentType();
+		if (agentType.equals(CrossValidation.class.getName()) ) {
 			
-			int folds = 5; // TODO read default value from file (if necessary)
-			if (evaluation_method.getOptions() != null) {
+			// TODO read default value from file (if necessary)
+			int folds = 5;
+			if (evaluationMethod.getOptions() != null) {
 				
-				NewOptions options = new NewOptions(evaluation_method.getOptions());
+				NewOptions options =
+						new NewOptions(evaluationMethod.getOptions());
 				NewOption optionF = options.fetchOptionByName("F");
-				IntegerValue valueF = (IntegerValue) optionF.toSingleValue().getCurrentValue();
-				folds = valueF.getValue();
+				if (optionF != null) {
+					IntegerValue valueF = (IntegerValue)
+							optionF.toSingleValue().getCurrentValue();
+					folds = valueF.getValue();
+				}				
 			}
 			
 			logInfo(folds + "-fold cross validation.");
@@ -125,8 +157,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 					classifier,
 					test,
 					folds, new Random(1));
-		}
-		else { // name = Standard
+		} else {
 			logInfo("Standard weka evaluation.");
 			eval.evaluateModel(classifier, test);
 		}
@@ -140,72 +171,76 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	}
 
 	@Override
-	public void evaluateCA(EvaluationMethod evaluation_method,
-			org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception{
+	public void evaluateCA(EvaluationMethod evaluationMethod,
+			org.pikater.core.ontology.subtrees.task.Evaluation evaluation
+			) throws Exception{
 		
-		float default_value = Float.MAX_VALUE;
-		Evaluation eval = test(evaluation_method);
+		float defaultValue = Float.MAX_VALUE;
+		Evaluation eval = test(evaluationMethod);
 		
-		java.util.List<Eval> evaluations = evaluation.getEvaluations();
-		//List evaluations = new ArrayList();
-		Eval ev = new Eval();
-		ev.setName(CoreConstant.Error.ERROR_RATE.name());
-		ev.setValue((float) eval.errorRate());
-		evaluations.add(ev);
+		List<Eval> evaluations = evaluation.getEvaluations();
 		
-		ev = new Eval();
-		ev.setName(CoreConstant.Error.KAPPA_STATISTIC.name());
+		Eval errorRateEval = new Eval();
+		errorRateEval.setName(CoreConstant.Error.ERROR_RATE.name());
+		errorRateEval.setValue((float) eval.errorRate());
+		evaluations.add(errorRateEval);
+		
+		Eval kappaStatisticEval = new Eval();
+		kappaStatisticEval.setName(CoreConstant.Error.KAPPA_STATISTIC.name());
 		try {
-			ev.setValue((float) eval.kappa());
+			kappaStatisticEval.setValue((float) eval.kappa());
 		} catch (Exception e) {
-			ev.setValue(default_value);
+			kappaStatisticEval.setValue(defaultValue);
 		}
-		evaluations.add(ev);
+		evaluations.add(kappaStatisticEval);
 
-		ev = new Eval();
-		ev.setName(CoreConstant.Error.MEAN_ABSOLUTE.name());
+		Eval meanAbsoluteError = new Eval();
+		meanAbsoluteError.setName(CoreConstant.Error.MEAN_ABSOLUTE.name());
 		try {
-			ev.setValue((float) eval.meanAbsoluteError());
+			meanAbsoluteError.setValue((float) eval.meanAbsoluteError());
 		} catch (Exception e) {
-			ev.setValue(default_value);
+			meanAbsoluteError.setValue(defaultValue);
 		}
-		evaluations.add(ev);
+		evaluations.add(meanAbsoluteError);
 
-		ev = new Eval();
-		ev.setName(CoreConstant.Error.RELATIVE_ABSOLUTE.name());
+		Eval relativeAbsoluteError = new Eval();
+		relativeAbsoluteError.setName(
+				CoreConstant.Error.RELATIVE_ABSOLUTE.name());
 		try {
-			ev.setValue((float) eval.relativeAbsoluteError());
+			relativeAbsoluteError.setValue(
+					(float) eval.relativeAbsoluteError());
 		} catch (Exception e) {
-			ev.setValue(default_value);
+			relativeAbsoluteError.setValue(defaultValue);
 		}
-		evaluations.add(ev);
+		evaluations.add(relativeAbsoluteError);
 		
-		ev = new Eval();
-		ev.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());
+		Eval meanSquaredEval = new Eval();
+		meanSquaredEval.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());
 		try {
-			ev.setValue((float) eval.rootMeanSquaredError());
+			meanSquaredEval.setValue((float) eval.rootMeanSquaredError());
 		} catch (Exception e) {
-			ev.setValue(default_value);
+			meanSquaredEval.setValue(defaultValue);
 		}
-		evaluations.add(ev);
+		evaluations.add(meanSquaredEval);
 
-		ev = new Eval();
-		ev.setName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
+		Eval relativeSquaredEval = new Eval();
+		relativeSquaredEval.setName(
+				CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
 		try {
-			ev.setValue((float) eval.rootRelativeSquaredError());
+			relativeSquaredEval.setValue(
+					(float) eval.rootRelativeSquaredError());
 		} catch (Exception e) {
-			ev.setValue(default_value);
+			relativeSquaredEval.setValue(defaultValue);
 		}
-		evaluations.add(ev);
+		evaluations.add(relativeSquaredEval);
 		
 		evaluation.setEvaluations(evaluations);		
 	}
 
 	@Override
 	public DataInstances getPredictions(Instances test,
-			DataInstances onto_test) {
+			DataInstances ontoTest) {
 
-		//Evaluation eval = test();
 		double[] pre = new double[test.numInstances()];
 		for (int i = 0; i < test.numInstances(); i++) {
 			try {
@@ -217,11 +252,11 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		// copy results to the DataInstancs
 		int i = 0;
-		for (Instance next_instance : onto_test.getInstances()) {
-			next_instance.setPrediction(pre[i]);
+		for (Instance instanceI : ontoTest.getInstances()) {
+			instanceI.setPrediction(pre[i]);
 			i++;
 		}
 
-		return onto_test;
+		return ontoTest;
 	}
 }

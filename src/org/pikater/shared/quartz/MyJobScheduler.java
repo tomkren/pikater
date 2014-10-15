@@ -18,17 +18,31 @@ import org.quartz.SchedulerException;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 
+/**
+ * A custom implementation of a job/task scheduler based on {@link Scheduler},
+ * providing some convenience interface.
+ * 
+ * @author SkyCrawl 
+ */
 public class MyJobScheduler extends PropertiesHandler
 {
+	/**
+	 * Reference to the '.properties' file used as configuration
+	 * for {@link #scheduler}.
+	 */
 	private final Properties quartzConf;
+	
+	/**
+	 * The underlying scheduled used to schedule jobs.
+	 */
 	private Scheduler scheduler;
 	
 	/**
-	 * By default, {@link StdSchedulerFactory} loads a properties file named "quartz.properties" from the 'current working
-	 * directory'. If that fails, then the "quartz.properties" file located (as a resource) in the org/quartz
-	 * package is loaded.</br></br>
+	 * By default, {@link StdSchedulerFactory} loads a ".properties" configuration
+	 * file named "quartz.properties" from the 'current working directory'. If that fails,
+	 * the "quartz.properties" file located (as a resource) in the "org.quartz"
+	 * package is loaded and that is what we are providing.
 	 * 
-	 * We will provide our own configuration. 
 	 * @param quartzConfAbsPath
 	 */
 	public MyJobScheduler(String quartzConfAbsPath)
@@ -47,7 +61,8 @@ public class MyJobScheduler extends PropertiesHandler
 	// SCHEDULER RELATED INTERFACE
 	
 	/**
-	 * Start the scheduler. No jobs will be defined after this call.
+	 * Start the scheduler. No jobs are defined after this call.
+	 * 
 	 * @throws SchedulerException
 	 */
 	public void start() throws SchedulerException
@@ -68,6 +83,7 @@ public class MyJobScheduler extends PropertiesHandler
 	
 	/**
 	 * Shuts down the scheduler. All defined jobs are lost.
+	 * 
 	 * @throws SchedulerException
 	 */
 	public void shutdown() throws SchedulerException
@@ -87,9 +103,9 @@ public class MyJobScheduler extends PropertiesHandler
 	// JOB SCHEDULLING/INTERRUPTING INTERFACE
 	
 	/**
-	 * Define a zero-argument job - build it, create it and schedule it.
-	 * @param clazz
-	 * @throws Throwable
+	 * Defines a zero-argument job - builds it, creates it and schedules it.
+	 * 
+	 * @throws Exception
 	 */
 	public JobKey defineJob(Class<? extends ZeroArgJob> clazz) throws Exception
 	{
@@ -97,8 +113,12 @@ public class MyJobScheduler extends PropertiesHandler
 	}
 
 	/**
-	 * Define an arbitrary job - build it, create it and schedule it.
+	 * Defines an arbitrary job - builds it, creates it and schedules it.
+	 * 
 	 * @param jobClass
+	 * @param args
+	 * @return
+	 * @throws Exception
 	 */
 	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Exception
 	{
@@ -148,6 +168,15 @@ public class MyJobScheduler extends PropertiesHandler
 	//--------------------------------------------------------
 	// OTHER INTERFACE
 	
+	/**
+	 * Sets arguments to a job defined by the arguments. This method
+	 * should be used prior to scheduling the job.
+	 * 
+	 * @param detail
+	 * @param helperJobInstance
+	 * @param args
+	 * @throws Exception
+	 */
 	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args) throws Exception  
 	{
 		if(args.length != helperJobInstance.getNumberOfArguments())
@@ -159,7 +188,7 @@ public class MyJobScheduler extends PropertiesHandler
 		{
 			for(int i = 0; i < args.length; i++)
 			{
-				if(helperJobInstance.argumentCorrect(i, args[i]))
+				if(helperJobInstance.argumentCorrect(args[i], i))
 				{
 					detail.getJobDataMap().put(String.valueOf(i), args[i]);
 				}

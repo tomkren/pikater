@@ -23,15 +23,25 @@ import org.pikater.core.ontology.subtrees.systemLoad.GetSystemLoad;
 import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 
-public class PlannerService
-{
+/**
+ * 
+ * Class offers possibility to call the most used
+ * requests to the {@link Agent_Planner}
+ *
+ */
+public class PlannerService {
+	
 	/**
 	 * Private constructor the implicit public one. 
 	 */
-	private PlannerService()
-	{
+	private PlannerService() {
 	}
 	
+	/**
+	 * Get the system load
+	 * @param agent
+	 * @return
+	 */
 	public static SystemLoad getSystemLoad(PikaterAgent agent) {
 		
 		GetSystemLoad getSystemLoad = new GetSystemLoad();
@@ -47,13 +57,13 @@ public class PlannerService
         msg.setOntology(ontology.getName());
         msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
 
-		Action a = new Action();
-		a.setAction(getSystemLoad);
-		a.setActor(agent.getAID());
+		Action action = new Action();
+		action.setAction(getSystemLoad);
+		action.setActor(agent.getAID());
 
 		try {
 			// Let JADE convert from Java objects to string
-			agent.getContentManager().fillContent(msg, a);
+			agent.getContentManager().fillContent(msg, action);
 
 		} catch (CodecException ce) {
 			agent.logSevere(ce.getMessage());
@@ -89,6 +99,11 @@ public class PlannerService
 		return null;
 	}
 	
+	/**
+	 * Sends request to kill all Tasks with batchID
+	 * @param agent
+	 * @param batchID
+	 */
 	public static void sendKillTasks(PikaterAgent agent, int batchID) {
 		
 		KillTasks killTasks = new KillTasks();
@@ -105,13 +120,13 @@ public class PlannerService
         msg.setOntology(ontology.getName());
         msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
 
-		Action a = new Action();
-		a.setAction(killTasks);
-		a.setActor(agent.getAID());
+		Action action = new Action();
+		action.setAction(killTasks);
+		action.setActor(agent.getAID());
 
 		try {
 			// Let JADE convert from Java objects to string
-			agent.getContentManager().fillContent(msg, a);
+			agent.getContentManager().fillContent(msg, action);
 
 		} catch (CodecException ce) {
 			agent.logSevere(ce.getMessage());

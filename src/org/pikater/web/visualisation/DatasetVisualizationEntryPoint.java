@@ -26,11 +26,11 @@ public class DatasetVisualizationEntryPoint extends InterruptibleJobHelper imple
 
 	@Override
 	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Exception {
-		startJob(DSVisOneGeneratorJob.class, new Object[] { dataset, attrs, attrTarget, context });
+		start(DSVisOneGeneratorJob.class, new Object[] { dataset, attrs, attrTarget, context });
 	}
 
 	@Override
 	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare) throws Exception {
-		startJob(DSVisTwoGeneratorJob.class, new Object[] { dataset1, dataset2, attrsToCompare, context });
+		start(DSVisTwoGeneratorJob.class, new Object[] { dataset1, dataset2, attrsToCompare, context });
 	}
 }

@@ -7,11 +7,11 @@ import org.pikater.core.ontology.subtrees.metadata.Metadata;
 public class MetadataListItem {
 	private Metadata metadata;
 	private int id;
-	public ArrayList to_compute = new ArrayList();
+	public ArrayList toCompute = new ArrayList();
 	
-	public MetadataListItem(Metadata _metadata, int _id){
-		setMetadata(_metadata);
-		setId(_id);
+	public MetadataListItem(Metadata metadata, int id){
+		setMetadata(metadata);
+		setId(id);
 	}
 
 	public Metadata getMetadata() {

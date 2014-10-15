@@ -33,20 +33,20 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 	public DSVisTwoGeneratorJob() {
 		super(4);
 	}
-
+	
 	@Override
-	public boolean argumentCorrect(int index, Object arg) {
-		switch (index) {
-		case 0:
-		case 1:
-			return arg instanceof JPADataSetLO;
-		case 2:
-			return arg instanceof AttrComparisons;
-		case 3:
-			return arg instanceof IProgressDialogResultHandler;
-		default:
-			return false;
-		}
+	public boolean argumentCorrect(Object argument, int argIndex) {
+		switch (argIndex) {
+			case 0:
+			case 1:
+				return argument instanceof JPADataSetLO;
+			case 2:
+				return argument instanceof AttrComparisons;
+			case 3:
+				return argument instanceof IProgressDialogResultHandler;
+			default:
+				return false;
+			}
 	}
 
 	@Override

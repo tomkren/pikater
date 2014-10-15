@@ -10,9 +10,9 @@ import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.shared.experiment.UniversalComputationDescription;
-import org.pikater.shared.experiment.UniversalConnector;
 import org.pikater.shared.experiment.UniversalElement;
+import org.pikater.shared.experiment.UniversalElementConnector;
+import org.pikater.shared.experiment.UniversalExperiment;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.KnownCoreAgents;
@@ -218,7 +218,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * This conversion is substantially simpler than its counterpart. It should always work.
 	 * @throws ConversionException
 	 */
-	public UniversalComputationDescription toUniversalFormat(KnownCoreAgents agentInfoProvider) throws ConversionException {
+	public UniversalExperiment toUniversalFormat(KnownCoreAgents agentInfoProvider) throws ConversionException {
 		try {
 			// first some checks
 			if (agentInfoProvider == null) {
@@ -226,7 +226,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 			}
 
 			// create the result uni-format experiment
-			UniversalComputationDescription result = new UniversalComputationDescription();
+			UniversalExperiment result = new UniversalExperiment();
 
 			// create uni-format master elements for all boxes that are registered
 			// from now on, only iterate this collection
@@ -262,8 +262,8 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				 */
 
 				// position
-				uniBox.getGuiInfo().setX(webBox.getPosX());
-				uniBox.getGuiInfo().setY(webBox.getPosY());
+				uniBox.getPresentationInfo().setX(webBox.getPosX());
+				uniBox.getPresentationInfo().setY(webBox.getPosY());
 
 				// edges
 				if (hasOutputEdges(webBox.getID())) { // these edges are all valid (currently registered)
@@ -285,7 +285,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 								for (Slot inputSlot : neighbourWebBox.getAssociatedAgent().getInputSlots()) {
 									if (slotConnections.areSlotsConnected(inputSlot, outputSlot)) {
 										// construct the edge, with exact slot connection
-										UniversalConnector connector = new UniversalConnector();
+										UniversalElementConnector connector = new UniversalElementConnector();
 										connector.setFromElement(uniBox);
 										connector.setOutputDataIdentifier(outputSlot.getName());
 										connector.setInputDataIdentifier(inputSlot.getName());
@@ -307,7 +307,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 							 */
 							if (!aConnectedWasAdded) { // no slot connections are defined
 								// at least remember the edge, with no slot connections whatsoever
-								UniversalConnector connector = new UniversalConnector();
+								UniversalElementConnector connector = new UniversalElementConnector();
 								connector.setFromElement(uniBox);
 								neighbourUniBox.getOntologyInfo().addInputDataSlot(connector);
 							}
@@ -338,7 +338,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * experiments back to web format.
 	 * @throws ConversionException
 	 */
-	public static ExperimentGraphServer fromUniversalFormat(KnownCoreAgents agentInfoProvider, UniversalComputationDescription uniFormat) throws ConversionException {
+	public static ExperimentGraphServer fromUniversalFormat(KnownCoreAgents agentInfoProvider, UniversalExperiment uniFormat) throws ConversionException {
 		try {
 			// first some checks
 			if (agentInfoProvider == null) {
@@ -348,7 +348,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				throw new NullPointerException("The argument uni-format is null.");
 			} else if (!uniFormat.isValid()) {
 				throw new NullPointerException("The argument uni-format is not valid.");
-			} else if (!uniFormat.isGUICompatible()) {
+			} else if (!uniFormat.isPresentationCompatible()) {
 				throw new IllegalArgumentException(String.format("The universal format below is not fully compatible with the GUI (web) format.\n%s", uniFormat.toXML()));
 			} else {
 				/*
@@ -373,16 +373,16 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 					}
 
 					// create web-format box and link it to uni-format box
-					BoxInfoServer webBox = webFormat.addBox(new BoxInfoServer(agentInfo, element.getGuiInfo().getX(), element.getGuiInfo().getY()));
+					BoxInfoServer webBox = webFormat.addBox(new BoxInfoServer(agentInfo, element.getPresentationInfo().getX(), element.getPresentationInfo().getY()));
 					uniBoxToWebBoxID.put(element, webBox.getID());
 				}
 
 				// then convert all edges
 				for (UniversalElement element : uniFormat.getAllElements()) {
-					Collection<UniversalConnector> dataAndErrorSlotConnections = new HashSet<UniversalConnector>();
+					Collection<UniversalElementConnector> dataAndErrorSlotConnections = new HashSet<UniversalElementConnector>();
 					dataAndErrorSlotConnections.addAll(element.getOntologyInfo().getInputDataSlots());
 					dataAndErrorSlotConnections.addAll(element.getOntologyInfo().getInputErrorSlots());
-					for (UniversalConnector slotConnection : dataAndErrorSlotConnections) {
+					for (UniversalElementConnector slotConnection : dataAndErrorSlotConnections) {
 						/*
 						 * SERIALIZATION SCHEME:
 						 * - edge: A (edge.getFromElement(); fromBox) -> B (element, toBox)

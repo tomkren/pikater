@@ -27,23 +27,23 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob {
 	public UploadedDatasetHandler() {
 		super(5); // number of arguments
 	}
-
+	
 	@Override
-	public boolean argumentCorrect(int index, Object arg) {
-		switch (index) {
-		case 0:
-			return arg instanceof JPAUser;
-		case 1:
-		case 2:
-			return arg instanceof String;
-		case 3:
-			return arg instanceof File;
-		case 4:
-			return arg instanceof String;
+	public boolean argumentCorrect(Object argument, int argIndex) {
+		switch (argIndex) {
+			case 0:
+				return argument instanceof JPAUser;
+			case 1:
+			case 2:
+				return argument instanceof String;
+			case 3:
+				return argument instanceof File;
+			case 4:
+				return argument instanceof String;
 
-		default:
-			return false;
-		}
+			default:
+				return false;
+			}
 	}
 
 	@Override

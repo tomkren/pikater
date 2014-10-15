@@ -130,7 +130,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception {
 					// start the task and bind it with the progress dialog
 					underlyingTask = new InterruptibleJobHelper();
-					underlyingTask.startJob(ExportBatchResultsJob.class, new Object[] { specificRow.getBatch(), tmpFile, contextForTask });
+					underlyingTask.start(ExportBatchResultsJob.class, new Object[] { specificRow.getBatch(), tmpFile, contextForTask });
 				}
 
 				@Override

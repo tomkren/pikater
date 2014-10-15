@@ -26,7 +26,6 @@ public abstract class AbstractTableRowDBView
 	/**
 	 * For internal use only. Initializes the row view and repeatedly calls
 	 * {@link #initValueWrapper(ITableColumn column)}.
-	 * @param dbView
 	 */
 	public void init(AbstractTableDBView dbView)
 	{
@@ -46,8 +45,6 @@ public abstract class AbstractTableRowDBView
 	
 	/**
 	 * Gets the value wrapper associated with this row and the provided column.
-	 * @param column
-	 * @return
 	 */
 	public AbstractDBViewValue<? extends Object> getValueWrapper(ITableColumn column)
 	{
@@ -64,7 +61,6 @@ public abstract class AbstractTableRowDBView
 	/**
 	 * Method to create an appropriate value wrapper for each of the table's columns,
 	 * each associated with an appropriate value from this row.
-	 * @param column
 	 */
 	public abstract AbstractDBViewValue<? extends Object> initValueWrapper(ITableColumn column);
 	

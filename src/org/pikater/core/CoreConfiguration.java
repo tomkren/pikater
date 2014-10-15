@@ -5,38 +5,49 @@ import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class CoreConfiguration
-{
+/**
+ * 
+ * Configurable informations for Pikater Core
+ *
+ */
+public class CoreConfiguration {
 	/**
 	 * Private constructors hide the public ones.
 	 */
-	private CoreConfiguration()
-	{
-	}
+	private CoreConfiguration() {}
 	
 	/*
 	 * Spring configuration convenience interface
 	 */
-	private static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext(getConfigurationFileName());
+	private static final ApplicationContext APPLICATION_CONTEXT =
+			new ClassPathXmlApplicationContext(getConfigurationFileName());
 	
 	@SuppressWarnings("unchecked")
-	private static <T extends Object> T getBean(String id)
-	{
+	private static <T extends Object> T getBean(String id) {
 		return (T) APPLICATION_CONTEXT.getBean(id);
 	}
 	
-	public static String getConfigurationFileName()
-	{
+	/**
+	 * 
+	 * Get Bean configuration file
+	 */
+	public static String getConfigurationFileName() {
 		return "Beans.xml";
 	}
 	
-	public static PostgreSQLConnectionProvider getPGSQLConnProvider()
-	{
+	/**
+	 * 
+	 * Get PostgreSQL database connection provider
+	 */
+	public static PostgreSQLConnectionProvider getPGSQLConnProvider() {
 		return getBean("defaultConnection");
 	}
 	
-	public static GUIDGenerator getGUIDGenerator()
-	{
+	/**
+	 * 
+	 * Get generator
+	 */
+	public static GUIDGenerator getGUIDGenerator() {
 		return getBean("guidGenerator");
 	}
 	
@@ -44,38 +55,72 @@ public class CoreConfiguration
 	 * Other configuration interface
 	 */
 	
-	public static String getCoreMasterConfigurationFilepath()
-	{
-		return "core" + System.getProperty("file.separator") + "configurationMaster.xml";
+	/**
+	 * 
+	 * Get a path for the Master server
+	 */
+	public static String getCoreMasterConfigurationFilepath() {
+		
+		return "core" +
+				System.getProperty("file.separator") +
+				"configurationMaster.xml";
 	}
 	
-	public static String getKlarasInputsPath()
-	{
-		return getCorePath("inputs") + "inputsKlara" + System.getProperty("file.separator");
+	/**
+	 * 
+	 * Get a path to input files for {@link Agent_GUIKlara}
+	 */
+	public static String getKlarasInputsPath() {
+		
+		return getCorePath("inputs") +
+				"inputsKlara" +
+				System.getProperty("file.separator");
 	}
 	
-	public static String getDataFilesPath()
-	{
-		return getCorePath("data") + "files" + System.getProperty("file.separator");
+	/**
+	 * 
+	 * Get a path to data files
+	 */
+	public static String getDataFilesPath() {
+		
+		return getCorePath("data") +
+				"files" +
+				System.getProperty("file.separator");
 	}
-	
-	public static String getExtAgentsPath()
-	{
+
+	/**
+	 * 
+	 * Get a path to external agent JAR files
+	 */
+	public static String getExtAgentsPath() {
+		
 		return getCorePath("ext_agents");
 	}
 	
-	public static String getSavedResultsPath()
-	{
+	/**
+	 * 
+	 * Get a path to the folder with results
+	 */
+	public static String getSavedResultsPath() {
+		
 		return getCorePath("saved");
 	}
 	
-	public static String getMetadataPath()
-	{
+	/**
+	 * 
+	 * Get a path to the folder for template files generated
+	 * by {@link Agent_MetadataQueen}
+	 */
+	public static String getMetadataPath() {
+		
 		return getCorePath("metadata");
 	}
 	
-	private static String getCorePath(String nextFolder)
-	{
-		return "core" + System.getProperty("file.separator") + nextFolder + System.getProperty("file.separator");
+	private static String getCorePath(String nextFolder) {
+		
+		return "core" +
+				System.getProperty("file.separator") +
+				nextFolder +
+				System.getProperty("file.separator");
 	}
 }

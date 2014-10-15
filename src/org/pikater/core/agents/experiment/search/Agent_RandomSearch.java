@@ -14,17 +14,26 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.search.RandomSearch_Box;
 
+/**
+ * Implementation of Random search.
+ * <p>
+ * Options:
+ * <ul>
+ *   <li>-E float   Minimum error rate (default 0.1)
+ *   <li>-M int     Maximum number of generations (default 10)
+ * </ul>  
+ */
 public class Agent_RandomSearch extends Agent_Search {
 
 	private static final long serialVersionUID = 2777277001533605329L;
 
-	private int number_of_tries = 0;
-	private float error_rate = 1;
+	private int numberOfTries = 0;
+	private float errorRate = 1;
 	
-	private int maximum_tries;
-	private float final_error_rate;
+	private int maximumTries;
+	private float finalErrorRate;
 	
-	protected Random rnd_gen = new Random(1);
+	protected Random rndGen = new Random(1);
 
 	@Override
 	protected String getAgentType() {
@@ -36,67 +45,87 @@ public class Agent_RandomSearch extends Agent_Search {
 		return RandomSearch_Box.get();
 	}
 
+	/**
+	 * @return	<code>true</code> if the current error_rate is lower
+	 * 			than the set threshold, or if the maximum number
+	 *			of tries has been exceeded, 
+	 *			<code>false</code> otherwise. 
+	 */
 	@Override
-	protected boolean finished() {
-		if (number_of_tries >= maximum_tries) {
+	protected boolean isFinished() {
+		if (numberOfTries >= maximumTries) {
 			return true;
 		}
 
-		if (error_rate <= final_error_rate) {
+		if (errorRate <= finalErrorRate) {
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Loads the parameters of random search from search's options.
+	 * If the options are not set, sets the values to defaults:
+	 * 
+	 *  <ul>
+	 *	 <li>maximumTries = 10;
+	 *   <li>finalErrorRate = 0.01;
+	 *  </ul>
+	 */
 	@Override
 	protected void loadSearchOptions(){
 		
-		final_error_rate = (float) 0.01;
-		maximum_tries= 10;
+		finalErrorRate = (float) 0.01;
+		maximumTries= 10;
 		
 		// find maximum tries in Options
-		NewOptions options = new NewOptions(getSearchOptions());
+		NewOptions options = getSearchOptions();
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.fetchOptionByName("E");
-			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
-			final_error_rate = valueE.getValue(); 
+			FloatValue valueE =
+					(FloatValue) optionE.toSingleValue().getCurrentValue();
+			finalErrorRate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.fetchOptionByName("M");
-			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
-			maximum_tries = valueM.getValue(); 
+			IntegerValue valueM =
+					(IntegerValue) optionM.toSingleValue().getCurrentValue();
+			maximumTries = valueM.getValue(); 
 		}	
 		
-		// query_block_size = 1;
-		query_block_size = maximum_tries;
+		queryBlockSize = maximumTries;
 		logInfo(getLocalName()+" parameters are: ");
-		logInfo("   final_error_rate: " + final_error_rate);
-		logInfo("   maximum_tries: " + maximum_tries);		
+		logInfo("   finalErrorRate: " + finalErrorRate);
+		logInfo("   maximumTries: " + maximumTries);		
 	}
 
 	@Override
 	protected float updateFinished(float[][] evaluations) {
 		if (evaluations == null){
-			error_rate = 1;
+			errorRate = 1;
 		}
 		else{
-			float best_err = evaluations[0][0];
+			float bestError = evaluations[0][0];
 			for(int i = 0; i < evaluations.length; i++){
-				if(evaluations[i][0]<best_err)
-					best_err = evaluations[i][0];
+				if(evaluations[i][0]<bestError)
+					bestError = evaluations[i][0];
 			}
-			error_rate = best_err;//((Evaluation)(evaluations.get(0))).getError_rate();			
+			errorRate = bestError;		
 		}
-		return error_rate;
+		return errorRate;
 	}
 	
+	/**
+	 * Goes through the solutions list, generates random values.
+	 * 
+	 * @return SearchSolution   a new random solution to try.
+	 */
 	private SearchSolution genRandomSolution(){
-		// go through the solutions Vector, generate random values
 		List<IValueData> new_solution = new ArrayList<IValueData>();
         List<String> names = new ArrayList<String>();
 		for (SearchItem si : getSchema() ) {
-			new_solution.add(si.randomValue(rnd_gen));
+			new_solution.add(si.randomValue(rndGen));
             names.add(si.getName());
 		}
 		SearchSolution sol = new SearchSolution();
@@ -104,15 +133,26 @@ public class Agent_RandomSearch extends Agent_Search {
 		return sol;
 	}
 		
+	
+	/**
+	 * Generates a list of new random solutions. 
+	 * The size of the list (number of solutions) is the queryBlockSize.
+	 * 
+	 * @param solutions     last solutions
+	 * @param evaluations   last evaluations of above solutions
+	 * @return              a list of newly generated solutions.
+	 */
 	@Override
-	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
-		number_of_tries+=query_block_size;
+	protected List<SearchSolution> generateNewSolutions(
+			List<SearchSolution> solutions, float[][] evaluations) {
 		
-		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
+		numberOfTries += queryBlockSize;
+		
+		List<SearchSolution> solutionsList = new ArrayList<SearchSolution>();
 		//generate sequence of random solutions
-		for(int i = 0; i < query_block_size; i++){
-			solutions_list.add(genRandomSolution());
+		for (int i = 0; i < queryBlockSize; i++) {
+			solutionsList.add(genRandomSolution());
 		}
-		return solutions_list;
+		return solutionsList;
 	}	
 }

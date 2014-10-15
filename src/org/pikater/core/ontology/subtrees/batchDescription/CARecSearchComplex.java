@@ -4,14 +4,19 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.pikater.core.CoreConstant;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 /**
- * Created by Martin Pilat on 28.12.13.
+ * Ontology represents the special part of Batch which
+ * is connecting {@link ComputingAgent}, {@link Search} and {@link Recommend}.
+ * 
+ * @author Martin Pilat
+ * @date 28.12.13
+ *
  */
-public class CARecSearchComplex extends DataProcessing implements IComputingAgent, IDataProvider {
+public class CARecSearchComplex extends DataProcessing implements
+		IComputingAgent, IDataProvider {
 
 	private static final long serialVersionUID = -913470799010962236L;
 
@@ -22,21 +27,37 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
     private Recommend recommender;
     private IComputingAgent computingAgent;
 
+    /**
+     * Constructor
+     */
     public CARecSearchComplex() {
     	
     	this.options = new ArrayList<NewOption>();
     	this.errors = new ArrayList<ErrorSourceDescription>();
     }
     
+    /**
+     * Get errors
+     */
     public List<ErrorSourceDescription> getErrors() {
         return errors;
     }
+    
+    /**
+     * Set errors
+     * @param errors
+     */
     public void setErrors(List<ErrorSourceDescription> errors) {
     	if (errors == null) {
     		throw new IllegalArgumentException("Argument errors can't be null");
     	}
         this.errors = errors;
     }
+    
+    /**
+     * Add a error
+     * @param error
+     */
     public void addError(ErrorSourceDescription error) {
     	if (error == null) {
     		throw new IllegalArgumentException("Argument error can't be null");
@@ -44,33 +65,70 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
         this.errors.add(error);
     }
     
+    /**
+     * Get the {@link ComputingAgent}
+     */
     public IComputingAgent getComputingAgent() {
         return computingAgent;
     }
+    
+    /**
+     * Set the {@link ComputingAgent}
+     * @param computingAgent
+     */
     public void setComputingAgent(IComputingAgent computingAgent) {
         this.computingAgent = computingAgent;
     }
     
+    /**
+     * Get the {@link Search}
+     * @return
+     */
     public Search getSearch() {
         return search;
     }
+    
+    /**
+     * Set the {@link Search}
+     * @param search
+     */
     public void setSearch(Search search) {
         this.search = search;
     }
 
+    /**
+     * Get the {@link Recommender}
+     * @return
+     */
     public Recommend getRecommender() {
         return recommender;
     }
+    /**
+     * Set the {@link Recommender}
+     * @param recommender
+     */
     public void setRecommender(Recommend recommender) {
         this.recommender = recommender;
     }
 
+    /**
+     * Get the {@link Options}
+     * @return
+     */
     public List<NewOption> getOptions() {
         return options;
     }
+    /**
+     * Set the {@link Options}
+     * @param options
+     */
     public void setOptions(List<NewOption> options) {
         this.options = options;
     }
+    /**
+     * Add the {@link Option}
+     * @param option
+     */
     public void addOption(NewOption option) {
     	if (option == null) {
     		throw new NullPointerException("Argument option can't be null");
@@ -123,7 +181,8 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName());
 		computingAgentSlot.setDataProvider((IDataProvider) computingAgent);
 
-		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
+		List<DataSourceDescription> slots =
+				new ArrayList<DataSourceDescription>();
 		if (search != null) {
 			slots.add(searchSlot);
 		}
@@ -137,17 +196,24 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 	}
 	
 	@Override
-	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
+	public void importAllDataSourceDescriptions(
+			List<DataSourceDescription> dataSourceDescriptions) {
+		
+		String searchSlot = CoreConstant.SlotContent.SEARCH.getSlotName();
+		String recommenderSlot =
+				CoreConstant.SlotContent.RECOMMEND.getSlotName();
+		String comAgentSlot =
+				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName();
 		
 		for (DataSourceDescription slotI : dataSourceDescriptions) {
 			
-			if (slotI.getInputType().equals(CoreConstant.SlotContent.SEARCH.getSlotName())) {
+			if (slotI.getInputType().equals(searchSlot)) {
 				search = (Search) slotI.getDataProvider();
 			}
-			if (slotI.getInputType().equals(CoreConstant.SlotContent.RECOMMEND.getSlotName())) {
+			if (slotI.getInputType().equals(recommenderSlot)) {
 				recommender = (Recommend) slotI.getDataProvider();
 			}
-			if (slotI.getInputType().equals(CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName())) {
+			if (slotI.getInputType().equals(comAgentSlot)) {
 				computingAgent = (IComputingAgent) slotI.getDataProvider();
 			}
 		}
@@ -155,15 +221,30 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 	}
 
 	@Override
-	public CARecSearchComplex clone()
-	{
+	public CARecSearchComplex clone() {
+		
+		Search searchClone = null;
+		if (search != null) {
+			searchClone = search.clone();
+		}
+		
+		Recommend recommendClone = null;
+		if (recommender != null) {
+			recommendClone = recommender.clone();
+		}
+		
+		IComputingAgent computingAgentClone = null;
+		if (computingAgent != null) {
+			computingAgentClone = computingAgent.clone();
+		}
+		
 		CARecSearchComplex result = (CARecSearchComplex) super.clone();
 		result.setId(this.getId());
 		result.setOptions(CollectionUtils.deepCopy(options));
 		result.setErrors(CollectionUtils.deepCopy(errors));
-		result.setSearch(search != null ? search.clone() : null);
-		result.setRecommender(recommender != null ? recommender.clone() : null);
-		result.setComputingAgent(computingAgent != null ? computingAgent.clone() : null);
+		result.setSearch(searchClone);
+		result.setRecommender(recommendClone);
+		result.setComputingAgent(computingAgentClone);
 		return result;
 	}
 	

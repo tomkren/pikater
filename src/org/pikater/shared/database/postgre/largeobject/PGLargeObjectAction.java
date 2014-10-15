@@ -27,7 +27,6 @@ public class PGLargeObjectAction
 	
 	/**
 	 * Constructor used to provide context telling the action to interrupt.
-	 * @param actionContext
 	 */
 	public PGLargeObjectAction(IPGLOActionContext actionContext)
 	{

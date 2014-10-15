@@ -15,47 +15,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
+/**
+ * Implementation of Genetic algorithm search.
+ * Half uniform crossover, tournament selection.
+ * <p>
+ * Options:
+ * <ul>
+ *  <li>-E float    Minimum error rate (default 0.1)
+ *  <li>-M int      Maximum number of generations (default 10)
+ *  <li>-T float    Mutation rate (default 0.2)
+ *  <li>-X float    Crossover probability (default 0.5)
+ *  <li>-P int      Population size (default 5)
+ *  <li>-S int      Size of tournament in selection (default 2)
+ * </ul> 
+ */
 public class Agent_GASearch extends Agent_Search {
-	/*
-	 * Implementation of Genetic algorithm search
-	 * Half uniform crossover, tournament selection
-	 * Options:
-	 * -E float
-	 * minimum error rate (default 0.1)
-	 * 
-	 * -M int 
-	 * maximal number of generations (default 10)
-	 * 
-	 * -T float
-	 * Mutation rate (default 0.2)
-	 * 
-	 * -X float
-	 * Crossover probability (default 0.5)
-	 * 
-	 * -P int
-	 * population size (default 5)
-	 * 
-	 * -S int
-	 * Size of tournament in selection (default 2)
-	 */
+	
 	private ArrayList<SearchSolution> population;
 	//fitness is the error rate - the lower, the better!
 	float[] fitnesses;
-	int pop_size = 0;
-	double mut_prob = 0.0;
-	double xover_prob = 0.0;
-	private int number_of_generations = 0;
-	private double best_error_rate = Double.MAX_VALUE;
+	int popSize = 0;
+	double mutProb = 0.0;
+	double xoverProb = 0.0;
+	private int numberOfGenerations = 0;
+	private double bestErrorRate = Double.MAX_VALUE;
 	
-	private int maximum_generations;
-	private double final_error_rate;
-	int tournament_size = 2;
-	protected Random rnd_gen = new Random(1);
+	private int maximumGenerations;
+	private double finalErrorRate;
+	int tournamentSize = 2;
+	protected Random rndGen = new Random(1);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -387458001824777077L;
 	
 	
@@ -70,211 +59,287 @@ public class Agent_GASearch extends Agent_Search {
 		return GASearch_Box.get();
 	}
 
+
+	/**
+	 * @return	<code>true</code> if the current best error_rate is lower
+	 * 			than the set threshold, or if the maximum number
+	 *			of generations has been exceeded, 
+	 *			<code>false</code> otherwise. 
+	 */
 	@Override
-	protected boolean finished() {
+	protected boolean isFinished() {
 		//number of generation, best error rate
-		if (number_of_generations >= maximum_generations) {
+		if (numberOfGenerations >= maximumGenerations) {
 			return true;
 		}
 
-		if (best_error_rate <= final_error_rate) {			
+		if (bestErrorRate <= finalErrorRate) {			
 			return true;
 		}
 		return false;
 
 	}
 	
+	/**
+	 * Generates a new population of the given size (for the first time), 
+	 * or uses the individuals from the old population to create a new one.
+	 * <p>
+	 * Uses a selection {@link selectIndividual} with 
+	 * elitism (the single best individual is kept), 
+	 * mutation {@link mutateIndividual} 
+	 * and crossover {@link xoverIndividuals}.
+	 * 
+	 * @param solutions     last solutions
+	 * @param evaluations   last evaluations of above solutions
+	 * @return              new solutions
+	 */
 	@Override
-	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
-		ArrayList<SearchSolution> new_population = new ArrayList<SearchSolution>(pop_size);
-		if(evaluations==null){
+	protected List<SearchSolution> generateNewSolutions(
+			List<SearchSolution> solutions, float[][] evaluations) {
+		
+		ArrayList<SearchSolution> newPopulation =
+				new ArrayList<SearchSolution>(popSize);
+		
+		if(evaluations == null){
 			//create new population			
-			number_of_generations = 0;
-			best_error_rate = Double.MAX_VALUE;
-			fitnesses = new float[pop_size];
-			for(int i = 0; i < pop_size; i++){
-				new_population.add(randomIndividual());
+			numberOfGenerations = 0;
+			bestErrorRate = Double.MAX_VALUE;
+			fitnesses = new float[popSize];
+			for(int i = 0; i < popSize; i++){
+				newPopulation.add(randomIndividual());
 			}
 		} else{
 			//population from the old one
 			//Elitism
 			//1. find the best
 			float best_fit = Float.MAX_VALUE;
-			int best_index = -1;
-			for(int i = 0; i < pop_size; i++){
+			int bestIndex = -1;
+			for(int i = 0; i < popSize; i++){
 				if(fitnesses[i] < best_fit){
 					best_fit = fitnesses[i];
-					best_index = i;
+					bestIndex = i;
 				}
 			}
-			SearchSolution elite_ind = cloneSol((SearchSolution) population.get(best_index)); //To cloneSol by tu (asi) nemuselo byt...
+			
+			SearchSolution searchSolution =
+					(SearchSolution) population.get(bestIndex);
+			
+			//To cloneSol by tu (asi) nemuselo byt...
+			SearchSolution eliteInd = cloneSolution(searchSolution); 
 			//2. put into new population
-			new_population.add(elite_ind);
-			for(int i = 0; i < ((pop_size-1)/2);i++){
+			newPopulation.add(eliteInd);
+			for(int i = 0; i < ((popSize-1)/2);i++){
 				//pairs
-				SearchSolution ind1 = cloneSol(selectIndividual());
-				SearchSolution ind2 = cloneSol(selectIndividual());
+				SearchSolution ind1 = cloneSolution(selectIndividual());
+				SearchSolution ind2 = cloneSolution(selectIndividual());
 				
-				if(rnd_gen.nextDouble()<xover_prob){
+				if(rndGen.nextDouble()<xoverProb){
 					xoverIndividuals(ind1, ind2);
 				}
 				mutateIndividual(ind1);
 				mutateIndividual(ind2);
-				new_population.add(ind1);
-				new_population.add(ind2);
+				newPopulation.add(ind1);
+				newPopulation.add(ind2);
 			}
-			if(((pop_size-1)%2)==1){
+			if(((popSize-1)%2)==1){
 				//one more, not in pair, if the pop is odd
-				SearchSolution ind = cloneSol(selectIndividual());
+				SearchSolution ind = cloneSolution(selectIndividual());
 				mutateIndividual(ind);
-				new_population.add(ind);
+				newPopulation.add(ind);
 			}
 		}
-		number_of_generations++;
-		population= new_population;
+		numberOfGenerations++;
+		population= newPopulation;
 		return population;
 	}
 
+	/**
+	 * Assigns evaluations to the population as fitnesses.
+	 * 
+	 * @return   The best (minimum) fitness in the current population. 
+	 */
 	@Override
-	protected float updateFinished(float[][] evaluations) {
-		//assign evaluations to the population as fitnesses		
+	protected float updateFinished(float[][] evaluations) {				
 		if(evaluations == null){
-			for(int i = 0; i < pop_size; i++){
+			for(int i = 0; i < popSize; i++){
 				fitnesses[i]=1;
 			}
 		}else{
 			for(int i = 0; i < evaluations.length; i++){				
 				//fitness
-				fitnesses[i]=evaluations[i][0];//((Evaluation)(evaluations.get(i))).getError_rate();				
+				fitnesses[i]=evaluations[i][0];				
 				//actualize best_error_rate
-				if(fitnesses[i]<best_error_rate){
-					best_error_rate = fitnesses[i];
+				if(fitnesses[i]<bestErrorRate){
+					bestErrorRate = fitnesses[i];
 				}
 			}
 		}
 		
-		return (float) best_error_rate;
+		return (float) bestErrorRate;
 	}
 
+	
+	/**
+	 * Loads the parameters of the genetic algorithm search from its options.
+	 * If the options are not set, sets the values to defaults:
+	 * 
+	 *  <ul>
+	 *	 <li>popSize = 5 ... the same as queryBlockSize
+	 *	 <li>mutProb = 0.2
+	 *	 <li>xoverProb = 0.5
+	 *	 <li>maximumGenerations = 10
+	 *	 <li>finalErrorRate = 0.1
+	 *	 <li>tournamentSize = 2
+	 *  </ul>
+	 */	
 	@Override
 	protected void loadSearchOptions() {
-		pop_size = 5;
-		mut_prob = 0.2;
-		xover_prob = 0.5;
-		maximum_generations = 10;
-		final_error_rate = 0.1;
-		tournament_size = 2;
+		popSize = 5;
+		mutProb = 0.2;
+		xoverProb = 0.5;
+		maximumGenerations = 10;
+		finalErrorRate = 0.1;
+		tournamentSize = 2;
 		
 		// find maximum tries in Options		
-		NewOptions options = new NewOptions(getSearchOptions());
+		NewOptions options = getSearchOptions();
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.fetchOptionByName("E");
-			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
-			final_error_rate = valueE.getValue(); 
+			FloatValue valueE =
+					(FloatValue) optionE.toSingleValue().getCurrentValue();
+			finalErrorRate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.fetchOptionByName("M");
-			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
-			maximum_generations = valueM.getValue(); 
+			IntegerValue valueM =
+					(IntegerValue) optionM.toSingleValue().getCurrentValue();
+			maximumGenerations = valueM.getValue(); 
 		}		
 		if (options.containsOptionWithName("T")) {
 			NewOption optionT = options.fetchOptionByName("T");
-			FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
-			mut_prob = valueT.getValue(); 
+			FloatValue valueT =
+					(FloatValue) optionT.toSingleValue().getCurrentValue();
+			mutProb = valueT.getValue(); 
 		}
 		if (options.containsOptionWithName("X")) {
 			NewOption optionX = options.fetchOptionByName("X");
-			FloatValue valueX = (FloatValue) optionX.toSingleValue().getCurrentValue();
-			xover_prob = valueX.getValue(); 
+			FloatValue valueX =
+					(FloatValue) optionX.toSingleValue().getCurrentValue();
+			xoverProb = valueX.getValue(); 
 		}
 		if (options.containsOptionWithName("P")) {
 			NewOption optionP = options.fetchOptionByName("P");
-			IntegerValue valueP = (IntegerValue) optionP.toSingleValue().getCurrentValue();
-			pop_size = valueP.getValue(); 
+			IntegerValue valueP =
+					(IntegerValue) optionP.toSingleValue().getCurrentValue();
+			popSize = valueP.getValue(); 
 		}
 		if (options.containsOptionWithName("S")) {
 			NewOption optionS = options.fetchOptionByName("S");
-			IntegerValue valueS = (IntegerValue) optionS.toSingleValue().getCurrentValue();
-			tournament_size = valueS.getValue(); 
+			IntegerValue valueS =
+					(IntegerValue) optionS.toSingleValue().getCurrentValue();
+			tournamentSize = valueS.getValue(); 
 		}
 
-		query_block_size = pop_size;
+		queryBlockSize = popSize;
 
 	}
 
-	//new random options
+	/**
+	 * Generates a new random options.
+	 */
 	private SearchSolution randomIndividual() {
 		
-		List<IValueData> new_solution = new ArrayList<IValueData>();
+		List<IValueData> newSolution = new ArrayList<IValueData>();
 		for (SearchItem si : getSchema() ) {
-            IValueData val = si.randomValue(rnd_gen);
-			new_solution.add(val);
+            IValueData val = si.randomValue(rndGen);
+			newSolution.add(val);
 		}		
 		SearchSolution res_sol = new SearchSolution();
-		res_sol.setValues(new_solution);
+		res_sol.setValues(newSolution);
 		return res_sol;
 	}
 	
-	//tournament selection (minimization)
+	/**
+	 * Tournament selection (minimization).
+	 * 
+	 * @return   the best SearchSolution in the population.
+	 */
 	private SearchSolution selectIndividual(){
 		float best_fit = Float.MAX_VALUE;
-		int best_index = -1;
-		for(int i = 0; i < tournament_size; i++){
-			int ind= rnd_gen.nextInt(fitnesses.length);
+		int bestIndex = -1;
+		for(int i = 0; i < tournamentSize; i++){
+			int ind= rndGen.nextInt(fitnesses.length);
 			//MINIMIZATION!!!
 			if(fitnesses[ind] <= best_fit){
 				best_fit = fitnesses[ind];
-				best_index = ind;
+				bestIndex = ind;
 			}
 		}
-		return (SearchSolution) population.get(best_index);
+		return (SearchSolution) population.get(bestIndex);
 	}
 	
-	//Half uniform crossover
-	private void xoverIndividuals(SearchSolution sol1, SearchSolution sol2){
-		List<IValueData> new_solution1 = new ArrayList<IValueData>();
-		List<IValueData> new_solution2 = new ArrayList<IValueData>();
+	/**
+	 * Crossover of the sol1 an sol2 solutions. Changes the given solutions.
+	 * Half uniform crossover.
+	 * 
+	 * @param sol1  solution 1 to be x-overed
+	 * @param sol2  solution 2 to be x-overed
+	 * 
+	 */
+
+	private void xoverIndividuals(SearchSolution sol1, SearchSolution sol2) {
+		List<IValueData> newSolution1 = new ArrayList<IValueData>();
+		List<IValueData> newSolution2 = new ArrayList<IValueData>();
 		
-		for (int i = 0; i < new_solution1.size(); i++) {
+		for (int i = 0; i < newSolution1.size(); i++) {
             IValueData val1 =  sol1.getValues().get(i);
             IValueData val2 =  sol2.getValues().get(i);
-			if(rnd_gen.nextBoolean()){
+			if(rndGen.nextBoolean()){
 				//The same...
-				new_solution1.add(val1);
-				new_solution2.add(val2);
+				newSolution1.add(val1);
+				newSolution2.add(val2);
 			}else{
 				//Gene exchange
-				new_solution1.add(val2);
-				new_solution2.add(val1);
+				newSolution1.add(val2);
+				newSolution2.add(val1);
 			}
 		}
-		sol1.setValues(new_solution1);
-		sol2.setValues(new_solution2);
+		sol1.setValues(newSolution1);
+		sol2.setValues(newSolution2);
 	}
 	
-	//mutation of the option
-	private void mutateIndividual(SearchSolution sol){
+	/** 
+	 * Mutation of the option. Changes the given solution.
+	 * 
+	 * @param solution     a solution to be mutated.
+	 */
+	private void mutateIndividual(SearchSolution solution){
 		
-		List<IValueData> new_sol = new ArrayList<IValueData>();
+		List<IValueData> newSolution = new ArrayList<IValueData>();
 		for (int i = 0; i < getSchema().size(); i++ ) {
 			
 			SearchItem si = getSchema().get(i);
-            IValueData val = sol.getValues().get(i);
-			if(rnd_gen.nextDouble() < mut_prob)
-				val = si.randomValue(rnd_gen);
-			new_sol.add(val);
+            IValueData val = solution.getValues().get(i);
+			if(rndGen.nextDouble() < mutProb)
+				val = si.randomValue(rndGen);
+			newSolution.add(val);
 		}
-		sol.setValues(new_sol);
+		solution.setValues(newSolution);
 	}
 	
 	
-	//Clone options
-	private SearchSolution cloneSol(SearchSolution sol){
-		List<IValueData> new_solution = sol.getValues();
-		SearchSolution res_sol = new SearchSolution();
-		res_sol.setValues(new_solution);
-		return res_sol;
+	/**
+	 * Clone options.
+	 * 
+	 * @param solution   a solution to be cloned.
+	 * @return           a cloned solution.
+	 */
+	private SearchSolution cloneSolution(SearchSolution solution){
+		List<IValueData> newSolution = solution.getValues();
+		SearchSolution resSolution = new SearchSolution();
+		resSolution.setValues(newSolution);
+		return resSolution;
 	}
 	
 }

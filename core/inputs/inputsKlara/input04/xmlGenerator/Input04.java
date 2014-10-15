@@ -31,6 +31,7 @@ public final class Input04 {
 		comAgent.setAgentType(null);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
+		comAgent.setValidationData(fileDataSource);
 		
 		NewOption optionF = new NewOption("F", 10);
 		

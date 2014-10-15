@@ -7,6 +7,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDura
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 /**
+ * Computation node for executing ML experiments
  * User: Kuba
  * Date: 18.5.2014
  * Time: 15:52
@@ -18,6 +19,12 @@ public class ModelComputationNode extends ComputationNode {
     private int experimentID;
     private int priority;
 
+    /**
+     *
+     * @param computationGraph Parent graph
+     * @param agent Owner agent
+     * @param experimentID Id of parent experiment
+     */
     public ModelComputationNode(ComputationGraph computationGraph,
     		PikaterAgent agent, int experimentID) {
         super(computationGraph);
@@ -25,34 +32,66 @@ public class ModelComputationNode extends ComputationNode {
         this.experimentID = experimentID;
     }
 
-    public ModelComputationNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph) {
-        super(executeStrategy,computationGraph);
+    /**
+     *
+     * @param executeStrategy Strategy to be executes
+     */
+    public ModelComputationNode(StartComputationStrategy executeStrategy) {
+        super(executeStrategy);
     }
 
+    /**
+     * Get method for eval, e.g. cross validation
+     * @return Evaluation method
+     */
 	public EvaluationMethod getEvaluationMethod() {
 		return evaluationMethod;
 	}
 
+    /**
+     * Sets method for eval
+     * @param evaluationMethod Method for evaluation
+     */
 	public void setEvaluationMethod(EvaluationMethod evaluationMethod) {
 		this.evaluationMethod = evaluationMethod;
 	}
 
+    /**
+     *
+     * @return Expected duration
+     */
 	public ExpectedDuration getExpectedDuration() {
 		return expectedDuration;
 	}
 
+    /**
+     * Sets expected duration
+     * @param expectedDuration Expected duration to be set
+     */
 	public void setExpectedDuration(ExpectedDuration expectedDuration) {
 		this.expectedDuration = expectedDuration;
 	}
 
+    /**
+     * Gets priority
+     * @return Priority of the node
+     */
 	public int getPriority() {
 		return priority;
 	}
 
+    /**
+     * Sets priority of the node
+     * @param priority Priority
+     */
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
 
+    /**
+     * Get batch of the parent graph
+     * @return  Batch id
+     */
 	public int getBatchID() {
 		return computationGraph.getBatchID();
 	}

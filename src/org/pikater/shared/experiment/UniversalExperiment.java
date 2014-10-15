@@ -1,6 +1,5 @@
 package org.pikater.shared.experiment;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,30 +10,46 @@ import org.pikater.shared.XStreamHelper;
 import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 
-public class UniversalComputationDescription
+/**
+ * <p>This class is the heart of the project - a high-level representation
+ * of experiments that binds web and core. Experiments are saved
+ * to database in this format, serialized as XML strings using the 
+ * XStream technology. We call it the "universal format".</p>
+ * 
+ * From this format, experiments are also converted to web or core
+ * specific formats:
+ * <ul>
+ * <li> Web formats and conversions from/to this format can be located in
+ * the "org.pikater.web.experiment" package.
+ * </ul>
+ * 
+ * @author stepan
+ */
+public class UniversalExperiment
 {
 	/**
-	 * Top-level options for this computation.
+	 * Top-level ({@link UniversalElement element} independent) options for this experiment.
 	 */
 	private final Set<NewOption> globalOptions;
 	
 	/**
-	 * Tree of ComputingDescription. Ontology elements wrapped in
-	 * UniversalElement Set. Contains only FileDataSavers.
+	 * Root {@link UniversalElement elements} of the whole experiment. Should only contain
+	 * elements representing {@link FileDataSaver}.
 	 */
 	private final Set<UniversalElement> rootElements;
 
 	/**
-	 * Contains all elements added to this computation.
+	 * All {@link UniversalElement elements} of the experiment.
 	 */
 	private final Set<UniversalElement> allElements;
 	
 	/**
-	 * ID generator for {@link UniversalOntology} instances within {@link UniversalElement}.
+	 * Central object generating IDs for instances of {@link UniversalElementOntology}
+	 * within {@link UniversalElement experiment elements}.
 	 */
 	private final SimpleIDGenerator idGenerator;
 
-	public UniversalComputationDescription()
+	public UniversalExperiment()
 	{
 		this.globalOptions = new HashSet<NewOption>();
 		this.rootElements = new HashSet<UniversalElement>();
@@ -45,33 +60,44 @@ public class UniversalComputationDescription
 	// ----------------------------------------------------------
 	// SOME BASIC INTERFACE
 	
+	/**
+	 * Gets top-level ({@link UniversalElement element} independent) options
+	 * for this experiment.
+	 * Changes to the returned collection are propagated inside this class.
+	 */
 	public Set<NewOption> getGlobalOptions()
 	{
 		return globalOptions;
 	}
 
-	public void addGlobalOptions(NewOption... options)
-	{
-		this.globalOptions.addAll(Arrays.asList(options));
-	}
-	
-	public void addGlobalOptions(Set<NewOption> options) {
-		this.globalOptions.addAll(options);
-	}
-	
+	/**
+	 * Gets root {@link UniversalElement elements} of this experiment - should
+	 * only be elements representing {@link FileDataSaver}. If an element of
+	 * another type is present, this object was most likely deserialized from XML
+	 * which already contained the bad reference.
+	 */
 	public Set<UniversalElement> getRootElements()
 	{
 		return rootElements;
 	}
-	
+
+	/**
+	 * Gets all {@link UniversalElement elements} of the experiment.
+	 */
 	public Set<UniversalElement> getAllElements()
 	{
 		return allElements;
 	}
 
+	/**
+	 * Adds an {@link UniversalElement element} to this experiment. If it a root element,
+	 * it is automatically handled.
+	 * @throws IllegalArgumentException if the given element doesn't associate itself to
+	 * an ontology
+	 */
 	public void addElement(UniversalElement element)
 	{
-		if(!element.isOntologyDefined())
+		if(element.getOntologyInfo() == null)
 		{
 			throw new IllegalArgumentException("The given element didn't have ontology defined.");
 		}
@@ -79,7 +105,14 @@ public class UniversalComputationDescription
 		{
 			element.getOntologyInfo().setId(idGenerator.getAndIncrement());
 			
-			//if (BoxType.fromOntologyClass(element.getOntologyInfo().getOntologyClass()) == BoxType.OUTPUT)
+			/*
+			 * ALTERNATIVE CONDITION IMPLEMENTATION USING A CLASS DEFINED IN THE WEB APPLICATION:
+			 * - it is more modular and clear but:
+			 * - if used, the core system becomes partially dependent on the web application (unless
+			 * the type is moved to core system of course)
+			 * 
+			 * if (BoxType.fromOntologyClass(element.getOntologyInfo().getOntologyClass()) == BoxType.OUTPUT)
+			 */
 			if (element.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
 			{
 				rootElements.add(element);
@@ -92,11 +125,11 @@ public class UniversalComputationDescription
 	 * Can this experiment be shown in the experiment editor? In other words,
 	 * can it be converted to the web format?
 	 */
-	public boolean isGUICompatible()
+	public boolean isPresentationCompatible()
 	{
 		for (UniversalElement elementI : this.allElements)
 		{
-			if (elementI.getGuiInfo() == null)
+			if (elementI.getPresentationInfo() == null)
 			{
 				return false;
 			}
@@ -105,8 +138,8 @@ public class UniversalComputationDescription
 	}
 	
 	/**
-	 * Determines whether this experiment is ready to be scheduled and should not
-	 * end up with needless errors.
+	 * Is this experiment ready to be queued for execution and is it not likely
+	 * to end up with needless errors? If not, the reason is logged.
 	 * @return
 	 */
 	public boolean isValid()
@@ -121,7 +154,7 @@ public class UniversalComputationDescription
 		}
 		for(UniversalElement element : allElements)
 		{
-			for(UniversalConnector connector : element.getOntologyInfo().getInputDataSlots())
+			for(UniversalElementConnector connector : element.getOntologyInfo().getInputDataSlots())
 			{
 				if(connector.getFromElement() == null)
 				{
@@ -153,19 +186,19 @@ public class UniversalComputationDescription
 	public String toXML()
 	{
 		return XStreamHelper.serializeToXML(this, 
-        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
+        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
 	}
 	
-	public static UniversalComputationDescription fromXML(String xml)
+	public static UniversalExperiment fromXML(String xml)
 	{
-		return XStreamHelper.deserializeFromXML(UniversalComputationDescription.class, xml, 
-        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
+		return XStreamHelper.deserializeFromXML(UniversalExperiment.class, xml, 
+        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
 	}
 	
 	public static void main(String[] args) throws CloneNotSupportedException
 	{
-		UniversalComputationDescription uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
+		UniversalExperiment uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
 		System.out.println(XStreamHelper.serializeToXML(uDescription, 
-				XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class)));
+				XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class)));
 	}
 }

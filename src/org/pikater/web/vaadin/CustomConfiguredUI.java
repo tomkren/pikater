@@ -166,7 +166,8 @@ public abstract class CustomConfiguredUI extends UI {
 				 */
 
 				// initialize and start the job scheduler
-				PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
+				PikaterJobScheduler.initStaticScheduler(IOUtils.joinPathComponents(
+						IOUtils.getAbsoluteWEBINFCLASSESPath(), IOUtils.getRelativePath(PikaterJobScheduler.class)));
 
 				/*
 				 * Update UI. 

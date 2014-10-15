@@ -117,19 +117,19 @@ public class DataSetConverter {
 		DataSetConverter.workbookToArff(DataSetConverter.readFileToEnd(headerFile), input, out);	
 	}
 	
-	public static void xlsToArff(File inputXLSFile,File outputFile) throws Exception{
+	public static void xlsToArff(File inputXLSFile,File outputFile) throws FileNotFoundException, DataSetConverterException, IOException{
 		DataSetConverter.xlsToArff((String)null, inputXLSFile, outputFile);
 	}
 	
-	public static void xlsToArff(File inputXLSFile,PrintStream out) throws Exception{
+	public static void xlsToArff(File inputXLSFile,PrintStream out) throws FileNotFoundException, DataSetConverterException, IOException {
 		DataSetConverter.xlsToArff((String)null, inputXLSFile, out);
 	}
 	
-	public static void xlsxToArff(File inputXLSXFile,File outputFile) throws Exception{
+	public static void xlsxToArff(File inputXLSXFile,File outputFile) throws FileNotFoundException, DataSetConverterException, IOException {
 		DataSetConverter.xlsxToArff((String)null, inputXLSXFile, outputFile);
 	}
 	
-	public static void xlsxToArff(File inputXLSXFile,PrintStream out) throws Exception{
+	public static void xlsxToArff(File inputXLSXFile,PrintStream out) throws FileNotFoundException, DataSetConverterException, IOException {
 		DataSetConverter.xlsxToArff((String)null, inputXLSXFile, out);
 	}
 	

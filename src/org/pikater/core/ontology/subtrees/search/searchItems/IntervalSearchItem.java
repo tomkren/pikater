@@ -49,7 +49,7 @@ public class IntervalSearchItem extends SearchItem {
         {
             float floatMin=((FloatValue)min).getValue();
             float floatMax=((FloatValue)max).getValue();
-            int x = getNumber_of_values_to_try();
+            int x = getNumberOfValuesToTry();
             float dv = (floatMax - floatMin)/ (x - 1);
             for (int i = 0; i < x; i++) {
                 float vFloat = floatMin + i * dv;
@@ -60,7 +60,7 @@ public class IntervalSearchItem extends SearchItem {
         {
             double doubleMin=((DoubleValue)min).getValue();
             double doubleMax=((DoubleValue)max).getValue();
-            int x = getNumber_of_values_to_try();
+            int x = getNumberOfValuesToTry();
             double dv = (doubleMax - doubleMin)/ (x - 1);
             for (int i = 0; i < x; i++) {
                 double vFloat = doubleMin + i * dv;
@@ -69,7 +69,7 @@ public class IntervalSearchItem extends SearchItem {
         }
             else if (min instanceof IntegerValue)
         {
-            int x = getNumber_of_values_to_try();
+            int x = getNumberOfValuesToTry();
             int intMin=((IntegerValue)min).getValue();
             int intMax=((IntegerValue)max).getValue();
             int range = intMax - intMin + 1;

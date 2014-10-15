@@ -14,184 +14,239 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.search.SimulatedAnnealing_Box;
 
+/**
+ * Implementation of Simulated Annealing search.
+ * <p>
+ * Options:
+ * <ul>
+ *   <li>-E float   Minimum error rate (default 0.1)
+ *   <li>-M int     Maximum number of generations (default 10)
+ *   <li>-T float   Initial temperature (default 1.0)
+ *   <li>-S float   Stability of generation of new option - probability of keeping an option (default 0.5)
+ * </ul>  
+ */
 public class Agent_SimulatedAnnealing extends Agent_Search {
-	/*
-	 * Implementation of Simulated Annealing search
-	 * Options:
-	 * -E float
-	 * minimum error rate (default 0.1)
-	 * 
-	 * -M int 
-	 * maximal number of generations (default 10)
-	 * 
-	 * -T float
-	 * Initial temperature (default 1.0)
-	 * 
-	 * -S float
-	 * Stability of generation of new option - probability of keeping of option (default 0.5)
-	 */
+
 	private static final long serialVersionUID = -5087231723984887596L;
 
 	private SearchSolution solution = null;
-	private SearchSolution new_solution = null;
+	private SearchSolution newSolution = null;
 	private float evaluation = Float.MAX_VALUE;
 	private double temperature = 0.0;
 	private double stability = 0.5;
-	private int number_of_tries = 0;
-	private int maximum_tries = 50;
-	private double best_error_rate = 1;
-	private double final_error_rate = 0.1;
+	private int numberOfTries = 0;
+	private int maximumTries = 50;
+	private double bestErrorRate = 1;
+	private double finalErrorRate = 0.1;
 	private boolean minimization = true;
-	protected Random rnd_gen = new Random(1);
-
+	protected Random rndGen = new Random(1);
+	
 	@Override
 	protected String getAgentType() {
+
 		return "SimulatedAnnealing";
 	}
-	
+
 	@Override
 	protected AgentInfo getAgentInfo() {
 
 		return SimulatedAnnealing_Box.get();
 	}
 
+	
+	/**
+	 * @return	<code>true</code> if the current error_rate is lower
+	 * 			than the set threshold, or if the maximum number
+	 *			of tries has been exceeded, 
+	 *			<code>false</code> otherwise. 
+	 */
 	@Override
-	protected boolean finished() {
+	protected boolean isFinished() {
 		//n>=nmax
-		if (number_of_tries >= maximum_tries) {
+		if (numberOfTries >= maximumTries) {
 			return true;
 		}
-		if (best_error_rate <= final_error_rate){
+		if (bestErrorRate <= finalErrorRate) {
 			return true;
 		}
 		return false;
 	}
 	
-
+	/**
+	 * Loads the parameters of annealing from search's options.
+	 * If the options are not set, sets the values to defaults:
+	 * 
+	 *  <ul>
+	 *   <li>temperature = 1.0;
+	 *	 <li>maximumTries = 50;
+	 *   <li>stability = 0.5;
+	 *   <li>finalErrorRate = 0.01;
+	 *  </ul>
+	 */	
 	@Override
 	protected void loadSearchOptions() {
-		temperature = 1.0;//?
-		maximum_tries = 50;
+		temperature = 1.0;
+		maximumTries = 50;
 		stability = 0.5;
-		final_error_rate = 0.01;
+		finalErrorRate = 0.01;
 		
-		NewOptions options = new NewOptions(getSearchOptions());
+		NewOptions options = getSearchOptions();
 		
 		NewOption optionE = options.fetchOptionByName("E");
-		FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
-		final_error_rate = valueE.getValue(); 
+		FloatValue valueE =
+				(FloatValue) optionE.toSingleValue().getCurrentValue();
+		finalErrorRate = valueE.getValue(); 
 
 		NewOption optionM = options.fetchOptionByName("M");
-		IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
-		maximum_tries = valueM.getValue(); 
+		IntegerValue valueM =
+				(IntegerValue) optionM.toSingleValue().getCurrentValue();
+		maximumTries = valueM.getValue(); 
 
 		NewOption optionS = options.fetchOptionByName("S");
-		FloatValue valueS = (FloatValue) optionS.toSingleValue().getCurrentValue();
+		FloatValue valueS =
+				(FloatValue) optionS.toSingleValue().getCurrentValue();
 		stability = valueS.getValue(); 
 
 		NewOption optionT = options.fetchOptionByName("T");
-		FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
+		FloatValue valueT =
+				(FloatValue) optionT.toSingleValue().getCurrentValue();
 		temperature = valueT.getValue(); 
 		
 	}
 
+	/**
+	 * Generates a new solution (uses the {@link neighbor} method).
+	 * If it is the first solution to generate, initialize the search first.
+	 */	
 	@Override
-	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
+	protected List<SearchSolution> generateNewSolutions(
+			List<SearchSolution> solutions, float[][] evaluations) {
 		
 		if(evaluations == null){
-			//inicializace
+			// initialization
 			solution = null;
-			new_solution = null;
+			newSolution = null;
 			evaluation = Float.MAX_VALUE;
-			number_of_tries = 0;
-			best_error_rate = Double.MAX_VALUE;
+			numberOfTries = 0;
+			bestErrorRate = Double.MAX_VALUE;
 		}
 		
-		//create a new solution for evaluation
-		new_solution = neighbor(solution);
+		// create a new solution for evaluation
+		newSolution = neighbor(solution);
 		
-		number_of_tries++;
+		numberOfTries++;
 		
-		//List of solutions to send
-		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
-		solutions_list.add(new_solution);
-		return solutions_list;
+		// List of solutions to send
+		List<SearchSolution> solutionsList =
+				new ArrayList<SearchSolution>();
+		solutionsList.add(newSolution);
+		return solutionsList;
 	}
 	
 	@Override
 	protected float updateFinished(float[][] evaluations) {
-		float new_evaluation;
+		float newEvaluation;
 		
 		if (evaluations == null){
-			new_evaluation = Float.MAX_VALUE;
+			newEvaluation = Float.MAX_VALUE;
 		}
 		else{
-			new_evaluation = evaluations[0][0];//((Evaluation)(evaluations.get(0))).getError_rate();
+			newEvaluation = evaluations[0][0];
 		}
 		
-		//Actualize best evaluation
-		if(new_evaluation < best_error_rate){
-			best_error_rate = new_evaluation;
+		// Actualize best evaluation
+		if(newEvaluation < bestErrorRate){
+			bestErrorRate = newEvaluation;
 		}
-		//Acceptance of new solutions
-		//System.out.print("<OK:> Temp:"+temperature+", e0: "+evaluation);
-		if (rnd_gen.nextDouble()<(acceptanceProb(new_evaluation-evaluation,temperature))){
-			solution = new_solution;
-			evaluation = new_evaluation;
+		// Acceptance of new solutions
+		// System.out.print("<OK:> Temp:"+temperature+", e0: "+evaluation);
+		
+		double prob = acceptanceProb(newEvaluation-evaluation, temperature);
+		if (rndGen.nextDouble() < prob){
+			solution = newSolution;
+			evaluation = newEvaluation;
 		}
-		//System.out.println(", e1:"+ new_evaluation+", acceptance: "+ acc+" ,.5->1:"+ acceptanceProb(1-0.5,temperature)+" ,1->.5:"+ acceptanceProb(0.5-1,temperature));
+		
+		/*
+		System.out.println(", e1:" + newEvaluation + ", acceptance: " +
+				acc + " ,.5->1: " + acceptanceProb(1-0.5,temperature) +
+				" ,1->.5:"+ acceptanceProb(0.5-1,temperature));
+		*/
+		
 		//Decrease temperature
-		Cooling();
+		cooling();
 		
-		return (float) best_error_rate;
+		return (float) bestErrorRate;
 	}
 	
-	//Neighbor function: Random solutions in case of beginning, or mutation of existing
-	private SearchSolution neighbor(SearchSolution sol){
+	/**
+	 * Generates random solutions in the beginning,
+	 * or changes the existing solution.
+	 * 
+	 */
+	private SearchSolution neighbor(SearchSolution solution) {
 
-		List<IValueData> neighbourSolutionValues = new ArrayList<IValueData>();
-		if(sol == null){
-			//Completely new solution
+		List<IValueData> neighbourSolutionValues =
+				new ArrayList<IValueData>();
+		if(solution == null) {
+			// Completely new solution
 			for (SearchItem si : getSchema() ) {
-				//dont want to change old solutions
-				neighbourSolutionValues.add(si.randomValue(rnd_gen));
+				// don't want to change old solutions
+				neighbourSolutionValues.add(si.randomValue(rndGen));
 			}
-		}else{
-			//Neighbor function
+		} else {
+			// Neighbor function
 			for (int i = 0; i < getSchema().size(); i++) {
 				
 				SearchItem si = getSchema().get(i);
-                IValueData val = sol.getValues().get(i);
+                IValueData val = solution.getValues().get(i);
 				
-				if(rnd_gen.nextDouble() > stability) {
-					val = si.randomValue(rnd_gen);
+				if(rndGen.nextDouble() > stability) {
+					val = si.randomValue(rndGen);
 				}
 				neighbourSolutionValues.add(val);
 			}
 		}
+		
 		SearchSolution result = new SearchSolution();
 		result.setValues(neighbourSolutionValues);
 		return result;
 	}
 	
-	/*Acceptance probability of annealed solutions: 
-	  -the better values are accepted
-	  -the worse with probability exp((e-e_new)/temperature)
-	*/
+	/**
+	 * Acceptance probability of annealed solutions
+	 *   <ul>
+	 *     <li>best values are always accepted
+	 *     <li>worse with probability exp((e-e_new)/temperature)
+	 *   </ul>
+	 */
 	private double acceptanceProb(double delta, double temperature){
-		if(!minimization) // for max problems
-		{
-			return -delta < 0 ? 1.0 : Math.exp(-delta/temperature);
-		}
-		else
-		{
-			return delta < 0 ? 1.0 : Math.exp(-delta/temperature);
+		
+		// for max problems
+		if (!minimization) {
+			
+			if (-delta < 0) {
+				return 1.0;
+			} else {
+				return Math.exp(-delta/temperature);
+			}
+		
+		} else {
+			
+			if (delta < 0) {
+				return 1.0;
+			} else {
+				return Math.exp(-delta/temperature);
+			}
 		}
 	}
 	
-	//Cooling scheme: 20% decrease in each step	
-	private void Cooling(){
-		temperature = 0.8*temperature;
+	/**
+	 * Cooling scheme: 20% decrease in each step
+	 */
+	private void cooling() {
+		
+		temperature = 0.8 * temperature;
 	}
 
 }

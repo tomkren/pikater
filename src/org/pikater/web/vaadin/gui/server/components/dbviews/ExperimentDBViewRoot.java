@@ -121,7 +121,7 @@ public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends Abstr
 				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception {
 					// start the task and bind it with the progress dialog
 					underlyingTask = new InterruptibleJobHelper();
-					underlyingTask.startJob(ExportExperimentResultsJob.class, new Object[] { specificRow.getExperiment(), tmpFile, contextForTask });
+					underlyingTask.start(ExportExperimentResultsJob.class, new Object[] { specificRow.getExperiment(), tmpFile, contextForTask });
 				}
 
 				@Override

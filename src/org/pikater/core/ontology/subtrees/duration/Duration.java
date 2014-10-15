@@ -8,15 +8,15 @@ public class Duration implements Concept {
 	private static final long serialVersionUID = -7310795521154346932L;
 	
 	private Date start;
-	private long durationMiliseconds; // ms
-	private float LR_duration;
+	private long durationMiliseconds;
+	private float durationLR;
 
 	public float getLR_duration() {
-		return LR_duration;
+		return durationLR;
 	}
 
-	public void setLR_duration(float LR_duration) {
-		this.LR_duration = LR_duration;
+	public void setdurationLR(float durationLR) {
+		this.durationLR = durationLR;
 	}
 
 	public Date getStart() {
