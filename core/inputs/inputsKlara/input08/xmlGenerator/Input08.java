@@ -2,11 +2,11 @@ package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
-import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
+import org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider;
+import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

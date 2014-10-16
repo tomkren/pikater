@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.batchDescription;
+package org.pikater.core.ontology.subtrees.batchdescription;
 
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.util.collections.CollectionUtils;

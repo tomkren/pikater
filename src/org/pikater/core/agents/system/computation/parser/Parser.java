@@ -6,7 +6,7 @@ import org.pikater.core.agents.system.computation.graph.*;
 import org.pikater.core.agents.system.computation.graph.edges.*;
 import org.pikater.core.agents.system.computation.graph.strategies.*;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;

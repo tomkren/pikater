@@ -3,8 +3,8 @@ package xmlGenerator;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.recommend.Agent_Basic;
-import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
+import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import java.io.FileNotFoundException;

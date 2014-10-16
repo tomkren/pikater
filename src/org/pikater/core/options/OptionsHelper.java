@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.CoreConstant;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration.DurationType;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;

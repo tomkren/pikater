@@ -19,7 +19,7 @@ import org.pikater.core.agents.system.computation.parser.ComputationOutputBuffer
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.manager.ExecuteDataProcessingBehaviour;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;

@@ -2,8 +2,8 @@ package org.pikater.core.agents.system.computation.graph;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 /**

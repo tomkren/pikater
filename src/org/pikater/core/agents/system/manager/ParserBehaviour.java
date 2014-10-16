@@ -9,6 +9,7 @@ import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
+
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationGraph;
 import org.pikater.core.agents.system.computation.graph.events.LoggerObserver;
@@ -17,7 +18,7 @@ import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 /**

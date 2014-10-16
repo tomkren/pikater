@@ -1,9 +1,9 @@
-package org.pikater.core.ontology.subtrees.batchDescription.examples;
+package org.pikater.core.ontology.subtrees.batchdescription.examples;
 
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
-import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
+import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;

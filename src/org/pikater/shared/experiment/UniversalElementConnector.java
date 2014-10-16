@@ -1,6 +1,6 @@
 package org.pikater.shared.experiment;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
+import org.pikater.core.ontology.subtrees.batchdescription.export.Slot;
 
 /**
  * Connects experiment {@link UniversalElement elements}. Represents

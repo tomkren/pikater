@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.batchDescription.durarion;
+package org.pikater.core.ontology.subtrees.batchdescription.duration;
 
 import org.pikater.shared.util.ICloneable;
 
@@ -58,12 +58,21 @@ public class ExpectedDuration implements Concept, ICloneable {
 	}
 	public void importDurationType(DurationType durationType) {
 		this.durationType = durationType.name();
-	}	
+	}
+	
+	@Override
 	public ExpectedDuration clone()
 	{
-		ExpectedDuration expectedDuration = new ExpectedDuration();
-		expectedDuration.setDurationType(durationType);
-		return expectedDuration;
+		ExpectedDuration result;
+		try
+		{
+			result = (ExpectedDuration) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setDurationType(durationType);
+		return result;
 	}
-
 }

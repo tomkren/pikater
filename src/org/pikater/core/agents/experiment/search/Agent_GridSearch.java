@@ -31,7 +31,7 @@ public class Agent_GridSearch extends Agent_Search {
     boolean linearSteps = true;
     boolean logSteps = true;
     double logZero = 1.0E-8;
-    ArrayList<IValueData> values = null;
+    List<IValueData> values = null;
 
     @Override
     protected String getAgentType() {
@@ -75,16 +75,16 @@ public class Agent_GridSearch extends Agent_Search {
         return ret;
     }
 
-    private ArrayList<IValueData> generateValues() {
+    private List<IValueData> generateValues() {
 
-        ArrayList<IValueData> vals = new ArrayList<IValueData>();
+        List<IValueData> vals = new ArrayList<IValueData>();
         
-        ArrayList<ArrayList<IValueData>> valsForOpts =
-        		new ArrayList<ArrayList<IValueData>>();
+        List<List<IValueData>> valsForOpts =
+        		new ArrayList<List<IValueData>>();
 
         for (SearchItem searchItemI : schema ) {
 
-            ArrayList<IValueData> valsForItem =
+            List<IValueData> valsForItem =
             		generateValue(searchItemI);
             valsForOpts.add(valsForItem);
         }
@@ -94,7 +94,7 @@ public class Agent_GridSearch extends Agent_Search {
         vals.addAll(valsForOpts.get(0));
         
         for (int i = 1; i < valsForOpts.size(); i++) {
-            ArrayList<IValueData> newVals = new ArrayList<IValueData>();
+            List<IValueData> newVals = new ArrayList<IValueData>();
             for (int j = 0; j < vals.size(); j++) {
             	for (int k = 0; k < valsForOpts.get(i).size(); k++) {
             		
@@ -109,7 +109,7 @@ public class Agent_GridSearch extends Agent_Search {
         return vals;
     }
 
-    private ArrayList<IValueData> generateValue(SearchItem searchInterval) {
+    private List<IValueData> generateValue(SearchItem searchInterval) {
     	
         Integer tries = searchInterval.getNumberOfValuesToTry();
         if (tries == 0) {

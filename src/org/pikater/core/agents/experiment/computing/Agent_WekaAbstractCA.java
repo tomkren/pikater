@@ -2,8 +2,8 @@ package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
-import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
+import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;

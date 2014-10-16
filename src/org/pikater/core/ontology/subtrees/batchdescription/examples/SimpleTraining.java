@@ -1,12 +1,12 @@
-package org.pikater.core.ontology.subtrees.batchDescription.examples;
+package org.pikater.core.ontology.subtrees.batchdescription.examples;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
-import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 

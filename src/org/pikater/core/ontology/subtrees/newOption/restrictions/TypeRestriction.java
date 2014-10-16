@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 public class TypeRestriction implements IRestriction
 {
@@ -53,12 +54,17 @@ public class TypeRestriction implements IRestriction
 	@Override
 	public TypeRestriction clone()
 	{
-		List<ValueType> clonedTypes = new ArrayList<ValueType>();
-		for(ValueType type : types)
+		TypeRestriction result;
+		try
 		{
-			clonedTypes.add(type.clone());
+			result = (TypeRestriction) super.clone();
 		}
-		return new TypeRestriction(clonedTypes);
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setTypes(CollectionUtils.deepCopy(types));
+		return result;
 	}
 	@Override
 	public boolean isValid()

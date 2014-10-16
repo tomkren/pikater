@@ -48,11 +48,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 	 */
 	@Override
 	protected boolean isFinished() {
-		if (ni < n) {
-			return false;
-		} else {
-			return true;
-		}
+		return ni >= n;
 	}
 
 	/**

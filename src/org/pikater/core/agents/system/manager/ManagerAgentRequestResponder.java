@@ -17,6 +17,14 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.configuration.Arguments;
@@ -25,17 +33,11 @@ import org.pikater.core.ontology.TerminationOntology;
 import org.pikater.core.ontology.subtrees.agent.TerminateSelf;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
-import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
-import org.pikater.core.ontology.subtrees.ping.Ping;
 import org.pikater.core.ontology.subtrees.ping.PingReply;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
-
-import java.io.*;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 /**
  * User: Kuba

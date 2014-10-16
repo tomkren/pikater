@@ -2,11 +2,13 @@ package org.pikater.shared.experiment;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
-import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
+import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchdescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.XStreamHelper;
+import org.pikater.shared.logging.core.ConsoleLogger;
 import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 
@@ -166,6 +168,6 @@ public class UniversalExperiment {
 
 	public static void main(String[] args) throws CloneNotSupportedException {
 		UniversalExperiment uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
-		System.out.println(XStreamHelper.serializeToXML(uDescription, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class)));
+		ConsoleLogger.log(Level.INFO, XStreamHelper.serializeToXML(uDescription, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class)));
 	}
 }

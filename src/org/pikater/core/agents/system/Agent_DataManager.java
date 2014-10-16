@@ -64,7 +64,7 @@ import org.pikater.core.ontology.subtrees.batch.LoadBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataset.DatasetInfo;
 import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
@@ -703,9 +703,9 @@ public class Agent_DataManager extends PikaterAgent {
 			getContentManager().fillContent(reply, result);
 			reply.setPerformative(ACLMessage.INFORM);
 		}catch(CodecException e){
-			logSevere(e.getMessage());
+			logException("", e);
 		}catch(OntologyException e){
-			logSevere(e.getMessage());
+			logException("", e);
 		}
 
 		return reply;

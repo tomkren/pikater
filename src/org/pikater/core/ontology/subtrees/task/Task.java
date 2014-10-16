@@ -3,8 +3,8 @@ package org.pikater.core.ontology.subtrees.task;
 import jade.content.Concept;
 
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
-import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.shared.database.jpa.JPAResult;

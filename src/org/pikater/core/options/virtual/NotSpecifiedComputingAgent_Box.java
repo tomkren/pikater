@@ -1,7 +1,7 @@
 package org.pikater.core.options.virtual;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent;
 import org.pikater.core.options.OptionsHelper;
 import org.pikater.core.options.SlotsHelper;
 

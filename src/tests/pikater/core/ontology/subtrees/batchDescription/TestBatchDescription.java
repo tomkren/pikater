@@ -2,9 +2,9 @@ package tests.pikater.core.ontology.subtrees.batchDescription;
 
 import java.io.FileNotFoundException;
 
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
-import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.examples.SearchOnly;
+import org.pikater.core.ontology.subtrees.batchdescription.examples.SimpleTraining;
 import org.pikater.shared.experiment.UniversalExperiment;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
