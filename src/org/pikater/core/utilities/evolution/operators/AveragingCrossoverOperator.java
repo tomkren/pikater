@@ -12,7 +12,7 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
  *
  * @author Martin Pilat
  */
-public class AveragingCrossoverOperator implements Operator{
+public class AveragingCrossoverOperator implements Operator {
 
     double xOverProb = 0;
     RandomNumberGenerator rng = null;

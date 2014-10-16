@@ -11,8 +11,7 @@ import org.pikater.core.utilities.evolution.individuals.MultiobjectiveIndividual
  * Compares two individuals based on one of the objectives.
  *
  */
-public class ObjectiveValueComparator implements Comparator<Individual>, Serializable
-{
+public class ObjectiveValueComparator implements Comparator<Individual>, Serializable {
 	private static final long serialVersionUID = 5987378684140074409L;
 	
 	private int mult = 1;
@@ -24,8 +23,7 @@ public class ObjectiveValueComparator implements Comparator<Individual>, Seriali
      * 
      * @param idx the index of the objective which is used for comparison
      */
-    public ObjectiveValueComparator(int idx)
-    {
+    public ObjectiveValueComparator(int idx) {
         this(idx, false);
     }
 
@@ -38,18 +36,15 @@ public class ObjectiveValueComparator implements Comparator<Individual>, Seriali
      * descending  {@code true} order
      */
     
-    public ObjectiveValueComparator(int idx, boolean reverse)
-    {
+    public ObjectiveValueComparator(int idx, boolean reverse) {
         this.idx = idx;
-        if (reverse)
-        {
+        if (reverse) {
             mult = -1;
         }
     }
 
     @Override
-    public int compare(Individual o1, Individual o2)
-    {
+    public int compare(Individual o1, Individual o2) {
         MultiobjectiveIndividual i1 = (MultiobjectiveIndividual) o1;
         MultiobjectiveIndividual i2 = (MultiobjectiveIndividual) o2;
 

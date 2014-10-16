@@ -22,7 +22,8 @@ public class SwappingMutationOperator implements Operator {
      * @param geneChangeProbability the percentage of genes which will be swapped in a mutated individual
      */
     
-    public SwappingMutationOperator(double mutationProbability, double geneChangeProbability) {
+    public SwappingMutationOperator(double mutationProbability,
+    		double geneChangeProbability) {
         this.mutationProbability = mutationProbability;
         this.geneChangeProbability = geneChangeProbability;
     }
@@ -40,8 +41,8 @@ public class SwappingMutationOperator implements Operator {
                 for (int j = 0; j < geneChangeProbability * p1.length(); j++) {
                     int r1 = RandomNumberGenerator.getInstance().nextInt(p1.length());
                     int r2 = RandomNumberGenerator.getInstance().nextInt(p1.length());
-                    double v1 = (double)o1.get(r1);  // Object v1 = o1.get(r1);
-                    double v2 = (double)o1.get(r2);  // Object v2 = o1.get(r2);
+                    double v1 = (double)o1.get(r1);
+                    double v2 = (double)o1.get(r2);
 
                     o1.set(r1, new DoubleValue(v2));
                     o1.set(r2, new DoubleValue(v1));

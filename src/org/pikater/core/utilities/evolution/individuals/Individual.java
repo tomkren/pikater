@@ -7,8 +7,7 @@ import org.pikater.shared.util.ICloneable;
  *
  * @author Martin Pilat
  */
-public abstract class Individual implements ICloneable
-{
+public abstract class Individual implements ICloneable {
     double fitnessValue;
     double objectiveValue;
 
@@ -58,16 +57,12 @@ public abstract class Individual implements ICloneable
      * @return The deep copy of the individual.
      */
     @Override
-    public Individual clone()
-    {
-    	try
-    	{
+    public Individual clone() {
+    	try {
     		Individual newInd = (Individual) super.clone();
     		newInd.fitnessValue = -Double.MAX_VALUE;
     		return newInd;
-    	}
-    	catch (CloneNotSupportedException e)
-    	{
+    	} catch (CloneNotSupportedException e) {
     		ConsoleLogger.logThrowable("Unexpected error occured:", e);
     		return null;
     	}

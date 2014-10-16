@@ -11,7 +11,7 @@ import org.pikater.core.utilities.evolution.individuals.IntegerIndividual;
  *
  * @author Martin Pilat
  */
-public class IntegerMutation implements Operator{
+public class IntegerMutation implements Operator {
 
     double mutationProbability;
     double geneChangeProbability;
@@ -41,7 +41,11 @@ public class IntegerMutation implements Operator{
              if (rng.nextDouble() < mutationProbability) {
                  for (int j = 0; j < o1.length(); j++) {
                      if (rng.nextDouble() < geneChangeProbability) {
-                         o1.set(j, new IntegerValue( RandomNumberGenerator.getInstance().nextInt(o1.getMax() - o1.getMin()) + o1.getMin()) );
+                    	 int value = o1.getMax() - o1.getMin();
+                    	 IntegerValue valueO = new IntegerValue(
+                    			 RandomNumberGenerator.getInstance()
+                    			 .nextInt(value) + o1.getMin());
+                         o1.set(j, valueO);
                      }
                  }
              }

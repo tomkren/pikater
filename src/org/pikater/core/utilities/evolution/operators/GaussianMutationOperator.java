@@ -14,7 +14,7 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
  * 
  * @author Martin Pilat
  */
-public class GaussianMutationOperator implements Operator{
+public class GaussianMutationOperator implements Operator {
 
     double mutationProbability;
     double geneChangeProbability;

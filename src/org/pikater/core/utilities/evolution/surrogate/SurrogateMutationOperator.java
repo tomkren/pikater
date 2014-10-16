@@ -39,7 +39,9 @@ public class SurrogateMutationOperator implements Operator {
      * @param mvp A provider for the value of model
      * @param norm Normalizer for the input values
      */
-    public SurrogateMutationOperator(SearchItemIndividualArchive archive, double mutProbability, ModelValueProvider mvp, ModelInputNormalizer norm) {
+    public SurrogateMutationOperator(SearchItemIndividualArchive archive,
+    		double mutProbability, ModelValueProvider mvp,
+    		ModelInputNormalizer norm) {
         this.archive = archive;
         this.mutProbability = mutProbability;
         this.mvp = mvp;
@@ -99,7 +101,8 @@ public class SurrogateMutationOperator implements Operator {
                     ea.evolve(innerPopulation);
                 }
               
-                SearchItemIndividual bestIndividual = (SearchItemIndividual)innerPopulation.getSortedIndividuals().get(0);
+                SearchItemIndividual bestIndividual = (SearchItemIndividual)
+                		innerPopulation.getSortedIndividuals().get(0);
                 offspring.add(bestIndividual);              
             }
 

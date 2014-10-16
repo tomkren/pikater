@@ -91,15 +91,13 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
     }
     
     @Override
-    public SearchItemIndividual clone()
-    {
+    public SearchItemIndividual clone() {
         SearchItemIndividual newSI = (SearchItemIndividual) super.clone();
         
         newSI.schema = schema;
         newSI.items = new IValueData[items.length];
         
-        for (int i = 0; i < items.length; i++)
-        {
+        for (int i = 0; i < items.length; i++) {
             newSI.items[i] = items[i].clone();
         }
         
@@ -158,28 +156,19 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         Instance inst = new Instance(items.length + 1);
         inst.setDataset(emptyDatasetFromSchema());
         
-        for (int i = 0; i < items.length; i++)
-        {
-            if (schema[i] instanceof SetSItem)
-            {
+        for (int i = 0; i < items.length; i++) {
+            if (schema[i] instanceof SetSItem) {
                 inst.setValue(i, items[i].toString());
                 continue;
-            }
-            else
-            {
+            } else {
                 IntervalSearchItem searchItem=(IntervalSearchItem)schema[i];
-                if (searchItem.getMin() instanceof BooleanValue)
-                {
+                if (searchItem.getMin() instanceof BooleanValue) {
                     inst.setValue(i, items[i].hackValue().equals("False") ? 0.0 : 1.0);
                     continue;
-                }
-                else if (searchItem.getMin() instanceof IntegerValue)
-                {
+                } else if (searchItem.getMin() instanceof IntegerValue) {
                     inst.setValue(i, norm.normalizeInt(items[i], (IntervalSearchItem)schema[i]));
                     continue;
-                }
-                else if (searchItem.getMin() instanceof FloatValue)
-                {
+                } else if (searchItem.getMin() instanceof FloatValue) {
                     inst.setValue(i, norm.normalizeFloat(items[i], (IntervalSearchItem)schema[i]));
                 }
             }

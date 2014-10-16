@@ -29,7 +29,8 @@ public class SearchItemIndividualMutation implements Operator {
      * @param geneChangeProbability Probability of gene change in a mutated individual
      * @param changeWidth How much integer and float parameters should be changed (as a ratio of the width of their interval)
      */
-    public SearchItemIndividualMutation(double mutationProbability, double geneChangeProbability, double changeWidth) {
+    public SearchItemIndividualMutation(double mutationProbability,
+    		double geneChangeProbability, double changeWidth) {
         this.mutationProbability = mutationProbability;
         this.geneChangeProbability = geneChangeProbability;
         this.changeWidth = changeWidth;

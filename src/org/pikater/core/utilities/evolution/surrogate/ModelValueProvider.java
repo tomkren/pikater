@@ -16,7 +16,8 @@ public interface ModelValueProvider {
 	 * @param norm The input normalizer
 	 * @return The target value for the individual
 	 */
-    public double getModelValue(SearchItemIndividual si, SearchItemIndividualArchive archive, ModelInputNormalizer norm);
+    public double getModelValue(SearchItemIndividual si,
+    		SearchItemIndividualArchive archive, ModelInputNormalizer norm);
     
     /**
      * Reinitilizes the value provider.
