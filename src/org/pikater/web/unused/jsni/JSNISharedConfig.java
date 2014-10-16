@@ -1,6 +1,6 @@
 package org.pikater.web.unused.jsni;
 
-public class JSNI_SharedConfig
+public class JSNISharedConfig
 {
 	public static enum ApplicationMode
 	{

@@ -19,7 +19,7 @@ public class BoxGraphItemShared implements Serializable, IBoxInfoCommon<Integer>
 	public int positionY;
 
 	/**
-	 * Default public constructor keeps Vaadin happy.
+	 * @deprecated Default public constructor keeps Vaadin happy.
 	 */
 	@Deprecated
 	public BoxGraphItemShared() {

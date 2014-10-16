@@ -7,7 +7,7 @@ import org.pikater.web.unused.components.console.SimpleConsoleComponent;
 
 public class ExecSequence
 {
-	private static final int default_state = -1;
+	private static final int DEFAULT_STATE = -1;
 	
 	private final List<String> commands;
 	private final boolean stopIfAnErrorIsEncountered;
@@ -63,11 +63,11 @@ public class ExecSequence
 	
 	private boolean isStateDefault()
 	{
-		return executionFailedAtCommand == default_state;
+		return executionFailedAtCommand == DEFAULT_STATE;
 	}
 	
 	private void resetState()
 	{
-		executionFailedAtCommand = default_state;
+		executionFailedAtCommand = DEFAULT_STATE;
 	}
 }

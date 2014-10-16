@@ -28,7 +28,7 @@ public class CellBrowser extends HorizontalLayout
 	// -----------------------------------------------------------------
 	// FIELDS
 	
-	private static final int level_root = 0;
+	private static final int LEVEL_ROOT = 0;
 	
 	private final CellBrowserDragSelection dragSelection;
 	private final ICellBrowserTreeViewModel viewModel;
@@ -91,7 +91,7 @@ public class CellBrowser extends HorizontalLayout
 		this.sourceToChildColumnComponentsMapping = new HashMap<CellBrowserCellSource, CellBrowserCellProvider>();
 		this.innerRootValue = new CellBrowserCellSource(userRootValue);
 		
-		recursivelyConstructComponentTree(level_root, innerRootValue);
+		recursivelyConstructComponentTree(LEVEL_ROOT, innerRootValue);
 		registerComponents();
 	}
 	
@@ -181,7 +181,7 @@ public class CellBrowser extends HorizontalLayout
 		}
 		
 		// fill the root-level column by default
-		setComponentsAtLevelForSource(level_root, innerRootValue);
+		setComponentsAtLevelForSource(LEVEL_ROOT, innerRootValue);
 	}
 	
 	private void selectCellAndExpand(CellBrowserCell sourceCell, int sourceCellsLevel)

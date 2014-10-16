@@ -27,7 +27,7 @@ public interface KineticComponentServerRpc extends ServerRpc {
 	void command_onLoadCallback(int absoluteX, int absoluteY);
 
 	/**
-	 * Currently unsupported. 
+	 * @deprecated Currently unsupported. 
 	 * @see {@link KineticUndoRedoManager}
 	 */
 	@Deprecated

@@ -12,7 +12,7 @@ import com.jcraft.jsch.JSchException;
 
 public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandExec
 {
-	private static final int consoleOutputRefreshRate = 100; // in milliseconds
+	private static final int OUTPUT_REFRESH_RATE = 100; // in milliseconds
 	
 	private final SSHSession session;
 	private final ISSHBatchChannelNotificationHandler outputHandler;
@@ -215,7 +215,7 @@ public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandE
 					}
 					else
 					{
-						Thread.sleep(consoleOutputRefreshRate);
+						Thread.sleep(OUTPUT_REFRESH_RATE);
 					}
 				}
 			}
@@ -238,9 +238,11 @@ public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandE
 				}
 				catch (IOException e)
 				{
+					PikaterWebLogger.logThrowable("", e);
 				}
 				catch (JSchException e)
 				{
+					PikaterWebLogger.logThrowable("", e);
 				}
 			}
 		}

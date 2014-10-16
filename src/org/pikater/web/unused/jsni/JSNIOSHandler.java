@@ -1,6 +1,6 @@
 package org.pikater.web.unused.jsni;
 
-public class JSNI_OSHandler
+public class JSNIOSHandler
 {
 	public static enum UnderlyingOS
 	{

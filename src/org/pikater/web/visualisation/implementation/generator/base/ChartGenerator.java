@@ -21,12 +21,12 @@ import org.pikater.web.visualisation.implementation.renderer.SVGRenderer;
 
 public class ChartGenerator {
 
-	public static int SINGLE_CHART_SIZE = 1000;
+	public static final int SINGLE_CHART_SIZE = 1000;
 	/**
-	 * Obsolete.
+	 * @deprecated Obsolete.
 	 */
 	@Deprecated
-	public static int MATRIX_CHART_SIZE = 2000;
+	public static final int MATRIX_CHART_SIZE = 2000;
 
 	/**
 	 * Creates an <b>SVG</b> encoded chart for dataset for the {@link JPADataSetLO JPADataSetLO} object.

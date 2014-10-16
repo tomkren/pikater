@@ -193,7 +193,7 @@ public class Toolbar extends VerticalLayout {
 				executeForNonNullActiveTab(new IActiveKineticComponentAction() {
 					@Override
 					public void doAction(KineticComponent activeComponent) {
-						activeComponent.getState().box_iconsVisible = (Boolean) event.getProperty().getValue();
+						activeComponent.getState().boxIconsVisible = (Boolean) event.getProperty().getValue();
 					}
 				}, true);
 			}
@@ -211,7 +211,7 @@ public class Toolbar extends VerticalLayout {
 				executeForNonNullActiveTab(new IActiveKineticComponentAction() {
 					@Override
 					public void doAction(KineticComponent activeComponent) {
-						activeComponent.getState().box_scale = (Double) event.getProperty().getValue();
+						activeComponent.getState().boxScale = (Double) event.getProperty().getValue();
 					}
 				}, true);
 			}

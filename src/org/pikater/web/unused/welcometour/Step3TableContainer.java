@@ -14,7 +14,7 @@ import com.vaadin.data.Property;
 @SuppressWarnings("serial")
 public class Step3TableContainer implements Container
 {
-	private static final Collection<Header> headers = new ArrayList<Header>()
+	private static final Collection<Header> HEADERS = new ArrayList<Header>()
 	{
 		{
 			add(Header.SERVERTYPE); // read-only
@@ -52,7 +52,7 @@ public class Step3TableContainer implements Container
 	@Override
 	public Collection<?> getContainerPropertyIds()
 	{
-		return headers;
+		return HEADERS;
 	}
 	
 	@Override
@@ -145,7 +145,7 @@ public class Step3TableContainer implements Container
 		@Override
 		public Collection<?> getItemPropertyIds()
 		{
-			return headers;
+			return HEADERS;
 		}
 		
 		@Override

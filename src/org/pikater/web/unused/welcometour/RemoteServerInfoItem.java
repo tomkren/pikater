@@ -62,11 +62,11 @@ public class RemoteServerInfoItem
 	}
 	
 	// values
-	public static final String connectionStatus_default = "Pending";
-	public static final String connectionStatus_canConnect = "Can connect";
-	public static final String connectionStatus_canNotConnect = "Can NOT connect";
-	public static final String connectionStatus_launched = "Launched";
-	public static final String connectionStatus_error = "Error";
+	public static final String CONN_STATUS_DEFAULT = "Pending";
+	public static final String CONN_STATUS_CAN_CONNECT = "Can connect";
+	public static final String CONN_STATUS_CAN_NOT_CONNECT = "Can NOT connect";
+	public static final String CONN_STATUS_LAUNCHED = "Launched";
+	public static final String CONN_STATUS_ERROR = "Error";
 	
 	public final RemoteServerInfo underlyingInfoInstance;
 	private final Map<Header, Property<? extends Object>> data;
@@ -84,7 +84,7 @@ public class RemoteServerInfoItem
 		this.data.put(Header.SERVERTYPE, new ObjectProperty<String>(type.name(), String.class, true)); // read-only
 		this.data.put(Header.TOPOLOGYNAME, new ObjectProperty<String>(filename, String.class, true)); // read-only
 		this.data.put(Header.INCLUDE, new ObjectProperty<CheckBox>(new CheckBox("", new ObjectProperty<Boolean>(true))));
-		this.data.put(Header.STATUS, new ObjectProperty<String>(connectionStatus_default, String.class));
+		this.data.put(Header.STATUS, new ObjectProperty<String>(CONN_STATUS_DEFAULT, String.class));
 	}
 	
 	// -----------------------------------------------------------------
@@ -154,13 +154,13 @@ public class RemoteServerInfoItem
 	public boolean isConnected()
 	{
 		String connectionStatus = (String) getProperty(Header.STATUS).getValue(); 
-		return connectionStatus == connectionStatus_canConnect;
+		return connectionStatus == CONN_STATUS_CAN_CONNECT;
 	}
 	
 	public boolean isLaunched()
 	{
 		String connectionStatus = (String) getProperty(Header.STATUS).getValue(); 
-		return connectionStatus == connectionStatus_launched;
+		return connectionStatus == CONN_STATUS_LAUNCHED;
 	}
 	
 	public ServerType getServerType()

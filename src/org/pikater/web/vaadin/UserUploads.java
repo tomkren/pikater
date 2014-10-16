@@ -3,7 +3,7 @@ package org.pikater.web.vaadin;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Set;
 
 import org.pikater.shared.util.collections.CollectionUtils;
 import org.pikater.web.HttpContentType;
@@ -113,7 +113,7 @@ public class UserUploads implements Serializable, IFileUploadEvents {
 	 * Creates a new upload button and binds it with the constant UploadStateWindow instance, unique for each
 	 * user (this class is unique for each user). 
 	 */
-	public MyMultiUpload createUploadButton(String caption, MyUploadStateWindow uploadInfoProvider, EnumSet<HttpContentType> allowedMIMETypes) throws UploadLimitReachedException {
+	public MyMultiUpload createUploadButton(String caption, MyUploadStateWindow uploadInfoProvider, Set<HttpContentType> allowedMIMETypes) throws UploadLimitReachedException {
 		if (get() >= MAX_CONCURRENT_UPLOADS) {
 			throw new UploadLimitReachedException();
 		} else {

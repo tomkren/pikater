@@ -7,7 +7,7 @@ import com.jcraft.jsch.Session;
 
 public class SSHSession
 {
-	public static final int defaultSSHport = 22;
+	public static final int DEFAULT_PORT = 22;
 	// public static final int sshSessionErrorStatusCode = 255;
 	// protected static final String sshKnownHostsPath = "$HOME/.ssh/known_hosts";
 	
@@ -60,7 +60,7 @@ public class SSHSession
 		this.notificationHandler = notificationHandler;
 		try
 		{
-			this.session = jsch.getSession(username, hostname, defaultSSHport);
+			this.session = jsch.getSession(username, hostname, DEFAULT_PORT);
 		}
 		catch (JSchException e)
 		{

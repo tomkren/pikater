@@ -1,6 +1,5 @@
 package org.pikater.web;
 
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -37,7 +36,7 @@ public enum HttpContentType {
 		return (extensionList != null) && extensionList.length > 0;
 	}
 
-	public static Set<String> getMimeTypes(EnumSet<HttpContentType> contentTypes) {
+	public static Set<String> getMimeTypes(Set<HttpContentType> contentTypes) {
 		Set<String> result = new LinkedHashSet<String>();
 		Iterator<HttpContentType> iter = contentTypes.iterator();
 		while (iter.hasNext()) {
@@ -46,7 +45,7 @@ public enum HttpContentType {
 		return result;
 	}
 
-	public static Set<String> getExtensions(EnumSet<HttpContentType> contentTypes) {
+	public static Set<String> getExtensions(Set<HttpContentType> contentTypes) {
 		Set<String> result = new LinkedHashSet<String>();
 		Iterator<HttpContentType> iter = contentTypes.iterator();
 		while (iter.hasNext()) {

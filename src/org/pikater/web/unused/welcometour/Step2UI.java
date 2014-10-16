@@ -24,7 +24,7 @@ import com.vaadin.ui.Button.ClickEvent;
 @SuppressWarnings("serial")
 public class Step2UI extends VerticalLayout
 {
-	private static final String comboBoxDefaultItem = "---";
+	private static final String DEFAULT_ITEM = "---";
 	
 	public static final boolean filterFilledDefaultValue = false;
 	
@@ -68,18 +68,18 @@ public class Step2UI extends VerticalLayout
 			// mainTable.setSortContainerPropertyId(Step2TableContainer.header3_login); // exception if data source used?
 			
 			ComboBox topologySelection = new ComboBox("Filter by topology:");
-			topologySelection.addItem(comboBoxDefaultItem);
+			topologySelection.addItem(DEFAULT_ITEM);
 			for(String topologyName : topologyNames)
 			{
 				topologySelection.addItem(topologyName);
 			}
-			topologySelection.setValue(comboBoxDefaultItem); // select the default value
+			topologySelection.setValue(DEFAULT_ITEM); // select the default value
 			topologySelection.addValueChangeListener(new Property.ValueChangeListener()
 			{
 				@Override
 				public void valueChange(ValueChangeEvent event)
 				{
-					dataSource.setFilterOnlyMachinesFromModel(event.getProperty().getValue() == comboBoxDefaultItem ? null : (String) event.getProperty().getValue());
+					dataSource.setFilterOnlyMachinesFromModel(event.getProperty().getValue() == DEFAULT_ITEM ? null : (String) event.getProperty().getValue());
 					refresh();
 				}
 			});

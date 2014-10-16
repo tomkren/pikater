@@ -16,7 +16,7 @@ public class EdgeGraphItemShared implements Serializable {
 	public Integer toBoxID;
 
 	/**
-	 * Default public constructor keeps Vaadin happy.
+	 * @deprecated Default public constructor keeps Vaadin happy.
 	 */
 	@Deprecated
 	public EdgeGraphItemShared() {

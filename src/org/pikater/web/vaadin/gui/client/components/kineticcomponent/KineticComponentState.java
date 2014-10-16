@@ -18,8 +18,8 @@ public class KineticComponentState extends AbstractComponentState {
 	 */
 	public ClickMode clickMode;
 	public boolean boxManagerBoundWithSelection;
-	public boolean box_iconsVisible;
-	public double box_scale;
+	public boolean boxIconsVisible;
+	public double boxScale;
 
 	/*
 	 * Other programmatic fields shared. 
@@ -29,14 +29,14 @@ public class KineticComponentState extends AbstractComponentState {
 	public KineticComponentState() {
 		this.clickMode = getDefaultClickMode();
 		this.boxManagerBoundWithSelection = getBoxManagerBoundWithSelectionByDefault();
-		this.box_iconsVisible = getBoxIconsVisibleByDefault();
-		this.box_scale = getDefaultScale();
+		this.boxIconsVisible = getBoxIconsVisibleByDefault();
+		this.boxScale = getDefaultScale();
 
 		// this.serverThinksThatSchemaIsModified = false;
 	}
 
 	public KineticBoxSettings toBoxVisualSettings() {
-		return new KineticBoxSettings(box_iconsVisible, box_scale);
+		return new KineticBoxSettings(boxIconsVisible, boxScale);
 	}
 
 	//----------------------------------------------------

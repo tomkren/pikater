@@ -216,7 +216,7 @@ public class SimpleConsoleComponent extends VerticalLayout
 		}
 		catch (IOException e)
 		{
-			// no way this can occur
+			PikaterWebLogger.logThrowable("Red alert: this should not occur", e);
 			return null;
 		}
 		// no need to close the stream if it's not connected to a resource 

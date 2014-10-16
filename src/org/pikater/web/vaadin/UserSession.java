@@ -18,9 +18,9 @@ import com.vaadin.server.VaadinSession;
  * @author SkyCrawl
  */
 public class UserSession {
-	private static final String key_userID = "k_uid";
-	private static final String key_userUploads = "k_uu";
-	private static final String key_sharedResources = "k_sr";
+	private static final String KEY_USER_ID = "k_uid";
+	private static final String KEY_USER_UPLOADS = "k_uu";
+	private static final String KEY_SHARED_RESOURCES = "k_sr";
 
 	// ----------------------------------------------------------
 	// PRIVATE INTERFACE (INFRASTRUCTURE)
@@ -38,19 +38,19 @@ public class UserSession {
 	// INTERFACE MANIPULATING WITH INDIVIDUAL ATTRIBUTES
 
 	public static int getUserID(VaadinSession session) {
-		return getAttribute(session, UserSession.key_userID);
+		return getAttribute(session, UserSession.KEY_USER_ID);
 	}
 
 	public static void storeUserID(VaadinSession session, Integer userID) {
-		setAttribute(session, UserSession.key_userID, userID);
+		setAttribute(session, UserSession.KEY_USER_ID, userID);
 	}
 
 	public static UserUploads getUserUploadManager(VaadinSession session) {
-		return getAttribute(session, UserSession.key_userUploads);
+		return getAttribute(session, UserSession.KEY_USER_UPLOADS);
 	}
 
 	public static void storeUserUploadManager(VaadinSession session, UserUploads manager) {
-		setAttribute(session, UserSession.key_userUploads, new UserUploads());
+		setAttribute(session, UserSession.KEY_USER_UPLOADS, new UserUploads());
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class UserSession {
 			sharedResources = new HashSet<UUID>();
 		}
 		if (sharedResources.add(resourceID)) {
-			session.setAttribute(key_sharedResources, sharedResources);
+			session.setAttribute(KEY_SHARED_RESOURCES, sharedResources);
 		}
 	}
 
@@ -79,6 +79,6 @@ public class UserSession {
 	 * @param session user's session
 	 */
 	public static Set<UUID> getSharedResources(VaadinSession session) {
-		return getAttribute(session, key_sharedResources);
+		return getAttribute(session, KEY_SHARED_RESOURCES);
 	}
 }

@@ -66,13 +66,11 @@ public class Anchor extends AbstractComponent implements AnchorClientRpc {
 		setPrimaryStyleName("v-widget v-label anchor");
 		setValue(caption);
 
-		if (functionSource == null) {
-			functionSource = "";
-		}
-		if (functionSource.startsWith("function")) {
-			getState().hrefAttrContent = String.format("javascript:(%s)();", functionSource);
-		} else {
+		if ((functionSource == null) || !functionSource.startsWith("function")) {
 			getState().hrefAttrContent = String.format("javascript:%s", functionSource);
+		}
+		else {
+			getState().hrefAttrContent = String.format("javascript:(%s)();", functionSource);
 		}
 	}
 

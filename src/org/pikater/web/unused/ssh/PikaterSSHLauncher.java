@@ -78,18 +78,18 @@ public class PikaterSSHLauncher
 			
 			if(test_forceReturnTrue)
 			{
-				updateConnectionStatus(RemoteServerInfoItem.connectionStatus_canConnect);
+				updateConnectionStatus(RemoteServerInfoItem.CONN_STATUS_CAN_CONNECT);
 				return true;
 			}
 			else if(newSession.isAliveAndWell())
 			{
 				this.session = newSession;
-				updateConnectionStatus(RemoteServerInfoItem.connectionStatus_canConnect);
+				updateConnectionStatus(RemoteServerInfoItem.CONN_STATUS_CAN_CONNECT);
 				return true;
 			}
 			else
 			{
-				updateConnectionStatus(RemoteServerInfoItem.connectionStatus_canNotConnect);
+				updateConnectionStatus(RemoteServerInfoItem.CONN_STATUS_CAN_NOT_CONNECT);
 				newSession.closeSession();
 				return false;
 			}
@@ -153,7 +153,7 @@ public class PikaterSSHLauncher
 	
 	private boolean launchPikaterInSlaveMode()
 	{
-		return doLaunchPikater("./runPikaterCoreSlave.sh " + String.valueOf(getNextSlaveID()));
+		return doLaunchPikater(String.format("./runPikaterCoreSlave.sh %d", getNextSlaveID()));
 	}
 	
 	private boolean doLaunchPikater(String finalLaunchingCommand)
@@ -183,13 +183,13 @@ public class PikaterSSHLauncher
 		
 		if(commands.exec(outputConsoleComponent)) // commands successfully sent for execution - execution errors are not handled here
 		{
-			updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched);
+			updateConnectionStatus(RemoteServerInfoItem.CONN_STATUS_LAUNCHED);
 			return true;
 		}
 		else // an error occured while trying to send a command for execution
 		{
 			handleError(String.format("Pikater launching failed at command: '%s'", commands.getFailedCommand()), false);
-			updateConnectionStatus(RemoteServerInfoItem.connectionStatus_error);
+			updateConnectionStatus(RemoteServerInfoItem.CONN_STATUS_ERROR);
 			return false;
 		}
 	}
@@ -204,7 +204,7 @@ public class PikaterSSHLauncher
 		if(outputConsoleComponent != null)
 		{
 			outputConsoleComponent.appendMessage(MessageStyle.ERROR, errorMessage);
-			updateConnectionStatus(RemoteServerInfoItem.connectionStatus_error);
+			updateConnectionStatus(RemoteServerInfoItem.CONN_STATUS_ERROR);
 			if(blockFurtherCommands)
 			{
 				outputConsoleComponent.disableInputField();
