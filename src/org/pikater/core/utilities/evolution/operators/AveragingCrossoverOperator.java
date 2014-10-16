@@ -7,10 +7,12 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 
 
 /**
+ * An arithmetic crossover operator. Computes weighted sum of the two vectors, the weight
+ * is chosen randomly and is different for each coordinate.
  *
  * @author Martin Pilat
  */
-public class AveragingCrossoverOperator implements Operator{
+public class AveragingCrossoverOperator implements Operator {
 
     double xOverProb = 0;
     RandomNumberGenerator rng = null;

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.pikater.core.utilities.evolution.selectors;
 
 import java.util.ArrayList;
@@ -9,7 +5,8 @@ import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 
 /**
- *
+ * A selector which selects the best individuals according to their fitness. 
+ * 
  * @author Martin Pilat
  */
 public class BestIndividualsSelector implements Selector{

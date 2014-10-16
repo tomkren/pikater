@@ -6,7 +6,11 @@ import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 
 /**
- *
+ * Performs a one point crossover. 
+ * 
+ * A single point is selected randomly in the indivdiual and the tails of the parents (following the
+ * selected point) are swapped between them.
+ * 
  * @author Martin Pilat
  */
 public class OnePtXOver implements Operator {
@@ -15,10 +19,15 @@ public class OnePtXOver implements Operator {
 
     RandomNumberGenerator rng = RandomNumberGenerator.getInstance();
 
+    /**
+     * Constructor, sets the probability of crossover
+     * 
+     * @param prob the probability of crossover
+     */
+    
     public OnePtXOver(double prob) {
         xOverProb = prob;
     }
-
 
     public void operate(Population parents, Population offspring) {
 

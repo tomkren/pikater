@@ -3,12 +3,16 @@ package org.pikater.core.utilities.evolution.operators;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 /**
+ *
+ * A mutation operator for individuals represented as a vector of {@link SearchItem}s. Goes through
+ * the individual and sets a new random value for each of the {@link SearchItem}s with a given probability.
  *
  * @author Martin Pilat
  */
@@ -19,13 +23,14 @@ public class SearchItemIndividualMutation implements Operator {
     double changeWidth;
     RandomNumberGenerator rng = RandomNumberGenerator.getInstance();
 
-    /**
+    /**Cosntructor
      * 
      * @param mutationProbability Probability of mutation for a given individual
      * @param geneChangeProbability Probability of gene change in a mutated individual
      * @param changeWidth How much integer and float parameters should be changed (as a ratio of the width of their interval)
      */
-    public SearchItemIndividualMutation(double mutationProbability, double geneChangeProbability, double changeWidth) {
+    public SearchItemIndividualMutation(double mutationProbability,
+    		double geneChangeProbability, double changeWidth) {
         this.mutationProbability = mutationProbability;
         this.geneChangeProbability = geneChangeProbability;
         this.changeWidth = changeWidth;

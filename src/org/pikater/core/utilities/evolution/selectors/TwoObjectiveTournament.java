@@ -6,7 +6,9 @@ import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 
 /**
- *
+ * Tournament selector for individuals with two objectives. The individuals are compared 
+ * lexicographically and the better one is chosen with 80% probability.
+ * 
  * @author Martin Pilat
  */
 public class TwoObjectiveTournament implements Selector{
@@ -23,7 +25,7 @@ public class TwoObjectiveTournament implements Selector{
             float[] o1 = ((SearchItemIndividual)from.get(i1)).getObjectives();
             float[] o2 = ((SearchItemIndividual)from.get(i2)).getObjectives();
 
-            if ((o1[0] > o2[0]) || ((o1[0] == o2[0]) && (o1[1] < o2[1])) && (rng.nextDouble() < 0.8))
+            if ((o1[0] > o2[0]) || ((o1[0] == o2[0]) && (o1[1] > o2[1])) && (rng.nextDouble() < 0.8))
             {
                 to.add((Individual)from.get(i1).clone());
             }

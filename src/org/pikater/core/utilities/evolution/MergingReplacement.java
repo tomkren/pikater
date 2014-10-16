@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.pikater.core.utilities.evolution;
 
 /**
- *
+ * An implementation of replacement which merges the parent and offspring populations.
+ * 
  * @author Martin Pilat
  */
 public class MergingReplacement implements Replacement {
@@ -17,7 +14,4 @@ public class MergingReplacement implements Replacement {
         replaced.addAll((Population)offspring.clone());
         return replaced;
     }
-    
-    
-    
 }

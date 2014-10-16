@@ -6,6 +6,7 @@ import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import java.util.Arrays;
 
 /**
+ * Implementation of an individual represented by a vector of real numbers in a given range.
  *
  * @author Martin Pilat
  */
@@ -31,20 +32,31 @@ public class RealIndividual extends ArrayIndividual {
         this.max = max;
     }
 
+    /**
+     * Returns the minimum value of the individual
+     * @return the minimum legal value of the individual
+     */
     public double getMin() {
         return min;
     }
 
+    /**
+     * Returns the maximum value of the individual
+     * @return the maximum legal value of the individual
+     */
     public double getMax() {
         return max;
     }
 
+    /**
+     * Prints the individual as a astring containing th fitness and the vector of real numbers.
+     */
     public String toString() {
         return "fitness: " + getFitnessValue() + " " + Arrays.toString(genes);
     }
 
     /**
-     * Returns the internall array.
+     * Returns the internal array.
      *
      * @return The internal integer array.
      */
@@ -66,7 +78,8 @@ public class RealIndividual extends ArrayIndividual {
     }
 
     /**
-     * Randomly initializes the individual.
+     * Randomly initializes the individual. The values are generated from a uniform distribution in the 
+     * range of possible values.
      */
     @Override
     public void randomInitialization() {

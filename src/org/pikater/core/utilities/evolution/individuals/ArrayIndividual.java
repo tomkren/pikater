@@ -31,8 +31,7 @@ public abstract class ArrayIndividual extends Individual {
     public abstract int length();
     
     @Override
-    public ArrayIndividual clone()
-    {
+    public ArrayIndividual clone() {
     	return (ArrayIndividual) super.clone();
     }
 }

@@ -5,7 +5,9 @@ import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 
 /**
- *
+ * Implements the tournament selection. Two individuals are chosen randomly (uniformly) from the population, 
+ * their fitness values are compared and the one with better fitness is selected with 80% probability.
+ * 
  * @author Martin Pilat
  */
 public class TournamentSelector implements Selector{

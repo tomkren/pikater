@@ -6,12 +6,28 @@ import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 
+/**
+ * Performs the polynomial mutation as described in:
+ * 
+ * Deb, Kalyanmoy and Mayank Goyal (1996). “A combined genetic adaptive search (GeneAS) for
+ * engineering design.” In: Computer Science and Informatics 26.4, pp. 30–45
+ * 
+ * @author Martin Pilat
+ *
+ */
+
 public class PolynomialMutationOperator implements Operator {
 
     private double mutRate;
     
     private static final double ETA_M = 100;
 
+    /**
+     * Constructor, sets the probability of mutation
+     * 
+     * @param mutationRate the probability of mutation
+     */
+    
     public PolynomialMutationOperator(double mutationRate) {
         mutRate = mutationRate;
 
@@ -30,6 +46,11 @@ public class PolynomialMutationOperator implements Operator {
         }
     }
 
+    /**
+     * Performs the mutation itself.
+     * 
+     * @param ch the individual to mutate, is changed in the method
+     */
     private void mutate(RealIndividual ch) {
         for (int i = 0; i < ch.length(); i++) {
             double y = (Double)ch.get(i);
