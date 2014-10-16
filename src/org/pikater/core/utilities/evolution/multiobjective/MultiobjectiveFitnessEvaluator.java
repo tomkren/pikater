@@ -8,9 +8,18 @@ import org.pikater.core.utilities.evolution.FitnessEvaluator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.MultiobjectiveIndividual;
 
+/**
+ * Basic class for multi-objective fitness evaluations. Provides the interface and some
+ * utility methods (non-dominated front extraction, non-dominated sorting and crowding
+ * distance assignment).
+ * 
+ * @author Martin Pilat
+ */
+
 public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator {
 
     /**
+     * Extracts the non-dominated individuals from the list of individuals 
      *
      * @param pop Population from which the non-dominated front is chosen
      * @return List of Individuals in current non-dominated front
@@ -43,6 +52,13 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         return front;
     }
 
+    /**
+     * Performs fast non-dominated sorting (division of population into non-dominated fronts).
+     * 
+     * @param pop the population of individuals
+     * @return The list of non-dominated fronts, lower fronts are first
+     */
+    
     protected List<List<Individual>> fastNonDominatedSort(List<Individual> pop) {
         List<List<Individual>> fronts = new ArrayList<List<Individual>>();
         List<Individual> population = new ArrayList<Individual>();
@@ -55,6 +71,13 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         return fronts;
     }
 
+    /**
+     * Assigns the crowding distance to all individuals in a single non-dominated front 
+     * as used e.g. in the NSGA-II algorithm.
+     * 
+     * @param front the non-dominated front
+     */
+    
     protected void crowdingDistanceAssignment(List<Individual> front) {
         ArrayList<MultiobjectiveIndividual> mi = new ArrayList<MultiobjectiveIndividual>();
         for (Individual ind : front) {
@@ -107,6 +130,10 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         return false;
     }
 
+    /**
+     * Compares two individuals based on their fitness value.
+     *
+     */
     protected class FitnessValueComparator implements Comparator<Individual> {
 
         @Override

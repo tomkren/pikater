@@ -5,7 +5,9 @@ import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 
 /**
- *
+ * Implements the roulette wheel selection. The probability of chosing an individual is in direct 
+ * proportion to its fitness. 
+ * 
  * @author Martin Pilat
  */
 public class RouletteWheelSelector implements Selector{

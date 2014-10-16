@@ -18,6 +18,11 @@ import weka.core.Instances;
 import java.util.Arrays;
 
 /**
+ * Represents an individual as an array of SearchItem objects. Can be used to search the parameters
+ * of machine-learning methods (computational agents).
+ * 
+ * Each individual has a schema, which describes the possible values on each position, and it also 
+ * has the particular value for each position.
  *
  * @author Martin Pilat
  */
@@ -26,15 +31,34 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
     SearchItem[] schema;
     IValueData[] items;
 
+    /**
+     * Constructor. Initializes the individual with empty array of given length.
+     * 
+     * @param n the length of the array
+     */
+    
     public SearchItemIndividual(int n) {
         schema = new SearchItem[n];
         items = new IValueData[n];
     }
     
+    /**
+     * Sets the value of the {@link SearchItem} on the position {@code n} 
+     * @param n the position to set
+     * @param s the item to set on this position
+     */
+    
     public void setSchema(int n, SearchItem s) {
         schema[n] = s;
     }
     
+    /**
+     * Returns the schema on the {@code n}-th position.
+     * 
+     * @param n the position
+     * @return the SearchItem on {@code n}-th position.
+     */
+
     public SearchItem getSchema(int n) {
         return schema[n];
     }

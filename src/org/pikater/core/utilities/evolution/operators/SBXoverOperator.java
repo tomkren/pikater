@@ -6,6 +6,17 @@ import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 
+/**
+ * Simulated binary crossover operator. 
+ * 
+ * Performs the crossover operation described in:
+ * 
+ * Deb, Kalyanmoy and Ram B Agrawal (1994). “Simulated Binary Crossover for Continuous
+ * Search Space.” In: Complex Systems 9, pp. 1–34
+ * 
+ * @author Martin Pilat
+ */
+
 public class SBXoverOperator implements Operator {
 
 	private double xover_rate;
@@ -13,7 +24,12 @@ public class SBXoverOperator implements Operator {
 	private static final double EPS = 0.00001;
 	private static final double ETA_C = 20;
 
-
+	/**
+	 * Constructor, sets the crossover rate.
+	 * 
+	 * @param cross_rate the crossover rate
+	 */
+	
 	public SBXoverOperator(double cross_rate) {
 		xover_rate = cross_rate;
 	}
@@ -32,6 +48,13 @@ public class SBXoverOperator implements Operator {
 		}
 	}
 
+	/**
+	 * Performs the crossover of itself.
+	 * 
+	 * @param a First parent, is changed in the method
+	 * @param b Second parent, is changed in the method
+	 */
+	
 	private void cross(RealIndividual a, RealIndividual b) {
 		double y1, y2, y_low, y_hi, tmp;
 		for (int i = 0; i < a.length(); i++) {

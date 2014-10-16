@@ -6,7 +6,8 @@ import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.ArrayIndividual;
 
 /**
- *
+ * A mutation which swaps the values on different positions in a single individual.
+ * 
  * @author Martin Pilat
  */
 public class SwappingMutationOperator implements Operator {
@@ -15,6 +16,12 @@ public class SwappingMutationOperator implements Operator {
     double geneChangeProbability;
     RandomNumberGenerator rng = RandomNumberGenerator.getInstance();
 
+    /**
+     * Constructor, sets the probabilities
+     * @param mutationProbability the probability of mutating an individual
+     * @param geneChangeProbability the percentage of genes which will be swapped in a mutated individual
+     */
+    
     public SwappingMutationOperator(double mutationProbability, double geneChangeProbability) {
         this.mutationProbability = mutationProbability;
         this.geneChangeProbability = geneChangeProbability;

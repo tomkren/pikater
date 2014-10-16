@@ -6,6 +6,8 @@ import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.IntegerIndividual;
 
 /**
+ * A mutation for integer encoded individuals. Goes through the indivudal and generates new value from the 
+ * valid interval for each of the positions with a given probability.
  *
  * @author Martin Pilat
  */
@@ -15,6 +17,13 @@ public class IntegerMutation implements Operator{
     double geneChangeProbability;
     RandomNumberGenerator rng = RandomNumberGenerator.getInstance();
 
+    /**
+     * Constructor, sets the probabilities
+     * 
+     * @param mutationProbability the probability of mutating an individual
+     * @param geneChangeProbability the probability of changing a given gene in the mutated individual
+     */
+    
     public IntegerMutation(double mutationProbability, double geneChangeProbability) {
         this.mutationProbability = mutationProbability;
         this.geneChangeProbability = geneChangeProbability;
