@@ -3,6 +3,8 @@ package org.pikater.core.utilities.evolution.surrogate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 
@@ -15,7 +17,7 @@ import weka.core.Instances;
  */
 public class SearchItemIndividualArchive {
 
-    HashMap<String, SearchItemIndividual> archive = new HashMap<String, SearchItemIndividual>();
+    Map<String, SearchItemIndividual> archive = new HashMap<String, SearchItemIndividual>();
     
     /**
      * Adds the individual to the archive.
@@ -62,7 +64,7 @@ public class SearchItemIndividualArchive {
      * @return
      */
     
-    public ArrayList<SearchItemIndividual> getSavedIndividuals() {
+    public List<SearchItemIndividual> getSavedIndividuals() {
         return new ArrayList<SearchItemIndividual>(archive.values());
     }
     

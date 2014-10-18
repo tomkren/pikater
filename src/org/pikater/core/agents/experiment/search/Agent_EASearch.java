@@ -322,7 +322,7 @@ public class Agent_EASearch extends Agent_Search {
         
         Population selected = new Population();
 
-        ArrayList<Individual> sortedOld = parents.getSortedIndividuals();
+        List<Individual> sortedOld = parents.getSortedIndividuals();
         for (int i = 0; i < eliteSize*parents.getPopulationSize(); i++) {
             selected.add(sortedOld.get(i));
         }

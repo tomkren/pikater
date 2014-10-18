@@ -1,9 +1,11 @@
 package org.pikater.core.utilities.evolution.multiobjective;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import org.pikater.core.utilities.evolution.FitnessEvaluator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.MultiobjectiveIndividual;
@@ -25,7 +27,7 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
      * @return List of Individuals in current non-dominated front
      */
     public static List<Individual> getNonDominatedFront(List<Individual> population) {
-        ArrayList<Individual> front = new ArrayList<Individual>();
+        List<Individual> front = new ArrayList<Individual>();
         front.add(population.get(0));
 
         for (Individual p : population) {
@@ -33,7 +35,7 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
                 continue;
             }
             front.add(p);
-            ArrayList<Individual> toRemove = new ArrayList<Individual>();
+            List<Individual> toRemove = new ArrayList<Individual>();
             for (Individual q : front) {
                 if (q.equals(p)) {
                     continue;
@@ -63,7 +65,7 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         List<List<Individual>> fronts = new ArrayList<List<Individual>>();
         List<Individual> population = new ArrayList<Individual>();
         population.addAll(pop);
-        while (population.size() > 0) {
+        while (!population.isEmpty()) {
             List<Individual> front = getNonDominatedFront(population);
             fronts.add(front);
             population.removeAll(front);
@@ -79,7 +81,7 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
      */
     
     protected void crowdingDistanceAssignment(List<Individual> front) {
-        ArrayList<MultiobjectiveIndividual> mi = new ArrayList<MultiobjectiveIndividual>();
+        List<MultiobjectiveIndividual> mi = new ArrayList<MultiobjectiveIndividual>();
         for (Individual ind : front) {
             mi.add((MultiobjectiveIndividual) ind);
         }
@@ -118,13 +120,13 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
     public static boolean dominates(Individual a, Individual b) {
         MultiobjectiveIndividual i1 = (MultiobjectiveIndividual) a;
         MultiobjectiveIndividual i2 = (MultiobjectiveIndividual) b;
-        int dom_count = 0;
+        int domCount = 0;
         for (int i = 0; i < i1.getObjectives().length; i++) {
             if (i1.getObjectives()[i] <= i2.getObjectives()[i]) {
-                dom_count++;
+                domCount++;
             }
         }
-        if (dom_count == i1.getObjectives().length) {
+        if (domCount == i1.getObjectives().length) {
             return true;
         }
         return false;
@@ -134,7 +136,10 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
      * Compares two individuals based on their fitness value.
      *
      */
-    protected class FitnessValueComparator implements Comparator<Individual> {
+    protected static class FitnessValueComparator implements Comparator<Individual>, Serializable {
+
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         public int compare(Individual o1, Individual o2) {

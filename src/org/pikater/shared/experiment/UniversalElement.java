@@ -2,7 +2,7 @@ package org.pikater.shared.experiment;
 
 /**
  * <p>Instances of this class are logical "parts" of the parent 
- * {@link UniversalExperiment experiment} that correspond to
+ * {@link UniversalComputationDescription experiment} that correspond to
  * boxes of the web application's experiment editor.</p>
  * 
  * <p>They are connected among themselves with instances of

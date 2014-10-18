@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.shared.experiment.UniversalExperiment;
+import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.experiment.UniversalElementConnector;
 import org.pikater.shared.experiment.UniversalElement;
 import org.pikater.shared.experiment.UniversalElementOntology;
@@ -169,15 +169,15 @@ public class ComputationDescription implements Concept {
 	}
 	
 	/**
-	 * Exports the {@link UniversalExperiment}
+	 * Exports the {@link UniversalComputationDescription}
 	 */
-	public UniversalExperiment exportUniversalComputationDescription() {
+	public UniversalComputationDescription exportUniversalComputationDescription() {
 		
 		generateIDs();
 		gene();
 		
-		UniversalExperiment uModel =
-				new UniversalExperiment();
+		UniversalComputationDescription uModel =
+				new UniversalComputationDescription();
 		uModel.getGlobalOptions().addAll(CollectionUtils.deepCopy(getGlobalOptions()));
 		
 		// map - id x ontology
@@ -266,10 +266,10 @@ public class ComputationDescription implements Concept {
 	}
 
 	/**
-	 * Imports the {@link UniversalExperiment}
+	 * Imports the {@link UniversalComputationDescription}
 	 */
 	public static ComputationDescription importUniversalComputationDescription(
-			UniversalExperiment uDescription) {
+			UniversalComputationDescription uDescription) {
 
 		ComputationDescription description = new ComputationDescription();
 		description.setGlobalOptions(

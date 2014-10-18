@@ -19,66 +19,68 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 
 public class SBXoverOperator implements Operator {
 
-	private double xover_rate;
-	
-	private static final double EPS = 0.00001;
-	private static final double ETA_C = 20;
+    private double xoverRate;
 
-	/**
-	 * Constructor, sets the crossover rate.
-	 * 
-	 * @param cross_rate the crossover rate
-	 */
-	
-	public SBXoverOperator(double cross_rate) {
-		xover_rate = cross_rate;
-	}
+    private static final double EPS = 0.00001;
+    private static final double ETA_C = 20;
 
-	public void operate(Population parents, Population offspring) {
-		int popSize = parents.getPopulationSize();
-		for(int i = 0; i < popSize - 1; i+=2) {
-			Individual p1 = parents.get(i);
-			Individual p2 = parents.get(i+1);
-			RealIndividual ch1 = (RealIndividual)p1.clone();
-			RealIndividual ch2 = (RealIndividual)p2.clone();
-			if (RandomNumberGenerator.getInstance().nextDouble() < xover_rate)
-				cross(ch1, ch2);
-			offspring.add(ch1);
-			offspring.add(ch2);
-		}
-	}
+    /**
+     * Constructor, sets the crossover rate.
+     * 
+     * @param crossRate the crossover rate
+     */
 
-	/**
-	 * Performs the crossover of itself.
-	 * 
-	 * @param a First parent, is changed in the method
-	 * @param b Second parent, is changed in the method
-	 */
-	
-	private void cross(RealIndividual a, RealIndividual b) {
-		double y1, y2, yLow, yHi, tmp;
-		for (int i = 0; i < a.length(); i++) {
-			y1 = (Double)a.get(i);
-			y2 = (Double)b.get(i);
-			if (Math.abs(y1 - y2) < EPS)
-				continue;
-			if (y1 > y2) {
-				tmp = y1;
-				y1 = y2;
-				y2 = tmp;
-			}
-			yLow = a.getMin();
-			yHi = a.getMax();
-			double rand = RandomNumberGenerator.getInstance().nextDouble();
-			double beta = 1.0 + (2.0*(y1-yLow)/(y2-y1));
-			double alpha = 2.0 - Math.pow(beta,-(ETA_C + 1.0));
-			double betaq = 0;
-			if (rand <= (1.0/alpha)) {
+    public SBXoverOperator(double crossRate) {
+        xoverRate = crossRate;
+    }
+
+    public void operate(Population parents, Population offspring) {
+        int popSize = parents.getPopulationSize();
+        for(int i = 0; i < popSize - 1; i+=2) {
+            Individual p1 = parents.get(i);
+            Individual p2 = parents.get(i+1);
+            RealIndividual ch1 = (RealIndividual)p1.clone();
+            RealIndividual ch2 = (RealIndividual)p2.clone();
+            if (RandomNumberGenerator.getInstance().nextDouble() < xoverRate) {
+                cross(ch1, ch2);
+            }
+            offspring.add(ch1);
+            offspring.add(ch2);
+        }
+    }
+
+    /**
+     * Performs the crossover of itself.
+     * 
+     * @param a First parent, is changed in the method
+     * @param b Second parent, is changed in the method
+     */
+
+    private void cross(RealIndividual a, RealIndividual b) {
+        double y1, y2, yLow, yHi, tmp;
+        for (int i = 0; i < a.length(); i++) {
+            y1 = (Double)a.get(i);
+            y2 = (Double)b.get(i);
+            if (Math.abs(y1 - y2) < EPS){
+                continue;
+            }
+            if (y1 > y2) {
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+            yLow = a.getMin();
+            yHi = a.getMax();
+            double rand = RandomNumberGenerator.getInstance().nextDouble();
+            double beta = 1.0 + (2.0*(y1-yLow)/(y2-y1));
+            double alpha = 2.0 - Math.pow(beta,-(ETA_C + 1.0));
+            double betaq = 0;
+            if (rand <= (1.0/alpha)) {
                 betaq = Math.pow(rand*alpha, 1.0 / (ETA_C + 1.0));
             } else {
                 betaq = Math.pow(1.0 / (2.0 - rand*alpha), 1.0 / (ETA_C + 1.0));
             }
-			double c1 = 0.5*((y1+y2)-betaq*(y2-y1));
+            double c1 = 0.5*((y1+y2)-betaq*(y2-y1));
             beta = 1.0 + (2.0*(yHi-y2)/(y2-y1));
             alpha = 2.0 - Math.pow(beta,-(ETA_C+1.0));
             if (rand <= (1.0/alpha)) {
@@ -87,24 +89,25 @@ public class SBXoverOperator implements Operator {
                 betaq = Math.pow(1.0 / (2.0 - rand*alpha), 1.0 / (ETA_C + 1.0));
             }
             double c2 = 0.5*((y1+y2)+betaq*(y2-y1));
-            if (c1<yLow)
+            if (c1<yLow) {
                 c1=yLow;
-            if (c2<yLow)
+            }
+            if (c2<yLow) {
                 c2=yLow;
-            if (c1>yHi)
+            }
+            if (c1>yHi) {
                 c1=yHi;
-            if (c2>yHi)
+            }
+            if (c2>yHi) {
                 c2=yHi;
-            if (RandomNumberGenerator.getInstance().nextDouble()<=0.5)
-            {
+            }
+            if (RandomNumberGenerator.getInstance().nextDouble()<=0.5) {
                 a.set(i, new DoubleValue(c2));
                 b.set(i, new DoubleValue(c1));
-            }
-            else
-            {
+            } else {
                 a.set(i, new DoubleValue(c1));
                 b.set(i, new DoubleValue(c2));
             }
-		}
-	}
+        }
+    }
 }

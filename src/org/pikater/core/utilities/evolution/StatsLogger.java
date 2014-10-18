@@ -5,7 +5,7 @@ import org.pikater.shared.logging.core.ConsoleLogger;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class serves as a logging interface for logging of the progress of fitness
@@ -17,6 +17,12 @@ import java.util.ArrayList;
 public class StatsLogger {
 
     /**
+     * To hide the implicit public constructor
+     */
+    private StatsLogger() {
+    }
+    
+    /**
      * Logs the information on fitness in the population. Writes one line to the
      * out stream. This line contains two numbers: the fitness of the best individual
      * in the population and the average fitness of the individuals in the population.
@@ -25,26 +31,25 @@ public class StatsLogger {
      * @param out The output stream to which the results are appended.
      */
 
-	public static void logFitness(Population pop, OutputStreamWriter out) {
-		
-            ArrayList<Individual> sortedIndividuals = pop.getSortedIndividuals();
-            double bestFitness = sortedIndividuals.get(0).getFitnessValue();
-		
-		double fitnessSum = 0;
-		for (Individual ch : sortedIndividuals) {
-			fitnessSum += ch.getFitnessValue();
-		}
-		
-		double averageFitness = fitnessSum/pop.getPopulationSize();
-		
-		try {
-			out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
-		}
-		catch (IOException e) {
-			ConsoleLogger.logThrowable("Unexpected error occured:", e);
-		}
-		
-	}
+    public static void logFitness(Population pop, OutputStreamWriter out) {
+
+        List<Individual> sortedIndividuals = pop.getSortedIndividuals();
+        double bestFitness = sortedIndividuals.get(0).getFitnessValue();
+
+        double fitnessSum = 0;
+        for (Individual ch : sortedIndividuals) {
+            fitnessSum += ch.getFitnessValue();
+        }
+
+        double averageFitness = fitnessSum/pop.getPopulationSize();
+
+        try {
+            out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
+        } catch (IOException e) {
+            ConsoleLogger.logThrowable("Unexpected error occured:", e);
+        }
+
+    }
 
      /**
      * Logs the information on the objective values in the population. Writes one line to the
@@ -56,24 +61,23 @@ public class StatsLogger {
      */
 
         public static void logObjective(Population pop, OutputStreamWriter out) {
-		
-            ArrayList<Individual> sortedIndividuals = pop.getSortedIndividuals();
+
+            List<Individual> sortedIndividuals = pop.getSortedIndividuals();
             double bestFitness = sortedIndividuals.get(0).getObjectiveValue();
-		
-		double fitnessSum = 0;
-		for (Individual ch : sortedIndividuals) {
-			fitnessSum += ch.getObjectiveValue();
-		}
-		
-		double averageFitness = fitnessSum/pop.getPopulationSize();
-		
-		try {
-			out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
-		}
-		catch (IOException e) {
-			ConsoleLogger.logThrowable("Unexpected error occured:", e);
-		}
-		
-	}
+        
+        double fitnessSum = 0;
+        for (Individual ch : sortedIndividuals) {
+            fitnessSum += ch.getObjectiveValue();
+        }
+
+        double averageFitness = fitnessSum/pop.getPopulationSize();
+
+        try {
+            out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
+        } catch (IOException e) {
+            ConsoleLogger.logThrowable("Unexpected error occured:", e);
+        }
+
+}
 
 }

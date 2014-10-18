@@ -40,16 +40,25 @@ public class BitFlipMutation implements Operator {
              BooleanIndividual o1 = (BooleanIndividual) p1.clone();
 
              if (rng.nextDouble() < mutationProbability) {
-                 for (int j = 0; j < o1.length(); j++) {
-                     if (rng.nextDouble() < bitFlipProbability) {
-                         boolean b = o1.toBooleanArray()[j];
-                         o1.set(j, new BooleanValue(!b));
-                     }
-                 }
+                 mutate(o1);
              }
              
              offspring.add(o1);
         }
+    }
+
+    /**
+     * Performs the actual mutation
+     * @param o1 The individual to mutate
+     */
+    
+    private void mutate(BooleanIndividual o1) {
+        for (int j = 0; j < o1.length(); j++) {
+             if (rng.nextDouble() < bitFlipProbability) {
+                 boolean b = o1.toBooleanArray()[j];
+                 o1.set(j, new BooleanValue(!b));
+             }
+         }
     }
 
 }

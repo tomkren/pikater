@@ -159,15 +159,12 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         for (int i = 0; i < items.length; i++) {
             if (schema[i] instanceof SetSItem) {
                 inst.setValue(i, items[i].toString());
-                continue;
             } else {
                 IntervalSearchItem searchItem=(IntervalSearchItem)schema[i];
                 if (searchItem.getMin() instanceof BooleanValue) {
-                    inst.setValue(i, items[i].hackValue().equals("False") ? 0.0 : 1.0);
-                    continue;
+                    inst.setValue(i, "False".equals(items[i].hackValue()) ? 0.0 : 1.0);
                 } else if (searchItem.getMin() instanceof IntegerValue) {
                     inst.setValue(i, norm.normalizeInt(items[i], (IntervalSearchItem)schema[i]));
-                    continue;
                 } else if (searchItem.getMin() instanceof FloatValue) {
                     inst.setValue(i, norm.normalizeFloat(items[i], (IntervalSearchItem)schema[i]));
                 }

@@ -61,7 +61,7 @@ public class RealIndividual extends ArrayIndividual {
      * @return The internal integer array.
      */
     public double[] toDoubleArray() {
-        return genes;
+        return Arrays.copyOf(genes, genes.length);
     }
 
     @Override

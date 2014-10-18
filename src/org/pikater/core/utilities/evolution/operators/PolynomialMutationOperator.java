@@ -62,16 +62,16 @@ public class PolynomialMutationOperator implements Operator {
             double delta1 = (y - yLow) / (yHi - yLow);
             double delta2 = (yHi - y) / (yHi - yLow);
             double rnd = RandomNumberGenerator.getInstance().nextDouble();
-            double mut_pow = 1.0 / (ETA_M + 1.0);
+            double mutPow = 1.0 / (ETA_M + 1.0);
             double deltaq;
             if (rnd <= 0.5) {
                 double xy = 1.0 - delta1;
                 double val = 2.0 * rnd + (1.0 - 2.0 * rnd) * Math.pow(xy, ETA_M + 1.0);
-                deltaq = Math.pow(val, mut_pow) - 1.0;
+                deltaq = Math.pow(val, mutPow) - 1.0;
             } else {
                 double xy = 1.0 - delta2;
                 double val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * Math.pow(xy, ETA_M + 1.0);
-                deltaq = 1.0 - (Math.pow(val, mut_pow));
+                deltaq = 1.0 - (Math.pow(val, mutPow));
             }
             y = y + deltaq * (yHi - yLow);
             if (y < yLow) {

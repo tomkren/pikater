@@ -22,8 +22,7 @@ public class SwappingMutationOperator implements Operator {
      * @param geneChangeProbability the percentage of genes which will be swapped in a mutated individual
      */
     
-    public SwappingMutationOperator(double mutationProbability,
-    		double geneChangeProbability) {
+    public SwappingMutationOperator(double mutationProbability, double geneChangeProbability) {
         this.mutationProbability = mutationProbability;
         this.geneChangeProbability = geneChangeProbability;
     }

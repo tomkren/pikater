@@ -23,9 +23,8 @@ import java.util.List;
  */
 public class ASMMOMAModelValueProvider implements ModelValueProvider{
 
-    ArrayList<SearchItemIndividual> nonDom = null;
+    List<SearchItemIndividual> nonDom = null;
     SearchItemIndividualArchive archive = null;
-    ModelInputNormalizer norm = null;
     
     /**
      * Computes the target value for individuals as in the ASM-MOMA algorithm. The non-dominated front
@@ -36,9 +35,8 @@ public class ASMMOMAModelValueProvider implements ModelValueProvider{
     public double getModelValue(SearchItemIndividual si, SearchItemIndividualArchive archive, ModelInputNormalizer norm) {
         if (this.archive == null) {
             this.archive = archive;
-            this.norm = norm;
             
-            ArrayList<Individual> inds = new ArrayList<Individual>();
+            List<Individual> inds = new ArrayList<Individual>();
             inds.addAll(archive.getSavedIndividuals());
             
             List<Individual> tmp = MultiobjectiveFitnessEvaluator.getNonDominatedFront(inds);
@@ -90,14 +88,13 @@ public class ASMMOMAModelValueProvider implements ModelValueProvider{
             if (s1.getMin() instanceof FloatValue) {
                 double range = ((FloatValue)s1.getMax()).getValue() - ((FloatValue)s1.getMin()).getValue();
                 dist += Math.pow(((FloatValue)i1.get(i)).getValue() - ((FloatValue)(i2.get(i))).getValue()/range, 2);
-                continue;
-            }
-            if (s1.getMin() instanceof IntegerValue) {
+            } else if (s1.getMin() instanceof IntegerValue) {
                 double range = ((IntegerValue)s1.getMax()).getValue() - ((IntegerValue)s1.getMin()).getValue();
                 dist += Math.pow(((IntegerValue)i1.get(i)).getValue() - ((IntegerValue)(i2.get(i))).getValue()/range, 2);
                 continue;
+            } else {
+                dist += i1.equals(i2) ? 0 : 1;
             }
-            dist += i1.equals(i2) ? 0 : 1;
         }
         
         return Math.log(Math.sqrt(dist) + 1);

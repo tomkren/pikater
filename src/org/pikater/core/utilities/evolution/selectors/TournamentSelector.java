@@ -23,8 +23,7 @@ public class TournamentSelector implements Selector{
 
             if ((from.get(i1).getFitnessValue() < from.get(i2).getFitnessValue()) && rng.nextDouble() < 0.8) {
                 to.add((Individual)from.get(i1).clone());
-            }
-            else {
+            } else {
                 to.add((Individual)from.get(i2).clone());
             }
         }

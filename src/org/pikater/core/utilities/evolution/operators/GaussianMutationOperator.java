@@ -61,15 +61,24 @@ public class GaussianMutationOperator implements Operator {
              RealIndividual o1 = (RealIndividual) p1.clone();
 
              if (rng.nextDouble() < mutationProbability) {
-                 for (int j = 0; j < o1.length(); j++) {
-                     if (rng.nextDouble() < geneChangeProbability) {
-                         o1.set(j, new DoubleValue( ((Double)o1.get(j)) + sigma*RandomNumberGenerator.getInstance().nextGaussian()) );
-                     }
-                 }
+                 mutate(o1);
              }
 
              offspring.add(o1);
         }
+    }
+
+    /**
+     * Performs the actual mutation
+     * 
+     * @param o1 the individual to mutate
+     */
+    private void mutate(RealIndividual o1) {
+        for (int j = 0; j < o1.length(); j++) {
+             if (rng.nextDouble() < geneChangeProbability) {
+                 o1.set(j, new DoubleValue( ((Double)o1.get(j)) + sigma*RandomNumberGenerator.getInstance().nextGaussian()) );
+             }
+         }
     }
 
 }

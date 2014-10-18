@@ -16,7 +16,8 @@ public class FitnessModelValueProvider implements ModelValueProvider {
     }
 
     @Override
-    public void reset() {       
+    public void reset() {
+        //no internal state to reset
     }
     
 }

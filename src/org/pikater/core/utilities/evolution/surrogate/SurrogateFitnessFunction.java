@@ -41,7 +41,7 @@ public class SurrogateFitnessFunction implements FitnessFunction {
         try {
             return surrogate.classifyInstance(in);
         } catch (Exception e) {
-        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
+             ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
         
         return 0.0;

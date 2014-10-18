@@ -27,7 +27,7 @@ import org.pikater.shared.util.SimpleIDGenerator;
  * 
  * @author stepan
  */
-public class UniversalExperiment {
+public class UniversalComputationDescription {
 	/**
 	 * Top-level ({@link UniversalElement element} independent) options for this experiment.
 	 */
@@ -50,7 +50,7 @@ public class UniversalExperiment {
 	 */
 	private final SimpleIDGenerator idGenerator;
 
-	public UniversalExperiment() {
+	public UniversalComputationDescription() {
 		this.globalOptions = new HashSet<NewOption>();
 		this.rootElements = new HashSet<UniversalElement>();
 		this.allElements = new HashSet<UniversalElement>();
@@ -159,15 +159,15 @@ public class UniversalExperiment {
 	}
 
 	public String toXML() {
-		return XStreamHelper.serializeToXML(this, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
+		return XStreamHelper.serializeToXML(this, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
 	}
 
-	public static UniversalExperiment fromXML(String xml) {
-		return XStreamHelper.deserializeFromXML(UniversalExperiment.class, xml, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class));
+	public static UniversalComputationDescription fromXML(String xml) {
+		return XStreamHelper.deserializeFromXML(UniversalComputationDescription.class, xml, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
 	}
 
 	public static void main(String[] args) throws CloneNotSupportedException {
-		UniversalExperiment uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
-		ConsoleLogger.log(Level.INFO, XStreamHelper.serializeToXML(uDescription, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalExperiment.class)));
+		UniversalComputationDescription uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
+		ConsoleLogger.log(Level.INFO, XStreamHelper.serializeToXML(uDescription, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class)));
 	}
 }

@@ -45,8 +45,9 @@ public abstract class Individual implements ICloneable {
      * @return The fitness value of the individual.
      */
     public double getFitnessValue() {
-        if (fitnessValue == -Double.MAX_VALUE)
+        if (fitnessValue == -Double.MAX_VALUE) {
             throw new IllegalStateException("Fitness value not evaluated");
+        }
         return fitnessValue;
     }
 
@@ -58,13 +59,13 @@ public abstract class Individual implements ICloneable {
      */
     @Override
     public Individual clone() {
-    	try {
-    		Individual newInd = (Individual) super.clone();
-    		newInd.fitnessValue = -Double.MAX_VALUE;
-    		return newInd;
-    	} catch (CloneNotSupportedException e) {
-    		ConsoleLogger.logThrowable("Unexpected error occured:", e);
-    		return null;
-    	}
+        try {
+            Individual newInd = (Individual) super.clone();
+            newInd.fitnessValue = -Double.MAX_VALUE;
+            return newInd;
+        } catch (CloneNotSupportedException e) {
+            ConsoleLogger.logThrowable("Unexpected error occured:", e);
+            return null;
+        }
     } 
 }

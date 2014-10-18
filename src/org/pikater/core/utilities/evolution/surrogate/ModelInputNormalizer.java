@@ -15,12 +15,12 @@ import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
  */
 public abstract class ModelInputNormalizer {
     
-	/**
-	 * Method to normalize float values
-	 * @param dbl The float value to normalize
-	 * @param schema The range of possible values
-	 * @return The normalized value
-	 */
+    /**
+     * Method to normalize float values
+     * @param dbl The float value to normalize
+     * @param schema The range of possible values
+     * @return The normalized value
+     */
     public abstract double normalizeFloat(IValueData dbl, IntervalSearchItem schema);
     
     /**

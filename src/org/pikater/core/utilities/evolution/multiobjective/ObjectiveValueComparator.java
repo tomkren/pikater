@@ -12,9 +12,9 @@ import org.pikater.core.utilities.evolution.individuals.MultiobjectiveIndividual
  *
  */
 public class ObjectiveValueComparator implements Comparator<Individual>, Serializable {
-	private static final long serialVersionUID = 5987378684140074409L;
-	
-	private int mult = 1;
+    private static final long serialVersionUID = 5987378684140074409L;
+
+    private int mult = 1;
     private int idx;
 
     

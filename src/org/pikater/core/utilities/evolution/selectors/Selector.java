@@ -17,7 +17,6 @@ public interface Selector {
      * @param from the population from which to select
      * @param to the population to place the individuals to
      */
-	
-	public void select(int howMany, Population from, Population to);
+    public void select(int howMany, Population from, Population to);
 
 }

@@ -12,7 +12,6 @@ import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
  */
 public class IdentityNormalizer extends ModelInputNormalizer {
 
-    //TODO: not necessary now imho, remove
     @Override
     public double normalizeFloat(IValueData dbl, IntervalSearchItem schema) {
         return ((FloatValue)dbl).getValue();

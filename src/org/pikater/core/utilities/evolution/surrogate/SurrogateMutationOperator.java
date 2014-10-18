@@ -40,8 +40,8 @@ public class SurrogateMutationOperator implements Operator {
      * @param norm Normalizer for the input values
      */
     public SurrogateMutationOperator(SearchItemIndividualArchive archive,
-    		double mutProbability, ModelValueProvider mvp,
-    		ModelInputNormalizer norm) {
+        double mutProbability, ModelValueProvider mvp,
+        ModelInputNormalizer norm) {
         this.archive = archive;
         this.mutProbability = mutProbability;
         this.mvp = mvp;
@@ -102,13 +102,13 @@ public class SurrogateMutationOperator implements Operator {
                 }
               
                 SearchItemIndividual bestIndividual = (SearchItemIndividual)
-                		innerPopulation.getSortedIndividuals().get(0);
+                    innerPopulation.getSortedIndividuals().get(0);
                 offspring.add(bestIndividual);              
             }
 
 
         } catch (Exception e) {
-        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
+            ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
 
 

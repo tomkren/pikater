@@ -1,20 +1,20 @@
-<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
+<org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription>
   <globalOptions/>
   <rootElements>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
       <id>0</id>
       <options/>
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing">
           <id>3</id>
           <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
           <options/>
           <errors/>
           <dataSources>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                 <id>4</id>
                 <options/>
                 <errors/>
@@ -23,9 +23,9 @@
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>firstInput</inputType>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+            <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                 <id>5</id>
                 <options/>
                 <errors/>
@@ -34,26 +34,26 @@
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>secondInput</inputType>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+            </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
         <outputType>sunnyOutput</outputType>
       </dataSource>
-    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    </org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
       <id>1</id>
       <options/>
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing">
           <id>3</id>
           <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
           <options/>
           <errors/>
           <dataSources>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                 <id>4</id>
                 <options/>
                 <errors/>
@@ -62,9 +62,9 @@
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>firstInput</inputType>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+            <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                 <id>5</id>
                 <options/>
                 <errors/>
@@ -73,26 +73,26 @@
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>secondInput</inputType>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+            </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
         <outputType>overcastOutput</outputType>
       </dataSource>
-    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    </org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
       <id>2</id>
       <options/>
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing">
           <id>3</id>
           <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
           <options/>
           <errors/>
           <dataSources>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                 <id>4</id>
                 <options/>
                 <errors/>
@@ -101,9 +101,9 @@
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>firstInput</inputType>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+            <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                 <id>5</id>
                 <options/>
                 <errors/>
@@ -112,11 +112,11 @@
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>secondInput</inputType>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+            </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
         <outputType>rainyOutput</outputType>
       </dataSource>
-    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    </org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
   </rootElements>
-</org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
+</org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription>

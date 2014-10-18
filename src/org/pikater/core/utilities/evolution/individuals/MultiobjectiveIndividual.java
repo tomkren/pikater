@@ -20,7 +20,7 @@ public abstract class MultiobjectiveIndividual extends ArrayIndividual {
      */
     
     public float[] getObjectives() {
-        return objectives;
+        return Arrays.copyOf(objectives, objectives.length);
     }
 
     /**
@@ -29,7 +29,7 @@ public abstract class MultiobjectiveIndividual extends ArrayIndividual {
      */
     
     public void setObjectives(float[] objectives) {
-        this.objectives = objectives;
+        this.objectives = Arrays.copyOf(objectives, objectives.length);
     }
     
     @Override
@@ -43,3 +43,4 @@ public abstract class MultiobjectiveIndividual extends ArrayIndividual {
         return mi;
     }
 }
+

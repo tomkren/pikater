@@ -39,19 +39,26 @@ public class IntegerMutation implements Operator {
              IntegerIndividual o1 = (IntegerIndividual) p1.clone();
 
              if (rng.nextDouble() < mutationProbability) {
-                 for (int j = 0; j < o1.length(); j++) {
-                     if (rng.nextDouble() < geneChangeProbability) {
-                    	 int value = o1.getMax() - o1.getMin();
-                    	 IntegerValue valueO = new IntegerValue(
-                    			 RandomNumberGenerator.getInstance()
-                    			 .nextInt(value) + o1.getMin());
-                         o1.set(j, valueO);
-                     }
-                 }
+                 mutate(o1);
              }
 
              offspring.add(o1);
         }
+    }
+
+    /**
+     * Performs the actual mutation
+     * @param o1 The offspring to mutate
+     */
+    private void mutate(IntegerIndividual o1) {
+        for (int j = 0; j < o1.length(); j++) {
+             if (rng.nextDouble() < geneChangeProbability) {
+                 int value = o1.getMax() - o1.getMin();
+                 int val0 = RandomNumberGenerator.getInstance().nextInt(value) + o1.getMin();
+                 IntegerValue valueO = new IntegerValue(val0);
+                 o1.set(j, valueO);
+             }
+         }
     }
 
 }

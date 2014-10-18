@@ -32,6 +32,6 @@ public abstract class ArrayIndividual extends Individual {
     
     @Override
     public ArrayIndividual clone() {
-    	return (ArrayIndividual) super.clone();
+        return (ArrayIndividual) super.clone();
     }
 }
