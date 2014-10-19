@@ -52,7 +52,7 @@ public class ManagerAgentRequestResponder {
         this.managerAgent = managerAgent;
     }
 
-    public  Object toObject(byte[] bytes) throws IOException, ClassNotFoundException{
+    public  Object toObject(byte[] bytes) throws IOException, ClassNotFoundException {
         Object object;
 
         object = new java.io.ObjectInputStream(new
@@ -158,8 +158,7 @@ public class ManagerAgentRequestResponder {
 
         if (la.getObject() != null){
             newAgent = (Agent)toObject(la.getObject());
-        }
-        else {
+        } else {
 
             // read agent from file
             String filename = CoreConfiguration.getSavedResultsPath() +
@@ -185,8 +184,7 @@ public class ManagerAgentRequestResponder {
             AgentController controller = container.acceptNewAgent(agentName, newAgent);
             controller.start();
 
-        }
-        else {
+        } else {
             throw new ControllerException("Agent not created.");
         }
 

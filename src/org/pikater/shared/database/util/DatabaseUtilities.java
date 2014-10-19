@@ -21,11 +21,14 @@ public class DatabaseUtilities {
 	/**
 	 * Does the given list contain an entity with the given ID?
 	 * 
-	 * @param list the list we are searching in
-	 * @param item the item we are searching for
-	 * @return true if item is in the list or false 
+	 * @param list
+	 *            the list we are searching in
+	 * @param item
+	 *            the item we are searching for
+	 * @return true if item is in the list or false
 	 */
-	public static <T extends JPAAbstractEntity> boolean containsID(List<T> list, int entityID) {
+	public static <T extends JPAAbstractEntity> boolean containsID(
+			List<T> list, int entityID) {
 		for (T i : list) {
 			if (i.getId() == entityID) {
 				return true;
@@ -41,7 +44,8 @@ public class DatabaseUtilities {
 	 */
 	public static String getMD5Hash(File file) throws IOException {
 		if (file == null) {
-			throw new NullPointerException("Who has ever heard of feeding nulls to a hashing function?");
+			throw new NullPointerException(
+					"Who has ever heard of feeding nulls to a hashing function?");
 		} else {
 			String res = null;
 			try (FileInputStream fis = new FileInputStream(file)) {

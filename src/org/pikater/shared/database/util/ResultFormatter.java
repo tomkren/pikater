@@ -16,8 +16,9 @@ public class ResultFormatter<T> {
 	}
 
 	/**
-	 * Returns the first item from the result list. If no items are in the result
-	 * NoResultException exception is thrown.
+	 * Returns the first item from the result list. If no items are in the
+	 * result NoResultException exception is thrown.
+	 * 
 	 * @return the first result
 	 * @throws NoResultException
 	 */
@@ -30,8 +31,9 @@ public class ResultFormatter<T> {
 	}
 
 	/**
-	 * Returns the first item from the result list. If no items are in the result
-	 * null is returned.
+	 * Returns the first item from the result list. If no items are in the
+	 * result null is returned.
+	 * 
 	 * @return the first result or null
 	 */
 	public T getSingleResultWithNull() {

@@ -30,7 +30,7 @@ public class AgentDataSource extends PikaterAgent {
 			"dataSources" + System.getProperty("file.separator");
 	
     private HashSet<String> ownedDataSources = new HashSet<String>();
-    public static String SERVICE_TYPE = "AgentDataSource";
+    public static final String SERVICE_TYPE = "AgentDataSource";
 
 	/**
 	 * Get ontologies which is using this agent

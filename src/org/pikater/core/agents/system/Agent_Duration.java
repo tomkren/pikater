@@ -248,8 +248,7 @@ public class Agent_Duration extends PikaterAgent {
 	    		
 	    		i++;
     		
-	    	}
-	    	catch (Exception e){
+	    	} catch (Exception e) {
 	    		logException("Unexpected error occured:", e);
 	    	}
 
@@ -317,8 +316,7 @@ public class Agent_Duration extends PikaterAgent {
                 logSevere("Responder " +
                 		failure.getSender().getName() +
                 		" does not exist");
-			}
-			else {
+			} else {
                 logSevere("Agent " +
                 		failure.getSender().getName() +
                 		" failed");
