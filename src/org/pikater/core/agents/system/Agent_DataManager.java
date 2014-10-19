@@ -1447,10 +1447,10 @@ public class Agent_DataManager extends PikaterAgent {
 		Metadata metadata = new Metadata();
 		ACLMessage reply = request.createReply();
 		logInfo("Retrieving metadata for hash " +
-				getMetadata.getInternal_filename());
+				getMetadata.getInternalFilename());
 		
 		List<JPADataSetLO> dataSets =
-				DAOs.dataSetDAO.getByHash(getMetadata.getInternal_filename());
+				DAOs.dataSetDAO.getByHash(getMetadata.getInternalFilename());
 		ResultFormatter<JPADataSetLO> resultFormatter =
 				new ResultFormatter<JPADataSetLO>(dataSets);
 		JPADataSetLO dslo = resultFormatter.getSingleResultWithNull();

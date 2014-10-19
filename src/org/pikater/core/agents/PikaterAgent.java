@@ -35,31 +35,31 @@ import org.pikater.core.ontology.subtrees.agent.TerminateSelf;
 import org.pikater.shared.logging.core.AgentLogger;
 
 /**
- * User: Kuba
- * Date: 25.8.13
- * Time: 9:38
+ * User: Kuba Date: 25.8.13 Time: 9:38
  */
-public abstract class PikaterAgent extends Agent
-{
+public abstract class PikaterAgent extends Agent {
 	private static final long serialVersionUID = 3427874121438630714L;
 
 	protected Codec codec = new SLCodec();
 	private transient AgentLogger logger;
-	protected Arguments arguments = new Arguments(new HashMap<String, Argument>());
-	/** for the master node this is empty, slave node agents are named with this as the suffix */
+	protected Arguments arguments = new Arguments(
+			new HashMap<String, Argument>());
+	/**
+	 * for the master node this is empty, slave node agents are named with this
+	 * as the suffix
+	 */
 	protected String nodeName;
 	private boolean registeredToDF = false;
-	
+
 	/*
 	 * INIT INTERFACE
 	 */
-	
+
 	protected boolean registerWithDF() {
 		return registerWithDF(new ArrayList<String>());
 	}
 
-	protected boolean registerWithDF(String service)
-	{
+	protected boolean registerWithDF(String service) {
 		return registerWithDF(Collections.singletonList(service));
 	}
 
@@ -80,7 +80,8 @@ public abstract class PikaterAgent extends Agent
 		serviceDescription.setType(typeDesc);
 		description.addServices(serviceDescription);
 
-		// add more agent service(s) (typicaly general service type, e.g. Search)
+		// add more agent service(s) (typicaly general service type, e.g.
+		// Search)
 
 		for (String st : ServiceTypes) {
 			ServiceDescription servicedesc_g = new ServiceDescription();
@@ -95,7 +96,8 @@ public abstract class PikaterAgent extends Agent
 			DFService.register(this, description);
 			registeredToDF = true;
 
-			StringBuilder sb = new StringBuilder("Successfully registered with DF; service types: ");
+			StringBuilder sb = new StringBuilder(
+					"Successfully registered with DF; service types: ");
 			for (String st : ServiceTypes) {
 				sb.append(st).append(" ");
 			}
@@ -107,48 +109,50 @@ public abstract class PikaterAgent extends Agent
 			return false;
 
 		}
-	} // end registerWithDF
-	
+	}
+
 	public void initDefault() {
 		Object[] args = getArguments();
 		initDefault(args);
 	}
-	
+
 	public void initDefault(Object[] args) {
 		if (getName().contains("-")) {
-			nodeName = getLocalName().substring(getLocalName().lastIndexOf('-')+1);
+			nodeName = getLocalName().substring(
+					getLocalName().lastIndexOf('-') + 1);
 		}
 		parseArguments(args);
-		
+
 		initLogging();
 		logInfo("is alive...");
 		getContentManager().registerLanguage(getCodec());
-		
-		for (Ontology ontologyI : getOntologies() ) {
+
+		for (Ontology ontologyI : getOntologies()) {
 			getContentManager().registerOntology(ontologyI);
 		}
 		getContentManager().registerOntology(TerminationOntology.getInstance());
-		
+
 		addTerminationBehavior();
 	}
-	
-	protected void initLogging()
-	{
+
+	protected void initLogging() {
 		logger = new AgentLogger(this);
 	}
-	
+
 	private void addTerminationBehavior() {
-		MessageTemplate template = MessageTemplate.and(
-				MessageTemplate.MatchOntology(TerminationOntology.getInstance().getName()),
+		MessageTemplate template = MessageTemplate.and(MessageTemplate
+				.MatchOntology(TerminationOntology.getInstance().getName()),
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
 		addBehaviour(new AchieveREResponder(this, template) {
 			private static final long serialVersionUID = 8926769466268882841L;
 
 			@Override
-			protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+			protected ACLMessage handleRequest(ACLMessage request)
+					throws NotUnderstoodException, RefuseException {
 				try {
-					Concept action = ((Action) (getContentManager().extractContent(request))).getAction();
+					Concept action = ((Action) (getContentManager()
+							.extractContent(request))).getAction();
 					if (action instanceof TerminateSelf) {
 						addBehaviour(new OneShotBehaviour() {
 							private static final long serialVersionUID = -8265931114367756110L;
@@ -163,26 +167,29 @@ public abstract class PikaterAgent extends Agent
 						res.setPerformative(ACLMessage.INFORM);
 						return res;
 					} else {
-						throw new NotUnderstoodException("Unknown action requested");
+						throw new NotUnderstoodException(
+								"Unknown action requested");
 					}
 				} catch (CodecException e) {
-					throw new NotUnderstoodException("Unknown codec: " + e.getMessage());
+					throw new NotUnderstoodException("Unknown codec: "
+							+ e.getMessage());
 				} catch (OntologyException e) {
-					throw new NotUnderstoodException("Unknown ontology: " + e.getMessage());
+					throw new NotUnderstoodException("Unknown ontology: "
+							+ e.getMessage());
 				}
 			}
 		});
 	}
-	
+
 	/*
 	 * TERMINATION INTERFACE
 	 */
-	
-	public boolean killAgent(String agentName){
+
+	public boolean killAgent(String agentName) {
 		ManagerAgentService communicator = new ManagerAgentService();
 		return communicator.killAgent(this, agentName);
 	}
-	
+
 	public void terminate() {
 		if (registeredToDF) {
 			try {
@@ -195,11 +202,11 @@ public abstract class PikaterAgent extends Agent
 		logInfo("Terminating");
 		doDelete();
 	}
-	
+
 	/*
 	 * MISCELLANEOUS INTERFACE
 	 */
-	
+
 	public Codec getCodec() {
 		return codec;
 	}
@@ -228,9 +235,9 @@ public abstract class PikaterAgent extends Agent
 		if (args == null) {
 			return;
 		}
-		for (Object arg : args) {
-			if (arg instanceof Argument) {
-				Argument argumentToAdd = (Argument) arg;
+		for (Object argI : args) {
+			if (argI instanceof Argument) {
+				Argument argumentToAdd = (Argument) argI;
 				argumentsMap.put(argumentToAdd.getName(), argumentToAdd);
 			} else {
 				throw new IllegalArgumentException();
@@ -239,43 +246,43 @@ public abstract class PikaterAgent extends Agent
 	}
 
 	public boolean isSameNode(AID id) {
-		return ((nodeName == null || nodeName.isEmpty()) && !id.getLocalName().contains("-")) ||
-				nodeName != null && id.getLocalName().endsWith("-" + nodeName);
+		return ((nodeName == null || nodeName.isEmpty()) && !id.getLocalName()
+				.contains("-"))
+				|| nodeName != null
+				&& id.getLocalName().endsWith("-" + nodeName);
 	}
-	
-	public AID createAgent(String type, String name, Arguments options){
+
+	public AID createAgent(String type, String name, Arguments options) {
 		return ManagerAgentService.createAgent(this, type, name, options);
 	}
-	
-	public AID createAgent(String type){
+
+	public AID createAgent(String type) {
 		return createAgent(type, null, null);
 	}
-	
-	public AID createAgent(org.pikater.core.ontology.subtrees.management.Agent agent){
-		return createAgent(agent.getType(), agent.getName(), null ); // TODO agent.getOptions ... predelat optiony na argumenty
+
+	public AID createAgent(
+			org.pikater.core.ontology.subtrees.management.Agent agent) {
+		return createAgent(agent.getType(), agent.getName(), null);
+		// TODO agent.getOptions ... predelat optiony na argumenty
 	}
-	
+
 	/*
 	 * LOGGING INTERFACE
 	 */
-	
-	public void logInfo(String text)
-	{
+
+	public void logInfo(String text) {
 		logger.log(Level.INFO, text);
 	}
-	
-	public void logWarning(String message)
-	{
+
+	public void logWarning(String message) {
 		logger.log(Level.WARNING, message);
 	}
-	
-	public void logSevere(String message)
-	{
+
+	public void logSevere(String message) {
 		logger.log(Level.SEVERE, message);
 	}
-	
-	public void logException(String message, Throwable t)
-	{
+
+	public void logException(String message, Throwable t) {
 		logger.logThrowable(message, t);
 	}
 }

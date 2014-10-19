@@ -6,9 +6,10 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
+
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computation.graph.ComputationNode;
-import org.pikater.core.agents.system.computation.graph.edges.DataSourceEdge;
+import org.pikater.core.agents.system.manager.graph.ComputationNode;
+import org.pikater.core.agents.system.manager.graph.edges.DataSourceEdge;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 

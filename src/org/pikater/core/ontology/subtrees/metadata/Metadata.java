@@ -18,9 +18,12 @@ public class Metadata implements Concept {
 	private int numberOfInstances = -1;
 	private int numberOfAttributes = -1;
 	private boolean missingValues;
-	private String defaultTask; // Classification, Regression, Clustering
-	private String attributeType; // Categorical, Numerical, Mixed, Multivariate
-	private int linearRegressionDuration; // ms
+	// Classification, Regression, Clustering
+	private String defaultTask;
+	// Categorical, Numerical, Mixed, Multivariate
+	private String attributeType;
+	// ms
+	private int linearRegressionDuration;
 	private List<AttributeMetadata> attributeMetadataList = new ArrayList<AttributeMetadata>();
 
 	public String getTargetClassType() {
@@ -54,8 +57,8 @@ public class Metadata implements Concept {
 		for (int i = getAttributeMetadataList().size() - 1; i >= 0; i--) {
 			AttributeMetadata att = (AttributeMetadata) getAttributeMetadataList()
 					.get(i);
-			if (!att.isIsTarget() && (att instanceof CategoricalAttributeMetadata))
-			{
+			if (!att.isIsTarget()
+					&& (att instanceof CategoricalAttributeMetadata)) {
 				count++;
 			}
 		}
@@ -67,8 +70,7 @@ public class Metadata implements Concept {
 		for (int i = getAttributeMetadataList().size() - 1; i >= 0; i--) {
 			AttributeMetadata att = (AttributeMetadata) getAttributeMetadataList()
 					.get(i);
-			if (!att.isIsTarget() && (att instanceof IntegerAttributeMetadata))
-			{
+			if (!att.isIsTarget() && (att instanceof IntegerAttributeMetadata)) {
 				count++;
 			}
 		}
@@ -77,10 +79,8 @@ public class Metadata implements Concept {
 
 	public int getNumberOfReal() {
 		int count = 0;
-		for (AttributeMetadata att : getAttributeMetadataList())
-		{
-			if (!att.isIsTarget() && (att instanceof RealAttributeMetadata))
-			{
+		for (AttributeMetadata att : getAttributeMetadataList()) {
+			if (!att.isIsTarget() && (att instanceof RealAttributeMetadata)) {
 				count++;
 			}
 		}
@@ -90,6 +90,7 @@ public class Metadata implements Concept {
 	public List<AttributeMetadata> getAttributeMetadataList() {
 		return attributeMetadataList;
 	}
+
 	public void setAttributeMetadataList(
 			List<AttributeMetadata> attributeMetadataList) {
 		this.attributeMetadataList = attributeMetadataList;
@@ -98,6 +99,7 @@ public class Metadata implements Concept {
 	public int getNumberOfInstances() {
 		return numberOfInstances;
 	}
+
 	public void setNumberOfInstances(int numberOfInstances) {
 		this.numberOfInstances = numberOfInstances;
 	}
@@ -105,22 +107,23 @@ public class Metadata implements Concept {
 	public int getNumberOfAttributes() {
 		return numberOfAttributes;
 	}
+
 	public void setNumberOfAttributes(int numberOfAttributes) {
 		this.numberOfAttributes = numberOfAttributes;
 	}
 
-	
 	public boolean getMissingValues() {
 		return missingValues;
 	}
+
 	public void setMissingValues(boolean missingValues) {
 		this.missingValues = missingValues;
 	}
-	
 
 	public String getDefaultTask() {
 		return defaultTask;
 	}
+
 	public void setDefaultTask(String defaultTask) {
 		this.defaultTask = defaultTask;
 	}
@@ -129,6 +132,7 @@ public class Metadata implements Concept {
 	public String getAttributeType() {
 		return attributeType;
 	}
+
 	// Deprecated
 	public void setAttributeType(String attributeType) {
 		this.attributeType = attributeType;
@@ -138,6 +142,7 @@ public class Metadata implements Concept {
 	public String getInternalName() {
 		return internalName;
 	}
+
 	// Deprecated
 	public void setInternalName(String internalName) {
 		this.internalName = internalName;
@@ -147,6 +152,7 @@ public class Metadata implements Concept {
 	public String getExternalName() {
 		return externalName;
 	}
+
 	// Deprecated
 	public void setExternalName(String externalName) {
 		this.externalName = externalName;
@@ -155,6 +161,7 @@ public class Metadata implements Concept {
 	public int getLinearRegressionDuration() {
 		return linearRegressionDuration;
 	}
+
 	public void setLinearRegressionDuration(int linearRegressionDuration) {
 		this.linearRegressionDuration = linearRegressionDuration;
 	}

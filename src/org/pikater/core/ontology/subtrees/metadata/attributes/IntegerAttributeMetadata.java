@@ -5,7 +5,7 @@
 package org.pikater.core.ontology.subtrees.metadata.attributes;
 
 /**
- *
+ * 
  * @author Kuba
  */
 public class IntegerAttributeMetadata extends NumericalAttributeMetadata {
@@ -13,9 +13,8 @@ public class IntegerAttributeMetadata extends NumericalAttributeMetadata {
 	private static final long serialVersionUID = 2610042360742781585L;
 
 	@Override
-    public  String getType()
-    {
-        return "Integer";
-    }
-    
+	public String getType() {
+		return "Integer";
+	}
+
 }

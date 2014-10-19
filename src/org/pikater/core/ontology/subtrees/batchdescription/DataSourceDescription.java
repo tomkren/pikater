@@ -9,42 +9,46 @@ public class DataSourceDescription implements ISourceDescription {
 
 	private static final long serialVersionUID = 2090764353306584887L;
 
-    private IDataProvider dataProvider;
+	private IDataProvider dataProvider;
 	private String outputType;
 	private String inputType;
 
+	public DataSourceDescription() {
+	}
 
-    public DataSourceDescription() {
-    }
+	public IDataProvider getDataProvider() {
+		return dataProvider;
+	}
 
-    public IDataProvider getDataProvider() {
-        return dataProvider;
-    }
-    public void setDataProvider(IDataProvider dataProvider) {
-    	
-    	if (dataProvider instanceof FileDataProvider) {
-    		this.setOutputType(CoreConstant.SlotContent.FILE_DATA.getSlotName());
-    		
-    	} else if (dataProvider instanceof ComputingAgent) {
-    		this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
-    		
-    	} else if (dataProvider instanceof CARecSearchComplex) {
-    		this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
-    	}
-    	
-        this.dataProvider = dataProvider;
-    }
+	public void setDataProvider(IDataProvider dataProvider) {
 
-    public String getOutputType() {
-        return outputType;
-    }
-    public void setOutputType(String dataType) {
-        this.outputType = dataType;
-    }
-    
-    public String getInputType() {
+		if (dataProvider instanceof FileDataProvider) {
+			this.setOutputType(CoreConstant.SlotContent.FILE_DATA.getSlotName());
+
+		} else if (dataProvider instanceof ComputingAgent) {
+			this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA
+					.getSlotName());
+
+		} else if (dataProvider instanceof CARecSearchComplex) {
+			this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA
+					.getSlotName());
+		}
+
+		this.dataProvider = dataProvider;
+	}
+
+	public String getOutputType() {
+		return outputType;
+	}
+
+	public void setOutputType(String dataType) {
+		this.outputType = dataType;
+	}
+
+	public String getInputType() {
 		return inputType;
 	}
+
 	public void setInputType(String dataInputType) {
 		this.inputType = dataInputType;
 	}
@@ -60,15 +64,11 @@ public class DataSourceDescription implements ISourceDescription {
 	}
 
 	@Override
-	public DataSourceDescription clone()
-	{
+	public DataSourceDescription clone() {
 		DataSourceDescription dataSource;
-		try
-		{
+		try {
 			dataSource = (DataSourceDescription) super.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
+		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 		dataSource.setInputType(this.getInputType());

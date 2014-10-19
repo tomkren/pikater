@@ -12,43 +12,45 @@ import org.pikater.shared.util.collections.CollectionUtils;
 public class Search extends DataProcessing implements IErrorProvider {
 
 	private static final long serialVersionUID = 7856131679884259768L;
-	
+
 	private String searchClass;
-    private List<NewOption> options;
+	private List<NewOption> options;
 
-    public Search() {
-    	this.options = new ArrayList<NewOption>();
-    }
-    
-    public String getAgentType() {
-        return searchClass;
-    }
+	public Search() {
+		this.options = new ArrayList<NewOption>();
+	}
+
+	public String getAgentType() {
+		return searchClass;
+	}
+
 	public void setAgentType(String agentType) {
-        this.searchClass = agentType;
-    }
+		this.searchClass = agentType;
+	}
 
-    public List<NewOption> getOptions() {
-        return options;
-    }
-    
-    public void setOptions(List<NewOption> options) {
-    	if (options == null) {
-    		throw new NullPointerException("Argument options can't be null");
-    	}
-        this.options = options;
-    }
-    
-    public void addOption(NewOption option) {
-    	if (option == null) {
-    		throw new NullPointerException("Argument option can't be null");
-    	}
-        this.options.add(option);
-    }
+	public List<NewOption> getOptions() {
+		return options;
+	}
+
+	public void setOptions(List<NewOption> options) {
+		if (options == null) {
+			throw new NullPointerException("Argument options can't be null");
+		}
+		this.options = options;
+	}
+
+	public void addOption(NewOption option) {
+		if (option == null) {
+			throw new NullPointerException("Argument option can't be null");
+		}
+		this.options.add(option);
+	}
 
 	@Override
-	public List<NewOption> exportAllOptions() {		
+	public List<NewOption> exportAllOptions() {
 		return this.options;
 	}
+
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		if (options == null) {
@@ -56,34 +58,38 @@ public class Search extends DataProcessing implements IErrorProvider {
 		}
 		this.options = options;
 	}
-	
+
 	@Override
 	public List<ErrorSourceDescription> exportAllErrors() {
 		return new ArrayList<ErrorSourceDescription>();
 	}
+
 	@Override
 	public void importAllErrors(List<ErrorSourceDescription> errors) {
-		
+
 		if (errors != null && !errors.isEmpty()) {
-			throw new IllegalArgumentException("Argument errors can be only null");
+			throw new IllegalArgumentException(
+					"Argument errors can be only null");
 		}
 	}
-	
+
 	@Override
 	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
 		return new ArrayList<DataSourceDescription>();
 	}
+
 	@Override
-	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
-		
+	public void importAllDataSourceDescriptions(
+			List<DataSourceDescription> dataSourceDescriptions) {
+
 		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
-			throw new IllegalArgumentException("Argument universalInputSlots can be only null");
+			throw new IllegalArgumentException(
+					"Argument universalInputSlots can be only null");
 		}
 	}
-	
+
 	@Override
-	public Search clone()
-	{
+	public Search clone() {
 		Search search = (Search) super.clone();
 		search.setId(this.getId());
 		search.setAgentType(searchClass);

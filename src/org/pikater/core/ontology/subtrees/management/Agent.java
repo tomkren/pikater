@@ -9,24 +9,24 @@ import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;
 
-public class Agent implements Concept, ICloneable
-{
+public class Agent implements Concept, ICloneable {
 	private static final long serialVersionUID = 6257129995443147585L;
-	
+
 	private String name;
 	private String type;
-	private Integer model; // null = new model
+	private Integer model;
 	private List<NewOption> options;
 	private byte[] object;
-	
-	public Agent(){
-		this.options=new ArrayList<NewOption>();
+
+	public Agent() {
+		this.options = new ArrayList<NewOption>();
 	}
 
 	// Methods required to use this class to represent the OPTIONS role
 	public List<NewOption> getOptions() {
 		return options;
 	}
+
 	public void setOptions(List<NewOption> options) {
 		this.options = options;
 	}
@@ -34,6 +34,7 @@ public class Agent implements Concept, ICloneable
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -41,6 +42,7 @@ public class Agent implements Concept, ICloneable
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
@@ -48,28 +50,26 @@ public class Agent implements Concept, ICloneable
 	public byte[] getObject() {
 		return object;
 	}
+
 	public void setObject(byte[] object) {
 		this.object = object;
 	}
-	
+
 	public boolean containsOptionByName(String optionName) {
 		NewOptions option = new NewOptions(getOptions());
-		return option.containsOptionWithName(optionName);		
+		return option.containsOptionWithName(optionName);
 	}
+
 	public NewOption getOptionByName(String name) {
 		NewOptions option = new NewOptions(getOptions());
 		return option.fetchOptionByName(name);
 	}
 
-	public Agent clone()
-	{
+	public Agent clone() {
 		Agent agent;
-		try
-		{
+		try {
 			agent = (Agent) super.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
+		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 		agent.setName(name);

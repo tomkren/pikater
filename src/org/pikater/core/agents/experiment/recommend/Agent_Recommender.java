@@ -187,7 +187,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 					if (rec.getDatas().getMetadata() == null) {
 						// or fetch them from database:
 						GetMetadata gm = new GetMetadata();
-						gm.setInternal_filename(rec.getDatas().exportInternalTestFileName());
+						gm.setInternalFilename(rec.getDatas().exportInternalTestFileName());
 						metadata = DataManagerService.getMetadata(agent, gm);
 						datas.setMetadata(metadata);
 					}                            			

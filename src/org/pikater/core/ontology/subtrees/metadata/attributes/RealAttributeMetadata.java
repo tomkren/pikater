@@ -5,7 +5,7 @@
 package org.pikater.core.ontology.subtrees.metadata.attributes;
 
 /**
- *
+ * 
  * @author Kuba
  */
 public class RealAttributeMetadata extends NumericalAttributeMetadata {
@@ -13,8 +13,7 @@ public class RealAttributeMetadata extends NumericalAttributeMetadata {
 	private static final long serialVersionUID = -4215218284827298376L;
 
 	@Override
-    public  String getType()
-    {
-        return "Real";
-    }
+	public String getType() {
+		return "Real";
+	}
 }

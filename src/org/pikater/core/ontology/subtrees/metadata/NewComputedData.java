@@ -11,20 +11,21 @@ public class NewComputedData implements AgentAction {
 
 	private int computedDataID;
 	private int userID;
-	
-	
+
 	public int getComputedDataID() {
 		return computedDataID;
 	}
+
 	public void setComputedDataID(int computedDataID) {
 		this.computedDataID = computedDataID;
 	}
-	
+
 	public int getUserID() {
 		return userID;
 	}
+
 	public void setUserID(int userId) {
 		this.userID = userId;
 	}
-	
+
 }
