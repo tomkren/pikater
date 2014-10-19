@@ -24,7 +24,6 @@ import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDura
 import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
-import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newoption.values.FloatValue;
@@ -83,11 +82,11 @@ public class Agent_PlannerTester extends PikaterAgent {
     	datas.addData(
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
-    					DataTypes.TEST_DATA) );
+    					CoreConstant.DataType.TEST_DATA.getType()) );
     	datas.addData(
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
-    					DataTypes.TRAIN_DATA) );
+    					CoreConstant.DataType.TRAIN_DATA.getType()) );
     	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
     	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
@@ -138,11 +137,11 @@ public class Agent_PlannerTester extends PikaterAgent {
     	datas.addData(
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
-    					DataTypes.TEST_DATA) );
+    					CoreConstant.DataType.TEST_DATA.getType()) );
     	datas.addData(
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
-    					DataTypes.TRAIN_DATA) );
+    					CoreConstant.DataType.TRAIN_DATA.getType()) );
     	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
     	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
@@ -195,11 +194,11 @@ public class Agent_PlannerTester extends PikaterAgent {
     	datas.addData(
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
-    					DataTypes.TEST_DATA) );
+    					CoreConstant.DataType.TEST_DATA.getType()) );
     	datas.addData(
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
-    					DataTypes.TRAIN_DATA) );
+    					CoreConstant.DataType.TRAIN_DATA.getType()) );
     	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
     	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	

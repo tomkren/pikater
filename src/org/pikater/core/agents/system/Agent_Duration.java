@@ -36,7 +36,6 @@ import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.Standard;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
-import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
 import org.pikater.core.ontology.subtrees.duration.SetDuration;
@@ -407,8 +406,8 @@ public class Agent_Duration extends PikaterAgent {
 		datas.addData(
 				new Data(durationDatasetName,
 						durationDatasetHash,
-						DataTypes.TRAIN_DATA));
-		datas.addData(new Data("xxx", "xxx", DataTypes.TEST_DATA));
+						CoreConstant.DataType.TRAIN_DATA.getType()));
+		datas.addData(new Data("xxx", "xxx", CoreConstant.DataType.TEST_DATA.getType()));
 		datas.setMode(CoreConstant.Mode.TRAIN_ONLY.name());
 		
 		Task task = new Task();		

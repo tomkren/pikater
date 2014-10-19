@@ -12,6 +12,23 @@ public class CoreConstant {
 	 */
 	private CoreConstant() {
 	}
+	
+	public static enum DataType
+	{
+		TRAIN_DATA("Train"),
+		TEST_DATA("Test"),
+		VALID_DATA("Valid");
+		
+		private final String type;
+		
+		private DataType(String type) {
+			this.type = type;
+		}
+		
+		public String getType() {
+			return type;
+		}
+	}
 
 	/**
 	 * 
