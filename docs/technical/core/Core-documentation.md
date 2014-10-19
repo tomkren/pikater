@@ -139,7 +139,7 @@ V paměti (a systému) jsou datasety reprezentovány ontologií `DataInstances` 
 
 V původním Pikateru se načtená data předávala výpočetním agentům přímo ACL zprávami, což se ukázalo jako nanejvýš neefektivní – potenciálně velká data musela projít drahou serializací a deserializací, dokonce i v rámci jednoho JADE containeru.
 
-Nyní jsou data přenášena z databáze přímo do agenta dedikovaného pro přístup k databázi, který se vyskytuje v každém containeru.
+Nyní jsou data přenášena z databáze přímo do agenta dedikovaného pro přístup k databázi, který se vyskytuje v každém containeru. Aktuální systém předpokládá výskyt právě jednoho slave containeru na jednom fyzickém stroji.
 
 V rámci daného containeru (stroje) jsou pak data přenášena tzv. "object to agent" rozhraním, které platforma JADE poskytuje. K přenosu dat vlastně dojde pouze předáním odkazu do stejného adresního prostoru, bez zbytečné serializace nebo kopírování dat.
 
@@ -174,11 +174,14 @@ Agent je naprogramován dostatečně obecně a může jádro spouštět jak na m
 Postup pro spuštění agenta z konzole:
 
 1. Spustit JADE.
-2. Do primárního nebo slave containeru umístit inicializačního agenta s parametrem cesty ke konfiguračnímu souboru (v případě Slave containeru s druhým parametrem udávajícím číslo Slave containeru). Konfigurační soubor obsahuje jméno třídy (včetně celého balíčku spouštěného agenta), jeho jméno a seznam parametrů. Pomocí druhého parametru se zajišťuje pouze jednoznačnost pojmenování agentů v rámci všech containerů. Ulehčuje se tím práce uživateli, jemuž pro spuštění několika Slave containerů stačí pouze jeden konfigurační soubor. Druhý parametr označující číslo containeru si agent Iniciator přidá jako sufix ke všem jménům v konfiguračním souboru. Nejpohodlněji se dá systém ovšem zapnout pomocí bash skriptů. Jeden zajišťuje buildování jádra systému, další spouštění hlavního containeru a poslední spouštění slave containeru s daným číselným parametrem. Tyto skripty volají pouze ANT na souboru buildCore.xml. Z kompilace jsou záměrně vyloučeny Balíčky potřebné pouze pro běh webové nadstavby, protože pro ni jsou potřeba knihovny dostupné přes Apache Ivy. Důvodem, proč se i pro kompilaci jádra nepoužívá Ivy, je přání zadavatelů, aby jádro systému Pikater šlo zkompilovat přímo ze zdrojových kódů bez nutnosti připojení k internetu (z bezpečnostních důvodů nebývá na superpočítačích k dispozici).
+2. <font color="red">Do primárního nebo slave containeru umístit inicializačního agenta s parametrem cesty ke konfiguračnímu souboru (v případě Slave containeru s druhým parametrem udávajícím číslo Slave containeru). Konfigurační soubor obsahuje jméno třídy (včetně celého balíčku spouštěného agenta), jeho jméno a seznam parametrů. Pomocí druhého parametru se zajišťuje pouze jednoznačnost pojmenování agentů v rámci všech containerů. Ulehčuje se tím práce uživateli, jemuž pro spuštění několika Slave containerů stačí pouze jeden konfigurační soubor. Druhý parametr označující číslo containeru si agent Iniciator přidá jako sufix ke všem jménům v konfiguračním souboru. Nejpohodlněji se dá systém ovšem zapnout pomocí bash skriptů. Jeden zajišťuje buildování jádra systému, další spouštění hlavního containeru a poslední spouštění slave containeru s daným číselným parametrem. Tyto skripty volají pouze ANT na souboru buildCore.xml. Z kompilace jsou záměrně vyloučeny Balíčky potřebné pouze pro běh webové nadstavby, protože pro ni jsou potřeba knihovny dostupné přes Apache Ivy. Důvodem, proč se i pro kompilaci jádra nepoužívá Ivy, je přání zadavatelů, aby jádro systému Pikater šlo zkompilovat přímo ze zdrojových kódů bez nutnosti připojení k internetu (z bezpečnostních důvodů nebývá na superpočítačích k dispozici).</font>
 
 #### Agent_ManagerAgent
 
 Tento agent se nachází na každém containeru právě jednou. Na master i slave containeru má funkci vládce.
+
+<font color="red">TODO: co s tímhle? A je to vůbec správně?
+"Systém předpokládá, že na jednom počítači běží pouze jeden container"</font>.
 
 Přijímá následující ontologie bez odpovědi:
 * `CreateAgent`  
@@ -228,13 +231,17 @@ Signál pro spuštění nové dávky. Obsahuje jednoznačný identifikátor dáv
 * `LoadBatch`  
 Signál pro načtení dávky. Dávka je získána z agenta `DataManager` ve formě ontologie `Batch` obsahující všechny relevantní informace.
 
-Rámcový postup pro spuštění nové dávky:
+<font color="red">Rámcový postup pro spuštění nové dávky:</font>
 
 1. Třídou `Parser` je dávka transformována na orientovaný a potenciálně cyklický multigraf.
 2. Multigraf je rozčleněn na části a protože jsou tyto části sdíleny mezy agenty, jsou jim následně přiřazeny identifikátory (JADE nezachovává při tomto druhu sdílení JAVA objektů reference).
 3. ... a tak dále. Destilovat z textu níže:
 
 **Parsování elementů**  
+
+<font color="red">
+WTH? Guys, this is NOT Javadoc... You will only confuse the reader by shoving all this in his face. As for me, I tried to make myself read it several times and each time I just failed horribly!  
+Keep it nice, simple and fluent. Use text structuring to help your reader understand what's going on and try to explain in small steps... not one big hell of a mess like this.</font>
 
 Při parsování logického multigrafu obsahující reprezentaci experimentů i ontologie, které mají pouze logický význam pomíjející. Problémy distribuovanosti výpočtu, problémy datových závislostí, skrývající problém vhodného pořadí spouštění tasku a přepravu dat na potřebná místa. V průběhu pársování si Manager vytváří závislostní graf reprezentovaný třídou ComputationGraf. Vrcholy závislostního grafu, reprezentované pomocí tříd ComputationNode, DataProcessingComputationNode, RecommenderComputationNode, SearchComputaionNode a ModelComputationNode.
 
@@ -272,7 +279,7 @@ Odpovídá zasláním informací o aktuálním vytížení systému - aktuální
 
 Rozvrhování se spouští po detekci změny, jež by mohla ovlivnit optimalitu rozvržení úloh. Typickými zástupci takových podnětů jsou příjem nové úlohy a dokončení/ukončení úlohy.
 
-Proces plánování:
+Proces plánování: <font color="red">(tohle chce speciálně zkontrolovat...)</font>
 
 1. Zjistíme, zda je k dispozici alespoň jedna úloha - pokud ano, vybere se ta z nich, která má nejvyšší prioritu. Nikoliv pouze nejvyšší celkovou prioritu, nýbrž i prioritu zohledňující průchodnost systému pro (podle predikce) krátce trvající dávky. Jako první se tedy vybírají úlohy s nejvyšší prioritou, které zároveň nebudou trvat dlouho.
 2. Vyhledají se nové, v plánovači dosud nezaregistrované slave servery. Zároveň s tím musí proběhnout změna struktury `CPUCoreStructure`, kam přibude informace o nových volných CPU jádrech.
@@ -482,7 +489,8 @@ Signál pro vygenerování metadat k novému uživatelem zadanému datasetu.
 * `NewComputedData`  
 Signál pro vygenerování metadat k nové datové množině vypočtené systémem. Výsledná metadata jsou prostřednictvím ontologie `Metadata` odeslána agentu `DataManager`, který je uloží a sváže s daným datasetem.
 
-po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat. Ten zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž mohou u výpočtů obsahujících datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.
+<font color="red">TODO: nechtěli byste k následujícímu raději udělat obrázek?
+po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat. Ten zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž mohou u výpočtů obsahujících datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.</font>
 
 ### Externí agenti
 
@@ -554,6 +562,8 @@ Obsahuje:
 * Seznam globálních přepínačů (optionů), které slouží ke specifické konfiguraci dávky.
 * Seznam instancí třídy `FileDataSaver`. 
 
+<font color="red">Tady jsem skončil. Proboha lidi, nechte tady jenom důležitý přehledový informace a zbytek nechte na Javadocu... </font>  
+
 Tyto elementy představují logické uložení vyprodukovaných dat v rámci jednoho Batche. Ontologie FileDataSaver obsahuje odkaz na hranu multigrafu, reprezentovanou pomocí DataSourceDescription. Hrana je napojená na další výpočetní element dědící od DataProcessingu. Protože obecný DataProsessing může obsahovat libovolné množství vstupních zdrojů a zároveň může produkovat data pro libovolné množství  DataProcessingů nebo jejich potomků musí každá hrana v multigrafu obsahovat  výstupní identifikátor říkající jaký tip dat má být předán z prvního DataProcessingu do druhého. Zároveň musí ComputationDescription obsahovat i výstupní identifikátor, který říká pro jaký účel se mají data použít. 
 
 V systému se nejčastěji objevují agenti, kteří představují, tak zvaného výpočetního agenta, který v rámci datové transformace z trénovací, testovací a validační množiny dat je schopný, vytvořit natrénovaný model, poskytnout výsledky trénování a testování jako datovou množinu a udat míru chyby, které se model dopouští na daných datech. Tito agenti se v rámci Ontologie ComputationDescription jsou reprezentováni jako ComputationAgent. Agent, který slouží právě k efektivnímu procházení parametru předem zadaného rozsahu, se nazývá Searcher a je zadáván ComputationDescription jako třída Searcher. Searcher vždy spolupracuje s výpočetním agentem a prochází jeho parametry, které nabývají hodnoty Questionmark .
@@ -569,13 +579,15 @@ Dalším speciálním výpočetním elementem  je evaluační metoda, která se 
     
 ### DataOntology
 
+<font color="red">TODO: dodělat</font>
+
 Prostřednictvím této množiny ontologií se přepravují data mezi agenty - vstupní datasety a datasety vypočtené během spuštění dávky.
 
 Díky možnosti spustit výpočet jednoho Batche distribuovaně na více strojích není možné, aby si jednotliví agenti předávali data pouze přes sdílený filesystém, ale musela vzniknout infrastruktura pro přesuny dat a tato Ontologie. 
 
 Tuto infrastrukturu z hlediska objemu dat bude nejvíce vytěžovat přeprava vstupních datasetů a vypočtených dat.  
 
-Jako soubory se mezi agenty na různých containerech přepravují JARka externích agentů, která nejsou součástí GitHub repozitáře.  Uživatelem těchto ontologií jsou tudíž agenti, kteří potřebují v systému přepravovat nějaká data. Agent ManagerAgent využívá přepravy JARek externích agentů, v případě, že obdrží požadavek na vytvoření nového agenta jehož zdrojové kódy nemá na svém containeru k dispozici. Agent ARFFReader žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním filesystému. Agent Planner využívá ontologie pro řízení, ukládání vypočtených dat do databáze odstíněné centrálním DataManagerem.
+Jako soubory se mezi agenty na různých containerech přepravují JARka externích agentů, která nejsou součástí GitHub repozitáře.  Uživatelem těchto ontologií jsou tudíž agenti, kteří potřebují v systému přepravovat nějaká data. Agent ManagerAgent využívá přepravy JARek externích agentů, v případě že obdrží požadavek na vytvoření nového agenta jehož zdrojové kódy nemá na svém containeru k dispozici. Agent ARFFReader žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním filesystému. Agent Planner využívá ontologie pro řízení, ukládání vypočtených dat do databáze odstíněné centrálním DataManagerem.
 
 ### DurationOntology 
 
