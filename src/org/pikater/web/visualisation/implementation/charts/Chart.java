@@ -8,41 +8,29 @@ import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
 import org.pikater.web.visualisation.implementation.renderer.RendererInterface;
 import org.pikater.web.visualisation.implementation.renderer.RendererInterface.TextAlignment;
 
+/**
+ * <p>
+ * Abstract class representing some general functionality for a basic chart. This chart may be used
+ * as base for chart, that displays multiple combinations of dataset attributes in one chart. For this
+ * reason it uses the basic functions to display the points and the background, but omitting function to
+ * draw e.g. captions.
+ * </p>
+ * <p>
+ * Dataset entities are represented by their [x,y] coordinates in the chart's plain and their values z , that
+ * is used by some {@link Colorer} object to generate points' color.
+ * </p>
+ * 
+ * @see org.pikater.web.visualisation.implementation.charts.SingleChart
+ * 
+ * @author siposp
+ *
+ */
 public abstract class Chart {
 
 	protected Axis horizontalAxis;
 	protected Axis verticalAxis;
 	protected int offsetx;
 	protected int offsety;
-
-	public Chart(int width, int height, int offsetx, int offsety, RendererInterface renderer, Axis horizontalAxis, Axis verticalAxis) {
-		setRenderer(renderer);
-		this.horizontalAxis = horizontalAxis;
-		this.verticalAxis = verticalAxis;
-		this.offsetx = offsetx;
-		this.offsety = offsety;
-		this.chartWidth = width;
-		this.chartHeight = height;
-	}
-
-	protected RendererInterface renderer;
-
-	protected void setRenderer(RendererInterface renderer) {
-		this.renderer = renderer;
-	}
-
-	/**
-	 * It calls renderer's begin() function to initiate rendering
-	 * When multiple ChartGenerators use the same renderer only once should be called this function or
-	 * the appropriate renderers begin() function
-	 */
-	public void beginRendering() {
-		this.renderer.begin();
-	}
-
-	public void endRendering() {
-		this.renderer.end();
-	}
 
 	protected int xLabelHeight = 60;
 	protected int chartHeight;
@@ -53,7 +41,27 @@ public abstract class Chart {
 	protected int yTopMargin = 10;
 	protected int yLabelWidth = 40;
 	protected int tickSize = 10;
+	
+	private Color backGroundColor = Color.GRAY;
+	boolean tickLabelVisible = true;
+	Colorer zcolorer;
+	protected RendererInterface renderer;
+	
+	
+	public Chart(int width, int height, int offsetx, int offsety, RendererInterface renderer, Axis horizontalAxis, Axis verticalAxis) {
+		setRenderer(renderer);
+		this.horizontalAxis = horizontalAxis;
+		this.verticalAxis = verticalAxis;
+		this.offsetx = offsetx;
+		this.offsety = offsety;
+		this.chartWidth = width;
+		this.chartHeight = height;
+	}
 
+	/**
+	 * Sets all margins of the chart - left, right, top, bottom
+	 * @param margin the value to be set
+	 */
 	public void setMargin(int margin) {
 		this.setXLeftMargin(margin);
 		this.setXRightMargin(margin);
@@ -61,16 +69,25 @@ public abstract class Chart {
 		this.setYBottomMargin(margin);
 	}
 
+	/**
+	 * Sets the size of both labels - for X and Y axis. Choice of the value may depend on used
+	 * {@link RendererInterface}.
+	 * @param labelSize new size of labels in points
+	 */
 	public void setLabelSize(int labelSize) {
-		this.setxLabelHeight(labelSize);
+		this.setXLabelHeight(labelSize);
 		this.setYLabelWidth(labelSize);
 	}
 
-	public int getxLabelHeight() {
+	protected void setRenderer(RendererInterface renderer) {
+		this.renderer = renderer;
+	}
+	
+	public int getXLabelHeight() {
 		return xLabelHeight;
 	}
 
-	public void setxLabelHeight(int xLabelHeight) {
+	public void setXLabelHeight(int xLabelHeight) {
 		this.xLabelHeight = xLabelHeight;
 	}
 
@@ -154,12 +171,6 @@ public abstract class Chart {
 		this.tickSize = tickSize;
 	}
 
-	public abstract void startChart();
-
-	public abstract void finishChart();
-
-	private Color backGroundColor = Color.GRAY;
-
 	public Color getBackGroundColor() {
 		return backGroundColor;
 	}
@@ -167,8 +178,6 @@ public abstract class Chart {
 	public void setBackGroundColor(Color backGroundColor) {
 		this.backGroundColor = backGroundColor;
 	}
-
-	boolean tickLabelVisible = true;
 
 	public boolean isTickLabelVisible() {
 		return tickLabelVisible;
@@ -178,6 +187,37 @@ public abstract class Chart {
 		this.tickLabelVisible = tickLabelVisible;
 	}
 
+	public Colorer getZcolorer() {
+		return zcolorer;
+	}
+
+	public void setZcolorer(Colorer zcolorer) {
+		this.zcolorer = zcolorer;
+	}
+	
+	public void setHorizontalAxis(Axis axis) {
+		this.horizontalAxis = axis;
+	}
+
+	public void setVerticalAxis(Axis axis) {
+		this.verticalAxis = axis;
+	}
+
+	public Axis getHorizontalAxis() {
+		return this.horizontalAxis;
+	}
+
+	public Axis getVerticalAxis() {
+		return this.verticalAxis;
+	}
+	
+	public abstract void startChart();
+
+	public abstract void finishChart();
+	
+	/**
+	 * Draws the background by rendering the area with axes and ticks marking some special values. 
+	 */
 	protected void renderBackground() {
 		//drawing the background
 		renderer.drawRectangle(offsetx + yLabelWidth, offsety, getAreaWidth(), getAreaHeight(), getBackGroundColor(), Color.BLACK, 0);
@@ -223,43 +263,55 @@ public abstract class Chart {
 
 	}
 
-	Colorer zcolorer;
-
-	public Colorer getZcolorer() {
-		return zcolorer;
-	}
-
-	public void setZcolorer(Colorer zcolorer) {
-		this.zcolorer = zcolorer;
-	}
-
+	/**
+	 * Draws a circle for some dataset entry. To choose the color of the point {@link Colorer} set for this chart is used.
+	 * You can change the colorer by calling {@link Chart#setZcolorer(Colorer)}
+	 * @param x coordinate in chart space
+	 * @param y coordinate in chart space
+	 * @param z value of the point
+	 * @param radius of the point in pixels
+	 */
 	public void renderPoint(double x, double y, double z, int radius) {
 		renderPoint(x, y, z, radius, this.zcolorer.getColor(z));
 	}
 
+	/**
+	 * Draws a circle for some dataset entry.
+	 * @param x coordinate in chart space
+	 * @param y coordinate in chart space
+	 * @param z value of the point
+	 * @param radius radius of the point in pixels
+	 * @param colorer {@link Colorer} used to retrieve the points color, based on its value
+	 */
 	public void renderPoint(double x, double y, double z, int radius, Colorer colorer) {
 		renderPoint(x, y, z, radius, colorer.getColor(z));
 	}
 
+	/**
+	 * Draws a circle for some dataset entry.
+	 * @param x coordinate in chart space
+	 * @param y coordinate in chart space
+	 * @param z value of the point
+	 * @param radius radius of the point in pixels
+	 * @param color {@link Color} point is filled with
+	 */
 	public void renderPoint(double x, double y, double z, int radius, Color color) {
 		renderer.drawCircle(this.offsetx + yLabelWidth + (int) (this.xLeftMargin + horizontalAxis.getValuePos(x) * this.getHorizontalAxisWidth()), this.offsety + this.yTopMargin
 				+ getVerticalAxisHeight() + yBottomMargin + (int) (-yBottomMargin - verticalAxis.getValuePos(y) * this.getVerticalAxisHeight()), radius, Color.BLACK, color, 1);
 	}
-
-	public void setHorizontalAxis(Axis axis) {
-		this.horizontalAxis = axis;
+	
+	/**
+	 * It calls the {@link RendererInterface#begin()} function to initiate rendering.
+	 */
+	public void beginRendering() {
+		this.renderer.begin();
 	}
 
-	public void setVerticalAxis(Axis axis) {
-		this.verticalAxis = axis;
-	}
-
-	public Axis getHorizontalAxis() {
-		return this.horizontalAxis;
-	}
-
-	public Axis getVerticalAxis() {
-		return this.verticalAxis;
+	/**
+	 * It calls the {@link RendererInterface#end()} function to initiate rendering.
+	 */
+	public void endRendering() {
+		this.renderer.end();
 	}
 
 }

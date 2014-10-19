@@ -17,6 +17,7 @@ public abstract class Generator {
 	protected int count = 0;
 
 	protected RendererInterface renderer;
+	public static final int DEFAULTCHARTSIZE = 1000;
 
 	protected Generator(AbstractDSVisResult<?, ?> progressListener, PrintStream output) {
 		this.progressListener = progressListener;

@@ -5,7 +5,7 @@ import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.pikater.web.visualisation.implementation.renderer.SVGRenderer;
 
 public class SingleSVGGenerator extends SingleGenerator {
@@ -21,7 +21,7 @@ public class SingleSVGGenerator extends SingleGenerator {
 	}
 
 	private void initRenderer() {
-		this.renderer = new SVGRenderer(output, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+		this.renderer = new SVGRenderer(output, Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 	}
 
 	@Override

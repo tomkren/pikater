@@ -18,7 +18,7 @@ import org.pikater.web.visualisation.definition.result.DSVisTwoSubresult;
 import org.pikater.web.visualisation.definition.task.IDSVisTwo;
 import org.pikater.web.visualisation.implementation.exceptions.MetadataNotPresentException;
 import org.pikater.web.visualisation.implementation.generator.ComparisonPNGGenerator;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
@@ -69,7 +69,7 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 
 	@Override
 	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList) {
-		DSVisTwoResult result = new DSVisTwoResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+		DSVisTwoResult result = new DSVisTwoResult(context, Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 		try {
 			if (dataset1.getHash().equals(dataset2.getHash())) {
 				throw new IllegalArgumentException("Identical datasets were received for comparison.");
