@@ -115,7 +115,7 @@ public class Agent_GridSearch extends Agent_Search {
         if (tries == 0) {
             tries = defaultTries;
         }
-        ArrayList<IValueData> valsForItem = new ArrayList<IValueData>();
+        List<IValueData> valsForItem = new ArrayList<IValueData>();
         IntervalSearchItem searchItem = (IntervalSearchItem) searchInterval;
         if (searchItem.getMin() instanceof BooleanValue) {
         	valsForItem.addAll(searchItem.possibleValues());

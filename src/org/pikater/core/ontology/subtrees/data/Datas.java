@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.CoreConstant;
-import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 
 import jade.content.Concept;
@@ -70,11 +69,11 @@ public class Datas implements Concept {
 	
 	
 	public void importInternalTrainFileName(String internalTrainFileName) {
-		Data trainData = exportData(DataTypes.TRAIN_DATA);
+		Data trainData = exportData(CoreConstant.DataType.TRAIN_DATA.getType());
 		if (trainData == null) {
 			trainData = new Data("",
 					internalTrainFileName,
-					DataTypes.TRAIN_DATA
+					CoreConstant.DataType.TRAIN_DATA.getType()
 					);
 			addData(trainData);
 		} else {
@@ -82,15 +81,15 @@ public class Datas implements Concept {
 		}
 	}
 	public String exportInternalTrainFileName() {
-		return exportData(DataTypes.TRAIN_DATA).getInternalFileName();
+		return exportData(CoreConstant.DataType.TRAIN_DATA.getType()).getInternalFileName();
 	}
 
 	public void importExternalTrainFileName(String externalTrainFileName) {
-		Data trainData = exportData(DataTypes.TRAIN_DATA);
+		Data trainData = exportData(CoreConstant.DataType.TRAIN_DATA.getType());
 		if (trainData == null) {
 			trainData = new Data(externalTrainFileName,
 					"",
-					DataTypes.TRAIN_DATA
+					CoreConstant.DataType.TRAIN_DATA.getType()
 					);
 			addData(trainData);
 		} else {
@@ -98,15 +97,15 @@ public class Datas implements Concept {
 		}
 	}
 	public String exportExternalTrainFileName() {
-		return exportData(DataTypes.TRAIN_DATA).getExternalFileName();
+		return exportData(CoreConstant.DataType.TRAIN_DATA.getType()).getExternalFileName();
 	}
 	
 	public void importInternalTestFileName(String internalTestFileName) {
-		Data testData = exportData(DataTypes.TEST_DATA);
+		Data testData = exportData(CoreConstant.DataType.TEST_DATA.getType());
 		if (testData == null) {
 			testData = new Data("",
 					internalTestFileName,
-					DataTypes.TEST_DATA
+					CoreConstant.DataType.TEST_DATA.getType()
 					);
 			addData(testData);
 		} else {
@@ -114,15 +113,15 @@ public class Datas implements Concept {
 		}
 	}
 	public String exportInternalTestFileName() {
-		return exportData(DataTypes.TEST_DATA).getInternalFileName();
+		return exportData(CoreConstant.DataType.TEST_DATA.getType()).getInternalFileName();
 	}
 
 	public void importExternalTestFileName(String externalTestFileName) {
-		Data testData = exportData(DataTypes.TEST_DATA);
+		Data testData = exportData(CoreConstant.DataType.TEST_DATA.getType());
 		if (testData == null) {
 			testData = new Data(externalTestFileName,
 					"",
-					DataTypes.TEST_DATA
+					CoreConstant.DataType.TEST_DATA.getType()
 					);
 			addData(testData);
 		} else {
@@ -130,15 +129,15 @@ public class Datas implements Concept {
 		}
 	}
 	public String exportExternalTestFileName() {
-		return exportData(DataTypes.TEST_DATA).getExternalFileName();
+		return exportData(CoreConstant.DataType.TEST_DATA.getType()).getExternalFileName();
 	}
 	
 	public void importInternalValidFileName(String internalValidFileName) {
-		Data validData = exportData(DataTypes.VALID_DATA);
+		Data validData = exportData(CoreConstant.DataType.VALID_DATA.getType());
 		if (validData == null) {
 			validData = new Data("",
 					internalValidFileName,
-					DataTypes.VALID_DATA
+					CoreConstant.DataType.VALID_DATA.getType()
 					);
 			addData(validData);
 		} else {
@@ -146,15 +145,15 @@ public class Datas implements Concept {
 		}
 	}
 	public String exportInternalValidFileName() {
-		return exportData(DataTypes.VALID_DATA).getInternalFileName();
+		return exportData(CoreConstant.DataType.VALID_DATA.getType()).getInternalFileName();
 	}
 
 	public void importExternalValidFileName(String externalValidFileName) {
-		Data validData = exportData(DataTypes.VALID_DATA);
+		Data validData = exportData(CoreConstant.DataType.VALID_DATA.getType());
 		if (validData == null) {
 			validData = new Data(externalValidFileName,
 					"",
-					DataTypes.VALID_DATA
+					CoreConstant.DataType.VALID_DATA.getType()
 					);
 			addData(validData);
 		} else {
@@ -162,6 +161,6 @@ public class Datas implements Concept {
 		}
 	}
 	public String exportExternalValidFileName() {
-		return exportData(DataTypes.VALID_DATA).getExternalFileName();
+		return exportData(CoreConstant.DataType.VALID_DATA.getType()).getExternalFileName();
 	}
 }

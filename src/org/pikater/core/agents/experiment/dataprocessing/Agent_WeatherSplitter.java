@@ -51,24 +51,29 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		ontologies.add(DataOntology.getInstance());
 		return ontologies;
 	}
-	
+
 	@Override
 	protected AgentInfo getAgentInfo() {
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.importAgentClass(this.getClass());
 		agentInfo.importOntologyClass(DataProcessing.class);
-	
+
 		agentInfo.setName("WeatherSplitter");
 		agentInfo.setDescription("Splits weather data by prediction.");
 
-		Slot i1 = new Slot("firstInput", CoreConstant.SlotCategory.DATA_GENERAL, "First weather input.");
-		Slot i2 = new Slot("secondInput", CoreConstant.SlotCategory.DATA_GENERAL, "Second weather input.");
-		
+		Slot i1 = new Slot("firstInput",
+				CoreConstant.SlotCategory.DATA_GENERAL, "First weather input.");
+		Slot i2 = new Slot("secondInput",
+				CoreConstant.SlotCategory.DATA_GENERAL, "Second weather input.");
+
 		agentInfo.setInputSlots(Arrays.asList(i1, i2));
 
-		Slot sunny = new Slot("sunnyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
-		Slot overcast = new Slot("overcastOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
-		Slot rainy = new Slot("rainyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
+		Slot sunny = new Slot("sunnyOutput",
+				CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
+		Slot overcast = new Slot("overcastOutput",
+				CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
+		Slot rainy = new Slot("rainyOutput",
+				CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
 
 		agentInfo.setOutputSlots(Arrays.asList(sunny, overcast, rainy));
 
@@ -88,40 +93,47 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 			private static final long serialVersionUID = 746138569142900592L;
 
 			@Override
-			protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
+			protected ACLMessage prepareResultNotification(ACLMessage request,
+					ACLMessage response) throws FailureException {
 				try {
-					Concept action = ((Action) (getContentManager().extractContent(request))).getAction();
+					Concept action = ((Action) (getContentManager()
+							.extractContent(request))).getAction();
 					if (action instanceof ExecuteTask) {
 						return respondToExecute(request);
-					}
-					else {
+					} else {
 						throw new RefuseException("Invalid action requested");
 					}
 				} catch (CodecException e) {
 					logException("Unknown codec: ", e);
-					throw new FailureException("Unknown codec: " + e.getMessage());
+					throw new FailureException("Unknown codec: "
+							+ e.getMessage());
 				} catch (OntologyException e) {
 					logException("Unknown ontology: ", e);
-					throw new FailureException("Unknown ontology: " + e.getMessage());
+					throw new FailureException("Unknown ontology: "
+							+ e.getMessage());
 				} catch (ContentException e) {
 					logException("Content problem: ", e);
-					throw new FailureException("Content problem: " + e.getMessage());
+					throw new FailureException("Content problem: "
+							+ e.getMessage());
 				} catch (FIPAException e) {
 					logException("FIPA exception when performing task", e);
-					throw new FailureException("Failed because of another agent " + e.getMessage());
+					throw new FailureException(
+							"Failed because of another agent " + e.getMessage());
 				}
 			}
 		});
-		
+
 	}
 
-	private ACLMessage respondToExecute(ACLMessage request) throws ContentException, FIPAException {
+	private ACLMessage respondToExecute(ACLMessage request)
+			throws ContentException, FIPAException {
 		logInfo("got execute");
 		final ACLMessage reply = request.createReply();
 		final ExecuteTask content;
 		Task performed;
 		try {
-			content = (ExecuteTask) ((Action)getContentManager().extractContent(request)).getAction();
+			content = (ExecuteTask) ((Action) getContentManager()
+					.extractContent(request)).getAction();
 			performed = performTask(content.getTask());
 		} catch (CodecException e) {
 			logException("Failed to extract task", e);
@@ -138,16 +150,16 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		logInfo("responding with finished task");
 		return reply;
 	}
-	
+
 	private List<DataInstances> getDataForTask(Task t) throws FIPAException {
 		List<DataInstances> res = new ArrayList<DataInstances>();
 		for (Data dataI : t.getDatas().getDatas()) {
 			String fname = dataI.getInternalFileName();
 			ACLMessage request = makeGetDataRequest(fname);
-			logInfo("sending getData for "+fname);
+			logInfo("sending getData for " + fname);
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
 			res.add(processGetDataResponse(reply));
-			logInfo("got data for "+fname);
+			logInfo("got data for " + fname);
 		}
 		return res;
 	}
@@ -162,7 +174,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		t.setOutput(outputs);
 		return t;
 	}
-	
+
 	private Instances mergeInputs(List<DataInstances> weatherData) {
 		Instances res = new Instances(weatherData.get(0).toWekaInstances());
 		Instances second = weatherData.get(1).toWekaInstances();
@@ -175,37 +187,38 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	private List<TaskOutput> processData(List<DataInstances> weatherData) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
 		Instances input = mergeInputs(weatherData);
-		
+
 		Instances sunny = new Instances(input, 0);
 		Instances overcast = new Instances(input, 0);
 		Instances rainy = new Instances(input, 0);
-		
+
 		Attribute forecast = input.attribute(0);
-		
+
 		for (int i = 0; i < input.numInstances(); ++i) {
 			Instance instance = input.instance(i);
 			String value = instance.stringValue(forecast);
 			switch (value) {
-			case "rainy":
-				rainy.add(instance);
-				break;
-			case "overcast":
-				overcast.add(instance);
-				break;
-			case "sunny":
-				sunny.add(instance);
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown weather data: " + value);
+				case "rainy":
+					rainy.add(instance);
+					break;
+				case "overcast":
+					overcast.add(instance);
+					break;
+				case "sunny":
+					sunny.add(instance);
+					break;
+				default:
+					throw new IllegalArgumentException("Unknown weather data: "
+							+ value);
 			}
 		}
-		
+
 		res.add(makeOutput(sunny, "sunnyOutput"));
 		res.add(makeOutput(overcast, "overcastOutput"));
 		res.add(makeOutput(rainy, "rainyOutput"));
 		return res;
 	}
-	
+
 	private TaskOutput makeOutput(Instances instances, String dataType) {
 		TaskOutput res = new TaskOutput();
 		res.setName(saveArff(instances));
@@ -213,5 +226,5 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		res.setDataType(dataType);
 		return res;
 	}
-	
+
 }

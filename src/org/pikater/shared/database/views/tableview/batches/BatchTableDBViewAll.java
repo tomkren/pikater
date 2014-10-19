@@ -19,7 +19,7 @@ import org.pikater.shared.database.views.base.query.QueryResult;
 public class BatchTableDBViewAll extends BatchTableDBView {
 	@Override
 	public Set<ITableColumn> getAllColumns() {
-		LinkedHashSet<ITableColumn> result = new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+		Set<ITableColumn> result = new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
 		result.remove(Column.USER_PRIORITY);
 		return result;
 	}

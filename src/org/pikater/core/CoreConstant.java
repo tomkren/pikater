@@ -13,6 +13,20 @@ public class CoreConstant {
 	private CoreConstant() {
 	}
 
+	public static enum DataType {
+		TRAIN_DATA("Train"), TEST_DATA("Test"), VALID_DATA("Valid");
+
+		private final String type;
+
+		private DataType(String type) {
+			this.type = type;
+		}
+
+		public String getType() {
+			return type;
+		}
+	}
+
 	/**
 	 * 
 	 * Represents a slot direction, input or output
@@ -38,12 +52,7 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum SlotCategory {
-		DATA_GENERAL,
-		DATA_AGENT,
-		DATA_SEARCH,
-		DATA_RECOMMEND,
-		DATA_EVALUATIONMETHOD,
-		ERROR
+		DATA_GENERAL, DATA_AGENT, DATA_SEARCH, DATA_RECOMMEND, DATA_EVALUATIONMETHOD, ERROR
 	}
 
 	/**
@@ -53,18 +62,12 @@ public class CoreConstant {
 	 */
 	public static enum SlotContent {
 
-		DATA("data"),
-		FILE_DATA("fileData"),
-		TRAINING_DATA("trainingData"),
-		TESTING_DATA("testingData"),
-		VALIDATION_DATA("validationData"),
-		COMPUTED_DATA("computedData"),
+		DATA("data"), FILE_DATA("fileData"), TRAINING_DATA("trainingData"), TESTING_DATA(
+				"testingData"), VALIDATION_DATA("validationData"), COMPUTED_DATA(
+				"computedData"),
 
-		COMPUTATION_AGENT("computingAgent"),
-		ERRORS("error"),
-		EVALUATION_METHOD("evaluationMethod"),
-		RECOMMEND("recommender"),
-		SEARCH("search");
+		COMPUTATION_AGENT("computingAgent"), ERRORS("error"), EVALUATION_METHOD(
+				"evaluationMethod"), RECOMMEND("recommender"), SEARCH("search");
 
 		private final String slotName;
 
@@ -79,27 +82,27 @@ public class CoreConstant {
 		public SlotCategory getCategory() {
 
 			switch (this) {
-			case DATA:
-			case COMPUTED_DATA:
-			case FILE_DATA:
-			case TESTING_DATA:
-			case TRAINING_DATA:
-			case VALIDATION_DATA:
-				return SlotCategory.DATA_GENERAL;
+				case DATA:
+				case COMPUTED_DATA:
+				case FILE_DATA:
+				case TESTING_DATA:
+				case TRAINING_DATA:
+				case VALIDATION_DATA:
+					return SlotCategory.DATA_GENERAL;
 
-			case COMPUTATION_AGENT:
-				return SlotCategory.DATA_AGENT;
-			case ERRORS:
-				return SlotCategory.ERROR;
-			case EVALUATION_METHOD:
-				return SlotCategory.DATA_EVALUATIONMETHOD;
-			case RECOMMEND:
-				return SlotCategory.DATA_RECOMMEND;
-			case SEARCH:
-				return SlotCategory.DATA_SEARCH;
+				case COMPUTATION_AGENT:
+					return SlotCategory.DATA_AGENT;
+				case ERRORS:
+					return SlotCategory.ERROR;
+				case EVALUATION_METHOD:
+					return SlotCategory.DATA_EVALUATIONMETHOD;
+				case RECOMMEND:
+					return SlotCategory.DATA_RECOMMEND;
+				case SEARCH:
+					return SlotCategory.DATA_SEARCH;
 
-			default:
-				throw new IllegalStateException();
+				default:
+					throw new IllegalStateException();
 			}
 		}
 	}

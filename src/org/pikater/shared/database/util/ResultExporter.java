@@ -18,7 +18,7 @@ public class ResultExporter {
 	/**
 	 * Character, which is used to separate two columns
 	 */
-	public static char DELIMINITER = ',';
+	public static final char DELIMINITER = ',';
 
 	public ResultExporter(PrintWriter output) {
 		this.out = output;
@@ -29,26 +29,34 @@ public class ResultExporter {
 	}
 
 	/**
-	 * Exports the results of a batch to CSV format by exporting all of its experiments
+	 * Exports the results of a batch to CSV format by exporting all of its
+	 * experiments
 	 * <p>
 	 * Header is printed on the first row.
-	 * @param batch the {@link JPABatch} object, which results should be exported 
+	 * 
+	 * @param batch
+	 *            the {@link JPABatch} object, which results should be exported
 	 */
 	public void export(JPABatch batch) {
 		this.export(batch.getId());
 	}
 
 	/**
-	 * Exports the results of a batch to CSV format by exporting all of its experiments
+	 * Exports the results of a batch to CSV format by exporting all of its
+	 * experiments
 	 * <p>
 	 * Header is printed on the first row.
-	 * @param batchID the ID of batch, which results should be exported 
+	 * 
+	 * @param batchID
+	 *            the ID of batch, which results should be exported
 	 */
 	public void export(int batchID) {
 		header(null, null, null);
-		List<Object[]> batchExperimentResultList = DAOs.batchDAO.getByIDwithResults(batchID);
+		List<Object[]> batchExperimentResultList = DAOs.batchDAO
+				.getByIDwithResults(batchID);
 		for (Object[] triplet : batchExperimentResultList) {
-			row((JPABatch) triplet[0], (JPAExperiment) triplet[1], (JPAResult) triplet[2]);
+			row((JPABatch) triplet[0], (JPAExperiment) triplet[1],
+					(JPAResult) triplet[2]);
 		}
 	}
 
@@ -108,7 +116,8 @@ public class ResultExporter {
 		out.println(sb.toString());
 	}
 
-	public void header(JPABatch batch, JPAExperiment experiment, JPAResult result) {
+	public void header(JPABatch batch, JPAExperiment experiment,
+			JPAResult result) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("batch ID");
@@ -167,7 +176,8 @@ public class ResultExporter {
 
 		sb.append(experiment.getModelStrategy().name());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel().getAgentClassName() : "no_model");
+		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel()
+				.getAgentClassName() : "no_model");
 		sb.append(ResultExporter.DELIMINITER);
 
 		out.println(sb.toString());
@@ -180,7 +190,8 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(experiment.getModelStrategy().name());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel().getAgentClassName() : "no_model");
+		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel()
+				.getAgentClassName() : "no_model");
 		sb.append(ResultExporter.DELIMINITER);
 
 		sb.append(result.getAgentName());
@@ -203,7 +214,8 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(result.getFinish());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(NewOptions.exportToWeka(NewOptions.importXML(result.getOptions()).getOptions()));
+		sb.append(NewOptions.exportToWeka(NewOptions.importXML(
+				result.getOptions()).getOptions()));
 		out.println(sb.toString());
 	}
 
@@ -223,7 +235,8 @@ public class ResultExporter {
 
 		sb.append(experiment.getModelStrategy().name());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel().getAgentClassName() : "no_model");
+		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel()
+				.getAgentClassName() : "no_model");
 		sb.append(ResultExporter.DELIMINITER);
 
 		sb.append(result.getAgentName());
@@ -246,7 +259,8 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(result.getFinish());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(NewOptions.exportToWeka(NewOptions.importXML(result.getOptions()).getOptions()));
+		sb.append(NewOptions.exportToWeka(NewOptions.importXML(
+				result.getOptions()).getOptions()));
 		out.println(sb.toString());
 	}
 

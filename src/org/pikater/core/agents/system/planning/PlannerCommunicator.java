@@ -28,11 +28,11 @@ import org.pikater.shared.logging.core.ConsoleLogger;
 public class PlannerCommunicator {
 
 	private Agent_Planner agent;
-	
+
 	public PlannerCommunicator(Agent_Planner agent) {
 		this.agent = agent;
 	}
-	
+
 	public AID[] getAllAgents(String agentType) {
 
 		DFAgentDescription template = new DFAgentDescription();
@@ -47,28 +47,29 @@ public class PlannerCommunicator {
 			for (int i = 0; i < result.length; ++i) {
 				foundAgents[i] = result[i].getName();
 			}
-		}
-		catch (FIPAException e)
-		{
+		} catch (FIPAException e) {
 			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 
 		return foundAgents;
 	}
-	
+
 	/** Request creation or loading of a CA */
 	public AID prepareCA(Task task, AID agentManagerAID) {
 		AID result;
 
 		if (task.getAgent().getModel() != null) {
-			result = ManagerAgentService.loadAgent(agent, task.getAgent().getModel(), agentManagerAID);
-			agent.logInfo("CA model " + task.getAgent().getModel() + " resurrected");
+			result = ManagerAgentService.loadAgent(agent, task.getAgent()
+					.getModel(), agentManagerAID);
+			agent.logInfo("CA model " + task.getAgent().getModel()
+					+ " resurrected");
 		} else {
 			String resultCAtype = task.getAgent().getType();
 			agent.logInfo("Sending request to create CA " + resultCAtype);
-			result = ManagerAgentService.createAgent(
-					agent, resultCAtype, resultCAtype, new Arguments(), agentManagerAID);
-			//agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
+			result = ManagerAgentService.createAgent(agent, resultCAtype,
+					resultCAtype, new Arguments(), agentManagerAID);
+			// agent.log("CA " + CAtype + " created by " +
+			// agentManagerAID.getName());
 			agent.logInfo("CA " + resultCAtype + " created");
 		}
 		return result;
@@ -78,7 +79,7 @@ public class PlannerCommunicator {
 
 		ExecuteTask executeTask = new ExecuteTask();
 		executeTask.setTask(task);
-		
+
 		AID caAID = prepareCA(task, agentManagerAID);
 
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
@@ -98,9 +99,9 @@ public class PlannerCommunicator {
 
 		agent.addBehaviour(new OneTaskComputingCABehaviour(agent, msg));
 	}
-	
+
 	public ComputerInfo getComputerInfo(AID managerAgentAID) {
-		
+
 		GetComputerInfo getComputerInfo = new GetComputerInfo();
 
 		agent.logInfo("Sending request to getComputerInfo ");
@@ -122,17 +123,18 @@ public class PlannerCommunicator {
 
 		ACLMessage reply = null;
 		try {
-			 reply = FIPAService.doFipaRequestClient(agent, msg);
+			reply = FIPAService.doFipaRequestClient(agent, msg);
 
 		} catch (FIPAException e) {
 			agent.logSevere(e.getMessage());
 			return null;
 		}
-		
+
 		try {
-			Result result = (Result) agent.getContentManager().extractContent(reply);
+			Result result = (Result) agent.getContentManager().extractContent(
+					reply);
 			return (ComputerInfo) result.getValue();
-			
+
 		} catch (UngroundedException e) {
 			agent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
@@ -140,7 +142,7 @@ public class PlannerCommunicator {
 		} catch (OntologyException e) {
 			agent.logException(e.getMessage(), e);
 		}
-		
+
 		return null;
 	}
 

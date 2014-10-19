@@ -25,7 +25,6 @@ import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.data.Datas;
-import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -140,7 +139,7 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 
-				if (data.exportData(DataTypes.VALID_DATA) != null) {
+				if (data.exportData(CoreConstant.DataType.VALID_DATA.getType()) != null) {
 					labelFn = data.exportInternalValidFileName();
 					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETLABELDATA_STATE);

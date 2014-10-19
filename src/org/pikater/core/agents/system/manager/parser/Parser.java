@@ -131,15 +131,13 @@ public class Parser {
 
             ComputingAgent computingAgent = (ComputingAgent) dataProvider;
             parent = parseComputing(computingAgent, batchID, userID, true);
-        }
-        else if (dataProvider instanceof CARecSearchComplex)
+        } else if (dataProvider instanceof CARecSearchComplex)
         {
             agent.logInfo("Ontology Matched - CARecSearchComplex");
 
             CARecSearchComplex complex = (CARecSearchComplex) dataProvider;
             parent = parseComplex(complex, batchID, userID);
-        }
-        else if (dataProvider instanceof DataProcessing) {
+        } else if (dataProvider instanceof DataProcessing) {
             agent.logInfo("Ontology Matched - DataProcessing");
             
             parseDataProcessing((DataProcessing) dataProvider, child,
@@ -149,6 +147,7 @@ public class Parser {
             agent.logInfo("Ontology Matched - Error unknown IDataProvider");
             return;
         }
+        
         if (child!=null) {
             //handle parent - set him as file receiver
             ComputationOutputBuffer<EdgeValue> fileBuffer =

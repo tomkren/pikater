@@ -91,8 +91,6 @@ public class WebToCoreEntryPoint {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		PikaterGateway_General.MASTER_PORT=1099;
-		
 		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfosVisibleForUser(-1);
 
 		for (AgentInfo agentInfoI : agentInfos.getAgentInfos()) {

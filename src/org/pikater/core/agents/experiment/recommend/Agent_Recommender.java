@@ -73,7 +73,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	 */
 	protected abstract void updateFinished();
     
-	public static Class<? extends Agent_ComputingAgent> DEFAULT_AGENT =
+	public static final Class<? extends Agent_ComputingAgent> DEFAULT_AGENT =
 			Agent_WekaRBFNetworkCA.class;
 	
 	private org.pikater.core.ontology.subtrees.management.Agent myAgentOntology =
@@ -336,8 +336,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		
 		if ((v1 == null) && (v2 == null)) {
 			return 0;
-		}
-		else if ((v1 == null) || (v2 == null)) {
+		} else if ((v1 == null) || (v2 == null)) {
 			return 1;
 		} else {
 			if (v1.equals(v2)) {

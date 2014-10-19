@@ -138,7 +138,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 			}
 
 			instances.fillWekaInstances(data);
-			ArrayList<Integer> types = new ArrayList<Integer>();
+			List<Integer> types = new ArrayList<Integer>();
 
 			for (int i = 0; i < data.numAttributes(); i++) {
 				Attribute attributeI = data.attribute(i);

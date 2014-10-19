@@ -31,7 +31,7 @@ import java.util.Random;
  */
 public class Agent_GASearch extends Agent_Search {
 	
-	private ArrayList<SearchSolution> population;
+	private List<SearchSolution> population;
 	//fitness is the error rate - the lower, the better!
 	float[] fitnesses;
 	int popSize = 0;
@@ -97,7 +97,7 @@ public class Agent_GASearch extends Agent_Search {
 	protected List<SearchSolution> generateNewSolutions(
 			List<SearchSolution> solutions, float[][] evaluations) {
 		
-		ArrayList<SearchSolution> newPopulation =
+		List<SearchSolution> newPopulation =
 				new ArrayList<SearchSolution>(popSize);
 		
 		if(evaluations == null){

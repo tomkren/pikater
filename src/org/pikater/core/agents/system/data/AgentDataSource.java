@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: Kuba
@@ -29,8 +30,8 @@ public class AgentDataSource extends PikaterAgent {
 			"data" + System.getProperty("file.separator") +
 			"dataSources" + System.getProperty("file.separator");
 	
-    private HashSet<String> ownedDataSources = new HashSet<String>();
-    public static String SERVICE_TYPE = "AgentDataSource";
+    private Set<String> ownedDataSources = new HashSet<String>();
+    public static final String SERVICE_TYPE = "AgentDataSource";
 
 	/**
 	 * Get ontologies which is using this agent

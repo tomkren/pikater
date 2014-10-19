@@ -59,9 +59,9 @@ public class Agent_EASearch extends Agent_Search {
     Population toEvaluate = new Population();
     Population evaluated = new Population();
     Replacement replacement = new MergingReplacement();
-    ArrayList<Selector> environmentalSelectors;
-    ArrayList<Selector> matingSelectors;
-    ArrayList<Operator> operators;
+    List<Selector> environmentalSelectors;
+    List<Selector> matingSelectors;
+    List<Operator> operators;
     boolean multiobjective = true;
     boolean surrogate = false;
     double eliteSize = 0.1;

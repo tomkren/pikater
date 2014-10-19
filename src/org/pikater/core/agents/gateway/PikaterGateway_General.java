@@ -9,7 +9,7 @@ import jade.wrapper.gateway.JadeGateway;
 
 public class PikaterGateway_General {
 	
-	public static int MASTER_PORT = 1099;
+	public static final int MASTER_PORT = 1099;
 	
 	/**
 	 * Constructor
