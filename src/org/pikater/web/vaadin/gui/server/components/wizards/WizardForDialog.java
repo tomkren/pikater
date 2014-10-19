@@ -5,12 +5,12 @@ package org.pikater.web.vaadin.gui.server.components.wizards;
  * 
  * @author SkyCrawl
  *
- * @param <C> The wizard's "state" class.
+ * @param <O> The wizard's "state" class.
  */
-public abstract class WizardForDialog<C extends IWizardCommon> extends WizardWithOutput<C> {
+public abstract class WizardForDialog<O extends IWizardCommon> extends WizardWithOutput<O> {
 	private static final long serialVersionUID = -6211218565088889148L;
 
-	public WizardForDialog(C output) {
+	public WizardForDialog(O output) {
 		super(output);
 		setSizeFull();
 		addStyleName("dialogWizard");

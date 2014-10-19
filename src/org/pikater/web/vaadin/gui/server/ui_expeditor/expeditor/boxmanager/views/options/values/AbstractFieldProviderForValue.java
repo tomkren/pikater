@@ -220,8 +220,8 @@ public abstract class AbstractFieldProviderForValue {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected static <OC extends Object & Comparable<? super OC>> List<OC> getSortedEnumerationForValue(List<IValueData> values) {
-		List<OC> options = (List<OC>) getUnsortedEnumerationForValue(values);
+	protected static <O extends Object & Comparable<? super O>> List<O> getSortedEnumerationForValue(List<IValueData> values) {
+		List<O> options = (List<O>) getUnsortedEnumerationForValue(values);
 		Collections.sort(options);
 		return options;
 	}

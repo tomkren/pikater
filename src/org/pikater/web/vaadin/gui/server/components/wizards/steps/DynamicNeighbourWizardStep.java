@@ -9,10 +9,10 @@ import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSte
  * @author SkyCrawl
  *
  */
-public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithDynamicSteps<OUTPUT>> extends ParentAwareWizardStep<OUTPUT, WIZARD> {
+public abstract class DynamicNeighbourWizardStep<O extends IWizardCommon, W extends WizardWithDynamicSteps<O>> extends ParentAwareWizardStep<O, W> {
 	private final boolean isLeaf;
 
-	public DynamicNeighbourWizardStep(WIZARD parentWizard, boolean isLeaf) {
+	public DynamicNeighbourWizardStep(W parentWizard, boolean isLeaf) {
 		super(parentWizard);
 
 		this.isLeaf = isLeaf;
@@ -48,5 +48,5 @@ public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, W
 	//----------------------------------------------------
 	// ABSTRACT INTERFACE
 
-	public abstract DynamicNeighbourWizardStep<OUTPUT, WIZARD> constructNextStep();
+	public abstract DynamicNeighbourWizardStep<O, W> constructNextStep();
 }

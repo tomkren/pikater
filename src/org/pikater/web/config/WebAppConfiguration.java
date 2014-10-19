@@ -104,7 +104,7 @@ public class WebAppConfiguration {
 	// PRIVATE INTERFACE
 
 	@SuppressWarnings("unchecked")
-	private static <PT extends Object> PT getContextParam(String key) {
-		return (PT) WEBAPPCONTEXT.getInitParameter(key);
+	private static <T extends Object> T getContextParam(String key) {
+		return (T) WEBAPPCONTEXT.getInitParameter(key);
 	}
 }

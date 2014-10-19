@@ -20,16 +20,16 @@ import com.vaadin.ui.Button;
  * 
  * @author SkyCrawl
  *
- * @param <T> The wizard's "state" class.
+ * @param <O> The wizard's "state" class.
  */
 @StyleSheet("wizards.css")
-public class WizardWithOutput<T extends IWizardCommon> extends Wizard {
+public class WizardWithOutput<O extends IWizardCommon> extends Wizard {
 	private static final long serialVersionUID = -673702186069757491L;
 
-	private final T output;
+	private final O output;
 	private boolean refreshActivatedSteps;
 
-	public WizardWithOutput(T output) {
+	public WizardWithOutput(O output) {
 		super();
 		setSizeUndefined();
 		setStyleName("myWizard");
@@ -59,7 +59,7 @@ public class WizardWithOutput<T extends IWizardCommon> extends Wizard {
 		});
 	}
 
-	public T getOutput() {
+	public O getOutput() {
 		return output;
 	}
 

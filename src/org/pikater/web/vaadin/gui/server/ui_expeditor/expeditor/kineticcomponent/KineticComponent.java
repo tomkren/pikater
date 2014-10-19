@@ -166,10 +166,9 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 				for (EdgeGraphItemShared edge : edges) {
 					interboxConnectionAction(opKind, edge);
 
-					if (boxManager.getCurrentBoxDataSource() != null) {
-						if ((edge.fromBoxID.equals(boxManager.getCurrentBoxDataSource().getID())) || (edge.toBoxID.equals(boxManager.getCurrentBoxDataSource().getID()))) {
+					if ((boxManager.getCurrentBoxDataSource() != null) && 
+							((edge.fromBoxID.equals(boxManager.getCurrentBoxDataSource().getID())) || (edge.toBoxID.equals(boxManager.getCurrentBoxDataSource().getID())))) {
 							boxManagerNeedsToUpdate = true;
-						}
 					}
 				}
 				if (boxManagerNeedsToUpdate) {

@@ -18,13 +18,13 @@ import com.vaadin.ui.Button.ClickEvent;
  * 
  * @author SkyCrawl
  *
- * @param <T> The wizard's "state" class.
+ * @param <O> The wizard's "state" class.
  */
-public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends WizardWithOutput<T>
+public abstract class WizardWithDynamicSteps<O extends IWizardCommon> extends WizardWithOutput<O>
 {
 	private static final long serialVersionUID = 6111242222755309996L;
 	
-	public WizardWithDynamicSteps(T output, boolean cancelButtonUsable)
+	public WizardWithDynamicSteps(O output, boolean cancelButtonUsable)
 	{
 		super(output);
 		addStyleName("dynamicWizard");
@@ -59,8 +59,8 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 			public void activeStepChanged(WizardStepActivationEvent event)
 			{
 				@SuppressWarnings("unchecked")
-				DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> activatedStep = 
-						(DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>>) event.getActivatedStep(); 
+				DynamicNeighbourWizardStep<O, WizardWithDynamicSteps<O>> activatedStep = 
+						(DynamicNeighbourWizardStep<O, WizardWithDynamicSteps<O>>) event.getActivatedStep(); 
 				
 				if(!isLastStep(activatedStep))
 				{
@@ -88,7 +88,7 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 		return !getCurrentStep().isLeaf();
 	}
 	
-	public void advance(DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> newStep)
+	public void advance(DynamicNeighbourWizardStep<O, WizardWithDynamicSteps<O>> newStep)
 	{
 		if(canAdvance())
 		{
@@ -134,10 +134,10 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 	// A LITTLE SPECIAL SOMETHING
 	
 	@SuppressWarnings("unchecked")
-	protected DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> getCurrentStep()
+	protected DynamicNeighbourWizardStep<O, WizardWithDynamicSteps<O>> getCurrentStep()
 	{
 		// the {@link addStep} method ensures steps are of the correct type
-		return (DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>>) currentStep;
+		return (DynamicNeighbourWizardStep<O, WizardWithDynamicSteps<O>>) currentStep;
 	}
 	
 	/*
@@ -157,5 +157,5 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 	/**
 	 * Return the first dynamically constructed step.
 	 */
-	protected abstract DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> createFirstStep();
+	protected abstract DynamicNeighbourWizardStep<O, WizardWithDynamicSteps<O>> createFirstStep();
 }
