@@ -9,9 +9,6 @@ import org.pikater.core.ontology.subtrees.agent.AgentClass;
 
 public class ExternalAgentNames implements Concept {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3513576942162577469L;
 	
 	private List<AgentClass> agentNames;

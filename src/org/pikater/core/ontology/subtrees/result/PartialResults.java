@@ -12,7 +12,7 @@ public class PartialResults implements Predicate {
 	private static final long serialVersionUID = -707946881612003753L;
 	// sent only with the first results
 	private Task task;
-	private String task_id;
+	private String taskID;
 	private List results;
 
 	public Task getTask() {
@@ -23,12 +23,12 @@ public class PartialResults implements Predicate {
 		this.task = task;
 	}
 
-	public String getTask_id() {
-		return task_id;
+	public String getTaskID() {
+		return taskID;
 	}
 
-	public void setTask_id(String taskId) {
-		task_id = taskId;
+	public void setTaskID(String taskID) {
+		this.taskID = taskID;
 	}
 
 	public List getResults() {

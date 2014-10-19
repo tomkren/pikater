@@ -146,7 +146,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
         }
 
 		// register with the DF
-		if (! this.getAID().getLocalName().contains("Service")){	
+		if (! this.getAID().getLocalName().contains("Service")) {	
 			List<String> descr = new ArrayList<String>();
 			descr.add(CoreAgents.COMPUTING_AGENT.getName());
 			descr.add(getLocalName());

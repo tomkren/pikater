@@ -13,19 +13,18 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AgentInfo implements Concept, ICloneable
-{
+public class AgentInfo implements Concept, ICloneable {
 	private static final long serialVersionUID = 5587052921037796722L;
 
 	private String agentClassName;
 	private String ontologyClassName;
-	
+
 	private String name;
 	private String description;
 
 	private List<Slot> inputSlots;
 	private List<Slot> outputSlots;
-	
+
 	private NewOptions options;
 
 	public AgentInfo() {
@@ -34,18 +33,16 @@ public class AgentInfo implements Concept, ICloneable
 		this.options = new NewOptions();
 	}
 
-	//---------------------------------------------------------
+	// ---------------------------------------------------------
 	// CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
-	
+
 	/*
 	 * Only compare the {@link #agentClassName} and {@link #ontologyClassName}
-	 * fields.
-	 * Web package (namely {@link AgentInfoCollection} depends on this.
+	 * fields. Web package (namely {@link AgentInfoCollection} depends on this.
 	 */
-	
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
@@ -58,91 +55,102 @@ public class AgentInfo implements Concept, ICloneable
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
+	public boolean equals(Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AgentInfo other = (AgentInfo) obj;
-		if (agentClassName == null)
-		{
-			if (other.agentClassName != null)
+		if (agentClassName == null) {
+			if (other.agentClassName != null) {
 				return false;
-		}
-		else if (!agentClassName.equals(other.agentClassName))
+			}
+		} else if (!agentClassName.equals(other.agentClassName)) {
 			return false;
-		if (ontologyClassName == null)
-		{
-			if (other.ontologyClassName != null)
+		}
+		if (ontologyClassName == null) {
+			if (other.ontologyClassName != null) {
 				return false;
-		}
-		else if (!ontologyClassName.equals(other.ontologyClassName))
+			}
+		} else if (!ontologyClassName.equals(other.ontologyClassName)) {
 			return false;
+		}
 		return true;
 	}
-	
-	//---------------------------------------------------------
+
+	// ---------------------------------------------------------
 	// REQUIRED GETTERS/SETTERS
-	
+
 	public String getAgentClassName() {
 		return agentClassName;
 	}
+
 	public void setAgentClassName(String agentClassName) {
 		this.agentClassName = agentClassName;
 	}
+
 	public String getOntologyClassName() {
 		return ontologyClassName;
 	}
+
 	public void setOntologyClassName(String ontologyClassName) {
 		this.ontologyClassName = ontologyClassName;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public List<Slot> getInputSlots() {
 		return inputSlots;
 	}
+
 	public void setInputSlots(List<Slot> inputSlots) {
 		this.inputSlots = inputSlots;
 	}
+
 	public List<Slot> getOutputSlots() {
 		return outputSlots;
 	}
+
 	public void setOutputSlots(List<Slot> outputSlots) {
 		this.outputSlots = outputSlots;
 	}
+
 	public NewOptions getOptions() {
 		return options;
 	}
+
 	public void setOptions(NewOptions options) {
 		this.options = options;
 	}
-	
-	//---------------------------------------------------------
+
+	// ---------------------------------------------------------
 	// OTHER INTERFACE
-	
+
 	@Override
-	public AgentInfo clone()
-	{
+	public AgentInfo clone() {
 		AgentInfo result;
-		try
-		{
+		try {
 			result = (AgentInfo) super.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
+		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 		result.setOntologyClassName(ontologyClassName);
@@ -169,74 +177,72 @@ public class AgentInfo implements Concept, ICloneable
 		}
 		this.options.addOption(option);
 	}
+
 	public void addOptions(List<NewOption> options) {
 		if (options == null) {
 			throw new IllegalArgumentException("Argument options can't be null");
 		}
 		this.options.addOptions(options);
 	}
-	
+
 	public void addInputSlot(Slot inputSlot) {
 		if (inputSlot == null) {
-			throw new IllegalArgumentException("Argument inputSlot can't be null");
+			throw new IllegalArgumentException(
+					"Argument inputSlot can't be null");
 		}
 		this.inputSlots.add(inputSlot);
 	}
+
 	public void addOutputSlot(Slot outputSlot) {
 		if (outputSlot == null) {
-			throw new IllegalArgumentException("Argument outputSlot can't be null");
+			throw new IllegalArgumentException(
+					"Argument outputSlot can't be null");
 		}
 		this.outputSlots.add(outputSlot);
 	}
-	
-	public Slot fetchInputSlotByName(String slotName)
-	{
-		for(Slot slot : inputSlots)
-		{
-			if(slot.getName().equals(slotName))
-			{
+
+	public Slot fetchInputSlotByName(String slotName) {
+		for (Slot slotI : inputSlots) {
+			if (slotI.getName().equals(slotName)) {
+				return slotI;
+			}
+		}
+		return null;
+	}
+
+	public Slot fetchOutputSlotByName(String slotName) {
+		for (Slot slot : outputSlots) {
+			if (slot.getName().equals(slotName)) {
 				return slot;
 			}
 		}
 		return null;
 	}
-	
-	public Slot fetchOutputSlotByName(String slotName)
-	{
-		for(Slot slot : outputSlots)
-		{
-			if(slot.getName().equals(slotName))
-			{
-				return slot;
-			}
-		}
-		return null;
-	}
-	
-	public boolean isIdentifiedBy(String ontologyClassName, String agentClassName)
-	{
-		if(this.agentClassName == null) // some kind of a weird agent (should be exactly one)
-		{
-			if(this.ontologyClassName.equals(ontologyClassName) && agentClassName == null)
-			{
+
+	public boolean isIdentifiedBy(String ontologyClassName,
+			String agentClassName) {
+		// some kind of a weird agent (should be exactly one)
+		if (this.agentClassName == null) {
+			if (this.ontologyClassName.equals(ontologyClassName)
+					&& agentClassName == null) {
 				return true;
 			}
-		}
-		else // just what we expect, the good option
-		{
-			if(this.ontologyClassName.equals(ontologyClassName) && this.agentClassName.equals(agentClassName))
-			{
+		} else {
+			// just what we expect, the good option
+
+			if (this.ontologyClassName.equals(ontologyClassName)
+					&& this.agentClassName.equals(agentClassName)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public boolean isOntologyType(Class<?> ontologyClass) {
-		
+
 		return this.ontologyClassName.equals(ontologyClass.getName());
 	}
-	
+
 	public String exportXML() {
 		XStream xstream = new XStream();
 		return xstream.toXML(this);
@@ -248,8 +254,8 @@ public class AgentInfo implements Concept, ICloneable
 		Scanner scanner = new Scanner(xmlContent);
 		String xml = scanner.useDelimiter("\\Z").next();
 		scanner.close();
-		
-		return (AgentInfo)xstream.fromXML(xml);
+
+		return (AgentInfo) xstream.fromXML(xml);
 	}
-	
+
 }
