@@ -203,10 +203,11 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			ACLMessage request = makeActionRequest(receiver, saveMetaDataAction);
 			logInfo("Sending SaveMetaDataAction to DataManager");
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
-			if (reply == null)
+			if (reply == null) {
 				logSevere("Reply not received");
-			else
+			} else {
 				logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+			}
 		} catch (OntologyException e) {
 			logException("Ontology error occurred: ", e);
 		} catch (CodecException e) {

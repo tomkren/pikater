@@ -28,10 +28,12 @@ public class SetSItem extends SearchItem {
 		
 		if (set.size() > getNumberOfValuesToTry() ){
             List<IValueData> posVals =new ArrayList<IValueData>();
-			for(int i = 0; i < getNumberOfValuesToTry(); i++)
+			for(int i = 0; i < getNumberOfValuesToTry(); i++) {
 				posVals.add(set.get(i));
+			}
 			return posVals;
-		}else
+		} else {
 			return set;
+		}
 	}
 }
