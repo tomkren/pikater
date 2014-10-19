@@ -78,7 +78,6 @@ public class Agent_PlannerTester extends PikaterAgent {
     	agent.setName(Agent_WekaRBFNetworkCA.class.getSimpleName());
     	agent.setType(Agent_WekaRBFNetworkCA.class.getName());
         agent.setOptions(options); 
-    	//agent.setOptions(options); //S,M
     	
     	Datas datas = new Datas();
     	datas.addData(
@@ -113,16 +112,9 @@ public class Agent_PlannerTester extends PikaterAgent {
         try {
         	
             ACLMessage request = makeActionRequest(receiver, executeTask);
-            //send(request);
             logInfo("Sending test request to Planner");
             send(request);
-/*            
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 100000);
-            if (reply == null)
-                logError("Reply not received.");
-            else
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
-*/
+
         } catch (CodecException | OntologyException e) {
             logException("Ontology/codec error occurred: "+e.getMessage(), e);
         }
@@ -141,7 +133,6 @@ public class Agent_PlannerTester extends PikaterAgent {
     	agent.setName(Agent_WekaJ48.class.getSimpleName());
     	agent.setType(Agent_WekaJ48.class.getName());
         agent.setOptions(options); 
-    	//agent.setOptions(options); //S,M
     	
     	Datas datas = new Datas();
     	datas.addData(
@@ -176,16 +167,10 @@ public class Agent_PlannerTester extends PikaterAgent {
         try {
         	
             ACLMessage request = makeActionRequest(receiver, executeTask);
-            //send(request);
+
             logInfo("Sending test request to Planner");
             send(request);
-/* 
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 100000);
-            if (reply == null)
-                logError("Reply not received.");
-            else
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
-*/
+
         } catch (CodecException | OntologyException e) {
             logException("Ontology/codec error occurred: "+e.getMessage(), e);
         }
@@ -239,16 +224,9 @@ public class Agent_PlannerTester extends PikaterAgent {
         try {
         	
             ACLMessage request = makeActionRequest(receiver, executeTask);
-            //send(request);
             logInfo("Sending test request to Planner");
             send(request);
-/* 
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 100000);
-            if (reply == null)
-                logError("Reply not received.");
-            else
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
-*/
+
         } catch (CodecException | OntologyException e) {
             logException("Ontology/codec error occurred: "+e.getMessage(), e);
         }
