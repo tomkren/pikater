@@ -17,7 +17,7 @@ import org.pikater.web.visualisation.definition.result.DSVisOneSubresult;
 import org.pikater.web.visualisation.definition.task.IDSVisOne;
 import org.pikater.web.visualisation.implementation.exceptions.MetadataNotPresentException;
 import org.pikater.web.visualisation.implementation.generator.SinglePNGGenerator;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
@@ -70,7 +70,7 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 
 	@Override
 	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) {
-		DSVisOneResult result = new DSVisOneResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+		DSVisOneResult result = new DSVisOneResult(context, Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 		try {
 			if (!dataset.hasComputedMetadata()) {
 				throw new MetadataNotPresentException(dataset.getFileName());

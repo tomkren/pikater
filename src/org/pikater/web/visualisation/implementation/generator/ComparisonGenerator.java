@@ -12,7 +12,6 @@ import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
 import org.pikater.web.visualisation.implementation.datasource.single.ArffXYZPoint;
 import org.pikater.web.visualisation.implementation.datasource.single.SingleArffDataset;
 import org.pikater.web.visualisation.implementation.exceptions.ChartException;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
 
 public abstract class ComparisonGenerator extends Generator {
@@ -63,7 +62,7 @@ public abstract class ComparisonGenerator extends Generator {
 
 			Colorer colorer = colorer1.merge(colorer2);
 
-			ComparisonChart cch = new ComparisonChart(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE, renderer, xAxis, yAxis);
+			ComparisonChart cch = new ComparisonChart(Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE, renderer, xAxis, yAxis);
 
 			cch.startChart();
 

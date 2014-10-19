@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.exceptions.ChartException;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
 
 public class ComparisonPNGGenerator extends ComparisonGenerator {
@@ -34,7 +34,7 @@ public class ComparisonPNGGenerator extends ComparisonGenerator {
 	}
 
 	private void initRenderer() {
-		renderer = new ImageRenderer(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+		renderer = new ImageRenderer(Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 	}
 
 	@Override

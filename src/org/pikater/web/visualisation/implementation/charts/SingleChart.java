@@ -6,6 +6,23 @@ import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.renderer.RendererInterface;
 import org.pikater.web.visualisation.implementation.renderer.RendererInterface.TextAlignment;
 
+/**
+ * <p>
+ * Class with functionality to display entries from one dataset. It should be use to display points 
+ * with x,y coordinates and value from one attribute each.
+ * </p>
+ * <p>
+ * Theoretically more attributes can be joined.
+ * However, this is possible due to data represenation of ARFF datasets and might be confusing, so usage
+ * of such practices is not recommended.
+ * </p>
+ * 
+ * @see org.pikater.web.visualisation.charts.ComparisonChart
+ * 
+ * @author siposp
+ * 
+ *
+ */
 public class SingleChart extends Chart {
 
 	private Color horizontalCaptionColor;
@@ -37,23 +54,6 @@ public class SingleChart extends Chart {
 		this.setCapitalCaption(true);
 	}
 
-	public boolean isCapitalCaption() {
-		return capitalCaption;
-	}
-
-	public void setCapitalCaption(boolean capitalCaption) {
-		this.capitalCaption = capitalCaption;
-	}
-
-	private void renderHorizontalCaption(String caption) {
-		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption, offsetx + yLabelWidth + getAreaWidth() / 2, offsety + chartHeight - xLabelHeight / 3, TextAlignment.Center,
-				horizontalCaptionColor, 0, captionSize);
-	}
-
-	private void renderVerticalCaption(String caption) {
-		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption, offsetx + yLabelWidth / 2, offsety + getAreaHeight() / 2, TextAlignment.Center, verticalCaptionColor, -90, captionSize);
-	}
-
 	public Color getHorizontalCaptionColor() {
 		return horizontalCaptionColor;
 	}
@@ -74,15 +74,46 @@ public class SingleChart extends Chart {
 		return captionSize;
 	}
 
+	public boolean isCapitalCaption() {
+		return capitalCaption;
+	}
+	
 	public void setCaptionSize(int captionSize) {
 		this.captionSize = captionSize;
 	}
 
+	public void setCapitalCaption(boolean capitalCaption) {
+		this.capitalCaption = capitalCaption;
+	}
+	
+	/**
+	 * Draws the caption for axis Y.
+	 * @param caption text for axis
+	 */
+	private void renderVerticalCaption(String caption) {
+		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption, offsetx + yLabelWidth / 2, offsety + getAreaHeight() / 2, TextAlignment.Center, verticalCaptionColor, -90, captionSize);
+	}
+
+	/**
+	 * Draws the caption for axis X.
+	 * @param caption text for axis
+	 */
+	private void renderHorizontalCaption(String caption) {
+		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption, offsetx + yLabelWidth + getAreaWidth() / 2, offsety + chartHeight - xLabelHeight / 3, TextAlignment.Center,
+				horizontalCaptionColor, 0, captionSize);
+	}
+	
+	/**
+	 * After drawing we just need to finalize rendering, no additional tasks required.
+	 */
 	@Override
 	public void finishChart() {
 		endRendering();
 	}
 
+	/**
+	 * When creating the chart we draw the background and whether they're enabled, we draw the captions.
+	 */
 	@Override
 	public void startChart() {
 		renderBackground();

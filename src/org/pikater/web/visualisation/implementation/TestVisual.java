@@ -12,7 +12,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.implementation.generator.ComparisonPNGGenerator;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.Generator;
 
 public class TestVisual {
 
@@ -30,7 +30,7 @@ public class TestVisual {
 			@Override
 			public void failed() {
 			}
-		}, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+		}, Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 
 		long time = 0;
 		JPADataSetLO iris1 = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
@@ -55,26 +55,5 @@ public class TestVisual {
 		}
 		System.out.println("Finished in: " + (System.currentTimeMillis() - time) + " ms");
 
-		/*
-		List<JPADataSetLO> datasets = DAOs.dataSetDAO.getAll();
-		
-		for(JPADataSetLO dataset : datasets){
-			
-			System.out.println("Generating PNG Single Chart for: " +dataset.getDescription());
-			time=System.currentTimeMillis();
-			
-			File temp;
-			try {
-				temp = new PGLargeObjectAction(null).downloadLOFromDB(dataset.getOID());
-				System.out.println("Dataset downloaded to "+temp.getAbsolutePath());
-				SinglePNGGenerator spngg=new SinglePNGGenerator(dummyResult, dataset,temp,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2s.png"), 0, 1, 2);
-				spngg.create();
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
-			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
-			break;
-		}
-		*/
 	}
 }

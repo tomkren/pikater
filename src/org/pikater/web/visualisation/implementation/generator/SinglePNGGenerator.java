@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
 
 public class SinglePNGGenerator extends SingleGenerator {
@@ -35,7 +35,7 @@ public class SinglePNGGenerator extends SingleGenerator {
 	}
 
 	private void initRenderer() {
-		this.renderer = new ImageRenderer(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
+		this.renderer = new ImageRenderer(Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 	}
 
 	@Override

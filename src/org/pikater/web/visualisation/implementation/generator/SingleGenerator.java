@@ -11,7 +11,6 @@ import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
 import org.pikater.web.visualisation.implementation.datasource.single.ArffXYZPoint;
 import org.pikater.web.visualisation.implementation.datasource.single.SingleArffDataset;
-import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
 
 public abstract class SingleGenerator extends Generator {
@@ -54,7 +53,7 @@ public abstract class SingleGenerator extends Generator {
 		Axis xAxis = dataset.getXAxis();
 		Colorer colorer = dataset.getZColorer();
 
-		SingleChart sch = new SingleChart(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE, renderer, xAxis, yAxis);
+		SingleChart sch = new SingleChart(Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE, renderer, xAxis, yAxis);
 
 		sch.startChart();
 
