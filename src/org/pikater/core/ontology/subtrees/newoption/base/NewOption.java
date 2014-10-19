@@ -189,7 +189,7 @@ public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable {
 	}
 
 	public boolean isEmpty() {
-		return valuesWrapper.size() == 0;
+		return valuesWrapper.isEmpty();
 	}
 
 	public boolean isSingleValue() {
