@@ -47,8 +47,8 @@ public class Entropy {
     		List<Object> attributeValues, List<Object> classValues) {
     	
         double result = 0;
-        HashSet<Object> targetValues = new HashSet<Object>();
-        HashSet<Object> sourceValues = new HashSet<Object>();
+        Set<Object> targetValues = new HashSet<Object>();
+        Set<Object> sourceValues = new HashSet<Object>();
 
         for (Object classValueI : classValues) {
 

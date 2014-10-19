@@ -96,7 +96,7 @@ public class DataSetTableDBView extends AbstractTableDBView {
 			}
 		}
 
-		public static EnumSet<Column> getColumns(boolean adminMode) {
+		public static Set<Column> getColumns(boolean adminMode) {
 			if (adminMode) {
 				return EnumSet.allOf(Column.class);
 			} else {

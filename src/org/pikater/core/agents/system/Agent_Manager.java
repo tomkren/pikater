@@ -49,10 +49,10 @@ public class Agent_Manager extends PikaterAgent {
 	private static final long serialVersionUID = -5140758757320827589L;
 
     protected Set<Subscription> subscriptions = new HashSet<Subscription>();
-	protected HashMap<Integer, ComputationCollectionItem> computationCollection =
+	protected Map<Integer, ComputationCollectionItem> computationCollection =
 			new HashMap<Integer, ComputationCollectionItem>();
 	
-	public HashMap<String, ACLMessage> searchMessages =
+	public Map<String, ACLMessage> searchMessages =
 			new HashMap<String, ACLMessage>();
 	
 	/**

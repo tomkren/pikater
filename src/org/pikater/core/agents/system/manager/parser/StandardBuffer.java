@@ -11,7 +11,7 @@ import java.util.LinkedList;
  * Time: 12:07
  */
 public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
-    LinkedList<E> buffer=new LinkedList<E>();
+    private LinkedList<E> buffer=new LinkedList<E>();
     private boolean data; 
     private String targetInput;
 

@@ -85,7 +85,7 @@ public class ExternalAgentTableDBView extends AbstractTableDBView {
 			}
 		}
 
-		public static EnumSet<Column> getAllColumns(boolean adminMode) {
+		public static Set<Column> getAllColumns(boolean adminMode) {
 			if (adminMode) {
 				return EnumSet.allOf(Column.class);
 			} else {

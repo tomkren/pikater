@@ -32,7 +32,7 @@ public class ExperimentGraph {
 	 * @param problems
 	 *            the problems
 	 */
-	public void setProblems(ArrayList<ExperimentItem> problems) {
+	public void setProblems(List<ExperimentItem> problems) {
 		this.problems = problems;
 	}
 

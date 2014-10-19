@@ -34,7 +34,7 @@ public abstract class AbstractTableDBView {
 	public abstract ITableColumn getDefaultSortOrder();
 
 	public Set<ITableColumn> getSortableColumns() {
-		HashSet<ITableColumn> result = new HashSet<ITableColumn>();
+		Set<ITableColumn> result = new HashSet<ITableColumn>();
 		for (ITableColumn column : getAllColumns()) {
 			if (column.getColumnType().isSortable()) {
 				result.add(column);

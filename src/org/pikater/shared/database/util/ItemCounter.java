@@ -1,12 +1,13 @@
 package org.pikater.shared.database.util;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
 public class ItemCounter<T> {
 
-	HashMap<T, Integer> hh;
+	Map<T, Integer> hh;
 
 	public ItemCounter() {
 		hh = new HashMap<T, Integer>();

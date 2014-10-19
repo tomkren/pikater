@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
@@ -175,7 +176,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             maxInstances = Math.max(ni, maxInstances);
         }
 
-        ArrayList<MetadataDistancePair> distances =
+        List<MetadataDistancePair> distances =
         		new ArrayList<MetadataDistancePair>();
 
         for (Metadata metadataI : allMetadata.getMetadatas()) {
@@ -218,7 +219,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             }
         }
 
-        HashMap<String, Integer> counts = new HashMap<String, Integer>();
+        Map<String, Integer> counts = new HashMap<String, Integer>();
 
         for (Agent a : agents) {
 
@@ -241,7 +242,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         logInfo("Best agent: " + bestAgentType);
 
-        ArrayList<Agent> bestAgents = new ArrayList<Agent>();
+        List<Agent> bestAgents = new ArrayList<Agent>();
 
         for (Agent agentI : agents) {
 
