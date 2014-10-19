@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.option;
+package org.pikater.core.ontology.subtrees.agentinfo;
 
 import jade.content.Concept;
 

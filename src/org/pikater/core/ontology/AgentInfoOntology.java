@@ -6,12 +6,12 @@ import jade.content.onto.Ontology;
 import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.GetOptions;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newoption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newoption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
 
