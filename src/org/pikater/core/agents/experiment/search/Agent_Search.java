@@ -116,7 +116,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		
 		addBehaviour(new RequestServer(this));
 		
-		addAgentInfoBehaviour(getAgentInfo());
+		addAgentInfoBehaviour();
 
 	}
 

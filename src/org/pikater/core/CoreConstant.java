@@ -38,7 +38,12 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum SlotCategory {
-		DATA_GENERAL, DATA_AGENT, DATA_SEARCH, DATA_RECOMMEND, DATA_EVALUATIONMETHOD, ERROR
+		DATA_GENERAL,
+		DATA_AGENT,
+		DATA_SEARCH,
+		DATA_RECOMMEND,
+		DATA_EVALUATIONMETHOD,
+		ERROR
 	}
 
 	/**
@@ -48,12 +53,18 @@ public class CoreConstant {
 	 */
 	public static enum SlotContent {
 
-		DATA("data"), FILE_DATA("fileData"), TRAINING_DATA("trainingData"), TESTING_DATA(
-				"testingData"), VALIDATION_DATA("validationData"), COMPUTED_DATA(
-				"computedData"),
+		DATA("data"),
+		FILE_DATA("fileData"),
+		TRAINING_DATA("trainingData"),
+		TESTING_DATA("testingData"),
+		VALIDATION_DATA("validationData"),
+		COMPUTED_DATA("computedData"),
 
-		COMPUTATION_AGENT("computingAgent"), ERRORS("error"), EVALUATION_METHOD(
-				"evaluationMethod"), RECOMMEND("recommender"), SEARCH("search");
+		COMPUTATION_AGENT("computingAgent"),
+		ERRORS("error"),
+		EVALUATION_METHOD("evaluationMethod"),
+		RECOMMEND("recommender"),
+		SEARCH("search");
 
 		private final String slotName;
 

@@ -43,7 +43,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 		
 		setEnabledO2ACommunication(true, 0);
 		
-		addAgentInfoBehaviour(getAgentInfo());
+		addAgentInfoBehaviour();
 	}
 	
 	public String saveArff(Instances i) {

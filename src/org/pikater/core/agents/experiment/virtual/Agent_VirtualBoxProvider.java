@@ -30,8 +30,7 @@ public abstract class Agent_VirtualBoxProvider extends Agent_AbstractExperiment 
 
 		registerWithDF(CoreAgents.VIRTUAL_BOX_PROVIDER.getName());
 
-		AgentInfo agentInfo = getAgentInfo();
-		addAgentInfoBehaviour(agentInfo);
+		addAgentInfoBehaviour();
 
 	}
 
