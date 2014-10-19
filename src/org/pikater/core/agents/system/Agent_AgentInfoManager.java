@@ -21,10 +21,10 @@ import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfoVisibleForUser;
-import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfoVisibleForUser;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
 import org.reflections.Reflections;
 
 import jade.content.lang.Codec;
