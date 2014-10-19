@@ -3,7 +3,6 @@ package org.pikater.web.visualisation.implementation.generator.base;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.jfree.util.PrintStreamLogTarget;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.exceptions.ChartException;
 import org.pikater.web.visualisation.implementation.renderer.RendererInterface;

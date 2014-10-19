@@ -1,5 +1,6 @@
 package org.pikater.web.visualisation.implementation.generator;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -15,14 +16,9 @@ import org.pikater.web.visualisation.implementation.renderer.SVGRenderer;
  *
  */
 public class SingleSVGGenerator extends SingleGenerator {
-
-	public SingleSVGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
-		super(progressListener, dslo, output, XIndex, YIndex, ColorIndex);
-		initRenderer();
-	}
-
-	public SingleSVGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, String XName, String YName, String ColorName) {
-		super(progressListener, dslo, output, XName, YName, ColorName);
+	
+	public SingleSVGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, String XName, String YName, String ColorName) {
+		super(progressListener, dslo, datasetCachedFile, output, XName, YName, ColorName);
 		initRenderer();
 	}
 

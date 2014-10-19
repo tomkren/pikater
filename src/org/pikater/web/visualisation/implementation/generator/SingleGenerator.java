@@ -24,25 +24,7 @@ public abstract class SingleGenerator extends Generator {
 
 	protected SingleArffDataset dataset;
 
-	public SingleGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
-		super(progressListener, output);
-		this.dataset = new SingleArffDataset(dslo, XIndex, YIndex, ColorIndex);
-		init();
-	}
-
-	public SingleGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, String XName, String YName, String ColorName) {
-		super(progressListener, output);
-		this.dataset = new SingleArffDataset(dslo, XName, YName, ColorName);
-		init();
-	}
-
-	public SingleGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
-		super(progressListener, output);
-		this.dataset = new SingleArffDataset(dslo, datasetCachedFile, XIndex, YIndex, ColorIndex);
-		init();
-	}
-
-	public SingleGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, String XName, String YName, String ColorName) {
+	protected SingleGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, String XName, String YName, String ColorName) {
 		super(progressListener, output);
 		this.dataset = new SingleArffDataset(dslo, datasetCachedFile, XName, YName, ColorName);
 		init();

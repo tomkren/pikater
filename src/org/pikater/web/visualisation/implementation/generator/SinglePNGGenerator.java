@@ -7,7 +7,6 @@ import java.io.PrintStream;
 
 import javax.imageio.ImageIO;
 
-import org.eclipse.persistence.jpa.rs.exceptions.IOExceptionMapper;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
@@ -20,21 +19,6 @@ import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
  *
  */
 public class SinglePNGGenerator extends SingleGenerator {
-
-	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
-		super(progressListener, dslo, output, XIndex, YIndex, ColorIndex);
-		initRenderer();
-	}
-
-	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, String XName, String YName, String ColorName) {
-		super(progressListener, dslo, output, XName, YName, ColorName);
-		initRenderer();
-	}
-
-	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
-		super(progressListener, dslo, datasetCachedFile, output, XIndex, YIndex, ColorIndex);
-		initRenderer();
-	}
 
 	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, String XName, String YName, String ColorName) {
 		super(progressListener, dslo, datasetCachedFile, output, XName, YName, ColorName);
