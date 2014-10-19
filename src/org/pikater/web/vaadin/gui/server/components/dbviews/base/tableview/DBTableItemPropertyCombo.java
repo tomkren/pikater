@@ -7,10 +7,10 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import com.vaadin.data.Property;
 import com.vaadin.ui.ComboBox;
 
-/** 
+/**
  * @author SkyCrawl
- * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, 
- * org.pikater.shared.database.views.base.values.AbstractDBViewValue) DBTableContainer#getProperty()}
+ * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, org.pikater.shared.database.views.base.values.AbstractDBViewValue)
+ *      DBTableContainer#getProperty()}
  */
 public class DBTableItemPropertyCombo implements Property<ComboBox> {
 	private static final long serialVersionUID = -5919644785774086999L;
@@ -18,7 +18,9 @@ public class DBTableItemPropertyCombo implements Property<ComboBox> {
 	private final ComboBox comboBox;
 	private final boolean readOnly;
 
-	public DBTableItemPropertyCombo(final DBTable parentTable, final AbstractTableRowDBView row, final RepresentativeDBViewValue valueWrapper) {
+	public DBTableItemPropertyCombo(final DBTable parentTable,
+			final AbstractTableRowDBView row,
+			final RepresentativeDBViewValue valueWrapper) {
 		this.readOnly = valueWrapper.isReadOnly();
 
 		this.comboBox = new ComboBox(null, valueWrapper.getValues());
@@ -35,7 +37,8 @@ public class DBTableItemPropertyCombo implements Property<ComboBox> {
 
 				@Override
 				public void valueChange(ValueChangeEvent event) {
-					valueWrapper.setValue((String) event.getProperty().getValue());
+					valueWrapper.setValue((String) event.getProperty()
+							.getValue());
 					if (parentTable.isImmediate()) {
 						valueWrapper.commit(row);
 					}
@@ -50,7 +53,8 @@ public class DBTableItemPropertyCombo implements Property<ComboBox> {
 	}
 
 	@Override
-	public void setValue(ComboBox newValue) throws com.vaadin.data.Property.ReadOnlyException {
+	public void setValue(ComboBox newValue)
+			throws com.vaadin.data.Property.ReadOnlyException {
 		throw new UnsupportedOperationException();
 	}
 

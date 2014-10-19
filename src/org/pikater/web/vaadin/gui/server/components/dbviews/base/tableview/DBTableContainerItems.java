@@ -9,15 +9,15 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.SimpleIDGenerator;
 
 /**
- * The lowest-level implementation of a view provider for
- * {@link DBTable}. Works directly with the database.
+ * The lowest-level implementation of a view provider for {@link DBTable}. Works
+ * directly with the database.
  * 
  * @author SkyCrawl
  */
 public class DBTableContainerItems implements ICommitable {
 	/**
-	 * Vaadin tables work with IDs, so we have to have all
-	 * rows mapped.
+	 * Vaadin tables work with IDs, so we have to have all rows mapped.
+	 * 
 	 * @see {@link #getRowIDs()}
 	 * @see {@link #getRow(Object)}
 	 */
@@ -25,6 +25,7 @@ public class DBTableContainerItems implements ICommitable {
 
 	/**
 	 * You never know when it might come in handy.
+	 * 
 	 * @see {@link #getAllItemsCount()}
 	 */
 	private QueryResult lastQueryResult;
@@ -40,13 +41,12 @@ public class DBTableContainerItems implements ICommitable {
 		}
 	}
 
-	//-----------------------------------------------
+	// -----------------------------------------------
 	// MAIN CONTAINER INTERFACE - SHOULD BE SELF EXPLANATORY
 
 	/**
-	 * Look at the table, define a query with its help, ask 
-	 * database for the new rows, store them and wait until
-	 * the table picks them up. 
+	 * Look at the table, define a query with its help, ask database for the new
+	 * rows, store them and wait until the table picks them up.
 	 */
 	public void loadRows(DBTableContainer container, QueryResult queryResult) {
 		// first, clear the previous rows
@@ -55,7 +55,8 @@ public class DBTableContainerItems implements ICommitable {
 		// then generate the new ones
 		SimpleIDGenerator ids = new SimpleIDGenerator();
 		for (AbstractTableRowDBView row : queryResult.getConstrainedResults()) {
-			this.currentlyViewedRows.put(ids.getAndIncrement(), new DBTableItem(container, row));
+			this.currentlyViewedRows.put(ids.getAndIncrement(),
+					new DBTableItem(container, row));
 		}
 
 		// and finally:
@@ -74,14 +75,14 @@ public class DBTableContainerItems implements ICommitable {
 		return lastQueryResult.getAllResultsCount();
 	}
 
-	//-----------------------------------------------
-	// SORT INTERFACE - REFER TO THE CONTAINER.SORTABLE INTERFACE JAVADOC WHEN IMPLEMENTING
+	// -----------------------------------------------
+	// SORT INTERFACE - REFER TO THE CONTAINER.SORTABLE INTERFACE JAVADOC WHEN
+	// IMPLEMENTING
 
 	/*
-	 * Although these methods are not really used by our tables (we
-	 * have support for native sorting by queries), they are set
-	 * to be "sortable" and thus require having a sortable container
-	 * at their disposal.
+	 * Although these methods are not really used by our tables (we have support
+	 * for native sorting by queries), they are set to be "sortable" and thus
+	 * require having a sortable container at their disposal.
 	 */
 
 	public Object getFirstItemID() {

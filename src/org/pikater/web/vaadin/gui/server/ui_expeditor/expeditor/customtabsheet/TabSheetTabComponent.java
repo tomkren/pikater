@@ -28,9 +28,8 @@ public class TabSheetTabComponent extends Panel // something clickable
 	private final Label label;
 
 	/**
-	 * Component to close the parent tab. Not attached by
-	 * default. Use {@link #addCloseHandler(ClickListener)}
-	 * to attach it manually.
+	 * Component to close the parent tab. Not attached by default. Use
+	 * {@link #addCloseHandler(ClickListener)} to attach it manually.
 	 */
 	private final IconButton closeTabButton;
 
@@ -50,7 +49,8 @@ public class TabSheetTabComponent extends Panel // something clickable
 		innerLayout.addComponent(label);
 		innerLayout.addComponent(closeTabButton);
 		innerLayout.setComponentAlignment(label, Alignment.MIDDLE_LEFT);
-		innerLayout.setComponentAlignment(closeTabButton, Alignment.MIDDLE_RIGHT);
+		innerLayout.setComponentAlignment(closeTabButton,
+				Alignment.MIDDLE_RIGHT);
 		innerLayout.setSpacing(true);
 
 		this.isSelected = false;
@@ -68,18 +68,19 @@ public class TabSheetTabComponent extends Panel // something clickable
 	}
 
 	/**
-	 * Is there a need to display a dialog so that the user
-	 * can confirm closing this tab?
+	 * Is there a need to display a dialog so that the user can confirm closing
+	 * this tab?
 	 */
 	public boolean canCloseTab() {
-		return true; // just some default implementation - override in subclasses
+		return true; // just some default implementation - override in
+						// subclasses
 	}
 
 	/**
-	 * Makes this tab closeable, attaches a special clickable component
-	 * which handles close events with the given close handler.
-	 * {@link #canCloseTab()} is not a part of this - if intended to be
-	 * used, use must do that within the close handler or elsewhere.
+	 * Makes this tab closeable, attaches a special clickable component which
+	 * handles close events with the given close handler. {@link #canCloseTab()}
+	 * is not a part of this - if intended to be used, use must do that within
+	 * the close handler or elsewhere.
 	 */
 	public void addCloseHandler(ClickListener closeHandler) {
 		this.closeTabButton.addClickListener(closeHandler);

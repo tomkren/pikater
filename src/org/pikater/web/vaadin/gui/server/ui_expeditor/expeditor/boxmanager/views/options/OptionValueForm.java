@@ -46,11 +46,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 
 /**
- * <p>Master component of {@link BoxManagerOptionView}.</p>
+ * <p>
+ * Master component of {@link BoxManagerOptionView}.
+ * </p>
  * 
- * <p>Makes a best effort at displaying the given arguments,
- * even if not valid. That way, the source box can still be
- * usable in some situations.</p>
+ * <p>
+ * Makes a best effort at displaying the given arguments, even if not valid.
+ * That way, the source box can still be usable in some situations.
+ * </p>
  */
 public class OptionValueForm extends CustomFormLayout {
 	private static final long serialVersionUID = 2200291325058461983L;
@@ -62,8 +65,8 @@ public class OptionValueForm extends CustomFormLayout {
 	private final IOptionViewDataSource dataSource;
 
 	/**
-	 * An object that constructs value fields for the given value and
-	 * provides some other useful interface.
+	 * An object that constructs value fields for the given value and provides
+	 * some other useful interface.
 	 */
 	private AbstractFieldProviderForValue typeSpecificFieldProvider;
 
@@ -90,23 +93,30 @@ public class OptionValueForm extends CustomFormLayout {
 		return null;
 	}
 
-	//---------------------------------------------------------------------------------------
-	// ROOT METHOD TO CREATE THE FORM - CREATES A TYPE FIELD AND CALLS OTHER METHODS OF THIS CLASS
+	// ---------------------------------------------------------------------------------------
+	// ROOT METHOD TO CREATE THE FORM - CREATES A TYPE FIELD AND CALLS OTHER
+	// METHODS OF THIS CLASS
 
 	private void setupFields() {
-		// go through allowed types, validate, register, sort & transform into strings
+		// go through allowed types, validate, register, sort & transform into
+		// strings
 		List<String> typeOptions = new ArrayList<String>();
 		for (ValueType type : dataSource.getAllowedTypes().getTypes()) {
 			/*
-			 * IMPORTANT: this is assumed to check various things which are needed both here
-			 * and in other methods of this class.
+			 * IMPORTANT: this is assumed to check various things which are
+			 * needed both here and in other methods of this class.
 			 */
 			if (type.isValid()) {
 				String typeStr = null;
 				try {
 					typeStr = type.getDefaultValue().toDisplayName();
 				} catch (Exception t) {
-					PikaterWebLogger.logThrowable(String.format("Could not transform the '%s' value type to display string.", type.getDefaultValue().getClass()), t);
+					PikaterWebLogger
+							.logThrowable(
+									String.format(
+											"Could not transform the '%s' value type to display string.",
+											type.getDefaultValue().getClass()),
+									t);
 					continue;
 				}
 
@@ -117,7 +127,8 @@ public class OptionValueForm extends CustomFormLayout {
 				}
 
 				if (typeToDisplayString.containsValue(typeStr)) {
-					PikaterWebLogger.logThrowable("Duplicate type detected.", new IllegalStateException());
+					PikaterWebLogger.logThrowable("Duplicate type detected.",
+							new IllegalStateException());
 				} else {
 					this.typeToDisplayString.put(type, typeStr);
 					typeOptions.add(typeStr);
@@ -125,7 +136,8 @@ public class OptionValueForm extends CustomFormLayout {
 			}
 		}
 		Collections.sort(typeOptions, new Comparator<String>() {
-			private final String nullDisplayName = new NullValue().toDisplayName();
+			private final String nullDisplayName = new NullValue()
+					.toDisplayName();
 
 			@Override
 			public int compare(String o1, String o2) {
@@ -139,30 +151,44 @@ public class OptionValueForm extends CustomFormLayout {
 			}
 		});
 
-		// display a warning to the user if there was a problem with the allowed types
+		// display a warning to the user if there was a problem with the allowed
+		// types
 		if (typeOptions.isEmpty()) {
-			MyNotifications.showError("No types defined or all invalid", "Please, contact the admins.");
-		} else if (typeOptions.size() != dataSource.getAllowedTypes().getTypes().size()) // a type is missing
+			MyNotifications.showError("No types defined or all invalid",
+					"Please, contact the admins.");
+		} else if (typeOptions.size() != dataSource.getAllowedTypes()
+				.getTypes().size()) // a type is missing
 		{
-			MyNotifications.showWarning("Some types not valid", "If this is a bug, contact admins.");
+			MyNotifications.showWarning("Some types not valid",
+					"If this is a bug, contact admins.");
 		} else {
 			String selectedType;
-			if ((dataSource.getValue().getType() != null) && typeToDisplayString.containsKey(dataSource.getValue().getType())) {
+			if ((dataSource.getValue().getType() != null)
+					&& typeToDisplayString.containsKey(dataSource.getValue()
+							.getType())) {
 				// value has defined type and it is a known type in restrictions
-				selectedType = typeToDisplayString.getValue(dataSource.getValue().getType());
+				selectedType = typeToDisplayString.getValue(dataSource
+						.getValue().getType());
 				if (dataSource.getValue().getCurrentValue() == null) {
-					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().getDefaultValue().clone());
+					dataSource.getValue().setCurrentValue(
+							dataSource.getValue().getType().getDefaultValue()
+									.clone());
 				}
 			} else // auto-correct accidental invalid type binding
 			{
 				selectedType = typeOptions.get(0);
-				dataSource.getValue().setType(typeToDisplayString.getKey(selectedType));
-				dataSource.getValue().setCurrentValue(typeToDisplayString.getKey(selectedType).getDefaultValue().clone());
+				dataSource.getValue().setType(
+						typeToDisplayString.getKey(selectedType));
+				dataSource.getValue().setCurrentValue(
+						typeToDisplayString.getKey(selectedType)
+								.getDefaultValue().clone());
 			}
-			// at this point, current value needs to be set (non-null) for the 'value' argument
+			// at this point, current value needs to be set (non-null) for the
+			// 'value' argument
 
 			// create type combobox and set it up
-			ComboBox cb_type = FormFieldFactory.createComboBox("Type:", typeOptions, selectedType, true, false);
+			ComboBox cb_type = FormFieldFactory.createComboBox("Type:",
+					typeOptions, selectedType, true, false);
 			cb_type.setSizeFull();
 			cb_type.addValueChangeListener(new Property.ValueChangeListener() {
 				private static final long serialVersionUID = 3736100120428402858L;
@@ -173,9 +199,11 @@ public class OptionValueForm extends CustomFormLayout {
 				@Override
 				public void valueChange(ValueChangeEvent event) {
 					// first change type and reset value to default
-					ValueType newlySelectedType = typeToDisplayString.getKey((String) event.getProperty().getValue());
+					ValueType newlySelectedType = typeToDisplayString
+							.getKey((String) event.getProperty().getValue());
 					dataSource.getValue().setType(newlySelectedType);
-					dataSource.getValue().setCurrentValue(newlySelectedType.getDefaultValue().clone());
+					dataSource.getValue().setCurrentValue(
+							newlySelectedType.getDefaultValue().clone());
 
 					// and then recreate type specific fields
 					recreateTypeSpecificFields(dataSource.getValue());
@@ -186,70 +214,86 @@ public class OptionValueForm extends CustomFormLayout {
 			// create and setup other fields
 			recreateTypeSpecificFields(dataSource.getValue());
 
-			// add a special button to reset value to default (default value of the currently selected type)
-			attachToButtonInterface(new Button("Reset value", new Button.ClickListener() {
-				private static final long serialVersionUID = 838180535195566779L;
+			// add a special button to reset value to default (default value of
+			// the currently selected type)
+			attachToButtonInterface(new Button("Reset value",
+					new Button.ClickListener() {
+						private static final long serialVersionUID = 838180535195566779L;
 
-				@Override
-				public void buttonClick(ClickEvent event) {
-					// first reset the value
-					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().getDefaultValue().clone());
+						@Override
+						public void buttonClick(ClickEvent event) {
+							// first reset the value
+							dataSource.getValue().setCurrentValue(
+									dataSource.getValue().getType()
+											.getDefaultValue().clone());
 
-					// and then recreate type specific fields
-					recreateTypeSpecificFields(dataSource.getValue());
-				}
-			}));
+							// and then recreate type specific fields
+							recreateTypeSpecificFields(dataSource.getValue());
+						}
+					}));
 		}
 	}
 
-	//---------------------------------------------------------------------------------------
-	// SECOND-LEVEL METHOD TO CREATE THE FORM - CREATES FIELDS IN TYPE-SPECIFIC MANNER
+	// ---------------------------------------------------------------------------------------
+	// SECOND-LEVEL METHOD TO CREATE THE FORM - CREATES FIELDS IN TYPE-SPECIFIC
+	// MANNER
 
 	/**
-	 * The {@link #setupFields(Value, TypeRestriction)} method ensures that the 
+	 * The {@link #setupFields(Value, TypeRestriction)} method ensures that the
 	 * {@link Value#getCurrentValue()} doesn't return null for the argument and
-	 * thus, this method requires it.</br>
-	 * IMPORTANT: this method is required to:
+	 * thus, this method requires it.</br> IMPORTANT: this method is required
+	 * to:
 	 * <ul>
-	 * <li> Set the appropriate child of {@link AbstractFieldProviderForValue}
-	 * to the {@link #typeSpecificFieldProvider} field.
-	 * <li> Register all the fields provided by {@link #typeSpecificFieldProvider}
-	 * into the form.
+	 * <li>Set the appropriate child of {@link AbstractFieldProviderForValue} to
+	 * the {@link #typeSpecificFieldProvider} field.
+	 * <li>Register all the fields provided by
+	 * {@link #typeSpecificFieldProvider} into the form.
 	 * </ul>
 	 */
 	private void recreateTypeSpecificFields(Value value) {
 		// first get rid of the old fields, if any are defined
 		if (typeSpecificFieldProvider != null) {
-			for (AbstractField<? extends Object> field : typeSpecificFieldProvider.getGeneratedFields().values()) {
+			for (AbstractField<? extends Object> field : typeSpecificFieldProvider
+					.getGeneratedFields().values()) {
 				removeField(field);
 			}
 		}
 
 		// then validate the value if need be
-		if (value.getCurrentValue() instanceof IValidatedValueData) // currently only QMR & QMS
+		if (value.getCurrentValue() instanceof IValidatedValueData) // currently
+																	// only QMR
+																	// & QMS
 		{
 			if (!((IValidatedValueData) value.getCurrentValue()).isValid()) {
-				PikaterWebLogger.logThrowable("", new IllegalStateException("Invalid value received."));
+				PikaterWebLogger.logThrowable("", new IllegalStateException(
+						"Invalid value received."));
 				MyNotifications.showWarning(null, "Invalid value received.");
 				return;
 			}
 		}
 
-		// then get the appropriate field provider according to the given value type
-		Class<? extends IValueData> typeClass = value.getCurrentValue().getClass();
+		// then get the appropriate field provider according to the given value
+		// type
+		Class<? extends IValueData> typeClass = value.getCurrentValue()
+				.getClass();
 		if (typeClass.equals(BooleanValue.class)) {
 			typeSpecificFieldProvider = new BooleanValueProvider();
 		} else if (typeClass.equals(StringValue.class)) {
 			// first special treatment and then default
-			if ((dataSource.getBox().getBoxType() == BoxType.INPUT) && dataSource.getBox().getAssociatedAgent().getName().equals("FileInput") && dataSource.getOption().getName().equals("fileURI")) {
+			if ((dataSource.getBox().getBoxType() == BoxType.INPUT)
+					&& dataSource.getBox().getAssociatedAgent().getName()
+							.equals("FileInput")
+					&& dataSource.getOption().getName().equals("fileURI")) {
 				typeSpecificFieldProvider = new FileInputFieldProvider();
 			} else {
 				typeSpecificFieldProvider = new StringValueProvider();
 			}
 		} else if (typeClass.equals(IntegerValue.class)) {
 			// first special treatment and then default
-			if ((dataSource.getBox().getBoxType() == BoxType.COMPUTE) && dataSource.getOption().getName().equals("model")) {
-				typeSpecificFieldProvider = new CAModelFieldProvider(dataSource.getBox().getAssociatedAgent().getAgentClassName());
+			if ((dataSource.getBox().getBoxType() == BoxType.COMPUTE)
+					&& dataSource.getOption().getName().equals("model")) {
+				typeSpecificFieldProvider = new CAModelFieldProvider(dataSource
+						.getBox().getAssociatedAgent().getAgentClassName());
 			} else {
 				typeSpecificFieldProvider = new IntegerValueProvider();
 			}
@@ -262,17 +306,24 @@ public class OptionValueForm extends CustomFormLayout {
 		} else if (typeClass.equals(QuestionMarkSet.class)) {
 			typeSpecificFieldProvider = new QMSValueProvider();
 		} else if (typeClass.equals(NullValue.class)) {
-			// these values can not be set and hence no field is created whatsoever
+			// these values can not be set and hence no field is created
+			// whatsoever
 			return;
 		} else {
-			PikaterWebLogger.logThrowable("", new IllegalStateException(String.format("Unimplemented value type used: '%s'.", typeClass.getName())));
-			MyNotifications.showWarning("Unsupported option type", typeClass.getSimpleName());
+			PikaterWebLogger.logThrowable(
+					"",
+					new IllegalStateException(String.format(
+							"Unimplemented value type used: '%s'.",
+							typeClass.getName())));
+			MyNotifications.showWarning("Unsupported option type",
+					typeClass.getSimpleName());
 			return;
 		}
 
 		// and finally, generate fields and register them
 		typeSpecificFieldProvider.generateFields(value);
-		for (Entry<String, AbstractField<? extends Object>> entry : typeSpecificFieldProvider.getGeneratedFields().entrySet()) {
+		for (Entry<String, AbstractField<? extends Object>> entry : typeSpecificFieldProvider
+				.getGeneratedFields().entrySet()) {
 			addField(entry.getKey(), entry.getValue());
 		}
 	}

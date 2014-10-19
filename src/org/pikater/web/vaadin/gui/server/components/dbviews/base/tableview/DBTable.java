@@ -19,12 +19,15 @@ import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Table;
 
 /**
- * <p>A custom Vaadin table made to display a portion of data
- * from database. Supports various page sizes and paging
- * controls to allow navigation.</p>
+ * <p>
+ * A custom Vaadin table made to display a portion of data from database.
+ * Supports various page sizes and paging controls to allow navigation.
+ * </p>
  * 
- * <p>Should only be used from {@link DBTableLayout} - it
- * knows best how to use this class.</p>
+ * <p>
+ * Should only be used from {@link DBTableLayout} - it knows best how to use
+ * this class.
+ * </p>
  * 
  * @author SkyCrawl
  */
@@ -38,9 +41,9 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 	private final DBTableContainer tableContainer;
 
 	/**
-	 * Defines a portion of the current database table
-	 * to be viewed.
-	 * @see {@link #setView(AbstractDBViewRoot)}  
+	 * Defines a portion of the current database table to be viewed.
+	 * 
+	 * @see {@link #setView(AbstractDBViewRoot)}
 	 */
 	private final PagingComponent pagingControls;
 	private ITableColumn currentSortColumn;
@@ -64,7 +67,7 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 		this.currentSortColumn = null;
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// INHERITED TABLE INTERFACE
 
 	@Override
@@ -76,14 +79,17 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 	public void setSortContainerPropertyId(Object propertyId) {
 		ITableColumn newSortColumn = (ITableColumn) propertyId;
 		if (newSortColumn == null) {
-			throw new NullPointerException("Can not set null sort column. A column to sort with must always be set.");
+			throw new NullPointerException(
+					"Can not set null sort column. A column to sort with must always be set.");
 		} else if (!newSortColumn.getColumnType().isSortable()) {
-			throw new IllegalArgumentException(String.format("The '%s' column is not sortable.", newSortColumn.getDisplayName()));
+			throw new IllegalArgumentException(String.format(
+					"The '%s' column is not sortable.",
+					newSortColumn.getDisplayName()));
 		}
 
 		/*
-		 * The new sort column has to be set now since the {@link #rebuildContainerRowIndex()} method
-		 * depends on it.
+		 * The new sort column has to be set now since the {@link
+		 * #rebuildContainerRowIndex()} method depends on it.
 		 */
 		if (newSortColumn != currentSortColumn) {
 			currentSortColumn = newSortColumn;
@@ -93,21 +99,21 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 		}
 
 		/*
-		 * Container row cache needs to be constructed before the Sortable interface is called. Vaadin
-		 * doesn't do it, buggy little mischief...
+		 * Container row cache needs to be constructed before the Sortable
+		 * interface is called. Vaadin doesn't do it, buggy little mischief...
 		 */
-		resetPaging(); // requires the above call (so that the subsequent database query is correct)
+		resetPaging(); // requires the above call (so that the subsequent
+						// database query is correct)
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// INHERITED PAGING RELATED INTERFACE
 
-	/* 
+	/*
 	 * Setting page length is important because otherwise, Vaadin table will
-	 * display a fixed number of rows whether there are enough items to
-	 * populate them or not.
-	 * This assumes that the container respects the maximum number of results
-	 * determined by paging.
+	 * display a fixed number of rows whether there are enough items to populate
+	 * them or not. This assumes that the container respects the maximum number
+	 * of results determined by paging.
 	 */
 
 	@Override
@@ -120,7 +126,7 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 		resetPaging();
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// OTHER INHERITED INTERFACE
 
 	@Override
@@ -140,7 +146,7 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 		setEnabled(true);
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// SELECTION RELATED INTERFACE
 
 	@SuppressWarnings("unchecked")
@@ -162,15 +168,17 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 	}
 
 	/**
-	 * The returned type is compatible with the type
-	 * used in {@link #setView(AbstractDBViewRoot)}.
-	 * For example, if {@link UsersTableDBView} was
-	 * used, then this method returns {@link UsersTableDBRow}.
+	 * The returned type is compatible with the type used in
+	 * {@link #setView(AbstractDBViewRoot)}. For example, if
+	 * {@link UsersTableDBView} was used, then this method returns
+	 * {@link UsersTableDBRow}.
 	 */
 	public AbstractTableRowDBView[] getViewsOfSelectedRows() {
-		CustomOrderSet<Object> sortedSelectedItemSet = new CustomOrderSet<Object>(getSelectedRowIDs());
+		CustomOrderSet<Object> sortedSelectedItemSet = new CustomOrderSet<Object>(
+				getSelectedRowIDs());
 
-		AbstractTableRowDBView[] result = new AbstractTableRowDBView[sortedSelectedItemSet.size()];
+		AbstractTableRowDBView[] result = new AbstractTableRowDBView[sortedSelectedItemSet
+				.size()];
 		int index = 0;
 		for (Object itemID : sortedSelectedItemSet) {
 			result[index] = tableContainer.getItem(itemID).getRowView();
@@ -179,26 +187,31 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 		return result;
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// OTHER PUBLIC INTERFACE
 
 	/**
-	 * {@link DBTableContainer} uses this to fetch the currently
-	 * viewed data. 
+	 * {@link DBTableContainer} uses this to fetch the currently viewed data.
 	 */
 	public QueryConstraints getQuery() {
-		return new QueryConstraints(currentSortColumn, currentSortOrder, pagingControls.getOverallOffset(), pagingControls.getPageSize());
+		return new QueryConstraints(currentSortColumn, currentSortOrder,
+				pagingControls.getOverallOffset(), pagingControls.getPageSize());
 	}
 
 	/**
-	 * <p>Maps a certain "database table" to this Vaadin table. Paging then
-	 * determines the actual rows viewed.</p>
+	 * <p>
+	 * Maps a certain "database table" to this Vaadin table. Paging then
+	 * determines the actual rows viewed.
+	 * </p>
 	 * 
-	 * <p>This is the most important method. Without it, the table is but an
-	 * empty shell.</p>
+	 * <p>
+	 * This is the most important method. Without it, the table is but an empty
+	 * shell.
+	 * </p>
 	 * 
 	 */
-	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot) {
+	public void setView(
+			AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot) {
 		// first register thy self in the view and don't forget to!
 		viewRoot.setParentTable(this);
 
@@ -207,7 +220,8 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 		setContainerDataSource(tableContainer);
 
 		// basic setup of columns
-		Set<ITableColumn> allDefinedColumns = viewRoot.getUnderlyingDBView().getAllColumns();
+		Set<ITableColumn> allDefinedColumns = viewRoot.getUnderlyingDBView()
+				.getAllColumns();
 		for (ITableColumn column : allDefinedColumns) {
 			setColumnHeader(column, column.getDisplayName());
 			setColumnAlignment(column, Align.CENTER);
@@ -215,7 +229,8 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 			setColumnCollapsible(column, true);
 			setColumnCollapsed(column, true);
 		}
-		for (ITableColumn column : viewRoot.getUnderlyingDBView().getDefaultColumns()) {
+		for (ITableColumn column : viewRoot.getUnderlyingDBView()
+				.getDefaultColumns()) {
 			setColumnCollapsed(column, false);
 		}
 		addHeaderClickListener(new HeaderClickListener() {
@@ -225,13 +240,21 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 			public void headerClick(HeaderClickEvent event) {
 				ITableColumn column = (ITableColumn) event.getPropertyId();
 				if (column.getColumnType().isSortable()) {
-					setSortContainerPropertyId(event.getPropertyId()); // Vaadin will not do this by itself... doh
+					setSortContainerPropertyId(event.getPropertyId()); // Vaadin
+																		// will
+																		// not
+																		// do
+																		// this
+																		// by
+																		// itself...
+																		// doh
 				}
 			}
 		});
 
 		// expand ratio of columns
-		if ((viewRoot.getExpandColumn() == null) || !allDefinedColumns.contains(viewRoot.getExpandColumn())) {
+		if ((viewRoot.getExpandColumn() == null)
+				|| !allDefinedColumns.contains(viewRoot.getExpandColumn())) {
 			// distribute available space evenly
 			float expandRatio = 1 / (float) allDefinedColumns.size();
 			for (ITableColumn column : allDefinedColumns) {
@@ -243,20 +266,22 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 		}
 
 		// this will rebuild the container row cache
-		setSortContainerPropertyId(viewRoot.getUnderlyingDBView().getDefaultSortOrder());
+		setSortContainerPropertyId(viewRoot.getUnderlyingDBView()
+				.getDefaultSortOrder());
 	}
 
 	public PagingComponent getPagingControls() {
 		return pagingControls;
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// PRIVATE INTERFACE
 
 	private void resetPaging() {
 		pagingControls.setPage(1, false);
 		rebuildRowCache();
-		pagingControls.updatePageCount(tableContainer.getUnconstrainedQueryResultsCount());
+		pagingControls.updatePageCount(tableContainer
+				.getUnconstrainedQueryResultsCount());
 	}
 
 	/**
@@ -269,8 +294,7 @@ public class DBTable extends Table implements IPagedComponent, ICommitable {
 	}
 
 	/**
-	 * Query database for the currently defined view and view
-	 * the result rows.
+	 * Query database for the currently defined view and view the result rows.
 	 */
 	public void rebuildRowCache() {
 		setPageLength(tableContainer.getItemIds().size());

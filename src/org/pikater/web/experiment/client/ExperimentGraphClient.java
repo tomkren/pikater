@@ -12,20 +12,22 @@ import org.pikater.web.experiment.IExperimentGraph;
 import org.pikater.web.experiment.server.ExperimentGraphServer;
 
 /**
- * A special (GWT&Vaadin)-compliant experiment graph implementation. As such, fields are
- * required to be public and a public default constructor is needed.
+ * A special (GWT&Vaadin)-compliant experiment graph implementation. As such,
+ * fields are required to be public and a public default constructor is needed.
  * 
  * This class is only used to efficiently transport already defined experiments
- * to the client. All experiments in experiment editor are actually stored on the server. 
+ * to the client. All experiments in experiment editor are actually stored on
+ * the server.
  * 
  * @author SkyCrawl
  * @see {@link ExperimentGraphServer}
  */
-public class ExperimentGraphClient implements Serializable, IExperimentGraph<Integer, BoxInfoClient> {
+public class ExperimentGraphClient implements Serializable,
+		IExperimentGraph<Integer, BoxInfoClient> {
 	private static final long serialVersionUID = 5653859184631065811L;
 
 	/**
-	 * ID generator for boxes. 
+	 * ID generator for boxes.
 	 */
 	public SimpleIDGenerator boxIDGenerator;
 
@@ -35,7 +37,8 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	public Map<Integer, BoxInfoClient> leafBoxes;
 
 	/**
-	 * Collection of oriented edges (between boxes), sorted by the "from end point".
+	 * Collection of oriented edges (between boxes), sorted by the
+	 * "from end point".
 	 */
 	public Map<Integer, Set<Integer>> edges;
 
@@ -107,30 +110,51 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	// PRIVATE INTERFACE
 
 	/**
-	 * Either connects or disconnects two given boxes, depending on the the last argument.
+	 * Either connects or disconnects two given boxes, depending on the the last
+	 * argument.
 	 */
-	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey, boolean connect) {
+	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey,
+			boolean connect) {
 		/*
-		 * Let this method have a transaction-like manner and only alter the data when
-		 * everything has been checked and approved.
+		 * Let this method have a transaction-like manner and only alter the
+		 * data when everything has been checked and approved.
 		 */
 
 		// first, all kinds of checks before actually doing anything significant
-		if ((fromBoxKey == null) || (toBoxKey == null)) { // boxes have not been added to the structure
-			throw new IllegalArgumentException("Cannot add this edge because at least one of the boxes was not added to the structure. " + "Call the 'addBox()' method first and try again.");
+		if ((fromBoxKey == null) || (toBoxKey == null)) { // boxes have not been
+															// added to the
+															// structure
+			throw new IllegalArgumentException(
+					"Cannot add this edge because at least one of the boxes was not added to the structure. "
+							+ "Call the 'addBox()' method first and try again.");
 		}
-		if (!leafBoxes.containsKey(fromBoxKey) || !leafBoxes.containsKey(toBoxKey)) {
-			throw new IllegalArgumentException("One of the supplied box keys represents a wrapper box. Cannot add edges to wrapper boxes.");
+		if (!leafBoxes.containsKey(fromBoxKey)
+				|| !leafBoxes.containsKey(toBoxKey)) {
+			throw new IllegalArgumentException(
+					"One of the supplied box keys represents a wrapper box. Cannot add edges to wrapper boxes.");
 		}
 		if (connect) { // we want to connect the boxes
-			if ((edges.get(fromBoxKey) != null) && edges.get(fromBoxKey).contains(toBoxKey)) // an edge already exists
+			if ((edges.get(fromBoxKey) != null)
+					&& edges.get(fromBoxKey).contains(toBoxKey)) // an edge
+																	// already
+																	// exists
 			{
-				throw new IllegalStateException("Cannot add an edge from box '" + String.valueOf(fromBoxKey) + "' to box '" + String.valueOf(toBoxKey) + "': they are already connected.");
+				throw new IllegalStateException("Cannot add an edge from box '"
+						+ String.valueOf(fromBoxKey) + "' to box '"
+						+ String.valueOf(toBoxKey)
+						+ "': they are already connected.");
 			}
 		} else { // we want to disconnect the boxes
-			if ((edges.get(fromBoxKey) == null) || !edges.get(fromBoxKey).contains(toBoxKey)) // the edge doesn't exist
+			if ((edges.get(fromBoxKey) == null)
+					|| !edges.get(fromBoxKey).contains(toBoxKey)) // the edge
+																	// doesn't
+																	// exist
 			{
-				throw new IllegalStateException("Cannot remove the edge from box '" + String.valueOf(fromBoxKey) + "' to box '" + String.valueOf(toBoxKey) + "': they are not connected.");
+				throw new IllegalStateException(
+						"Cannot remove the edge from box '"
+								+ String.valueOf(fromBoxKey) + "' to box '"
+								+ String.valueOf(toBoxKey)
+								+ "': they are not connected.");
 			}
 		}
 

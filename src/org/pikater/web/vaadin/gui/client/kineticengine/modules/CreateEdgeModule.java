@@ -22,7 +22,7 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGra
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
 
 /**
- * Module implementing creating edges, from start to end. 
+ * Module implementing creating edges, from start to end.
  * 
  * @author SkyCrawl
  */
@@ -70,15 +70,24 @@ public final class CreateEdgeModule implements IEngineModule {
 			fromEndPoint = box;
 
 			// create the new edge and convert it to baseline
-			newEdge = kineticEngine.getContext().getGraphItemCreator().createEdge(GraphItemRegistration.MANUAL, fromEndPoint, null);
-			newEdge.edgeDrag_toBaseLine(kineticEngine.getMousePosition(), fromEndPoint);
+			newEdge = kineticEngine
+					.getContext()
+					.getGraphItemCreator()
+					.createEdge(GraphItemRegistration.MANUAL, fromEndPoint,
+							null);
+			newEdge.edgeDrag_toBaseLine(kineticEngine.getMousePosition(),
+					fromEndPoint);
 		}
 
 		/**
-		 * <p>Start creation of a new edge.</p>
+		 * <p>
+		 * Start creation of a new edge.
+		 * </p>
 		 * 
-		 * <p>This method has to call {@link finishOperation(BoxPrototype toEndPoint)}
-		 * for consistency.</p>
+		 * <p>
+		 * This method has to call {@link finishOperation(BoxPrototype
+		 * toEndPoint)} for consistency.
+		 * </p>
 		 */
 		public void stopOperation() {
 			finishOperation(null);
@@ -94,28 +103,40 @@ public final class CreateEdgeModule implements IEngineModule {
 				toEndPoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
 				if (fromEndPoint.isNotConnectedTo(toEndPoint)) {
 					newEdge.setEndpoint(EndPoint.TO, toEndPoint);
-					newEdge.edgeDrag_toEdge(true); // switches the edge's internal state and updates it, doesn't draw anything
+					newEdge.edgeDrag_toEdge(true); // switches the edge's
+													// internal state and
+													// updates it, doesn't draw
+													// anything
 					selectionModule.onNewEdgeCreated(newEdge);
 
 					/*
-					 * Duplicate code from {@link ItemRegistrationModule}. Not so easy to do it 
-					 * with another way.
+					 * Duplicate code from {@link ItemRegistrationModule}. Not
+					 * so easy to do it with another way.
 					 */
-					EdgeGraphItemShared[] serializedEdges = EdgeGraphItemClient.toShared(newEdge);
+					EdgeGraphItemShared[] serializedEdges = EdgeGraphItemClient
+							.toShared(newEdge);
 					if (serializedEdges.length == 0) {
-						throw new IllegalStateException("Something weird is happening... Looks like we broke " + "some conditions for new edges in this module.");
+						throw new IllegalStateException(
+								"Something weird is happening... Looks like we broke "
+										+ "some conditions for new edges in this module.");
 					} else {
-						kineticEngine.getContext().command_edgeSetChange(RegistrationOperation.REGISTER, serializedEdges);
+						kineticEngine.getContext()
+								.command_edgeSetChange(
+										RegistrationOperation.REGISTER,
+										serializedEdges);
 					}
 				} else {
-					kineticEngine.getContext().getHistoryManager().undoAndDiscard();
+					kineticEngine.getContext().getHistoryManager()
+							.undoAndDiscard();
 				}
 			} else {
 				kineticEngine.getContext().getHistoryManager().undoAndDiscard();
 			}
 			reset();
 
-			kineticEngine.setFillRectangleHandlers(); // automatically removes these handlers before setting the originals
+			kineticEngine.setFillRectangleHandlers(); // automatically removes
+														// these handlers before
+														// setting the originals
 			kineticEngine.draw(EngineComponent.STAGE);
 		}
 
@@ -153,35 +174,55 @@ public final class CreateEdgeModule implements IEngineModule {
 
 		@Override
 		protected void handleInner(KineticEvent event) {
-			if (edgeCreationContext.isAnEdgeBeingCreated()) // whichever clickmode is currently set, finish the operation if started
+			if (edgeCreationContext.isAnEdgeBeingCreated()) // whichever
+															// clickmode is
+															// currently set,
+															// finish the
+															// operation if
+															// started
 			{
 				/*
 				 * Finish this create edge operation.
 				 */
-				if (getEventSourceBox() != edgeCreationContext.getFromEndPoint()) {
+				if (getEventSourceBox() != edgeCreationContext
+						.getFromEndPoint()) {
 					edgeCreationContext.finishOperation(getEventSourceBox());
 				}
 
 				event.stopVerticalPropagation();
 				event.setProcessed();
-			} else if ((kineticEngine.getContext().getClickMode() == ClickMode.CONNECTION) || GWTKeyboardManager.isAltKeyDown()) // when it's either clear we want to connect or the right modifier key is down 
+			} else if ((kineticEngine.getContext().getClickMode() == ClickMode.CONNECTION)
+					|| GWTKeyboardManager.isAltKeyDown()) // when it's either
+															// clear we want to
+															// connect or the
+															// right modifier
+															// key is down
 			{
 				/*
 				 * Start this create edge operation.
 				 */
 
 				edgeCreationContext.startOperation(getEventSourceBox());
-				getEventSourceBox().setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
+				getEventSourceBox()
+						.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
 
 				// register the required handlers
 				kineticEngine.removeFillRectangleHandlers();
-				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseMoveHandler, EventType.Basic.MOUSEMOVE);
-				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseDownHandler, EventType.Basic.MOUSEDOWN);
+				kineticEngine.getFillRectangle().addEventListener(
+						fillRectangleEdgeDragMouseMoveHandler,
+						EventType.Basic.MOUSEMOVE);
+				kineticEngine.getFillRectangle().addEventListener(
+						fillRectangleEdgeDragMouseDownHandler,
+						EventType.Basic.MOUSEDOWN);
 
 				// register the new edge and also draw the stage
-				kineticEngine.pushToHistory(new ItemRegistrationOperation(kineticEngine, null, new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() }, true));
+				kineticEngine.pushToHistory(new ItemRegistrationOperation(
+						kineticEngine, null,
+						new EdgeGraphItemClient[] { edgeCreationContext
+								.getNewEdge() }, true));
 
-				// and display changes - not needed at this point (done in the previous command)
+				// and display changes - not needed at this point (done in the
+				// previous command)
 				// kineticEngine.draw(parentBox.getComponentToDraw());
 
 				event.stopVerticalPropagation();
@@ -197,8 +238,11 @@ public final class CreateEdgeModule implements IEngineModule {
 
 		@Override
 		protected void handleInner(KineticEvent event) {
-			if (edgeCreationContext.isAnEdgeBeingCreated() && (getEventSourceBox() != edgeCreationContext.getFromEndPoint())) {
-				getEventSourceBox().setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
+			if (edgeCreationContext.isAnEdgeBeingCreated()
+					&& (getEventSourceBox() != edgeCreationContext
+							.getFromEndPoint())) {
+				getEventSourceBox()
+						.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
 				kineticEngine.draw(getEventSourceBox().getComponentToDraw());
 
 				event.stopVerticalPropagation();
@@ -214,8 +258,11 @@ public final class CreateEdgeModule implements IEngineModule {
 
 		@Override
 		protected void handleInner(KineticEvent event) {
-			if (edgeCreationContext.isAnEdgeBeingCreated() && (getEventSourceBox() != edgeCreationContext.getFromEndPoint())) {
-				getEventSourceBox().setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
+			if (edgeCreationContext.isAnEdgeBeingCreated()
+					&& (getEventSourceBox() != edgeCreationContext
+							.getFromEndPoint())) {
+				getEventSourceBox().setVisualStyle(
+						VisualStyle.NOT_HIGHLIGHTED_EDGE);
 				kineticEngine.draw(getEventSourceBox().getComponentToDraw());
 
 				event.stopVerticalPropagation();
@@ -225,13 +272,16 @@ public final class CreateEdgeModule implements IEngineModule {
 	}
 
 	/**
-	 * The special handlers that will temporarily replace the engine's when an edge drag is triggered.
+	 * The special handlers that will temporarily replace the engine's when an
+	 * edge drag is triggered.
 	 */
 	private final IEventListener fillRectangleEdgeDragMouseMoveHandler = new IEventListener() {
 		@Override
 		public void handle(KineticEvent event) {
-			edgeCreationContext.getNewEdge().edgeDrag_updateBaseLine(kineticEngine.getMousePosition());
-			kineticEngine.draw(edgeCreationContext.getNewEdge().getComponentToDraw());
+			edgeCreationContext.getNewEdge().edgeDrag_updateBaseLine(
+					kineticEngine.getMousePosition());
+			kineticEngine.draw(edgeCreationContext.getNewEdge()
+					.getComponentToDraw());
 		}
 	};
 	private final IEventListener fillRectangleEdgeDragMouseDownHandler = new IEventListener() {
@@ -263,7 +313,8 @@ public final class CreateEdgeModule implements IEngineModule {
 
 	@Override
 	public void createModuleCrossReferences() {
-		selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
+		selectionModule = (SelectionModule) kineticEngine
+				.getModule(SelectionModule.moduleID);
 	}
 
 	@Override
@@ -275,9 +326,14 @@ public final class CreateEdgeModule implements IEngineModule {
 	public void attachHandlers(AbstractGraphItemClient<?> graphItem) {
 		if (graphItem instanceof BoxGraphItemClient) {
 			BoxGraphItemClient box = (BoxGraphItemClient) graphItem;
-			box.getMasterNode().addEventListener(new BoxClickListener(box), EventType.Basic.CLICK.withName(moduleID));
-			box.getMasterNode().addEventListener(new BoxMouseEnterListener(box), EventType.Basic.MOUSEENTER.withName(moduleID));
-			box.getMasterNode().addEventListener(new BoxMouseLeaveListener(box), EventType.Basic.MOUSELEAVE.withName(moduleID));
+			box.getMasterNode().addEventListener(new BoxClickListener(box),
+					EventType.Basic.CLICK.withName(moduleID));
+			box.getMasterNode().addEventListener(
+					new BoxMouseEnterListener(box),
+					EventType.Basic.MOUSEENTER.withName(moduleID));
+			box.getMasterNode().addEventListener(
+					new BoxMouseLeaveListener(box),
+					EventType.Basic.MOUSELEAVE.withName(moduleID));
 		} else {
 			throw new IllegalStateException();
 		}

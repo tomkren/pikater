@@ -6,9 +6,8 @@ import org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction
 import org.pikater.web.experiment.server.BoxInfoServer;
 
 /**
- * Implementations of this interface provide all
- * required information to {@link OptionValueForm
- * box option editor}.
+ * Implementations of this interface provide all required information to
+ * {@link OptionValueForm box option editor}.
  * 
  * @author SkyCrawl
  */

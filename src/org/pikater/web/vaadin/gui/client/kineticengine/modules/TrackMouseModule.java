@@ -42,7 +42,8 @@ public final class TrackMouseModule implements IEngineModule {
 		@Override
 		protected void handleInner(KineticEvent event) {
 			setCurrentlyHoveredBox(getEventSourceBox());
-			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.POINTER);
+			GWTCursorManager.setCursorType(kineticEngine.getContext()
+					.getStageDOMElement(), MyCursor.POINTER);
 		}
 	}
 
@@ -50,7 +51,8 @@ public final class TrackMouseModule implements IEngineModule {
 		@Override
 		protected void handleInner(KineticEvent event) {
 			unsetCurrentlyHoveredBox();
-			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.AUTO);
+			GWTCursorManager.setCursorType(kineticEngine.getContext()
+					.getStageDOMElement(), MyCursor.AUTO);
 		}
 	}
 
@@ -84,8 +86,10 @@ public final class TrackMouseModule implements IEngineModule {
 	public void attachHandlers(AbstractGraphItemClient<?> graphItem) {
 		if (graphItem instanceof BoxGraphItemClient) {
 			BoxGraphItemClient box = (BoxGraphItemClient) graphItem;
-			box.getMasterNode().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(moduleID));
-			box.getMasterNode().addEventListener(new BoxMouseOutHandler(), EventType.Basic.MOUSEOUT.withName(moduleID));
+			box.getMasterNode().addEventListener(new BoxMouseOverListener(box),
+					EventType.Basic.MOUSEOVER.withName(moduleID));
+			box.getMasterNode().addEventListener(new BoxMouseOutHandler(),
+					EventType.Basic.MOUSEOUT.withName(moduleID));
 		} else {
 			throw new IllegalStateException();
 		}

@@ -12,15 +12,15 @@ import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Button;
 
 /**
- * Our own version of a wizard taken from the Wizards Vaadin add-on,
- * that uses a global "state" object (and is thus capable of producing
- * an "output") and is capable of refreshing the newly activated steps,
- * if set to do so (steps may then be a result of previous steps, for
- * example).
+ * Our own version of a wizard taken from the Wizards Vaadin add-on, that uses a
+ * global "state" object (and is thus capable of producing an "output") and is
+ * capable of refreshing the newly activated steps, if set to do so (steps may
+ * then be a result of previous steps, for example).
  * 
  * @author SkyCrawl
- *
- * @param <O> The wizard's "state" class.
+ * 
+ * @param <O>
+ *            The wizard's "state" class.
  */
 @StyleSheet("wizards.css")
 public class WizardWithOutput<O extends IWizardCommon> extends Wizard {
@@ -52,8 +52,10 @@ public class WizardWithOutput<O extends IWizardCommon> extends Wizard {
 
 			@Override
 			public void activeStepChanged(WizardStepActivationEvent event) {
-				if (refreshActivatedSteps && (event.getActivatedStep() instanceof RefreshableWizardStep<?, ?>)) {
-					((RefreshableWizardStep<?, ?>) event.getActivatedStep()).refresh();
+				if (refreshActivatedSteps
+						&& (event.getActivatedStep() instanceof RefreshableWizardStep<?, ?>)) {
+					((RefreshableWizardStep<?, ?>) event.getActivatedStep())
+							.refresh();
 				}
 			}
 		});

@@ -10,8 +10,8 @@ import com.vaadin.server.AbstractExtension;
 import com.vaadin.ui.UI;
 
 /**
- * A special extension to {@link UI} that enables logging client issues on the server
- * and some other things. 
+ * A special extension to {@link UI} that enables logging client issues on the
+ * server and some other things.
  * 
  * @author SkyCrawl
  * @see {@link UniversalUIExtensionClientRpc}
@@ -31,12 +31,15 @@ public class UniversalUIExtension extends AbstractExtension {
 
 			@Override
 			public void logThrowable(String message, String throwableStackTrace) {
-				PikaterWebLogger.log(Level.SEVERE, String.format("%s\n%s", message, throwableStackTrace));
+				PikaterWebLogger.log(Level.SEVERE,
+						String.format("%s\n%s", message, throwableStackTrace));
 			}
 
 			@Override
 			public void logUncaughtNativeClientException() {
-				PikaterWebLogger.log(Level.SEVERE, "An uncaught native client exception has been thrown. Best to launch a thorough debug.");
+				PikaterWebLogger
+						.log(Level.SEVERE,
+								"An uncaught native client exception has been thrown. Best to launch a thorough debug.");
 			}
 		});
 	}

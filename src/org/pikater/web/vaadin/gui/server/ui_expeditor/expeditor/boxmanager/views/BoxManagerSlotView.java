@@ -24,6 +24,7 @@ import com.vaadin.ui.Button.ClickEvent;
 
 /**
  * Subview of overview, built especially for editing slots.
+ * 
  * @see {@link BoxManagerView#SLOTVIEW}
  */
 public class BoxManagerSlotView extends AbstractBoxManagerView<Slot> {
@@ -57,15 +58,18 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot> {
 
 		HorizontalLayout hLayout_buttons = new HorizontalLayout();
 		hLayout_buttons.setSpacing(true);
-		hLayout_buttons.addComponent(new Button("Back to overview", new Button.ClickListener() {
-			private static final long serialVersionUID = -2304908022626669874L;
+		hLayout_buttons.addComponent(new Button("Back to overview",
+				new Button.ClickListener() {
+					private static final long serialVersionUID = -2304908022626669874L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getContext().getView(BoxManagerView.OVERVIEW).refreshContent(); // to update connected / not connected state of slots
-				getContext().resetView();
-			}
-		}));
+					@Override
+					public void buttonClick(ClickEvent event) {
+						getContext().getView(BoxManagerView.OVERVIEW)
+								.refreshContent(); // to update connected / not
+													// connected state of slots
+						getContext().resetView();
+					}
+				}));
 
 		addComponent(getBoxIdentificatinComponent());
 		addComponent(hl_slotIdentification);
@@ -80,46 +84,79 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot> {
 
 	@Override
 	public void refreshContent() {
-		BoxSlot currentEndpoint = new BoxSlot(getContext().getCurrentBoxDataSource(), getCurrentSource());
+		BoxSlot currentEndpoint = new BoxSlot(getContext()
+				.getCurrentBoxDataSource(), getCurrentSource());
 
 		this.link_slotName.setValue(currentEndpoint.getChildSlot().getName());
-		this.link_slotName.setDescription(currentEndpoint.getChildSlot().getDescription());
-		this.lbl_slotType.setValue(String.format("(%s)", currentEndpoint.getChildSlotsType().name()));
+		this.link_slotName.setDescription(currentEndpoint.getChildSlot()
+				.getDescription());
+		this.lbl_slotType.setValue(String.format("(%s)", currentEndpoint
+				.getChildSlotsType().name()));
 
 		VerticalLayout vLayout_slots_new = new VerticalLayout();
 		vLayout_slots_new.setStyleName("viewItem");
-		vLayout_slots_new.setCaption(String.format("Connected %s slots:", currentEndpoint.getChildSlotsType().getOther().name()));
+		vLayout_slots_new.setCaption(String.format("Connected %s slots:",
+				currentEndpoint.getChildSlotsType().getOther().name()));
 		vLayout_slots_new.setSpacing(true);
-		for (final BoxSlot endpoint : getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().getCandidateEndpoints(currentEndpoint)) {
-			HorizontalFlowLayout connectionRow = new HorizontalFlowLayout(new IFlowLayoutStyleProvider() {
-				@Override
-				public void setStylesForInnerComponent(Component c, StyleBuilder builder) {
-					builder.setProperty("margin-left", "5px");
-					if (c instanceof CheckBox) {
-						builder.setProperty("margin-top", "-1px");
-					}
-				}
-			});
+		for (final BoxSlot endpoint : getContext().getCurrentComponent()
+				.getExperimentGraph().getSlotConnections()
+				.getCandidateEndpoints(currentEndpoint)) {
+			HorizontalFlowLayout connectionRow = new HorizontalFlowLayout(
+					new IFlowLayoutStyleProvider() {
+						@Override
+						public void setStylesForInnerComponent(Component c,
+								StyleBuilder builder) {
+							builder.setProperty("margin-left", "5px");
+							if (c instanceof CheckBox) {
+								builder.setProperty("margin-top", "-1px");
+							}
+						}
+					});
 			connectionRow.setStyleName("listItem"); // size is determined in CSS
 
-			new BoxHighlightExtension( // mouse over and mouse out events
-					getContext().getCurrentComponent().getConnectorId(), new Integer[] { endpoint.getParentBox().getID() }).extend(connectionRow);
+			new BoxHighlightExtension(
+					// mouse over and mouse out events
+					getContext().getCurrentComponent().getConnectorId(),
+					new Integer[] { endpoint.getParentBox().getID() })
+					.extend(connectionRow);
 
-			CheckBox chb_endpoint = new CheckBox(null, getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().areSlotsConnected(getCurrentSource(), endpoint.getChildSlot()));
+			CheckBox chb_endpoint = new CheckBox(null, getContext()
+					.getCurrentComponent()
+					.getExperimentGraph()
+					.getSlotConnections()
+					.areSlotsConnected(getCurrentSource(),
+							endpoint.getChildSlot()));
 			chb_endpoint.setImmediate(true);
-			chb_endpoint.addValueChangeListener(new Property.ValueChangeListener() {
-				private static final long serialVersionUID = -3307902234166001492L;
+			chb_endpoint
+					.addValueChangeListener(new Property.ValueChangeListener() {
+						private static final long serialVersionUID = -3307902234166001492L;
 
-				@Override
-				public void valueChange(ValueChangeEvent event) {
-					if ((Boolean) event.getProperty().getValue()) {
-						getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().connect(new BoxSlot(getContext().getCurrentBoxDataSource(), getCurrentSource()), endpoint);
-					} else {
-						getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().disconnect(getCurrentSource(), endpoint.getChildSlot());
-					}
-				}
-			});
-			Label lbl_caption = new Label(String.format("%s@%s", endpoint.getParentBox().getAssociatedAgent().getName(), endpoint.getChildSlot().getName()));
+						@Override
+						public void valueChange(ValueChangeEvent event) {
+							if ((Boolean) event.getProperty().getValue()) {
+								getContext()
+										.getCurrentComponent()
+										.getExperimentGraph()
+										.getSlotConnections()
+										.connect(
+												new BoxSlot(
+														getContext()
+																.getCurrentBoxDataSource(),
+														getCurrentSource()),
+												endpoint);
+							} else {
+								getContext()
+										.getCurrentComponent()
+										.getExperimentGraph()
+										.getSlotConnections()
+										.disconnect(getCurrentSource(),
+												endpoint.getChildSlot());
+							}
+						}
+					});
+			Label lbl_caption = new Label(String.format("%s@%s", endpoint
+					.getParentBox().getAssociatedAgent().getName(), endpoint
+					.getChildSlot().getName()));
 			lbl_caption.setSizeUndefined();
 
 			connectionRow.addComponent(chb_endpoint);
@@ -127,9 +164,13 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot> {
 			vLayout_slots_new.addComponent(connectionRow);
 		}
 		if (vLayout_slots_new.getComponentCount() > 0) {
-			getBoxIdentificationStyler().getStyle().setProperty("background-color", KineticBoxSettings.getColor(VisualStyle.SELECTED).toString());
+			getBoxIdentificationStyler().getStyle().setProperty(
+					"background-color",
+					KineticBoxSettings.getColor(VisualStyle.SELECTED)
+							.toString());
 		} else {
-			getBoxIdentificationStyler().getStyle().setProperty("background-color", "transparent");
+			getBoxIdentificationStyler().getStyle().setProperty(
+					"background-color", "transparent");
 			BoxManagerOverview.correctEmptyLayout(vLayout_slots_new);
 		}
 		replaceComponent(this.vLayout_slots, vLayout_slots_new);

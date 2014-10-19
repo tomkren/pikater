@@ -10,10 +10,10 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import com.vaadin.server.VaadinSession;
 
 /**
- * A utility class that manages all attributes the application stores in
- * user {@link VaadinSession sessions}. Do note, however, that
- * it is not a "session implementation". On the contrary, 
- * the session in question is always required as a method argument.
+ * A utility class that manages all attributes the application stores in user
+ * {@link VaadinSession sessions}. Do note, however, that it is not a
+ * "session implementation". On the contrary, the session in question is always
+ * required as a method argument.
  * 
  * @author SkyCrawl
  */
@@ -25,12 +25,14 @@ public class UserSession {
 	// ----------------------------------------------------------
 	// PRIVATE INTERFACE (INFRASTRUCTURE)
 
-	private static void setAttribute(VaadinSession session, String key, Object value) {
+	private static void setAttribute(VaadinSession session, String key,
+			Object value) {
 		session.setAttribute(key, value);
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T extends Object> T getAttribute(VaadinSession session, String key) {
+	private static <T extends Object> T getAttribute(VaadinSession session,
+			String key) {
 		return (T) session.getAttribute(key);
 	}
 
@@ -49,21 +51,30 @@ public class UserSession {
 		return getAttribute(session, UserSession.KEY_USER_UPLOADS);
 	}
 
-	public static void storeUserUploadManager(VaadinSession session, UserUploads manager) {
+	public static void storeUserUploadManager(VaadinSession session,
+			UserUploads manager) {
 		setAttribute(session, UserSession.KEY_USER_UPLOADS, new UserUploads());
 	}
 
 	/**
-	 * <p>All shared resources registered with {@link ResourceRegistrar} and
-	 * {@link ResourceExpiration#ON_SESSION_END} are also required to be
-	 * stored in the user's session for eventual cleanup.</p>
+	 * <p>
+	 * All shared resources registered with {@link ResourceRegistrar} and
+	 * {@link ResourceExpiration#ON_SESSION_END} are also required to be stored
+	 * in the user's session for eventual cleanup.
+	 * </p>
 	 * 
-	 * <p>Other resources may be stored too.</p>
+	 * <p>
+	 * Other resources may be stored too.
+	 * </p>
 	 * 
-	 * @param session user's session
-	 * @param resourceID the identifier assigned to the given resource by {@link ResourceRegistrar}
+	 * @param session
+	 *            user's session
+	 * @param resourceID
+	 *            the identifier assigned to the given resource by
+	 *            {@link ResourceRegistrar}
 	 */
-	public static void rememberSharedResource(VaadinSession session, UUID resourceID) {
+	public static void rememberSharedResource(VaadinSession session,
+			UUID resourceID) {
 		Set<UUID> sharedResources = getSharedResources(session);
 		if (sharedResources == null) {
 			sharedResources = new HashSet<UUID>();
@@ -74,9 +85,11 @@ public class UserSession {
 	}
 
 	/**
-	 * Returns all identifiers stored by {@link #rememberSharedResource(VaadinSession, UUID)}
-	 * method. 
-	 * @param session user's session
+	 * Returns all identifiers stored by
+	 * {@link #rememberSharedResource(VaadinSession, UUID)} method.
+	 * 
+	 * @param session
+	 *            user's session
 	 */
 	public static Set<UUID> getSharedResources(VaadinSession session) {
 		return getAttribute(session, KEY_SHARED_RESOURCES);

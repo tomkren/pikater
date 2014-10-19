@@ -27,7 +27,7 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob {
 	public UploadedDatasetHandler() {
 		super(5); // number of arguments
 	}
-	
+
 	@Override
 	public boolean argumentCorrect(Object argument, int argIndex) {
 		switch (argIndex) {
@@ -43,7 +43,7 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob {
 
 			default:
 				return false;
-			}
+		}
 	}
 
 	@Override
@@ -64,12 +64,17 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob {
 		File convertedFile = null;
 		try {
 			convertedFile = this.convert(uploadedFile, optionalARFFHeaders);
-			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile, realFilename, description, owner.getId(), JPADatasetSource.USER_UPLOAD);
+			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,
+					realFilename, description, owner.getId(),
+					JPADatasetSource.USER_UPLOAD);
 
 			try {
 				WebToCoreEntryPoint.notify_newDataset(newDatasetID);
 			} catch (Exception e) {
-				PikaterWebLogger.logThrowable("Could not send notification about a new dataset to core.", e);
+				PikaterWebLogger
+						.logThrowable(
+								"Could not send notification about a new dataset to core.",
+								e);
 			}
 
 		} catch (IOException e) {
@@ -89,16 +94,19 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob {
 	}
 
 	/**
-	 * Converts the input file to an ARFF file
-	 * Input file can be in ARFF,CSV,XLS,XLSX formats.
-	 * if header is null , than only data section is generated
-	 * @param file the input file
-	 * @return File object representing the file converted to ARFF format 
-	 * @throws IOException 
-	 * @throws DataSetConverterException 
+	 * Converts the input file to an ARFF file Input file can be in
+	 * ARFF,CSV,XLS,XLSX formats. if header is null , than only data section is
+	 * generated
+	 * 
+	 * @param file
+	 *            the input file
+	 * @return File object representing the file converted to ARFF format
+	 * @throws IOException
+	 * @throws DataSetConverterException
 	 * @throws Exception
 	 */
-	private File convert(File file, String header) throws IOException, DataSetConverterException {
+	private File convert(File file, String header) throws IOException,
+			DataSetConverterException {
 		String path = file.getAbsolutePath().toLowerCase();
 
 		File convertedFile = new File(file.getAbsolutePath() + ".convert");
@@ -107,29 +115,37 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob {
 			if (header == null) {
 				return file;
 			} else {
-				DataSetConverter.joinARFFFileWithHeader(file, header, convertedFile);
+				DataSetConverter.joinARFFFileWithHeader(file, header,
+						convertedFile);
 				return convertedFile;
 			}
 		} else {
 			DataSetConverter.InputType inputType = InputType.INVALID;
 			if (path.endsWith("xls")) {
-				convertedFile = new File(file.getAbsolutePath().substring(0, path.lastIndexOf("xls")) + "arff");
+				convertedFile = new File(file.getAbsolutePath().substring(0,
+						path.lastIndexOf("xls"))
+						+ "arff");
 				inputType = InputType.XLS;
 			} else if (path.endsWith("xlsx")) {
-				convertedFile = new File(file.getAbsolutePath().substring(0, path.lastIndexOf("xlsx")) + "arff");
+				convertedFile = new File(file.getAbsolutePath().substring(0,
+						path.lastIndexOf("xlsx"))
+						+ "arff");
 				inputType = InputType.XLSX;
 			} else if (path.endsWith("csv")) {
-				convertedFile = new File(file.getAbsolutePath().substring(0, path.lastIndexOf("csv")) + "arff");
+				convertedFile = new File(file.getAbsolutePath().substring(0,
+						path.lastIndexOf("csv"))
+						+ "arff");
 				inputType = InputType.CSV;
 			} else {
-				//System.err.println("Not supported input file format!\nPlease use ARFF,XLS or XLSX formats");
+				// System.err.println("Not supported input file format!\nPlease use ARFF,XLS or XLSX formats");
 				return null;
 			}
 
 			if (inputType == InputType.INVALID) {
 				return null;
 			} else {
-				DataSetConverter.spreadSheetToArff(inputType, file, header, convertedFile);
+				DataSetConverter.spreadSheetToArff(inputType, file, header,
+						convertedFile);
 				return convertedFile;
 			}
 		}

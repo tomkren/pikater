@@ -8,19 +8,24 @@ import org.pikater.web.config.WebAppConfiguration;
 import com.vaadin.server.VaadinSession;
 
 /**
- * <p>A utility class that manages information about the currently
- * logged-in user. For that purpose, {@link UserSession} is used.</p>
+ * <p>
+ * A utility class that manages information about the currently logged-in user.
+ * For that purpose, {@link UserSession} is used.
+ * </p>
  * 
- * <p>Do note, that this is not a "session implementation". On the contrary, 
- * the session in question is always required as a method argument.</p>
+ * <p>
+ * Do note, that this is not a "session implementation". On the contrary, the
+ * session in question is always required as a method argument.
+ * </p>
  * 
  * @author SkyCrawl
  */
 public class UserAuth {
 	public static Integer getUserID(VaadinSession session) {
 		if (session == null) {
-			throw new NullPointerException("Session is null. Did you use the 'getSession()' method? If so, make sure you"
-					+ "use it from the 'AbstractComponent.attach' method or just use 'VaadinSession.getCurrent()' instead.");
+			throw new NullPointerException(
+					"Session is null. Did you use the 'getSession()' method? If so, make sure you"
+							+ "use it from the 'AbstractComponent.attach' method or just use 'VaadinSession.getCurrent()' instead.");
 		} else {
 			return UserSession.getUserID(session);
 		}
@@ -30,7 +35,8 @@ public class UserAuth {
 		if (WebAppConfiguration.avoidUsingDBForNow()) {
 			return JPAUser.getDummy();
 		} else {
-			return DAOs.userDAO.getByID(getUserID(session), EmptyResultAction.LOG_NULL);
+			return DAOs.userDAO.getByID(getUserID(session),
+					EmptyResultAction.LOG_NULL);
 		}
 	}
 
@@ -40,7 +46,8 @@ public class UserAuth {
 
 	public static void login(VaadinSession session, int userID) {
 		if (isUserAuthenticated(session)) {
-			throw new IllegalStateException("User is already authenticated in this session.");
+			throw new IllegalStateException(
+					"User is already authenticated in this session.");
 		} else {
 			UserSession.storeUserID(session, userID);
 			UserSession.storeUserUploadManager(session, new UserUploads());

@@ -30,16 +30,19 @@ public class TestExpandableView extends ExpandableView {
 
 		this.mainTestLayout = new DBTableLayout();
 		this.mainTestLayout.setSizeFull();
-		this.mainTestLayout.getTable().setMultiSelect(false); // this is required below
+		this.mainTestLayout.getTable().setMultiSelect(false); // this is
+																// required
+																// below
 		this.mainTestLayout.setReadOnly(true);
 	}
 
-	//-----------------------------------------------------------
+	// -----------------------------------------------------------
 	// VIEW INTERFACE
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// always call these last, when you're absolutely ready to display the content
+		// always call these last, when you're absolutely ready to display the
+		// content
 		this.mainTestLayout.setView(new TestDBViewRoot(new TestTableDBView()));
 		super.finishInit(); // don't forget to!
 	}
@@ -58,7 +61,7 @@ public class TestExpandableView extends ExpandableView {
 	public void beforeClose() {
 	}
 
-	//-----------------------------------------------------------
+	// -----------------------------------------------------------
 	// OTHER INTERFACE
 
 	@Override
@@ -72,7 +75,7 @@ public class TestExpandableView extends ExpandableView {
 		return new Step1(this);
 	}
 
-	//-----------------------------------------------------------
+	// -----------------------------------------------------------
 	// INDIVIDUAL STEPS
 
 	private class Step1 extends ExpandableViewStep {
@@ -98,7 +101,8 @@ public class TestExpandableView extends ExpandableView {
 		}
 
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
+		protected ExpandableViewStep constructNextStepFromView(
+				AbstractTableRowDBView view) {
 			return new Step2(getParentWizard());
 		}
 	}
@@ -126,7 +130,8 @@ public class TestExpandableView extends ExpandableView {
 		}
 
 		@Override
-		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view) {
+		protected ExpandableViewStep constructNextStepFromView(
+				AbstractTableRowDBView view) {
 			return null;
 		}
 	}

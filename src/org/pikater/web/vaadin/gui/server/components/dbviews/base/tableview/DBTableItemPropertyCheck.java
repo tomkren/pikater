@@ -7,10 +7,10 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import com.vaadin.data.Property;
 import com.vaadin.ui.CheckBox;
 
-/** 
+/**
  * @author SkyCrawl
- * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, 
- * org.pikater.shared.database.views.base.values.AbstractDBViewValue) DBTableContainer#getProperty()}
+ * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, org.pikater.shared.database.views.base.values.AbstractDBViewValue)
+ *      DBTableContainer#getProperty()}
  */
 public class DBTableItemPropertyCheck implements Property<CheckBox> {
 	private static final long serialVersionUID = 8460699686386766346L;
@@ -18,7 +18,9 @@ public class DBTableItemPropertyCheck implements Property<CheckBox> {
 	private final CheckBox checkBox;
 	private final boolean readOnly;
 
-	public DBTableItemPropertyCheck(final DBTable parentTable, final AbstractTableRowDBView row, final BooleanDBViewValue valueWrapper) {
+	public DBTableItemPropertyCheck(final DBTable parentTable,
+			final AbstractTableRowDBView row,
+			final BooleanDBViewValue valueWrapper) {
 		this.readOnly = valueWrapper.isReadOnly();
 
 		this.checkBox = new CheckBox(null, valueWrapper.getValue());
@@ -30,7 +32,8 @@ public class DBTableItemPropertyCheck implements Property<CheckBox> {
 
 				@Override
 				public void valueChange(ValueChangeEvent event) {
-					valueWrapper.setValue((Boolean) event.getProperty().getValue());
+					valueWrapper.setValue((Boolean) event.getProperty()
+							.getValue());
 					if (parentTable.isImmediate()) {
 						valueWrapper.commit(row);
 					}
@@ -45,7 +48,8 @@ public class DBTableItemPropertyCheck implements Property<CheckBox> {
 	}
 
 	@Override
-	public void setValue(CheckBox newValue) throws com.vaadin.data.Property.ReadOnlyException {
+	public void setValue(CheckBox newValue)
+			throws com.vaadin.data.Property.ReadOnlyException {
 		throw new UnsupportedOperationException();
 	}
 

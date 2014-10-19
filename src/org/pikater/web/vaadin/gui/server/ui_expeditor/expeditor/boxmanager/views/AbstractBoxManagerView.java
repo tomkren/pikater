@@ -14,10 +14,12 @@ import com.vaadin.ui.VerticalLayout;
  * views/subviews.
  * 
  * @author SkyCrawl
- *
- * @param <S> Data source object type for this view.
+ * 
+ * @param <S>
+ *            Data source object type for this view.
  */
-public abstract class AbstractBoxManagerView<S extends Object> extends VerticalLayout {
+public abstract class AbstractBoxManagerView<S extends Object> extends
+		VerticalLayout {
 	private static final long serialVersionUID = 2129962006939216700L;
 
 	/**
@@ -31,8 +33,8 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	private final Label boxIdentificationLabel;
 
 	/**
-	 * Extension providing server-side CSS styling interface
-	 * to {@link #boxIdentificationLabel}.
+	 * Extension providing server-side CSS styling interface to
+	 * {@link #boxIdentificationLabel}.
 	 */
 	private final Dom boxIdentificationStyler;
 
@@ -72,13 +74,17 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	 * Comes in handy when the data source for this view gets changed.
 	 */
 	public void refreshBoxIdentification() {
-		boxIdentificationLabel.setValue(String.format("%s@%s", BoxType.fromAgentInfo(context.getCurrentBoxDataSource().getAssociatedAgent()).name(), context.getCurrentBoxDataSource()
-				.getAssociatedAgent().getName()));
+		boxIdentificationLabel.setValue(String.format(
+				"%s@%s",
+				BoxType.fromAgentInfo(
+						context.getCurrentBoxDataSource().getAssociatedAgent())
+						.name(), context.getCurrentBoxDataSource()
+						.getAssociatedAgent().getName()));
 	}
 
 	/**
-	 * Set data source for view. Handles the whole process, nothing else
-	 * is needed.
+	 * Set data source for view. Handles the whole process, nothing else is
+	 * needed.
 	 */
 	public void setContentFrom(S source) {
 		if (currentSource != source) {
@@ -89,7 +95,8 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 					validateSource(source);
 				}
 			} catch (IllegalArgumentException e) {
-				MyNotifications.showError("Can not load the resource", e.getMessage());
+				MyNotifications.showError("Can not load the resource",
+						e.getMessage());
 				return;
 			}
 
@@ -99,23 +106,24 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 		}
 	}
 
-	//-------------------------------------------------
+	// -------------------------------------------------
 	// ABSTRACT INTERFACE
 
 	/**
-	 * Throws an exception if something is not right with the
-	 * given data source.
+	 * Throws an exception if something is not right with the given data source.
+	 * 
 	 * @throws IllegalArgumentException
 	 */
-	protected abstract void validateSource(S source) throws IllegalArgumentException;
+	protected abstract void validateSource(S source)
+			throws IllegalArgumentException;
 
 	/**
-	 * Called when this view's data source is changed so as to
-	 * refresh the displayed content for another object.
+	 * Called when this view's data source is changed so as to refresh the
+	 * displayed content for another object.
 	 */
 	public abstract void refreshContent();
 
-	//-------------------------------------------------
+	// -------------------------------------------------
 	// PROTECTED INTERFACE
 
 	protected IContextForViews getContext() {

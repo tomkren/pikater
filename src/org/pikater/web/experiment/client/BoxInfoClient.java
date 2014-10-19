@@ -6,8 +6,8 @@ import org.pikater.web.experiment.IBoxInfoCommon;
 import org.pikater.web.experiment.server.BoxInfoServer;
 
 /**
- * A special (GWT&Vaadin)-compliant box implementation. As such, fields are required to be public
- * and a public default constructor is needed. 
+ * A special (GWT&Vaadin)-compliant box implementation. As such, fields are
+ * required to be public and a public default constructor is needed.
  * 
  * @author SkyCrawl
  */
@@ -28,21 +28,24 @@ public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer> {
 	public int positionY;
 
 	/*
-	 * Picture info. 
+	 * Picture info.
 	 */
 	public String pictureURL;
 
 	/**
-	 * Default public constructor keeps Vaadin happy. Use the other constructor instead.
+	 * Default public constructor keeps Vaadin happy. Use the other constructor
+	 * instead.
 	 */
 	@Deprecated
 	public BoxInfoClient() {
 	}
 
 	/**
-	 * See {@link BoxInfoServer} for an example of what values need to be passed here.
+	 * See {@link BoxInfoServer} for an example of what values need to be passed
+	 * here.
 	 */
-	public BoxInfoClient(Integer boxID, String boxTypeName, String displayName, int posX, int posY, String pictureURL) {
+	public BoxInfoClient(Integer boxID, String boxTypeName, String displayName,
+			int posX, int posY, String pictureURL) {
 		this.boxID = boxID;
 		this.boxTypeName = boxTypeName;
 		this.displayName = displayName;

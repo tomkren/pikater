@@ -27,13 +27,14 @@ import org.quartz.JobExecutionException;
  * 
  * @author SkyCrawl
  */
-public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext {
+public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob
+		implements IDSVisTwo, IPGLOActionContext {
 	private IProgressDialogResultHandler context;
 
 	public DSVisTwoGeneratorJob() {
 		super(4);
 	}
-	
+
 	@Override
 	public boolean argumentCorrect(Object argument, int argIndex) {
 		switch (argIndex) {
@@ -46,7 +47,7 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 				return argument instanceof IProgressDialogResultHandler;
 			default:
 				return false;
-			}
+		}
 	}
 
 	@Override
@@ -68,11 +69,14 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 	}
 
 	@Override
-	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList) {
-		DSVisTwoResult result = new DSVisTwoResult(context, Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
+	public void visualizeDatasetComparison(JPADataSetLO dataset1,
+			JPADataSetLO dataset2, AttrComparisons comparisonList) {
+		DSVisTwoResult result = new DSVisTwoResult(context,
+				Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 		try {
 			if (dataset1.getHash().equals(dataset2.getHash())) {
-				throw new IllegalArgumentException("Identical datasets were received for comparison.");
+				throw new IllegalArgumentException(
+						"Identical datasets were received for comparison.");
 			} else if (!dataset1.hasComputedMetadata()) {
 				throw new MetadataNotPresentException(dataset1.getDescription());
 			} else if (!dataset2.hasComputedMetadata()) {
@@ -80,8 +84,10 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 			}
 
 			PGLargeObjectAction downloadAction = new PGLargeObjectAction(this);
-			File datasetCachedFile1 = downloadAction.downloadLOFromDB(dataset1.getOID());
-			File datasetCachedFile2 = downloadAction.downloadLOFromDB(dataset2.getOID());
+			File datasetCachedFile1 = downloadAction.downloadLOFromDB(dataset1
+					.getOID());
+			File datasetCachedFile2 = downloadAction.downloadLOFromDB(dataset2
+					.getOID());
 
 			float subresultsGenerated = 0;
 			float finalCountOfSubresults = comparisonList.size();
@@ -92,21 +98,35 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 				}
 
 				// otherwise continue generating
-				DSVisTwoSubresult imageResult = result.createAndRegisterSubresult(attrsToCompare, ImageType.PNG);
-				new ComparisonPNGGenerator(null, // no need to pass in progress listener - progress is updated below
-						new PrintStream(imageResult.getFile()), dataset1, dataset2, datasetCachedFile1, datasetCachedFile2, attrsToCompare.getValue1().getAttrX().getName(), attrsToCompare.getValue2()
-								.getAttrX().getName(), attrsToCompare.getValue1().getAttrY().getName(), attrsToCompare.getValue2().getAttrY().getName(), attrsToCompare.getValue1().getAttrTarget()
-								.getName(), attrsToCompare.getValue2().getAttrTarget().getName()).create();
+				DSVisTwoSubresult imageResult = result
+						.createAndRegisterSubresult(attrsToCompare,
+								ImageType.PNG);
+				new ComparisonPNGGenerator(
+						null, // no need to pass in progress listener - progress
+								// is updated below
+						new PrintStream(imageResult.getFile()), dataset1,
+						dataset2, datasetCachedFile1, datasetCachedFile2,
+						attrsToCompare.getValue1().getAttrX().getName(),
+						attrsToCompare.getValue2().getAttrX().getName(),
+						attrsToCompare.getValue1().getAttrY().getName(),
+						attrsToCompare.getValue2().getAttrY().getName(),
+						attrsToCompare.getValue1().getAttrTarget().getName(),
+						attrsToCompare.getValue2().getAttrTarget().getName())
+						.create();
 				subresultsGenerated++;
-				result.updateProgress(subresultsGenerated / finalCountOfSubresults);
+				result.updateProgress(subresultsGenerated
+						/ finalCountOfSubresults);
 			}
 			result.finished();
 		} catch (InterruptedException e) {
 			// user interrupted visualization, don't log
-			result.failed(); // don't forget to... important cleanup will take place
+			result.failed(); // don't forget to... important cleanup will take
+								// place
 		} catch (Exception e) {
-			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
-			result.failed(); // don't forget to... important cleanup will take place
+			PikaterWebLogger.logThrowable(
+					"Job could not finish because of the following error:", e);
+			result.failed(); // don't forget to... important cleanup will take
+								// place
 		} finally {
 			// generated temporary files will be deleted when the JVM exits
 		}

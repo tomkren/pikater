@@ -28,12 +28,14 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticEdg
  * 
  * @author SkyCrawl
  */
-public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSettings> {
+public class EdgeGraphItemClient extends
+		AbstractGraphItemClient<KineticEdgeSettings> {
 	// **********************************************************************************************
 	// INNER KINETIC COMPONENTS
 
 	/**
-	 * The group to contain the edge and the drag marks, not the baseline though.
+	 * The group to contain the edge and the drag marks, not the baseline
+	 * though.
 	 */
 	private final Group groupContainer;
 
@@ -49,7 +51,8 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 	private final Rectangle toBoxDragMark;
 
 	/**
-	 * The line to be shown instead of this edge when an endpoint box is dragged or this edge is being connected (dragged) to a different endpoint.
+	 * The line to be shown instead of this edge when an endpoint box is dragged
+	 * or this edge is being connected (dragged) to a different endpoint.
 	 */
 	private final Line baseLine;
 
@@ -65,12 +68,12 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 
 		public EndPoint getInverted() {
 			switch (this) {
-			case FROM:
-				return TO;
-			case TO:
-				return FROM;
-			default:
-				throw new IllegalStateException();
+				case FROM:
+					return TO;
+				case TO:
+					return FROM;
+				default:
+					throw new IllegalStateException();
 			}
 		}
 	}
@@ -82,7 +85,8 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 	private BoxGraphItemClient toBox;
 
 	/**
-	 * The state indicating whether this edge is currently being displayed as an edge or as a baseline.
+	 * The state indicating whether this edge is currently being displayed as an
+	 * edge or as a baseline.
 	 */
 	private EdgeState internalState;
 
@@ -116,11 +120,13 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 		this.arrow.setStrokeWidth(3.0);
 
 		// setup the edge if connected, part 2
-		this.fromBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
+		this.fromBoxDragMark = Kinetic.createRectangle(new Box2d(
+				Vector2d.origin, Vector2d.origin));
 		this.fromBoxDragMark.setDraggable(false);
 
 		// setup the edge if connected, part 3
-		this.toBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
+		this.toBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin,
+				Vector2d.origin));
 		this.toBoxDragMark.setDraggable(false);
 
 		// create the group, bind it all together
@@ -151,33 +157,35 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 	@Override
 	protected void applyVisualStyle(VisualStyle style) {
 		switch (style) {
-		case SELECTED:
-			arrow.setStroke(Colour.gold);
-			break;
-		case NOT_SELECTED:
-			arrow.setStroke(Colour.black);
-			break;
+			case SELECTED:
+				arrow.setStroke(Colour.gold);
+				break;
+			case NOT_SELECTED:
+				arrow.setStroke(Colour.black);
+				break;
 
-		case HIGHLIGHTED_EDGE:
-			arrow.setStroke(Colour.red);
-			break;
-		case NOT_HIGHLIGHTED_EDGE:
-			arrow.setStroke(Colour.black);
-			break;
+			case HIGHLIGHTED_EDGE:
+				arrow.setStroke(Colour.red);
+				break;
+			case NOT_HIGHLIGHTED_EDGE:
+				arrow.setStroke(Colour.black);
+				break;
 
-		case HIGHLIGHTED_SLOT:
-		case NOT_HIGHLIGHTED_SLOT:
-			break;
+			case HIGHLIGHTED_SLOT:
+			case NOT_HIGHLIGHTED_SLOT:
+				break;
 
-		default:
-			throw new IllegalStateException("Unknown state: " + style.name());
+			default:
+				throw new IllegalStateException("Unknown state: "
+						+ style.name());
 		}
 	}
 
 	@Override
 	protected void setRegisteredInKinetic(boolean registered) {
 		if (registered) {
-			Layer layer = getKineticEngine().getContainer(EngineComponent.LAYER_EDGES).cast();
+			Layer layer = getKineticEngine().getContainer(
+					EngineComponent.LAYER_EDGES).cast();
 			layer.add(groupContainer);
 			layer.add(baseLine);
 		} else {
@@ -198,24 +206,27 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 		if (isSelected()) {
 			groupContainer.moveTo(getKineticEngine().getSelectionContainer()); // select
 		} else {
-			groupContainer.moveTo(getKineticEngine().getContainer(EngineComponent.LAYER_EDGES)); // deselect
+			groupContainer.moveTo(getKineticEngine().getContainer(
+					EngineComponent.LAYER_EDGES)); // deselect
 		}
 	}
 
 	@Override
 	public EngineComponent getComponentToDraw() {
-		return internalState == EdgeState.BASELINE ? EngineComponent.LAYER_EDGES : (isSelected() ? EngineComponent.LAYER_SELECTION : EngineComponent.LAYER_EDGES);
+		return internalState == EdgeState.BASELINE ? EngineComponent.LAYER_EDGES
+				: (isSelected() ? EngineComponent.LAYER_SELECTION
+						: EngineComponent.LAYER_EDGES);
 	}
 
 	@Override
 	public Node getMasterNode() {
 		switch (internalState) {
-		case BASELINE:
-			return baseLine;
-		case EDGE:
-			return groupContainer;
-		default:
-			throw new IllegalStateException();
+			case BASELINE:
+				return baseLine;
+			case EDGE:
+				return groupContainer;
+			default:
+				throw new IllegalStateException();
 		}
 	}
 
@@ -224,28 +235,29 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 
 	public BoxGraphItemClient getEndPoint(EndPoint endPoint) {
 		switch (endPoint) {
-		case FROM:
-			return fromBox;
-		case TO:
-			return toBox;
-		default:
-			throw new IllegalStateException();
+			case FROM:
+				return fromBox;
+			case TO:
+				return toBox;
+			default:
+				throw new IllegalStateException();
 		}
 	}
 
 	public Rectangle getDragMark(EndPoint endPoint) {
 		switch (endPoint) {
-		case FROM:
-			return fromBoxDragMark;
-		case TO:
-			return toBoxDragMark;
-		default:
-			throw new IllegalStateException();
+			case FROM:
+				return fromBoxDragMark;
+			case TO:
+				return toBoxDragMark;
+			default:
+				throw new IllegalStateException();
 		}
 	}
 
 	public boolean isExactlyOneEndSelected() {
-		return fromBox.isSelected() ^ toBox.isSelected(); // exclusive or (aka "xor")
+		return fromBox.isSelected() ^ toBox.isSelected(); // exclusive or (aka
+															// "xor")
 	}
 
 	public boolean areBothEndsSelected() {
@@ -262,27 +274,31 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 
 	public BoxGraphItemClient getOtherEndpoint(BoxGraphItemClient oneEndpoint) {
 		if ((oneEndpoint == null) && (fromBox == null) && (toBox == null)) {
-			throw new NullPointerException("The given argument and both endpoints are null. No idea what to return.");
+			throw new NullPointerException(
+					"The given argument and both endpoints are null. No idea what to return.");
 		}
 		if (oneEndpoint == fromBox) {
 			return toBox;
 		} else if (oneEndpoint == toBox) {
 			return fromBox;
 		} else {
-			throw new IllegalArgumentException("The given argument didn't match any of the endpoints.");
+			throw new IllegalArgumentException(
+					"The given argument didn't match any of the endpoints.");
 		}
 	}
 
 	public BoxGraphItemClient getSelectedEndpoint() {
 		if (!isExactlyOneEndSelected()) {
-			throw new IllegalStateException("Exactly one endpoint needs to be selected.");
+			throw new IllegalStateException(
+					"Exactly one endpoint needs to be selected.");
 		}
 		return fromBox.isSelected() ? fromBox : toBox;
 	}
 
 	public BoxGraphItemClient getNotSelectedEndpoint() {
 		if (!isExactlyOneEndSelected()) {
-			throw new IllegalStateException("Exactly one endpoint needs to be selected.");
+			throw new IllegalStateException(
+					"Exactly one endpoint needs to be selected.");
 		}
 		return fromBox.isSelected() ? toBox : fromBox;
 	}
@@ -304,35 +320,39 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 	}
 
 	/**
-	 * When using this method, keep in mind that eventually {@link #setEdgeRegisteredInEndpoints(boolean registered)}
-	 * needs to be called to keep consistency.
+	 * When using this method, keep in mind that eventually
+	 * {@link #setEdgeRegisteredInEndpoints(boolean registered)} needs to be
+	 * called to keep consistency.
 	 */
 	public void setEndpoint(EndPoint endPoint, BoxGraphItemClient box) {
 		switch (endPoint) {
-		case FROM:
-			if (fromBox != null) {
-				fromBox.setEdgeRegistered(this, false);
-			}
-			fromBox = box;
-			break;
-		case TO:
-			if (toBox != null) {
-				toBox.setEdgeRegistered(this, false);
-			}
-			this.toBox = box;
-			break;
-		default:
-			throw new IllegalStateException("Unknown state: " + endPoint.name());
+			case FROM:
+				if (fromBox != null) {
+					fromBox.setEdgeRegistered(this, false);
+				}
+				fromBox = box;
+				break;
+			case TO:
+				if (toBox != null) {
+					toBox.setEdgeRegistered(this, false);
+				}
+				this.toBox = box;
+				break;
+			default:
+				throw new IllegalStateException("Unknown state: "
+						+ endPoint.name());
 		}
 	}
 
 	/**
-	 * Only call this method after both endpoints have been correctly set with the
-	 * {@link #setEndpoint(EndPoint endPoint, BoxGraphItemClient box)} method.
+	 * Only call this method after both endpoints have been correctly set with
+	 * the {@link #setEndpoint(EndPoint endPoint, BoxGraphItemClient box)}
+	 * method.
 	 */
 	public void setEdgeRegisteredInEndpoints(boolean registered) {
 		if (!areBothEndsDefined()) {
-			throw new IllegalStateException("One of the endpoint boxes has not been set for this edge.");
+			throw new IllegalStateException(
+					"One of the endpoint boxes has not been set for this edge.");
 		} else {
 			this.fromBox.setEdgeRegistered(this, registered);
 			this.toBox.setEdgeRegistered(this, registered);
@@ -343,7 +363,9 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 		Set<EdgeGraphItemShared> resultSet = new HashSet<EdgeGraphItemShared>();
 		for (int i = 0; i < edges.length; i++) {
 			if (edges[i].areBothEndsDefined()) {
-				resultSet.add(new EdgeGraphItemShared(edges[i].getEndPoint(EndPoint.FROM).getInfo().boxID, edges[i].getEndPoint(EndPoint.TO).getInfo().boxID));
+				resultSet.add(new EdgeGraphItemShared(edges[i].getEndPoint(
+						EndPoint.FROM).getInfo().boxID, edges[i].getEndPoint(
+						EndPoint.TO).getInfo().boxID));
 			}
 		}
 		return resultSet.toArray(new EdgeGraphItemShared[0]);
@@ -354,22 +376,26 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 
 	public void endPointDrag_toBaseLine(BoxGraphItemClient draggedEndPoint) {
 		// IMPORTANT: don't violate the call order
-		baseLine.setEnd(getOtherEndpoint(draggedEndPoint).getAbsolutePointPosition(RectanglePoint.CENTER));
+		baseLine.setEnd(getOtherEndpoint(draggedEndPoint)
+				.getAbsolutePointPosition(RectanglePoint.CENTER));
 		endPointDrag_updateBaseLine(draggedEndPoint);
 		setInternalState(EdgeState.BASELINE);
 	}
 
 	public void endPointDrag_updateBaseLine(BoxGraphItemClient draggedEndPoint) {
-		updateBaseLineStart(draggedEndPoint.getAbsolutePointPosition(RectanglePoint.CENTER));
+		updateBaseLineStart(draggedEndPoint
+				.getAbsolutePointPosition(RectanglePoint.CENTER));
 	}
 
 	public void endPointDrag_toEdge() {
 		toEdge_onFinish(false);
 	}
 
-	public void edgeDrag_toBaseLine(Vector2d initialDragPosition, BoxGraphItemClient staticBox) {
+	public void edgeDrag_toBaseLine(Vector2d initialDragPosition,
+			BoxGraphItemClient staticBox) {
 		// IMPORTANT: don't violate the call order
-		baseLine.setEnd(staticBox.getAbsolutePointPosition(RectanglePoint.CENTER));
+		baseLine.setEnd(staticBox
+				.getAbsolutePointPosition(RectanglePoint.CENTER));
 		edgeDrag_updateBaseLine(initialDragPosition);
 		setInternalState(EdgeState.BASELINE);
 	}
@@ -387,7 +413,8 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 
 	private void updateBaseLineStart(Vector2d position) {
 		baseLine.setStart(position);
-		Vector2d delta = position.sub(baseLine.getEnd()); // alias for the same Vector2d instance
+		Vector2d delta = position.sub(baseLine.getEnd()); // alias for the same
+															// Vector2d instance
 		if (delta.x == 0 || delta.y == 0) {
 			baseLine.setStrokeWidth(2);
 			baseLine.setLineStyle(LineStyle.NORMAL);
@@ -398,7 +425,8 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 	}
 
 	/**
-	 * Called to switch internal state to 'edge', after both endpoints have been specified.
+	 * Called to switch internal state to 'edge', after both endpoints have been
+	 * specified.
 	 */
 	private void toEdge_onFinish(boolean updateEdge) {
 		// change the state
@@ -415,35 +443,52 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 	// EDGE COMPUTATION INTERFACE
 
 	/**
-	 * Recomputes the arrow path. If changes are to be visible in the kinetic environment, the 
-	 * {@link KineticEngine#draw(EngineComponent component)} needs to be called.
+	 * Recomputes the arrow path. If changes are to be visible in the kinetic
+	 * environment, the {@link KineticEngine#draw(EngineComponent component)}
+	 * needs to be called.
 	 */
 	public void updateEdge() {
 		if (internalState == EdgeState.BASELINE) {
-			throw new IllegalStateException("Edge is in baseline mode. Switch to edge mode before executing this method.");
+			throw new IllegalStateException(
+					"Edge is in baseline mode. Switch to edge mode before executing this method.");
 		}
 
 		// compute new endpoints
-		Vector2d delta = toBox.getAbsolutePointPosition(RectanglePoint.CENTER).sub(fromBox.getAbsolutePointPosition(RectanglePoint.CENTER)); // the vector from A to B <=> B-A <=> delta
+		Vector2d delta = toBox.getAbsolutePointPosition(RectanglePoint.CENTER)
+				.sub(fromBox.getAbsolutePointPosition(RectanglePoint.CENTER)); // the
+																				// vector
+																				// from
+																				// A
+																				// to
+																				// B
+																				// <=>
+																				// B-A
+																				// <=>
+																				// delta
 		double angle = Math.toDegrees(Math.atan2(delta.y, delta.x));
 		double absAngle = Math.abs(angle);
 		RectanglePoint b1Endpoint;
 		if (absAngle < 60) {
 			b1Endpoint = RectanglePoint.WESTCENTER;
 		} else if (absAngle < 120) {
-			b1Endpoint = angle < 0 ? RectanglePoint.NORTHCENTER : RectanglePoint.SOUTHCENTER;
+			b1Endpoint = angle < 0 ? RectanglePoint.NORTHCENTER
+					: RectanglePoint.SOUTHCENTER;
 		} else {
 			b1Endpoint = RectanglePoint.EASTCENTER;
 		}
 
 		// update arrow
 		Vector2d fromPos = fromBox.getAbsolutePointPosition(b1Endpoint);
-		Vector2d toPos = toBox.getAbsolutePointPosition(b1Endpoint.getInverted());
-		groupContainer.setPosition(Vector2d.origin); // have to reset in case we performed a drag operation earlier
+		Vector2d toPos = toBox.getAbsolutePointPosition(b1Endpoint
+				.getInverted());
+		groupContainer.setPosition(Vector2d.origin); // have to reset in case we
+														// performed a drag
+														// operation earlier
 		computeArrowPath(fromPos, toPos);
 
 		// update the drag marks
-		Vector2d dragMarkHalfSize = currentSettings.getDragMarkSize().scale(0.5);
+		Vector2d dragMarkHalfSize = currentSettings.getDragMarkSize()
+				.scale(0.5);
 		this.fromBoxDragMark.setPosition(fromPos.sub(dragMarkHalfSize));
 		this.toBoxDragMark.setPosition(toPos.sub(dragMarkHalfSize));
 	}
@@ -465,7 +510,11 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 		rightArrowEnd.sub(v);
 
 		// update the arrow
-		this.arrow.setData(new Path().moveTo(fromPos).lineTo(toPos).moveTo(leftArrowEnd).lineTo(toPos).lineTo(rightArrowEnd).closePath().toSVGPath());
-		this.arrow.setPosition(0, 0); // reset any selection drags to avoid the X and Y properties to act as an offset
+		this.arrow.setData(new Path().moveTo(fromPos).lineTo(toPos)
+				.moveTo(leftArrowEnd).lineTo(toPos).lineTo(rightArrowEnd)
+				.closePath().toSVGPath());
+		this.arrow.setPosition(0, 0); // reset any selection drags to avoid the
+										// X and Y properties to act as an
+										// offset
 	}
 }

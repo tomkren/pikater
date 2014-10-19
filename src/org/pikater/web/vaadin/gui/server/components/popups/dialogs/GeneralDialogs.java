@@ -23,7 +23,9 @@ public class GeneralDialogs extends DialogCommons {
 	 * A simple notification message box that can closed right away.
 	 */
 	public static MessageBox info(String title, String message) {
-		MessageBox mb = MessageBox.showPlain(Icon.INFO, title == null ? "Notification" : title, message, ButtonId.CLOSE);
+		MessageBox mb = MessageBox
+				.showPlain(Icon.INFO, title == null ? "Notification" : title,
+						message, ButtonId.CLOSE);
 		setupGeneralDialog(mb, true);
 		bindActionsToKeyboard(mb, mb.getButton(ButtonId.CLOSE), true);
 		return mb;
@@ -33,7 +35,8 @@ public class GeneralDialogs extends DialogCommons {
 	 * A simple warning message box that can closed right away.
 	 */
 	public static MessageBox warning(String title, String message) {
-		MessageBox mb = MessageBox.showPlain(Icon.WARN, title == null ? "Warning" : title, message, ButtonId.CLOSE);
+		MessageBox mb = MessageBox.showPlain(Icon.WARN,
+				title == null ? "Warning" : title, message, ButtonId.CLOSE);
 		setupGeneralDialog(mb, true);
 		bindActionsToKeyboard(mb, mb.getButton(ButtonId.CLOSE), true);
 		return mb;
@@ -43,7 +46,8 @@ public class GeneralDialogs extends DialogCommons {
 	 * A simple error message box that can closed right away.
 	 */
 	public static MessageBox error(String title, String message) {
-		MessageBox mb = MessageBox.showPlain(Icon.ERROR, title == null ? "Error" : title, message, ButtonId.OK);
+		MessageBox mb = MessageBox.showPlain(Icon.ERROR,
+				title == null ? "Error" : title, message, ButtonId.OK);
 		setupGeneralDialog(mb, true);
 		bindActionsToKeyboard(mb, mb.getButton(ButtonId.OK), true);
 		return mb;
@@ -52,9 +56,13 @@ public class GeneralDialogs extends DialogCommons {
 	/**
 	 * A simple confirmation message box that can closed right away.
 	 */
-	public static MessageBox confirm(String title, String message, IDialogResultHandler resultHandler) {
-		MyMessageBoxListener listener = MyMessageBoxListener.getDefault(resultHandler);
-		MessageBox mb = MessageBox.showPlain(Icon.QUESTION, title == null ? "Confirm" : title, message, listener, ButtonId.YES, ButtonId.NO);
+	public static MessageBox confirm(String title, String message,
+			IDialogResultHandler resultHandler) {
+		MyMessageBoxListener listener = MyMessageBoxListener
+				.getDefault(resultHandler);
+		MessageBox mb = MessageBox.showPlain(Icon.QUESTION,
+				title == null ? "Confirm" : title, message, listener,
+				ButtonId.YES, ButtonId.NO);
 		listener.setParentBox(mb); // don't forget this!
 		setupGeneralDialog(mb, true);
 		bindActionsToKeyboard(mb, mb.getButton(ButtonId.YES), true);
@@ -63,9 +71,12 @@ public class GeneralDialogs extends DialogCommons {
 
 	/**
 	 * A text-prompt in the form of a dialog.
-	 * @param inputLabel what do we want the user to enter
+	 * 
+	 * @param inputLabel
+	 *            what do we want the user to enter
 	 */
-	public static MessageBox textPrompt(String title, String inputLabel, final IDialogResultHandler resultHandler) {
+	public static MessageBox textPrompt(String title, String inputLabel,
+			final IDialogResultHandler resultHandler) {
 		final TextField tf = new TextField();
 		tf.setInputPrompt("Enter value");
 		MyMessageBoxListener listener = new MyMessageBoxListener(resultHandler) {
@@ -79,7 +90,9 @@ public class GeneralDialogs extends DialogCommons {
 				arguments.add(tf.getValue());
 			}
 		};
-		MessageBox mb = MessageBox.showCustomized(Icon.QUESTION, title == null ? "Text prompt" : title, tf, listener, ButtonId.OK);
+		MessageBox mb = MessageBox.showCustomized(Icon.QUESTION,
+				title == null ? "Text prompt" : title, tf, listener,
+				ButtonId.OK);
 		listener.setParentBox(mb); // don't forget this!
 		setupGeneralDialog(mb, false);
 		bindActionsToKeyboard(mb, mb.getButton(ButtonId.OK), true);
@@ -89,9 +102,13 @@ public class GeneralDialogs extends DialogCommons {
 	/**
 	 * A custom component, wrapped in a dialog.
 	 */
-	public static MessageBox componentDialog(String title, IDialogComponent content) {
-		MyComponentMessageBoxListener<IDialogComponent> listener = new MyComponentMessageBoxListener<IDialogComponent>(content);
-		MessageBox mb = MessageBox.showCustomized(Icon.NONE, title != null ? title : "", content, listener, ButtonId.OK, ButtonId.CANCEL);
+	public static MessageBox componentDialog(String title,
+			IDialogComponent content) {
+		MyComponentMessageBoxListener<IDialogComponent> listener = new MyComponentMessageBoxListener<IDialogComponent>(
+				content);
+		MessageBox mb = MessageBox.showCustomized(Icon.NONE,
+				title != null ? title : "", content, listener, ButtonId.OK,
+				ButtonId.CANCEL);
 		listener.setParentBox(mb); // don't forget this!
 		setupGeneralDialog(mb, false);
 		bindActionsToKeyboard(mb, mb.getButton(ButtonId.OK), true);
@@ -101,10 +118,13 @@ public class GeneralDialogs extends DialogCommons {
 	/**
 	 * A custom component, wrapped in a dialog.
 	 */
-	public static MessageBox componentDialog(String title, IDialogResultPreparer content, IDialogResultHandler resultHandler) {
-		MyComponentMessageBoxListenerWithExternalResultHandler<IDialogResultPreparer> listener = new MyComponentMessageBoxListenerWithExternalResultHandler<IDialogResultPreparer>(content,
-				resultHandler);
-		MessageBox mb = MessageBox.showCustomized(Icon.NONE, title != null ? title : "", content, listener, ButtonId.OK, ButtonId.CANCEL);
+	public static MessageBox componentDialog(String title,
+			IDialogResultPreparer content, IDialogResultHandler resultHandler) {
+		MyComponentMessageBoxListenerWithExternalResultHandler<IDialogResultPreparer> listener = new MyComponentMessageBoxListenerWithExternalResultHandler<IDialogResultPreparer>(
+				content, resultHandler);
+		MessageBox mb = MessageBox.showCustomized(Icon.NONE,
+				title != null ? title : "", content, listener, ButtonId.OK,
+				ButtonId.CANCEL);
 		listener.setParentBox(mb); // don't forget this!
 		setupGeneralDialog(mb, false);
 		bindActionsToKeyboard(mb, mb.getButton(ButtonId.OK), true);
@@ -114,8 +134,10 @@ public class GeneralDialogs extends DialogCommons {
 	/**
 	 * A custom wizard component, wrapped in a dialog.
 	 */
-	public static <C extends WizardForDialog<?> & IDialogComponent> MessageBox wizardDialog(String title, final C content) {
-		final MessageBox mb = MessageBox.showCustomized(Icon.NONE, title != null ? title : "", content);
+	public static <C extends WizardForDialog<?> & IDialogComponent> MessageBox wizardDialog(
+			String title, final C content) {
+		final MessageBox mb = MessageBox.showCustomized(Icon.NONE,
+				title != null ? title : "", content);
 		setupWizardDialog(mb, content);
 		bindActionsToKeyboard(mb, null, true);
 		content.getCancelButton().addClickListener(new Button.ClickListener() {
@@ -148,8 +170,11 @@ public class GeneralDialogs extends DialogCommons {
 	/**
 	 * A custom wizard component, wrapped in a dialog.
 	 */
-	public static <C extends WizardForDialog<?> & IDialogResultPreparer> MessageBox wizardDialog(String title, final C content, final IDialogResultHandler resultHandler) {
-		final MessageBox mb = MessageBox.showCustomized(Icon.NONE, title != null ? title : "", content);
+	public static <C extends WizardForDialog<?> & IDialogResultPreparer> MessageBox wizardDialog(
+			String title, final C content,
+			final IDialogResultHandler resultHandler) {
+		final MessageBox mb = MessageBox.showCustomized(Icon.NONE,
+				title != null ? title : "", content);
 		setupWizardDialog(mb, content);
 		bindActionsToKeyboard(mb, null, true);
 		content.getCancelButton().addClickListener(new Button.ClickListener() {

@@ -26,7 +26,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob {
 	public UploadedAgentHandler() {
 		super(5);
 	}
-	
+
 	@Override
 	public boolean argumentCorrect(Object argument, int argIndex) {
 		switch (argIndex) {
@@ -41,7 +41,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob {
 
 			default:
 				return false;
-			}
+		}
 	}
 
 	@Override
@@ -68,7 +68,8 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob {
 			agent.setCreated(new Date());
 			byte[] content;
 			try {
-				content = Files.readAllBytes(Paths.get(uploadedFile.getAbsolutePath()));
+				content = Files.readAllBytes(Paths.get(uploadedFile
+						.getAbsolutePath()));
 			} catch (IOException e) {
 				throw new JobExecutionException("Unable to open input jar", e);
 			}
@@ -78,7 +79,10 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob {
 			try {
 				WebToCoreEntryPoint.notify_newAgent(agent.getId());
 			} catch (Exception e) {
-				PikaterWebLogger.logThrowable("Could not send notification about a new external agent to core.", e);
+				PikaterWebLogger
+						.logThrowable(
+								"Could not send notification about a new external agent to core.",
+								e);
 			}
 		} finally {
 			uploadedFile.delete();

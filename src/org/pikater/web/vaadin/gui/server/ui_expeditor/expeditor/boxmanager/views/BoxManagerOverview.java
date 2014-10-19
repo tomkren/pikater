@@ -27,6 +27,7 @@ import com.vaadin.ui.VerticalLayout;
 
 /**
  * Subview of overview, built especially for editing slots.
+ * 
  * @see {@link BoxManagerView#OVERVIEW}
  */
 public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer> {
@@ -48,7 +49,8 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer> {
 	}
 
 	@Override
-	protected void validateSource(BoxInfoServer source) throws IllegalArgumentException {
+	protected void validateSource(BoxInfoServer source)
+			throws IllegalArgumentException {
 		// accept all instances
 	}
 
@@ -64,7 +66,7 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer> {
 		this.innerLayout.setEnabled(enabled);
 	}
 
-	//---------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------
 	// MAIN REFRESH ROUTINES
 
 	private void refreshOptions() {
@@ -72,28 +74,34 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer> {
 		vLayout.setCaption("Options:");
 		vLayout.setSpacing(true);
 		vLayout.addStyleName("viewItem");
-		for (final NewOption option : getCurrentSource().getAssociatedAgent().getOptions()) {
-			vLayout.addComponent(createLabeledRow(option.getName(), option.getDescription(), new Button("Edit", new Button.ClickListener() {
-				private static final long serialVersionUID = 4258994618274439965L;
+		for (final NewOption option : getCurrentSource().getAssociatedAgent()
+				.getOptions()) {
+			vLayout.addComponent(createLabeledRow(option.getName(), option
+					.getDescription(), new Button("Edit",
+					new Button.ClickListener() {
+						private static final long serialVersionUID = 4258994618274439965L;
 
-				@Override
-				public void buttonClick(ClickEvent event) {
-					BoxManagerOptionView optionView = (BoxManagerOptionView) getContext().getView(BoxManagerView.OPTIONVIEW);
-					optionView.setContentFrom(option);
-					getContext().setView(optionView);
-				}
-			})));
+						@Override
+						public void buttonClick(ClickEvent event) {
+							BoxManagerOptionView optionView = (BoxManagerOptionView) getContext()
+									.getView(BoxManagerView.OPTIONVIEW);
+							optionView.setContentFrom(option);
+							getContext().setView(optionView);
+						}
+					})));
 		}
 		correctEmptyLayout(vLayout);
 		this.innerLayout.addComponent(vLayout);
 	}
 
 	private void refreshSlots() {
-		this.innerLayout.addComponent(getSlotLayout("Input slots:", getCurrentSource().getAssociatedAgent().getInputSlots()));
-		this.innerLayout.addComponent(getSlotLayout("Output slots:", getCurrentSource().getAssociatedAgent().getOutputSlots()));
+		this.innerLayout.addComponent(getSlotLayout("Input slots:",
+				getCurrentSource().getAssociatedAgent().getInputSlots()));
+		this.innerLayout.addComponent(getSlotLayout("Output slots:",
+				getCurrentSource().getAssociatedAgent().getOutputSlots()));
 	}
 
-	//---------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------
 	// SECONDARY REFRESH ROUTINES
 
 	private VerticalLayout getSlotLayout(String caption, List<Slot> source) {
@@ -102,32 +110,41 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer> {
 		vLayout_slots.setSpacing(true);
 		vLayout_slots.addStyleName("viewItem");
 		for (final Slot slot : source) {
-			vLayout_slots.addComponent(createSlotRow(slot, new Button("Edit", new Button.ClickListener() {
-				private static final long serialVersionUID = -4121772417813177161L;
+			vLayout_slots.addComponent(createSlotRow(slot, new Button("Edit",
+					new Button.ClickListener() {
+						private static final long serialVersionUID = -4121772417813177161L;
 
-				@Override
-				public void buttonClick(ClickEvent event) {
-					BoxManagerSlotView slotView = (BoxManagerSlotView) getContext().getView(BoxManagerView.SLOTVIEW);
-					slotView.setContentFrom(slot);
-					getContext().setView(slotView);
-				}
-			})));
+						@Override
+						public void buttonClick(ClickEvent event) {
+							BoxManagerSlotView slotView = (BoxManagerSlotView) getContext()
+									.getView(BoxManagerView.SLOTVIEW);
+							slotView.setContentFrom(slot);
+							getContext().setView(slotView);
+						}
+					})));
 		}
 		correctEmptyLayout(vLayout_slots);
 		return vLayout_slots;
 	}
 
 	private Component createSlotRow(final Slot slot, Button actionButton) {
-		Set<BoxSlot> connectedEndpoints = getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().getConnectedValidEndpoints(slot);
+		Set<BoxSlot> connectedEndpoints = getContext().getCurrentComponent()
+				.getExperimentGraph().getSlotConnections()
+				.getConnectedValidEndpoints(slot);
 		boolean isSlotConnected = !connectedEndpoints.isEmpty();
-		LedIndicator ledComponent = new LedIndicator(getIndicatorTheme(isSlotConnected));
-		ledComponent.setDescription(isSlotConnected ? "Slot IS connected." : "Slot is NOT connected.");
+		LedIndicator ledComponent = new LedIndicator(
+				getIndicatorTheme(isSlotConnected));
+		ledComponent.setDescription(isSlotConnected ? "Slot IS connected."
+				: "Slot is NOT connected.");
 
-		HorizontalFlowLayout fLayout = (HorizontalFlowLayout) createLabeledRow(slot.getName(), slot.getDescription(), actionButton);
+		HorizontalFlowLayout fLayout = (HorizontalFlowLayout) createLabeledRow(
+				slot.getName(), slot.getDescription(), actionButton);
 		fLayout.addComponentAsFirst(ledComponent);
 		if (isSlotConnected) {
-			new BoxHighlightExtension( // mouse over and mouse out events
-					getContext().getCurrentComponent().getConnectorId(), endpointSetToIDArray(connectedEndpoints)).extend(fLayout);
+			new BoxHighlightExtension(
+					// mouse over and mouse out events
+					getContext().getCurrentComponent().getConnectorId(),
+					endpointSetToIDArray(connectedEndpoints)).extend(fLayout);
 		}
 		return fLayout;
 	}
@@ -141,24 +158,30 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer> {
 	}
 
 	private LedIndicatorTheme getIndicatorTheme(boolean slotHasAValidConnection) {
-		return slotHasAValidConnection ? LedIndicatorTheme.GREEN : LedIndicatorTheme.RED;
+		return slotHasAValidConnection ? LedIndicatorTheme.GREEN
+				: LedIndicatorTheme.RED;
 	}
 
-	//---------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------
 	// SOME UI CONSTRUCTION METHODS
 
-	public static Component createLabeledRow(String label, String description, Button actionButton) {
-		HorizontalFlowLayout fLayout = new HorizontalFlowLayout(new IFlowLayoutStyleProvider() {
-			@Override
-			public void setStylesForInnerComponent(Component c, StyleBuilder builder) {
-				if (c instanceof LedIndicator) {
-					// it is assumed here that this method is used to create slot rows too
-					builder.setProperty("display", "table"); // vertically centers
-				} else if (c instanceof Label) {
-					builder.setProperty("padding-left", "10px");
-				}
-			}
-		});
+	public static Component createLabeledRow(String label, String description,
+			Button actionButton) {
+		HorizontalFlowLayout fLayout = new HorizontalFlowLayout(
+				new IFlowLayoutStyleProvider() {
+					@Override
+					public void setStylesForInnerComponent(Component c,
+							StyleBuilder builder) {
+						if (c instanceof LedIndicator) {
+							// it is assumed here that this method is used to
+							// create slot rows too
+							builder.setProperty("display", "table"); // vertically
+																		// centers
+						} else if (c instanceof Label) {
+							builder.setProperty("padding-left", "10px");
+						}
+					}
+				});
 		fLayout.setStyleName("listItem"); // size is determined in CSS
 
 		Label lbl_option = new Label(label);

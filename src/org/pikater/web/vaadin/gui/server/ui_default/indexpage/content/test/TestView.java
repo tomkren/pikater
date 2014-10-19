@@ -24,11 +24,15 @@ import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * <p>View implementing the test feature - purely for development.</p>
+ * <p>
+ * View implementing the test feature - purely for development.
+ * </p>
  * 
- * <p>This class contains some useful code snippets should they ever
- * be needed. This is also the perfect place to try various things
- * being integrated into production code.<p>
+ * <p>
+ * This class contains some useful code snippets should they ever be needed.
+ * This is also the perfect place to try various things being integrated into
+ * production code.
+ * <p>
  * 
  * @author SkyCrawl
  * 
@@ -48,7 +52,7 @@ public class TestView extends VerticalLayout implements IContentComponent {
 		dummyExpandableDBTableLayout();
 	}
 
-	//----------------------------------------------------
+	// ----------------------------------------------------
 	// VIEW INTERFACE
 
 	@Override
@@ -100,24 +104,38 @@ public class TestView extends VerticalLayout implements IContentComponent {
 	// TIPS AND TRICKS
 
 	protected static void callJSFunctionOnTheClient() {
-		JavaScript.getCurrent().addFunction("pikater_setAppMode", new JavaScriptFunction() {
-			private static final long serialVersionUID = 4291049321598205127L;
+		JavaScript.getCurrent().addFunction("pikater_setAppMode",
+				new JavaScriptFunction() {
+					private static final long serialVersionUID = 4291049321598205127L;
 
-			@Override
-			public void call(JSONArray arguments) throws JSONException {
-				// this is called on the server when the function is called on the client
-				System.out.println(arguments.length());
-				System.out.println(arguments.getBoolean(0));
-			}
-		});
-		JavaScript.getCurrent().execute("window.pikater_setAppMode(true)"); // calls the function on the client
+					@Override
+					public void call(JSONArray arguments) throws JSONException {
+						// this is called on the server when the function is
+						// called on the client
+						System.out.println(arguments.length());
+						System.out.println(arguments.getBoolean(0));
+					}
+				});
+		JavaScript.getCurrent().execute("window.pikater_setAppMode(true)"); // calls
+																			// the
+																			// function
+																			// on
+																			// the
+																			// client
 	}
 
 	protected static void callJSNIAddedFunctionOnTheClient() {
-		JavaScript.getCurrent().execute("window.ns_pikater.setAppMode(\"DEBUG\");"); // calls the function on the client
+		JavaScript.getCurrent().execute(
+				"window.ns_pikater.setAppMode(\"DEBUG\");"); // calls the
+																// function on
+																// the client
 	}
 
-	protected static void backgroundThreadDoingSomeJobPeriodically() // quartz could be used too...
+	protected static void backgroundThreadDoingSomeJobPeriodically() // quartz
+																		// could
+																		// be
+																		// used
+																		// too...
 	{
 		// The background thread that updates clock times once every second.
 		new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -134,8 +152,10 @@ public class TestView extends VerticalLayout implements IContentComponent {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// getUI().getPage().setLocation("/NewPikater/static/hokus_pokus.txt"); // ./WEB-INF/static/hokus_pokus.txt
-				// getUI().getPage().setLocation("/Pikater/staticDownload"); // servlet mapped to /staticDownload
+				// getUI().getPage().setLocation("/NewPikater/static/hokus_pokus.txt");
+				// // ./WEB-INF/static/hokus_pokus.txt
+				// getUI().getPage().setLocation("/Pikater/staticDownload"); //
+				// servlet mapped to /staticDownload
 			}
 		};
 	}

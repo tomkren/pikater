@@ -26,16 +26,16 @@ import org.quartz.JobExecutionException;
  * 
  * @author SkyCrawl
  */
-public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisOne, IPGLOActionContext {
+public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob
+		implements IDSVisOne, IPGLOActionContext {
 	private IProgressDialogResultHandler context;
 
 	public DSVisOneGeneratorJob() {
 		super(4);
 	}
-	
+
 	@Override
-	public boolean argumentCorrect(Object argument, int argIndex)
-	{
+	public boolean argumentCorrect(Object argument, int argIndex) {
 		switch (argIndex) {
 			case 0:
 				return argument instanceof JPADataSetLO;
@@ -47,7 +47,7 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 				return argument instanceof IProgressDialogResultHandler;
 			default:
 				return false;
-			}
+		}
 	}
 
 	@Override
@@ -69,14 +69,17 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 	}
 
 	@Override
-	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) {
-		DSVisOneResult result = new DSVisOneResult(context, Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
+	public void visualizeDataset(JPADataSetLO dataset,
+			JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) {
+		DSVisOneResult result = new DSVisOneResult(context,
+				Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 		try {
 			if (!dataset.hasComputedMetadata()) {
 				throw new MetadataNotPresentException(dataset.getFileName());
 			}
 
-			File datasetCachedFile = new PGLargeObjectAction(this).downloadLOFromDB(dataset.getOID());
+			File datasetCachedFile = new PGLargeObjectAction(this)
+					.downloadLOFromDB(dataset.getOID());
 
 			float subresultsGenerated = 0;
 			float finalCountOfSubresults = attrs.length * attrs.length;
@@ -88,20 +91,30 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 					}
 
 					// otherwise continue generating
-					DSVisOneSubresult imageResult = result.createAndRegisterSubresult(new AttrMapping(attrX, attrY, attrTarget), ImageType.PNG);
-					new SinglePNGGenerator(null, // no need to pass in progress listener - progress is updated below
-							dataset, datasetCachedFile, new PrintStream(imageResult.getFile()), attrX.getName(), attrY.getName(), attrTarget.getName()).create();
+					DSVisOneSubresult imageResult = result
+							.createAndRegisterSubresult(new AttrMapping(attrX,
+									attrY, attrTarget), ImageType.PNG);
+					new SinglePNGGenerator(null, // no need to pass in progress
+													// listener - progress is
+													// updated below
+							dataset, datasetCachedFile, new PrintStream(
+									imageResult.getFile()), attrX.getName(),
+							attrY.getName(), attrTarget.getName()).create();
 					subresultsGenerated++;
-					result.updateProgress(subresultsGenerated / finalCountOfSubresults);
+					result.updateProgress(subresultsGenerated
+							/ finalCountOfSubresults);
 				}
 			}
 			result.finished();
 		} catch (InterruptedException e) {
 			// user interrupted visualization, don't log
-			result.failed(); // don't forget to... important cleanup will take place
+			result.failed(); // don't forget to... important cleanup will take
+								// place
 		} catch (Exception e) {
-			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
-			result.failed(); // don't forget to... important cleanup will take place
+			PikaterWebLogger.logThrowable(
+					"Job could not finish because of the following error:", e);
+			result.failed(); // don't forget to... important cleanup will take
+								// place
 		} finally {
 			// generated temporary files will be deleted when the JVM exits
 		}

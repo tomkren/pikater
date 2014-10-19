@@ -13,8 +13,7 @@ import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
 /**
- * Background task that exports batch results into a human-readable
- * format.
+ * Background task that exports batch results into a human-readable format.
  * 
  * @author SkyCrawl
  */
@@ -22,7 +21,7 @@ public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob {
 	public ExportBatchResultsJob() {
 		super(3);
 	}
-	
+
 	@Override
 	public boolean argumentCorrect(Object argument, int argIndex) {
 		switch (argIndex) {
@@ -35,7 +34,7 @@ public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob {
 
 			default:
 				return false;
-			}
+		}
 	}
 
 	@Override
@@ -51,7 +50,8 @@ public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob {
 
 		// the actual action
 		try {
-			ResultExporter re = new ResultExporter(new FileOutputStream(resultFile));
+			ResultExporter re = new ResultExporter(new FileOutputStream(
+					resultFile));
 
 			re.header((JPABatch) null, (JPAExperiment) null);
 
@@ -61,14 +61,17 @@ public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob {
 				re.row(batch, experiment);
 
 				experimentsExported++;
-				resultHandler.updateProgress(experimentsExported / experimentCount);
+				resultHandler.updateProgress(experimentsExported
+						/ experimentCount);
 			}
 
 			re.close();
 			resultHandler.finished(null);
 		} catch (Exception e) {
-			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
-			resultHandler.failed(); // don't forget to... important cleanup will take place
+			PikaterWebLogger.logThrowable(
+					"Job could not finish because of the following error:", e);
+			resultHandler.failed(); // don't forget to... important cleanup will
+									// take place
 		} finally {
 			// generated temporary files will be deleted when the JVM exits
 		}

@@ -28,10 +28,11 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.ui.UI;
 
-public class CustomConfiguredUIServlet extends VaadinServlet implements SessionInitListener, SessionDestroyListener {
+public class CustomConfiguredUIServlet extends VaadinServlet implements
+		SessionInitListener, SessionDestroyListener {
 	private static final long serialVersionUID = -8268135994612358127L;
 
-	//--------------------------------------------------------
+	// --------------------------------------------------------
 	// UI TO URL MAPPING
 
 	private static final Map<String, PikaterUI> urlPatternToUI = new HashMap<String, PikaterUI>();
@@ -42,11 +43,13 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 	}
 
 	/**
-	 * Public definition of all used UIs. By default, the application won't serve any UIs that are
-	 * not declared in this enumeration.
+	 * Public definition of all used UIs. By default, the application won't
+	 * serve any UIs that are not declared in this enumeration.
 	 */
 	public enum PikaterUI {
-		INDEX_PAGE("index", DefaultUI.class), EXP_EDITOR("editor", ExpEditorUI.class), DATASET_VISUALIZATION("visualization", VisualizationUI.class);
+		INDEX_PAGE("index", DefaultUI.class), EXP_EDITOR("editor",
+				ExpEditorUI.class), DATASET_VISUALIZATION("visualization",
+				VisualizationUI.class);
 
 		private final String mappedURL;
 		private final Class<? extends UI> mappedUI;
@@ -65,7 +68,7 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 		}
 	}
 
-	//--------------------------------------------------------
+	// --------------------------------------------------------
 	// INHERITED INTERFACE
 
 	@Override
@@ -77,17 +80,23 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 	}
 
 	@Override
-	protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
-		VaadinServletService vaadinServletService = new VaadinServletService(this, deploymentConfiguration) {
+	protected VaadinServletService createServletService(
+			DeploymentConfiguration deploymentConfiguration)
+			throws ServiceException {
+		VaadinServletService vaadinServletService = new VaadinServletService(
+				this, deploymentConfiguration) {
 			private static final long serialVersionUID = 8833521650509773424L;
 
 			@Override
-			protected List<RequestHandler> createRequestHandlers() throws ServiceException {
+			protected List<RequestHandler> createRequestHandlers()
+					throws ServiceException {
 				/*
-				 * Specify request handlers in the order they will be called (LIFO) on incoming requests. This
-				 * is useful for constructing dynamic content where no UIs are necessary.
+				 * Specify request handlers in the order they will be called
+				 * (LIFO) on incoming requests. This is useful for constructing
+				 * dynamic content where no UIs are necessary.
 				 */
-				List<RequestHandler> requestHandlerList = super.createRequestHandlers();
+				List<RequestHandler> requestHandlerList = super
+						.createRequestHandlers();
 				// requestHandlerList.add(new RequestHandler());
 				return requestHandlerList;
 			}
@@ -103,15 +112,21 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 
 			@Override
 			public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
-				String servletPath = HttpRequestUtils.getServletPathWhetherMappedOrNot(VaadinServletService.getCurrentServletRequest());
+				String servletPath = HttpRequestUtils
+						.getServletPathWhetherMappedOrNot(VaadinServletService
+								.getCurrentServletRequest());
 				PikaterUI resultUI = urlPatternToUI.get(servletPath);
 				if (resultUI == null) {
 					try {
-						VaadinServletService.getCurrentResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
+						VaadinServletService.getCurrentResponse().sendError(
+								HttpServletResponse.SC_NOT_FOUND);
 					} catch (IOException e) {
-						PikaterWebLogger.logThrowable(String.format("An undefined resource with servlet path '%s' was requested "
-								+ "but writing an error code of 404 (NOT_FOUND) to the response failed because of the "
-								+ "following exception. Vaadin should have defaulted to error code 500 instead.", servletPath), e);
+						PikaterWebLogger.logThrowable(
+								String.format(
+										"An undefined resource with servlet path '%s' was requested "
+												+ "but writing an error code of 404 (NOT_FOUND) to the response failed because of the "
+												+ "following exception. Vaadin should have defaulted to error code 500 instead.",
+										servletPath), e);
 					}
 					return null;
 				} else {
@@ -124,11 +139,12 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 	@Override
 	public void sessionDestroy(SessionDestroyEvent event) {
 		/*
-		 * Manually log user out (if authenticated with this session) so that any eventual background threads
-		 * can correctly use the updated state. Also detach the session from {@link NoSessionStore} since it is
-		 * Vaadin independent.
-		 * IMPORTANT NOTE: this method might get called several times when closing a session because VaadinServlet
-		 * implementations of our UI objects extend this class. 
+		 * Manually log user out (if authenticated with this session) so that
+		 * any eventual background threads can correctly use the updated state.
+		 * Also detach the session from {@link NoSessionStore} since it is
+		 * Vaadin independent. IMPORTANT NOTE: this method might get called
+		 * several times when closing a session because VaadinServlet
+		 * implementations of our UI objects extend this class.
 		 */
 
 		ResourceRegistrar.expireSessionResources(event.getSession());
@@ -137,11 +153,13 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 		}
 
 		/*
-		 * IMPORTANT NOTES:
-		 * - UIs are bound to a VaadinSession. We don't need to close and destroy the UIs because
-		 * that is already done automatically for us - their detach listeners are called.
-		 * - A UI expires when no requests are received by it from the client and after the client engine sends 3 keep-alive messages.
-		 * - All UIs of a session expire => session still remains and is cleaned up from the server when the session timeout configured in the web application expires.
+		 * IMPORTANT NOTES: - UIs are bound to a VaadinSession. We don't need to
+		 * close and destroy the UIs because that is already done automatically
+		 * for us - their detach listeners are called. - A UI expires when no
+		 * requests are received by it from the client and after the client
+		 * engine sends 3 keep-alive messages. - All UIs of a session expire =>
+		 * session still remains and is cleaned up from the server when the
+		 * session timeout configured in the web application expires.
 		 */
 	}
 }

@@ -22,10 +22,9 @@ public class ResourceExpirationJob extends AbstractJobWithArgs {
 	public ResourceExpirationJob() {
 		super(2);
 	}
-	
+
 	@Override
-	public boolean argumentCorrect(Object argument, int argIndex)
-	{
+	public boolean argumentCorrect(Object argument, int argIndex) {
 		switch (argIndex) {
 			case 0:
 				return argument instanceof UUID;
@@ -33,7 +32,7 @@ public class ResourceExpirationJob extends AbstractJobWithArgs {
 				return argument instanceof IRegistrarResource;
 			default:
 				return false;
-			}
+		}
 	}
 
 	@Override
@@ -42,7 +41,9 @@ public class ResourceExpirationJob extends AbstractJobWithArgs {
 
 	@Override
 	public Trigger getJobTrigger() {
-		return newTrigger().startAt(futureDate(DynamicDownloadServlet.EXPIRATION_TIME_IN_SECONDS, IntervalUnit.SECOND)).build();
+		return newTrigger().startAt(
+				futureDate(DynamicDownloadServlet.EXPIRATION_TIME_IN_SECONDS,
+						IntervalUnit.SECOND)).build();
 	}
 
 	@Override

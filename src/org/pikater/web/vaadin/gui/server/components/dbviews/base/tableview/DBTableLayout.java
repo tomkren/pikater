@@ -14,10 +14,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * A class wrapping our {@link DBTable database tables} and related
- * features like paging into a Vaadin component.
+ * A class wrapping our {@link DBTable database tables} and related features
+ * like paging into a Vaadin component.
  * 
- * @author SkyCrawl 
+ * @author SkyCrawl
  */
 @StyleSheet("dbTableLayout.css")
 public class DBTableLayout extends VerticalLayout {
@@ -35,7 +35,11 @@ public class DBTableLayout extends VerticalLayout {
 		setSizeFull();
 		setSpacing(true);
 
-		this.chb_commit = new CheckBox("commit changes immediately", true); // table is, by default, immediate
+		this.chb_commit = new CheckBox("commit changes immediately", true); // table
+																			// is,
+																			// by
+																			// default,
+																			// immediate
 		this.chb_commit.setSizeUndefined();
 		this.chb_commit.setImmediate(true);
 		this.chb_commit.addValueChangeListener(new ValueChangeListener() {
@@ -55,15 +59,16 @@ public class DBTableLayout extends VerticalLayout {
 		this.tablePagingControls = this.table.getPagingControls();
 		this.tablePagingControls.setWidth("100%");
 
-		this.btn_saveChanges = new Button("Save changes", new Button.ClickListener() {
-			private static final long serialVersionUID = -8473715451478153672L;
+		this.btn_saveChanges = new Button("Save changes",
+				new Button.ClickListener() {
+					private static final long serialVersionUID = -8473715451478153672L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				table.commitToDB();
-				table.rebuildRowCache();
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						table.commitToDB();
+						table.rebuildRowCache();
+					}
+				});
 		this.btn_saveChanges.setVisible(false);
 
 		hl_btnInterface = new HorizontalLayout();
@@ -79,8 +84,8 @@ public class DBTableLayout extends VerticalLayout {
 	}
 
 	/**
-	 * Sets this component to be read-only by disabling
-	 * both automatic and manual database update features.
+	 * Sets this component to be read-only by disabling both automatic and
+	 * manual database update features.
 	 */
 	@Override
 	public void setReadOnly(boolean readOnly) {
@@ -100,14 +105,15 @@ public class DBTableLayout extends VerticalLayout {
 	/**
 	 * 
 	 */
-	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot) {
+	public void setView(
+			AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot) {
 		table.setView(viewRoot);
 	}
 
 	/**
-	 * If set to true, change made to a cell will automatically
-	 * be published to database IMMEDIATELY. Otherwise, changes
-	 * will only apply when the "save changes" button is clicked.
+	 * If set to true, change made to a cell will automatically be published to
+	 * database IMMEDIATELY. Otherwise, changes will only apply when the
+	 * "save changes" button is clicked.
 	 */
 	public void setCommitImmediately(boolean immediate) {
 		chb_commit.setValue(immediate);
@@ -125,8 +131,7 @@ public class DBTableLayout extends VerticalLayout {
 	}
 
 	/**
-	 * Adds a custom component (most likely a button) to the button
-	 * interface.
+	 * Adds a custom component (most likely a button) to the button interface.
 	 */
 	public void addCustomActionComponent(Component component) {
 		hl_btnInterface.addComponent(component);

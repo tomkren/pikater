@@ -17,6 +17,7 @@ import com.vaadin.ui.Label;
 
 /**
  * Subview of overview, built especially for editing slots.
+ * 
  * @see {@link BoxManagerView#OPTIONVIEW}
  */
 public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption> {
@@ -50,7 +51,8 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption> {
 	}
 
 	@Override
-	protected void validateSource(NewOption source) throws IllegalArgumentException {
+	protected void validateSource(NewOption source)
+			throws IllegalArgumentException {
 		if (!source.isSingleValue()) {
 			throw new IllegalArgumentException("Multi-value options.");
 		}
@@ -65,8 +67,10 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption> {
 			removeComponent(currentForm);
 		}
 		currentForm = new OptionValueForm(new IOptionViewDataSource() {
-			private final Value currentValue = getCurrentSource().toSingleValue();
-			private final TypeRestriction allowedTypes = getCurrentSource().fetchValueRestrictionForIndex(0);
+			private final Value currentValue = getCurrentSource()
+					.toSingleValue();
+			private final TypeRestriction allowedTypes = getCurrentSource()
+					.fetchValueRestrictionForIndex(0);
 
 			@Override
 			public BoxInfoServer getBox() {
@@ -90,14 +94,15 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption> {
 		});
 		currentForm.setCaption("Value information:");
 		currentForm.setSizeFull();
-		currentForm.attachToButtonInterface(new Button("Back to overview", new Button.ClickListener() {
-			private static final long serialVersionUID = 8283308445389621644L;
+		currentForm.attachToButtonInterface(new Button("Back to overview",
+				new Button.ClickListener() {
+					private static final long serialVersionUID = 8283308445389621644L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getContext().resetView();
-			}
-		}));
+					@Override
+					public void buttonClick(ClickEvent event) {
+						getContext().resetView();
+					}
+				}));
 		addComponent(currentForm);
 	}
 }

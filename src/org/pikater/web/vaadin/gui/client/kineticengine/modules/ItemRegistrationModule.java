@@ -17,8 +17,8 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGra
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
 
 /**
- * Module implementing item registering/unregistering in the
- * kinetic canvas (environment).
+ * Module implementing item registering/unregistering in the kinetic canvas
+ * (environment).
  * 
  * @author SkyCrawl
  */
@@ -65,7 +65,8 @@ public class ItemRegistrationModule implements IEngineModule {
 
 	@Override
 	public void createModuleCrossReferences() {
-		selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
+		selectionModule = (SelectionModule) kineticEngine
+				.getModule(SelectionModule.moduleID);
 	}
 
 	@Override
@@ -78,19 +79,23 @@ public class ItemRegistrationModule implements IEngineModule {
 	}
 
 	// *****************************************************************************************************
-	// PUBLIC TYPES AND INTERFACE TO PERFORM ALL ITEM REGISTRATION/UNREGISTRATION RELATED OPERATIONS
+	// PUBLIC TYPES AND INTERFACE TO PERFORM ALL ITEM
+	// REGISTRATION/UNREGISTRATION RELATED OPERATIONS
 
 	/**
-	 * Does the operation corresponding to the arguments, doesn't handle edges in any way.
-	 * The following things are required to be done in the calling code:
+	 * Does the operation corresponding to the arguments, doesn't handle edges
+	 * in any way. The following things are required to be done in the calling
+	 * code:
 	 * <ul>
-	 * <li> Proper initialization of the given items.
+	 * <li>Proper initialization of the given items.
 	 * </ul>
 	 */
-	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, BoxGraphItemClient... boxes) {
+	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish,
+			boolean notifyServer, BoxGraphItemClient... boxes) {
 		// first deselect provided boxes, if necessary
 		if (opKind == RegistrationOperation.UNREGISTER) {
-			selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, boxes);
+			selectionModule.doSelectionRelatedOperation(
+					SelectionOperation.DESELECTION, false, true, boxes);
 		}
 
 		// then do the action
@@ -109,7 +114,8 @@ public class ItemRegistrationModule implements IEngineModule {
 
 		// send info to the server
 		if ((boxes.length != 0) && notifyServer) {
-			kineticEngine.getContext().command_boxSetChange(opKind, BoxGraphItemClient.toShared(boxes));
+			kineticEngine.getContext().command_boxSetChange(opKind,
+					BoxGraphItemClient.toShared(boxes));
 		}
 
 		// and finally, request redraw of the stage
@@ -119,33 +125,39 @@ public class ItemRegistrationModule implements IEngineModule {
 	}
 
 	/**
-	 * Does the operation corresponding to the arguments, doesn't handle boxes in any way.
-	 * The following things are required to be done in the calling code:
+	 * Does the operation corresponding to the arguments, doesn't handle boxes
+	 * in any way. The following things are required to be done in the calling
+	 * code:
 	 * <ul>
-	 * <li> Proper initialization of the given items.
+	 * <li>Proper initialization of the given items.
 	 * </ul>
 	 */
-	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, EdgeGraphItemClient... edges) {
+	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish,
+			boolean notifyServer, EdgeGraphItemClient... edges) {
 		boolean visible = opKind == RegistrationOperation.REGISTER;
 		for (EdgeGraphItemClient edge : edges) {
 			if (edge.isSelected()) {
 				/*
-				 * Edges are assumed to have been deselected in 
-				 * {@link #doOperation(RegistrationOperation, boolean, BoxGraphItemClient...)} or
-				 * the calling code. 
+				 * Edges are assumed to have been deselected in {@link
+				 * #doOperation(RegistrationOperation, boolean,
+				 * BoxGraphItemClient...)} or the calling code.
 				 */
-				throw new IllegalStateException("Can not register a selected edge. Deselect first.");
+				throw new IllegalStateException(
+						"Can not register a selected edge. Deselect first.");
 			}
 			if (edge.areBothEndsDefined()) {
 				edge.setEdgeRegisteredInEndpoints(visible);
 			}
 
-			// only register unregistered edges and vice versa - don't register an already registered edge again
-			if ((opKind == RegistrationOperation.REGISTER) && !edge.getMasterNode().isRegistered()) {
+			// only register unregistered edges and vice versa - don't register
+			// an already registered edge again
+			if ((opKind == RegistrationOperation.REGISTER)
+					&& !edge.getMasterNode().isRegistered()) {
 				edge.applySettings(kineticEngine.getEdgeSettings());
 				edge.setVisibleInKinetic(true);
 				allRegisteredEdges.add(edge);
-			} else if ((opKind == RegistrationOperation.UNREGISTER) && edge.getMasterNode().isRegistered()) {
+			} else if ((opKind == RegistrationOperation.UNREGISTER)
+					&& edge.getMasterNode().isRegistered()) {
 				edge.setVisibleInKinetic(false);
 				allRegisteredEdges.remove(edge);
 			}
@@ -153,9 +165,11 @@ public class ItemRegistrationModule implements IEngineModule {
 
 		// send info to the server
 		if ((edges.length != 0) && notifyServer) {
-			EdgeGraphItemShared[] serializedEdges = EdgeGraphItemClient.toShared(edges);
+			EdgeGraphItemShared[] serializedEdges = EdgeGraphItemClient
+					.toShared(edges);
 			if (serializedEdges.length > 0) {
-				kineticEngine.getContext().command_edgeSetChange(opKind, serializedEdges);
+				kineticEngine.getContext().command_edgeSetChange(opKind,
+						serializedEdges);
 			}
 		}
 
@@ -165,10 +179,10 @@ public class ItemRegistrationModule implements IEngineModule {
 	}
 
 	/**
-	 * Does exactly what the method's name suggests.</br>
-	 * This method is supposed to be called from the server and only resets the
-	 * engine (boxes, edges and selection). Further cleanup (e.g. history) is expected
-	 * to be done in the calling code.
+	 * Does exactly what the method's name suggests.</br> This method is
+	 * supposed to be called from the server and only resets the engine (boxes,
+	 * edges and selection). Further cleanup (e.g. history) is expected to be
+	 * done in the calling code.
 	 */
 	public void destroyGraphAndClearStage() {
 		// then destroy edges

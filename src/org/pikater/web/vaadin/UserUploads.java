@@ -19,9 +19,9 @@ import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.UI;
 
 /**
- * A class wrapping multi file-upload functionality for a single user - an instance of this class
- * is exclusively mapped to a particular session. This allows easy integration and nice usage of
- * the MultiFileUpload add-on.
+ * A class wrapping multi file-upload functionality for a single user - an
+ * instance of this class is exclusively mapped to a particular session. This
+ * allows easy integration and nice usage of the MultiFileUpload add-on.
  * 
  * @author SkyCrawl
  */
@@ -32,8 +32,8 @@ public class UserUploads implements Serializable, IFileUploadEvents {
 	// FILE SIZE DEFINITIONS
 
 	/*
-	 * Signed 4B-integer poses a maximum of 2.147 GB.
-	 * Unsigned 4B-integer poses a maximum of 4.294 GB.
+	 * Signed 4B-integer poses a maximum of 2.147 GB. Unsigned 4B-integer poses
+	 * a maximum of 4.294 GB.
 	 */
 
 	private static final int ONE_KB = 1000;
@@ -50,8 +50,9 @@ public class UserUploads implements Serializable, IFileUploadEvents {
 	private int currentUploadsCount;
 
 	/**
-	 * A backup of the original push mode. When an upload starts, set the current UI's push mode to
-	 * Automatic and when all the uploads finish, set it back to the original value. 
+	 * A backup of the original push mode. When an upload starts, set the
+	 * current UI's push mode to Automatic and when all the uploads finish, set
+	 * it back to the original value.
 	 */
 	private PushMode originalPushMode;
 
@@ -92,7 +93,8 @@ public class UserUploads implements Serializable, IFileUploadEvents {
 	 * Only for internal use.
 	 */
 	@Override
-	public synchronized void uploadFinished(StreamingEndEvent event, File uploadedFileHandler) {
+	public synchronized void uploadFinished(StreamingEndEvent event,
+			File uploadedFileHandler) {
 		currentUploadsCount--;
 		if (!isAFileBeingUploaded()) {
 			onThingsUploadFinished();
@@ -109,27 +111,49 @@ public class UserUploads implements Serializable, IFileUploadEvents {
 	}
 
 	/**
-	 * This is the most important method of this class.
-	 * Creates a new upload button and binds it with the constant UploadStateWindow instance, unique for each
-	 * user (this class is unique for each user). 
+	 * This is the most important method of this class. Creates a new upload
+	 * button and binds it with the constant UploadStateWindow instance, unique
+	 * for each user (this class is unique for each user).
 	 */
-	public MyMultiUpload createUploadButton(String caption, MyUploadStateWindow uploadInfoProvider, Set<HttpContentType> allowedMIMETypes) throws UploadLimitReachedException {
+	public MyMultiUpload createUploadButton(String caption,
+			MyUploadStateWindow uploadInfoProvider,
+			Set<HttpContentType> allowedMIMETypes)
+			throws UploadLimitReachedException {
 		if (get() >= MAX_CONCURRENT_UPLOADS) {
 			throw new UploadLimitReachedException();
 		} else {
-			MyMultiUpload result = new MyMultiUpload(uploadInfoProvider, false); // true doesn't work... seems to be a bug in the plugin
+			MyMultiUpload result = new MyMultiUpload(uploadInfoProvider, false); // true
+																					// doesn't
+																					// work...
+																					// seems
+																					// to
+																					// be
+																					// a
+																					// bug
+																					// in
+																					// the
+																					// plugin
 			result.setMaxFileSize(ONE_GB);
-			result.setAcceptedMimeTypes(new ArrayList<String>(HttpContentType.getMimeTypes(allowedMIMETypes)));
-			result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", CollectionUtils.join(HttpContentType.getExtensions(allowedMIMETypes), ", ")));
+			result.setAcceptedMimeTypes(new ArrayList<String>(HttpContentType
+					.getMimeTypes(allowedMIMETypes)));
+			result.setMimeTypeErrorMsgPattern(String.format(
+					"Error: you can only upload '%s' files via this dialog.",
+					CollectionUtils.join(
+							HttpContentType.getExtensions(allowedMIMETypes),
+							", ")));
 			result.setSizeErrorMsgPattern("Error: you can only upload files up to 1GB.");
 			result.setMaxVisibleRows(5);
 			result.getSmartUpload().setUploadButtonCaptions(caption, caption);
-			result.addFileUploadEventsCallback(this); // don't forget this... the callbacks defined here have to be called first (added first)
+			result.addFileUploadEventsCallback(this); // don't forget this...
+														// the callbacks defined
+														// here have to be
+														// called first (added
+														// first)
 			return result;
 		}
 	}
 
-	/** 
+	/**
 	 * @return whether a file is being uploaded in ANY UI instance
 	 */
 	public boolean isAFileBeingUploaded() {
