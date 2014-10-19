@@ -248,10 +248,14 @@ public abstract class PikaterAgent extends Agent {
 	}
 
 	public boolean isSameNode(AID id) {
-		return ((nodeName == null || nodeName.isEmpty()) && !id.getLocalName()
-				.contains("-"))
-				|| nodeName != null
-				&& id.getLocalName().endsWith("-" + nodeName);
+		if((nodeName == null) || nodeName.isEmpty()) {
+			return false;
+		} else if (id.getLocalName().contains("-")) {
+			return false;
+		} else {
+			// assumes "nodeName != null" (see the above condition)
+			return id.getLocalName().endsWith("-" + nodeName);
+		}
 	}
 
 	public AID createAgent(String type, String name, Arguments options) {

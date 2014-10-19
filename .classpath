@@ -153,5 +153,7 @@
 	<classpathentry kind="lib" path="libraries/poi/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="libraries/reflections/guava-16.0.1.jar"/>
 	<classpathentry kind="lib" path="libraries/reflections/javassist.jar"/>
+	<classpathentry kind="lib" path="libraries/jbcrypt-0.3m-javadoc.jar"/>
+	<classpathentry kind="lib" path="libraries/jbcrypt-0.3m.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
