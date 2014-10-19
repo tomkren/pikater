@@ -164,18 +164,25 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		}
 		
 		String generatedName = generateName(name == null ? type : name);
-		
-		// // we may have the class in DB - DataManager will save the JAR to FS if it finds it so we can retry
-		DataManagerService.getExternalAgent(this, type);
-		try {
-			doCreateAgent(generatedName, type, container, args2);
-		} catch (StaleProxyException e) {
-			logInfo("agent creation failed, trying to get JAR for type " + type + " from DB");
-		} catch (ControllerException e) {
-			logException(e.getMessage(), e);
-			return null;
-		}
 
+		try {
+				try {
+					doCreateAgent(generatedName, type, container, args2);
+				} catch (StaleProxyException e) {
+					// we may have the class in DB
+					logInfo("agent creation failed, trying to get JAR for type " + type
+							+ " from DB");
+					DataManagerService.getExternalAgent(this, type);
+					// DataManager will save the JAR to FS if it finds it so we can
+					// retry
+					doCreateAgent(generatedName, type, container, args2);
+				}
+			
+		 } catch (ControllerException e) {
+			 logException(e.getMessage(), e);
+			 return null;
+		 }
+		
 		// provide agent time to register with DF etc.
 		doWait(300);
 		return generatedName;

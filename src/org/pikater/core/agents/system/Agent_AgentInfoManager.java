@@ -132,7 +132,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		});
 		
 
-		initializationAgentInfo();
+		//initializationAgentInfo();
 
 	}
 
