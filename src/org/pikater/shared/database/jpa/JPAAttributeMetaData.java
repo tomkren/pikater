@@ -19,7 +19,7 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 @Entity
 @Table(name = "AttributeMetaData")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class JPAAttributeMetaData extends JPAAbstractEntity implements Comparable<JPAAttributeMetaData> {
+public class JPAAttributeMetaData extends JPAAbstractEntity implements Comparable<JPAAttributeMetaData> {
 	private double ratioOfMissingValues;
 	private boolean isTarget;
 	private String name;
@@ -137,28 +137,39 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity implements 
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		JPAAttributeMetaData other = (JPAAttributeMetaData) obj;
-		if (attrOrder != other.attrOrder)
+		if (attrOrder != other.attrOrder) {
 			return false;
-		if (Double.doubleToLongBits(classEntropy) != Double.doubleToLongBits(other.classEntropy))
+		}
+		if (Double.doubleToLongBits(classEntropy) != Double.doubleToLongBits(other.classEntropy)) {
 			return false;
-		if (Double.doubleToLongBits(entropy) != Double.doubleToLongBits(other.entropy))
+		}
+		if (Double.doubleToLongBits(entropy) != Double.doubleToLongBits(other.entropy)) {
 			return false;
-		if (isTarget != other.isTarget)
+		}
+		if (isTarget != other.isTarget) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
-		if (Double.doubleToLongBits(ratioOfMissingValues) != Double.doubleToLongBits(other.ratioOfMissingValues))
+		}
+		if (Double.doubleToLongBits(ratioOfMissingValues) != Double.doubleToLongBits(other.ratioOfMissingValues)) {
 			return false;
+		}
 		return true;
 	}
 }

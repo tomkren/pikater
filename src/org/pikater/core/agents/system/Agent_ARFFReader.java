@@ -57,7 +57,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 	 * Reads the Data-Set from file
 	 * 
 	 */
-	boolean ReadFromFile(String relativeFileName) {
+	boolean readFromFile(String relativeFileName) {
 		
 		if (relativeFileName == null || relativeFileName.length() == 0) {
 			return false;
@@ -131,8 +131,8 @@ public class Agent_ARFFReader extends PikaterAgent {
 			DataInstances instances = new DataInstances();
 			
 			// Read the file
-			boolean file_read = ReadFromFile(fileName);
-			if (!file_read) {
+			boolean fileRead = readFromFile(fileName);
+			if (!fileRead) {
 				throw new FailureException(
 						"File hasn't been read. Wrong file-name?");
 			}
@@ -168,13 +168,12 @@ public class Agent_ARFFReader extends PikaterAgent {
 				result = new Result(action, instances);
 			}
 
-			try {
-				getContentManager().fillContent(msgOut, result);
-			} catch (CodecException ce) {
-				logException(ce.getMessage(), ce);
-			} catch (OntologyException oe) {
-				logException(oe.getMessage(), oe);
-			}
+			getContentManager().fillContent(msgOut, result);
+			
+		} catch (CodecException ce) {
+			logException(ce.getMessage(), ce);
+		} catch (OntologyException oe) {
+			logException(oe.getMessage(), oe);
 		} catch (Exception e) {
 			logException("Unexpected error message:", e);
 		}

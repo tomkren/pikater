@@ -15,22 +15,16 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
 
 public class BatchTableDBRow extends AbstractTableRowDBView {
-	private static final Set<String> allowedTotalPriorities = new LinkedHashSet<String>() {
-		private static final long serialVersionUID = -7303124181497778648L;
-		{
-			for (int i = 0; i < 100; i++) {
-				add(String.valueOf(i));
-			}
+	private static final Set<String> allowedTotalPriorities = new LinkedHashSet<String>();
+	private static final Set<String> allowedUserPriorities = new LinkedHashSet<String>();
+	static {
+		for (int i = 0; i < 100; i++) {
+			allowedTotalPriorities.add(String.valueOf(i));
 		}
-	};
-	private static final Set<String> allowedUserPriorities = new LinkedHashSet<String>() {
-		private static final long serialVersionUID = -7303124181497778648L;
-		{
-			for (int i = 0; i < 10; i++) {
-				add(String.valueOf(i));
-			}
+		for (int i = 0; i < 10; i++) {
+			allowedUserPriorities.add(String.valueOf(i));
 		}
-	};
+	}
 
 	private final JPABatch batch;
 	private final boolean adminMode;

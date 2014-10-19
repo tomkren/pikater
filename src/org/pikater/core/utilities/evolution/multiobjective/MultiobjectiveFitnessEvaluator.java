@@ -31,25 +31,20 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         front.add(population.get(0));
 
         for (Individual p : population) {
-            if (front.contains(p)) {
-                continue;
+            if (!front.contains(p)) {
+	            front.add(p);
+	            List<Individual> toRemove = new ArrayList<Individual>();
+	            for (Individual q : front) {
+	                if (!q.equals(p) && !toRemove.contains(q)) { 
+	                	if (dominates(q, p)) {
+		                    toRemove.add(p);
+		                } else if (dominates(p, q)) {
+		                    toRemove.add(q);
+		                }
+	                }
+	            }
+	            front.removeAll(toRemove);
             }
-            front.add(p);
-            List<Individual> toRemove = new ArrayList<Individual>();
-            for (Individual q : front) {
-                if (q.equals(p)) {
-                    continue;
-                }
-                if (toRemove.contains(q)) {
-                    continue;
-                }
-                if (dominates(q, p)) {
-                    toRemove.add(p);
-                } else if (dominates(p, q)) {
-                    toRemove.add(q);
-                }
-            }
-            front.removeAll(toRemove);
         }
         return front;
     }

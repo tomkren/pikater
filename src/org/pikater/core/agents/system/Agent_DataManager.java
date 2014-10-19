@@ -687,9 +687,9 @@ public class Agent_DataManager extends PikaterAgent {
 		List<JPAExternalAgent> externalAgents = DAOs.externalAgentDAO.getAll();
 
 		List<AgentClass> agentNames = new ArrayList<AgentClass>();
-		for (JPAExternalAgent JPAAgentI : externalAgents) {
+		for (JPAExternalAgent jpaAgentI : externalAgents) {
 			AgentClass agentClass = new AgentClass(
-					JPAAgentI.getAgentClass());
+					jpaAgentI.getAgentClass());
 			
 			agentNames.add(agentClass);
 		}
@@ -1922,31 +1922,30 @@ public class Agent_DataManager extends PikaterAgent {
 					while ((read = reader.read(buf, 0, buf.length)) > 0) {
 						out.write(buf, 0, read);
 					}
-
-					logInfo(new Date() + " Moving file to: " +
-							target.getAbsolutePath());
-					try {
-						CopyOption copyOption = (CopyOption)
-								StandardCopyOption.REPLACE_EXISTING;
-						
-						java.nio.file.Files.move(temp.toPath(),
-								target.toPath(), copyOption);
-						
-						logInfo(new Date() + "File was successfully moved");
-						
-					} catch (IOException ioe) {
-						logSevere(new Date() +
-								"Error while moving file with hash " +
-								dslo.getHash() + " to new location " +
-								target.getAbsolutePath());
-					}
 				} catch (IOException ioe) {
 					logException("Error while downloading file with hash " +
 							hash + " from database", ioe);
 				} finally {
 					reader.close();
 					out.close();
-
+				}
+				
+				logInfo(new Date() + " Moving file to: " +
+						target.getAbsolutePath());
+				try {
+					CopyOption copyOption = (CopyOption)
+							StandardCopyOption.REPLACE_EXISTING;
+					
+					java.nio.file.Files.move(temp.toPath(),
+							target.toPath(), copyOption);
+					
+					logInfo(new Date() + "File was successfully moved");
+					
+				} catch (IOException ioe) {
+					logSevere(new Date() +
+							"Error while moving file with hash " +
+							dslo.getHash() + " to new location " +
+							target.getAbsolutePath());
 				}
 			} catch (IOException e) {
 				logException("Unexpected error occured:", e);

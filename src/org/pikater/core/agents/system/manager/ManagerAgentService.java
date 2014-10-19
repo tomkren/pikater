@@ -180,15 +180,9 @@ public class ManagerAgentService {
 		
 		try {
 			agent.getContentManager().fillContent(msgPingManagerAgent, action);
-			
-			try {
-				FIPAService.doFipaRequestClient(
-						agent, msgPingManagerAgent, 3000);
-				
-			} catch(FailureException e0) {
-				return false;
-			}
-			
+			FIPAService.doFipaRequestClient(agent, msgPingManagerAgent, 3000);
+		} catch(FailureException e0) {
+			return false;
 		} catch (FIPAException e) {
 			agent.logException(agent.getName(), e);
 		} catch (Codec.CodecException e) {

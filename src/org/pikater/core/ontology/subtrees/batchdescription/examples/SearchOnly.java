@@ -71,12 +71,12 @@ public class SearchOnly {
 
         crsc.setSearch(sa);
 
-        DataSourceDescription CAds = new DataSourceDescription();
-        CAds.setDataProvider(ca);
-        CAds.setOutputType("trained");
+        DataSourceDescription cAds = new DataSourceDescription();
+        cAds.setDataProvider(ca);
+        cAds.setOutputType("trained");
 
         FileDataSaver fds = new FileDataSaver();
-        fds.setDataSource(CAds);
+        fds.setDataSource(cAds);
 
         ComputationDescription cd = new ComputationDescription();
         cd.addRootElement(fds);

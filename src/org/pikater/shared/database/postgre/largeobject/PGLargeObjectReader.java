@@ -43,14 +43,16 @@ public class PGLargeObjectReader extends Reader {
 	@Override
 	public void close() {
 		try {
-			if (obj != null)
+			if (obj != null) {
 				obj.close();
+			}
 		} catch (SQLException e) {
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 		try {
-			if (con != null)
+			if (con != null) {
 				((java.sql.Connection) con).setAutoCommit(true);
+			}
 		} catch (SQLException e) {
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
@@ -68,8 +70,9 @@ public class PGLargeObjectReader extends Reader {
 		int res = -1;
 		try {
 			res = obj.read(buf, arg1, arg2);
-			if (res == 0)
+			if (res == 0) {
 				return -1;
+			}
 		} catch (SQLException e) {
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 			return -1;

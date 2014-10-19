@@ -21,22 +21,23 @@ public class Attribute implements Concept {
 	public final static String DATE_TYPE = "DATE";
 	public final static String RELATIONAL_TYPE = "RELATIONAL";
 	private String name;
-	private String type;// nominal/numeric/string
+	// nominal/numeric/string
+	private String type;
 	private List values;
-	private String date_format;
+	private String dateFormat;
 
 	/**
-	 * @return the date_format
+	 * @return the dateFormat
 	 */
 	public String getDate_format() {
-		return date_format;
+		return dateFormat;
 	}
 
 	/**
-	 *            the date_format to set
+	 * the dateFormat to set
 	 */
 	public void setDate_format(String dateFormat) {
-		date_format = dateFormat;
+		this.dateFormat = dateFormat;
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 *            the name to set
+	 * the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -61,7 +62,7 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 *            the type to set
+	 * the type to set
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -75,7 +76,7 @@ public class Attribute implements Concept {
 	}
 
 	/**
-	 *            the values to set
+	 * the values to set
 	 */
 	public void setValues(List values) {
 		this.values = values;
@@ -83,20 +84,21 @@ public class Attribute implements Concept {
 
 	// =======================================
 	public weka.core.Attribute toWekaAttribute() {
+
 		if (values != null && !values.isEmpty()) {
-			FastVector my_nominal_values = new FastVector();
+			FastVector myNominalValues = new FastVector();
 			Iterator itr = values.iterator();
 			while (itr.hasNext()) {
 				String val = (String) itr.next();
-				my_nominal_values.addElement(val);
+				myNominalValues.addElement(val);
 			}
-			// co type???
-			return new weka.core.Attribute(name, my_nominal_values);
+
+			return new weka.core.Attribute(name, myNominalValues);
 		} else {
 			if (type.equals(DATE_TYPE)) {
-				return new weka.core.Attribute(name, date_format);
+				return new weka.core.Attribute(name, dateFormat);
 			} else if (type.equals(RELATIONAL_TYPE)) {
-				// TODO: another instance
+
 				weka.core.Instances winst = null;
 				return new weka.core.Attribute(name, winst);
 			} else {
@@ -123,16 +125,16 @@ public class Attribute implements Concept {
 			break;
 		case weka.core.Attribute.RELATIONAL:
 			setType(RELATIONAL_TYPE);
-			/* TODO: treating another table */
+
 			break;
 		default:
-			// TODO: error
+			// error
 		}
-		List attr_values = new ArrayList();
+		List attrValues = new ArrayList();
 		for (int j = 0; j < wattr.numValues(); j++) {
-			attr_values.add(wattr.value(j));
+			attrValues.add(wattr.value(j));
 		}
-		setValues(attr_values);
+		setValues(attrValues);
 	}
 
 	String stringValue(double _dval) {
@@ -142,15 +144,8 @@ public class Attribute implements Concept {
 			return Utils.doubleToString(_dval, 6);
 		} else if (type.equals(DATE_TYPE)) {
 			Date d = new Date((long) _dval);
-			return Utils.quote(d.toString());// TODO: normalized date format
-												// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+			return Utils.quote(d.toString());
 		}
-		// TODO: relational
 		return null;
 	}
-	/*
-	 * public void print() { // TODO Auto-generated method stub
-	 * System.out.print(name+" "+type+" "); Iterator itr = values.iterator();
-	 * while(itr.hasNext()){ System.out.print((String)itr.next()+","); } }
-	 */
 }

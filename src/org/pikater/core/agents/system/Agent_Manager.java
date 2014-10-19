@@ -66,8 +66,7 @@ public class Agent_Manager extends PikaterAgent {
 	/**
 	 * Adds a {@link ComputationCollectionItem} to computationCollection.
 	*/	
-    public void addComputation(ComputationCollectionItem item)
-    {
+    public void addComputation(ComputationCollectionItem item) {
         computationCollection.put(item.getBatchID(),item);
     }
 
@@ -195,15 +194,13 @@ public class Agent_Manager extends PikaterAgent {
 								.get(batchID).getProblemGraph()
 								.getNode(nodeId); 
 
-                        for (SearchSolution ss : ep.getSolutions())
-                        {
+                        for (SearchSolution ssI : ep.getSolutions()) {
                             SolutionEdge se = new SolutionEdge();
                             se.setComputationID(computationId);
-                            se.setOptions(ss);
+                            se.setOptions(ssI);
                             searchNode.addToOutputAndProcess(se, "searchedoptions");
                         }
-				    }
-					else{
+				    } else{
 						logSevere("unknown message received.");
 					}
 					
@@ -214,8 +211,7 @@ public class Agent_Manager extends PikaterAgent {
 				} catch (OntologyException e1) {
 					logException(e1.getMessage(), e1);
 				}
-			}
-			else {
+			} else {
 				block();
 			}
 
@@ -262,10 +258,10 @@ public class Agent_Manager extends PikaterAgent {
 	 */
 	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {
 		// Prepare the subscription message to the request originator
-		@SuppressWarnings("unused")
 		ACLMessage msgOut = originalMessage.createReply();
 		msgOut.setPerformative(result.getPerformative());
 		
+		/*
 		// copy content of inform message to a subscription
 		try {
 			@SuppressWarnings("unused")
@@ -280,6 +276,7 @@ public class Agent_Manager extends PikaterAgent {
 		} catch (OntologyException e) {
 			logException(e.getMessage(), e);
 		}
+		*/
 
 		// go through every subscription
 		java.util.Iterator<Subscription> it = subscriptions.iterator();
@@ -319,7 +316,7 @@ public class Agent_Manager extends PikaterAgent {
 	public List<AID> getAgentByType(String agentType, int n) {
 		
 		// List of AIDs
-		List<AID> Agents = new ArrayList<AID>();
+		List<AID> agents = new ArrayList<AID>();
 		
 		// Make the list of agents of given type
 		DFAgentDescription template = new DFAgentDescription();
@@ -332,22 +329,22 @@ public class Agent_Manager extends PikaterAgent {
 			
 			for (int i = 0; i < result.length; ++i) {
 				AID aid = result[i].getName();
-				if (Agents.size() < n){
-					Agents.add(aid);
+				if (agents.size() < n){
+					agents.add(aid);
 				}
 			}
 			
-			while (Agents.size() < n) {
+			while (agents.size() < n) {
 				// create agent
 				AID aid = createAgent(agentType);
-				Agents.add(aid);
+				agents.add(aid);
 			}
 		} catch (FIPAException fe) {
 			logException(fe.getMessage(), fe);
 			return new ArrayList<AID>();
 		}
 		
-		return Agents;
+		return agents;
 		
 	}
 	// end getAgentByType

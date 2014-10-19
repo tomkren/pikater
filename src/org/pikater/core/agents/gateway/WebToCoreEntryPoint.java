@@ -8,8 +8,8 @@ import org.pikater.core.agents.gateway.batch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.batchPriorityChanged.PikaterGatewayBatchPriorityChanged;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
-import org.pikater.core.agents.gateway.newAgent.PikaterGateway_NewAgent;
 import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
+import org.pikater.core.agents.gateway.newagent.PikaterGateway_NewAgent;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -48,7 +48,7 @@ public class WebToCoreEntryPoint {
 	 * @throws PikaterGatewayException
 	 */
 	public static void notify_batchPriorityChanged(int batchID) throws PikaterGatewayException {
-		PikaterGatewayBatchPriorityChanged.ChangeBatchPriority(batchID);
+		PikaterGatewayBatchPriorityChanged.changeBatchPriority(batchID);
 	}
 	
 	/**

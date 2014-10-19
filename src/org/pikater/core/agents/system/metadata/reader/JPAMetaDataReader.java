@@ -65,7 +65,7 @@ public class JPAMetaDataReader {
 	            if(attName==null){
 	            	attName="attr_"+i;
 	            }
-	            JPAAttributeMetaData jpaam=new JPAAttributeMetaData() {};
+	            JPAAttributeMetaData jpaam=new JPAAttributeMetaData();
 	            
 	            if(att instanceof CategoricalAttributeMetadata){
 	            	int numberOfCategories=((CategoricalAttributeMetadata)att).getNumberOfCategories();

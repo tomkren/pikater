@@ -174,16 +174,12 @@ public abstract class ComputingCommunicator {
 					request);
 			Result result = new Result((Action) content, agent.agentOptions);
 
-			try {
-				// Let JADE convert from Java objects to string
-				agent.getContentManager().fillContent(msgOut, result);
-
-			} catch (CodecException ce) {
-				agent.logException(ce.getMessage(), ce);
-			} catch (OntologyException oe) {
-				agent.logException(oe.getMessage(), oe);
-			}
-
+			// Let JADE convert from Java objects to string
+			agent.getContentManager().fillContent(msgOut, result);
+		} catch (CodecException ce) {
+			agent.logException(ce.getMessage(), ce);
+		} catch (OntologyException oe) {
+			agent.logException(oe.getMessage(), oe);
 		} catch (Exception e) {
 			agent.logException("Unexpected error message:", e);
 		}

@@ -112,11 +112,11 @@ public class Agent_GASearch extends Agent_Search {
 			//population from the old one
 			//Elitism
 			//1. find the best
-			float best_fit = Float.MAX_VALUE;
+			float bestFit = Float.MAX_VALUE;
 			int bestIndex = -1;
 			for(int i = 0; i < popSize; i++){
-				if(fitnesses[i] < best_fit){
-					best_fit = fitnesses[i];
+				if(fitnesses[i] < bestFit){
+					bestFit = fitnesses[i];
 					bestIndex = i;
 				}
 			}
@@ -128,12 +128,12 @@ public class Agent_GASearch extends Agent_Search {
 			SearchSolution eliteInd = cloneSolution(searchSolution); 
 			//2. put into new population
 			newPopulation.add(eliteInd);
-			for(int i = 0; i < ((popSize-1)/2);i++){
+			for(int i = 0; i < ((popSize-1)/2);i++) {
 				//pairs
 				SearchSolution ind1 = cloneSolution(selectIndividual());
 				SearchSolution ind2 = cloneSolution(selectIndividual());
 				
-				if(rndGen.nextDouble()<xoverProb){
+				if(rndGen.nextDouble() < xoverProb){
 					xoverIndividuals(ind1, ind2);
 				}
 				mutateIndividual(ind1);
@@ -141,7 +141,7 @@ public class Agent_GASearch extends Agent_Search {
 				newPopulation.add(ind1);
 				newPopulation.add(ind2);
 			}
-			if(((popSize-1)%2)==1){
+			if(((popSize-1)%2) == 1) {
 				//one more, not in pair, if the pop is odd
 				SearchSolution ind = cloneSolution(selectIndividual());
 				mutateIndividual(ind);
@@ -168,7 +168,7 @@ public class Agent_GASearch extends Agent_Search {
 			for(int i = 0; i < evaluations.length; i++){				
 				//fitness
 				fitnesses[i]=evaluations[i][0];				
-				//actualize best_error_rate
+				//actualize bestErrorRate
 				if(fitnesses[i]<bestErrorRate){
 					bestErrorRate = fitnesses[i];
 				}
@@ -255,9 +255,9 @@ public class Agent_GASearch extends Agent_Search {
             IValueData val = si.randomValue(rndGen);
 			newSolution.add(val);
 		}		
-		SearchSolution res_sol = new SearchSolution();
-		res_sol.setValues(newSolution);
-		return res_sol;
+		SearchSolution resSol = new SearchSolution();
+		resSol.setValues(newSolution);
+		return resSol;
 	}
 	
 	/**
@@ -321,8 +321,9 @@ public class Agent_GASearch extends Agent_Search {
 			
 			SearchItem si = getSchema().get(i);
             IValueData val = solution.getValues().get(i);
-			if(rndGen.nextDouble() < mutProb)
+			if(rndGen.nextDouble() < mutProb) {
 				val = si.randomValue(rndGen);
+			}
 			newSolution.add(val);
 		}
 		solution.setValues(newSolution);

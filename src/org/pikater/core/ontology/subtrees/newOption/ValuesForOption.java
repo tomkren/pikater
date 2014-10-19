@@ -62,6 +62,10 @@ public class ValuesForOption implements Concept, IValidated, ICloneable,
 	public int size() {
 		return values.size();
 	}
+	
+	public boolean isEmpty() {
+		return size() == 0;
+	}
 
 	public boolean containsQuestionMark() {
 		for (Value valueI : values) {
