@@ -13,7 +13,7 @@ import org.pikater.core.agents.system.manager.graph.edges.DataSourceEdge;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Behavior for data processing - pre and postprocessing
@@ -76,7 +76,7 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 				// get the original task from msg
 				Result result = (Result) content;					
 				Task task = (Task) result.getValue();
-                ArrayList<TaskOutput> outputs = task.getOutput();
+                List<TaskOutput> outputs = task.getOutput();
                 for (TaskOutput output : outputs) {
                     DataSourceEdge edge = new DataSourceEdge();
                     edge.setDataSourceId(output.getName());

@@ -66,11 +66,11 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		
 		agentInfo.setInputSlots(Arrays.asList(i1, i2));
 
-		Slot o_sunny = new Slot("sunnyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
-		Slot o_overcast = new Slot("overcastOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
-		Slot o_rainy = new Slot("rainyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
+		Slot sunny = new Slot("sunnyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
+		Slot overcast = new Slot("overcastOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
+		Slot rainy = new Slot("rainyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
 
-		agentInfo.setOutputSlots(Arrays.asList(o_sunny, o_overcast, o_rainy));
+		agentInfo.setOutputSlots(Arrays.asList(sunny, overcast, rainy));
 
 		return agentInfo;
 	}
@@ -96,10 +96,13 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 					else
 						throw new RefuseException("Invalid action requested");
 				} catch (CodecException e) {
+					logException("Unknown codec: ", e);
 					throw new FailureException("Unknown codec: " + e.getMessage());
 				} catch (OntologyException e) {
+					logException("Unknown ontology: ", e);
 					throw new FailureException("Unknown ontology: " + e.getMessage());
 				} catch (ContentException e) {
+					logException("Content problem: ", e);
 					throw new FailureException("Content problem: " + e.getMessage());
 				} catch (FIPAException e) {
 					logException("FIPA exception when performing task", e);
@@ -152,7 +155,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 
 		List<DataInstances> weatherData = getDataForTask(t);
 		logInfo("processing data");
-		ArrayList<TaskOutput> outputs = processData(weatherData);
+		List<TaskOutput> outputs = processData(weatherData);
 		logInfo("returning outputs");
 		t.setOutput(outputs);
 		return t;

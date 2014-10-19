@@ -63,7 +63,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 		}
 	}
 
-	/* Extract data from INFORM message (ARFF reader) */
+	/** Extract data from INFORM message (ARFF reader) */
 	public DataInstances processGetDataResponse(ACLMessage inform) {
 		ContentElement content;
 		try {
@@ -76,11 +76,12 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 				} else if (result.getValue() instanceof Boolean) {
 
 					Object dataInstance = getO2AObject();
-					if (dataInstance == null)
+					if (dataInstance == null) {
 						throw new IllegalStateException(
 								"received GetData response without o2a object in queue");
-					else
+					} else {
 						return (DataInstances) dataInstance;
+					}
 				} else {
 					throw new IllegalStateException(
 							"received unexpected Inform");
@@ -97,7 +98,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 	}
 
 	public ACLMessage makeGetDataRequest(String fileName) {
-		AID[] ARFFReaders;
+		AID[] arffReaders;
 		AID reader = null;
 		ACLMessage msgOut = null;
 		// Make the list of reader agents
@@ -110,7 +111,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 
 			DFAgentDescription[] result = DFService.search(this, template);
 
-			ARFFReaders = new AID[result.length];
+			arffReaders = new AID[result.length];
 			for (int i = 0; i < result.length; ++i) {
 				if (isSameNode(result[i].getName())) {
 					// prefer local reader for O2A transfer
@@ -119,14 +120,14 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 					getData.setO2aAgent(getLocalName());
 					break;
 				}
-				ARFFReaders[i] = result[i].getName();
+				arffReaders[i] = result[i].getName();
 			}
 
 			// randomly choose one of the readers if none preferred
 			if (reader == null) {
 				Random randomGenerator = new Random();
 				int randomInt = randomGenerator.nextInt(result.length);
-				reader = ARFFReaders[randomInt];
+				reader = arffReaders[randomInt];
 			}
 
 			logInfo("using reader " + reader + ", filename: " + fileName);

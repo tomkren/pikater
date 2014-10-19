@@ -63,7 +63,7 @@ public abstract class PikaterAgent extends Agent {
 		return registerWithDF(Collections.singletonList(service));
 	}
 
-	protected boolean registerWithDF(List<String> ServiceTypes) {
+	protected boolean registerWithDF(List<String> serviceTypes) {
 		// register with the DF
 
 		DFAgentDescription description = new DFAgentDescription();
@@ -83,11 +83,11 @@ public abstract class PikaterAgent extends Agent {
 		// add more agent service(s) (typicaly general service type, e.g.
 		// Search)
 
-		for (String st : ServiceTypes) {
-			ServiceDescription servicedesc_g = new ServiceDescription();
-			servicedesc_g.setName(getLocalName());
-			servicedesc_g.setType(st);
-			description.addServices(servicedesc_g);
+		for (String st : serviceTypes) {
+			ServiceDescription serviceDescG = new ServiceDescription();
+			serviceDescG.setName(getLocalName());
+			serviceDescG.setType(st);
+			description.addServices(serviceDescG);
 		}
 
 		// register synchronously registers us with the DF, we may
@@ -98,7 +98,7 @@ public abstract class PikaterAgent extends Agent {
 
 			StringBuilder sb = new StringBuilder(
 					"Successfully registered with DF; service types: ");
-			for (String st : ServiceTypes) {
+			for (String st : serviceTypes) {
 				sb.append(st).append(" ");
 			}
 			logInfo(sb.toString());
@@ -171,9 +171,11 @@ public abstract class PikaterAgent extends Agent {
 								"Unknown action requested");
 					}
 				} catch (CodecException e) {
+					logException("Unknown codec", e);
 					throw new NotUnderstoodException("Unknown codec: "
 							+ e.getMessage());
 				} catch (OntologyException e) {
+					logException("Unknown ontology", e);
 					throw new NotUnderstoodException("Unknown ontology: "
 							+ e.getMessage());
 				}
