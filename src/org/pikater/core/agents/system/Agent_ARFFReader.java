@@ -168,13 +168,12 @@ public class Agent_ARFFReader extends PikaterAgent {
 				result = new Result(action, instances);
 			}
 
-			try {
-				getContentManager().fillContent(msgOut, result);
-			} catch (CodecException ce) {
-				logException(ce.getMessage(), ce);
-			} catch (OntologyException oe) {
-				logException(oe.getMessage(), oe);
-			}
+			getContentManager().fillContent(msgOut, result);
+			
+		} catch (CodecException ce) {
+			logException(ce.getMessage(), ce);
+		} catch (OntologyException oe) {
+			logException(oe.getMessage(), oe);
 		} catch (Exception e) {
 			logException("Unexpected error message:", e);
 		}

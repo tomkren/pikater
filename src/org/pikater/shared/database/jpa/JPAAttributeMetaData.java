@@ -19,7 +19,7 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 @Entity
 @Table(name = "AttributeMetaData")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class JPAAttributeMetaData extends JPAAbstractEntity implements Comparable<JPAAttributeMetaData> {
+public class JPAAttributeMetaData extends JPAAbstractEntity implements Comparable<JPAAttributeMetaData> {
 	private double ratioOfMissingValues;
 	private boolean isTarget;
 	private String name;

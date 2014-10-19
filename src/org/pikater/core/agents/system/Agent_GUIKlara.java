@@ -236,7 +236,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	private void killBatch(String input) {
 		String[] cmd = input.split(" ");
 		int batchID = -1;
-		try{
+		try {
 			batchID=Integer.parseInt(cmd[cmd.length-1]);
 			
 			KillTasks killBatch = new KillTasks();
@@ -244,31 +244,27 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 			Ontology taskOntology = TaskOntology.getInstance();
 
-			try {
-				AID planner = new AID(CoreAgents.PLANNER.getName(), false);
+			AID planner = new AID(CoreAgents.PLANNER.getName(), false);
 
-				ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-				request.addReceiver(planner);
-				request.setLanguage(getCodec().getName());
-				request.setOntology(taskOntology.getName());
-				
-				Action action = new Action(planner, killBatch);
-				getContentManager().fillContent(request, action);
+			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+			request.addReceiver(planner);
+			request.setLanguage(getCodec().getName());
+			request.setOntology(taskOntology.getName());
+			
+			Action action = new Action(planner, killBatch);
+			getContentManager().fillContent(request, action);
 
-				ACLMessage reply =
-						FIPAService.doFipaRequestClient(this, request, 10000);
+			ACLMessage reply =
+					FIPAService.doFipaRequestClient(this, request, 10000);
 
-				if ((reply != null) &&
-					(reply.getPerformative() == ACLMessage.INFORM)) {
-					System.out.println("Planner responded Inform");
-				} else {
-					System.err.println("Planner couldn't perform the action");
-				}
-            
-			} catch (CodecException | OntologyException | FIPAException e) {
-				e.printStackTrace();
+			if ((reply != null) &&
+				(reply.getPerformative() == ACLMessage.INFORM)) {
+				System.out.println("Planner responded Inform");
+			} else {
+				System.err.println("Planner couldn't perform the action");
 			}
-           
+		} catch (CodecException | OntologyException | FIPAException e) {
+			e.printStackTrace();
 		} catch(NumberFormatException nfe) {
 			System.err.println("Wrong number format of Batch ID");
 		}
