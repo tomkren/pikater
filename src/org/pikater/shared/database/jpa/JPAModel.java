@@ -20,29 +20,27 @@ import javax.persistence.Transient;
  * fully compatible with JPA.
  */
 @Entity
-@Table(name="Model")
-@NamedQueries({
-	@NamedQuery(name="Model.getAll",query="select m from JPAModel m"),
-	@NamedQuery(name="Model.getByAgentClassName",query="select m from JPAModel m where m.agentClassName=:agentClassName"),
-	@NamedQuery(name="Model.getNotPermanentOlderThan",query="select m, r from JPAModel m, JPAResult r where r.createdModel=m and m.created < :paramDate and m.permanent=false")
-})
-public class JPAModel extends JPAAbstractEntity{
-	
+@Table(name = "Model")
+@NamedQueries({ @NamedQuery(name = "Model.getAll", query = "select m from JPAModel m"),
+		@NamedQuery(name = "Model.getByAgentClassName", query = "select m from JPAModel m where m.agentClassName=:agentClassName"),
+		@NamedQuery(name = "Model.getNotPermanentOlderThan", query = "select m, r from JPAModel m, JPAResult r where r.createdModel=m and m.created < :paramDate and m.permanent=false") })
+public class JPAModel extends JPAAbstractEntity {
+
 	@OneToOne
 	private JPAResult creatorResult;
 	private String agentClassName;
-    @Lob
-    private byte[] serializedAgent;
-    private boolean permanent;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created;
-    
-    public JPAModel(){
-    	this.created=new Date();
-    	this.permanent=false;
-    }
-    
-    public JPAResult getCreatorResult() {
+	@Lob
+	private byte[] serializedAgent;
+	private boolean permanent;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
+
+	public JPAModel() {
+		this.created = new Date();
+		this.permanent = false;
+	}
+
+	public JPAResult getCreatorResult() {
 		return creatorResult;
 	}
 
@@ -81,24 +79,22 @@ public class JPAModel extends JPAAbstractEntity{
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
-	public InputStream getInputStream()
-	{
+
+	public InputStream getInputStream() {
 		return new ByteArrayInputStream(serializedAgent);
 	}
-	
-	public String getFileName()
-	{
+
+	public String getFileName() {
 		return String.format("%d-%s.agent", creatorResult.getExperiment().getId(), creatorResult.getCreatedModel().getAgentClassName());
 	}
-	
+
 	@Transient
 	public static final String EntityName = "Model";
-	
+
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
-		JPAModel updateValues=(JPAModel) newValues;
+		JPAModel updateValues = (JPAModel) newValues;
 		this.setPermanent(updateValues.isPermanent());
 	}
-    
+
 }

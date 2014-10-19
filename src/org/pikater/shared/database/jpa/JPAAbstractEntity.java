@@ -19,21 +19,21 @@ import javax.persistence.Transient;
  * the entity. 
  */
 @Entity
-@Table(name="Root")
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@Table(name = "Root")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @MappedSuperclass
 public abstract class JPAAbstractEntity {
-	
+
 	@Transient
 	public static final String EntityName = "AbstractEntity";
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected int id;
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	protected int id;
+
 	public int getId() {
-        return id;
-    }
-	
+		return id;
+	}
+
 	/**
 	 * Abstract function for entity updates. This function should be overridden
 	 * with function, that updates entity's values or throws an exception if the entity
@@ -42,5 +42,5 @@ public abstract class JPAAbstractEntity {
 	 * @throws Exception
 	 */
 	public abstract void updateValues(JPAAbstractEntity newValues) throws Exception;
-	
+
 }

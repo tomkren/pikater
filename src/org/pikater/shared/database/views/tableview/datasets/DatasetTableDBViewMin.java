@@ -6,23 +6,14 @@ import java.util.Set;
 
 import org.pikater.shared.database.views.base.ITableColumn;
 
-public class DatasetTableDBViewMin extends DataSetTableDBView
-{
+public class DatasetTableDBViewMin extends DataSetTableDBView {
 	@Override
-	public Set<ITableColumn> getAllColumns()
-	{
-		return new LinkedHashSet<ITableColumn>(EnumSet.of(
-				Column.CREATED,
-				Column.DEFAULT_TASK_TYPE,
-				Column.NUMBER_OF_INSTANCES,
-				Column.FILENAME,
-				Column.DESCRIPTION
-		));
+	public Set<ITableColumn> getAllColumns() {
+		return new LinkedHashSet<ITableColumn>(EnumSet.of(Column.CREATED, Column.DEFAULT_TASK_TYPE, Column.NUMBER_OF_INSTANCES, Column.FILENAME, Column.DESCRIPTION));
 	}
-	
+
 	@Override
-	public Set<ITableColumn> getDefaultColumns()
-	{
+	public Set<ITableColumn> getDefaultColumns() {
 		return getAllColumns();
 	}
 }

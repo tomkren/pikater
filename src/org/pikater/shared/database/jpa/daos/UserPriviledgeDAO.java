@@ -5,19 +5,17 @@ import org.pikater.shared.database.util.CustomActionResultFormatter;
 
 public class UserPriviledgeDAO extends AbstractDAO<JPAUserPriviledge> {
 
-	public UserPriviledgeDAO(){
+	public UserPriviledgeDAO() {
 		super(JPAUserPriviledge.class);
 	}
-	
+
 	@Override
 	public String getEntityName() {
 		return JPAUserPriviledge.EntityName;
 	}
-	
+
 	public JPAUserPriviledge getByName(String name) {
-		return new CustomActionResultFormatter<JPAUserPriviledge>(
-				getByTypedNamedQuery("UserPriviledge.getByName", "name", name)
-			   ).getSingleResultWithNull();
+		return new CustomActionResultFormatter<JPAUserPriviledge>(getByTypedNamedQuery("UserPriviledge.getByName", "name", name)).getSingleResultWithNull();
 	}
-	
+
 }

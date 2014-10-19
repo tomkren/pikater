@@ -14,22 +14,17 @@ import org.pikater.shared.logging.database.PikaterDBLogger;
  *
  * @see org.pikater.shared.database.jpa.daos
  */
-public class EntityManagerInstancesCreator
-{
+public class EntityManagerInstancesCreator {
 	/**
 	 * EntityManagerFactory instantiation takes some time so it's best to use a single instance to
 	 * produce EntityManager instances, unless we need several different configurations for various
 	 * purposes.
 	 */
 	private static EntityManagerFactory primaryFactory;
-	static
-	{
-		try
-		{
+	static {
+		try {
 			primaryFactory = Persistence.createEntityManagerFactory("pikaterDataModel");
-		}
-		catch(Exception t)
-		{
+		} catch (Exception t) {
 			PikaterDBLogger.logThrowable("Failed to initialize EntityManagerFactory: ", t);
 		}
 	}
@@ -38,11 +33,10 @@ public class EntityManagerInstancesCreator
 	 * Produced instances of EntityManager use the same configuration as the parental EntityManagerFactory instance. 
 	 * @see ./src/META-INF/persistence.xml
 	 */
-	public static EntityManager getEntityManagerInstance()
-	{
+	public static EntityManager getEntityManagerInstance() {
 		return primaryFactory.createEntityManager();
-    }
-	
+	}
+
 	/**
 	 * Makes a default database call from information provided in the "persistence.xml" file.
 	 * @throws UnknownHostException If the database address provided in "persistence.xml" could not be resolved.
@@ -50,8 +44,7 @@ public class EntityManagerInstancesCreator
 	 * 		IMPORTANT NOTE: this behaviour might be specific to PostGre.
 	 * @TODO: exception thrown when invalid auth info is provided in "persistence.xml"?
 	 */
-	public static void testDatabaseConnectionWorkingProperly() throws UnknownHostException
-	{
-		getEntityManagerInstance();		
+	public static void testDatabaseConnectionWorkingProperly() throws UnknownHostException {
+		getEntityManagerInstance();
 	}
 }

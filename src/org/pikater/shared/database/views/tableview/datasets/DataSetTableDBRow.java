@@ -14,34 +14,30 @@ import org.pikater.shared.util.IOUtils;
 
 public class DataSetTableDBRow extends AbstractTableRowDBView {
 
-	private JPADataSetLO dataset=null;
+	private JPADataSetLO dataset = null;
 
-	public DataSetTableDBRow(JPADataSetLO dataset)
-	{
-		this.dataset=dataset;
+	public DataSetTableDBRow(JPADataSetLO dataset) {
+		this.dataset = dataset;
 	}
-	
-	public JPADataSetLO getDataset()
-	{
+
+	public JPADataSetLO getDataset() {
 		return dataset;
 	}
 
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column) {
 		DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
-		switch(specificColumn)
-		{
+		switch (specificColumn) {
 		/*
 		 * First the read-only properties.
 		 */
 		case NUMBER_OF_INSTANCES:
-			return new StringReadOnlyDBViewValue(dataset.getGlobalMetaData()!=null?""+dataset.getGlobalMetaData().getNumberofInstances():"N/A");
+			return new StringReadOnlyDBViewValue(dataset.getGlobalMetaData() != null ? "" + dataset.getGlobalMetaData().getNumberofInstances() : "N/A");
 		case DEFAULT_TASK_TYPE:
-			JPAGlobalMetaData gmd=dataset.getGlobalMetaData();
-			if(gmd!=null){
-				return new StringReadOnlyDBViewValue(gmd.getDefaultTaskType()!=null? gmd.getDefaultTaskType().getName() : "N/A");
-			}else{
+			JPAGlobalMetaData gmd = dataset.getGlobalMetaData();
+			if (gmd != null) {
+				return new StringReadOnlyDBViewValue(gmd.getDefaultTaskType() != null ? gmd.getDefaultTaskType().getName() : "N/A");
+			} else {
 				//the global metadata for this dataset is not available
 				return new StringReadOnlyDBViewValue("N/A");
 			}
@@ -55,22 +51,19 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(dataset.getDescription());
 		case FILENAME:
 			return new StringReadOnlyDBViewValue(dataset.getFileName());
-			
-		/*
-		 * And then custom actions.
-		 */
+
+			/*
+			 * And then custom actions.
+			 */
 		case APPROVED:
-			return new BooleanDBViewValue(dataset.isApproved())
-			{
+			return new BooleanDBViewValue(dataset.isApproved()) {
 				@Override
-				protected void updateEntities(Boolean newValue)
-				{
+				protected void updateEntities(Boolean newValue) {
 					dataset.setApproved(newValue);
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 					commitRow();
 				}
 			};
@@ -78,77 +71,64 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 			return new NamedActionDBViewValue("Visualize") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
-					return dataset.hasComputedMetadata(); 
+				public boolean isEnabled() {
+					return dataset.hasComputedMetadata();
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
 		case COMPARE:
 			return new NamedActionDBViewValue("Compare to") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
-					return dataset.hasComputedMetadata(); 
+				public boolean isEnabled() {
+					return dataset.hasComputedMetadata();
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
 		case DOWNLOAD:
 			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return true;
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
 		case DELETE:
-			return new NamedActionDBViewValue("Delete")
-			{
+			return new NamedActionDBViewValue("Delete") {
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return dataset.isVisible();
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 					dataset.setVisible(false);
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 					commitRow();
 				}
 			};
@@ -159,8 +139,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 	}
 
 	@Override
-	public void commitRow()
-	{
+	public void commitRow() {
 		DAOs.dataSetDAO.updateEntity(dataset);
 	}
 }

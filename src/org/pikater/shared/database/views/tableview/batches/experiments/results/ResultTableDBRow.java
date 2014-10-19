@@ -12,42 +12,35 @@ import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.LocaleUtils;
 
-public class ResultTableDBRow extends AbstractTableRowDBView
-{
+public class ResultTableDBRow extends AbstractTableRowDBView {
 	private JPAResult result;
 	private JPADataSetLO firstValidInput;
 	private JPADataSetLO firstValidOutput;
 	private Locale currentLocale;
 
-	public ResultTableDBRow(JPAResult result)
-	{
-		this.result=result;
-		this.firstValidInput=null;
-		this.firstValidOutput=null;
-		this.currentLocale=LocaleUtils.getDefaultLocale();
+	public ResultTableDBRow(JPAResult result) {
+		this.result = result;
+		this.firstValidInput = null;
+		this.firstValidOutput = null;
+		this.currentLocale = LocaleUtils.getDefaultLocale();
 	}
-	
-	public JPAResult getResult()
-	{
+
+	public JPAResult getResult() {
 		return result;
 	}
-	
-	public JPADataSetLO getFirstValidInput()
-	{
+
+	public JPADataSetLO getFirstValidInput() {
 		return firstValidInput;
 	}
 
-	public JPADataSetLO getFirstValidOutput()
-	{
+	public JPADataSetLO getFirstValidOutput() {
 		return firstValidOutput;
 	}
 
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column) {
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
-		switch(specificColumn)
-		{
+		switch (specificColumn) {
 		/*
 		 * First the read-only properties.
 		 */
@@ -69,117 +62,95 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRootMeanSquaredError()));
 		case ROOT_REL_SQR_ERR:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRootRelativeSquaredError()));
-		
-		/*
-		 * And then custom actions.
-		 */
+
+			/*
+			 * And then custom actions.
+			 */
 		case TRAINED_MODEL:
 			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return result.getCreatedModel() != null;
 				}
 
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
 
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
 		case VISUALIZE:
 			return new NamedActionDBViewValue("Visualize") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
-					if(result.hasAnOutput())
-					{
+				public boolean isEnabled() {
+					if (result.hasAnOutput()) {
 						setValidOutput();
 						return firstValidOutput != null;
-					}
-					else
-					{
+					} else {
 						return false;
 					}
 				}
 
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
 
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
 		case COMPARE:
 			return new NamedActionDBViewValue("Compare") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
-					if(result.hasAnInput() && result.hasAnOutput())
-					{
+				public boolean isEnabled() {
+					if (result.hasAnInput() && result.hasAnOutput()) {
 						setValidInput();
 						setValidOutput();
 						return (firstValidInput != null) && (firstValidOutput != null);
-					}
-					else
-					{
+					} else {
 						return false;
 					}
 				}
 
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
 
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
-		
+
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}
 	}
 
 	@Override
-	public void commitRow()
-	{
+	public void commitRow() {
 	}
-	
+
 	//------------------------------------------------------------
 	// SPECIAL PRIVATE INTERFACE
-	
-	private void setValidInput()
-	{
-		for(JPADataSetLO dataset : result.getInputs())
-		{
-			if(dataset.hasComputedMetadata())
-			{
+
+	private void setValidInput() {
+		for (JPADataSetLO dataset : result.getInputs()) {
+			if (dataset.hasComputedMetadata()) {
 				firstValidInput = dataset;
 				return;
 			}
 		}
 		firstValidInput = null;
 	}
-	
-	private void setValidOutput()
-	{
-		for(JPADataSetLO dataset : result.getOutputs())
-		{
-			if(dataset.hasComputedMetadata())
-			{
+
+	private void setValidOutput() {
+		for (JPADataSetLO dataset : result.getOutputs()) {
+			if (dataset.hasComputedMetadata()) {
 				firstValidOutput = dataset;
 				return;
 			}
