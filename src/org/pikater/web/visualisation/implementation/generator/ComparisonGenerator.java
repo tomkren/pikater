@@ -14,6 +14,12 @@ import org.pikater.web.visualisation.implementation.datasource.single.SingleArff
 import org.pikater.web.visualisation.implementation.exceptions.ChartException;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
 
+/**
+ * Implements functionality to create visualisation chart for two data sets.
+ * 
+ * @author siposp
+ *
+ */
 public abstract class ComparisonGenerator extends Generator {
 
 	protected SingleArffDataset dataset1;
@@ -47,6 +53,13 @@ public abstract class ComparisonGenerator extends Generator {
 		this.instNum = dataset1.getNumberOfInstances() + dataset2.getNumberOfInstances();
 	}
 
+	/**
+	 * <p>
+	 * Creates the comparison chart for two datasets, that have previously been set for this {@link ComparisonGenerator}.
+	 * </p>
+	 * @Override
+	 * {@link Generator#create()}
+	 */
 	@Override
 	public void create() throws IOException, ChartException {
 		try {

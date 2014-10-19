@@ -8,6 +8,12 @@ import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.pikater.web.visualisation.implementation.renderer.SVGRenderer;
 
+/**
+ * Implements functionality to create visualisation chart for one data set in SVG format.
+ * 
+ * @author siposp
+ *
+ */
 public class SingleSVGGenerator extends SingleGenerator {
 
 	public SingleSVGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, int XIndex, int YIndex, int ColorIndex) {

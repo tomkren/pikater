@@ -7,11 +7,18 @@ import java.io.PrintStream;
 
 import javax.imageio.ImageIO;
 
+import org.eclipse.persistence.jpa.rs.exceptions.IOExceptionMapper;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
 
+/**
+ * Implements functionality to create visualisation chart for one data set in PNG format.
+ * 
+ * @author siposp
+ *
+ */
 public class SinglePNGGenerator extends SingleGenerator {
 
 	public SinglePNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output, int XIndex, int YIndex, int ColorIndex) {
@@ -38,6 +45,10 @@ public class SinglePNGGenerator extends SingleGenerator {
 		this.renderer = new ImageRenderer(Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 	}
 
+	/**
+	 * Creates a chart in PNG format for one dataset, that has previously been set for this {@link SingleGenerator}.
+	 * @throws IOException when some I/O error occured when accessing data set
+	 */
 	@Override
 	public void create() throws IOException {
 		super.create();

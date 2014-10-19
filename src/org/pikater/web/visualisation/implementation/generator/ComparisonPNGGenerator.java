@@ -13,6 +13,12 @@ import org.pikater.web.visualisation.implementation.exceptions.ChartException;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
 import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
 
+/**
+ * Implements functionality to create visualisation chart in PNG format for two data sets.
+ * 
+ * @author siposp
+ *
+ */
 public class ComparisonPNGGenerator extends ComparisonGenerator {
 
 	public ComparisonPNGGenerator(AbstractDSVisResult<?, ?> progressListener, PrintStream output, JPADataSetLO dslo1, JPADataSetLO dslo2, int XIndex1, int XIndex2, int YIndex1, int YIndex2,
@@ -37,6 +43,16 @@ public class ComparisonPNGGenerator extends ComparisonGenerator {
 		renderer = new ImageRenderer(Generator.DEFAULTCHARTSIZE, Generator.DEFAULTCHARTSIZE);
 	}
 
+	/**
+	 * <p>
+	 * Creates the comparison chart for two datasets, that have previously been set for this {@link ComparisonPNGGenerator}.
+	 * </p>
+	 * <p>
+	 * The resulted image is in PNG format.
+	 * </p>
+	 * @Override
+	 * {@link ComparisonGenerator#create()}
+	 */
 	@Override
 	public void create() throws IOException, ChartException {
 		try {

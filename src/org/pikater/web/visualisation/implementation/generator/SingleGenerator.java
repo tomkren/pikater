@@ -13,6 +13,13 @@ import org.pikater.web.visualisation.implementation.datasource.single.ArffXYZPoi
 import org.pikater.web.visualisation.implementation.datasource.single.SingleArffDataset;
 import org.pikater.web.visualisation.implementation.generator.base.Generator;
 
+/**
+ * Implements functionality to create visualisation chart for one data set. Format
+ * of the result is not yet specified.
+ * 
+ * @author siposp
+ *
+ */
 public abstract class SingleGenerator extends Generator {
 
 	protected SingleArffDataset dataset;
@@ -45,6 +52,9 @@ public abstract class SingleGenerator extends Generator {
 		this.instNum = dataset.getNumberOfInstances();
 	}
 
+	/**
+	 * Creates a chart for one dataset, that has previously been set for this {@link SingleGenerator}.
+	 */
 	@Override
 	public void create() throws IOException {
 		renderer.begin();
