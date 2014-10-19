@@ -6,18 +6,19 @@ import com.google.gwt.dom.client.CanvasElement;
 
 public class Canvas extends JavaScriptObject {
 
-	protected Canvas() {}
-	
+	protected Canvas() {
+	}
+
 	public final native void clear() /*-{
-		this.clear();
-	}-*/;
-	
+										this.clear();
+										}-*/;
+
 	public final native Context2d getContext() /*-{
-		return this.getContext();
-	}-*/;
-	
+												return this.getContext();
+												}-*/;
+
 	public final native CanvasElement getElement() /*-{
-		return this.getElement();
-	}-*/;
-	
+													return this.getElement();
+													}-*/;
+
 }

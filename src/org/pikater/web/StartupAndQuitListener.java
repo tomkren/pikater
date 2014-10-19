@@ -41,8 +41,10 @@ public class StartupAndQuitListener implements ServletContextListener {
 		 */
 
 		/*
-		 * This is where the actual initialization begins. GENERAL NOTE: don't
-		 * alter the code order. There may be some dependencies.
+		 * This is where the actual initialization begins.
+		 * 
+		 * GENERAL NOTE: don't alter the code order. There may be some
+		 * dependencies.
 		 */
 
 		try {
@@ -60,8 +62,7 @@ public class StartupAndQuitListener implements ServletContextListener {
 				announceCheckOrAction("checking core connection");
 				try {
 					WebToCoreEntryPoint.checkLocalConnection();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					throw new IllegalStateException(
 							"Could not establish connection with pikater core.",
 							e);
@@ -84,8 +85,7 @@ public class StartupAndQuitListener implements ServletContextListener {
 							"\n**********************************************************\n"
 									+ "APPLICATION SETUP SUCCESSFULLY FINISHED\n"
 									+ "**********************************************************");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			PikaterWebLogger.log(Level.SEVERE,
 					"APPLICATION LAUNCH REQUIREMENTS WERE NOT MET. ABORTED.");
 			throw new IllegalStateException(e); // will be printed just
