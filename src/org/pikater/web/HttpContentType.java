@@ -5,16 +5,21 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * There are various enumerations like this in various libraries but none of them
- * seems to be complete or provide interface we require so we made our own implementation,
- * sufficient to cover the needs of our application.
+ * There are various enumerations like this in various libraries but none of
+ * them seems to be complete or provide interface we require so we made our own
+ * implementation, sufficient to cover the needs of our application.
  * 
  * @author SkyCrawl
  */
 public enum HttpContentType {
-	APPLICATION_JAR("application/java-archive", ".jar"), APPLICATION_OCTET_STREAM("application/octet-stream", ".bin"), APPLICATION_MS_EXCEL("application/vnd.ms-excel", ".xls"), APPLICATION_MS_OFFICE_OPEN_SPREADSHEET(
-			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx"), APPLICATION_XHTML_XML("application/xhtml+xml", ".xhtml"), APPLICATION_XML("application/xml", ".xml"), TEXT_CSV(
-			"text/csv", ".csv"), TEXT_HTML("text/html", ".htm", ".html"), TEXT_PLAIN("text/plain", ".txt"), WILDCARD("*/*");
+	APPLICATION_JAR("application/java-archive", ".jar"), APPLICATION_OCTET_STREAM(
+			"application/octet-stream", ".bin"), APPLICATION_MS_EXCEL(
+			"application/vnd.ms-excel", ".xls"), APPLICATION_MS_OFFICE_OPEN_SPREADSHEET(
+			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			".xlsx"), APPLICATION_XHTML_XML("application/xhtml+xml", ".xhtml"), APPLICATION_XML(
+			"application/xml", ".xml"), TEXT_CSV("text/csv", ".csv"), TEXT_HTML(
+			"text/html", ".htm", ".html"), TEXT_PLAIN("text/plain", ".txt"), WILDCARD(
+			"*/*");
 
 	private final String contentType;
 	private final String[] extensionList;

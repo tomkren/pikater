@@ -3,8 +3,8 @@ package org.pikater.web;
 import com.google.common.net.MediaType;
 
 /**
- * Declaration of image types supported by some of the
- * features of this application.
+ * Declaration of image types supported by some of the features of this
+ * application.
  * 
  * @author SkyCrawl
  */

@@ -48,8 +48,11 @@ public class MathTooling {
 
 	  // if abs(angle)==1 then the lines are parallell,
 	  // so no intersection is possible
-	  if(Math.abs(deg)==1) return null;
-
+	  if(Math.abs(deg)==1)
+	  {
+		  return null;
+	  }
+	  
 	  // find intersection Pt between two lines
 	  Vector2d pt=new Vector2d(0,0);
 	  div=yD2*xD1-xD2*yD1;
