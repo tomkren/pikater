@@ -35,7 +35,7 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -146,7 +146,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
         }
 
 		// register with the DF
-		if (! this.getAID().getLocalName().contains("Service")){	
+		if (! this.getAID().getLocalName().contains("Service")) {	
 			List<String> descr = new ArrayList<String>();
 			descr.add(CoreAgents.COMPUTING_AGENT.getName());
 			descr.add(getLocalName());
@@ -212,8 +212,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 	/**
 	 * Set options
-	 * @param task
-	 * @return
 	 */
 	public boolean setOptions(Task task) {
 		
@@ -232,7 +230,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 	/**
 	 * Get options
-	 * @return
 	 */
 	public String getOptions() {
 
@@ -247,7 +244,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	/**
 	 * Will we accept or refuse the request? (working,
 	 * size of taksFIFO, latency time...)
-	 * @return
 	 */
 	public boolean acceptTask() {
 		return true;

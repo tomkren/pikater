@@ -2,53 +2,52 @@ package org.pikater.core.ontology.subtrees.newOption.values;
 
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-public class NullValue implements IValueData
-{
+public class NullValue implements IValueData {
 	private static final long serialVersionUID = 4240750027791781820L;
-	
-	public NullValue() {}
-	
+
+	public NullValue() {
+	}
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return 0;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
+	public boolean equals(Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		return true; // needed in {@link NewOption#mergeWith(IMergeable)}
+		}
+		// needed in {@link NewOption#mergeWith(IMergeable)}
+		return true;
 	}
+
 	@Override
-	public Object hackValue()
-	{
+	public Object hackValue() {
 		return null;
 	}
+
 	@Override
-	public String exportToWeka()
-	{
+	public String exportToWeka() {
 		return "";
 	}
+
 	@Override
-	public String toDisplayName()
-	{
+	public String toDisplayName() {
 		return "NONE";
 	}
+
 	@Override
-	public NullValue clone()
-	{
-		try
-		{
+	public NullValue clone() {
+		try {
 			return (NullValue) super.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
+		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}

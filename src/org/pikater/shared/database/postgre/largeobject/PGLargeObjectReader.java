@@ -12,25 +12,25 @@ import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 
 public class PGLargeObjectReader extends Reader {
-	
-	long oid=-1;
-	LargeObjectManager lobj=null;
+
+	long oid = -1;
+	LargeObjectManager lobj = null;
 	LargeObject obj = null;
-	PGConnection con=null;
-	
+	PGConnection con = null;
+
 	/**
 	 * Creates a new instance of PostgreLargeObjectReader for the
 	 * defined connection and LargeObject ID
 	 * @param con The PGConnection, that is used to retrieve the data
 	 * @param oid The ID of the LargeObject for which the reader should be created
 	 */
-	public PGLargeObjectReader(PGConnection con, long oid){
-		this.con=con;
-		this.oid=oid;
+	public PGLargeObjectReader(PGConnection con, long oid) {
+		this.con = con;
+		this.oid = oid;
 		init();
 	}
 
-	private void init(){
+	private void init() {
 		try {
 			((java.sql.Connection) con).setAutoCommit(false);
 			lobj = con.getLargeObjectAPI();
@@ -39,17 +39,19 @@ public class PGLargeObjectReader extends Reader {
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 	}
-	
+
 	@Override
-	public void close(){
-		try{
-			if(obj!=null) obj.close();
-		}catch(SQLException e){
+	public void close() {
+		try {
+			if (obj != null)
+				obj.close();
+		} catch (SQLException e) {
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
-		try{
-			if(con!=null) ((java.sql.Connection) con).setAutoCommit(true);
-		}catch(SQLException e){
+		try {
+			if (con != null)
+				((java.sql.Connection) con).setAutoCommit(true);
+		} catch (SQLException e) {
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 	}
@@ -63,20 +65,21 @@ public class PGLargeObjectReader extends Reader {
 	 */
 	public int read(char[] arg0, int arg1, int arg2) throws IOException {
 		byte[] buf = new byte[arg2];
-		int res=-1;
+		int res = -1;
 		try {
-			res=obj.read(buf, arg1, arg2);
-			if(res==0) return -1;
+			res = obj.read(buf, arg1, arg2);
+			if (res == 0)
+				return -1;
 		} catch (SQLException e) {
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 			return -1;
 		}
-		for(int i=0;i<arg2;i++){
-			arg0[i]=(char)buf[i];
+		for (int i = 0; i < arg2; i++) {
+			arg0[i] = (char) buf[i];
 		}
 		return res;
 	}
-	
+
 	/**
 	 * Function to retrieve data from the Large Object.
 	 * It uses the native byte[] data byte to retrieve the data, which is the preferred way
@@ -92,13 +95,13 @@ public class PGLargeObjectReader extends Reader {
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * Return an InputStream object for the LargeObject associated with this reader
 	 * @return the object of inputstream
 	 * @throws SQLException
 	 */
-	public InputStream getInputStream() throws SQLException{
+	public InputStream getInputStream() throws SQLException {
 		return obj.getInputStream();
 	}
 
@@ -106,7 +109,7 @@ public class PGLargeObjectReader extends Reader {
 	 * Returns the size of the opened Large Object. It return -1 for a closed Large Object. 
 	 * @return Size of the LargeObject.
 	 */
-	public int size(){
+	public int size() {
 		try {
 			return obj.size();
 		} catch (SQLException e) {
@@ -114,8 +117,7 @@ public class PGLargeObjectReader extends Reader {
 		}
 	}
 
-	public static PGLargeObjectReader getForLargeObject(long oid)
-	{
+	public static PGLargeObjectReader getForLargeObject(long oid) {
 		return new PGLargeObjectReader(MyPGConnection.getConnectionToCurrentPGDB(), oid);
 	}
 }

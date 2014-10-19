@@ -27,31 +27,19 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
  * Each of this class contains a list of experiments that form the actual batch. 
  */
 @Entity
-@Table(
-		name="Batch",
-		indexes={
-				@Index(columnList="owner_id"),
-				@Index(columnList="name"),
-				@Index(columnList="note"),
-				@Index(columnList="created"),
-				@Index(columnList="finished"),
-				@Index(columnList="status"),
-				@Index(columnList="totalPriority"),
-				@Index(columnList="owner_id,status")
-		}
-	  )
+@Table(name = "Batch", indexes = { @Index(columnList = "owner_id"), @Index(columnList = "name"), @Index(columnList = "note"), @Index(columnList = "created"), @Index(columnList = "finished"),
+		@Index(columnList = "status"), @Index(columnList = "totalPriority"), @Index(columnList = "owner_id,status") })
 @NamedQueries({
-	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
-	@NamedQuery(name="Batch.getAll.count",query="select count(b) from JPABatch b"),
-	@NamedQuery(name="Batch.getByStatus",query="select b from JPABatch b where b.status=:status"),
-	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner"),
-	@NamedQuery(name="Batch.getByOwner.count",query="select count(b) from JPABatch b where b.owner=:owner"),
-	@NamedQuery(name="Batch.getByIDwithResult",query="select b,e,r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
-	@NamedQuery(name="Batch.getByIDonlyResults",query="select r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
-	@NamedQuery(name="Batch.getByIDonlyResults.count",query="select count(r) from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results")
-})
-public class JPABatch extends JPAAbstractEntity{
-	
+		@NamedQuery(name = "Batch.getAll", query = "select b from JPABatch b"),
+		@NamedQuery(name = "Batch.getAll.count", query = "select count(b) from JPABatch b"),
+		@NamedQuery(name = "Batch.getByStatus", query = "select b from JPABatch b where b.status=:status"),
+		@NamedQuery(name = "Batch.getByOwner", query = "select b from JPABatch b where b.owner=:owner"),
+		@NamedQuery(name = "Batch.getByOwner.count", query = "select count(b) from JPABatch b where b.owner=:owner"),
+		@NamedQuery(name = "Batch.getByIDwithResult", query = "select b,e,r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
+		@NamedQuery(name = "Batch.getByIDonlyResults", query = "select r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
+		@NamedQuery(name = "Batch.getByIDonlyResults.count", query = "select count(r) from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results") })
+public class JPABatch extends JPAAbstractEntity {
+
 	private String name;
 	private String note;
 	@Lob
@@ -63,63 +51,64 @@ public class JPABatch extends JPAAbstractEntity{
 	private boolean sendEmailAfterFinish;
 	@Enumerated(EnumType.STRING)
 	private JPABatchStatus status;
-	
-	@OneToMany(cascade=CascadeType.PERSIST)
+
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<JPAExperiment> experiments = new ArrayList<JPAExperiment>();
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date started;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date finished;
-	
+
 	/**
 	 * Constructor for JPA compatibility
 	 */
-	public JPABatch(){}
-	
+	public JPABatch() {
+	}
+
 	/**
 	 * Creates an experiment to be saved (not queued).
 	 */
-	public JPABatch(String name, String note, String xml, JPAUser owner)
-	{
-		this.name=name;
-		this.note=note;
-		this.XML=xml;
-		this.owner=owner;
-		this.userAssignedPriority=0;
-		this.totalPriority=0;
-		this.created=new Date();
-		this.status=JPABatchStatus.CREATED;
+	public JPABatch(String name, String note, String xml, JPAUser owner) {
+		this.name = name;
+		this.note = note;
+		this.XML = xml;
+		this.owner = owner;
+		this.userAssignedPriority = 0;
+		this.totalPriority = 0;
+		this.created = new Date();
+		this.status = JPABatchStatus.CREATED;
 	}
-	
+
 	/**
 	 * Creates an experiment to be queued.
 	 */
-	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, boolean sendEmailAfterFinish)
-	{
-		this.name=name;
-		this.note=note;
-		this.XML=xml;
-		this.owner=owner;
-		this.sendEmailAfterFinish=sendEmailAfterFinish;
+	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, boolean sendEmailAfterFinish) {
+		this.name = name;
+		this.note = note;
+		this.XML = xml;
+		this.owner = owner;
+		this.sendEmailAfterFinish = sendEmailAfterFinish;
 		this.userAssignedPriority = userAssignedPriority; // this needs to presede updating total priority:
 		updateTotalPriority();
-		this.created=new Date();
-		this.status=JPABatchStatus.WAITING;
+		this.created = new Date();
+		this.status = JPABatchStatus.WAITING;
 	}
 
-	public void setName(String name){
-		this.name=name;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getName(){
+
+	public String getName() {
 		return this.name;
 	}
-	
+
 	public String getNote() {
 		return note;
 	}
+
 	public void setNote(String note) {
 		this.note = note;
 	}
@@ -127,6 +116,7 @@ public class JPABatch extends JPAAbstractEntity{
 	public String getXML() {
 		return XML;
 	}
+
 	public void setXML(String xML) {
 		XML = xML;
 	}
@@ -134,30 +124,28 @@ public class JPABatch extends JPAAbstractEntity{
 	public JPAUser getOwner() {
 		return owner;
 	}
+
 	public void setOwner(JPAUser owner) {
 		this.owner = owner;
 	}
 
-	public void setUserAssignedPriority(int priority)
-	{
+	public void setUserAssignedPriority(int priority) {
 		/*
 		 * Currently it is only set once when an experiment is queued and after that it is readonly
 		 * so we don't need to update total priority.
 		 */
-		
-		if((priority >= 0) && priority < 10)
-		{
-			this.userAssignedPriority=priority;
-		}
-		else
-		{
+
+		if ((priority >= 0) && priority < 10) {
+			this.userAssignedPriority = priority;
+		} else {
 			throw new IllegalArgumentException("Only values from 0 to 9 are allowed. Received: " + priority);
 		}
 	}
-	public int getUserAssignedPriority(){ 
+
+	public int getUserAssignedPriority() {
 		return this.userAssignedPriority;
 	}
-	
+
 	/**
 	 * Use this method with caution as it may break synchronization between user priority and 
 	 * user assigned priority.</br>
@@ -167,16 +155,18 @@ public class JPABatch extends JPAAbstractEntity{
 	 * </ul>
 	 */
 	@Deprecated
-	public void setTotalPriority(int totalPriority){
-		this.totalPriority=totalPriority;
+	public void setTotalPriority(int totalPriority) {
+		this.totalPriority = totalPriority;
 	}
+
 	/**
 	 * Only THIS value is used in core system as priority for the whole batch.
 	 */
-	public int getTotalPriority(){
+	public int getTotalPriority() {
 		return this.totalPriority;
 	}
-	public void updateTotalPriority(){
+
+	public void updateTotalPriority() {
 		setTotalPriority(owner.getPriorityMax() * 10 + userAssignedPriority);
 	}
 
@@ -191,9 +181,11 @@ public class JPABatch extends JPAAbstractEntity{
 	public List<JPAExperiment> getExperiments() {
 		return experiments;
 	}
+
 	public void setExperiments(List<JPAExperiment> experiments) {
 		this.experiments = experiments;
 	}
+
 	public void addExperiment(JPAExperiment experiment) {
 		this.experiments.add(experiment);
 	}
@@ -205,6 +197,7 @@ public class JPABatch extends JPAAbstractEntity{
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+
 	public Date getStarted() {
 		return started;
 	}
@@ -216,15 +209,19 @@ public class JPABatch extends JPAAbstractEntity{
 	public Date getFinished() {
 		return finished;
 	}
+
 	public void setFinished(Date finished) {
 		this.finished = finished;
 	}
+
 	public JPABatchStatus getStatus() {
 		return status;
 	}
+
 	public void setStatus(JPABatchStatus status) {
 		this.status = status;
 	}
+
 	/**
 	 * Sets the status of the batch to the desired value
 	 * @param status String representation of JPABatchStatus object
@@ -232,39 +229,35 @@ public class JPABatch extends JPAAbstractEntity{
 	public void setStatus(String status) {
 		this.setStatus(JPABatchStatus.valueOf(status));
 	}
-	
-	public boolean isDesignatedForExecution()
-	{
+
+	public boolean isDesignatedForExecution() {
 		return getStatus() != JPABatchStatus.CREATED;
 	}
-	
-	public boolean isBeingExecuted()
-	{
-		return (getStatus().ordinal() >= JPABatchStatus.STARTED.ordinal()) &&
-				(getStatus().ordinal() <= JPABatchStatus.COMPUTING.ordinal());
+
+	public boolean isBeingExecuted() {
+		return (getStatus().ordinal() >= JPABatchStatus.STARTED.ordinal()) && (getStatus().ordinal() <= JPABatchStatus.COMPUTING.ordinal());
 	}
-	
-	public boolean isFinishedOrFailed()
-	{
+
+	public boolean isFinishedOrFailed() {
 		return (getStatus() == JPABatchStatus.FINISHED) || (getStatus() == JPABatchStatus.FAILED);
 	}
-	
+
 	@Transient
 	public static final String EntityName = "Batch";
-	
+
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
-		JPABatch updateValues=(JPABatch)newValues;
-		this.created=updateValues.getCreated();
-		this.experiments=updateValues.getExperiments();
-		this.started=updateValues.getStarted();
-		this.finished=updateValues.getFinished();
-		this.name=updateValues.getName();
-		this.note=updateValues.getNote();
-		this.owner=updateValues.getOwner();
-		this.userAssignedPriority=updateValues.getUserAssignedPriority();
-		this.status=updateValues.getStatus();
-		this.totalPriority=updateValues.getTotalPriority();
-		this.XML=updateValues.getXML();
+		JPABatch updateValues = (JPABatch) newValues;
+		this.created = updateValues.getCreated();
+		this.experiments = updateValues.getExperiments();
+		this.started = updateValues.getStarted();
+		this.finished = updateValues.getFinished();
+		this.name = updateValues.getName();
+		this.note = updateValues.getNote();
+		this.owner = updateValues.getOwner();
+		this.userAssignedPriority = updateValues.getUserAssignedPriority();
+		this.status = updateValues.getStatus();
+		this.totalPriority = updateValues.getTotalPriority();
+		this.XML = updateValues.getXML();
 	}
 }

@@ -14,7 +14,9 @@ public class CoreConfiguration {
 	/**
 	 * Private constructors hide the public ones.
 	 */
-	private CoreConfiguration() {}
+	private CoreConfiguration()
+	{
+	}
 	
 	/*
 	 * Spring configuration convenience interface

@@ -25,7 +25,7 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 /**

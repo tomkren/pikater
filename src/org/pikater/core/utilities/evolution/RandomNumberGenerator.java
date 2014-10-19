@@ -12,7 +12,6 @@ public class RandomNumberGenerator {
     private static RandomNumberGenerator theInstance = null;
 
     private RandomNumberGenerator() {
-        rnd = new Random();
     }
 
     /**
@@ -24,6 +23,7 @@ public class RandomNumberGenerator {
     public static RandomNumberGenerator getInstance() {
 
         if (theInstance == null) {
+            rnd = new Random();
             theInstance = new RandomNumberGenerator();
         }
         return theInstance;
@@ -60,12 +60,13 @@ public class RandomNumberGenerator {
         return rnd.nextGaussian();
     }
 
-    /* write to static field from instance method
-     ** Sets a new seed for the random number generator.
+    /** Sets a new seed for the random number generator.
+     *
      * @param seed The seed which shall be set.
+     */
     public void reseed(long seed) {
-        rnd = new Random(seed);
-    } */
+        rnd.setSeed(seed);
+    } 
 
     public Random getRandom() {
         return rnd;

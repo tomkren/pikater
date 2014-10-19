@@ -1,6 +1,6 @@
-package org.pikater.core.ontology.subtrees.batchDescription.export;
+package org.pikater.core.ontology.subtrees.batchdescription.export;
 
-import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
+import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
 
 public class Slot {
 	

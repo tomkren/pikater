@@ -15,7 +15,13 @@ import weka.classifiers.functions.GaussianProcesses;
 import weka.core.Instances;
 
 /**
- *
+ * Informed mutation based on the information from a surrogate model (Gaussian process regression).
+ * Performs an internal evolutionary search to find an optimum of the model. 
+ * 
+ * Details can be found in: M. Pilat and R. Neruda. ASM-MOMA: Multiobjective memetic algorithm
+ * with aggregate surrogate model. In Evolutionary Computation (CEC), 2011 IEEE Congress on,
+ * pages 1202-1208. IEEE, 2011.
+ * 
  * @author Martin Pilat
  */
 public class SurrogateMutationOperator implements Operator {
@@ -25,13 +31,29 @@ public class SurrogateMutationOperator implements Operator {
     ModelValueProvider mvp;
     ModelInputNormalizer norm;
 
-    public SurrogateMutationOperator(SearchItemIndividualArchive archive, double mutProbability, ModelValueProvider mvp, ModelInputNormalizer norm) {
+    /**
+     * Constructor. Creates an instance of the mutation. 
+     * 
+     * @param archive Archive of previously evaluated individuals
+     * @param mutProbability Probability of mutation
+     * @param mvp A provider for the value of model
+     * @param norm Normalizer for the input values
+     */
+    public SurrogateMutationOperator(SearchItemIndividualArchive archive,
+        double mutProbability, ModelValueProvider mvp,
+        ModelInputNormalizer norm) {
         this.archive = archive;
         this.mutProbability = mutProbability;
         this.mvp = mvp;
         this.norm = norm;
     }
 
+    /**
+     * Performs the mutation. First the individuals from the archive are used to create the values for the mode,
+     * which are then normalized using the normalizer. Gaussian process regression model is used to 
+     * predict the values of the model. An internal evolutionary algorithm is started to find a good
+     * value of the model. The solution found by the internal algorithm is added back to the population.
+     */
     @Override
     public void operate(Population parents, Population offspring) {
         try {
@@ -79,15 +101,14 @@ public class SurrogateMutationOperator implements Operator {
                     ea.evolve(innerPopulation);
                 }
               
-                SearchItemIndividual bestIndividual = (SearchItemIndividual)innerPopulation.getSortedIndividuals().get(0);
-                offspring.add(bestIndividual);
-                //System.err.println("SURROGATE_OUT" + bestIndividual.toString() + " " + bestIndividual.getFitnessValue());
-
+                SearchItemIndividual bestIndividual = (SearchItemIndividual)
+                    innerPopulation.getSortedIndividuals().get(0);
+                offspring.add(bestIndividual);              
             }
 
 
         } catch (Exception e) {
-        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
+            ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
 
 

@@ -19,25 +19,25 @@ public class LoadResults implements AgentAction {
 
 	private static final long serialVersionUID = -5184334421291769440L;
 
-	int userID;
+	private int userID;
 
-    Double mseLower;
-    Double mseUpper;
-    Double kappaLower;
-    Double kappaUpper;
-    Double errorLower;
-    Double errorUpper;
-    Double maeLower;
-    Double maeUpper;
-    Double raeLower;
-    Double raeUpper;
-    Double rrseLower;
-    Double rrseUpper;
-    String dataFile;
-    String testFile;
-    String agentType;
-    String startDate;
-    String endDate;
+	private Double mseLower;
+	private Double mseUpper;
+	private Double kappaLower;
+	private Double kappaUpper;
+	private Double errorLower;
+	private Double errorUpper;
+	private Double maeLower;
+	private Double maeUpper;
+	private Double raeLower;
+	private Double raeUpper;
+	private Double rrseLower;
+	private Double rrseUpper;
+	private String dataFile;
+	private String testFile;
+	private String agentType;
+	private String startDate;
+	private String endDate;
 
     public String getAgentType() {
         return agentType;
@@ -193,29 +193,40 @@ public class LoadResults implements AgentAction {
 
         String txt = "";
 
-        if (agentType != null)
+        if (agentType != null) {
             txt = appendAnd(txt, "Agent type = " + agentType);
-        if (dataFile != null)
+        }
+        if (dataFile != null) {
             txt = appendAnd(txt, "training file = " + dataFile);
-        if (testFile != null)
+        }
+        if (testFile != null) {
             txt = appendAnd(txt, "testing file = " + testFile);
-        if (startDate != null && endDate != null)
+        }
+        if (startDate != null && endDate != null) {
             txt = appendAnd(txt, "created between " + startDate + " and " + endDate);
-        if (errorLower != null && errorUpper != null)
+        }
+        if (errorLower != null && errorUpper != null) {
             txt = appendAnd(txt,errorLower + " <= error <= " + errorUpper);
-        if (kappaLower != null && kappaUpper != null)
+        }
+        if (kappaLower != null && kappaUpper != null) {
             txt = appendAnd(txt, kappaLower + " <= kappa <= " + kappaUpper);
-        if (mseLower != null && mseUpper != null)
+        }
+        if (mseLower != null && mseUpper != null) {
             txt = appendAnd(txt, mseLower + " <= RMSE <= " + mseUpper);
-        if (maeLower != null && maeUpper != null)
+        }
+        if (maeLower != null && maeUpper != null) {
             txt = appendAnd(txt, maeLower + " <= MAE <= " + maeUpper);
-        if (raeLower != null && raeUpper != null)
+        }
+        if (raeLower != null && raeUpper != null) {
             txt = appendAnd(txt, raeLower + " <= RAE <= " + raeUpper);
-        if (rrseLower != null && rrseUpper != null)
+        }
+        if (rrseLower != null && rrseUpper != null) {
             txt = appendAnd(txt, rrseLower + " <= RRSE <= " + rrseUpper);
+        }
 
-        if (txt.equals(""))
+        if (txt.equals("")) {
             return "No filter";
+        }
 
         return txt;
     }
@@ -231,29 +242,37 @@ public class LoadResults implements AgentAction {
         //"rootRelativeSquaredError DOUBLE)");
 
 
-        if (agentType != null)
+        if (agentType != null) {
             txt = appendAnd(txt, "agentType LIKE \'%" + agentType + "%\'");
-        if (dataFile != null)
+        }
+        if (dataFile != null) {
             txt = appendAnd(txt, "trainFileExt LIKE \'%" + dataFile + "%\'");
-        if (testFile != null)
+        }
+        if (testFile != null) {
             txt = appendAnd(txt, "testFileExt LIKE \'%" + testFile + "\'%");
-        //if (startDate != null && endDate != null)
-        //    txt = appendAnd(txt, "created between " + startDate + " and " + endDate);
-        if (errorLower != null && errorUpper != null)
+        }
+        if (errorLower != null && errorUpper != null) {
             txt = appendAnd(txt,errorLower + " <= errorRate AND errorRate <= " + errorUpper);
-        if (kappaLower != null && kappaUpper != null)
+        }
+        if (kappaLower != null && kappaUpper != null) {
             txt = appendAnd(txt, kappaLower + " <= kappaStatistic AND kappaStatistic <= " + kappaUpper);
-        if (mseLower != null && mseUpper != null)
+        }
+        if (mseLower != null && mseUpper != null) {
             txt = appendAnd(txt, mseLower + " <= rootMeanSquaredError AND rootMeanSquaredError <= " + mseUpper);
-        if (maeLower != null && maeUpper != null)
+        }
+        if (maeLower != null && maeUpper != null) {
             txt = appendAnd(txt, maeLower + " <= meanAbsoluteError AND meanAbsoluteError <= " + maeUpper);
-        if (raeLower != null && raeUpper != null)
+        }
+        if (raeLower != null && raeUpper != null) {
             txt = appendAnd(txt, raeLower + " <= relativeAbsoluteError AND relativeAbsoluteError <= " + raeUpper);
-        if (rrseLower != null && rrseUpper != null)
+        }
+        if (rrseLower != null && rrseUpper != null) {
             txt = appendAnd(txt, rrseLower + " <= rootRelativeSquaredError AND rootRelativeSquaredError <= " + rrseUpper);
-
-        if (txt.equals(""))
+        }
+        
+        if (txt.equals("")) {
             return "";
+        }
 
 
         return "WHERE " + txt;

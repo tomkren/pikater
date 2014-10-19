@@ -23,7 +23,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
-import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
@@ -333,7 +333,6 @@ public class ComputingAction extends FSMBehaviour {
 			/**
 			 * Save DataSources
 			 * 
-			 * @param labeledData
 			 * @throws Exception
 			 */
 			private void saveDataSource (List<DataInstances> labeledData) throws Exception {
@@ -501,7 +500,6 @@ public class ComputingAction extends FSMBehaviour {
 	/**
 	 * Resulting message: FAILURE
 	 * 
-	 * @param desc
 	 */
 	private void failureMsg(String desc) {
 		List<Eval> evaluations = new ArrayList<Eval>();
@@ -531,7 +529,6 @@ public class ComputingAction extends FSMBehaviour {
 	/**
 	 * Get a message from the FIFO of tasks
 	 * 
-	 * @return
 	 */
 	private boolean getRequest() {
 		if (!agent.taskFIFO.isEmpty()) {

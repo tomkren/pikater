@@ -5,6 +5,7 @@ import org.pikater.core.utilities.evolution.operators.Operator;
 import org.pikater.core.utilities.evolution.selectors.Selector;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /** The main class which is responsible for the run of a single generation of
  * the evolutionary algorithm. Provides a way to specify the fitness function,
@@ -15,9 +16,9 @@ import java.util.ArrayList;
  */
 public class EvolutionaryAlgorithm {
 
-    ArrayList<Operator> operators;
-    ArrayList<Selector> matingSelectors;
-    ArrayList<Selector> environmentalSelectors;
+    List<Operator> operators;
+    List<Selector> matingSelectors;
+    List<Selector> environmentalSelectors;
     double eliteSize = 0.0;
     FitnessEvaluator fitness;
     Replacement replacement;
@@ -128,8 +129,9 @@ public class EvolutionaryAlgorithm {
 
     public void evolve(Population pop) {
 
-        if (fitness == null)
+        if (fitness == null) {
             throw new IllegalStateException("No fitness function defined");
+        }
 
         fitness.evaluate(pop);
 
@@ -137,8 +139,7 @@ public class EvolutionaryAlgorithm {
         
         Population matingPool = new Population();
 
-        if (!matingSelectors.isEmpty())
-        {
+        if (!matingSelectors.isEmpty()) {
             int mateSel = matingSelectors.size();
             int toSelect = parents.getPopulationSize()/mateSel;
             for (int i = 0; i < matingSelectors.size(); i++) {
@@ -153,8 +154,7 @@ public class EvolutionaryAlgorithm {
                 matingSelectors.get(matingSelectors.size()-1).select(toSelect, parents, sel);
                 matingPool.addAll((Population)sel.clone());
             }
-        } else
-        {
+        } else {
             matingPool = (Population)parents.clone();
         }
 
@@ -169,7 +169,7 @@ public class EvolutionaryAlgorithm {
 
         Population selected = new Population();
 
-        ArrayList<Individual> sortedOld = parents.getSortedIndividuals();
+        List<Individual> sortedOld = parents.getSortedIndividuals();
         for (int i = 0; i < eliteSize*parents.getPopulationSize(); i++) {
             selected.add(sortedOld.get(i));
         }

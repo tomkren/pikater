@@ -7,57 +7,47 @@ import java.util.Set;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("topology")
-public class TopologyModel
-{
-	public enum ServerType
-	{
-		MASTER,
-		SLAVE;
-		
+public class TopologyModel {
+	public enum ServerType {
+		MASTER, SLAVE;
+
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			return this.name();
 		}
 	}
-	
+
 	/**
 	 * The Set collection is critical for @Step3 class. Do not change it lightly.
 	 */
 	private final Set<RemoteServerInfo> masters;
 	private final Set<RemoteServerInfo> slaves;
-	
-	public TopologyModel()
-	{
+
+	public TopologyModel() {
 		this.masters = new HashSet<RemoteServerInfo>();
 		this.slaves = new HashSet<RemoteServerInfo>();
 	}
-	
-	public boolean addServer(ServerType type, RemoteServerInfo server)
-	{
-		switch(type)
-		{
-			case MASTER:
-				return this.masters.add(server);
-			case SLAVE:
-				return this.slaves.add(server);
-			default:
-				throw new IllegalStateException();
+
+	public boolean addServer(ServerType type, RemoteServerInfo server) {
+		switch (type) {
+		case MASTER:
+			return this.masters.add(server);
+		case SLAVE:
+			return this.slaves.add(server);
+		default:
+			throw new IllegalStateException();
 		}
 	}
-	
-	public Set<RemoteServerInfo> getMasters()
-	{
+
+	public Set<RemoteServerInfo> getMasters() {
 		return masters;
 	}
 
-	public Set<RemoteServerInfo> getSlaves()
-	{
+	public Set<RemoteServerInfo> getSlaves() {
 		return slaves;
 	}
 
-	public boolean isWellFormed()
-	{
+	public boolean isWellFormed() {
 		return !masters.isEmpty() && !slaves.isEmpty() && Collections.disjoint(masters, slaves);
 	}
 }

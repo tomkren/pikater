@@ -1,8 +1,7 @@
 package org.pikater.core.agents.system.computation.planning.structures;
 
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
-
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration.DurationType;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.ArrayList;

@@ -9,7 +9,11 @@ import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.options.recommend.BasicRecommend_Box;
 
-
+/**
+ * Implementation of a simple recommendation strategy. The best-performing computational agent
+ * on the closest dataset is recommended together with its parameters. 
+ * 
+ */
 public class Agent_Basic extends Agent_Recommender {
 
 	private static final long serialVersionUID = 1175580440950655620L;
@@ -32,6 +36,19 @@ public class Agent_Basic extends Agent_Recommender {
 		return BasicRecommend_Box.get();
 	}
 
+	/**
+	 * Returns the best agent selected based on the metadata. 
+	 * 
+	 * The closest dataset (according to metadata) is selected and then all the results on this
+	 * dataset are investigated. The agent which provided the best result in this dataset is 
+	 * recommended for the new data together with its parameters.
+	 * 
+	 * In case no results are found in the database (cold start) default agent is recommended
+	 * (RBF Network)
+	 * 
+	 * @param data The new data, for which the agent is recommended
+	 * @return The best agent and its settings for the data
+	 */
 	@Override
 	protected org.pikater.core.ontology.subtrees.management.Agent
 		chooseBestAgent(Datas data) {
@@ -129,8 +146,13 @@ public class Agent_Basic extends Agent_Recommender {
 		
 		return agent;
 
-	}	         
+	}	
 	
+	/**
+	 * Computes the distance matrix between all pairs of metadata. Used only for logging.
+	 * 
+	 * @return Formated String with the metadata distance matrix.
+	 */
 	private String distanceMatrix() {
 		String matrix = "";
 		
@@ -178,7 +200,12 @@ public class Agent_Basic extends Agent_Recommender {
 	}
 
 	/**
-	 * Compute distance between two datasets (use metadata)
+	 * Computes the distance between two datasets as a weighted sum of differences between their 
+	 * metadata.
+	 * 
+	 * @param m1 Metadata for the first dataset
+	 * @param m2 Metadata for the second dataset
+	 * @return Distance between the two datasets
 	 */
 	private double distance(Metadata m1, Metadata m2) {
 

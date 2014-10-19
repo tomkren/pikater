@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.batchDescription;
+package org.pikater.core.ontology.subtrees.batchdescription;
 
 /**
  * Created by Marti  on 27.12.13.

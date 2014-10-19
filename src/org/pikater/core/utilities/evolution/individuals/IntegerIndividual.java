@@ -51,7 +51,7 @@ public class IntegerIndividual extends ArrayIndividual{
      * @return The internal integer array.
      */
     public int[] toIntArray() {
-        return genes;
+        return Arrays.copyOf(genes, genes.length);
     }
 
     @Override

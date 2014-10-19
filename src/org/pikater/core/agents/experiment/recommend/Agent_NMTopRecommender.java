@@ -58,6 +58,9 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 		return NMTopRecommender_Box.get();
 	}
 	
+	/**
+	 * A simple class to store together the metadata and its distance to a different metadata.
+	 */
     class MetadataDistancePair implements Comparable<MetadataDistancePair> {
 
         Metadata m;
@@ -79,6 +82,12 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         }
         double d;
 
+        /**
+         * The contructor for this class
+         * 
+         * @param m The metadata
+         * @param d The distance of this metadata
+         */
         public MetadataDistancePair(Metadata m, double d) {
             this.m = m;
             this.d = d;
@@ -88,6 +97,13 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 			return Agent_NMTopRecommender.this;
 		}
 
+        /**
+         * Compares this instance to another one based on the distance.
+         * 
+         * @param o The other instance
+         * @return 0 if the distance is the same, 1 if this instance is closer and -1 if the other 
+         * 	instance is closer
+         */
         @Override
         public int compareTo(MetadataDistancePair o) {
             if (o.getDistance() == this.getDistance()) {
@@ -121,6 +137,18 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 		}
     }
 
+    /**
+     * Chooses the best agent for the {@code data}. First the N closes datasets are chosen, for each of these
+     * datasets the best {@code M} agents are considered. The most frequent agent of these {@code N*M} is 
+     * chosen as the agent type. Next, all the options of the agent from those {@code N*M} observations
+     * are statistically analyzed to provide the ranges of options of the recommended agent. 
+     * 
+     * The mean and standard deviation of the option values are computed and the interval
+     * {@code [mean-2*stddev, mean+2*stddev]} is used as the recommended interval for each option.
+     * 
+     * @param data The data for which the agent is recommended
+     * @return The description of the recommended agent
+     */
     @Override
     protected Agent chooseBestAgent(Datas data) {
     	
@@ -361,6 +389,14 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
     }
 
 
+    /**
+     * Computes the distance between two sets of metadata as the weighted sum of the distances of 
+     * all the meta-attributes.
+     *  
+     * @param m1 First set of metadata
+     * @param m2 Second set of metadata
+     * @return Distance between {@code m1} and {@code m2}.
+     */
     private double distance(Metadata m1, Metadata m2) {
 
         double wAttributeType = 1;

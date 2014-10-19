@@ -6,7 +6,7 @@ import java.util.List;
 import org.jfree.util.Log;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualNotSpecifiedComputingAgent;
 import org.pikater.core.ontology.subtrees.agent.AgentClass;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;

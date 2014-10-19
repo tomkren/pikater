@@ -108,8 +108,9 @@ public class Agent_RandomSearch extends Agent_Search {
 		else{
 			float bestError = evaluations[0][0];
 			for(int i = 0; i < evaluations.length; i++){
-				if(evaluations[i][0]<bestError)
+				if(evaluations[i][0] < bestError) {
 					bestError = evaluations[i][0];
+				}
 			}
 			errorRate = bestError;		
 		}
@@ -122,14 +123,14 @@ public class Agent_RandomSearch extends Agent_Search {
 	 * @return SearchSolution   a new random solution to try.
 	 */
 	private SearchSolution genRandomSolution(){
-		List<IValueData> new_solution = new ArrayList<IValueData>();
+		List<IValueData> newSolution = new ArrayList<IValueData>();
         List<String> names = new ArrayList<String>();
 		for (SearchItem si : getSchema() ) {
-			new_solution.add(si.randomValue(rndGen));
+			newSolution.add(si.randomValue(rndGen));
             names.add(si.getName());
 		}
 		SearchSolution sol = new SearchSolution();
-		sol.setValues(new_solution);
+		sol.setValues(newSolution);
 		return sol;
 	}
 		

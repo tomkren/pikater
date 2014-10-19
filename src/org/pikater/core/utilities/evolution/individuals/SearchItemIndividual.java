@@ -18,6 +18,11 @@ import weka.core.Instances;
 import java.util.Arrays;
 
 /**
+ * Represents an individual as an array of SearchItem objects. Can be used to search the parameters
+ * of machine-learning methods (computational agents).
+ * 
+ * Each individual has a schema, which describes the possible values on each position, and it also 
+ * has the particular value for each position.
  *
  * @author Martin Pilat
  */
@@ -26,15 +31,34 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
     SearchItem[] schema;
     IValueData[] items;
 
+    /**
+     * Constructor. Initializes the individual with empty array of given length.
+     * 
+     * @param n the length of the array
+     */
+    
     public SearchItemIndividual(int n) {
         schema = new SearchItem[n];
         items = new IValueData[n];
     }
     
+    /**
+     * Sets the value of the {@link SearchItem} on the position {@code n} 
+     * @param n the position to set
+     * @param s the item to set on this position
+     */
+    
     public void setSchema(int n, SearchItem s) {
         schema[n] = s;
     }
     
+    /**
+     * Returns the schema on the {@code n}-th position.
+     * 
+     * @param n the position
+     * @return the SearchItem on {@code n}-th position.
+     */
+
     public SearchItem getSchema(int n) {
         return schema[n];
     }
@@ -67,15 +91,13 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
     }
     
     @Override
-    public SearchItemIndividual clone()
-    {
+    public SearchItemIndividual clone() {
         SearchItemIndividual newSI = (SearchItemIndividual) super.clone();
         
         newSI.schema = schema;
         newSI.items = new IValueData[items.length];
         
-        for (int i = 0; i < items.length; i++)
-        {
+        for (int i = 0; i < items.length; i++) {
             newSI.items[i] = items[i].clone();
         }
         
@@ -134,28 +156,16 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         Instance inst = new Instance(items.length + 1);
         inst.setDataset(emptyDatasetFromSchema());
         
-        for (int i = 0; i < items.length; i++)
-        {
-            if (schema[i] instanceof SetSItem)
-            {
+        for (int i = 0; i < items.length; i++) {
+            if (schema[i] instanceof SetSItem) {
                 inst.setValue(i, items[i].toString());
-                continue;
-            }
-            else
-            {
+            } else {
                 IntervalSearchItem searchItem=(IntervalSearchItem)schema[i];
-                if (searchItem.getMin() instanceof BooleanValue)
-                {
-                    inst.setValue(i, items[i].hackValue().equals("False") ? 0.0 : 1.0);
-                    continue;
-                }
-                else if (searchItem.getMin() instanceof IntegerValue)
-                {
+                if (searchItem.getMin() instanceof BooleanValue) {
+                    inst.setValue(i, "False".equals(items[i].hackValue()) ? 0.0 : 1.0);
+                } else if (searchItem.getMin() instanceof IntegerValue) {
                     inst.setValue(i, norm.normalizeInt(items[i], (IntervalSearchItem)schema[i]));
-                    continue;
-                }
-                else if (searchItem.getMin() instanceof FloatValue)
-                {
+                } else if (searchItem.getMin() instanceof FloatValue) {
                     inst.setValue(i, norm.normalizeFloat(items[i], (IntervalSearchItem)schema[i]));
                 }
             }

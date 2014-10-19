@@ -25,14 +25,16 @@ public class GetAgentInfoInitiator extends Initiator {
 	public AgentInfos getAgentInfosResponse(Codec codec,
 			Ontology agentInfoOntology) throws PikaterGatewayException {
 
-		if (response == null)
+		if (response == null) {
 			throw new PikaterGatewayException("No response for Pikater agent action");
-
+		}
+		
 		if (ACLMessage.FAILURE == response.getPerformative()
-				|| ACLMessage.REFUSE == response.getPerformative())
+				|| ACLMessage.REFUSE == response.getPerformative()) {
 			throw new PikaterGatewayException("Pikater agent action failed or refused: "
 					+ response.getPerformative() + " " + response.getContent());
-
+		}
+		
 		ContentManager contentManager = new ContentManager();
 		contentManager.registerLanguage(codec);
 		contentManager.registerOntology(agentInfoOntology);

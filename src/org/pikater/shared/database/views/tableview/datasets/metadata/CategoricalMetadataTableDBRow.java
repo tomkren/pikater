@@ -12,21 +12,18 @@ import org.pikater.shared.util.LocaleUtils;
 
 public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 
-	private JPAAttributeCategoricalMetaData attrCat=null;
+	private JPAAttributeCategoricalMetaData attrCat = null;
 	private Locale currentLocale;
 
-	public CategoricalMetadataTableDBRow(JPAAttributeCategoricalMetaData attrCat,Locale locale)
-	{
-		this.attrCat=attrCat;
-		this.currentLocale=locale;
+	public CategoricalMetadataTableDBRow(JPAAttributeCategoricalMetaData attrCat, Locale locale) {
+		this.attrCat = attrCat;
+		this.currentLocale = locale;
 	}
 
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column) {
 		CategoricalMetaDataTableDBView.Column specificColumn = (CategoricalMetaDataTableDBView.Column) column;
-		switch(specificColumn)
-		{
+		switch (specificColumn) {
 		/*
 		 * First the read-only properties.
 		 */
@@ -35,21 +32,20 @@ public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 		case IS_TARGET:
 			return new BooleanReadOnlyDBViewValue(attrCat.isTarget());
 		case RATIO_OF_MISSING_VALUES:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getRatioOfMissingValues()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getRatioOfMissingValues()));
 		case CATEGORY_COUNT:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatInteger(currentLocale,attrCat.getNumberOfCategories()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatInteger(currentLocale, attrCat.getNumberOfCategories()));
 		case ENTROPY:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getEntropy()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getEntropy()));
 		case CLASS_ENTROPY:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getClassEntropy()));
-		
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getClassEntropy()));
+
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}
 	}
 
 	@Override
-	public void commitRow()
-	{
+	public void commitRow() {
 	}
 }

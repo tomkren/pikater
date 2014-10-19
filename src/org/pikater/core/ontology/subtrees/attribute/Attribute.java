@@ -83,7 +83,7 @@ public class Attribute implements Concept {
 
 	// =======================================
 	public weka.core.Attribute toWekaAttribute() {
-		if (values != null && values.size() > 0) {
+		if (values != null && !values.isEmpty()) {
 			FastVector my_nominal_values = new FastVector();
 			Iterator itr = values.iterator();
 			while (itr.hasNext()) {
@@ -136,7 +136,7 @@ public class Attribute implements Concept {
 	}
 
 	String stringValue(double _dval) {
-		if (values != null && values.size() > 0) {
+		if (values != null && !values.isEmpty()) {
 			return Utils.quote((String) values.get((int) _dval));
 		} else if (type.equals(NUMERIC_TYPE)) {
 			return Utils.doubleToString(_dval, 6);

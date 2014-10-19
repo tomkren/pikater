@@ -1,22 +1,33 @@
 package org.pikater.core.utilities.evolution.multiobjective;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import org.pikater.core.utilities.evolution.FitnessEvaluator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.MultiobjectiveIndividual;
 
+/**
+ * Basic class for multi-objective fitness evaluations. Provides the interface and some
+ * utility methods (non-dominated front extraction, non-dominated sorting and crowding
+ * distance assignment).
+ * 
+ * @author Martin Pilat
+ */
+
 public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator {
 
     /**
+     * Extracts the non-dominated individuals from the list of individuals 
      *
      * @param pop Population from which the non-dominated front is chosen
      * @return List of Individuals in current non-dominated front
      */
     public static List<Individual> getNonDominatedFront(List<Individual> population) {
-        ArrayList<Individual> front = new ArrayList<Individual>();
+        List<Individual> front = new ArrayList<Individual>();
         front.add(population.get(0));
 
         for (Individual p : population) {
@@ -24,7 +35,7 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
                 continue;
             }
             front.add(p);
-            ArrayList<Individual> toRemove = new ArrayList<Individual>();
+            List<Individual> toRemove = new ArrayList<Individual>();
             for (Individual q : front) {
                 if (q.equals(p)) {
                     continue;
@@ -43,12 +54,18 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         return front;
     }
 
+    /**
+     * Performs fast non-dominated sorting (division of population into non-dominated fronts).
+     * 
+     * @param pop the population of individuals
+     * @return The list of non-dominated fronts, lower fronts are first
+     */
+    
     protected List<List<Individual>> fastNonDominatedSort(List<Individual> pop) {
         List<List<Individual>> fronts = new ArrayList<List<Individual>>();
         List<Individual> population = new ArrayList<Individual>();
         population.addAll(pop);
-        while (!population.isEmpty())
-        {
+        while (!population.isEmpty()) {
             List<Individual> front = getNonDominatedFront(population);
             fronts.add(front);
             population.removeAll(front);
@@ -56,8 +73,15 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         return fronts;
     }
 
+    /**
+     * Assigns the crowding distance to all individuals in a single non-dominated front 
+     * as used e.g. in the NSGA-II algorithm.
+     * 
+     * @param front the non-dominated front
+     */
+    
     protected void crowdingDistanceAssignment(List<Individual> front) {
-        ArrayList<MultiobjectiveIndividual> mi = new ArrayList<MultiobjectiveIndividual>();
+        List<MultiobjectiveIndividual> mi = new ArrayList<MultiobjectiveIndividual>();
         for (Individual ind : front) {
             mi.add((MultiobjectiveIndividual) ind);
         }
@@ -96,19 +120,26 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
     public static boolean dominates(Individual a, Individual b) {
         MultiobjectiveIndividual i1 = (MultiobjectiveIndividual) a;
         MultiobjectiveIndividual i2 = (MultiobjectiveIndividual) b;
-        int dom_count = 0;
+        int domCount = 0;
         for (int i = 0; i < i1.getObjectives().length; i++) {
             if (i1.getObjectives()[i] <= i2.getObjectives()[i]) {
-                dom_count++;
+                domCount++;
             }
         }
-        if (dom_count == i1.getObjectives().length) {
+        if (domCount == i1.getObjectives().length) {
             return true;
         }
         return false;
     }
 
-    protected class FitnessValueComparator implements Comparator<Individual> {
+    /**
+     * Compares two individuals based on their fitness value.
+     *
+     */
+    protected static class FitnessValueComparator implements Comparator<Individual>, Serializable {
+
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         public int compare(Individual o1, Individual o2) {

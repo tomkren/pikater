@@ -8,44 +8,42 @@ package org.pikater.shared.experiment;
  * 
  * @author stepan
  */
-public class UniversalElementPresentation
-{
+public class UniversalElementPresentation {
 	/**
 	 * X position of the box represented by the parent element.
 	 */
 	private int x;
-	
+
 	/**
 	 * Y position of the box represented by the parent element.
 	 */
 	private int y;
-	
+
 	/**
 	 * Gets the X position of the box represented by the parent element.
 	 */
-	public int getX()
-	{
+	public int getX() {
 		return x;
 	}
+
 	/**
 	 * Sets the X position of the box represented by the parent element.
 	 */
-	public void setX(int x)
-	{
+	public void setX(int x) {
 		this.x = x;
 	}
+
 	/**
 	 * Gets the Y position of the box represented by the parent element.
 	 */
-	public int getY()
-	{
+	public int getY() {
 		return y;
 	}
+
 	/**
 	 * Sets the Y position of the box represented by the parent element.
 	 */
-	public void setY(int y)
-	{
+	public void setY(int y) {
 		this.y = y;
 	}
 }

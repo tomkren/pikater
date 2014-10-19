@@ -155,7 +155,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	 * - at the moment only error rate, root mean squared error 
 	 * and kappa statistic.
 	 *
-	 * @param named_evals
 	 * @return array of values without names (in a fixed order)
 	 */
 	private float[] namedEvalsToFitness(Evaluation eval) {
@@ -338,8 +337,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					solutionsNew = generateNewSolutions(solutionsNew, evaluations);
 					if(solutionsNew != null) {
 						evaluations = new float[solutionsNew.size()][];
-					} else
+					} else {
 						solutionsNew = new ArrayList<>();
+					}
 					queriesToProcess = solutionsNew.size();
 					
 					for (int i = 0; i < solutionsNew.size(); i++){
@@ -486,7 +486,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	 * Prepares an ACLMessage with search parameters in a response
 	 * to a request containing GetParameters ontology.
 	 * 
-	 * @param request
 	 * @return			ACLMessage containing parameters
 	 */
 	protected ACLMessage getParameters(ACLMessage request) {

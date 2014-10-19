@@ -29,7 +29,7 @@ public class BooleanIndividual extends ArrayIndividual{
      * @return The internall array.
      */
     public boolean[] toBooleanArray() {
-        return genes;
+        return Arrays.copyOf(genes, genes.length);
     }
 
     @Override
@@ -49,10 +49,11 @@ public class BooleanIndividual extends ArrayIndividual{
     public void randomInitialization() {
 
         for (int i = 0; i < length; i++) {
-            if (RandomNumberGenerator.getInstance().nextDouble() > 0.5)
+            if (RandomNumberGenerator.getInstance().nextDouble() > 0.5) {
                 genes[i] = true;
-            else
+            } else {
                 genes[i] = false;
+            }
         }
         
     }

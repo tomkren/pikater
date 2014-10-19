@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod;
+package org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod;
 
 import jade.content.Concept;
 

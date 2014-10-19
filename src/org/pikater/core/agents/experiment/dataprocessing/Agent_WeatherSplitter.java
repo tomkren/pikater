@@ -26,7 +26,7 @@ import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
+import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;

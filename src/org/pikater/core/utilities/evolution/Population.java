@@ -5,6 +5,7 @@ import org.pikater.shared.logging.core.ConsoleLogger;
 import org.pikater.shared.util.ICloneable;
 import org.pikater.shared.util.collections.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,8 +15,7 @@ import java.util.List;
  *
  * @author Martin Pilat
  */
-public class Population implements ICloneable
-{
+public class Population implements ICloneable {
     int size = 0;
     Individual sampleIndividual;
     List<Individual> individuals;
@@ -35,18 +35,14 @@ public class Population implements ICloneable
      * their clone methods.
      */
     @Override
-    public Population clone()
-    {
-        try
-        {
+    public Population clone() {
+        try {
             Population result = (Population) super.clone();
             result.individuals = CollectionUtils.deepCopy(individuals);
             return result;
-        }
-        catch (Exception e)
-        {
-        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
-        	throw new RuntimeException("failed to clone");
+        } catch (Exception e) {
+            ConsoleLogger.logThrowable("Unexpected error occured:", e);
+            throw new RuntimeException("failed to clone");
         }
     }
 
@@ -147,9 +143,9 @@ public class Population implements ICloneable
      * @return The sorted list of individuals.
      */
 
-    public ArrayList<Individual> getSortedIndividuals() {
+    public List<Individual> getSortedIndividuals() {
         
-        ArrayList<Individual> sorted = new ArrayList<Individual>();
+        List<Individual> sorted = new ArrayList<Individual>();
         sorted.addAll(individuals);
 
         Collections.sort(sorted, new FitnessFunctionComparator());
@@ -158,13 +154,17 @@ public class Population implements ICloneable
 
     }
 
-    class FitnessFunctionComparator implements Comparator<Individual> {
+    static class FitnessFunctionComparator implements Comparator<Individual>, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         public int compare(Individual o1, Individual o2) {
-            if (o1.getFitnessValue() > o2.getFitnessValue())
+            if (o1.getFitnessValue() > o2.getFitnessValue()) {
                 return -1;
-            if (o1.getFitnessValue() == o2.getFitnessValue())
+            }
+            if (o1.getFitnessValue() == o2.getFitnessValue()) {
                 return 0;
+            }
             return 1;
         }
 

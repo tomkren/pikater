@@ -1,15 +1,15 @@
-<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
+<org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription>
   <globalOptions/>
   <rootElements>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
       <id>0</id>
       <options/>
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent">
           <id>1</id>
-          <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+          <options defined-in="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing"/>
           <errors/>
           <dataSources/>
           <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
@@ -80,10 +80,10 @@
           </duration>
           <evaluationMethod>
             <id>3</id>
-            <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+            <options defined-in="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
+            <agentType>org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation</agentType>
             <options>
               <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                 <name>F</name>
@@ -118,7 +118,7 @@
             </options>
           </evaluationMethod>
           <trainingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
               <id>2</id>
               <options/>
               <errors/>
@@ -129,7 +129,7 @@
             <inputType>trainingData</inputType>
           </trainingData>
           <testingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
               <id>2</id>
               <options/>
               <errors/>
@@ -140,7 +140,7 @@
             <inputType>testingData</inputType>
           </testingData>
           <validationData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
               <id>2</id>
               <options/>
               <errors/>
@@ -153,6 +153,6 @@
         </dataProvider>
         <outputType>computedData</outputType>
       </dataSource>
-    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    </org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
   </rootElements>
-</org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
+</org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription>

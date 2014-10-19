@@ -12,18 +12,17 @@ import org.pikater.core.ontology.subtrees.newOption.NewOptions;
  * 
  * @author SkyCrawl
  */
-public class UniversalElementOntology
-{
+public class UniversalElementOntology {
 	/**
 	 * Id the parent {@link UniversalElement element}.
 	 */
 	private int id;
-	
+
 	/**
 	 * Ontology associated with the parent {@link UniversalElement element}.
 	 */
 	private Class<?> ontologyClass;
-	
+
 	/**
 	 * Agent associated with the parent {@link UniversalElement element}.
 	 */
@@ -33,67 +32,55 @@ public class UniversalElementOntology
 	 * Collection of edges that lead to the parent {@link UniversalElement element}. 
 	 */
 	private final Collection<UniversalElementConnector> inputDataSlots;
-	
+
 	/**
 	 * Collection of error edges that lead to the parent {@link UniversalElement element}. 
 	 */
 	private final Collection<UniversalElementConnector> inputErrorSlots;
-	
+
 	/**
 	 * Collection of options for the parent {@link UniversalElement element}. 
 	 */
 	private NewOptions options;
 
-	public UniversalElementOntology()
-	{
+	public UniversalElementOntology() {
 		this.inputDataSlots = new ArrayList<UniversalElementConnector>();
 		this.inputErrorSlots = new ArrayList<UniversalElementConnector>();
 		this.options = new NewOptions();
 	}
 
-	public int getId()
-	{
+	public int getId() {
 		return id;
 	}
 
-	public void setId(int id)
-	{
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public Class<?> getOntologyClass()
-	{
+	public Class<?> getOntologyClass() {
 		return ontologyClass;
 	}
 
-	public void setOntologyClass(Class<?> type)
-	{
+	public void setOntologyClass(Class<?> type) {
 		this.ontologyClass = type;
 	}
 
-	public String getAgentClass()
-	{
+	public String getAgentClass() {
 		return agentClass;
 	}
 
-	public void setAgentClass(String agentClass)
-	{
+	public void setAgentClass(String agentClass) {
 		this.agentClass = agentClass;
 	}
 
-	public NewOptions getOptions()
-	{
+	public NewOptions getOptions() {
 		return options;
 	}
 
-	public void setOptions(NewOptions options)
-	{
-		if (options == null)
-		{
+	public void setOptions(NewOptions options) {
+		if (options == null) {
 			throw new IllegalArgumentException("Argument options can't be null");
-		}
-		else
-		{
+		} else {
 			this.options = options;
 		}
 	}
@@ -101,26 +88,22 @@ public class UniversalElementOntology
 	/**
 	 * Gets data edges that lead to the parent {@link UniversalElement element}.
 	 */
-	public Collection<UniversalElementConnector> getInputDataSlots()
-	{
+	public Collection<UniversalElementConnector> getInputDataSlots() {
 		return inputDataSlots;
 	}
 
 	/**
 	 * Gets error edges that lead to the parent {@link UniversalElement element}.
 	 */
-	public Collection<UniversalElementConnector> getInputErrorSlots()
-	{
+	public Collection<UniversalElementConnector> getInputErrorSlots() {
 		return inputErrorSlots;
 	}
 
-	public void addInputDataSlot(UniversalElementConnector connector)
-	{
+	public void addInputDataSlot(UniversalElementConnector connector) {
 		inputDataSlots.add(connector);
 	}
 
-	public void addInputErrorSlot(UniversalElementConnector connector)
-	{
+	public void addInputErrorSlot(UniversalElementConnector connector) {
 		inputErrorSlots.add(connector);
 	}
 }

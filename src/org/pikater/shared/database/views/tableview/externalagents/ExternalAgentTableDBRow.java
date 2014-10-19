@@ -14,22 +14,18 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 
 	private JPAExternalAgent agent;
 
-	public ExternalAgentTableDBRow(JPAExternalAgent agent)
-	{
-		this.agent=agent;
+	public ExternalAgentTableDBRow(JPAExternalAgent agent) {
+		this.agent = agent;
 	}
-	
-	public JPAExternalAgent getAgent()
-	{
+
+	public JPAExternalAgent getAgent() {
 		return agent;
 	}
 
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column) {
 		ExternalAgentTableDBView.Column specificColumn = (ExternalAgentTableDBView.Column) column;
-		switch(specificColumn)
-		{
+		switch (specificColumn) {
 		/*
 		 * First the read-only properties.
 		 */
@@ -43,22 +39,19 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(agent.getName());
 		case CREATED:
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(agent.getCreated()));
-			
-		/*
-		 * And then custom actions.
-		 */
+
+			/*
+			 * And then custom actions.
+			 */
 		case APPROVED:
-			return new BooleanDBViewValue(agent.isApproved())
-			{
+			return new BooleanDBViewValue(agent.isApproved()) {
 				@Override
-				protected void updateEntities(Boolean newValue)
-				{
+				protected void updateEntities(Boolean newValue) {
 					agent.setApproved(newValue);
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 					commitRow();
 				}
 			};
@@ -66,51 +59,43 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return true;
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 				}
 			};
 		case DELETE:
-			return new NamedActionDBViewValue("Delete")
-			{
+			return new NamedActionDBViewValue("Delete") {
 				@Override
-				public boolean isEnabled()
-				{
+				public boolean isEnabled() {
 					return true;
 				}
-				
+
 				@Override
-				public void updateEntities()
-				{
+				public void updateEntities() {
 					agent.setVisible(false);
 				}
-				
+
 				@Override
-				protected void commitEntities()
-				{
+				protected void commitEntities() {
 					commitRow();
 				}
 			};
-			
+
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}
 	}
 
 	@Override
-	public void commitRow()
-	{
+	public void commitRow() {
 		DAOs.externalAgentDAO.updateEntity(agent);
 	}
 }

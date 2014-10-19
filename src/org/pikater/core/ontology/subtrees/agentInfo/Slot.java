@@ -16,7 +16,7 @@ public class Slot implements Concept, ICloneable
 	private String categoryName;
 	
 	/**
-	 * Should only be used internally and by Jade.
+	 * @deprecated Should only be used internally and by Jade.
 	 */
 	@Deprecated
 	public Slot()

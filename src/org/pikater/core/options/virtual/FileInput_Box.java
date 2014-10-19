@@ -3,7 +3,7 @@ package org.pikater.core.options.virtual;
 import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualFileInputBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
+import org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.options.SlotsHelper;

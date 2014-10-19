@@ -12,21 +12,18 @@ import org.pikater.shared.util.LocaleUtils;
 
 public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 
-	private JPAAttributeNumericalMetaData attrNum=null;
+	private JPAAttributeNumericalMetaData attrNum = null;
 	private Locale currentLocale;
 
-	public NumericalMetadataTableDBRow(JPAAttributeNumericalMetaData attrNum,Locale locale)
-	{
-		this.attrNum=attrNum;
-		this.currentLocale=locale;
+	public NumericalMetadataTableDBRow(JPAAttributeNumericalMetaData attrNum, Locale locale) {
+		this.attrNum = attrNum;
+		this.currentLocale = locale;
 	}
 
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column) {
 		NumericalMetaDataTableDBView.Column specificColumn = (NumericalMetaDataTableDBView.Column) column;
-		switch(specificColumn)
-		{
+		switch (specificColumn) {
 		/*
 		 * First the read-only properties.
 		 */
@@ -39,23 +36,23 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 		case IS_TARGET:
 			return new BooleanReadOnlyDBViewValue(attrNum.isTarget());
 		case MAXIMUM:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMax()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getMax()));
 		case MEDIAN:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMedian()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getMedian()));
 		case MINIMUM:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMin()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getMin()));
 			/*
-		case MODE:
+			case MODE:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMode()));
 			*/
 		case RATIO_OF_MISSING_VALUES:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getRatioOfMissingValues()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getRatioOfMissingValues()));
 		case VARIANCE:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getVariance()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getVariance()));
 		case ENTROPY:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getEntropy()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getEntropy()));
 		case CLASS_ENTROPY:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getClassEntropy()));
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getClassEntropy()));
 
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
@@ -63,7 +60,6 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 	}
 
 	@Override
-	public void commitRow()
-	{
+	public void commitRow() {
 	}
 }

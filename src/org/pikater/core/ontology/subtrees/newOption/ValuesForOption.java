@@ -16,112 +16,102 @@ import org.pikater.shared.util.collections.CollectionUtils;
 
 import jade.content.Concept;
 
-public class ValuesForOption implements Concept, IValidated, ICloneable, IWekaItem, Iterable<Value>
-{
+public class ValuesForOption implements Concept, IValidated, ICloneable,
+		IWekaItem, Iterable<Value> {
 	private static final long serialVersionUID = -3600291732186684079L;
 
 	private List<Value> values;
-	
+
 	/**
 	 * Should only be used internally and by JADE.
 	 */
 	@Deprecated
-	public ValuesForOption()
-	{
+	public ValuesForOption() {
 		this.values = new ArrayList<Value>();
 	}
-    public ValuesForOption(Value value)
-    {
-    	this();
-        this.values.add(value);
-    }
-	public ValuesForOption(List<Value> values)
-	{
+
+	public ValuesForOption(Value value) {
+		this();
+		this.values.add(value);
+	}
+
+	public ValuesForOption(List<Value> values) {
 		this();
 		this.values.addAll(values);
 	}
-	
+
 	public List<Value> getValues() {
 		return values;
 	}
+
 	public void setValues(List<Value> values) {
 		this.values = values;
 	}
-	
+
 	/*
 	 * Some convenience interface.
 	 */
-	public void addValue(Value value)
-	{
+	public void addValue(Value value) {
 		this.values.add(value);
 	}
-	public Value returnByIndex(int index)
-	{
+
+	public Value returnByIndex(int index) {
 		return values.get(index);
 	}
-	public int size()
-	{
+
+	public int size() {
 		return values.size();
 	}
-	public boolean containsQuestionMark()
-	{
-		for (Value valueI : values)
-		{
+
+	public boolean containsQuestionMark() {
+		for (Value valueI : values) {
 			IValueData ivalueI = valueI.getCurrentValue();
-			if (ivalueI instanceof QuestionMarkRange ||
-					ivalueI instanceof QuestionMarkSet) {
+			if (ivalueI instanceof QuestionMarkRange
+					|| ivalueI instanceof QuestionMarkSet) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/*
 	 * Inherited interface.
 	 */
 	@Override
-	public ValuesForOption clone()
-	{
+	public ValuesForOption clone() {
 		ValuesForOption result;
-		try
-		{
+		try {
 			result = (ValuesForOption) super.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
+		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 		result.setValues(CollectionUtils.deepCopy(values));
 		return result;
 	}
+
 	@Override
-	public boolean isValid()
-	{
-		for(Value value : values)
-		{
-			if(!value.isValid())
-			{
+	public boolean isValid() {
+		for (Value value : values) {
+			if (!value.isValid()) {
 				return false;
 			}
 		}
 		return true;
 	}
+
 	@Override
-	public String exportToWeka()
-	{
+	public String exportToWeka() {
 		String result = "";
-		for (Value valueI : values)
-		{
-			if (!(valueI.getCurrentValue() instanceof NullValue))
-			{
+		for (Value valueI : values) {
+			if (!(valueI.getCurrentValue() instanceof NullValue)) {
 				result += " " + valueI.getCurrentValue().exportToWeka();
 			}
 		}
 		return result;
 	}
+
 	@Override
-	public Iterator<Value> iterator()
-	{
+	public Iterator<Value> iterator() {
 		return values.iterator();
 	}
 }

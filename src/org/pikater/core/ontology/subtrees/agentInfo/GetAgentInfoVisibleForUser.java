@@ -4,9 +4,6 @@ import jade.content.AgentAction;
 
 public class GetAgentInfoVisibleForUser implements AgentAction {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -9018024161636538318L;
 	
 	private int userID;

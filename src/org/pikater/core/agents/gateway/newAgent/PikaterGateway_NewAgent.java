@@ -23,7 +23,8 @@ public class PikaterGateway_NewAgent {
 		try {
 	        NewAgent newAgent = new NewAgent();
 	        JPAExternalAgent ea = DAOs.externalAgentDAO.getByID(externalAgentID, EmptyResultAction.NULL);
-	        if(ea!=null){
+	        
+	        if(ea != null) {
 	        	newAgent.setAgentClassName(ea.getAgentClass());
 
 	        	Ontology agentInfoOntology = AgentInfoOntology.getInstance();

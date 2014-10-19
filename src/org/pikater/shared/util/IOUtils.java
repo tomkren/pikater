@@ -89,9 +89,7 @@ public class IOUtils {
 	 * Abstract method to join string-defined paths. Automatically handles
 	 * directory separation.
 	 * 
-	 * @param prefixPath 
 	 * @param suffixPath may denote a directory or file but must NOT be an absolute path
-	 * @return
 	 */
 	public static String joinPathComponents(String prefixPath, String suffixPath) {
 		StringBuilder result = new StringBuilder();
@@ -107,13 +105,15 @@ public class IOUtils {
 	}
 
 	/**
-	 * Gets the relative (package) path to the given class. There is no way to
-	 * determine context path with just the class.
-	 *  
-	 * @param clazz
-	 * @return
+	 * Gets an absolute path to the given class - consists of 2 parts:
+	 * <ol>
+	 * <li> Absolute path to the application. See {@link #setAbsoluteBaseAppPath(String)},
+	 * which must be called prior to this method.
+	 * <li> Relative source path to the given class.
+	 * </ol>
+	 * 
 	 */
-	public static String getRelativePath(Class<?> clazz) {
+	public static String getAbsolutePath(Class<?> clazz) {
 		return joinPathComponents(getAbsoluteSRCPath(), clazz.getPackage().getName().replace(".", System.getProperty("file.separator"))) + System.getProperty("file.separator");
 	}
 
@@ -123,8 +123,6 @@ public class IOUtils {
 	/**
 	 * Reads the content of the given file to a string.
 	 * 
-	 * @param filePath 
-	 * @return
 	 */
 	public static String readTextFile(String filePath) {
 		try {
@@ -139,9 +137,6 @@ public class IOUtils {
 	/**
 	 * Writes the given content to the given using the given charset.
 	 * 
-	 * @param filePath
-	 * @param content
-	 * @param charset
 	 */
 	public static void writeToFile(String filePath, String content, Charset charset) {
 		try {
@@ -154,8 +149,6 @@ public class IOUtils {
 	/**
 	 * Creates a temporary file in the system defined temp directory, with no extension.
 	 * 
-	 * @param prefix
-	 * @return
 	 */
 	public static File createTemporaryFile(String prefix) {
 		return createTemporaryFile(prefix, null);
@@ -165,9 +158,6 @@ public class IOUtils {
 	 * Creates a temporary file in the system defined temp directory, with
 	 * the given extension.
 	 * 
-	 * @param prefix
-	 * @param extension
-	 * @return
 	 */
 	public static File createTemporaryFile(String prefix, String extension) {
 		File file;
@@ -183,11 +173,7 @@ public class IOUtils {
 	/**
 	 * Creates a temporary file in the given directory, with given extension.
 	 * 
-	 * @param extension
-	 * @param directory
-	 * @param prefix
 	 * @param extension must include a dot, e.g. ".jpg"
-	 * @return
 	 */
 	public static File createTemporaryFile(String directory, String prefix, String extension) {
 		File file;
@@ -208,13 +194,12 @@ public class IOUtils {
 	 * Converts the given size in bytes into the appropriate string
 	 * notation, e.g. "10 KiB".
 	 * 
-	 * @param size
-	 * @return
 	 * @see <a href="http://stackoverflow.com/questions/3263892/format-file-size-as-mb-gb-etc">StackOverFlow</a>
 	 */
 	public static String formatFileSize(long size) {
-		if (size <= 0)
+		if (size <= 0) {
 			return "0";
+		}
 		final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
 		int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
 		return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];

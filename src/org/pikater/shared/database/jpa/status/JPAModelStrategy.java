@@ -16,6 +16,5 @@ import org.pikater.shared.database.jpa.JPAExperiment;
  * </p>
  */
 public enum JPAModelStrategy {
-	CREATION,
-	EXISTING
+	CREATION, EXISTING
 }

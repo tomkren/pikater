@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.batchDescription;
+package org.pikater.core.ontology.subtrees.batchdescription;
 
 import org.pikater.shared.util.ICloneable;
 

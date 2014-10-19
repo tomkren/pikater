@@ -1,15 +1,15 @@
-<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
+<org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription>
   <globalOptions/>
   <rootElements>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
       <id>0</id>
       <options/>
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent">
           <id>1</id>
-          <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+          <options defined-in="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing"/>
           <errors/>
           <dataSources/>
           <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
@@ -80,10 +80,10 @@
           </duration>
           <evaluationMethod>
             <id>3</id>
-            <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+            <options defined-in="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
+            <agentType>org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation</agentType>
             <options>
               <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                 <name>F</name>
@@ -118,14 +118,14 @@
             </options>
           </evaluationMethod>
           <trainingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing">
               <id>2</id>
               <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
               <options/>
               <errors/>
               <dataSources>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                     <id>4</id>
                     <options/>
                     <errors/>
@@ -134,9 +134,9 @@
                   </dataProvider>
                   <outputType>fileData</outputType>
                   <inputType>firstInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                     <id>5</id>
                     <options/>
                     <errors/>
@@ -145,21 +145,21 @@
                   </dataProvider>
                   <outputType>fileData</outputType>
                   <inputType>secondInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+                </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
               </dataSources>
             </dataProvider>
             <outputType>sunnyOutput</outputType>
             <inputType>trainingData</inputType>
           </trainingData>
           <testingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing">
               <id>2</id>
               <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
               <options/>
               <errors/>
               <dataSources>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                     <id>4</id>
                     <options/>
                     <errors/>
@@ -168,9 +168,9 @@
                   </dataProvider>
                   <outputType>fileData</outputType>
                   <inputType>firstInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                     <id>5</id>
                     <options/>
                     <errors/>
@@ -179,21 +179,21 @@
                   </dataProvider>
                   <outputType>fileData</outputType>
                   <inputType>secondInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+                </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
               </dataSources>
             </dataProvider>
             <outputType>sunnyOutput</outputType>
             <inputType>testingData</inputType>
           </testingData>
           <validationData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing">
               <id>2</id>
               <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
               <options/>
               <errors/>
               <dataSources>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                     <id>4</id>
                     <options/>
                     <errors/>
@@ -202,9 +202,9 @@
                   </dataProvider>
                   <outputType>fileData</outputType>
                   <inputType>firstInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                <org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider">
                     <id>5</id>
                     <options/>
                     <errors/>
@@ -213,7 +213,7 @@
                   </dataProvider>
                   <outputType>fileData</outputType>
                   <inputType>secondInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+                </org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription>
               </dataSources>
             </dataProvider>
             <outputType>sunnyOutput</outputType>
@@ -222,6 +222,6 @@
         </dataProvider>
         <outputType>computedData</outputType>
       </dataSource>
-    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    </org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver>
   </rootElements>
-</org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
+</org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription>

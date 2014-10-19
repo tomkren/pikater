@@ -17,47 +17,37 @@ import org.pikater.shared.database.views.base.query.QueryResult;
 /**
  * A view displaying all saved (not scheduled) experiments for the given user.
  */
-public class BatchTableDBViewUserSaved extends BatchTableDBViewUser
-{
+public class BatchTableDBViewUserSaved extends BatchTableDBViewUser {
 	/**  
 	 * @param user the user whose batches to display
 	 */
-	public BatchTableDBViewUserSaved(JPAUser user)
-	{
+	public BatchTableDBViewUserSaved(JPAUser user) {
 		super(user);
 	}
-	
+
 	@Override
-	public Set<ITableColumn> getAllColumns()
-	{
-		return new LinkedHashSet<ITableColumn>(EnumSet.of(
-				Column.CREATED,
-				Column.NAME,
-				Column.NOTE
-		));
+	public Set<ITableColumn> getAllColumns() {
+		return new LinkedHashSet<ITableColumn>(EnumSet.of(Column.CREATED, Column.NAME, Column.NOTE));
 	}
-	
+
 	@Override
-	public Set<ITableColumn> getDefaultColumns()
-	{
+	public Set<ITableColumn> getDefaultColumns() {
 		return getAllColumns();
 	}
-	
+
 	@Override
-	public ITableColumn getDefaultSortOrder()
-	{
+	public ITableColumn getDefaultSortOrder() {
 		return Column.CREATED; // user will probably want to continue working on his last experiment
 	}
-	
+
 	@Override
-	public QueryResult queryUninitializedRows(QueryConstraints constraints)
-	{
-		List<JPABatch> resultBatches=DAOs.batchDAO.getByOwnerAndStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
+		List<JPABatch> resultBatches = DAOs.batchDAO.getByOwnerAndStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(),
+				constraints.getSortOrder());
 		int allBatchesCount = DAOs.batchDAO.getByOwnerAndStatusCount(this.owner, JPABatchStatus.CREATED);
-		
+
 		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
-		for(JPABatch batch : resultBatches)
-		{
+		for (JPABatch batch : resultBatches) {
 			resultRows.add(new BatchTableDBRow(batch, false));
 		}
 		return new QueryResult(resultRows, allBatchesCount);

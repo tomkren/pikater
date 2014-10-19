@@ -1,13 +1,13 @@
-package org.pikater.core.ontology.subtrees.batchDescription;
+package org.pikater.core.ontology.subtrees.batchdescription;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.CoreConstant;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
-import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration.DurationType;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
