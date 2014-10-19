@@ -8,12 +8,9 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.logging.web.PikaterWebLogger;
-import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.requests.HttpRequestComponent;
 import org.pikater.web.requests.HttpRequestUtils;
-import org.pikater.web.unused.welcometour.WelcomeTourWizard;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
@@ -26,11 +23,9 @@ import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.UI;
 
 /** 
@@ -147,34 +142,7 @@ public abstract class CustomConfiguredUI extends UI {
 	 */
 	private void displayApplicationSetupWizard() {
 		setPageCroppedAndHorizontallyCentered(false);
-		setMyContent(new WelcomeTourWizard(new Button.ClickListener() {
-			private static final long serialVersionUID = -8250998657726465300L;
-
-			/**
-			 * Event fired the "finish" button is clicked in the wizard. All required checks are done
-			 * in the wizard itself, so this method should only:
-			 * <ul>
-			 * <li> Further initialize the application.
-			 * <li> Update the user interface accordingly (so that the authenticated admin may be redirected
-			 * to the default page).
-			 * </ul>
-			 */
-			@Override
-			public void buttonClick(ClickEvent event) {
-				/*
-				 * Further initializations. 
-				 */
-
-				// initialize and start the job scheduler
-				PikaterJobScheduler.initStaticScheduler(IOUtils.joinPathComponents(
-						IOUtils.getAbsoluteWEBINFCLASSESPath(), IOUtils.getRelativePath(PikaterJobScheduler.class)));
-
-				/*
-				 * Update UI. 
-				 */
-				displayChildContent();
-			}
-		}));
+		// TODO: display welcome tour wizard
 	}
 
 	/**

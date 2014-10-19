@@ -7,9 +7,6 @@ import java.util.TimerTask;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.pikater.shared.database.views.tableview.test.TestTableDBView;
-import org.pikater.web.unused.components.console.SimpleConsoleComponent;
-import org.pikater.web.unused.ssh.SSHSession;
-import org.pikater.web.unused.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.dbviews.TestDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
@@ -97,26 +94,6 @@ public class TestView extends VerticalLayout implements IContentComponent {
 			}
 		}));
 		addComponent(new Anchor("test2", "function() { alert(42); }"));
-	}
-
-	public void testJSCH() {
-		addComponent(new SimpleConsoleComponent(new SSHSession("nassoftwerak.ms.mff.cuni.cz", "e2:dc:09:34:e5:94:11:7f:fd:ee:00:09:b8:1e:f5:d4", "softwerak", "SrapRoPy",
-				new ISSHSessionNotificationHandler() {
-					@Override
-					public void notifySessionClosed() {
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					public void notifyChannelClosed(int exitStatus) {
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					public void handleError(String description, Throwable t) {
-						// TODO Auto-generated method stub
-					}
-				})));
 	}
 
 	// -------------------------------------------------------------------
