@@ -8,20 +8,20 @@ import org.pikater.web.visualisation.implementation.renderer.RendererInterface.T
 
 /**
  * <p>
- * Class with functionality to display entries from one dataset. It should be use to display points 
- * with x,y coordinates and value from one attribute each.
+ * Class with functionality to display entries from one dataset. It should be
+ * use to display points with x,y coordinates and value from one attribute each.
  * </p>
  * <p>
- * Theoretically more attributes can be joined.
- * However, this is possible due to data represenation of ARFF datasets and might be confusing, so usage
- * of such practices is not recommended.
+ * Theoretically more attributes can be joined. However, this is possible due to
+ * data represenation of ARFF datasets and might be confusing, so usage of such
+ * practices is not recommended.
  * </p>
  * 
  * @see org.pikater.web.visualisation.charts.ComparisonChart
  * 
  * @author siposp
  * 
- *
+ * 
  */
 public class SingleChart extends Chart {
 
@@ -34,12 +34,15 @@ public class SingleChart extends Chart {
 		super(1000, 1000, 0, 0, null, null, null);
 	}
 
-	public SingleChart(int width, int height, int offsetx, int offsety, RendererInterface renderer, Axis horizontalAxis, Axis verticalAxis) {
-		super(width, height, offsetx, offsety, renderer, horizontalAxis, verticalAxis);
+	public SingleChart(int width, int height, int offsetx, int offsety,
+			RendererInterface renderer, Axis horizontalAxis, Axis verticalAxis) {
+		super(width, height, offsetx, offsety, renderer, horizontalAxis,
+				verticalAxis);
 		initDefaults();
 	}
 
-	public SingleChart(int width, int height, RendererInterface renderer, Axis horizontalAxis, Axis verticalAxis) {
+	public SingleChart(int width, int height, RendererInterface renderer,
+			Axis horizontalAxis, Axis verticalAxis) {
 		this(width, height, 0, 0, renderer, horizontalAxis, verticalAxis);
 		initDefaults();
 	}
@@ -77,7 +80,7 @@ public class SingleChart extends Chart {
 	public boolean isCapitalCaption() {
 		return capitalCaption;
 	}
-	
+
 	public void setCaptionSize(int captionSize) {
 		this.captionSize = captionSize;
 	}
@@ -85,26 +88,35 @@ public class SingleChart extends Chart {
 	public void setCapitalCaption(boolean capitalCaption) {
 		this.capitalCaption = capitalCaption;
 	}
-	
+
 	/**
 	 * Draws the caption for axis Y.
-	 * @param caption text for axis
+	 * 
+	 * @param caption
+	 *            text for axis
 	 */
 	private void renderVerticalCaption(String caption) {
-		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption, offsetx + yLabelWidth / 2, offsety + getAreaHeight() / 2, TextAlignment.Center, verticalCaptionColor, -90, captionSize);
+		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption,
+				offsetx + yLabelWidth / 2, offsety + getAreaHeight() / 2,
+				TextAlignment.Center, verticalCaptionColor, -90, captionSize);
 	}
 
 	/**
 	 * Draws the caption for axis X.
-	 * @param caption text for axis
+	 * 
+	 * @param caption
+	 *            text for axis
 	 */
 	private void renderHorizontalCaption(String caption) {
-		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption, offsetx + yLabelWidth + getAreaWidth() / 2, offsety + chartHeight - xLabelHeight / 3, TextAlignment.Center,
+		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption,
+				offsetx + yLabelWidth + getAreaWidth() / 2, offsety
+						+ chartHeight - xLabelHeight / 3, TextAlignment.Center,
 				horizontalCaptionColor, 0, captionSize);
 	}
-	
+
 	/**
-	 * After drawing we just need to finalize rendering, no additional tasks required.
+	 * After drawing we just need to finalize rendering, no additional tasks
+	 * required.
 	 */
 	@Override
 	public void finishChart() {
@@ -112,7 +124,8 @@ public class SingleChart extends Chart {
 	}
 
 	/**
-	 * When creating the chart we draw the background and whether they're enabled, we draw the captions.
+	 * When creating the chart we draw the background and whether they're
+	 * enabled, we draw the captions.
 	 */
 	@Override
 	public void startChart() {

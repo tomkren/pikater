@@ -12,8 +12,9 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.IGraphItemSettings;
  */
 public class KineticEdgeSettings implements IGraphItemSettings {
 	/*
-	 * Parameters defining the looks of the arrowhead (how "sharp" it is).
-	 * In this case, it is a little bit longer than wider, which makes for a bit "sharper" arrowhead.
+	 * Parameters defining the looks of the arrowhead (how "sharp" it is). In
+	 * this case, it is a little bit longer than wider, which makes for a bit
+	 * "sharper" arrowhead.
 	 */
 
 	public int getArrowHeight() {
@@ -36,9 +37,11 @@ public class KineticEdgeSettings implements IGraphItemSettings {
 		return Colour.darkorchid;
 	}
 
-	// private static final Vector2d dragMarkHalfSize = new Vector2d(dragMarkDimensionInPixels >> 1, dragMarkDimensionInPixels >> 1).;
+	// private static final Vector2d dragMarkHalfSize = new
+	// Vector2d(dragMarkDimensionInPixels >> 1, dragMarkDimensionInPixels >>
+	// 1).;
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 	// INSTANCE COMPARING
 
 	@Override

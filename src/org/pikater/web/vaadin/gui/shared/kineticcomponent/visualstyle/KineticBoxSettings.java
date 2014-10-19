@@ -6,10 +6,14 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.IGraphItemSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
 
 /**
- * <p>Visual style settings of boxes in the client kinetic canvas.</p>
+ * <p>
+ * Visual style settings of boxes in the client kinetic canvas.
+ * </p>
  * 
- * <p>All functionality used by the "server" package should be static and
- * not involve constructors.</p>
+ * <p>
+ * All functionality used by the "server" package should be static and not
+ * involve constructors.
+ * </p>
  * 
  * @author SkyCrawl
  */
@@ -29,18 +33,19 @@ public class KineticBoxSettings implements IGraphItemSettings {
 		return iconsVisible;
 	}
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 	// POSITIONING
 
 	public double getTextOffsetLeft() {
 		if (areIconsVisible()) {
-			return getInnerComponentSpace() + getIconWidth() + (getInnerComponentSpace() >> 1);
+			return getInnerComponentSpace() + getIconWidth()
+					+ (getInnerComponentSpace() >> 1);
 		} else {
 			return getInnerComponentSpace();
 		}
 	}
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 	// SIZING
 
 	public double getBoxWidth() {
@@ -67,7 +72,7 @@ public class KineticBoxSettings implements IGraphItemSettings {
 		return getIconHeight() / 2;
 	}
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 	// VARIOUS
 
 	public int getInnerComponentSpace() {
@@ -78,24 +83,24 @@ public class KineticBoxSettings implements IGraphItemSettings {
 		return scale;
 	}
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 	// SOME STATIC METHODS
 
 	public static Colour getColor(VisualStyle graphItemStyle) {
 		switch (graphItemStyle) {
-		case SELECTED:
-			return Colour.gold;
-		case HIGHLIGHTED_EDGE:
-			return Colour.red;
-		case HIGHLIGHTED_SLOT:
-			return Colour.lime;
+			case SELECTED:
+				return Colour.gold;
+			case HIGHLIGHTED_EDGE:
+				return Colour.red;
+			case HIGHLIGHTED_SLOT:
+				return Colour.lime;
 
-		default:
-			return Colour.black;
+			default:
+				return Colour.black;
 		}
 	}
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 	// INSTANCE COMPARING - GENERATED WITH ECLIPSE
 
 	@Override
@@ -120,7 +125,8 @@ public class KineticBoxSettings implements IGraphItemSettings {
 		KineticBoxSettings other = (KineticBoxSettings) obj;
 		if (iconsVisible != other.iconsVisible)
 			return false;
-		if (Double.doubleToLongBits(scale) != Double.doubleToLongBits(other.scale))
+		if (Double.doubleToLongBits(scale) != Double
+				.doubleToLongBits(other.scale))
 			return false;
 		return true;
 	}

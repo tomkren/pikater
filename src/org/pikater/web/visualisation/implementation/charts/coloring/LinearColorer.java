@@ -8,7 +8,7 @@ import org.pikater.web.visualisation.implementation.exceptions.ColorerNotMergeab
  * Class implementing colorer used for numerical values.
  * 
  * @author siposp
- *
+ * 
  */
 public class LinearColorer implements Colorer {
 
@@ -26,13 +26,19 @@ public class LinearColorer implements Colorer {
 	}
 
 	/**
-	 * <p>Returns color for the value and the color's Saturation in HSB color space is based on the value.
-	 * Hue and Brightness are 1.0f except for some extreme cases.</p>
-	 * <p>Colors returned by the function are the following:
-	 * <ul> 
-	 * <li>if value is within interval [minimum,maximum] than the returned color is within interval [red,white] - simply several shades of red</li>
+	 * <p>
+	 * Returns color for the value and the color's Saturation in HSB color space
+	 * is based on the value. Hue and Brightness are 1.0f except for some
+	 * extreme cases.
+	 * </p>
+	 * <p>
+	 * Colors returned by the function are the following:
+	 * <ul>
+	 * <li>if value is within interval [minimum,maximum] than the returned color
+	 * is within interval [red,white] - simply several shades of red</li>
 	 * <li>if value is Double.NaN then returns {@link Color.BLACK}
-	 * <li>if the value is {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY} then returns {@link Color.GRAY}</li>
+	 * <li>if the value is {@link Double#POSITIVE_INFINITY} or
+	 * {@link Double#NEGATIVE_INFINITY} then returns {@link Color.GRAY}</li>
 	 * </ul>
 	 * </p>
 	 */

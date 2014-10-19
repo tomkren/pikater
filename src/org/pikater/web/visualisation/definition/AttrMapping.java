@@ -4,7 +4,8 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 
 /**
  * Utility class dedicated to visualization. Specifies what columns (attributes)
- * of datasets should be compared and how. It is also used to index generated images. 
+ * of datasets should be compared and how. It is also used to index generated
+ * images.
  * 
  * @author SkyCrawl
  */
@@ -13,7 +14,8 @@ public class AttrMapping {
 	private final JPAAttributeMetaData attrY;
 	private final JPAAttributeMetaData attrTarget;
 
-	public AttrMapping(JPAAttributeMetaData attrX, JPAAttributeMetaData attrY, JPAAttributeMetaData attrTarget) {
+	public AttrMapping(JPAAttributeMetaData attrX, JPAAttributeMetaData attrY,
+			JPAAttributeMetaData attrTarget) {
 		this.attrX = attrX;
 		this.attrY = attrY;
 		this.attrTarget = attrTarget;
@@ -43,14 +45,15 @@ public class AttrMapping {
 		return sb.toString();
 	}
 
-	//--------------------------------------------------------
+	// --------------------------------------------------------
 	// INSTANCE COMPARING INTERFACE - generated with Eclipse
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((attrTarget == null) ? 0 : attrTarget.hashCode());
+		result = prime * result
+				+ ((attrTarget == null) ? 0 : attrTarget.hashCode());
 		result = prime * result + ((attrX == null) ? 0 : attrX.hashCode());
 		result = prime * result + ((attrY == null) ? 0 : attrY.hashCode());
 		return result;

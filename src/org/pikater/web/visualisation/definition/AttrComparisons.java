@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import org.pikater.shared.util.Tuple;
 
 /**
- * Just an alias for better clarity and easier modification. See references to this class.
+ * Just an alias for better clarity and easier modification. See references to
+ * this class.
  * 
  * @author SkyCrawl
  */

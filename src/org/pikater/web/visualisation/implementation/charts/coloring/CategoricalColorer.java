@@ -8,7 +8,7 @@ import org.pikater.web.visualisation.implementation.exceptions.ColorerNotMergeab
  * Class implementing colorer used for categorical values.
  * 
  * @author siposp
- *
+ * 
  */
 public class CategoricalColorer implements Colorer {
 
@@ -23,9 +23,9 @@ public class CategoricalColorer implements Colorer {
 	}
 
 	/**
-	 * Changes the hue of the color based on the value
-	 * if the value is Double.NaN then returns Color.BLACK
-	 * if the value is Infinite of Double the returns Color.GRAY
+	 * Changes the hue of the color based on the value if the value is
+	 * Double.NaN then returns Color.BLACK if the value is Infinite of Double
+	 * the returns Color.GRAY
 	 */
 	@Override
 	public Color getColor(double value) {
@@ -33,16 +33,19 @@ public class CategoricalColorer implements Colorer {
 			return Color.BLACK;
 		if (Double.isInfinite(value))
 			return Color.GRAY;
-		return Color.getHSBColor((float) (value / this.numberOfCategories), 1.0f, 1.0f);
+		return Color.getHSBColor((float) (value / this.numberOfCategories),
+				1.0f, 1.0f);
 	}
 
 	/**
-	 * Merges two {@link CategoricalColorer} objects if they have the same number of categories.
+	 * Merges two {@link CategoricalColorer} objects if they have the same
+	 * number of categories.
 	 */
 	@Override
 	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException {
 		if (colorer instanceof CategoricalColorer) {
-			if (this.numberOfCategories == ((CategoricalColorer) colorer).getNumberOfCategories()) {
+			if (this.numberOfCategories == ((CategoricalColorer) colorer)
+					.getNumberOfCategories()) {
 				return this;
 			} else {
 				throw new ColorerNotMergeableException();

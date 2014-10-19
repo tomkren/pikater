@@ -4,7 +4,7 @@ package org.pikater.web.visualisation.implementation.charts.axis;
  * Class representing an axis for numerical values.
  * 
  * @author siposp
- *
+ * 
  */
 public class ValueAxis extends Axis {
 	protected double min;
