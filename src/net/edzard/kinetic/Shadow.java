@@ -1,8 +1,8 @@
 package net.edzard.kinetic;
 
 /**
- * Defines properties for a shadow. Shadows can be assigned to any shape.
- * 
+ * Defines properties for a shadow.
+ * Shadows can be assigned to any shape.
  * @author Ed
  * @see Shapes
  */
@@ -16,29 +16,23 @@ public class Shadow {
 	private Vector2d offset;
 	/** The shadow's alpha value (default 0.75) */
 	private double alpha;
-
+	
 	/**
 	 * Default Ctor.
 	 */
 	public Shadow() {
 		colour = Colour.black;
 		blur = 10;
-		offset = new Vector2d(5, 5);
+		offset = new Vector2d(5,5);
 		alpha = 0.75;
 	}
-
+	
 	/**
 	 * Parametrized Ctor.
-	 * 
-	 * @param colour
-	 *            Shadow colour
-	 * @param blur
-	 *            Gaussian blur
-	 * @param offset
-	 *            Offset in relation to shape
-	 * @param alpha
-	 *            Transparency of the shadow (0 is fully transparent, 1 is fully
-	 *            opaque)
+	 * @param colour Shadow colour
+	 * @param blur Gaussian blur
+	 * @param offset Offset in relation to shape
+	 * @param alpha Transparency of the shadow (0 is fully transparent, 1 is fully opaque)
 	 */
 	public Shadow(Colour colour, double blur, Vector2d offset, double alpha) {
 		this.colour = colour;
@@ -49,7 +43,6 @@ public class Shadow {
 
 	/**
 	 * Retrieve the shadow's colour.
-	 * 
 	 * @return The colour value
 	 */
 	public Colour getColour() {
@@ -58,28 +51,23 @@ public class Shadow {
 
 	/**
 	 * Assign the shadow colour.
-	 * 
-	 * @param colour
-	 *            A colour value
+	 * @param colour A colour value
 	 */
 	public void setColour(Colour colour) {
 		this.colour = colour;
 	}
 
-	/**
+	/** 
 	 * Retrieve the shadow's gaussian blur.
-	 * 
 	 * @return The blur value
 	 */
 	public double getBlur() {
 		return blur;
 	}
-
+	
 	/**
 	 * Assign the shadow's gaussian blur.
-	 * 
-	 * @param blur
-	 *            A new blur value
+	 * @param blur A new blur value
 	 */
 	public void setBlur(double blur) {
 		this.blur = blur;
@@ -87,7 +75,6 @@ public class Shadow {
 
 	/**
 	 * Retrieve the shadow's offset.
-	 * 
 	 * @return The offset value, relative to shape
 	 */
 	public Vector2d getOffset() {
@@ -96,9 +83,7 @@ public class Shadow {
 
 	/**
 	 * Assign the shadow's offset.
-	 * 
-	 * @param offset
-	 *            An offset value relative to the shape
+	 * @param offset An offset value relative to the shape
 	 */
 	public void setOffset(Vector2d offset) {
 		this.offset = offset;
@@ -106,7 +91,6 @@ public class Shadow {
 
 	/**
 	 * Retrieve the shadow's alpha value.
-	 * 
 	 * @return The alpha value
 	 */
 	public double getAlpha() {
@@ -115,9 +99,7 @@ public class Shadow {
 
 	/**
 	 * Assign the shadow's alpha value.
-	 * 
-	 * @param alpha
-	 *            A new alpha value
+	 * @param alpha A new alpha value
 	 */
 	public void setAlpha(double alpha) {
 		this.alpha = alpha;
@@ -125,7 +107,6 @@ public class Shadow {
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -133,5 +114,6 @@ public class Shadow {
 		return "Shadow [colour=" + colour + ", blur=" + blur + ", offset="
 				+ offset + ", alpha=" + alpha + "]";
 	}
-
+	
+	
 }
