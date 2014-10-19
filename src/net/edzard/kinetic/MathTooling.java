@@ -129,8 +129,7 @@ public class MathTooling {
 		double bb4ac = b * b - 4 * a * c;
 	
 		// Don't intersect
-		if (Math.abs(a) < epsilon || bb4ac < 0)
-		{
+		if (Math.abs(a) < epsilon || bb4ac < 0) {
 		   return new Vector2d[0];
 		}
 	
