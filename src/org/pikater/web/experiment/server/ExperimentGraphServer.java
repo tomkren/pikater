@@ -10,9 +10,9 @@ import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.experiment.UniversalElement;
 import org.pikater.shared.experiment.UniversalElementConnector;
-import org.pikater.shared.experiment.UniversalExperiment;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.KnownCoreAgents;
@@ -218,7 +218,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * This conversion is substantially simpler than its counterpart. It should always work.
 	 * @throws ConversionException
 	 */
-	public UniversalExperiment toUniversalFormat(KnownCoreAgents agentInfoProvider) throws ConversionException {
+	public UniversalComputationDescription toUniversalFormat(KnownCoreAgents agentInfoProvider) throws ConversionException {
 		try {
 			// first some checks
 			if (agentInfoProvider == null) {
@@ -226,7 +226,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 			}
 
 			// create the result uni-format experiment
-			UniversalExperiment result = new UniversalExperiment();
+			UniversalComputationDescription result = new UniversalComputationDescription();
 
 			// create uni-format master elements for all boxes that are registered
 			// from now on, only iterate this collection
@@ -338,7 +338,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * experiments back to web format.
 	 * @throws ConversionException
 	 */
-	public static ExperimentGraphServer fromUniversalFormat(KnownCoreAgents agentInfoProvider, UniversalExperiment uniFormat) throws ConversionException {
+	public static ExperimentGraphServer fromUniversalFormat(KnownCoreAgents agentInfoProvider, UniversalComputationDescription uniFormat) throws ConversionException {
 		try {
 			// first some checks
 			if (agentInfoProvider == null) {

@@ -11,7 +11,8 @@ public class ExecuteParameters implements AgentAction{
 	 */
 	private static final long serialVersionUID = 599262534378620154L;
 
-	private List<SearchSolution> solutions; // list of lists of Options
+	// list of lists of Options
+	private List<SearchSolution> solutions;
 
 	public List<SearchSolution> getSolutions() {
 		return solutions;

@@ -909,8 +909,9 @@ public class Agent_DataManager extends PikaterAgent {
 					logInfo("Sending notification request to mailAgent");
 					ACLMessage reply = FIPAService.doFipaRequestClient(
 							this.myAgent, request, 10000);
-					if (reply == null)
+					if (reply == null) {
 						logSevere("Reply not received.");
+					}
 				} catch (CodecException | OntologyException | FIPAException e) {
 					logException("Failed to request e-mail", e);
 				}

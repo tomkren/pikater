@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.batchDescription.durarion;
+package org.pikater.core.ontology.subtrees.batchdescription.durarion;
 
 import org.pikater.shared.util.ICloneable;
 

@@ -122,7 +122,7 @@ public class Agent_RandomSearch extends Agent_Search {
 	 * 
 	 * @return SearchSolution   a new random solution to try.
 	 */
-	private SearchSolution genRandomSolution(){
+	private SearchSolution genRandomSolution() {
 		List<IValueData> newSolution = new ArrayList<IValueData>();
         List<String> names = new ArrayList<String>();
 		for (SearchItem si : getSchema() ) {

@@ -1,14 +1,14 @@
 package org.pikater.web.experiment.server;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
-import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
-import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
-import org.pikater.core.ontology.subtrees.batchDescription.Search;
+import org.pikater.core.ontology.subtrees.batchdescription.CARecSearchComplex;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
+import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider;
+import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchdescription.Recommend;
+import org.pikater.core.ontology.subtrees.batchdescription.Search;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 
 /**

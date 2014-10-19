@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponen
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.experiment.UniversalExperiment;
+import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.experiment.server.BoxInfoServer;
 import org.pikater.web.experiment.server.ExperimentGraphServer;
@@ -282,7 +282,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		 * Handle the exported experiment in this method.
 		 * @param experimentSavedCallback callback for when the experiment is successfully saved to database
 		 */
-		void handleExperiment(UniversalExperiment exportedExperiment, IOnExperimentSaved experimentSavedCallback);
+		void handleExperiment(UniversalComputationDescription exportedExperiment, IOnExperimentSaved experimentSavedCallback);
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			resetEnvironment();
 
 			// transform to universal format
-			UniversalExperiment uniFormat = UniversalExperiment.fromXML(experiment.getXML());
+			UniversalComputationDescription uniFormat = UniversalComputationDescription.fromXML(experiment.getXML());
 
 			// transform universal format to server format and store the result
 			experimentGraph = ExperimentGraphServer.fromUniversalFormat(parentEditor.getAgentInfoProvider(), uniFormat);
@@ -347,7 +347,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			/*
 			 * The actual export code.
 			 */
-			UniversalExperiment result = experimentGraph.toUniversalFormat(parentEditor.getAgentInfoProvider());
+			UniversalComputationDescription result = experimentGraph.toUniversalFormat(parentEditor.getAgentInfoProvider());
 
 			/*
 			// test case - redirect the same experiment into a new tab and test the conversion cycle (don't save experiment for execution if you want to use this)
