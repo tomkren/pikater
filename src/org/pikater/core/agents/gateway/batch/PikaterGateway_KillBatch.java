@@ -16,6 +16,17 @@ import org.pikater.core.ontology.subtrees.task.KillTasks;
 
 public class PikaterGateway_KillBatch {
 
+	/**
+	 * Constructor
+	 */
+	private PikaterGateway_KillBatch() {
+	}
+	
+	/**
+	 * Kill the Batch
+	 * @param batchID
+	 * @throws PikaterGatewayException
+	 */
 	public static void killBatch(int batchID) throws PikaterGatewayException {
 
 		try {

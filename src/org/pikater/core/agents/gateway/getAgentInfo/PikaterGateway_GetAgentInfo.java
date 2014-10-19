@@ -18,6 +18,18 @@ import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfoVisibleForUser;
 
 public class PikaterGateway_GetAgentInfo {
 
+	/**
+	 * Constructor
+	 */
+	private PikaterGateway_GetAgentInfo() {
+	}
+	
+	/**
+	 * Get the all AgentInfos for the user with userID
+	 * @param userID
+	 * @return
+	 * @throws PikaterGatewayException
+	 */
 	public static AgentInfos getAgentInfosVisibleForUser(int userID) throws PikaterGatewayException {
 		
 		AgentInfos agentInfos = null;

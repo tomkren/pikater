@@ -18,6 +18,12 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 public class WebToCoreEntryPoint {
 
 	/**
+	 * Constructor
+	 */
+	private WebToCoreEntryPoint(){
+	}
+	
+	/**
 	 * Gets required and relevant information about all agents used in the core
 	 * system that can act as "boxes" in web's experiment editor.
 	 * @throws PikaterGatewayException
