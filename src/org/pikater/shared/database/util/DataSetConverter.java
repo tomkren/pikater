@@ -26,18 +26,22 @@ public class DataSetConverter {
 		INVALID, CSV, XLS, XLSX
 	}
 
-	private static void workbookToArff(String header, Workbook workbook, PrintStream out) throws DataSetConverterException {
+	private static void workbookToArff(String header, Workbook workbook,
+			PrintStream out) throws DataSetConverterException {
+		
 		//Parsing the first sheet or throw an exception
-		if (workbook.getNumberOfSheets() == 0)
+		if (workbook.getNumberOfSheets() == 0) {
 			throw new DataSetConverterException("No sheets available in the document");
-
+		}
+		
 		//Parsing the first sheet
 		Sheet sheet = workbook.getSheetAt(0);
 
 		int startrow = sheet.getFirstRowNum();
-		if (startrow != 0)
+		if (startrow != 0) {
 			throw new DataSetConverterException("The data values must start at the first row");
-
+		}
+		
 		int lastrow = sheet.getLastRowNum();
 
 		DataSetConverter.printArffHeaderSection(header, out);
@@ -46,20 +50,22 @@ public class DataSetConverter {
 
 		for (int rownum = startrow; rownum <= lastrow; rownum++) {
 
-			Row row = sheet.getRow(rownum);
+			Row row = sheet.getRow(rownum);	
 
 			int firstcell = row.getFirstCellNum();
-			if (firstcell != 0)
+			if (firstcell != 0) {
 				throw new DataSetConverterCellException("Data must start with the first column", rownum, firstcell);
-
+			}
+			
 			int lastcell = row.getLastCellNum();
 			//TODO: somehow nicely check if the column number is the same in all rows
 			int diff = lastcell - firstcell;
-			if (columnnum == -3)
+			if (columnnum == -3) {
 				columnnum = diff;
-			else if (columnnum != diff)
+			} else if (columnnum != diff) {
 				throw new DataSetConverterCellException("The sheet must contain the same number of columns in every row", rownum, columnnum);
-
+			}
+			
 			for (int col = firstcell; col < lastcell; col++) {
 				Cell cell = row.getCell(col);
 				if (cell != null) {

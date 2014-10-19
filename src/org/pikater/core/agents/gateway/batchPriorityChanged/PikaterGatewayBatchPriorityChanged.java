@@ -27,7 +27,7 @@ public class PikaterGatewayBatchPriorityChanged {
 	 * @param batchID
 	 * @throws PikaterGatewayException
 	 */
-	public static void ChangeBatchPriority(int batchID) throws PikaterGatewayException {
+	public static void changeBatchPriority(int batchID) throws PikaterGatewayException {
 				
 		try {	        
 			BatchPriorityChanged batchPriorityChanged =

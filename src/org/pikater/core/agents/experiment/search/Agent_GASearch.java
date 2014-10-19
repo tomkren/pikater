@@ -321,8 +321,9 @@ public class Agent_GASearch extends Agent_Search {
 			
 			SearchItem si = getSchema().get(i);
             IValueData val = solution.getValues().get(i);
-			if(rndGen.nextDouble() < mutProb)
+			if(rndGen.nextDouble() < mutProb) {
 				val = si.randomValue(rndGen);
+			}
 			newSolution.add(val);
 		}
 		solution.setValues(newSolution);

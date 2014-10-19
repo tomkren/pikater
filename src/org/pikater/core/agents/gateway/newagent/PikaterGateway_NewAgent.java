@@ -1,4 +1,4 @@
-package org.pikater.core.agents.gateway.newAgent;
+package org.pikater.core.agents.gateway.newagent;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;

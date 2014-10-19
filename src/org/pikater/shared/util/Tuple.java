@@ -49,24 +49,32 @@ public class Tuple<V1, V2> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		@SuppressWarnings("rawtypes")
 		Tuple other = (Tuple) obj;
 		if (value1 == null) {
-			if (other.value1 != null)
+			if (other.value1 != null) {
 				return false;
-		} else if (!value1.equals(other.value1))
+			}
+		} else if (!value1.equals(other.value1)) {
 			return false;
+		}
+		
 		if (value2 == null) {
-			if (other.value2 != null)
+			if (other.value2 != null) {
 				return false;
-		} else if (!value2.equals(other.value2))
+			}
+		} else if (!value2.equals(other.value2)) {
 			return false;
+		}
 		return true;
 	}
 }
