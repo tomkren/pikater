@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.Standard;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 public class EvaluationMethod extends DataProcessing implements IDataProvider {

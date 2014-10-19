@@ -26,13 +26,13 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.RecommendOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.ValuesForOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.core.ontology.subtrees.recommend.Recommend;
 
 

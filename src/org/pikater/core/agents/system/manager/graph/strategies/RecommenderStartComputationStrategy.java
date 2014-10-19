@@ -24,7 +24,7 @@ import org.pikater.core.agents.system.manager.parser.ComputationOutputBuffer;
 import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.core.ontology.subtrees.recommend.Recommend;
 
 import java.util.Map;

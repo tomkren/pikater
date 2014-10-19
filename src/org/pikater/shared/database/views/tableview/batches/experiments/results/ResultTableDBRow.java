@@ -2,7 +2,7 @@ package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
 import java.util.Locale;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.views.base.ITableColumn;

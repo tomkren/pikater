@@ -1,7 +1,7 @@
 package org.pikater.core.options.virtual;
 
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualFileSaverBoxProvider;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
 import org.pikater.core.options.SlotsHelper;
 

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.CoreConstant;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.values.StringValue;
 
 /**
  * Created by Martin Pilat on 27.12.13.

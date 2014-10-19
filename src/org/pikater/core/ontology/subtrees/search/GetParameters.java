@@ -2,8 +2,8 @@ package org.pikater.core.ontology.subtrees.search;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.search.searchitems.SearchItem;
 
 import jade.content.AgentAction;
 

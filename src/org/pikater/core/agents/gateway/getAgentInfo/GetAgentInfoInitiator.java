@@ -12,7 +12,7 @@ import jade.content.onto.basic.Result;
 import org.jfree.util.Log;
 import org.pikater.core.agents.gateway.Initiator;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
 
 public class GetAgentInfoInitiator extends Initiator {
 	

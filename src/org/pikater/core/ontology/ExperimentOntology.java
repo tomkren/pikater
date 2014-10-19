@@ -5,10 +5,10 @@ import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.IRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.shared.logging.core.ConsoleLogger;
 

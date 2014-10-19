@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.core.CoreConstant.SlotContent;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentinfo.Slot;
 
 /**
  * 

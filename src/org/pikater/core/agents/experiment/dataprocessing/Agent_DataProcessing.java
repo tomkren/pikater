@@ -26,7 +26,7 @@ import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.data.GetData;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;

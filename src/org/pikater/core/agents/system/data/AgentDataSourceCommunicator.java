@@ -17,9 +17,9 @@ import jade.lang.acl.UnreadableException;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DataOntology;
-import org.pikater.core.ontology.subtrees.dataSource.DataSourcePath;
-import org.pikater.core.ontology.subtrees.dataSource.GetDataSourcePath;
-import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
+import org.pikater.core.ontology.subtrees.datasource.DataSourcePath;
+import org.pikater.core.ontology.subtrees.datasource.GetDataSourcePath;
+import org.pikater.core.ontology.subtrees.datasource.RegisterDataSourceConcept;
 
 /**
  * User: Kuba Date: 2.5.2014 Time: 15:39

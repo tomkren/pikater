@@ -13,36 +13,36 @@
           <errors defined-in="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing"/>
           <dataSources/>
           <options>
-            <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+            <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
               <name>DEFAULT</name>
               <valuesWrapper>
                 <values>
-                  <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                    <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                  <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                    <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                       <value>EVALUATION_ONLY</value>
                     </currentValue>
                     <type>
-                      <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                      <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                         <value>EVALUATION_ONLY</value>
                       </defaultValue>
                     </type>
-                  </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                  </org.pikater.core.ontology.subtrees.newoption.base.Value>
                 </values>
               </valuesWrapper>
               <valueRestrictions>
                 <restrictions>
-                  <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                  <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                     <types>
-                      <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                        <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                      <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                        <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                           <value>EVALUATION_ONLY</value>
                         </defaultValue>
-                      </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                      </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                     </types>
-                  </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                  </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                 </restrictions>
               </valueRestrictions>
-            </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+            </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
           </options>
           <errors/>
           <computingAgent type="org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent">
@@ -62,36 +62,36 @@
               <dataSources/>
               <agentType>org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation</agentType>
               <options>
-                <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                   <name>F</name>
                   <valuesWrapper>
                     <values>
-                      <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                        <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                      <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                        <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                           <value>8</value>
                         </currentValue>
                         <type>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                          <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                             <value>8</value>
                           </defaultValue>
                         </type>
-                      </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                      </org.pikater.core.ontology.subtrees.newoption.base.Value>
                     </values>
                   </valuesWrapper>
                   <valueRestrictions>
                     <restrictions>
-                      <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                      <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                         <types>
-                          <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                            <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                          <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                            <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                               <value>8</value>
                             </defaultValue>
-                          </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                          </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                         </types>
-                      </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                      </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                     </restrictions>
                   </valueRestrictions>
-                </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
               </options>
             </evaluationMethod>
             <trainingData>
@@ -101,36 +101,36 @@
                 <errors defined-in="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing"/>
                 <dataSources/>
                 <options>
-                  <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                     <name>DEFAULT</name>
                     <valuesWrapper>
                       <values>
-                        <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                          <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                        <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                          <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                             <value>EVALUATION_ONLY</value>
                           </currentValue>
                           <type>
-                            <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                            <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                               <value>EVALUATION_ONLY</value>
                             </defaultValue>
                           </type>
-                        </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                        </org.pikater.core.ontology.subtrees.newoption.base.Value>
                       </values>
                     </valuesWrapper>
                     <valueRestrictions>
                       <restrictions>
-                        <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                           <types>
-                            <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                            <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                              <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                                 <value>EVALUATION_ONLY</value>
                               </defaultValue>
-                            </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                            </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                           </types>
-                        </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                       </restrictions>
                     </valueRestrictions>
-                  </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                 </options>
                 <errors/>
                 <computingAgent type="org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent">
@@ -150,36 +150,36 @@
                     <dataSources/>
                     <agentType>org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation</agentType>
                     <options>
-                      <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                      <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                         <name>F</name>
                         <valuesWrapper>
                           <values>
-                            <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                              <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                            <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                              <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                 <value>8</value>
                               </currentValue>
                               <type>
-                                <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                   <value>8</value>
                                 </defaultValue>
                               </type>
-                            </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                            </org.pikater.core.ontology.subtrees.newoption.base.Value>
                           </values>
                         </valuesWrapper>
                         <valueRestrictions>
                           <restrictions>
-                            <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                            <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                               <types>
-                                <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                                  <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                     <value>8</value>
                                   </defaultValue>
-                                </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                               </types>
-                            </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                            </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                           </restrictions>
                         </valueRestrictions>
-                      </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                      </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                     </options>
                   </evaluationMethod>
                   <trainingData>
@@ -227,36 +227,36 @@
                 <errors defined-in="org.pikater.core.ontology.subtrees.batchdescription.DataProcessing"/>
                 <dataSources/>
                 <options>
-                  <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                     <name>DEFAULT</name>
                     <valuesWrapper>
                       <values>
-                        <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                          <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                        <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                          <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                             <value>EVALUATION_ONLY</value>
                           </currentValue>
                           <type>
-                            <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                            <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                               <value>EVALUATION_ONLY</value>
                             </defaultValue>
                           </type>
-                        </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                        </org.pikater.core.ontology.subtrees.newoption.base.Value>
                       </values>
                     </valuesWrapper>
                     <valueRestrictions>
                       <restrictions>
-                        <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                           <types>
-                            <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.StringValue">
+                            <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                              <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.StringValue">
                                 <value>EVALUATION_ONLY</value>
                               </defaultValue>
-                            </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                            </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                           </types>
-                        </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                       </restrictions>
                     </valueRestrictions>
-                  </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                 </options>
                 <errors/>
                 <computingAgent type="org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent">
@@ -276,36 +276,36 @@
                     <dataSources/>
                     <agentType>org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation</agentType>
                     <options>
-                      <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                      <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                         <name>F</name>
                         <valuesWrapper>
                           <values>
-                            <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                              <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                            <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                              <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                 <value>8</value>
                               </currentValue>
                               <type>
-                                <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                   <value>8</value>
                                 </defaultValue>
                               </type>
-                            </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                            </org.pikater.core.ontology.subtrees.newoption.base.Value>
                           </values>
                         </valuesWrapper>
                         <valueRestrictions>
                           <restrictions>
-                            <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                            <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                               <types>
-                                <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                                  <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                     <value>8</value>
                                   </defaultValue>
-                                </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                               </types>
-                            </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                            </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                           </restrictions>
                         </valueRestrictions>
-                      </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                      </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                     </options>
                   </evaluationMethod>
                   <trainingData>

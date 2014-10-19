@@ -1,10 +1,10 @@
 package org.pikater.core.options.computing;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaNaiveBayesCA;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
 import org.pikater.core.options.OptionsHelper;
 import org.pikater.core.options.SlotsHelper;
 
