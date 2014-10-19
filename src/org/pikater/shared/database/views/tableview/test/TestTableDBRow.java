@@ -12,80 +12,69 @@ import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.test.TestTableDBView.Column;
 
-public class TestTableDBRow extends AbstractTableRowDBView
-{
+public class TestTableDBRow extends AbstractTableRowDBView {
 	private static final String mockupValue = "value";
-	
-	private final int row_nr;
+
+	private final int rowNr;
 	private final Set<String> mockupSet;
-	
-	public TestTableDBRow(int row_nr)
-	{
-		this.row_nr = row_nr;
+
+	public TestTableDBRow(int rowNr) {
+		this.rowNr = rowNr;
 		this.mockupSet = new HashSet<String>();
 		this.mockupSet.add(mockupValue);
 	}
 
 	@Override
-	public AbstractDBViewValue<? extends Object> initValueWrapper(ITableColumn column)
-	{
+	public AbstractDBViewValue<? extends Object> initValueWrapper(
+			ITableColumn column) {
+		
 		Column specificColumn = (Column) column;
-		switch(specificColumn)
-		{
-			case COLUMN1:
-				return new StringReadOnlyDBViewValue(String.format("%s_%d", column.getDisplayName(), row_nr));
-			case COLUMN2:
-				return new BooleanDBViewValue(true)
-				{
-					@Override
-					protected void updateEntities(Boolean newValue)
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
-			case COLUMN3:
-				return new RepresentativeDBViewValue(mockupSet, mockupValue)
-				{
-					@Override
-					protected void updateEntities(String newValue)
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
-			case COLUMN4:
-				return new NamedActionDBViewValue("Action")
-				{
-					@Override
-					public boolean isEnabled()
-					{
-						return true;
-					}
-					
-					@Override
-					protected void updateEntities()
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+		switch (specificColumn) {
+		case COLUMN1:
+			return new StringReadOnlyDBViewValue(String.format("%s_%d",
+					column.getDisplayName(), rowNr));
+		case COLUMN2:
+			return new BooleanDBViewValue(true) {
+				@Override
+				protected void updateEntities(Boolean newValue) {
+				}
+
+				@Override
+				protected void commitEntities() {
+				}
+			};
+		case COLUMN3:
+			return new RepresentativeDBViewValue(mockupSet, mockupValue) {
+				@Override
+				protected void updateEntities(String newValue) {
+				}
+
+				@Override
+				protected void commitEntities() {
+				}
+			};
+		case COLUMN4:
+			return new NamedActionDBViewValue("Action") {
+				@Override
+				public boolean isEnabled() {
+					return true;
+				}
+
+				@Override
+				protected void updateEntities() {
+				}
+
+				@Override
+				protected void commitEntities() {
+				}
+			};
+		default:
+			throw new IllegalStateException("Unknown state: "
+					+ specificColumn.name());
 		}
 	}
 
 	@Override
-	protected void commitRow()
-	{
+	protected void commitRow() {
 	}
 }

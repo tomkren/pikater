@@ -66,15 +66,15 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity> {
 	/**
 	 * Function retrieving an entity based upon the primary key. Currently primary
 	 * key is an integer generated at entity persistence.
-	 * @param ID of the searched entity
+	 * @param entityID of the searched entity
 	 * @param era type of action, that should be performed if no entity is found
 	 * @return the entity with the given ID
 	 */
-	public T getByID(int ID, EmptyResultAction era) {
+	public T getByID(int entityID, EmptyResultAction era) {
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		T item = null;
 		try {
-			item = em.find(ec, ID);
+			item = em.find(ec, entityID);
 		} catch (Exception t) {
 			PikaterDBLogger.logThrowable("Exception while retrieveing entity based on its primary key", t);
 		}
@@ -107,11 +107,11 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity> {
 
 	/**
 	 * Checks whether the entity with the given ID is available
-	 * @param ID of the entity 
+	 * @param entityID of the entity 
 	 * @return true if the entity is present
 	 */
-	public boolean existsByID(int ID) {
-		return getByID(ID, EmptyResultAction.NULL) != null;
+	public boolean existsByID(int entityID) {
+		return getByID(entityID, EmptyResultAction.NULL) != null;
 	}
 
 	/**

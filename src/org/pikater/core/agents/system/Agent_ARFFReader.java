@@ -131,8 +131,8 @@ public class Agent_ARFFReader extends PikaterAgent {
 			DataInstances instances = new DataInstances();
 			
 			// Read the file
-			boolean file_read = ReadFromFile(fileName);
-			if (!file_read) {
+			boolean fileRead = ReadFromFile(fileName);
+			if (!fileRead) {
 				throw new FailureException(
 						"File hasn't been read. Wrong file-name?");
 			}

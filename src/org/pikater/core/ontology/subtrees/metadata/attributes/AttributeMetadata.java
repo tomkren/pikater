@@ -15,66 +15,67 @@ public class AttributeMetadata implements Concept {
 
 	private static final long serialVersionUID = -1009786277447730894L;
 
-	private double _ratioOfMissingValues = 0;
-	private int _order;
-	private double _entropy = 0;
-	private double _attributeClassEntropy = 0;
+	private String name;
+	private boolean isTarget;
+	private double ratioOfMissingValues = 0;
+	private int order;
+	private double entropy = 0;
+	private double attributeClassEntropy = 0;
 
-	public double getAttributeClassEntropy() {
-		return _attributeClassEntropy;
+
+	public String getName() {
+		return name;
 	}
 
-	public void setAttributeClassEntropy(double _attributeClassEntropy) {
-		this._attributeClassEntropy = _attributeClassEntropy;
+	public void setName(String name) {
+		this.name = name;
 	}
-
-	public double getEntropy() {
-		return _entropy;
-	}
-
-	public void setEntropy(double _entropy) {
-		this._entropy = _entropy;
-	}
-
-	private String _name;
-	private boolean _isTarget;
 
 	public boolean isIsTarget() {
-		return _isTarget;
+		return isTarget;
 	}
 
-	public void setIsTarget(boolean _isTarget) {
-		this._isTarget = _isTarget;
+	public void setIsTarget(boolean isTarget) {
+		this.isTarget = isTarget;
+	}
+
+	public double getRatioOfMissingValues() {
+		return ratioOfMissingValues;
+	}
+
+	public void setRatioOfMissingValues(double ratioOfMissingValues) {
+		this.ratioOfMissingValues = ratioOfMissingValues;
 	}
 
 	public int getOrder() {
-		return _order;
+		return order;
 	}
 
-	public void setOrder(int _order) {
-		this._order = _order;
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
-	public String getName() {
-		return _name;
+	public double getEntropy() {
+		return entropy;
 	}
 
-	public void setName(String _name) {
-		this._name = _name;
+	public void setEntropy(double entropy) {
+		this.entropy = entropy;
 	}
 
 	public boolean getHasMissingValues() {
 		return getRatioOfMissingValues() == 0;
 	}
 
-	public double getRatioOfMissingValues() {
-		return _ratioOfMissingValues;
+	public double getAttributeClassEntropy() {
+		return attributeClassEntropy;
 	}
 
-	public void setRatioOfMissingValues(double _ratioOfMissingValues) {
-		this._ratioOfMissingValues = _ratioOfMissingValues;
+	public void setAttributeClassEntropy(double attributeClassEntropy) {
+		this.attributeClassEntropy = attributeClassEntropy;
 	}
 
+	
 	public String getType() {
 		return "Base";
 	}
