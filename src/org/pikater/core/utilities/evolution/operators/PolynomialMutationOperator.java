@@ -1,6 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
+import org.pikater.core.ontology.subtrees.newoption.values.DoubleValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
@@ -9,8 +9,8 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 /**
  * Performs the polynomial mutation as described in:
  * 
- * Deb, Kalyanmoy and Mayank Goyal (1996). “A combined genetic adaptive search (GeneAS) for
- * engineering design.” In: Computer Science and Informatics 26.4, pp. 30–45
+ * Deb, Kalyanmoy and Mayank Goyal (1996). ï¿½A combined genetic adaptive search (GeneAS) for
+ * engineering design.ï¿½ In: Computer Science and Informatics 26.4, pp. 30ï¿½45
  * 
  * @author Martin Pilat
  *

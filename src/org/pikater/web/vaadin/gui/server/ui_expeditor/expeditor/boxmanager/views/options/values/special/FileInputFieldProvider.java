@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special;
 
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.web.vaadin.gui.server.components.dbviews.pickers.DatasetTablePicker;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;

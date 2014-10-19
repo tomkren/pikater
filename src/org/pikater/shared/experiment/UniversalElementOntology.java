@@ -3,7 +3,7 @@ package org.pikater.shared.experiment;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 
 /**
  * Additional experiment related information to {@link UniversalElement}.

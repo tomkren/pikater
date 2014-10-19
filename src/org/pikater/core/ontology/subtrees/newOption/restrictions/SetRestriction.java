@@ -1,11 +1,11 @@
-package org.pikater.core.ontology.subtrees.newOption.restrictions;
+package org.pikater.core.ontology.subtrees.newoption.restrictions;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 public class SetRestriction implements IRestriction, Iterable<IValueData> {

@@ -1,15 +1,15 @@
-package org.pikater.core.ontology.subtrees.newOption;
+package org.pikater.core.ontology.subtrees.newoption;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newoption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 
 public class Example {
 

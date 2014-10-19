@@ -27,7 +27,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.agent.AgentClass;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.NewComputedData;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;

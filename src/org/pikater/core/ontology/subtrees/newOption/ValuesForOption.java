@@ -1,20 +1,20 @@
-package org.pikater.core.ontology.subtrees.newOption;
+package org.pikater.core.ontology.subtrees.newoption;
+
+import jade.content.Concept;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.IValidated;
-import org.pikater.core.ontology.subtrees.newOption.base.IWekaItem;
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.IValidated;
+import org.pikater.core.ontology.subtrees.newoption.base.IWekaItem;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.values.NullValue;
+import org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.shared.util.ICloneable;
 import org.pikater.shared.util.collections.CollectionUtils;
-
-import jade.content.Concept;
 
 public class ValuesForOption implements Concept, IValidated, ICloneable,
 		IWekaItem, Iterable<Value> {

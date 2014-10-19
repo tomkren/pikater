@@ -10,13 +10,19 @@ import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
 import org.pikater.core.agents.gateway.newAgent.PikaterGateway_NewAgent;
 import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
 public class WebToCoreEntryPoint {
 
+	/**
+	 * Constructor
+	 */
+	private WebToCoreEntryPoint(){
+	}
+	
 	/**
 	 * Gets required and relevant information about all agents used in the core
 	 * system that can act as "boxes" in web's experiment editor.

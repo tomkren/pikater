@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.task;
 
 import java.util.Date;
 
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 
 import jade.content.Concept;
 

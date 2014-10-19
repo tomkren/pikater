@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.systemLoad;
+package org.pikater.core.ontology.subtrees.systemload;
 
 import java.util.logging.Level;
 
@@ -16,30 +16,32 @@ public class SystemLoad implements Concept {
 	private int numberOfTasksInQueue;
 	private int numberOfBusyCores;
 	private int numberOfFreeCores;
-	
+
 	public int getNumberOfTasksInQueue() {
 		return numberOfTasksInQueue;
 	}
+
 	public void setNumberOfTasksInQueue(int numberOfTasksInQueue) {
 		this.numberOfTasksInQueue = numberOfTasksInQueue;
 	}
-	
+
 	public int getNumberOfBussyCores() {
 		return numberOfBusyCores;
 	}
+
 	public void setNumberOfBusyCores(int numberOfBussyCores) {
 		this.numberOfBusyCores = numberOfBussyCores;
 	}
-	
+
 	public int getNumberOfFreeCores() {
 		return numberOfFreeCores;
 	}
+
 	public void setNumberOfUntappedCores(int numberOfFreeCores) {
 		this.numberOfFreeCores = numberOfFreeCores;
 	}
-	
-	public void print()
-	{
+
+	public void print() {
 		StringBuilder sb = new StringBuilder("Planner:\n");
 		sb.append("\tNumberOfTasksInQueue: " + numberOfTasksInQueue);
 		sb.append("\tNumberOfBussyCores: " + numberOfBusyCores);

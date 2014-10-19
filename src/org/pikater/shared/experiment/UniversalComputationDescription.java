@@ -6,7 +6,7 @@ import java.util.logging.Level;
 
 import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchdescription.examples.SearchOnly;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.XStreamHelper;
 import org.pikater.shared.logging.core.ConsoleLogger;
 import org.pikater.shared.logging.database.PikaterDBLogger;

@@ -1,6 +1,6 @@
 package org.pikater.core.utilities.evolution.individuals;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 
 /**
  * Represents all individual which acts as arrays of values. 

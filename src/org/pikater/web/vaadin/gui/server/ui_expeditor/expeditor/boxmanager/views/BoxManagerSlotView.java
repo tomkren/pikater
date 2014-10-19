@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views;
 
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentinfo.Slot;
 import org.pikater.web.experiment.server.BoxSlot;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;

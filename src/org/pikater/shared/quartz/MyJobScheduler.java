@@ -42,7 +42,6 @@ public class MyJobScheduler extends PropertiesHandler {
 	 * the "quartz.properties" file located (as a resource) in the "org.quartz"
 	 * package is loaded and that is what we are providing.
 	 * 
-	 * @param quartzConfAbsPath
 	 */
 	public MyJobScheduler(String quartzConfAbsPath) {
 		String quartzConfPath = quartzConfAbsPath;
@@ -103,9 +102,6 @@ public class MyJobScheduler extends PropertiesHandler {
 	/**
 	 * Defines an arbitrary job - builds it, creates it and schedules it.
 	 * 
-	 * @param jobClass
-	 * @param args
-	 * @return
 	 * @throws Exception
 	 */
 	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Exception {
@@ -133,7 +129,6 @@ public class MyJobScheduler extends PropertiesHandler {
 
 	/**
 	 * Interrupts the given job.
-	 * @param key
 	 */
 	public void interruptJob(JobKey key) {
 		try {
@@ -150,9 +145,6 @@ public class MyJobScheduler extends PropertiesHandler {
 	 * Sets arguments to a job defined by the arguments. This method
 	 * should be used prior to scheduling the job.
 	 * 
-	 * @param detail
-	 * @param helperJobInstance
-	 * @param args
 	 * @throws Exception
 	 */
 	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args) throws Exception {

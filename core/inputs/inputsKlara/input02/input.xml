@@ -22,106 +22,106 @@
                 <dataSources/>
                 <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
                 <options>
-                  <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                     <name>L</name>
                     <valuesWrapper>
                       <values>
-                        <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                          <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                        <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                          <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                             <value>0.5</value>
                           </currentValue>
                           <type>
-                            <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                               <value>0.5</value>
                             </defaultValue>
                           </type>
-                        </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                        </org.pikater.core.ontology.subtrees.newoption.base.Value>
                       </values>
                     </valuesWrapper>
                     <valueRestrictions>
                       <restrictions>
-                        <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                           <types>
-                            <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                              <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                 <value>0.5</value>
                               </defaultValue>
-                            </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                            </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                           </types>
-                        </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                       </restrictions>
                     </valueRestrictions>
-                  </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                  <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
+                  <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                     <name>M</name>
                     <valuesWrapper>
                       <values>
-                        <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                          <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
+                        <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                          <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange">
                             <countOfValuesToTry>20</countOfValuesToTry>
                             <userDefinedRestriction>
-                              <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                 <value>0.0</value>
                               </minValue>
-                              <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                 <value>1.0</value>
                               </maxValue>
                             </userDefinedRestriction>
                           </currentValue>
                           <type>
-                            <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
+                            <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange">
                               <countOfValuesToTry>20</countOfValuesToTry>
                               <userDefinedRestriction>
-                                <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                   <value>0.0</value>
                                 </minValue>
-                                <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                   <value>1.0</value>
                                 </maxValue>
                               </userDefinedRestriction>
                             </defaultValue>
                             <rangeRestriction>
-                              <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                 <value>0.0</value>
                               </minValue>
-                              <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                 <value>1.0</value>
                               </maxValue>
                             </rangeRestriction>
                           </type>
-                        </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                        </org.pikater.core.ontology.subtrees.newoption.base.Value>
                       </values>
                     </valuesWrapper>
                     <valueRestrictions>
                       <restrictions>
-                        <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                           <types>
-                            <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
+                            <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                              <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange">
                                 <countOfValuesToTry>20</countOfValuesToTry>
                                 <userDefinedRestriction>
-                                  <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                     <value>0.0</value>
                                   </minValue>
-                                  <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                     <value>1.0</value>
                                   </maxValue>
                                 </userDefinedRestriction>
                               </defaultValue>
                               <rangeRestriction>
-                                <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                   <value>0.0</value>
                                 </minValue>
-                                <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                   <value>1.0</value>
                                 </maxValue>
                               </rangeRestriction>
-                            </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                            </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                           </types>
-                        </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                       </restrictions>
                     </valueRestrictions>
-                  </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                 </options>
                 <duration>
                   <durationType>MINUTES</durationType>
@@ -133,36 +133,36 @@
                   <dataSources/>
                   <agentType>org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation</agentType>
                   <options>
-                    <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                    <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                       <name>F</name>
                       <valuesWrapper>
                         <values>
-                          <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                            <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                          <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                            <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                               <value>10</value>
                             </currentValue>
                             <type>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                              <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                 <value>10</value>
                               </defaultValue>
                             </type>
-                          </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                          </org.pikater.core.ontology.subtrees.newoption.base.Value>
                         </values>
                       </valuesWrapper>
                       <valueRestrictions>
                         <restrictions>
-                          <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                          <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                             <types>
-                              <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                              <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                                <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                                   <value>10</value>
                                 </defaultValue>
-                              </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                              </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                             </types>
-                          </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                          </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                         </restrictions>
                       </valueRestrictions>
-                    </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                    </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                   </options>
                 </evaluationMethod>
                 <trainingData>
@@ -217,106 +217,106 @@
             <dataSources/>
             <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
             <options>
-              <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+              <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                 <name>L</name>
                 <valuesWrapper>
                   <values>
-                    <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                      <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                    <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                      <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                         <value>0.5</value>
                       </currentValue>
                       <type>
-                        <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                        <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                           <value>0.5</value>
                         </defaultValue>
                       </type>
-                    </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                    </org.pikater.core.ontology.subtrees.newoption.base.Value>
                   </values>
                 </valuesWrapper>
                 <valueRestrictions>
                   <restrictions>
-                    <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                    <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                       <types>
-                        <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                        <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                          <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                             <value>0.5</value>
                           </defaultValue>
-                        </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                        </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                       </types>
-                    </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                    </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                   </restrictions>
                 </valueRestrictions>
-              </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-              <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+              </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
+              <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                 <name>M</name>
                 <valuesWrapper>
                   <values>
-                    <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                      <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
+                    <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                      <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange">
                         <countOfValuesToTry>20</countOfValuesToTry>
                         <userDefinedRestriction>
-                          <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                          <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                             <value>0.0</value>
                           </minValue>
-                          <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                          <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                             <value>1.0</value>
                           </maxValue>
                         </userDefinedRestriction>
                       </currentValue>
                       <type>
-                        <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
+                        <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange">
                           <countOfValuesToTry>20</countOfValuesToTry>
                           <userDefinedRestriction>
-                            <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                               <value>0.0</value>
                             </minValue>
-                            <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                               <value>1.0</value>
                             </maxValue>
                           </userDefinedRestriction>
                         </defaultValue>
                         <rangeRestriction>
-                          <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                          <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                             <value>0.0</value>
                           </minValue>
-                          <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                          <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                             <value>1.0</value>
                           </maxValue>
                         </rangeRestriction>
                       </type>
-                    </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                    </org.pikater.core.ontology.subtrees.newoption.base.Value>
                   </values>
                 </valuesWrapper>
                 <valueRestrictions>
                   <restrictions>
-                    <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                    <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                       <types>
-                        <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
+                        <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                          <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange">
                             <countOfValuesToTry>20</countOfValuesToTry>
                             <userDefinedRestriction>
-                              <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                 <value>0.0</value>
                               </minValue>
-                              <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                                 <value>1.0</value>
                               </maxValue>
                             </userDefinedRestriction>
                           </defaultValue>
                           <rangeRestriction>
-                            <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <minValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                               <value>0.0</value>
                             </minValue>
-                            <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <maxValue type="org.pikater.core.ontology.subtrees.newoption.values.DoubleValue">
                               <value>1.0</value>
                             </maxValue>
                           </rangeRestriction>
-                        </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                        </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                       </types>
-                    </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                    </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                   </restrictions>
                 </valueRestrictions>
-              </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+              </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
             </options>
             <duration>
               <durationType>MINUTES</durationType>
@@ -328,36 +328,36 @@
               <dataSources/>
               <agentType>org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation</agentType>
               <options>
-                <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                <org.pikater.core.ontology.subtrees.newoption.base.NewOption>
                   <name>F</name>
                   <valuesWrapper>
                     <values>
-                      <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                        <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                      <org.pikater.core.ontology.subtrees.newoption.base.Value>
+                        <currentValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                           <value>10</value>
                         </currentValue>
                         <type>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                          <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                             <value>10</value>
                           </defaultValue>
                         </type>
-                      </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                      </org.pikater.core.ontology.subtrees.newoption.base.Value>
                     </values>
                   </valuesWrapper>
                   <valueRestrictions>
                     <restrictions>
-                      <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                      <org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                         <types>
-                          <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                            <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                          <org.pikater.core.ontology.subtrees.newoption.base.ValueType>
+                            <defaultValue type="org.pikater.core.ontology.subtrees.newoption.values.IntegerValue">
                               <value>10</value>
                             </defaultValue>
-                          </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                          </org.pikater.core.ontology.subtrees.newoption.base.ValueType>
                         </types>
-                      </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                      </org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction>
                     </restrictions>
                   </valueRestrictions>
-                </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                </org.pikater.core.ontology.subtrees.newoption.base.NewOption>
               </options>
             </evaluationMethod>
             <trainingData>

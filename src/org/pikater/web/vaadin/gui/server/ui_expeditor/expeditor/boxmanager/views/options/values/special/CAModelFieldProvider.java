@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special;
 
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
 import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.gui.server.components.dbviews.pickers.ModelWizardPicker;
 import org.pikater.web.vaadin.gui.server.components.dbviews.pickers.ModelWizardPickerOutput;

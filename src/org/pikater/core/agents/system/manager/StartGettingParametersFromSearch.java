@@ -7,8 +7,8 @@ import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computation.graph.edges.ErrorEdge;
-import org.pikater.core.agents.system.computation.graph.strategies.SearchStartComputationStrategy;
+import org.pikater.core.agents.system.manager.graph.edges.ErrorEdge;
+import org.pikater.core.agents.system.manager.graph.strategies.SearchStartComputationStrategy;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 public class StartGettingParametersFromSearch extends AchieveREInitiator {
@@ -23,10 +23,9 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 	public StartGettingParametersFromSearch(Agent_Manager a, ACLMessage req, ACLMessage msg,
 			SearchStartComputationStrategy cs) {
 		super(a, msg);
-		
 		this.myAgent = a;
-		this.msg = msg;
 		this.strategy = cs;
+		this.msg = msg;
 		
         myAgent.logSevere("StartGettingParametersFromSearch behavior created.");
 	}

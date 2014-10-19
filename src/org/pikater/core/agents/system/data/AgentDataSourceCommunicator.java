@@ -17,98 +17,95 @@ import jade.lang.acl.UnreadableException;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DataOntology;
-import org.pikater.core.ontology.subtrees.dataSource.DataSourcePath;
-import org.pikater.core.ontology.subtrees.dataSource.GetDataSourcePath;
-import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
+import org.pikater.core.ontology.subtrees.datasource.DataSourcePath;
+import org.pikater.core.ontology.subtrees.datasource.GetDataSourcePath;
+import org.pikater.core.ontology.subtrees.datasource.RegisterDataSourceConcept;
 
 /**
- * User: Kuba
- * Date: 2.5.2014
- * Time: 15:39
+ * User: Kuba Date: 2.5.2014 Time: 15:39
  */
 public class AgentDataSourceCommunicator {
-    PikaterAgent initAgent;
-    AID receiverAid;
+	PikaterAgent initAgent;
+	AID receiverAid;
 
-    public AgentDataSourceCommunicator(PikaterAgent initAgent, boolean localOnly) throws Exception {
-        this.initAgent=initAgent;
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType(AgentDataSource.SERVICE_TYPE);
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.addServices(sd);
-        SearchConstraints constraints=new SearchConstraints();
-        constraints.setMaxDepth(0L);
-        constraints.setMaxResults(1L);
-        try {
-            DFAgentDescription[] searchResults= DFService.search(initAgent,dfd,constraints);
-            if (searchResults.length==1)
-            {
-                receiverAid=searchResults[0].getName();
-            }
-            else
-            {
-                throw new IllegalStateException("No DataSourceAgent found");
-            }
-        } catch (FIPAException e) {
-        	initAgent.logException(e.getMessage(), e);
-        }
-    }
+	public AgentDataSourceCommunicator(PikaterAgent initAgent, boolean localOnly)
+			throws Exception {
+		this.initAgent = initAgent;
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType(AgentDataSource.SERVICE_TYPE);
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.addServices(sd);
+		SearchConstraints constraints = new SearchConstraints();
+		constraints.setMaxDepth(0L);
+		constraints.setMaxResults(1L);
+		try {
+			DFAgentDescription[] searchResults =
+					DFService.search(initAgent, dfd, constraints);
+			if (searchResults.length == 1) {
+				receiverAid = searchResults[0].getName();
+			} else {
+				throw new IllegalStateException("No DataSourceAgent found");
+			}
+		} catch (FIPAException e) {
+			initAgent.logException(e.getMessage(), e);
+		}
+	}
 
-    public String getDataSourceLocalPath(String taskId,String type) {
-    	Ontology ontology = DataOntology.getInstance();
-    	
-        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-        msg.addReceiver(receiverAid);
-        msg.setLanguage(initAgent.getCodec().getName());
-        msg.setOntology(ontology.getName());
+	public String getDataSourceLocalPath(String taskId, String type) {
+		Ontology ontology = DataOntology.getInstance();
 
-        GetDataSourcePath getDataSourcePath = new GetDataSourcePath();
-        getDataSourcePath.setTaskId(taskId);
-        getDataSourcePath.setType(type);
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.addReceiver(receiverAid);
+		msg.setLanguage(initAgent.getCodec().getName());
+		msg.setOntology(ontology.getName());
 
-        Action a = new Action(initAgent.getAID(),getDataSourcePath);
+		GetDataSourcePath getDataSourcePath = new GetDataSourcePath();
+		getDataSourcePath.setTaskId(taskId);
+		getDataSourcePath.setType(type);
 
-        try {
-            initAgent.getContentManager().fillContent(msg, a);
-            ACLMessage msg_reply = FIPAService.doFipaRequestClient(initAgent, msg);
-            DataSourcePath result=(DataSourcePath)((Result)msg_reply.getContentObject()).getValue();
-            return result.getPath();
-        } catch (Codec.CodecException e) {
-        	initAgent.logException(e.getMessage(), e);
-        } catch (UnreadableException e) {
-        	initAgent.logException(e.getMessage(), e);
-        } catch (FIPAException e) {
-        	initAgent.logException(e.getMessage(), e);
-        } catch (OntologyException e) {
-        	initAgent.logException(e.getMessage(), e);
-        }
- 
- 
- 
-        return "failure";
-    }
+		Action action = new Action(initAgent.getAID(), getDataSourcePath);
 
-    public void registerDataSources(String taskId,String[] typeList) {
-    	Ontology ontology = DataOntology.getInstance();
-    	
-        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-        msg.addReceiver(receiverAid);
-        msg.setLanguage(initAgent.getCodec().getName());
-        msg.setOntology(ontology.getName());
+		try {
+			initAgent.getContentManager().fillContent(msg, action);
+			ACLMessage msgReply =
+					FIPAService.doFipaRequestClient(initAgent, msg);
+			DataSourcePath result = (DataSourcePath) ((Result) msgReply
+					.getContentObject()).getValue();
+			return result.getPath();
+		} catch (Codec.CodecException e) {
+			initAgent.logException(e.getMessage(), e);
+		} catch (UnreadableException e) {
+			initAgent.logException(e.getMessage(), e);
+		} catch (FIPAException e) {
+			initAgent.logException(e.getMessage(), e);
+		} catch (OntologyException e) {
+			initAgent.logException(e.getMessage(), e);
+		}
 
-        RegisterDataSourceConcept registerDS = new RegisterDataSourceConcept();
-        registerDS.setTaskId(taskId);
-        registerDS.setDataTypes(typeList);
+		return "failure";
+	}
 
-        Action a = new Action(initAgent.getAID(),registerDS);
+	public void registerDataSources(String taskId, String[] typeList) {
+		Ontology ontology = DataOntology.getInstance();
 
-        try {
-            initAgent.getContentManager().fillContent(msg, a);
-            initAgent.send(msg);
-        } catch (Codec.CodecException e) {
-        	initAgent.logException(e.getMessage(), e);
-        } catch (OntologyException e) {
-        	initAgent.logException(e.getMessage(), e);
-        }
-    }
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.addReceiver(receiverAid);
+		msg.setLanguage(initAgent.getCodec().getName());
+		msg.setOntology(ontology.getName());
+
+		RegisterDataSourceConcept registerDS = new RegisterDataSourceConcept();
+		registerDS.setTaskId(taskId);
+		registerDS.setDataTypes(typeList);
+
+		Action action = new Action(initAgent.getAID(), registerDS);
+
+		try {
+			initAgent.getContentManager().fillContent(msg, action);
+			initAgent.send(msg);
+		} catch (Codec.CodecException e) {
+			initAgent.logException(e.getMessage(), e);
+		} catch (OntologyException e) {
+			initAgent.logException(e.getMessage(), e);
+		}
+	}
 }

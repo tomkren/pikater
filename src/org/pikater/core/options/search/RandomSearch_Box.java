@@ -1,12 +1,12 @@
 package org.pikater.core.options.search;
 
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchdescription.Search;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
 import org.pikater.core.options.SlotsHelper;
 
 public class RandomSearch_Box {

@@ -3,7 +3,7 @@ package org.pikater.shared.database.jpa.daos;
 import java.util.Date;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;

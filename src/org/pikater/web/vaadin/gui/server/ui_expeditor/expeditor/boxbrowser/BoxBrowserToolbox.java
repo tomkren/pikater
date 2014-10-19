@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.web.config.KnownCoreAgents;
 import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;

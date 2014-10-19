@@ -11,22 +11,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.Agents;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadatas;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.core.options.recommend.NMTopRecommender_Box;
 
 /**

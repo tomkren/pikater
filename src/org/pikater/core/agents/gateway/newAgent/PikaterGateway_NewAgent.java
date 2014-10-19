@@ -19,6 +19,17 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 
 public class PikaterGateway_NewAgent {
 
+	/**
+	 * Constructor
+	 */
+	private PikaterGateway_NewAgent() {
+	}
+	
+	/**
+	 * New External Agent Inform
+	 * @param externalAgentID
+	 * @throws PikaterGatewayException
+	 */
 	public static void newAgent(int externalAgentID) throws PikaterGatewayException {
 		try {
 	        NewAgent newAgent = new NewAgent();

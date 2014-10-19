@@ -7,13 +7,13 @@ import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.SearchOntology;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.option.GetOptions;
+import org.pikater.core.ontology.subtrees.agentinfo.GetOptions;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
-import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.searchitems.SearchItem;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
@@ -116,7 +116,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		
 		addBehaviour(new RequestServer(this));
 		
-		addAgentInfoBehaviour(getAgentInfo());
+		addAgentInfoBehaviour();
 
 	}
 

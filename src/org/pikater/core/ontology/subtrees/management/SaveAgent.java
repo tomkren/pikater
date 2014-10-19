@@ -8,10 +8,11 @@ public class SaveAgent implements AgentAction {
 
 	private int userID = 1;
 	private Agent agent;
-	
+
 	public Agent getAgent() {
 		return agent;
 	}
+
 	public void setAgent(Agent agent) {
 		this.agent = agent;
 	}
@@ -19,8 +20,9 @@ public class SaveAgent implements AgentAction {
 	public int getUserID() {
 		return userID;
 	}
+
 	public void setUserID(int userID) {
 		this.userID = userID;
-	}	
+	}
 
 }

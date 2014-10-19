@@ -2,9 +2,9 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.view
 
 import java.util.Collection;
 
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.shared.util.collections.BidiMap;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;

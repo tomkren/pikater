@@ -1,7 +1,7 @@
 package org.pikater.core.options.recommend;
 
 import org.pikater.core.agents.experiment.recommend.Agent_Basic;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchdescription.Recommend;
 import org.pikater.core.options.SlotsHelper;
 

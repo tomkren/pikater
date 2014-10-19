@@ -16,7 +16,20 @@ import org.pikater.core.ontology.subtrees.batch.NewBatch;
 
 public class PikaterGateway_NewBatch {
 
-	public static void newBatch(int IDNewBatch, int userID) throws PikaterGatewayException {
+	/**
+	 * Constructor
+	 */
+	private PikaterGateway_NewBatch() {
+	}
+	
+	/**
+	 * New Batch Inform
+	 * @param IDNewBatch
+	 * @param userID
+	 * @throws PikaterGatewayException
+	 */
+	public static void newBatch(int IDNewBatch, int userID
+			) throws PikaterGatewayException {
 
 		try {
 	        

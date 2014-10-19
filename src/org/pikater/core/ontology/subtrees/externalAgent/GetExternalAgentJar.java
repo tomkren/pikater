@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.externalAgent;
+package org.pikater.core.ontology.subtrees.externalagent;
 
 import jade.content.AgentAction;
 import jade.content.onto.annotations.Slot;

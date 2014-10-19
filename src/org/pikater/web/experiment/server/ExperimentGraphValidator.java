@@ -3,10 +3,10 @@ package org.pikater.web.experiment.server;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.pikater.core.CoreConstant;
 import org.pikater.core.CoreConstant.SlotDirection;
-import org.pikater.core.CoreConstants;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.agentinfo.Slot;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 
 /**
  * As implied by the name, a class created for the sole purpose of validating experiments
@@ -94,22 +94,22 @@ public class ExperimentGraphValidator {
 								registerValidationProblem("At least one of 'FileInput' boxes has the invalid default value set in the 'fileURI' option.");
 							}
 						}
-						validateBoxSlot(box, SlotDirection.OUTPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.OUTPUT, CoreConstant.SlotContent.FILE_DATA.getSlotName()); // potentially duplicate check but it is needed
 						break;
 					case CHOOSE:
 						break;
 					case COMPOSITE:
 						break;
 					case COMPUTE:
-						validateBoxSlot(box, SlotDirection.INPUT, CoreConstants.SLOT_TRAINING_DATA); // potentially duplicate check but it is needed
-						validateBoxSlot(box, SlotDirection.INPUT, CoreConstants.SLOT_TESTING_DATA); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.TRAINING_DATA.getSlotName()); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.TESTING_DATA.getSlotName()); // potentially duplicate check but it is needed
 						break;
 					case MISC:
 						break;
 					case OPTION:
 						break;
 					case OUTPUT:
-						validateBoxSlot(box, SlotDirection.INPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.FILE_DATA.getSlotName()); // potentially duplicate check but it is needed
 						break;
 					case PROCESS_DATA:
 						break;

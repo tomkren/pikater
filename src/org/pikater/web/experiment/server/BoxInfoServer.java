@@ -1,6 +1,6 @@
 package org.pikater.web.experiment.server;
 
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.web.experiment.IBoxInfoCommon;
 import org.pikater.web.experiment.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;

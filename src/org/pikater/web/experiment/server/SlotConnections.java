@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.pikater.core.CoreConstant.SlotDirection;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentinfo.Slot;
 
 /**
  * <p>Maps connected slots of a given {@link ExperimentGraphServer}.</br>

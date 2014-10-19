@@ -1,13 +1,13 @@
 package org.pikater.core.utilities.evolution.operators;
 
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.newoption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
-import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
+import org.pikater.core.ontology.subtrees.search.searchitems.IntervalSearchItem;
+import org.pikater.core.ontology.subtrees.search.searchitems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.searchitems.SetSItem;
 
 /**
  *

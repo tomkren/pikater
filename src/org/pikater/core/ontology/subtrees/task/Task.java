@@ -9,7 +9,7 @@ import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.shared.database.jpa.JPAResult;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains information about how well an experiment performed
@@ -51,7 +51,7 @@ public class Task implements Concept {
 
 	// results are filled in after they are computed
 	private Evaluation result;
-	private ArrayList<TaskOutput> output; // list of outputs
+	private List<TaskOutput> output; // list of outputs
 
 	private String note;
 
@@ -167,10 +167,10 @@ public class Task implements Concept {
 		this.result = result;
 	}
 
-	public ArrayList<TaskOutput> getOutput() {
+	public List<TaskOutput> getOutput() {
 		return output;
 	}
-	public void setOutput(ArrayList<TaskOutput> output) {
+	public void setOutput(List<TaskOutput> output) {
 		this.output = output;
 	}
 

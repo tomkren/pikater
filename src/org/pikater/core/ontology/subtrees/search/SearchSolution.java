@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.search;
 
 import jade.content.Concept;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
 import java.util.ArrayList;

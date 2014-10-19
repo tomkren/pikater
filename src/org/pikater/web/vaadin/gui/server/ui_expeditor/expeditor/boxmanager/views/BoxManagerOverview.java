@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.agentinfo.Slot;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.web.experiment.server.BoxInfoServer;
 import org.pikater.web.experiment.server.BoxSlot;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;

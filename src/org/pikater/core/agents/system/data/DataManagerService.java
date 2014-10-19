@@ -34,14 +34,14 @@ import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.subtrees.account.GetUser;
 import org.pikater.core.ontology.subtrees.account.GetUserID;
 import org.pikater.core.ontology.subtrees.account.User;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAllAgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
-import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.ExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentinfo.GetAgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.GetAllAgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.GetExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentinfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.GetBatchPriority;
 import org.pikater.core.ontology.subtrees.batch.LoadBatch;
@@ -54,7 +54,7 @@ import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
 import org.pikater.core.ontology.subtrees.experiment.UpdateExperimentStatus;
-import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
+import org.pikater.core.ontology.subtrees.externalagent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.file.GetFileInfo;
@@ -80,9 +80,9 @@ import org.pikater.shared.logging.core.ConsoleLogger;
 
 /**
  * 
- * Class offers possibility to call the most used
- * requests to the {@link Agent_DataManger}
- *
+ * Class offers possibility to call the most used requests to the
+ * {@link Agent_DataManger}
+ * 
  */
 public class DataManagerService extends FIPAService {
 
@@ -155,19 +155,21 @@ public class DataManagerService extends FIPAService {
 	/**
 	 * Translates internal file name to the external file name
 	 */
-	public static String translateInternalFilename(PikaterAgent agent, int userID,
-			String internalFilename) {
-		return DataManagerService.translateFilename(agent, userID,
-				null, internalFilename);
+	public static String translateInternalFilename(PikaterAgent agent,
+			int userID, String internalFilename) {
+		return DataManagerService.translateFilename(agent, userID, null,
+				internalFilename);
 	}
+
 	/**
 	 * Translates external file name to the internal file name
 	 */
-	public static String translateExternalFilename(PikaterAgent agent, int userID,
-			String externalFilename) {
+	public static String translateExternalFilename(PikaterAgent agent,
+			int userID, String externalFilename) {
 		return DataManagerService.translateFilename(agent, userID,
-				externalFilename, null);	
+				externalFilename, null);
 	}
+
 	private static String translateFilename(PikaterAgent agent, int userID,
 			String externalFilename, String internalFilename) {
 
@@ -237,8 +239,7 @@ public class DataManagerService extends FIPAService {
 
 		try {
 			FIPAService.doFipaRequestClient(agent, request, 10000);
-		} catch (FIPAException e)
-		{
+		} catch (FIPAException e) {
 			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 
@@ -310,7 +311,6 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
-	
 	/**
 	 * Get {@link Model} by model ID
 	 */
@@ -406,7 +406,7 @@ public class DataManagerService extends FIPAService {
 	}
 
 	/**
-	 * Saves {@link Metadata} 
+	 * Saves {@link Metadata}
 	 */
 	public static void saveMetadata(PikaterAgent agent, Metadata metadata) {
 		SaveMetadata saveMetadata = new SaveMetadata();
@@ -437,7 +437,7 @@ public class DataManagerService extends FIPAService {
 	}
 
 	/**
-	 * Get the all {@link Metadata}s 
+	 * Get the all {@link Metadata}s
 	 */
 	public static Metadatas getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
 
@@ -455,8 +455,8 @@ public class DataManagerService extends FIPAService {
 			agent.getContentManager().fillContent(request, action);
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
-			Result result = (Result) agent.getContentManager()
-					.extractContent(inform);
+			Result result = (Result) agent.getContentManager().extractContent(
+					inform);
 			return (Metadatas) result.getValue(); // all metadata
 
 		} catch (CodecException e) {
@@ -489,8 +489,8 @@ public class DataManagerService extends FIPAService {
 			agent.getContentManager().fillContent(request, action);
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
-			Result result = (Result) agent.getContentManager()
-					.extractContent(inform);
+			Result result = (Result) agent.getContentManager().extractContent(
+					inform);
 			return (Metadata) result.getValue();
 
 		} catch (CodecException e) {
@@ -546,7 +546,7 @@ public class DataManagerService extends FIPAService {
 	}
 
 	public static Agent getTheBestAgent(PikaterAgent agent, String fileName) {
-		
+
 		Agents agents = DataManagerService.getNBestAgents(agent, fileName, 1);
 		if ((agents != null) && !agents.getAgents().isEmpty()) {
 			return agents.getAgents().get(0);
@@ -617,7 +617,7 @@ public class DataManagerService extends FIPAService {
 
 		return null;
 	}
-	
+
 	public static AgentInfo getAgentInfo(PikaterAgent agent,
 			String agentClassName) {
 
@@ -740,7 +740,7 @@ public class DataManagerService extends FIPAService {
 
 		return null;
 	}
-	
+
 	public static ExternalAgentNames getExternalAgentNames(PikaterAgent agent) {
 
 		AID receiver = new AID(CoreAgents.DATA_MANAGER.getName(), false);
@@ -890,12 +890,9 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e1.getMessage(), e1);
 		}
 
-		if (content instanceof Result)
-		{
+		if (content instanceof Result) {
 			return (Batch) ((Result) content).getValue();
-		}
-		else
-		{
+		} else {
 			agent.logSevere("No Result ontology");
 			return null;
 		}
@@ -942,12 +939,12 @@ public class DataManagerService extends FIPAService {
 	}
 
 	public static int getBatchPriority(PikaterAgent agent, int batchID) {
-		
+
 		GetBatchPriority getBatchPriority = new GetBatchPriority();
 		getBatchPriority.setBatchID(batchID);
-		
+
 		Ontology ontology = BatchOntology.getInstance();
-		
+
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setSender(agent.getAID());
 		msg.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
@@ -989,17 +986,14 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e1.getMessage(), e1);
 		}
 
-		if (content instanceof Result)
-		{
+		if (content instanceof Result) {
 			return (int) ((Result) content).getValue();
-		}
-		else
-		{
+		} else {
 			agent.logSevere("No Result ontology");
 			return -1;
 		}
 	}
-	
+
 	/*
 	 * Sends to save the Experiment to the Agent_DataManger Returns
 	 * Experiment-ID
@@ -1069,7 +1063,7 @@ public class DataManagerService extends FIPAService {
 
 	public static void updateExperimentStatus(PikaterAgent agent,
 			int experimentID, String experimentStatus) {
-		
+
 		UpdateExperimentStatus updateExperimentStatus = new UpdateExperimentStatus();
 		updateExperimentStatus.setExperimentID(experimentID);
 		updateExperimentStatus.setStatus(experimentStatus);
@@ -1154,12 +1148,9 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e1.getMessage(), e1);
 		}
 
-		if (content instanceof Result)
-		{
+		if (content instanceof Result) {
 			return (User) ((Result) content).getValue();
-		}
-		else
-		{
+		} else {
 			agent.logSevere("No Result ontology");
 			return null;
 		}
@@ -1283,8 +1274,7 @@ public class DataManagerService extends FIPAService {
 
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
-			if (inform == null)
-			{
+			if (inform == null) {
 				return new jade.util.leap.ArrayList();
 			}
 

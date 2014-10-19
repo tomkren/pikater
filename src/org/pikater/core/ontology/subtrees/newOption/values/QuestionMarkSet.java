@@ -1,10 +1,10 @@
-package org.pikater.core.ontology.subtrees.newOption.values;
+package org.pikater.core.ontology.subtrees.newoption.values;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValidatedValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 
 public class QuestionMarkSet implements IValidatedValueData {
 	private static final long serialVersionUID = 4434448192843651477L;

@@ -152,7 +152,7 @@ public class ManagerAgentRequestResponder {
 
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         LoadAgent la = (LoadAgent) a.getAction();
-        ExecuteTask fa = la.getFirst_action();
+        ExecuteTask fa = la.getFirstAction();
 
         Agent newAgent;
 

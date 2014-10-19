@@ -24,11 +24,11 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.Slot;
 import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.data.Data;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
@@ -66,11 +66,11 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		
 		agentInfo.setInputSlots(Arrays.asList(i1, i2));
 
-		Slot o_sunny = new Slot("sunnyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
-		Slot o_overcast = new Slot("overcastOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
-		Slot o_rainy = new Slot("rainyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
+		Slot sunny = new Slot("sunnyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
+		Slot overcast = new Slot("overcastOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
+		Slot rainy = new Slot("rainyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
 
-		agentInfo.setOutputSlots(Arrays.asList(o_sunny, o_overcast, o_rainy));
+		agentInfo.setOutputSlots(Arrays.asList(sunny, overcast, rainy));
 
 		return agentInfo;
 	}
@@ -91,15 +91,20 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 			protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
 				try {
 					Concept action = ((Action) (getContentManager().extractContent(request))).getAction();
-					if (action instanceof ExecuteTask)
+					if (action instanceof ExecuteTask) {
 						return respondToExecute(request);
-					else
+					}
+					else {
 						throw new RefuseException("Invalid action requested");
+					}
 				} catch (CodecException e) {
+					logException("Unknown codec: ", e);
 					throw new FailureException("Unknown codec: " + e.getMessage());
 				} catch (OntologyException e) {
+					logException("Unknown ontology: ", e);
 					throw new FailureException("Unknown ontology: " + e.getMessage());
 				} catch (ContentException e) {
+					logException("Content problem: ", e);
 					throw new FailureException("Content problem: " + e.getMessage());
 				} catch (FIPAException e) {
 					logException("FIPA exception when performing task", e);
@@ -152,7 +157,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 
 		List<DataInstances> weatherData = getDataForTask(t);
 		logInfo("processing data");
-		ArrayList<TaskOutput> outputs = processData(weatherData);
+		List<TaskOutput> outputs = processData(weatherData);
 		logInfo("returning outputs");
 		t.setOutput(outputs);
 		return t;
@@ -167,8 +172,8 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		return res;
 	}
 
-	private ArrayList<TaskOutput> processData(List<DataInstances> weatherData) {
-		ArrayList<TaskOutput> res = new ArrayList<TaskOutput>();
+	private List<TaskOutput> processData(List<DataInstances> weatherData) {
+		List<TaskOutput> res = new ArrayList<TaskOutput>();
 		Instances input = mergeInputs(weatherData);
 		
 		Instances sunny = new Instances(input, 0);

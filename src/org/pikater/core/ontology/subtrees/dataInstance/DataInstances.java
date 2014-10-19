@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.dataInstance;
+package org.pikater.core.ontology.subtrees.datainstance;
 
 import jade.content.Concept;
 import weka.core.FastVector;

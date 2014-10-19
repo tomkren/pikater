@@ -6,11 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberConstant;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;

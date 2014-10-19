@@ -1,11 +1,11 @@
 package org.pikater.core.ontology;
 
 
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.dataset.DatasetInfo;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.data.GetData;
-import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
+import org.pikater.core.ontology.subtrees.externalagent.GetExternalAgentJar;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.BeanOntologyException;

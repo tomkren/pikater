@@ -1,6 +1,6 @@
-package org.pikater.core.ontology.subtrees.newOption.restrictions;
+package org.pikater.core.ontology.subtrees.newoption.restrictions;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IComparableValueData;
 
 public class RangeRestriction implements IRestriction {
 	private static final long serialVersionUID = -9196397486608350955L;

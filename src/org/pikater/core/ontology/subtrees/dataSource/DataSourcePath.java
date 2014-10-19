@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.dataSource;
+package org.pikater.core.ontology.subtrees.datasource;
 
 import jade.content.Concept;
 

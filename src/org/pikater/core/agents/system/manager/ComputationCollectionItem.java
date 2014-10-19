@@ -2,7 +2,7 @@ package org.pikater.core.agents.system.manager;
 
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.agents.system.computation.graph.ComputationGraph;
+import org.pikater.core.agents.system.manager.graph.ComputationGraph;
 
 /**
  * The type Computation collection item.

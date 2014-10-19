@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent;
 
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;

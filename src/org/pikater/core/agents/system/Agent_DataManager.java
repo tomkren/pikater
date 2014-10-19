@@ -50,14 +50,14 @@ import org.pikater.core.ontology.subtrees.account.GetUser;
 import org.pikater.core.ontology.subtrees.account.GetUserID;
 import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.agent.AgentClass;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAllAgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
-import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.ExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentinfo.GetAgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.GetAllAgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.GetExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentinfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.GetBatchPriority;
 import org.pikater.core.ontology.subtrees.batch.LoadBatch;
@@ -74,7 +74,7 @@ import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
 import org.pikater.core.ontology.subtrees.experiment.UpdateExperimentStatus;
-import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
+import org.pikater.core.ontology.subtrees.externalagent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.file.GetFileInfo;
@@ -93,12 +93,12 @@ import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.CategoricalAttributeMetadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.NumericalAttributeMetadata;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.core.ontology.subtrees.model.GetModel;
 import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.model.SaveModel;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
@@ -1447,10 +1447,10 @@ public class Agent_DataManager extends PikaterAgent {
 		Metadata metadata = new Metadata();
 		ACLMessage reply = request.createReply();
 		logInfo("Retrieving metadata for hash " +
-				getMetadata.getInternal_filename());
+				getMetadata.getInternalFilename());
 		
 		List<JPADataSetLO> dataSets =
-				DAOs.dataSetDAO.getByHash(getMetadata.getInternal_filename());
+				DAOs.dataSetDAO.getByHash(getMetadata.getInternalFilename());
 		ResultFormatter<JPADataSetLO> resultFormatter =
 				new ResultFormatter<JPADataSetLO>(dataSets);
 		JPADataSetLO dslo = resultFormatter.getSingleResultWithNull();

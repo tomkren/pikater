@@ -1,7 +1,7 @@
 package org.pikater.web.experiment.server;
 
 import org.pikater.core.CoreConstant.SlotDirection;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentinfo.Slot;
 
 /**
  * A wrapper class for (oriented) experiment graph endpoint - a box, a slot and

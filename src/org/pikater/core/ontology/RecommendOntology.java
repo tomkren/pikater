@@ -6,11 +6,11 @@ import jade.content.onto.Ontology;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.Agents;
 import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.IRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
