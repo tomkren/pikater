@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.batchdescription;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 
 public class FileDataSaver extends DataProcessing implements IDataSaver {
 

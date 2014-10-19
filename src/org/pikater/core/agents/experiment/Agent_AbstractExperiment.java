@@ -14,8 +14,8 @@ import jade.proto.AchieveREResponder;
 import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.GetYourAgentInfo;
 
 public abstract class Agent_AbstractExperiment extends PikaterAgent {
 

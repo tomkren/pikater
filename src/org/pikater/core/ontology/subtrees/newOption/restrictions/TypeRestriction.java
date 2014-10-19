@@ -1,9 +1,9 @@
-package org.pikater.core.ontology.subtrees.newOption.restrictions;
+package org.pikater.core.ontology.subtrees.newoption.restrictions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newoption.base.ValueType;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 public class TypeRestriction implements IRestriction {

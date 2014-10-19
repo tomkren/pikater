@@ -2,7 +2,7 @@ package org.pikater.core.agents.system.manager.graph.edges;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 
 /**
  * Edge with option list

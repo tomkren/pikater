@@ -1,12 +1,12 @@
-package org.pikater.core.ontology.subtrees.newOption;
+package org.pikater.core.ontology.subtrees.newoption;
 
 import jade.content.Concept;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.IValidated;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.base.IValidated;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction;
 import org.pikater.shared.util.ICloneable;
 import org.pikater.shared.util.collections.CollectionUtils;
 

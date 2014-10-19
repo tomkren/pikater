@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.systemLoad;
+package org.pikater.core.ontology.subtrees.systemload;
 
 import java.util.logging.Level;
 

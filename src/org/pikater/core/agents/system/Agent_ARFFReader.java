@@ -18,7 +18,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.data.GetData;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 
 import weka.core.Attribute;
 import weka.core.Instances;

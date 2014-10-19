@@ -13,8 +13,8 @@ import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfoVisibleForUser;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentinfo.GetAgentInfoVisibleForUser;
 
 public class PikaterGateway_GetAgentInfo {
 

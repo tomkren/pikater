@@ -1,16 +1,16 @@
-package org.pikater.core.ontology.subtrees.newOption.base;
+package org.pikater.core.ontology.subtrees.newoption.base;
 
 import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
-import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.*;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newoption.ValuesForOption;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.*;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.shared.util.ICloneable;
 
 import java.util.Arrays;

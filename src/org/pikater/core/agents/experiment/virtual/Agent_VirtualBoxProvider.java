@@ -5,7 +5,7 @@ import jade.content.onto.Ontology;
 import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 
 public abstract class Agent_VirtualBoxProvider extends Agent_AbstractExperiment {
 

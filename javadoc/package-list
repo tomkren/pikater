@@ -54,11 +54,11 @@ org.pikater.core.ontology.subtrees.management
 org.pikater.core.ontology.subtrees.metadata
 org.pikater.core.ontology.subtrees.metadata.attributes
 org.pikater.core.ontology.subtrees.model
-org.pikater.core.ontology.subtrees.newOption
-org.pikater.core.ontology.subtrees.newOption.example
-org.pikater.core.ontology.subtrees.newOption.restriction
-org.pikater.core.ontology.subtrees.newOption.type
-org.pikater.core.ontology.subtrees.newOption.value
+org.pikater.core.ontology.subtrees.newoption
+org.pikater.core.ontology.subtrees.newoption.example
+org.pikater.core.ontology.subtrees.newoption.restriction
+org.pikater.core.ontology.subtrees.newoption.type
+org.pikater.core.ontology.subtrees.newoption.value
 org.pikater.core.ontology.subtrees.oldPikaterMessages
 org.pikater.core.ontology.subtrees.option
 org.pikater.core.ontology.subtrees.recomend

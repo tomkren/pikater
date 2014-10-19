@@ -20,7 +20,7 @@ import org.pikater.core.agents.system.manager.graph.strategies.RecommenderStartC
 import org.pikater.core.agents.system.manager.graph.strategies.SearchStartComputationStrategy;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 import java.util.HashMap;

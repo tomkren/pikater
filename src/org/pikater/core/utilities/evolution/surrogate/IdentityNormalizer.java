@@ -1,10 +1,10 @@
 package org.pikater.core.utilities.evolution.surrogate;
 
 
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
+import org.pikater.core.ontology.subtrees.newoption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.search.searchitems.IntervalSearchItem;
 
 /**
  * Dummy normalizer which does not do any normalization. Can be used to switch normalization off.

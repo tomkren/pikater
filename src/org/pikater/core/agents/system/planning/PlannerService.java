@@ -19,8 +19,8 @@ import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
-import org.pikater.core.ontology.subtrees.systemLoad.GetSystemLoad;
-import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
+import org.pikater.core.ontology.subtrees.systemload.GetSystemLoad;
+import org.pikater.core.ontology.subtrees.systemload.SystemLoad;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 
 /**

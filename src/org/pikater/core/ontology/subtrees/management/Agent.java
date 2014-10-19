@@ -3,8 +3,8 @@ package org.pikater.core.ontology.subtrees.management;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;

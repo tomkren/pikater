@@ -4,13 +4,13 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.IRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.ping.Ping;
-import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
+import org.pikater.core.ontology.subtrees.systemload.SystemLoad;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
 

@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.batchdescription;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.experiment.UniversalElementOntology;
 import org.pikater.shared.util.ICloneable;
 

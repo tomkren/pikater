@@ -10,7 +10,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
+import org.pikater.core.ontology.subtrees.datasource.RegisterDataSourceConcept;
 
 /**
  * User: Kuba

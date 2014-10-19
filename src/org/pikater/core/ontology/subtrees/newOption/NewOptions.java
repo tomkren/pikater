@@ -1,18 +1,18 @@
-package org.pikater.core.ontology.subtrees.newOption;
+package org.pikater.core.ontology.subtrees.newoption;
+
+import jade.content.Concept;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.IMergeable;
-import org.pikater.core.ontology.subtrees.newOption.base.IWekaItem;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.IMergeable;
+import org.pikater.core.ontology.subtrees.newoption.base.IWekaItem;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.util.ICloneable;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.thoughtworks.xstream.XStream;
-
-import jade.content.Concept;
 
 public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem,
 		Iterable<NewOption> {

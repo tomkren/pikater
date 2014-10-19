@@ -1,6 +1,6 @@
-package org.pikater.core.ontology.subtrees.newOption.values;
+package org.pikater.core.ontology.subtrees.newoption.values;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IComparableValueData;
 
 public class IntegerValue implements IComparableValueData {
 	private static final long serialVersionUID = -2925380308174903951L;
