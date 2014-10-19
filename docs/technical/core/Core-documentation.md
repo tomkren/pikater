@@ -50,7 +50,7 @@ Dále nedělitelná podčást experimentu, nezávislá na dalších úlohách.
 **Dávka**  
 Experiment přetransformovaný do seznamu úloh.
 
-**Hledače**    
+**Prohledávače**    
 Agenti, jejichž účel je generovat a hledat optimální parametry dané metody strojového učení v rámci aktuálního 
 experimentu.
 
@@ -68,7 +68,7 @@ Označení pro autonomní část experimentu (z logického úhlu pohledu). Exper
 Funkce původního systému jsou:
 * Efektivní procházení stavového prostoru parametrů jednotlivých algoritmů.
 * Využití doporučovačů.
-* Zpracování experimentů představující jednu úlohu (trénování a testování, případně ukládání modelu). Úlohy mohly být spouštěny postupně na několika vstupních datasetech a s různými parametry buďto zadanými uživatelem nebo vygenerovanými nějakým hledačem.
+* Zpracování experimentů představující jednu úlohu (trénování a testování, případně ukládání modelu). Úlohy mohly být spouštěny postupně na několika vstupních datasetech a s různými parametry buďto zadanými uživatelem nebo vygenerovanými nějakým prohledávačům.
 * Bylo možné si vybrat konkrétní metodu strojového učení, evaluační metodu a nastavit parametry ovlivňující řízení běhu výpočtu. Nebyla-li metoda strojového učení uživatelem zadána, musel být vybrán nějaký doporučovač.
  
 ## Nové jádro
@@ -157,7 +157,7 @@ I tato data se cachují.
 
 Jádro webovému rozhraní poskytuje:
 * Seznam aktuálně zadefinovaných krabiček pro grafický editor experimentů, s veškerými doprovodnými informacemi (parametry metod strojového učení a tak dále). Pro tento účel byla vytvořena ontologie `AgentInfo` reprezentující jednu krabičku.
-* API přejímající informace o událostech, např. "byl vydán příkaz ke spuštění této dávky".
+* API přejímající informace o událostech, např. "byl vydán příkaz ke spuštění tohoto experimentu".
 
 Od webového rozhraní nevyžaduje jádro naopak nic - musí i nadále pracovat jako nezávislá jednotka.
 
@@ -167,21 +167,26 @@ Od webového rozhraní nevyžaduje jádro naopak nic - musí i nadále pracovat 
 
 #### Agent_Initiator
 
-Zajišťuje start celého systému a všech agentů uvedených v konfiguračním souboru `core/Configuration.xml`.
+Spouští jak master container, kde se spravují systém a výpočty, tak i vyžadované slave containery, které by měly převážně být vytěžovány výpočetními agenty. Způsob spouštění systému je ve všech případech stejný a liší se jen:
+* iniciační parametr,
+* jméno konfiguračního souboru.
 
-Agent je naprogramován dostatečně obecně a může jádro spouštět jak na master containeru (kde se spravují systém a výpočty), tak i na slave containerech, které by měly převážně být vytěžovány výpočetními agenty. Způsob spouštění systému je stejný ve všech případech, liší se jen iniciační parametr a jméno konfiguračního souboru. V případě slave containeru se přidává ještě druhý parametr označující pořadové číšlo vytvářeného slave containeru.
+V případě slave containeru se přidává ještě druhý parametr označující pořadové číslo.
 
-Postup pro spuštění agenta z konzole:
+Agent je naprogramován dostatečně obecně, aby ho použít i prostřednictvím Ant. 
+
+##### Spuštění systému z konzole
 
 1. Spustit JADE.
-2. <font color="red">Do primárního nebo slave containeru umístit inicializačního agenta s parametrem cesty ke konfiguračnímu souboru (v případě Slave containeru s druhým parametrem udávajícím číslo Slave containeru). Konfigurační soubor obsahuje jméno třídy (včetně celého balíčku spouštěného agenta), jeho jméno a seznam parametrů. Pomocí druhého parametru se zajišťuje pouze jednoznačnost pojmenování agentů v rámci všech containerů. Ulehčuje se tím práce uživateli, jemuž pro spuštění několika Slave containerů stačí pouze jeden konfigurační soubor. Druhý parametr označující číslo containeru si agent Iniciator přidá jako sufix ke všem jménům v konfiguračním souboru. Nejpohodlněji se dá systém ovšem zapnout pomocí bash skriptů. Jeden zajišťuje buildování jádra systému, další spouštění hlavního containeru a poslední spouštění slave containeru s daným číselným parametrem. Tyto skripty volají pouze ANT na souboru buildCore.xml. Z kompilace jsou záměrně vyloučeny Balíčky potřebné pouze pro běh webové nadstavby, protože pro ni jsou potřeba knihovny dostupné přes Apache Ivy. Důvodem, proč se i pro kompilaci jádra nepoužívá Ivy, je přání zadavatelů, aby jádro systému Pikater šlo zkompilovat přímo ze zdrojových kódů bez nutnosti připojení k internetu (z bezpečnostních důvodů nebývá na superpočítačích k dispozici).</font>
+2. Spustit tohoto agenta (ve smyslu příkazu `java`). Spuštěni jsou agenti definovaní v konfiguračním souboru, jehož cestu agent dostane jako argument, nebo není-li žádný takový argument definován, implicitně se pokusí načíst `core/Configuration.xml`.
+
+##### Spuštění systému přes skripty
+
+Nejpohodlněji lze systém zapnout pomocí bash skriptů: jeden zajišťuje buildování jádra systému, další spouštění hlavního containeru a poslední spouštění slave containeru s daným číselným parametrem. Tyto skripty pouze volají Ant na konfiguračním souboru `buildCore.xml` v kořenovém adresáři projektu.
 
 #### Agent_ManagerAgent
 
 Tento agent se nachází na každém containeru právě jednou. Na master i slave containeru má funkci vládce.
-
-<font color="red">TODO: co s tímhle? A je to vůbec správně?
-"Systém předpokládá, že na jednom počítači běží pouze jeden container"</font>.
 
 Přijímá následující ontologie bez odpovědi:
 * `CreateAgent`  
@@ -227,33 +232,21 @@ Nejdůležitější agent celého systému. Přejímá, transformuje, přeposíl
 
 Přijímá následující ontologie bez odpovědi:
 * `NewBatch`  
-Signál pro spuštění nové dávky. Obsahuje jednoznačný identifikátor dávky a uživatele, který ji zadal.
+Signál pro spuštění nového experimentu. Obsahuje jednoznačný identifikátor experimentu i uživatele, který ho zadal.
 * `LoadBatch`  
-Signál pro načtení dávky. Dávka je získána z agenta `DataManager` ve formě ontologie `Batch` obsahující všechny relevantní informace.
+Signál pro načtení experimentu. Experiment se získá z agenta `DataManager` ve formě ontologie `Batch` obsahující všechny relevantní informace.
 
-<font color="red">Rámcový postup pro spuštění nové dávky:</font>
+**Rámcový postup pro spuštění nového experimentu:**
 
-1. Třídou `Parser` je dávka transformována na orientovaný a potenciálně cyklický multigraf.
-2. Multigraf je rozčleněn na části a protože jsou tyto části sdíleny mezy agenty, jsou jim následně přiřazeny identifikátory (JADE nezachovává při tomto druhu sdílení JAVA objektů reference).
-3. ... a tak dále. Destilovat z textu níže:
-
-**Parsování elementů**  
-
-<font color="red">
-WTH? Guys, this is NOT Javadoc... You will only confuse the reader by shoving all this in his face. As for me, I tried to make myself read it several times and each time I just failed horribly!  
-Keep it nice, simple and fluent. Use text structuring to help your reader understand what's going on and try to explain in small steps... not one big hell of a mess like this.</font>
-
-Při parsování logického multigrafu obsahující reprezentaci experimentů i ontologie, které mají pouze logický význam pomíjející. Problémy distribuovanosti výpočtu, problémy datových závislostí, skrývající problém vhodného pořadí spouštění tasku a přepravu dat na potřebná místa. V průběhu pársování si Manager vytváří závislostní graf reprezentovaný třídou ComputationGraf. Vrcholy závislostního grafu, reprezentované pomocí tříd ComputationNode, DataProcessingComputationNode, RecommenderComputationNode, SearchComputaionNode a ModelComputationNode.
-
-Mezi uzly vzájemně sdílenou strukturu front, velmi blízce připomínající problém a návrhový vzor Producent Konzument. Do systému front tvořených potomky třídy AbstractComputionBuffer se přidávají informace už v průběhu parsování Ontologie ComputationDescription, například logické jméno vstupního datasetu z Ontologie FileDataInput přeložené na interní jméno neboli hash, Optiony upravující způsob běhu Searche agenta a další Optiony, přičemž jeden z nejdůležitějších Optionů je typ agenta. Touto cestou se postaví závislostní graf včetně sdílených front, nainicializuje se potřebnými informacemi.
-
-Všechny fronty cyklicky prochází, zda jsou k dispozici všechna data pro zpracování dalšího kroku výpočtu. V průběhu parsování Batche se poprvé v systému zjistí, kolik logických experimentů v sobě aktuální ComputationDescription obsahuje, tudíž v parseru dochází k lobování existence nových experimentů. V okamžiku dokončení experimentu se za použití návrhového vzoru Observeru zalogovává (opět použitím zprávy DataManagerovi) změna statusu experimentu na Finished. 
-
-Pro změnu statusu Batche se používá opět odesílání Ontologie DataManagerovi, v tomto případě Ontologie UpdateBatchStatus. Pro změnu statusu experimentu se využívá Ontologie UpdateExperimentStatus. Experimentům se na rozdíl od Batchů Managerovi pouze nemění statusy, ale experimenty se pomocí Ontologie SaveExperiment za pomoci DataManagera v systému i vytváří.
-
-Pro zpracování jednotlivých vrcholů závislostního grafu se využívají tzv. strategie. Strategie jsou třídy, které na základě příchozích dat upravují informace uložené ve struktuře front. Mezi nejintuitivnější patří CAStartComputationStrategy, která řídí strukturu front výpočetního agenta. Pokud jsou k dispozici všechna data a informace, vyprodukuje z nich jeden Task. Mezi další strategie patří RecommenderStartComputation, která zajišťuje komunikaci s Recommendrem, a následně za použití strategie výpočetního agenta vygeneruje opět jeden Task. Strategie SearchStartComputationStrategy zajišťuje komunikaci se Searcherem, který Managerovi vrací parametry, na nichž se postupně spouští strategie výpočetního agenta. Nejobecnější strategie je strategie DataProcessecingStrategy, která pouze čeká na všechna potřebná data pro vytvoření jedné Ontologie Task. Strategiemi vyprodukované Tasky se předávají ke zpracování agentovi Plannerovi.
-
-V okamžiku, kdy se všechny fronty vyprázdní a Manager obdrží od plánovače výsledky všech Tasků příslušících aktuálnímu Batche, jsou již statusy všech experimentů dokončeny, výpočet ComputationDescription končí a jako poslední krok se změní status Batche na Finished.
+1. Třídou `Parser` je experiment rekurzivně (v daném pořadí) transformován na:
+	* orientovaný, acyklický multigraf,
+	* podexperimenty,
+	* úlohy.
+2. Úlohy jsou již během transformace registrovány do struktury front (v tomto agentu), které zachovávají závislosti.
+3. Všem úlohám jsou přiřazeny identifikátory, protože JADE nezachovává při sdílení reference JAVA objektů.
+4. Struktura front je pak přeposlána plánovači (agent `Agent_Planner`).
+5. Plánovač postupně úlohy spouští a výsledky jsou registrovány v tomto agentu.
+6. Jakmile se dokončí výpočet poslední úlohy, výpočet experimentu končí a nastaví se mu status na "FINISHED".
 
 #### Agent_Planner
 
@@ -271,7 +264,7 @@ Přijímá následující ontologie bez odpovědi:
 * `ExecuteTask`  
 Signál pro zadání jedné úlohy (pro jednoho agenta). Přijaté úlohy se řadí do datové struktury `WaitingTaskQueues` představující skupinu prioritních front. Po doručení každé nové úlohy dochází k přeplánování.
 * `KillTasks`  
-Signál pro "ukončení" úloh jisté dávky - plánovač je vyřadí ze struktury front, přičemž nedopočítané úlohy nejsou nijak rušeny a úspěšně doběhnou.
+Signál pro "ukončení" úloh jistého experimentu - plánovač je vyřadí ze struktury front. Nedopočítané úlohy nejsou nijak rušeny a úspěšně doběhnou.
 
 Přijímá následující ontologie s odpovědí:
 * `GetSystemLoad`  
@@ -279,11 +272,11 @@ Odpovídá zasláním informací o aktuálním vytížení systému - aktuální
 
 Rozvrhování se spouští po detekci změny, jež by mohla ovlivnit optimalitu rozvržení úloh. Typickými zástupci takových podnětů jsou příjem nové úlohy a dokončení/ukončení úlohy.
 
-Proces plánování: <font color="red">(tohle chce speciálně zkontrolovat...)</font>
+Proces plánování:
 
-1. Zjistíme, zda je k dispozici alespoň jedna úloha - pokud ano, vybere se ta z nich, která má nejvyšší prioritu. Nikoliv pouze nejvyšší celkovou prioritu, nýbrž i prioritu zohledňující průchodnost systému pro (podle predikce) krátce trvající dávky. Jako první se tedy vybírají úlohy s nejvyšší prioritou, které zároveň nebudou trvat dlouho.
+1. Zjistíme, zda je k dispozici alespoň jedna úloha - pokud ano, vybere se ta z nich, která má nejvyšší prioritu. Nikoliv pouze nejvyšší celkovou prioritu, nýbrž i prioritu zohledňující průchodnost systému pro (podle predikce) krátce trvající experimenty. Jako první se tedy vybírají úlohy s nejvyšší prioritou, které zároveň nebudou trvat dlouho.
 2. Vyhledají se nové, v plánovači dosud nezaregistrované slave servery. Zároveň s tím musí proběhnout změna struktury `CPUCoreStructure`, kam přibude informace o nových volných CPU jádrech.
-3. Všem registrovaným agentům `AgentManager` se pošle ontologie `Ping`, abychom ověřili dostupnost a připravenost containerů pro počítání.
+3. Všem registrovaným agentům `AgentManager` se pošle ontologie `Ping`, abychom ověřili dostupnost výpočetních agentů/containerů.
 4. V případě, že nějaký container "umřel", musí být všechny jeho nedopočítané úlohy navráceny do struktury front.
 5. Pro vybranou úlohu se ze třídy `DataRegistry` (pro každou vstupní datovou závislost) určí seznam strojů, na nichž se soubor nachází, a zjistí se tak, jsou-li k dispozici všechna data. Pokud ano, plánovač se pokusí úloze přiřadit volné procesorové jádro na stroji, kde jsou alespoň nějaká data potřebná pro její výpočet.
 6. Nejsou-li vstupní data aktuálně dostupná na žádném stroji, plánovač se pokusí znovu spustit úlohy, které měly již dříve tato data spočítat, vybraná úloha je navrácena zpět do struktury front a znovu dojde k přeplánování.
@@ -312,7 +305,7 @@ Agent při zapnutí vždy ověřuje, že jsou v databázi uloženy informace o v
 
 Agent je pojmenovaný po Mgr. Kláře Peškové, autorce původního Pikateru. Vznikl jako další "vstupní bod" do jádra, nezávislý na webové nadstavbě.
 
-Po zapnutí agenta se spustí jednoduchý komunikační automat, který umožňuje v konzolovém režimu zadat novou dávku, přidat nový dataset a vygenerovat pro něj metadata. Nová dávka se načítá v podobě instance třídy `ComputationDescription`, serializované do XML souboru na filesystému. Konverze formátu z/do JAVA objektů zajišťuje knihovna XStream.
+Po zapnutí agenta se spustí jednoduchý komunikační automat, který umožňuje v konzolovém režimu zadat nový experiment, přidat nový dataset a vygenerovat pro něj metadata. Nový experiment se načítá v podobě instance třídy `ComputationDescription`, serializované do XML souboru na filesystému. Konverze formátu z/do JAVA objektů zajišťuje knihovna XStream.
 
 Komunikace probíhá přes agenta `GUIComunicator`, jehož snahou je vytvořit jednotné přístupové rozhraní pro všechny GUI agenty jako je tento. V praxi si tedy může kdokoli vytvořit vlastní přístupový bod do systému, s vlastní definicí dávek. Nakonec je ovšem samozřejmě nutné implementovat konverzi do `ComputationDescription`, kterou používá jádro.
 
@@ -324,7 +317,7 @@ Přijímá následující ontologie bez odpovědi:
 * `SendEmail`  
 Signál pro zaslání emailu specifikovaného zprávou na jednu emailovou adresu. 
 
-Aktuálně je agent je v systému využíván pouze při dokončení dávky.
+Aktuálně je agent je v systému využíván pouze při dokončení experimentu.
 
 **Odesílání notifikace o dokončeném výpočtu**  
 
@@ -361,10 +354,10 @@ ARFFReader-->>-ComputingAgent: (data - O2A)
 
 ### Experimentoví agenti
 
-Tvoří základní stavební kameny pro dávky. Nezabývají se technickými problémy ani zajištěním běhu Pikateru, nýbrž pouze a výlučně implementací jednotlivých metod strojového učení. Nacházejí se v samostatné package `org.pikater.core.agents.experiment`, dědí od agenta `AbstractExperiment` a dělí se podle kategorií na:
+Tvoří základní stavební kameny pro experimenty. Nezabývají se technickými problémy ani zajištěním běhu Pikateru, nýbrž pouze a výlučně implementací jednotlivých metod strojového učení. Nacházejí se v samostatné package `org.pikater.core.agents.experiment`, dědí od agenta `AbstractExperiment` a dělí se podle kategorií na:
 * výpočetní agenty,
 * doporučovače,
-* hledače,
+* prohledávače,
 * data processingy.
 
 Tito agenti nejsou jednoznačně přiřazeni krabičkám. Abychom tohoto stavu docílili, vytvořili jsme speciální podbalíček `virtual` a v něm tzv. "virtuální agenty", jejichž jediným účelem je deklarovat a vracet instance třídy `AgentInfo`.
@@ -377,13 +370,13 @@ Představují "datové transformace", dědí od agenta `DataProcessing`. Na vstu
 
 Data mají v celém systému formát ARFF a tento agent tedy využívá pro čtení i zapisování dat agenta `ARFFReader`.
 
-V dávkách jsou data processing agenti identifikování ontologií `DataProcessing`.
+V experimentech jsou data processing agenti identifikování ontologií `DataProcessing`.
 
 Existence data processingu umožňuje učit modely postupně, případně vytvářet dva modely, kde jeden řeší lépe problém pro data jednoho typu a druhý pro data jiného typu. Jako příklad uvedeme agenta `WeatherSplitter`, který obdrží na vstupu dva vstupní datasety se stejnou strukturou a na základě hodnoty v jistém sloupečku je rozdělí na tři soubory.
 
 #### Výpočetní agenti
 
-Specifičtější forma data processingu. Nejedná se o pouhé datové transformace, nýbrž přímo o proces strojového učení. Většinou je k tomu využita knihovna Weka, ale nic nebrání vlastní implementaci jakékoli metody. Tyto agenty nazýváme výpočetní, protože provádějí časově nejnáročnější operace v systému, a proto se výpočty distribuují na více strojů. Pro reprezentaci výpočetního agenta se v dávkách používá ontologie `ComputingAgent`.
+Specifičtější forma data processingu. Nejedná se o pouhé datové transformace, nýbrž přímo o proces strojového učení. Většinou je k tomu využita knihovna Weka, ale nic nebrání vlastní implementaci jakékoli metody. Tyto agenty nazýváme výpočetní, protože provádějí časově nejnáročnější operace v systému, a proto se výpočty distribuují na více strojů. Pro reprezentaci výpočetního agenta se v experimentech používá ontologie `ComputingAgent`.
 
 Přijímají následující ontologie bez odpovědi:
 * `Task`  
@@ -436,11 +429,11 @@ ARFFReader->ARFFReader: loads data
 ARFFReader-->>-ComputingAgent: (data - O2A)
 }}}}}}
 
-#### Hledači
+#### Prohledávače
 
-Využívají se pro procházení množiny parametrů, dědí od abstraktního agenta `Searcher` a v dávkách jsou reprezentováni ontologií `Searcher`.
+Využívají se pro procházení množiny parametrů, dědí od abstraktního agenta `Searcher` a v experimentech jsou reprezentováni ontologií `Searcher`.
 
-K efektivnímu procházení stavového prostoru se používá mnoho přístupů - od nejjednodušších využívajících náhodný výběr hodnoty parametru (např. `RandomSearch`), přes složitější (`ChooseXValues`), po složité hledače využívající genetických a evolučních algoritmů. Složitější agenti obsahují více nastavení a nabízí širší možnosti prohledávání.
+K efektivnímu procházení stavového prostoru se používá mnoho přístupů - od nejjednodušších využívajících náhodný výběr hodnoty parametru (např. `RandomSearch`), přes složitější (`ChooseXValues`), po složité prohledávače využívající genetických a evolučních algoritmů. Složitější agenti obsahují více nastavení a nabízí širší možnosti prohledávání.
 
 Přijímají následující ontologie s odpovědí:
 * `GetParameters`  
@@ -450,11 +443,11 @@ Přijímají následující ontologie bez odpovědi:
 * `Eval`  
 Zpětná vazba úspěšnosti vygenerovaných parametrů. Jako metrika jsou použity míry chyb naučeného a otestovaného modelu.
 
-#### Doporučovači
+#### Doporučovače
 
 Jejich úkolem je vybírat pro daná vstupní data vhodnou metodu strojového učení. V praxi dostanou hash vstupního souboru trénovací množiny dat a vydávají plné jméno třídy agenta, který by měl pro daná vstupní data vytvořit nejkvalitnější/nejúspěšnější model. Dokáží poradit nejen metodu strojového učení, ale i nastavení jejích parametrů - k tomu využívají primárně podobnost vstupních datových množin. Pro porovnávání dat se nepoužívají přímo velké vstupní soubory, nýbrž vygenerovaná metadata (v zájmu efektivity a snadnějšího zpracování). Metadata byla navržena tak, aby dokázala pojmout informace o každém sloupci datového ARFF souboru a aby obsahovala k jednotlivým sloupcům i jisté typované statistiky.
 
-Všimněte si, že vstupní data nemusí nutně být vstupní data celé dávky nebo experimentu - mohou to například být i data spočtená předchozí dílčí úlohou. Jedinou podmínkou je, aby měla vygenerovaná metadata.
+Všimněte si, že vstupní data nemusí nutně být vstupní data celého experimentu - mohou to například být i data spočtená předchozí dílčí úlohou. Jedinou podmínkou je, aby měla vygenerovaná metadata.
 
 **Proces doporučení:**  
 Jakmile je nalezena povahově nejbližší datová množinu (ke vstupním datům), projdou se prostřednictvím agenta `DataManager` výsledky všech předchozích výpočtů s ní souvisejících a vybere se ten "nejúspěšnější". Ke každému výpočtu (úloze) lze dohledat agenta, který tohoto výsledku dosáhl.
@@ -473,7 +466,7 @@ Můžeme je rozdělit do několika logických oblastí:
 * Pro získání základních informací o uživateli a překlad přihlašovacího jména na ID se používají ontologie `GetUser` a `GetUserID`.
 * Pro překlad jména souboru na hash se využívá ontologie `TranslateFilename`.
 * Pro ukládání a načítání struktury `AgentInfo` se používají ontologie `SaveAgentInfo` a `GetAgentInfo`. Existují i ontologie pro získání všech `AgentInfo` interních i externích krabiček uložených v databázi.
-* Pro práci s dávkami se používají ontologie `SaveBatch`, `LoadBatch`, `UpdateBatchStatus`, `GetBatchPriority`.
+* Pro práci s experimenty se používají ontologie `SaveBatch`, `LoadBatch`, `UpdateBatchStatus`, `GetBatchPriority`.
 * Podobně koncipované jsou ontologie pracující s experimenty: `SaveExperiment` a `UpdateExperimentStatus`.
 * Analogicky se ukládají i výsledky: `SaveResults`, `LoadResult`. Ontologie `Result` ovšem slouží pouze pro reprezentaci chyb natrénovaného modelu a neobsahuje tudíž žádné datové množiny.
 * Pro ukládání datových množin slouží ontologie `SaveDataset`. Načítání provádí ontologie `GetFile`. Speciálním případem jsou pak externí agenti - pro ně je k dispozici ontologie `GetExternalAgentJar`. Ukládání agentů provádí pouze webové GUI, tudíž ontologie "SaveExternalAgent" neexistuje.
@@ -481,7 +474,7 @@ Můžeme je rozdělit do několika logických oblastí:
 
 #### Agent_MetadataQueen
 
-Tento agent generuje metadata pro jednotlivé datové množiny. Počítá statistické veličiny, které se ve výsledku používají k odhadu podobnosti dvou datasetů bez časově náročné manipulace a opětovného načítání.
+Tento agent generuje metadata pro jednotlivé datové množiny, jak vstupní tak i výstupní. Počítá statistické veličiny, které se ve výsledku používají k odhadu podobnosti dvou datasetů bez časově náročné manipulace a opětovného načítání.
 
 Přijímá následující ontologie bez odpovědi:
 * `NewDataset`  
@@ -489,12 +482,9 @@ Signál pro vygenerování metadat k novému uživatelem zadanému datasetu.
 * `NewComputedData`  
 Signál pro vygenerování metadat k nové datové množině vypočtené systémem. Výsledná metadata jsou prostřednictvím ontologie `Metadata` odeslána agentu `DataManager`, který je uloží a sváže s daným datasetem.
 
-<font color="red">TODO: nechtěli byste k následujícímu raději udělat obrázek?
-po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat. Ten zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž mohou u výpočtů obsahujících datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.</font>
-
 ### Externí agenti
 
-Specifikace ukládá umožnit přidávání nových "komponent" – agentů, kteří musí být specializací jednoho z typů definovaných systémem (výpočetní agent, doporučovač, hledač, ...). Uživatel musí dodat implementaci v podobě JADE agenta, který na požádání pošle svoji konfiguraci (mj. pro účely zobrazení ve webovém GUI).
+Specifikace ukládá umožnit přidávání nových "komponent" – agentů, kteří musí být specializací jednoho z typů definovaných systémem (výpočetní agent, doporučovač, prohledávač, ...). Uživatel musí dodat implementaci v podobě JADE agenta, který na požádání pošle svoji konfiguraci (mj. pro účely zobrazení ve webovém GUI).
 
 Uživatel má možnost skrz webové rozhraní nahrát do systému JAR soubor obsahující zkompilovaný kód implementující funkčního agenta, dědícího od třídy `org.pikater.core.agents.PikaterAgent` nebo některé specializace, např. `org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing`.
 
@@ -506,7 +496,7 @@ V našem případě je to:
 
 `-jade_core_management_AgentManagementService_agentspath core/ext_agents`
 
-Ukázkovou implementaci externího agenta lze nahlédnout ve třídě `org.pikater.external.ExternalWekaAgent`. Chová se jako výpočetní agent typu RBFNetwork.
+Ukázkovou implementaci externího agenta lze nahlédnout ve třídě `org.pikater.external.ExternalWekaAgent`. Chová se jako výpočetní agent `RBFNetwork`.
 
 **Vytvoření agenta**  
 
@@ -553,41 +543,37 @@ Adresátem těchto zpráv bývá agent `ManagerAgent`, který má v rámci svéh
 
 ### BatchOntology
 
-Zprostředkovává vytváření, načítání, přepravu a logování dávek.
+Zprostředkovává vytváření, načítání, přepravu a logování experimentů.
 
 **ComputationDescription**  
 Podontologie navržená k reprezentaci libovolného množství vzájemně datově závislých úloh (instancí třídy `DataProcessing`). Jedná se tedy o strukturu logicky představující multigraf, kde vrcholy jsou "výpočty" a hrany "toky dat" ("chyb" nebo datasetů).
 
 Obsahuje:
-* Seznam globálních přepínačů (optionů), které slouží ke specifické konfiguraci dávky.
-* Seznam instancí třídy `FileDataSaver`. 
+* Seznam globálních přepínačů (optionů), které slouží ke specifické konfiguraci experimentů na globální úrovni.
+* Seznam instancí třídy `FileDataSaver`.
 
-<font color="red">Tady jsem skončil. Proboha lidi, nechte tady jenom důležitý přehledový informace a zbytek nechte na Javadocu... </font>  
+Využívá se hlavně jako prostředek komunikace mezi výpočetními agenty a plánovačem nebo jinými agenty (prohledávači a doporučovači). Výpočetní agenti:
+* vytvářejí natrénovaný model z trénovací, testovací a validační datové množiny,
+* poskytují výsledky trénování a testování ve formě datové množiny a míry chyb, které se model dopouští na daných datech.
 
-Tyto elementy představují logické uložení vyprodukovaných dat v rámci jednoho Batche. Ontologie FileDataSaver obsahuje odkaz na hranu multigrafu, reprezentovanou pomocí DataSourceDescription. Hrana je napojená na další výpočetní element dědící od DataProcessingu. Protože obecný DataProsessing může obsahovat libovolné množství vstupních zdrojů a zároveň může produkovat data pro libovolné množství  DataProcessingů nebo jejich potomků musí každá hrana v multigrafu obsahovat  výstupní identifikátor říkající jaký tip dat má být předán z prvního DataProcessingu do druhého. Zároveň musí ComputationDescription obsahovat i výstupní identifikátor, který říká pro jaký účel se mají data použít. 
+Ontologie je ve skutečnosti hack, který umožňuje nespecifikovat konkrétního výpočetního agenta a namísto něj:
+* vyplnit nedefinovaného agenta,
+* a zapojit k němu doporučovač.
 
-V systému se nejčastěji objevují agenti, kteří představují, tak zvaného výpočetního agenta, který v rámci datové transformace z trénovací, testovací a validační množiny dat je schopný, vytvořit natrénovaný model, poskytnout výsledky trénování a testování jako datovou množinu a udat míru chyby, které se model dopouští na daných datech. Tito agenti se v rámci Ontologie ComputationDescription jsou reprezentováni jako ComputationAgent. Agent, který slouží právě k efektivnímu procházení parametru předem zadaného rozsahu, se nazývá Searcher a je zadáván ComputationDescription jako třída Searcher. Searcher vždy spolupracuje s výpočetním agentem a prochází jeho parametry, které nabývají hodnoty Questionmark .
+Jestliže nemá výpočetní agent specifikovány všechny optiony, musí být napojen na prohledávač, který prochází množinu přípustných hodnot a pokouší se přiblížit k těm optimálním.
 
-Pokud uživatel snažící se natrénovat model netuší jaká metoda strojového učení by byla pro konkrétní data optimální může využít některého z Recommender agentů, kteří na základě podobnosti dat a již spočítaných výsledků, dokážou poradit vhodnou metodu.  Takovýto agend bude v ComputationDescripion zadefinovaný jako Recommender. 
-  
-Speciálním potomkem DataProcessingu je ontologie CARecSearchComplex pracovně nazývaná jako Trojkrabička. Trojkrabička obsahuje tři vstupy a to Recommendera, Searchera a výpočetního agenta.
- Tato Ontologie je ve skutečnosti hack, který dává uživateli možnost nevybrat si konkrétního výpočetního agenta, ale místo toho vyplnit nedefinovaného a zapojit k němu Recommender.  V případě, že uživatel nevyplní všechny optiony výpočetního agenta musí být zapojený Searcher, který projde množinou přípustných hodnot pro daný Option a pokusí se přiblížit k optimální hodnotě parametrů pro daná data. Trojkrabička umožňuje vícero validních zapojení přičemž, chování Trojkrabičky je závislé na tom, jaké všechny Ontologie z množiny Searcher Recommender a výpočetní agent jsou do ní zapojeny. Nejjednodušší případ zapojení Trojkrabičky je takový, když je na ní připojen pouze samotný konkrétní výpočetní agent se všemi vyplněnými parametry. V tomto případě má Trojkrabička stejný význam, jako kdyby tam nebyla a výpočetní agent byl připojen mimo Trojkrabičku.
-
-Speciálním případem výpočetního elementu dědící od Ontologie DataProcessing je Ontologie FileDataInput, která slouží jako reprezentant vstupního datasetu produkující data pro první řadu výpočetních elementů. 
-
-Dalším speciálním výpočetním elementem  je evaluační metoda, která se zapojuje jako vstup pro výpočetního agenta. Evaluační metoda slouží k určení správné doby procesů učení modelu, aby se našel vhodný kompromis mezi nedostatečně vytrénovaným a přeučeným modelem.        
+Dalším speciálním výpočetním elementem je evaluační metoda, která se zapojuje jako vstup pro výpočetního agenta. Evaluační metoda slouží k určení správné doby procesů učení modelu, aby se našel vhodný kompromis mezi nedostatečně vytrénovaným a přeučeným modelem.
     
 ### DataOntology
 
-<font color="red">TODO: dodělat</font>
+Tato množina ontologií má dva účely:
+* jednak řídí přesuny velkých dat (říká, co se má kam poslat),
+* a jednak se jejím prostřednictvím zasílají malá data (například ".JAR" soubory agentů).
 
-Prostřednictvím této množiny ontologií se přepravují data mezi agenty - vstupní datasety a datasety vypočtené během spuštění dávky.
-
-Díky možnosti spustit výpočet jednoho Batche distribuovaně na více strojích není možné, aby si jednotliví agenti předávali data pouze přes sdílený filesystém, ale musela vzniknout infrastruktura pro přesuny dat a tato Ontologie. 
-
-Tuto infrastrukturu z hlediska objemu dat bude nejvíce vytěžovat přeprava vstupních datasetů a vypočtených dat.  
-
-Jako soubory se mezi agenty na různých containerech přepravují JARka externích agentů, která nejsou součástí GitHub repozitáře.  Uživatelem těchto ontologií jsou tudíž agenti, kteří potřebují v systému přepravovat nějaká data. Agent ManagerAgent využívá přepravy JARek externích agentů, v případě že obdrží požadavek na vytvoření nového agenta jehož zdrojové kódy nemá na svém containeru k dispozici. Agent ARFFReader žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním filesystému. Agent Planner využívá ontologie pro řízení, ukládání vypočtených dat do databáze odstíněné centrálním DataManagerem.
+Je využita například v těchto scénářích:
+* Agent `ManagerAgent` žádá o poskytnutí ".JAR" souborů externích agentů v případě, že obdrží požadavek na vytvoření agenta, jehož zdrojové kódy zatím nemá na svém containeru k dispozici.
+* Agent `ARFFReader` žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním filesystému.
+* Agent `Planner` využívá tuto ontologii pro řízení a ukládání vypočtených dat do databáze.
 
 ### DurationOntology 
 
@@ -595,7 +581,7 @@ Zaznamenává dobu výpočtu úloh, kterou měří `DurationAgent`.
 
 ### ExperimentOntology
 
-Ontologie reprezentující podproblémy jedné dávky. Nejvíce ji využívá agent `Manager`, který za pomoci agenta `DataManagera` řídí výpočet dávek, rozděluje je na podproblémy a loguje jejich změny.
+Ontologie reprezentující dávky. Nejvíce ji využívá agent `Manager`, který za pomoci agenta `DataManagera` řídí výpočet experimentů, rozděluje je na podproblémy a loguje jejich změny.
 
 ### FileNameTranslationOntology
 
@@ -607,7 +593,7 @@ Překlad provádí agent `DataManager`, který spravuje párování externích a
 
 ### MailingOntology
 
-Tyto ontologie se využívají pro zadání povelu k zaslání určitého emailu. Aktuálně je pouze využívá agent `Manager` po dokončení výpočtu dávek - zasílá informaci o dokončení výpočtu uživateli, který dávku zadal a přidá nejmenší chybu, které bylo při strojovém učení v dané dávce dosáhnuto.
+Tyto ontologie se využívají pro zadání povelu k zaslání určitého emailu. Aktuálně je pouze využívá agent `Manager` po dokončení výpočtu experimentů - zasílá informaci o dokončení výpočtu uživateli, který experiment zadal a přidá nejmenší chybu, které bylo při strojovém učení v dané dávce dosáhnuto.
 
 ### MetadataOntology
 
@@ -629,7 +615,7 @@ Cílem této ontologie je poskytnout prostředek přepravy výsledků experiment
 
 ### SearchOntology
 
-Slouží ke zpřístupnění funkce hledačů zbytku systému, tj. efektivně prohledávat stavový prostor modelů s důrazem na zachování vhodného poměru explorace a exploatace.
+Slouží ke zpřístupnění funkce prohledávačů zbytku systému, tj. efektivně prohledávat stavový prostor modelů s důrazem na zachování vhodného poměru explorace a exploatace.
 
 ### TaskOntology
 
