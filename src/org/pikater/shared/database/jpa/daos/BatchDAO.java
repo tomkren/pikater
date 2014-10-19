@@ -23,20 +23,20 @@ import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class BatchDAO extends AbstractDAO<JPABatch> {
 
-	public BatchDAO(){
+	public BatchDAO() {
 		super(JPABatch.class);
 	}
-	
+
 	@Override
 	public String getEntityName() {
 		return JPABatch.EntityName;
 	}
-	
-	protected Path<Object> convertColumnToJPAParam(ITableColumn column){
+
+	protected Path<Object> convertColumnToJPAParam(ITableColumn column) {
 		Root<JPABatch> root = this.getRoot();
-		switch((BatchTableDBView.Column)column){
-		case CREATED: 
-		case FINISHED: 
+		switch ((BatchTableDBView.Column) column) {
+		case CREATED:
+		case FINISHED:
 		case NAME:
 		case NOTE:
 		case STATUS:
@@ -49,32 +49,31 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 			return root.get("name");
 		}
 	}
-	
-	private Predicate createAllExcludeByStatusPredicate(JPABatchStatus status){
-		return getCriteriaBuilder()
-				.notEqual(getRoot().get("status"), status);
+
+	private Predicate createAllExcludeByStatusPredicate(JPABatchStatus status) {
+		return getCriteriaBuilder().notEqual(getRoot().get("status"), status);
 	}
-	
+
 	/**
 	 * Creates a list of all batches, that doesn't have the specified status.
 	 * @return the list of batches
 	 */
-	public List<JPABatch> getAllExcludeByStatus(int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder,JPABatchStatus status) {
+	public List<JPABatch> getAllExcludeByStatus(int offset, int maxResultCount, ITableColumn sortColumn, SortOrder sortOrder, JPABatchStatus status) {
 		return getByCriteriaQuery(createAllExcludeByStatusPredicate(status), sortColumn, sortOrder, offset, maxResultCount);
 	}
-	
+
 	/**
 	 * Computes the number of batches, that doesn't have the specified status
 	 * @return the number of batches
 	 */
-	public int getAllExcludeByStatusCount(JPABatchStatus status){
+	public int getAllExcludeByStatusCount(JPABatchStatus status) {
 		return getByCriteriaQueryCount(createAllExcludeByStatusPredicate(status));
 	}
-	
-	private Predicate createByOwnerPredicate(JPAUser owner){
+
+	private Predicate createByOwnerPredicate(JPAUser owner) {
 		return getCriteriaBuilder().equal(getRoot().get("owner"), owner);
 	}
-	
+
 	/**
 	 * Creates a list of batches, that are associated with the given user   
 	 * @param owner {@link JPAUser} object of the user
@@ -84,140 +83,119 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	 * @param sortOrder ascending or descending order of sorting
 	 * @return list the list of batches 
 	 */
-	public List<JPABatch> getByOwner(JPAUser owner,int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder) {
+	public List<JPABatch> getByOwner(JPAUser owner, int offset, int maxResultCount, ITableColumn sortColumn, SortOrder sortOrder) {
 		return getByCriteriaQuery(createByOwnerPredicate(owner), sortColumn, sortOrder, offset, maxResultCount);
 	}
-	
+
 	public int getBatchResultCount(JPABatch batch) {
 		return getByCountQuery("Batch.getByIDonlyResults.count", "batchID", batch.getId());
 	}
 
-	private Predicate createByOwnerAndStatusPredicate(JPAUser owner, JPABatchStatus status){
-		return getCriteriaBuilder()
-				.and(
-					getCriteriaBuilder().equal(getRoot().get("owner"), owner),
-					getCriteriaBuilder().equal(getRoot().get("status"), status));
+	private Predicate createByOwnerAndStatusPredicate(JPAUser owner, JPABatchStatus status) {
+		return getCriteriaBuilder().and(getCriteriaBuilder().equal(getRoot().get("owner"), owner), getCriteriaBuilder().equal(getRoot().get("status"), status));
 	}
-	
+
 	/**
 	 * Creates a list of batches with specified status for the given user.
 	 * @return the list of batches
 	 */
-	public List<JPABatch> getByOwnerAndStatus(JPAUser owner,JPABatchStatus status,int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder) {
+	public List<JPABatch> getByOwnerAndStatus(JPAUser owner, JPABatchStatus status, int offset, int maxResultCount, ITableColumn sortColumn, SortOrder sortOrder) {
 		return getByCriteriaQuery(createByOwnerAndStatusPredicate(owner, status), sortColumn, sortOrder, offset, maxResultCount);
 	}
-	
+
 	/**
 	 * Computes the number of batches with the given status, for the specified user
 	 * @return the number of batches
 	 */
-	public int getByOwnerAndStatusCount(JPAUser owner, JPABatchStatus status){
+	public int getByOwnerAndStatusCount(JPAUser owner, JPABatchStatus status) {
 		return getByCriteriaQueryCount(createByOwnerAndStatusPredicate(owner, status));
 	}
-	
-	
-	private Predicate createByOwnerAndNotStatusPredicate(JPAUser owner, JPABatchStatus status){
-		return getCriteriaBuilder()
-				.and(
-					getCriteriaBuilder().equal(getRoot().get("owner"), owner),
-					getCriteriaBuilder().notEqual(getRoot().get("status"), status));
-	}	
-	
+
+	private Predicate createByOwnerAndNotStatusPredicate(JPAUser owner, JPABatchStatus status) {
+		return getCriteriaBuilder().and(getCriteriaBuilder().equal(getRoot().get("owner"), owner), getCriteriaBuilder().notEqual(getRoot().get("status"), status));
+	}
+
 	/**
 	 * Creates list of batches of given user, that don't have the specified status.
 	 * @return list of batches
 	 */
-	public List<JPABatch> getByOwnerAndNotStatus(JPAUser owner, JPABatchStatus status,int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder) {
+	public List<JPABatch> getByOwnerAndNotStatus(JPAUser owner, JPABatchStatus status, int offset, int maxResultCount, ITableColumn sortColumn, SortOrder sortOrder) {
 		return getByCriteriaQuery(createByOwnerAndNotStatusPredicate(owner, status), sortColumn, sortOrder, offset, maxResultCount);
 	}
-	
+
 	/**
 	 * Computes the number of batches of given user, that don't have the specified status
 	 * @return the number of batches
 	 */
-	public int getByOwnerAndNotStatusCount(JPAUser owner, JPABatchStatus status){
+	public int getByOwnerAndNotStatusCount(JPAUser owner, JPABatchStatus status) {
 		return getByCriteriaQueryCount(createByOwnerAndNotStatusPredicate(owner, status));
 	}
-	
-	
-	
+
 	public int getAllCount() {
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("Batch.getAll.count")
-				.getSingleResult())
-				.intValue();
+		return ((Long) EntityManagerInstancesCreator.getEntityManagerInstance().createNamedQuery("Batch.getAll.count").getSingleResult()).intValue();
 	}
-	
+
 	public List<JPABatch> getByStatus(JPABatchStatus status) {
 		return getByTypedNamedQuery("Batch.getByStatus", "status", status);
 	}
-	
+
 	public List<JPABatch> getByOwner(JPAUser owner) {
 		return getByTypedNamedQuery("Batch.getByOwner", "owner", owner);
 	}
-	
-	public List<JPABatch> getByOwner(JPAUser owner,int offset,int maxResultCount) {
-		return getByTypedNamedQuery("Batch.getByOwner", "owner", owner,offset,maxResultCount);
+
+	public List<JPABatch> getByOwner(JPAUser owner, int offset, int maxResultCount) {
+		return getByTypedNamedQuery("Batch.getByOwner", "owner", owner, offset, maxResultCount);
 	}
-	
+
 	public int getByOwnerCount(JPAUser owner) {
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("Batch.getByOwner.count")
-				.setParameter("owner", owner)
-				.getSingleResult())
-				.intValue();
+		return ((Long) EntityManagerInstancesCreator.getEntityManagerInstance().createNamedQuery("Batch.getByOwner.count").setParameter("owner", owner).getSingleResult()).intValue();
 	}
-	
+
 	/**
 	 * 
 	 * @return the ID of the saved Experiment Entity, -1 when failed to save
 	 */
-	public int addExperimentToBatch(Experiment experiment){
-		int batchID=experiment.getBatchID();
+	public int addExperimentToBatch(Experiment experiment) {
+		int batchID = experiment.getBatchID();
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
-		try{
-			JPABatch batch=em.find(JPABatch.class, batchID);
-			if(batch!=null){
+		try {
+			JPABatch batch = em.find(JPABatch.class, batchID);
+			if (batch != null) {
 				JPAExperiment jpaExperiment;
-				
-				if(experiment.getModel() == null){
-					jpaExperiment=new JPAExperiment(batch);
-				}else{
-					int modelID=experiment.getModel();
-					JPAModel model=em.find(JPAModel.class, modelID);
-					jpaExperiment=new JPAExperiment(batch, model);
+
+				if (experiment.getModel() == null) {
+					jpaExperiment = new JPAExperiment(batch);
+				} else {
+					int modelID = experiment.getModel();
+					JPAModel model = em.find(JPAModel.class, modelID);
+					jpaExperiment = new JPAExperiment(batch, model);
 				}
-				
+
 				jpaExperiment.setStatus(experiment.getStatus());
-				
+
 				em.persist(jpaExperiment);
 				batch.addExperiment(jpaExperiment);
 				em.getTransaction().commit();
 				return jpaExperiment.getId();
-			}else{
+			} else {
 				em.getTransaction().rollback();
 				return -1;
 			}
-		}finally{
+		} finally {
 			em.close();
 		}
 	}
-	
-	public List<Object[]> getByIDwithResults(int batchID){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return em
-					.createNamedQuery("Batch.getByIDwithResult",Object[].class)
-					.setParameter("batchID", batchID)
-					.getResultList();
-		}finally{
+
+	public List<Object[]> getByIDwithResults(int batchID) {
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		try {
+			return em.createNamedQuery("Batch.getByIDwithResult", Object[].class).setParameter("batchID", batchID).getResultList();
+		} finally {
 			em.close();
 		}
 	}
-	
+
 	/**
 	 * Retrieves all results for the given batch
 	 * @param batchID ID of {@link JPABatch} entity
@@ -225,44 +203,38 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	 * @param maxResultCount maximal number of needed results
 	 * @return list of {@link JPAResult}s for the batch
 	 */
-	public List<JPAResult> getByIDwithResults(int batchID,int offset,int maxResultCount){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return em
-					.createNamedQuery("Batch.getByIDonlyResults",JPAResult.class)
-					.setParameter("batchID", batchID)
-					.setFirstResult(offset)
-					.setMaxResults(maxResultCount)
-					.getResultList();
-		}finally{
+	public List<JPAResult> getByIDwithResults(int batchID, int offset, int maxResultCount) {
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		try {
+			return em.createNamedQuery("Batch.getByIDonlyResults", JPAResult.class).setParameter("batchID", batchID).setFirstResult(offset).setMaxResults(maxResultCount).getResultList();
+		} finally {
 			em.close();
 		}
 	}
 
-
-	public void updateEntity(JPABatch changedEntity){
+	public void updateEntity(JPABatch changedEntity) {
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
-		try{
-			JPABatch item=em.find(JPABatch.class, changedEntity.getId());
+		try {
+			JPABatch item = em.find(JPABatch.class, changedEntity.getId());
 			item.updateValues(changedEntity);
 			em.getTransaction().commit();
-		}catch(Exception e){
+		} catch (Exception e) {
 			PikaterDBLogger.logThrowable("Can't update JPA Batch object.", e);
 			em.getTransaction().rollback();
-		}finally{
+		} finally {
 			em.close();
 		}
-	}	
-	
-	public void deleteBatchEntity(JPABatch batch){
+	}
+
+	public void deleteBatchEntity(JPABatch batch) {
 		this.deleteBatchByID(batch.getId());
 	}
-	
-	public void deleteBatchByID(int id){
+
+	public void deleteBatchByID(int id) {
 		this.deleteEntityByID(id);
 	}
-	
+
 	/**
 	 * Sets the status of computed batches to failed, because just after startup, there shouldn't be
 	 * running computations.
@@ -270,35 +242,22 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	public void cleanUp() {
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
-		try{
+		try {
 			PikaterDBLogger.log(Level.INFO, "Starting cleaning up batches");
-			List<JPABatch> batches=em
-					.createNamedQuery("Batch.getByStatus",JPABatch.class)
-					.setParameter("status", JPABatchStatus.COMPUTING)
-					.getResultList();
-			batches.addAll(
-					em
-					.createNamedQuery("Batch.getByStatus",JPABatch.class)
-					.setParameter("status", JPABatchStatus.WAITING)
-					.getResultList()
-					);
-			batches.addAll(
-					em
-					.createNamedQuery("Batch.getByStatus",JPABatch.class)
-					.setParameter("status", JPABatchStatus.STARTED)
-					.getResultList()
-					);
-			for(JPABatch batch : batches){
+			List<JPABatch> batches = em.createNamedQuery("Batch.getByStatus", JPABatch.class).setParameter("status", JPABatchStatus.COMPUTING).getResultList();
+			batches.addAll(em.createNamedQuery("Batch.getByStatus", JPABatch.class).setParameter("status", JPABatchStatus.WAITING).getResultList());
+			batches.addAll(em.createNamedQuery("Batch.getByStatus", JPABatch.class).setParameter("status", JPABatchStatus.STARTED).getResultList());
+			for (JPABatch batch : batches) {
 				batch.setStatus(JPABatchStatus.FAILED.name());
 			}
 			em.getTransaction().commit();
 			PikaterDBLogger.log(Level.INFO, "Cleaning up batches finished");
-		}catch(Exception e){
+		} catch (Exception e) {
 			PikaterDBLogger.logThrowable("Error during cleanup...", e);
 			em.getTransaction().rollback();
-		}finally{
+		} finally {
 			em.close();
 		}
-		
+
 	}
 }

@@ -18,46 +18,43 @@ public class ResultExporter {
 	/**
 	 * Character, which is used to separate two columns
 	 */
-	public static char DELIMINITER=',';
-	
-	public ResultExporter(PrintWriter output){
-		this.out=output;
+	public static char DELIMINITER = ',';
+
+	public ResultExporter(PrintWriter output) {
+		this.out = output;
 	}
-	
-	public ResultExporter(OutputStream output){
-		this.out=new PrintWriter(output);
+
+	public ResultExporter(OutputStream output) {
+		this.out = new PrintWriter(output);
 	}
-	
+
 	/**
 	 * Exports the results of a batch to CSV format by exporting all of its experiments
 	 * <p>
 	 * Header is printed on the first row.
 	 * @param batch the {@link JPABatch} object, which results should be exported 
 	 */
-	public void export(JPABatch batch){
+	public void export(JPABatch batch) {
 		this.export(batch.getId());
 	}
-	
+
 	/**
 	 * Exports the results of a batch to CSV format by exporting all of its experiments
 	 * <p>
 	 * Header is printed on the first row.
 	 * @param batchID the ID of batch, which results should be exported 
 	 */
-	public void export(int batchID){
-		header(null,null,null);
-		List<Object[]> batchExperimentResultList=DAOs.batchDAO.getByIDwithResults(batchID);
-		for(Object[] triplet : batchExperimentResultList){
-			row(
-				(JPABatch)triplet[0],
-				(JPAExperiment)triplet[1],
-				(JPAResult)triplet[2]);
+	public void export(int batchID) {
+		header(null, null, null);
+		List<Object[]> batchExperimentResultList = DAOs.batchDAO.getByIDwithResults(batchID);
+		for (Object[] triplet : batchExperimentResultList) {
+			row((JPABatch) triplet[0], (JPAExperiment) triplet[1], (JPAResult) triplet[2]);
 		}
 	}
 
-	public void header(JPABatch batch, JPAExperiment experiment){
-		StringBuilder sb=new StringBuilder();
-		
+	public void header(JPABatch batch, JPAExperiment experiment) {
+		StringBuilder sb = new StringBuilder();
+
 		sb.append("batch ID");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("batch name");
@@ -68,25 +65,25 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("batch finished");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append("model strategy");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("used model class");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		out.println(sb.toString());
 	}
-	
-	public void header(JPAExperiment experiment, JPAResult result){
-		StringBuilder sb=new StringBuilder();
-		
+
+	public void header(JPAExperiment experiment, JPAResult result) {
+		StringBuilder sb = new StringBuilder();
+
 		sb.append("experiment ID");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("model strategy");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("used model class");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append("agent name");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("duration");
@@ -110,10 +107,10 @@ public class ResultExporter {
 		sb.append("weka options");
 		out.println(sb.toString());
 	}
-	
-	public void header(JPABatch batch, JPAExperiment experiment, JPAResult result){
-		StringBuilder sb=new StringBuilder();
-		
+
+	public void header(JPABatch batch, JPAExperiment experiment, JPAResult result) {
+		StringBuilder sb = new StringBuilder();
+
 		sb.append("batch ID");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("batch name");
@@ -124,12 +121,12 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("batch finished");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append("model strategy");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("used model class");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append("agent name");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("duration");
@@ -153,10 +150,10 @@ public class ResultExporter {
 		sb.append("weka options");
 		out.println(sb.toString());
 	}
-	
-	public void row(JPABatch batch, JPAExperiment experiment){
-		StringBuilder sb=new StringBuilder();
-		
+
+	public void row(JPABatch batch, JPAExperiment experiment) {
+		StringBuilder sb = new StringBuilder();
+
 		sb.append(batch.getId());
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(batch.getName());
@@ -167,25 +164,25 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(batch.getFinished());
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append(experiment.getModelStrategy().name());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(experiment.getUsedModel()!=null?experiment.getUsedModel().getAgentClassName():"no_model");
+		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel().getAgentClassName() : "no_model");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		out.println(sb.toString());
 	}
-	
-	public void row(JPAExperiment experiment, JPAResult result){
-		StringBuilder sb=new StringBuilder();
-		
+
+	public void row(JPAExperiment experiment, JPAResult result) {
+		StringBuilder sb = new StringBuilder();
+
 		sb.append(experiment.getId());
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(experiment.getModelStrategy().name());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(experiment.getUsedModel()!=null?experiment.getUsedModel().getAgentClassName():"no_model");
+		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel().getAgentClassName() : "no_model");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append(result.getAgentName());
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(result.getDuration());
@@ -209,10 +206,10 @@ public class ResultExporter {
 		sb.append(NewOptions.exportToWeka(NewOptions.importXML(result.getOptions()).getOptions()));
 		out.println(sb.toString());
 	}
-	
-	public void row(JPABatch batch, JPAExperiment experiment, JPAResult result){
-		StringBuilder sb=new StringBuilder();
-		
+
+	public void row(JPABatch batch, JPAExperiment experiment, JPAResult result) {
+		StringBuilder sb = new StringBuilder();
+
 		sb.append(batch.getId());
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(batch.getName());
@@ -223,12 +220,12 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(batch.getFinished());
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append(experiment.getModelStrategy().name());
 		sb.append(ResultExporter.DELIMINITER);
-		sb.append(experiment.getUsedModel()!=null?experiment.getUsedModel().getAgentClassName():"no_model");
+		sb.append(experiment.getUsedModel() != null ? experiment.getUsedModel().getAgentClassName() : "no_model");
 		sb.append(ResultExporter.DELIMINITER);
-		
+
 		sb.append(result.getAgentName());
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(result.getDuration());
@@ -252,18 +249,18 @@ public class ResultExporter {
 		sb.append(NewOptions.exportToWeka(NewOptions.importXML(result.getOptions()).getOptions()));
 		out.println(sb.toString());
 	}
-	
+
 	/**
 	 * Closes the underlying {@link PrintWriter} object.
 	 */
-	public void close(){
+	public void close() {
 		this.out.close();
 	}
-	
+
 	/**
 	 * Flushes the underlying {@link PrintWriter} object.
 	 */
-	public void flush(){
+	public void flush() {
 		this.out.flush();
 	}
 }

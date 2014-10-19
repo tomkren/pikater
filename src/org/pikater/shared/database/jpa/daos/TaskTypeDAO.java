@@ -8,8 +8,8 @@ import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPATaskType;
 
 public class TaskTypeDAO extends AbstractDAO<JPATaskType> {
-	
-	public TaskTypeDAO(){
+
+	public TaskTypeDAO() {
 		super(JPATaskType.class);
 	}
 
@@ -17,29 +17,24 @@ public class TaskTypeDAO extends AbstractDAO<JPATaskType> {
 	public String getEntityName() {
 		return JPATaskType.EntityName;
 	}
-	
+
 	public JPATaskType createOrGetByName(String name) {
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		try {
 			em.getTransaction().begin();
-			List<JPATaskType> tasks=
-					em.
-					createNamedQuery("TaskType.getByName", JPATaskType.class)
-					.setParameter("name", name)
-					.getResultList();
-			if(!tasks.isEmpty())
-			{
+			List<JPATaskType> tasks = em.createNamedQuery("TaskType.getByName", JPATaskType.class).setParameter("name", name).getResultList();
+			if (!tasks.isEmpty()) {
 				em.getTransaction().commit();
 				return tasks.get(0);
-			}else{
-				JPATaskType newTT=new JPATaskType();
+			} else {
+				JPATaskType newTT = new JPATaskType();
 				newTT.setName(name);
 				DAOs.taskTypeDAO.storeEntity(newTT);
 				return newTT;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			em.getTransaction().rollback();
-		}finally{
+		} finally {
 			em.close();
 		}
 		return null;

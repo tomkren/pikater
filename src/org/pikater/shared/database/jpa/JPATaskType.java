@@ -12,27 +12,25 @@ import javax.persistence.Transient;
  * be performed on the datasets.
  */
 @Entity
-@Table(name="TaskType")
-@NamedQueries({
-	@NamedQuery(name="TaskType.getAll",query="select tt from JPATaskType tt"),
-	@NamedQuery(name="TaskType.getByName",query="select tt from JPATaskType tt where tt.name=:name")
-})
-public class JPATaskType extends JPAAbstractEntity{
-	
-	@Column(unique=true)
+@Table(name = "TaskType")
+@NamedQueries({ @NamedQuery(name = "TaskType.getAll", query = "select tt from JPATaskType tt"), @NamedQuery(name = "TaskType.getByName", query = "select tt from JPATaskType tt where tt.name=:name") })
+public class JPATaskType extends JPAAbstractEntity {
+
+	@Column(unique = true)
 	private String name;
-	
-	public JPATaskType(){
+
+	public JPATaskType() {
 		super();
 	}
-	
-	public JPATaskType(String name){
-		this.name=name;
+
+	public JPATaskType(String name) {
+		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -42,7 +40,7 @@ public class JPATaskType extends JPAAbstractEntity{
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
-		JPATaskType updatedValues=(JPATaskType)newValues;
-		this.name=updatedValues.getName();
+		JPATaskType updatedValues = (JPATaskType) newValues;
+		this.name = updatedValues.getName();
 	}
 }
