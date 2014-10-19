@@ -16,6 +16,17 @@ import org.pikater.core.ontology.subtrees.batch.BatchPriorityChanged;
 
 public class PikaterGatewayBatchPriorityChanged {
 
+	/**
+	 * Constructor
+	 */
+	private PikaterGatewayBatchPriorityChanged() {
+	}
+	
+	/**
+	 * Changes the priority of the Batch
+	 * @param batchID
+	 * @throws PikaterGatewayException
+	 */
 	public static void ChangeBatchPriority(int batchID) throws PikaterGatewayException {
 				
 		try {	        
