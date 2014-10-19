@@ -22,14 +22,14 @@ import org.pikater.core.ontology.subtrees.duration.GetDuration;
 
 public class DurationService extends FIPAService {
 
-	static final Codec codec = new SLCodec();
+	static final Codec CODEC = new SLCodec();
 
 	public static Duration getDuration(PikaterAgent agent, GetDuration gd) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DURATION.getName(), false));
 		request.setOntology(DurationOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action action = new Action();

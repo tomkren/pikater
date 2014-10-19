@@ -9,37 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class SearchSolution implements Concept
-{
+public class SearchSolution implements Concept {
 	private static final long serialVersionUID = 5183991490097709263L;
-	
+
 	private List<IValueData> values;
-	
-	public List<IValueData> getValues()
-	{
-		if(values!=null)
-		{
+
+	public List<IValueData> getValues() {
+		if (values != null) {
 			return values;
-		}
-		else
-		{
+		} else {
 			return new ArrayList<IValueData>();
 		}
 	}
 
-	public void setValues(List<IValueData> values)
-	{
+	public void setValues(List<IValueData> values) {
 		this.values = values;
 	}
-	
-	public void printContent()
-	{
+
+	public void printContent() {
 		StringBuilder sb = new StringBuilder();
 		boolean start = true;
-		for (IValueData valueI : getValues())
-		{
-			if(!start)
-			{
+		for (IValueData valueI : getValues()) {
+			if (!start) {
 				sb.append(",");
 			}
 			sb.append(valueI);

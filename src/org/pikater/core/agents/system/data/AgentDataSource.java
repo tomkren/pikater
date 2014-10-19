@@ -24,7 +24,7 @@ public class AgentDataSource extends PikaterAgent {
 
 	private static final long serialVersionUID = -2175414070329509621L;
 
-	private static final String pathToLocalSources = "core" +
+	private static final String PATH_TO_LOCAL_SOURCES = "core" +
 			System.getProperty("file.separator") +
 			"data" + System.getProperty("file.separator") +
 			"dataSources" + System.getProperty("file.separator");
@@ -49,7 +49,7 @@ public class AgentDataSource extends PikaterAgent {
     		String fileName) throws IOException {
     	
         FileOutputStream fileOut =
-        		new FileOutputStream(pathToLocalSources+fileName);
+        		new FileOutputStream(PATH_TO_LOCAL_SOURCES+fileName);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
         out.writeObject(toSerialize);
         out.close();
@@ -72,7 +72,7 @@ public class AgentDataSource extends PikaterAgent {
     public String getPathToDataSource(String dataSourceName) {
     	
       if (ownedDataSources.contains(dataSourceName)) {
-              return pathToLocalSources+dataSourceName;
+              return PATH_TO_LOCAL_SOURCES+dataSourceName;
       } else {
           throw new IllegalArgumentException();
           //TODO: obtain from other containers
@@ -87,7 +87,7 @@ public class AgentDataSource extends PikaterAgent {
         logInfo("Cleaning local datasources directory "
         		+ "from the datasources of the previous run");
         
-        File localDataSourcesDirectory = new File(pathToLocalSources);
+        File localDataSourcesDirectory = new File(PATH_TO_LOCAL_SOURCES);
         FileUtils.cleanDirectory(localDataSourcesDirectory);
     }
 

@@ -72,8 +72,9 @@ public class DataTransferService extends FIPAService {
 
 			serverSocket.close();
 		} finally {
-			if (socket != null)
+			if (socket != null) {
 				socket.close();
+			}
 		}
 	}
 }

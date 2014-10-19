@@ -86,7 +86,7 @@ import org.pikater.shared.logging.core.ConsoleLogger;
  */
 public class DataManagerService extends FIPAService {
 
-	static final Codec codec = new SLCodec();
+	static final Codec CODEC = new SLCodec();
 
 	/**
 	 * Sends the request to userID to the Agent_DataManger Returns User-ID
@@ -106,13 +106,13 @@ public class DataManagerService extends FIPAService {
 		msg.setLanguage(new SLCodec().getName());
 		msg.setOntology(ontology.getName());
 
-		Action a = new Action();
-		a.setAction(getUserID);
-		a.setActor(agent.getAID());
+		Action action = new Action();
+		action.setAction(getUserID);
+		action.setActor(agent.getAID());
 
 		try {
 			// Let JADE convert from Java objects to string
-			agent.getContentManager().fillContent(msg, a);
+			agent.getContentManager().fillContent(msg, action);
 
 		} catch (CodecException ce) {
 			agent.logSevere(ce.getMessage());
@@ -179,7 +179,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(FilenameTranslationOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();
@@ -257,7 +257,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(ResultOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();
@@ -285,8 +285,9 @@ public class DataManagerService extends FIPAService {
 	 */
 	public static void ensureCached(PikaterAgent agent, String filename) {
 		agent.logInfo("making sure file " + filename + " is present");
-		if (new File(CoreConfiguration.getDataFilesPath() + filename).exists())
+		if (new File(CoreConfiguration.getDataFilesPath() + filename).exists()) {
 			return;
+		}
 		agent.logInfo("getting file " + filename + " from dataManager");
 		GetFile gf = new GetFile();
 		gf.setHash(filename);
@@ -294,7 +295,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(DataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		try {
 			agent.getContentManager().fillContent(request,
@@ -321,7 +322,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(ModelOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		try {
 			agent.getContentManager().fillContent(request,
@@ -414,7 +415,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(MetadataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();
@@ -443,7 +444,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(MetadataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action action = new Action();
@@ -477,7 +478,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(MetadataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action action = new Action();
@@ -515,7 +516,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(RecommendOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action action = new Action();
@@ -562,7 +563,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(DataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		try {
 			agent.getContentManager().fillContent(request,
@@ -1171,7 +1172,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(DataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();
@@ -1210,7 +1211,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(MetadataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();
@@ -1239,7 +1240,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(DataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();
@@ -1270,7 +1271,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(DataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();
@@ -1315,7 +1316,7 @@ public class DataManagerService extends FIPAService {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(CoreAgents.DATA_MANAGER.getName(), false));
 		request.setOntology(DataOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
+		request.setLanguage(CODEC.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		Action a = new Action();

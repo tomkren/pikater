@@ -16,7 +16,8 @@ public class GetParameters implements AgentAction {
 
 	private static final long serialVersionUID = -4554163588726699351L;
 	
-	private List<SearchItem> schema; // List of Options
+	// List of Options
+	private List<SearchItem> schema;
 	private List<NewOption> searchOptions;
 	
 	/**
