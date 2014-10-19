@@ -52,9 +52,9 @@ public class FileUploadTester extends PikaterAgent {
 			logInfo("Sending test request to dataManager");
 
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
-			if (reply == null)
+			if (reply == null) {
 				logSevere("Reply not received.");
-			else {
+			} else {
 				logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
 				int port = Integer.parseInt(reply.getContent());
 				// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)

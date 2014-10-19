@@ -56,9 +56,14 @@ public class Agent_PikaterGateway extends GatewayAgent {
     }
 
     /** receiver je jmeno agenta (prijemce), action je nejaka AgentAction z Pikateri ontologie */
-    static public ACLMessage makeActionRequest(String receiver, Ontology ontology, AgentAction action) throws CodecException, OntologyException, ControllerException {
+    static public ACLMessage makeActionRequest(String receiver,
+    		Ontology ontology, AgentAction action) throws CodecException,
+    		OntologyException, ControllerException {
+    	
     	PikaterGateway_General.initJadeGateway();
-        JadeGateway.checkJADE(); // force gateway container initialization to make AID resolution possible
+        
+    	JadeGateway.checkJADE();
+        // force gateway container initialization to make AID resolution possible
         
         ContentManager contentManager = new ContentManager();
         contentManager.registerLanguage(codec);
@@ -66,17 +71,17 @@ public class Agent_PikaterGateway extends GatewayAgent {
         
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-        try{
+        try {
         	AID target = new AID(receiver, AID.ISLOCALNAME);
         	
         	msg.addReceiver(target);
         	msg.setLanguage(codec.getName());
         	msg.setOntology(ontology.getName());
         	contentManager.fillContent(msg, new Action(target, action));
-        }catch(CodecException ce){
+        } catch(CodecException ce) {
         	JadeGateway.shutdown();
         	throw ce;
-        }catch(OntologyException oe){
+        } catch(OntologyException oe) {
         	JadeGateway.shutdown();
         	throw oe;
         }

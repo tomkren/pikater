@@ -46,10 +46,11 @@ public class MailAgentTester extends PikaterAgent {
             ACLMessage request = makeActionRequest(receiver, action);
             logInfo("Sending test request to mailAgent");
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
-            if (reply == null)
+            if (reply == null) {
                 logSevere("Reply not received.");
-            else
+            } else {
                 logInfo("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+            }
         } catch (CodecException e) {
             logException("Codec error occurred: "+e.getMessage(), e);
         } catch (OntologyException e) {

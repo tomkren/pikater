@@ -337,8 +337,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					solutionsNew = generateNewSolutions(solutionsNew, evaluations);
 					if(solutionsNew != null) {
 						evaluations = new float[solutionsNew.size()][];
-					} else
+					} else {
 						solutionsNew = new ArrayList<>();
+					}
 					queriesToProcess = solutionsNew.size();
 					
 					for (int i = 0; i < solutionsNew.size(); i++){

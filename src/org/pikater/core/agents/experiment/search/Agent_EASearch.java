@@ -104,8 +104,9 @@ public class Agent_EASearch extends Agent_Search {
             return true;
         }
         
-        if (archive.size() >= maxEval) 
+        if (archive.size() >= maxEval) {
             return true;
+        }
         
         return false;
     }
@@ -139,8 +140,8 @@ public class Agent_EASearch extends Agent_Search {
             
             if (!multiobjective) {
                 environmentalSelectors.add(new TournamentSelector());            
-            }
-            else {
+            
+            } else {
                 environmentalSelectors.add(new BestIndividualsSelector());
                 eliteSize = 0.0;
             }
@@ -220,9 +221,9 @@ public class Agent_EASearch extends Agent_Search {
         }
         
         offspring = null;
-        for (Operator o : operators) {
+        for (Operator operatorI : operators) {
             offspring = new Population();
-            o.operate(matingPool, offspring);
+            operatorI.operate(matingPool, offspring);
             matingPool = offspring;
         }
         
