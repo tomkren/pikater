@@ -24,14 +24,14 @@ public class PikaterGateway_NewDataset {
 	
 	/**
 	 * New DataSet Inform
-	 * @param IDNewDataset
+	 * @param newDatasetID
 	 * @throws PikaterGatewayException
 	 */
-	public static void newDataset(int IDNewDataset) throws PikaterGatewayException {
+	public static void newDataset(int newDatasetID) throws PikaterGatewayException {
 
 		try {
 			NewDataset newDataset = new NewDataset();
-			newDataset.setDataSetID(IDNewDataset);
+			newDataset.setDataSetID(newDatasetID);
 
 			Ontology metadataOntology = MetadataOntology.getInstance();
 

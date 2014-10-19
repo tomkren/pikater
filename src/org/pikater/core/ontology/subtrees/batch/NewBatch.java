@@ -16,14 +16,14 @@ public class NewBatch implements AgentAction {
 	public int getBatchId() {
 		return batchId;
 	}
-	public void setBatchId(int batchId) {
+	public void setBatchID(int batchId) {
 		this.batchId = batchId;
 	}
 
 	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserID(int userId) {
 		this.userId = userId;
 	}
 

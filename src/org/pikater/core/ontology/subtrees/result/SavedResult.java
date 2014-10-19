@@ -44,8 +44,8 @@ public class SavedResult {
         return RMSE;
     }
 
-    public void setRMSE(double RMSE) {
-        this.RMSE = RMSE;
+    public void setRMSE(double rMSE) {
+        this.RMSE = rMSE;
     }
 
     public String getAgentOptions() {

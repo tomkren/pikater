@@ -11,8 +11,8 @@ public class Instance implements Concept {
 	 * 
 	 */
 	private static final long serialVersionUID = -767943628175500132L;
-	private List<Double> values;// Double[]
-	private List<Boolean> missing;// Boolean[]
+	private List<Double> values;
+	private List<Boolean> missing;
 
 	/**
 	 * @return the values
@@ -20,13 +20,13 @@ public class Instance implements Concept {
 	public List<Double> getValues() {
 		return values;
 	}
+
 	/**
-	 *            the values to set
+	 * the values to set
 	 */
 	public void setValues(List<Double> values) {
 		this.values = values;
 	}
-
 
 	public List<Boolean> getMissing() {
 		return missing;
@@ -40,14 +40,13 @@ public class Instance implements Concept {
 		values.remove(values.size() - 1);
 		values.add(v);
 	}
-	
-	private boolean isValueMissing(int index)
-	{
+
+	private boolean isValueMissing(int index) {
 		return getMissing().get(index);
 	}
 
 	// ---------------------
-	public String toString(DataInstances _insts) {
+	public String toString(DataInstances insts) {
 		if (values == null) {
 			return "\n";
 		}
@@ -58,8 +57,8 @@ public class Instance implements Concept {
 		for (int indexI = 0; indexI < values.size(); indexI++) {
 
 			double value = getValues().get(indexI);
-			Attribute attr = _insts.getAttributes().get(indexI);
-			
+			Attribute attr = insts.getAttributes().get(indexI);
+
 			if (i > 0) {
 				text.append(',');
 			}
@@ -73,14 +72,16 @@ public class Instance implements Concept {
 		return text.toString();
 	}
 
-	/* index-th value of instance as a string */
-	public String toString(DataInstances _insts, int index) {
+	/**
+	 * index-th value of instance as a string
+	 */
+	public String toString(DataInstances insts, int index) {
 		if (values == null) {
 			return "";
 		}
 		boolean miss = (Boolean) missing.get(index);
 		double value = (Double) values.get(index);
-		Attribute attr = (Attribute) _insts.getAttributes().get(index);
+		Attribute attr = (Attribute) insts.getAttributes().get(index);
 		if (miss) {
 			return "?";
 		} else {

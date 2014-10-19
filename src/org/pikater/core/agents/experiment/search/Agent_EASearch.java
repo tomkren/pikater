@@ -331,8 +331,8 @@ public class Agent_EASearch extends Agent_Search {
         Population combined = replacement.replace(parents, offspring);
         
         if (multiobjective) {
-            NSGAFitnessEvaluator NSGAfit = new NSGAFitnessEvaluator();
-            NSGAfit.evaluate(combined);
+            NSGAFitnessEvaluator nSGAfit = new NSGAFitnessEvaluator();
+            nSGAfit.evaluate(combined);
         }
         
         int envSel = environmentalSelectors.size();

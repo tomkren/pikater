@@ -687,9 +687,9 @@ public class Agent_DataManager extends PikaterAgent {
 		List<JPAExternalAgent> externalAgents = DAOs.externalAgentDAO.getAll();
 
 		List<AgentClass> agentNames = new ArrayList<AgentClass>();
-		for (JPAExternalAgent JPAAgentI : externalAgents) {
+		for (JPAExternalAgent jpaAgentI : externalAgents) {
 			AgentClass agentClass = new AgentClass(
-					JPAAgentI.getAgentClass());
+					jpaAgentI.getAgentClass());
 			
 			agentNames.add(agentClass);
 		}

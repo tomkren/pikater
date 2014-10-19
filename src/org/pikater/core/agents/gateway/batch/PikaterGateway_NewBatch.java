@@ -24,18 +24,18 @@ public class PikaterGateway_NewBatch {
 	
 	/**
 	 * New Batch Inform
-	 * @param IDNewBatch
+	 * @param newBatchID
 	 * @param userID
 	 * @throws PikaterGatewayException
 	 */
-	public static void newBatch(int IDNewBatch, int userID
+	public static void newBatch(int newBatchID, int userID
 			) throws PikaterGatewayException {
 
 		try {
 	        
 	        NewBatch newBatch = new NewBatch();
-	        newBatch.setUserId(userID);
-	        newBatch.setBatchId(IDNewBatch);
+	        newBatch.setUserID(userID);
+	        newBatch.setBatchID(newBatchID);
 
 			Ontology batchOntology = BatchOntology.getInstance();
 

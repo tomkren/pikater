@@ -12,50 +12,50 @@ public class NumericalAttributeMetadata extends AttributeMetadata {
 
 	private static final long serialVersionUID = -4614350036978302414L;
 
-	private double _min;
-	private double _max;
-	private double _avg;
-	private double _median;
-	private double _standardDeviation;
+	private double min;
+	private double max;
+	private double avg;
+	private double median;
+	private double standardDeviation;
 
 	public double getStandardDeviation() {
-		return _standardDeviation;
+		return standardDeviation;
 	}
 
-	public void setStandardDeviation(double _standardDeviation) {
-		this._standardDeviation = _standardDeviation;
+	public void setStandardDeviation(double standardDeviation) {
+		this.standardDeviation = standardDeviation;
 	}
 
 	public double getAvg() {
-		return _avg;
+		return avg;
 	}
 
-	public void setAvg(double _avg) {
-		this._avg = _avg;
+	public void setAvg(double avg) {
+		this.avg = avg;
 	}
 
 	public double getMax() {
-		return _max;
+		return max;
 	}
 
-	public void setMax(double _max) {
-		this._max = _max;
+	public void setMax(double max) {
+		this.max = max;
 	}
 
 	public double getMedian() {
-		return _median;
+		return median;
 	}
 
-	public void setMedian(double _median) {
-		this._median = _median;
+	public void setMedian(double median) {
+		this.median = median;
 	}
 
 	public double getMin() {
-		return _min;
+		return min;
 	}
 
-	public void setMin(double _min) {
-		this._min = _min;
+	public void setMin(double min) {
+		this.min = min;
 	}
 
 	@Override

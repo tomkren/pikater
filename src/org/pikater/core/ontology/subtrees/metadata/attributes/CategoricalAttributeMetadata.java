@@ -12,14 +12,14 @@ public class CategoricalAttributeMetadata extends AttributeMetadata {
 
 	private static final long serialVersionUID = 5050710635914157333L;
 
-	private int _numberOfCategories;
+	private int numberOfCategories;
 
 	public int getNumberOfCategories() {
-		return _numberOfCategories;
+		return numberOfCategories;
 	}
 
-	public void setNumberOfCategories(int _numberOfCategories) {
-		this._numberOfCategories = _numberOfCategories;
+	public void setNumberOfCategories(int numberOfCategories) {
+		this.numberOfCategories = numberOfCategories;
 	}
 
 	@Override
