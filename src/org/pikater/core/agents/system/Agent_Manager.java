@@ -262,10 +262,10 @@ public class Agent_Manager extends PikaterAgent {
 	 */
 	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {
 		// Prepare the subscription message to the request originator
-		@SuppressWarnings("unused")
 		ACLMessage msgOut = originalMessage.createReply();
 		msgOut.setPerformative(result.getPerformative());
 		
+		/*
 		// copy content of inform message to a subscription
 		try {
 			@SuppressWarnings("unused")
@@ -280,6 +280,7 @@ public class Agent_Manager extends PikaterAgent {
 		} catch (OntologyException e) {
 			logException(e.getMessage(), e);
 		}
+		*/
 
 		// go through every subscription
 		java.util.Iterator<Subscription> it = subscriptions.iterator();
