@@ -24,9 +24,6 @@ public class Mailing {
 	 * Sends a plain text email defined by the arguments. Local SMTP
 	 * server needs to be running for this method to work.
 	 * 
-	 * @param to
-	 * @param subject
-	 * @param body
 	 * @throws MessagingException if the email could not be sent
 	 */
 	public static void sendEmail(String to, String subject, String body) throws MessagingException {

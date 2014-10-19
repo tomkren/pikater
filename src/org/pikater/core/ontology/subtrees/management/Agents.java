@@ -11,8 +11,8 @@ public class Agents implements Concept {
 
 	private List<Agent> agents;
 
-	public Agents() { 
-		this.agents=new ArrayList<Agent>();
+	public Agents() {
+		this.agents = new ArrayList<Agent>();
 	}
 
 	public List<Agent> getAgents() {
@@ -23,7 +23,7 @@ public class Agents implements Concept {
 		this.agents = agents;
 	}
 
-	public void add(Agent agent){
+	public void add(Agent agent) {
 		this.agents.add(agent);
 	}
 }

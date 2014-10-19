@@ -1,6 +1,6 @@
-package org.pikater.core.ontology.subtrees.newOption.values;
+package org.pikater.core.ontology.subtrees.newoption.values;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 
 public class NullValue implements IValueData {
 	private static final long serialVersionUID = 4240750027791781820L;

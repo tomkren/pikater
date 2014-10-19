@@ -26,7 +26,7 @@ import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
@@ -399,7 +399,7 @@ public class ComputingAction extends FSMBehaviour {
 				if (success && (resultMsg == null)) {
 
 					if ((agent.currentTask.getSaveMode() != null &&
-							agent.currentTask .getSaveMode().equals("file")) && 
+							"file".equals(agent.currentTask .getSaveMode())) && 
 							!agent.resurrected) {
 						
 						try {
@@ -419,8 +419,8 @@ public class ComputingAction extends FSMBehaviour {
 					}
 
 					if (agent.currentTask.getSaveMode() != null
-							&& agent.currentTask.getSaveMode().equals(
-									"message")) {
+							&& "message".equals(agent.currentTask.getSaveMode()
+									)) {
 						try {
 							eval.setObject(agent.getAgentObject());
 						} catch (IOException e1) {

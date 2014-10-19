@@ -1,7 +1,7 @@
-package org.pikater.core.ontology.subtrees.search.searchItems;
+package org.pikater.core.ontology.subtrees.search.searchitems;
 
 import jade.content.Concept;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 
 import java.util.List;
 import java.util.Random;

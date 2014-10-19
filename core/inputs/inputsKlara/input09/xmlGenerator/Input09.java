@@ -12,7 +12,7 @@ import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchdescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

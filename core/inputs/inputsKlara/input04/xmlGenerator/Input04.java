@@ -6,7 +6,7 @@ import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

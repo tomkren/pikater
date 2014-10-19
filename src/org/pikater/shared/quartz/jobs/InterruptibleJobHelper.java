@@ -22,8 +22,6 @@ public class InterruptibleJobHelper {
 	 * Define and schedule an interruptible job with the given
 	 * arguments.
 	 * 
-	 * @param jobClass
-	 * @param jobArgs
 	 * @throws Exception
 	 */
 	public void start(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Exception {

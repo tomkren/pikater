@@ -14,8 +14,8 @@ import jade.proto.AchieveREResponder;
 import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.GetYourAgentInfo;
 
 public abstract class Agent_AbstractExperiment extends PikaterAgent {
 
@@ -26,7 +26,7 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 
 	protected abstract AgentInfo getAgentInfo();
 	
-	protected void addAgentInfoBehaviour(AgentInfo agentInfo) {
+	protected void addAgentInfoBehaviour() {
 		
 		
 		Ontology ontology = AgentInfoOntology.getInstance();
@@ -43,10 +43,10 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 			protected ACLMessage handleRequest(ACLMessage request)
 					throws NotUnderstoodException, RefuseException {
 				try {
-					Action a = (Action) getContentManager()
+					Action action = (Action) getContentManager()
 							.extractContent(request);
 
-					if (a.getAction() instanceof GetYourAgentInfo) {
+					if (action.getAction() instanceof GetYourAgentInfo) {
 					
 						return respondToGetAgentInfo(request);
 					}

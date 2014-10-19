@@ -1,7 +1,7 @@
 package org.pikater.core.utilities.evolution.individuals;
 
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 
 import java.util.Arrays;

@@ -23,7 +23,6 @@ public class PikaterJobScheduler {
 	 * terminate until you call the {@link #shutdownStaticScheduler} method,
 	 * because there will be active threads.
 	 * 
-	 * @param quartzConfAbsPath
 	 * @throws {@link IllegalStateException}
 	 */
 	public static synchronized void initStaticScheduler(String quartzConfAbsPath) {
@@ -65,7 +64,6 @@ public class PikaterJobScheduler {
 	 * Gets the scheduler or throws an exception if {@link #initStaticScheduler(String)}
 	 * has not been called.
 	 *  
-	 * @return
 	 * @throws {@link IllegalStateException} 
 	 */
 	public static MyJobScheduler getJobScheduler() {

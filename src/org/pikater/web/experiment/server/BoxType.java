@@ -1,6 +1,6 @@
 package org.pikater.web.experiment.server;
 
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchdescription.CARecSearchComplex;
 import org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;

@@ -1,12 +1,12 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated;
 
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.values.DoubleValue;
+import org.pikater.core.ontology.subtrees.newoption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newoption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IComparableValueData;
 import org.pikater.shared.util.Interval;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;

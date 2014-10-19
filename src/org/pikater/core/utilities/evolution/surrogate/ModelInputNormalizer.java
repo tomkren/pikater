@@ -4,8 +4,8 @@
  */
 package org.pikater.core.utilities.evolution.surrogate;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.search.searchitems.IntervalSearchItem;
 
 /**
  * Interface for input normalizers. These are used to normalize the inputs before model creation, 

@@ -1,15 +1,15 @@
-package org.pikater.core.ontology.subtrees.newOption.base;
+package org.pikater.core.ontology.subtrees.newoption.base;
 
 import jade.content.Concept;
 
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newoption.values.NullValue;
+import org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newoption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 import org.pikater.shared.util.ICloneable;
 
 public class ValueType implements Concept, IValidated, ICloneable {

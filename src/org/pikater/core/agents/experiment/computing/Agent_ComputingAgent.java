@@ -1,6 +1,5 @@
 package org.pikater.core.agents.experiment.computing;
 
-import jade.content.Concept;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -35,11 +34,11 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.agentinfo.GetOptions;
 import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.option.GetOptions;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
@@ -63,7 +62,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	private static final String CLASS_NAME = "className";
 
 	// common properties for all computing agents
-	public String trainFileName;
+	public String trainFileName = "";
 	public String testFileName;
 	public String labelFileName = "";
 
@@ -111,11 +110,11 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 	public abstract Date train(Evaluation evaluation) throws Exception;
 
-	public abstract void evaluateCA(EvaluationMethod evaluation_method,
+	public abstract void evaluateCA(EvaluationMethod evaluationMethod,
 			Evaluation evaluation) throws Exception;
 
 	public abstract DataInstances getPredictions(Instances test,
-			DataInstances onto_test);
+			DataInstances ontoTest);
 
 	public abstract String getAgentType();
 
@@ -142,8 +141,10 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
         if (containsArgument(CLASS_NAME)) {
             className = getArgumentValue(CLASS_NAME);
         }
+        /*
         if (isArgumentValueTrue("load")) {
         }
+        */
 
 		// register with the DF
 		if (! this.getAID().getLocalName().contains("Service")) {	
@@ -269,10 +270,10 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 						getContentManager().extractContent(request);
 					
 					if (action.getAction() instanceof GetOptions) {
-						return respondToGetOptions(request, action);
+						return respondToGetOptions(request);
 
 					} else if (action.getAction() instanceof ExecuteTask) {
-						return respondExecuteTask(request, action);
+						return respondExecuteTask(request);
 					}
 
 					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
@@ -288,13 +289,13 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 	}
 	
-	private ACLMessage respondToGetOptions(ACLMessage request, Concept concept) {
+	private ACLMessage respondToGetOptions(ACLMessage request) {
 		
 		return ComputingCommunicator.sendOptions(
 				Agent_ComputingAgent.this, request);
 	}
 	
-	private ACLMessage respondExecuteTask(ACLMessage request, Action a) {
+	private ACLMessage respondExecuteTask(ACLMessage request) {
 		
 		return ComputingCommunicator.handleTask(this, request);
 	}

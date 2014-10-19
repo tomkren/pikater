@@ -1,6 +1,6 @@
-package org.pikater.core.ontology.subtrees.newOption.restrictions;
+package org.pikater.core.ontology.subtrees.newoption.restrictions;
 
-import org.pikater.core.ontology.subtrees.newOption.base.IValidated;
+import org.pikater.core.ontology.subtrees.newoption.base.IValidated;
 import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;

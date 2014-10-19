@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent;
 
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.logging.web.PikaterWebLogger;

@@ -12,8 +12,6 @@ import java.util.Set;
  * 
  * @author SkyCrawl
  *
- * @param <K>
- * @param <V>
  */
 public class BidiMap<K, V> implements Serializable {
 	private static final long serialVersionUID = 5011484513683193827L;

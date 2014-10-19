@@ -1,11 +1,11 @@
 package org.pikater.core.ontology;
 
 import org.jfree.util.Log;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
-import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.searchitems.SearchItem;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 import jade.content.onto.BeanOntology;

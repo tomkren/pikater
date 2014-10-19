@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.experiment.UniversalElementOntology;
 import org.pikater.shared.util.collections.CollectionUtils;
 
@@ -20,7 +20,7 @@ public class DataProcessing implements IDataProvider {
 
 	private int id = -1;
 	private String agentType;
-	
+
 	private List<NewOption> options;
 	private List<ErrorSourceDescription> errors;
 	private List<DataSourceDescription> dataSources;
@@ -30,10 +30,11 @@ public class DataProcessing implements IDataProvider {
 		this.errors = new ArrayList<ErrorSourceDescription>();
 		this.dataSources = new ArrayList<DataSourceDescription>();
 	}
-			
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -41,6 +42,7 @@ public class DataProcessing implements IDataProvider {
 	public String getAgentType() {
 		return agentType;
 	}
+
 	public void setAgentType(String agentType) {
 		this.agentType = agentType;
 	}
@@ -48,6 +50,7 @@ public class DataProcessing implements IDataProvider {
 	public List<NewOption> getOptions() {
 		return options;
 	}
+
 	public void setOptions(List<NewOption> options) {
 		this.options = options;
 	}
@@ -55,29 +58,33 @@ public class DataProcessing implements IDataProvider {
 	public List<ErrorSourceDescription> getErrors() {
 		return errors;
 	}
+
 	public void setErrors(List<ErrorSourceDescription> errors) {
 		this.errors = errors;
 	}
 
-    public List<DataSourceDescription> getDataSources() {
-        return dataSources;
-    }
-    public void setDataSources(List<DataSourceDescription> dataSources) {
-        this.dataSources = dataSources;
-    }
-    public void addDataSources(DataSourceDescription dataSources) {
-    	
-    	if (dataSources == null) {
-    		throw new IllegalArgumentException("Argument dataSources can't be null");
-    	}
-        this.dataSources.add(dataSources);
-    }
+	public List<DataSourceDescription> getDataSources() {
+		return dataSources;
+	}
 
-	
+	public void setDataSources(List<DataSourceDescription> dataSources) {
+		this.dataSources = dataSources;
+	}
+
+	public void addDataSources(DataSourceDescription dataSources) {
+
+		if (dataSources == null) {
+			throw new IllegalArgumentException(
+					"Argument dataSources can't be null");
+		}
+		this.dataSources.add(dataSources);
+	}
+
 	@Override
 	public List<NewOption> exportAllOptions() {
 		return this.options;
 	}
+
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		if (options == null) {
@@ -85,37 +92,37 @@ public class DataProcessing implements IDataProvider {
 		}
 		this.options = options;
 	}
-		
+
 	@Override
-	public List<DataSourceDescription> exportAllDataSourceDescriptions() {		
+	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
 		return this.dataSources;
 	}
+
 	@Override
 	public void importAllDataSourceDescriptions(
 			List<DataSourceDescription> dataSourceDescriptions) {
 		this.dataSources = dataSourceDescriptions;
 	}
-	
+
 	@Override
 	public List<ErrorSourceDescription> exportAllErrors() {
 		return this.errors;
 	}
+
 	@Override
 	public void importAllErrors(List<ErrorSourceDescription> errors) {
 		this.errors = errors;
 	}
-	
-	public int generateIDs(int lastUsedId)
-	{
-		if (getId() == -1)
-		{
+
+	public int generateIDs(int lastUsedId) {
+		if (getId() == -1) {
 			setId(lastUsedId + 1);
 		}
 		return getId();
 	}
 
 	public UniversalElementOntology exportUniversalOntology() {
-		
+
 		UniversalElementOntology ontologyInfo = new UniversalElementOntology();
 		ontologyInfo.setId(getId());
 		ontologyInfo.setOntologyClass(getClass());
@@ -125,11 +132,13 @@ public class DataProcessing implements IDataProvider {
 			ontologyInfo.setAgentClass(getAgentType());
 		}
 		ontologyInfo.setOptions(new NewOptions(exportAllOptions()));
-		
+
 		return ontologyInfo;
 	}
-	public static DataProcessing importUniversalOntology(UniversalElementOntology uOntology) {
-		
+
+	public static DataProcessing importUniversalOntology(
+			UniversalElementOntology uOntology) {
+
 		Constructor<?> cons = null;
 		try {
 			cons = uOntology.getOntologyClass().getConstructor();
@@ -138,7 +147,7 @@ public class DataProcessing implements IDataProvider {
 		} catch (SecurityException e) {
 			Log.error(e.getMessage(), e);
 		}
-		
+
 		Object object = null;
 		try {
 			object = cons.newInstance();
@@ -151,50 +160,48 @@ public class DataProcessing implements IDataProvider {
 		} catch (InvocationTargetException e) {
 			Log.error(e.getMessage(), e);
 		}
-		
+
 		DataProcessing dataProcess = (DataProcessing) object;
 		dataProcess.setId(uOntology.getId());
 		if (uOntology.getAgentClass() == null) {
 			dataProcess.setAgentType(null);
 		} else {
-			dataProcess.setAgentType(uOntology.getAgentClass());	
+			dataProcess.setAgentType(uOntology.getAgentClass());
 		}
 		dataProcess.importAllOptions(uOntology.getOptions().getOptions());
-		
+
 		return dataProcess;
 	}
-	
+
 	@Override
 	public boolean equalsElement(IComputationElement element) {
-		
+
 		return this.getId() == element.getId();
 	}
-	
+
 	@Override
-	public DataProcessing clone()
-	{
+	public DataProcessing clone() {
 		DataProcessing dataProcessing = null;
-		try
-		{
+		try {
 			dataProcessing = (DataProcessing) super.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
+		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		dataProcessing.setId(this.id);
 		dataProcessing.setAgentType(this.getAgentType());
-		dataProcessing.importAllErrors(CollectionUtils.deepCopy(exportAllErrors()));
-		dataProcessing.importAllOptions(CollectionUtils.deepCopy(exportAllOptions()));
-		dataProcessing.importAllDataSourceDescriptions(CollectionUtils.deepCopy(exportAllDataSourceDescriptions()));
+		dataProcessing.importAllErrors(
+				CollectionUtils.deepCopy(exportAllErrors()));
+		dataProcessing.importAllOptions(
+				CollectionUtils.deepCopy(exportAllOptions()));
+		dataProcessing.importAllDataSourceDescriptions(
+				CollectionUtils.deepCopy(exportAllDataSourceDescriptions()));
 		return dataProcessing;
 	}
 
-
-	public void cloneSources()
-	{
-		importAllDataSourceDescriptions(CollectionUtils.deepCopy(exportAllDataSourceDescriptions()));
+	public void cloneSources() {
+		importAllDataSourceDescriptions(CollectionUtils
+				.deepCopy(exportAllDataSourceDescriptions()));
 		importAllErrors(CollectionUtils.deepCopy(exportAllErrors()));
 	}
 }

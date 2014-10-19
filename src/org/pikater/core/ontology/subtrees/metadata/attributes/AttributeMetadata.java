@@ -3,77 +3,79 @@
  * and open the template in the editor.
  */
 package org.pikater.core.ontology.subtrees.metadata.attributes;
+
 import jade.content.Concept;
 
 /**
  * Metadata of one attribute
+ * 
  * @author Kuba
  */
 public class AttributeMetadata implements Concept {
 
 	private static final long serialVersionUID = -1009786277447730894L;
 
-	private double _ratioOfMissingValues=0;
-    private int _order;
-    private double _entropy=0;
-    private double _attributeClassEntropy=0;
+	private double _ratioOfMissingValues = 0;
+	private int _order;
+	private double _entropy = 0;
+	private double _attributeClassEntropy = 0;
 
-    public double getAttributeClassEntropy() {
-        return _attributeClassEntropy;
-    }
+	public double getAttributeClassEntropy() {
+		return _attributeClassEntropy;
+	}
 
-    public void setAttributeClassEntropy(double _attributeClassEntropy) {
-        this._attributeClassEntropy = _attributeClassEntropy;
-    }
+	public void setAttributeClassEntropy(double _attributeClassEntropy) {
+		this._attributeClassEntropy = _attributeClassEntropy;
+	}
 
-    public double getEntropy() {
-        return _entropy;
-    }
+	public double getEntropy() {
+		return _entropy;
+	}
 
-    public void setEntropy(double _entropy) {
-        this._entropy = _entropy;
-    }
-    private String _name;    
-    private boolean _isTarget;
+	public void setEntropy(double _entropy) {
+		this._entropy = _entropy;
+	}
 
-    public boolean isIsTarget() {
-        return _isTarget;
-    }
+	private String _name;
+	private boolean _isTarget;
 
-    public void setIsTarget(boolean _isTarget) {
-        this._isTarget = _isTarget;
-    }
+	public boolean isIsTarget() {
+		return _isTarget;
+	}
 
-    public int getOrder() {
-        return _order;
-    }
+	public void setIsTarget(boolean _isTarget) {
+		this._isTarget = _isTarget;
+	}
 
-    public void setOrder(int _order) {
-        this._order = _order;
-    }
+	public int getOrder() {
+		return _order;
+	}
 
-    public String getName() {
-        return _name;
-    }
+	public void setOrder(int _order) {
+		this._order = _order;
+	}
 
-    public void setName(String _name) {
-        this._name = _name;
-    }
+	public String getName() {
+		return _name;
+	}
 
-    public boolean getHasMissingValues() {
-        return getRatioOfMissingValues()==0;
-    }
-    
-    public double getRatioOfMissingValues() {
-        return _ratioOfMissingValues;
-    }
+	public void setName(String _name) {
+		this._name = _name;
+	}
 
-    public void setRatioOfMissingValues(double _ratioOfMissingValues) {
-        this._ratioOfMissingValues = _ratioOfMissingValues;
-    }
-    
-    public String getType()
-    {
-        return "Base";
-    }
+	public boolean getHasMissingValues() {
+		return getRatioOfMissingValues() == 0;
+	}
+
+	public double getRatioOfMissingValues() {
+		return _ratioOfMissingValues;
+	}
+
+	public void setRatioOfMissingValues(double _ratioOfMissingValues) {
+		this._ratioOfMissingValues = _ratioOfMissingValues;
+	}
+
+	public String getType() {
+		return "Base";
+	}
 }

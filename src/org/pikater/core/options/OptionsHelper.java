@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration.DurationType;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.Value;
+import org.pikater.core.ontology.subtrees.newoption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newoption.values.NullValue;
+import org.pikater.core.ontology.subtrees.newoption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
 
 /**
  * 

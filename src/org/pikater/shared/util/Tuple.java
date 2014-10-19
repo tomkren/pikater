@@ -5,8 +5,6 @@ package org.pikater.shared.util;
  * 
  * @author SkyCrawl
  *
- * @param <V1>
- * @param <V2>
  */
 public class Tuple<V1, V2> {
 	private V1 value1;

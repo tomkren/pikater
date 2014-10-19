@@ -1,6 +1,6 @@
-package org.pikater.core.ontology.subtrees.newOption.values.interfaces;
+package org.pikater.core.ontology.subtrees.newoption.values.interfaces;
 
-import org.pikater.core.ontology.subtrees.newOption.base.IWekaItem;
+import org.pikater.core.ontology.subtrees.newoption.base.IWekaItem;
 import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;

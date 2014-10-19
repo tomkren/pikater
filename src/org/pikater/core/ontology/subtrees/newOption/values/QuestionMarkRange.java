@@ -1,8 +1,8 @@
-package org.pikater.core.ontology.subtrees.newOption.values;
+package org.pikater.core.ontology.subtrees.newoption.values;
 
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
+import org.pikater.core.ontology.subtrees.newoption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValidatedValueData;
 
 public class QuestionMarkRange implements IValidatedValueData {
 	private static final long serialVersionUID = 4064649544713291827L;

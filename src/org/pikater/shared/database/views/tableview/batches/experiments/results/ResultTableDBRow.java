@@ -2,7 +2,7 @@ package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
 import java.util.Locale;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.views.base.ITableColumn;
@@ -67,8 +67,8 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 			 * And then custom actions.
 			 */
 		case TRAINED_MODEL:
-			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
-			{
+			return new NamedActionDBViewValue("Download") {
+			// no DB changes needed - this is completely GUI managed
 				@Override
 				public boolean isEnabled() {
 					return result.getCreatedModel() != null;
@@ -83,8 +83,8 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case VISUALIZE:
-			return new NamedActionDBViewValue("Visualize") // no DB changes needed - this is completely GUI managed
-			{
+			return new NamedActionDBViewValue("Visualize") {
+			// no DB changes needed - this is completely GUI managed
 				@Override
 				public boolean isEnabled() {
 					if (result.hasAnOutput()) {
@@ -104,8 +104,8 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case COMPARE:
-			return new NamedActionDBViewValue("Compare") // no DB changes needed - this is completely GUI managed
-			{
+			return new NamedActionDBViewValue("Compare") {
+			// no DB changes needed - this is completely GUI managed
 				@Override
 				public boolean isEnabled() {
 					if (result.hasAnInput() && result.hasAnOutput()) {

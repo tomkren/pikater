@@ -16,7 +16,7 @@ import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.logging.core.ConsoleLogger;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.CategoricalAttributeMetadata;

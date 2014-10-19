@@ -16,6 +16,17 @@ import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 
 public class PikaterGateway_NewDataset {
 
+	/**
+	 * Constructor
+	 */
+	private PikaterGateway_NewDataset() {
+	}
+	
+	/**
+	 * New DataSet Inform
+	 * @param IDNewDataset
+	 * @throws PikaterGatewayException
+	 */
 	public static void newDataset(int IDNewDataset) throws PikaterGatewayException {
 
 		try {

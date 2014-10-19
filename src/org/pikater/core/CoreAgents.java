@@ -3,10 +3,10 @@ package org.pikater.core;
 /**
  * 
  * Enum represents the names of system agents
- *
+ * 
  */
 public enum CoreAgents {
-	
+
 	INITIATOR("Initiator"),
 	DATA_MANAGER("DataManager"),
 	GUI_AGENTS_COMMUNICATOR("GuiAgentsCommunicator"),
@@ -24,13 +24,13 @@ public enum CoreAgents {
 	MAILING("Mailing"),
 	DURATION("Duration"),
 	DURATION_SERVICE("DurationServiceRegression");
-	
+
 	private final String name;
-	
+
 	private CoreAgents(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

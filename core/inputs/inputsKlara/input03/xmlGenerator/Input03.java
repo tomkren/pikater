@@ -5,7 +5,7 @@ import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 
 import java.io.FileNotFoundException;
 

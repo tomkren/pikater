@@ -4,8 +4,8 @@ import jade.content.AgentAction;
 
 import java.util.List;
 
-public class ExecuteParameters implements AgentAction{
-	
+public class ExecuteParameters implements AgentAction {
+
 	/**
 	 * 
 	 */
@@ -17,6 +17,7 @@ public class ExecuteParameters implements AgentAction{
 	public List<SearchSolution> getSolutions() {
 		return solutions;
 	}
+
 	public void setSolutions(List<SearchSolution> solutions) {
 		this.solutions = solutions;
 	}

@@ -40,8 +40,6 @@ public abstract class AbstractJobWithArgs implements Job {
 	/**
 	 * Gets the argument this job received with the given index.
 	 * 
-	 * @param index
-	 * @return
 	 * @throws JobExecutionException
 	 */
 	@SuppressWarnings("unchecked")
@@ -80,21 +78,16 @@ public abstract class AbstractJobWithArgs implements Job {
 	 * Determines whether the argument has a correct type and 
 	 * possibly even content.
 	 *  
-	 * @param index
-	 * @param arg
-	 * @return
 	 */
 	public abstract boolean argumentCorrect(Object argument, int argIndex);
 
 	/**
 	 * Defines (most importantly) job identity if needed.
-	 * @param builder
 	 */
 	public abstract void buildJob(JobBuilder builder);
 
 	/**
 	 * Gets the schedule for this job.
-	 * @return
 	 */
 	public abstract Trigger getJobTrigger();
 

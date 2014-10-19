@@ -9,11 +9,11 @@ public class Results implements Concept {
 
 	/**
 	 * 
-	 */	
+	 */
 	private static final long serialVersionUID = -3411423409276645995L;
-	
-	private float maxValue = (float)Integer.MAX_VALUE;
-	
+
+	private float maxValue = (float) Integer.MAX_VALUE;
+
 	private String problemId;
 	private Id taskId;
 
@@ -25,10 +25,11 @@ public class Results implements Concept {
 	private float avgRootRelativeSquaredError = -1;
 
 	private List results;
-	
+
 	public String getProblemId() {
 		return problemId;
 	}
+
 	public void setProblemId(String problemId) {
 		this.problemId = problemId;
 	}
@@ -36,6 +37,7 @@ public class Results implements Concept {
 	public Id getTaskId() {
 		return taskId;
 	}
+
 	public void setTaskId(Id taskId) {
 		this.taskId = taskId;
 	}
@@ -43,6 +45,7 @@ public class Results implements Concept {
 	public List getResults() {
 		return results;
 	}
+
 	public void setResults(List results) {
 		this.results = results;
 	}
@@ -50,11 +53,11 @@ public class Results implements Concept {
 	public float getAvgErrorRate() {
 		return avgErrorRate;
 	}
+
 	public void setAvgErrorRate(float avgErrorRate) {
-		if (Float.isInfinite(avgErrorRate)){
+		if (Float.isInfinite(avgErrorRate)) {
 			this.avgErrorRate = maxValue;
-		}
-		else{
+		} else {
 			this.avgErrorRate = avgErrorRate;
 		}
 	}
@@ -62,11 +65,11 @@ public class Results implements Concept {
 	public float getAvgKappaStatistic() {
 		return avgKappaStatistic;
 	}
+
 	public void setAvg_kappa_statistic(float avgKappaStatistic) {
-		if (Float.isInfinite(avgKappaStatistic)){
+		if (Float.isInfinite(avgKappaStatistic)) {
 			this.avgKappaStatistic = maxValue;
-		}
-		else{
+		} else {
 			this.avgKappaStatistic = avgKappaStatistic;
 		}
 	}
@@ -74,11 +77,11 @@ public class Results implements Concept {
 	public float getAvgMeanAbsoluteError() {
 		return avgMeanAbsoluteError;
 	}
+
 	public void setAvgMeanAbsoluteError(float avgMeanAbsoluteError) {
-		if (Float.isInfinite(avgMeanAbsoluteError)){
+		if (Float.isInfinite(avgMeanAbsoluteError)) {
 			this.avgMeanAbsoluteError = maxValue;
-		}
-		else{		
+		} else {
 			this.avgMeanAbsoluteError = avgMeanAbsoluteError;
 		}
 	}
@@ -86,11 +89,11 @@ public class Results implements Concept {
 	public float getAvgRootMeanSquaredError() {
 		return avgRootMeanSquaredError;
 	}
+
 	public void setAvg_root_mean_squared_error(float avgRootMeanSquaredError) {
-		if (Float.isInfinite(avgRootMeanSquaredError)){
+		if (Float.isInfinite(avgRootMeanSquaredError)) {
 			this.avgRootMeanSquaredError = maxValue;
-		}
-		else{
+		} else {
 			this.avgRootMeanSquaredError = avgRootMeanSquaredError;
 		}
 	}
@@ -98,11 +101,11 @@ public class Results implements Concept {
 	public float getAvgRelativeAbsoluteError() {
 		return avgRelativeAbsoluteError;
 	}
+
 	public void setAvgRelativeAbsoluteError(float avgRelativeAbsoluteError) {
-		if (Float.isInfinite(avgRelativeAbsoluteError)){
+		if (Float.isInfinite(avgRelativeAbsoluteError)) {
 			this.avgRelativeAbsoluteError = maxValue;
-		}
-		else{
+		} else {
 			this.avgRelativeAbsoluteError = avgRelativeAbsoluteError;
 		}
 	}
@@ -110,14 +113,13 @@ public class Results implements Concept {
 	public float getAvgRootRelativeSquaredError() {
 		return avgRootRelativeSquaredError;
 	}
-	public void setAvgRootRelativeSquaredError(
-			float avgRootRelativeSquaredError) {
-		if (Float.isInfinite(avgRootRelativeSquaredError)){
+
+	public void setAvgRootRelativeSquaredError(float avgRootRelativeSquaredError) {
+		if (Float.isInfinite(avgRootRelativeSquaredError)) {
 			this.avgRootRelativeSquaredError = maxValue;
-		}
-		else{		
+		} else {
 			this.avgRootRelativeSquaredError = avgRootRelativeSquaredError;
 		}
 	}
-	
+
 }
