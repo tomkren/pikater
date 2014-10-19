@@ -113,8 +113,8 @@ public class IOUtils {
 	 * </ol>
 	 * 
 	 */
-	public static String getAbsolutePath(Class<?> clazz) {
-		return joinPathComponents(getAbsoluteSRCPath(), clazz.getPackage().getName().replace(".", System.getProperty("file.separator"))) + System.getProperty("file.separator");
+	public static String getRelativePath(Class<?> clazz) {
+		return clazz.getPackage().getName().replace(".", System.getProperty("file.separator"));
 	}
 
 	//----------------------------------------------------------------------------------------------------------------
