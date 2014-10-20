@@ -25,8 +25,8 @@ public class ManagerService {
 			int userID, int newBatchID) {
 		
 		NewBatch newBatch = new NewBatch();
-		newBatch.setUserID(userID);
-		newBatch.setBatchID(newBatchID);
+		newBatch.setUserId(userID);
+		newBatch.setBatchId(newBatchID);
         
         Ontology ontology = BatchOntology.getInstance();
 

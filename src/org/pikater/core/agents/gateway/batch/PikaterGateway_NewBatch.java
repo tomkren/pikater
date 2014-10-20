@@ -34,8 +34,8 @@ public class PikaterGateway_NewBatch {
 		try {
 	        
 	        NewBatch newBatch = new NewBatch();
-	        newBatch.setUserID(userID);
-	        newBatch.setBatchID(newBatchID);
+	        newBatch.setUserId(userID);
+	        newBatch.setBatchId(newBatchID);
 
 			Ontology batchOntology = BatchOntology.getInstance();
 
