@@ -113,12 +113,12 @@ public class ImageRenderer implements RendererInterface {
 		affineTransform.rotate(Math.toRadians(rotationDegree), rotationX, rotationY);
 
 		switch (textAlignment) {
-		case Left:
+		case LEFT:
 			break;
-		case Center:
+		case CENTER:
 			affineTransform.translate(-fm.stringWidth(text) / 2, 0);
 			break;
-		case Right:
+		case RIGHT:
 			affineTransform.translate(-fm.stringWidth(text), 0);
 			break;
 		default:

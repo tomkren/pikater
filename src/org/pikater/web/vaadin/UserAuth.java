@@ -35,7 +35,7 @@ public class UserAuth {
 		if (WebAppConfiguration.avoidUsingDBForNow()) {
 			return JPAUser.getDummy();
 		} else {
-			return DAOs.userDAO.getByID(getUserID(session),
+			return DAOs.USERDAO.getByID(getUserID(session),
 					EmptyResultAction.LOG_NULL);
 		}
 	}

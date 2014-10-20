@@ -94,22 +94,22 @@ public class ExperimentGraphValidator {
 								registerValidationProblem("At least one of 'FileInput' boxes has the invalid default value set in the 'fileURI' option.");
 							}
 						}
-						validateBoxSlot(box, SlotDirection.OUTPUT, CoreConstant.SlotContent.FILE_DATA.getSlotName()); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.OUTPUT, CoreConstant.SlotContent.FILEDATA.getSlotName()); // potentially duplicate check but it is needed
 						break;
 					case CHOOSE:
 						break;
 					case COMPOSITE:
 						break;
 					case COMPUTE:
-						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.TRAINING_DATA.getSlotName()); // potentially duplicate check but it is needed
-						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.TESTING_DATA.getSlotName()); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.TRAININGDATA.getSlotName()); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.TESTINGDATA.getSlotName()); // potentially duplicate check but it is needed
 						break;
 					case MISC:
 						break;
 					case OPTION:
 						break;
 					case OUTPUT:
-						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.FILE_DATA.getSlotName()); // potentially duplicate check but it is needed
+						validateBoxSlot(box, SlotDirection.INPUT, CoreConstant.SlotContent.FILEDATA.getSlotName()); // potentially duplicate check but it is needed
 						break;
 					case PROCESS_DATA:
 						break;

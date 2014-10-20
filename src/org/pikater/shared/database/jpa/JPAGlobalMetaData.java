@@ -58,7 +58,7 @@ public class JPAGlobalMetaData extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "GlobalMetaData";
+	public static final String ENTITYNAME = "GlobalMetaData";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

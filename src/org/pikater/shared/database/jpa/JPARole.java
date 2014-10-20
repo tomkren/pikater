@@ -90,7 +90,7 @@ public class JPARole extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "Role";
+	public static final String ENTITYNAME = "Role";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

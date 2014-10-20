@@ -89,7 +89,7 @@ public class JPAModel extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "Model";
+	public static final String ENTITYNAME = "Model";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

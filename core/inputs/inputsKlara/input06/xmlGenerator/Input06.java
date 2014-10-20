@@ -60,12 +60,12 @@ public final class Input06 {
 		// Data processed by dp are the new datasource
 		DataSourceDescription dataSourceSunny = new DataSourceDescription();
 		dataSourceSunny.setOutputType("sunnyOutput");
-		dataSourceSunny.setInputType(CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
+		dataSourceSunny.setInputType(CoreConstant.SlotContent.TRAININGDATA.getSlotName());
 		dataSourceSunny.setDataProvider(dp);
 
 		DataSourceDescription dataSourceRainy = new DataSourceDescription();
 		dataSourceRainy.setOutputType("sunnyOutput");
-		dataSourceRainy.setInputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
+		dataSourceRainy.setInputType(CoreConstant.SlotContent.TESTINGDATA.getSlotName());
 		dataSourceRainy.setDataProvider(dp);
 		
 		// Create new computing agent, add options and datasource that we have
@@ -80,7 +80,7 @@ public final class Input06 {
 		comAgent.setEvaluationMethod(evaluationMethod);
 
 		DataSourceDescription computingAgentDataSource = new DataSourceDescription();
-		computingAgentDataSource.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
+		computingAgentDataSource.setOutputType(CoreConstant.SlotContent.COMPUTEDDATA.getSlotName());
 		computingAgentDataSource.setDataProvider(comAgent);
 
 		// Save labeled data

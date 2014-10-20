@@ -76,7 +76,7 @@ public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends Abstr
 
 		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
 		if (specificColumn == ExperimentTableDBView.Column.BEST_MODEL) {
-			final JPAModel modelToServe = DAOs.resultDAO.getByExperimentBestResult(specificRow.getExperiment()).getCreatedModel();
+			final JPAModel modelToServe = DAOs.RESULTDAO.getByExperimentBestResult(specificRow.getExperiment()).getCreatedModel();
 			try {
 				UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource() {
 					@Override

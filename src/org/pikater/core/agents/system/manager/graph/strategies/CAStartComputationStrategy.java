@@ -202,14 +202,14 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		agent.setOptions(usedoptions.getOptions());
 		
 		Datas datas = new Datas();
-        DataSourceEdge trainingEdge = (DataSourceEdge)inputs.get(CoreConstant.SlotContent.TRAINING_DATA.getSlotName()).getNext();
+        DataSourceEdge trainingEdge = (DataSourceEdge)inputs.get(CoreConstant.SlotContent.TRAININGDATA.getSlotName()).getNext();
         DataSourceEdge testingEdge;
 		String training = trainingEdge.getDataSourceId();
-		if( inputs.get(CoreConstant.SlotContent.TESTING_DATA.getSlotName()) == null){
+		if( inputs.get(CoreConstant.SlotContent.TESTINGDATA.getSlotName()) == null){
 			testingEdge=trainingEdge;
 		} else {
 
-			testingEdge = ((DataSourceEdge) inputs.get(CoreConstant.SlotContent.TESTING_DATA.getSlotName()).getNext());
+			testingEdge = ((DataSourceEdge) inputs.get(CoreConstant.SlotContent.TESTINGDATA.getSlotName()).getNext());
 		}
 
         if (trainingEdge.isFile()) {

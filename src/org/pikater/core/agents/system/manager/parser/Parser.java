@@ -420,7 +420,7 @@ public class Parser {
         alreadyProcessed.put(recommender.getId(), recNode);
 
         ComputationOutputBuffer buffer = child.getInputs().get(
-        		CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
+        		CoreConstant.SlotContent.TRAININGDATA.getSlotName());
         
         DataSourceEdge ds = (DataSourceEdge) buffer.getNext();
         DataSourceEdge copy = new DataSourceEdge();
@@ -431,7 +431,7 @@ public class Parser {
         training.setTarget(recNode);
         
         String trainingSlot =
-        		CoreConstant.SlotContent.TRAINING_DATA.getSlotName();
+        		CoreConstant.SlotContent.TRAININGDATA.getSlotName();
         recNode.addInput(trainingSlot, training);
 
         for (ErrorSourceDescription error : recommender.getErrors()) {

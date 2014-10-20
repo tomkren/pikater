@@ -162,15 +162,15 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		float[] res = new float[3];
 		
 		Eval e0 = eval.exportEvalByName(
-				CoreConstant.Error.ERROR_RATE.name());
+				CoreConstant.Error.ERRORRATE.name());
 		res[0] = e0.getValue();
 		
 		Eval e1 = eval.exportEvalByName(
-				CoreConstant.Error.ROOT_MEAN_SQUARED.name());
+				CoreConstant.Error.ROOTMEANSQUARED.name());
 		res[1] = e1.getValue();
 		
 		Eval e2 = eval.exportEvalByName(
-				CoreConstant.Error.KAPPA_STATISTIC.name());
+				CoreConstant.Error.KAPPASTATISTIC.name());
 		res[2] = e2.getValue();
 		
 		return res;
@@ -194,17 +194,17 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		List<Eval> evals = new ArrayList<Eval>();
 		
 		Eval evalErrorRate = new Eval();
-		evalErrorRate.setName(CoreConstant.Error.ERROR_RATE.name());
+		evalErrorRate.setName(CoreConstant.Error.ERRORRATE.name());
 		evalErrorRate.setValue(fitness[0]);
 		evals.add(evalErrorRate);
 		
 		Eval evalMeanSquared = new Eval();
-		evalMeanSquared.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());			
+		evalMeanSquared.setName(CoreConstant.Error.ROOTMEANSQUARED.name());			
 		evalMeanSquared.setValue(fitness[1]);				
 		evals.add(evalMeanSquared);
 		
 		Eval evalKappa = new Eval();
-		evalKappa.setName(CoreConstant.Error.KAPPA_STATISTIC.name());
+		evalKappa.setName(CoreConstant.Error.KAPPASTATISTIC.name());
 		evalKappa.setValue(fitness[2]);
 		evals.add(evalKappa);
 		

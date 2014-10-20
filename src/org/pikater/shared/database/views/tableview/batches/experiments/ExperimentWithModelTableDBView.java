@@ -18,8 +18,8 @@ public class ExperimentWithModelTableDBView extends ExperimentTableDBView {
 
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
-		List<JPAExperiment> experiments = DAOs.experimentDAO.getByBatchWithModel(batch, constraints.getOffset(), constraints.getMaxResults());
-		int experimentCount = DAOs.experimentDAO.getByBatchWithModelCount(batch);
+		List<JPAExperiment> experiments = DAOs.EXPERIMENTDAO.getByBatchWithModel(batch, constraints.getOffset(), constraints.getMaxResults());
+		int experimentCount = DAOs.EXPERIMENTDAO.getByBatchWithModelCount(batch);
 
 		List<ExperimentTableDBRow> resultRows = new ArrayList<ExperimentTableDBRow>();
 		for (JPAExperiment experiment : experiments) {

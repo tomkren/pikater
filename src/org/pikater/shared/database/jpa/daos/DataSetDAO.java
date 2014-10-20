@@ -39,7 +39,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 
 	@Override
 	public String getEntityName() {
-		return JPADataSetLO.EntityName;
+		return JPADataSetLO.ENTITYNAME;
 	}
 
 	protected Path<Object> convertColumnToJPAParam(ITableColumn column) {
@@ -61,7 +61,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 	}
 
 	private Predicate createAllUserUploadPredicate() {
-		return getCriteriaBuilder().equal(getRoot().get("source"), JPADatasetSource.USER_UPLOAD);
+		return getCriteriaBuilder().equal(getRoot().get("source"), JPADatasetSource.USERUPLOAD);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 	}
 
 	private Predicate createUserUploadVisiblePredicate() {
-		return getCriteriaBuilder().and(getCriteriaBuilder().equal(getRoot().get("source"), JPADatasetSource.USER_UPLOAD), getCriteriaBuilder().equal(getRoot().get("visible"), true));
+		return getCriteriaBuilder().and(getCriteriaBuilder().equal(getRoot().get("source"), JPADatasetSource.USERUPLOAD), getCriteriaBuilder().equal(getRoot().get("visible"), true));
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 	}
 
 	public List<JPADataSetLO> getAllUserUploaded() {
-		return this.getAllBySource(JPADatasetSource.USER_UPLOAD);
+		return this.getAllBySource(JPADatasetSource.USERUPLOAD);
 	}
 
 	public List<JPADataSetLO> getAllExperimentUploaded() {
@@ -122,7 +122,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 
 	private Predicate createByOwnerUserUploadVisiblePredicate(JPAUser owner) {
 		CriteriaBuilder cb = getCriteriaBuilder();
-		Predicate pred = cb.equal(getRoot().get("source"), JPADatasetSource.USER_UPLOAD);
+		Predicate pred = cb.equal(getRoot().get("source"), JPADatasetSource.USERUPLOAD);
 		pred = cb.and(pred, cb.equal(getRoot().get("owner"), owner));
 		pred = cb.and(pred, cb.equal(getRoot().get("visible"), true));
 
@@ -176,7 +176,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 		p = cb.and(p, cb.isNotNull(r.get("globalMetaData")));
 
 		//we want user uploaded datasets
-		p = cb.and(p, cb.equal(r.get("source"), JPADatasetSource.USER_UPLOAD));
+		p = cb.and(p, cb.equal(r.get("source"), JPADatasetSource.USERUPLOAD));
 
 		cq = cq.where(p);
 		return em.createQuery(cq).getResultList();
@@ -227,7 +227,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 		p = cb.and(p, cb.isNotNull(r.get("globalMetaData")));
 
 		//we want user uploaded datasets
-		p = cb.and(p, cb.equal(r.get("source"), JPADatasetSource.USER_UPLOAD));
+		p = cb.and(p, cb.equal(r.get("source"), JPADatasetSource.USERUPLOAD));
 
 		Subquery<JPAResult> subquery = cq.subquery(JPAResult.class);
 		Root<JPAResult> sqroot = subquery.from(JPAResult.class);
@@ -250,7 +250,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 	 */
 	public int storeNewDataSet(File sourceFile, String realFilename, String description, int userID, JPADatasetSource datasetSource) throws IOException {
 
-		JPAUser owner = DAOs.userDAO.getByID(userID);
+		JPAUser owner = DAOs.USERDAO.getByID(userID);
 
 		JPADataSetLO newDSLO = new JPADataSetLO();
 		newDSLO.setCreated(new Date());
@@ -260,7 +260,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 
 		long oid = -1;
 		String hash = DatabaseUtilities.getMD5Hash(sourceFile);
-		List<JPADataSetLO> sameHashDS = DAOs.dataSetDAO.getByHash(hash);
+		List<JPADataSetLO> sameHashDS = DAOs.DATASETDAO.getByHash(hash);
 		if (!sameHashDS.isEmpty()) {
 			oid = sameHashDS.get(0).getOID();
 		} else {
@@ -274,7 +274,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO> {
 		fm.setExternalfilename(realFilename);
 		fm.setInternalfilename(hash);
 		fm.setUser(owner);
-		DAOs.filemappingDAO.storeEntity(fm);
+		DAOs.FILEMAPPINGDAO.storeEntity(fm);
 		newDSLO.setHash(hash);
 		newDSLO.setOID(oid);
 		newDSLO.setSize(sourceFile.length());

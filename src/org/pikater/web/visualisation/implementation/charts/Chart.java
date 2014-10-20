@@ -247,18 +247,18 @@ public abstract class Chart {
 					if (i % 2 == 0) {
 						renderer.drawText(verticalAxis.getTickString(i),
 								offsetx + yLabelWidth - tickSize - 2, y + 5,
-								TextAlignment.Center,
+								TextAlignment.CENTER,
 								verticalAxis.getAxisColor(), -90);
 					} else {
 						renderer.drawText(verticalAxis.getTickString(i),
 								offsetx + yLabelWidth - tickSize - 18, y + 5,
-								TextAlignment.Center,
+								TextAlignment.CENTER,
 								verticalAxis.getAxisColor(), -90);
 					}
 				} else {
 					renderer.drawText(verticalAxis.getTickString(i), offsetx
 							+ yLabelWidth - tickSize - 2, y + 5,
-							TextAlignment.Right, verticalAxis.getAxisColor());
+							TextAlignment.RIGHT, verticalAxis.getAxisColor());
 				}
 			}
 		}
@@ -282,18 +282,18 @@ public abstract class Chart {
 					if (i % 2 == 0) {
 						renderer.drawText(horizontalAxis.getTickString(i), x,
 								offsety + getAreaHeight() + tickSize + 15,
-								TextAlignment.Center,
+								TextAlignment.CENTER,
 								horizontalAxis.getAxisColor());
 					} else {
 						renderer.drawText(horizontalAxis.getTickString(i), x,
 								offsety + getAreaHeight() + tickSize + 31,
-								TextAlignment.Center,
+								TextAlignment.CENTER,
 								horizontalAxis.getAxisColor());
 					}
 				} else {
 					renderer.drawText(horizontalAxis.getTickString(i), x,
 							offsety + getAreaHeight() + tickSize + 15,
-							TextAlignment.Center, horizontalAxis.getAxisColor());
+							TextAlignment.CENTER, horizontalAxis.getAxisColor());
 				}
 			}
 		}

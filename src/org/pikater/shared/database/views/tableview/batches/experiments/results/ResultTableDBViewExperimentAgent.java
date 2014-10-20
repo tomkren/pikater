@@ -19,8 +19,8 @@ public class ResultTableDBViewExperimentAgent extends ResultTableDBViewMin {
 
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
-		List<JPAResult> results = DAOs.resultDAO.getByExperimentAndAgentNameWithModel(getExperiment(), agentName, constraints.getOffset(), constraints.getMaxResults());
-		int resultCount = DAOs.resultDAO.getByExperimentAndAgentNameWithModelCount(getExperiment(), agentName);
+		List<JPAResult> results = DAOs.RESULTDAO.getByExperimentAndAgentNameWithModel(getExperiment(), agentName, constraints.getOffset(), constraints.getMaxResults());
+		int resultCount = DAOs.RESULTDAO.getByExperimentAndAgentNameWithModelCount(getExperiment(), agentName);
 
 		List<ResultTableDBRow> resultRows = new ArrayList<ResultTableDBRow>();
 		for (JPAResult result : results) {

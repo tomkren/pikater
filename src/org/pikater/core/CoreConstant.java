@@ -13,6 +13,8 @@ public class CoreConstant {
 	private CoreConstant() {
 	}
 
+	public static final String BEANSLOCATION = "Beans.xml";
+	
 	public static enum DataType {
 		TRAIN_DATA("Train"), TEST_DATA("Test"), VALID_DATA("Valid");
 
@@ -52,7 +54,7 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum SlotCategory {
-		DATA_GENERAL, DATA_AGENT, DATA_SEARCH, DATA_RECOMMEND, DATA_EVALUATIONMETHOD, ERROR
+		DATAGENERAL, DATAAGENT, DATASEARCH, DATARECOMMEND, DATAEVALUATIONMETHOD, ERROR
 	}
 
 	/**
@@ -62,11 +64,11 @@ public class CoreConstant {
 	 */
 	public static enum SlotContent {
 
-		DATA("data"), FILE_DATA("fileData"), TRAINING_DATA("trainingData"), TESTING_DATA(
-				"testingData"), VALIDATION_DATA("validationData"), COMPUTED_DATA(
+		DATA("data"), FILEDATA("fileData"), TRAININGDATA("trainingData"), TESTINGDATA(
+				"testingData"), VALIDATIONDATA("validationData"), COMPUTEDDATA(
 				"computedData"),
 
-		COMPUTATION_AGENT("computingAgent"), ERRORS("error"), EVALUATION_METHOD(
+		COMPUTATIONAGENT("computingAgent"), ERRORS("error"), EVALUATIONMETHOD(
 				"evaluationMethod"), RECOMMEND("recommender"), SEARCH("search");
 
 		private final String slotName;
@@ -83,23 +85,23 @@ public class CoreConstant {
 
 			switch (this) {
 				case DATA:
-				case COMPUTED_DATA:
-				case FILE_DATA:
-				case TESTING_DATA:
-				case TRAINING_DATA:
-				case VALIDATION_DATA:
-					return SlotCategory.DATA_GENERAL;
+				case COMPUTEDDATA:
+				case FILEDATA:
+				case TESTINGDATA:
+				case TRAININGDATA:
+				case VALIDATIONDATA:
+					return SlotCategory.DATAGENERAL;
 
-				case COMPUTATION_AGENT:
-					return SlotCategory.DATA_AGENT;
+				case COMPUTATIONAGENT:
+					return SlotCategory.DATAAGENT;
 				case ERRORS:
 					return SlotCategory.ERROR;
-				case EVALUATION_METHOD:
-					return SlotCategory.DATA_EVALUATIONMETHOD;
+				case EVALUATIONMETHOD:
+					return SlotCategory.DATAEVALUATIONMETHOD;
 				case RECOMMEND:
-					return SlotCategory.DATA_RECOMMEND;
+					return SlotCategory.DATARECOMMEND;
 				case SEARCH:
-					return SlotCategory.DATA_SEARCH;
+					return SlotCategory.DATASEARCH;
 
 				default:
 					throw new IllegalStateException();
@@ -113,7 +115,7 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum Mode {
-		DEFAULT, TRAIN_ONLY, TEST_ONLY, TRAIN_TEST,
+		DEFAULT, TRAINONLY, TESTONLY, TRAINTEST,
 	}
 
 	/**
@@ -122,7 +124,7 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum Output {
-		DEFAULT, EVALUATION_ONLY, PREDICTION;
+		DEFAULT, EVALUATIONONLY, PREDICTION;
 	}
 
 	/**
@@ -131,11 +133,11 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum Error {
-		ERROR_RATE, KAPPA_STATISTIC, MEAN_ABSOLUTE, RELATIVE_ABSOLUTE, ROOT_MEAN_SQUARED, ROOT_RELATIVE_SQUARED;
+		ERRORRATE, KAPPASTATISTIC, MEANABSOLUTE, RELATIVEABSOLUTE, ROOTMEANSQUARED, ROOTRELATIVESQUARED;
 	}
 
-	public static final String INPUT_FILE_NAME = "input.xml";
-	public static final String DURATION_DATASET_NAME = "lineardata.arff";
+	public static final String INPUTFILENAME = "input.xml";
+	public static final String DURATIONDATASETNAME = "lineardata.arff";
 	public static final String MODEL = "model";
 	public static final String DURATION = "duration";
 	public static final String DURATIONLR = "durationLR";

@@ -104,14 +104,14 @@ public class MetadataReader {
         AttributeMetadata attributeMetadata = getAttributeMetadataInstance(type);
         setBaseAttributeProperties(data, attributeMetadata, attributeNumber);
         
-        if (type!=AttributeType.Categorical) {
+        if (type!=AttributeType.CATEGORICAL) {
         	setNumericalAttributeProperties(data, attributeMetadata,
         			attributeNumber);
         } else {
         	setCategoricalAttributeProperties(data, attributeMetadata,
         			attributeNumber);
         }
-        if (type != AttributeType.Real) {
+        if (type != AttributeType.REAL) {
         	countEntropies(data, attributeMetadata, attributeNumber);
         }
         return attributeMetadata;
@@ -231,9 +231,9 @@ public class MetadataReader {
     		AttributeType type) {
     	
         switch (type) {
-            case Categorical: 
+            case CATEGORICAL: 
                 return new CategoricalAttributeMetadata();
-            case Integer: 
+            case INTEGER: 
                 return new IntegerAttributeMetadata();
             default: return new RealAttributeMetadata();
         }
@@ -246,7 +246,7 @@ public class MetadataReader {
         		data.getAttributes().get(attributeNumber);
         
         if (attribute.getType().equals("NOMINAL")) {
-            return AttributeType.Categorical;
+            return AttributeType.CATEGORICAL;
         }
         boolean canBeInt = true;
 		for (Instance instanceI : data.getInstances()) {
@@ -264,15 +264,15 @@ public class MetadataReader {
                         canBeInt= false;
                     }
                 } else {
-                    return AttributeType.Categorical;
+                    return AttributeType.CATEGORICAL;
                 }
             }
         }
 		
 		if (canBeInt) {
-			return AttributeType.Integer;
+			return AttributeType.INTEGER;
 		} else {
-			return AttributeType.Real;
+			return AttributeType.REAL;
 		}
 		
     }

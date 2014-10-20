@@ -157,7 +157,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 	 */
 	private ACLMessage respondToNewData(ACLMessage request, String path, int dataID) {
 		try {
-			JPADataSetLO dslo = DAOs.dataSetDAO.getByID(dataID, EmptyResultAction.THROW);
+			JPADataSetLO dslo = DAOs.DATASETDAO.getByID(dataID, EmptyResultAction.THROW);
 			PGLargeObjectReader plor = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 
 			final String baseFilename = path + dslo.getHash();

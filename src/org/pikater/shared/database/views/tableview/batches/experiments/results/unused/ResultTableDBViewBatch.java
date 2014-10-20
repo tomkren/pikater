@@ -21,8 +21,8 @@ public class ResultTableDBViewBatch extends ResultTableDBView {
 
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
-		List<JPAResult> batchResultList = DAOs.batchDAO.getByIDwithResults(batch.getId(), constraints.getOffset(), constraints.getMaxResults());
-		int resultCount = DAOs.batchDAO.getBatchResultCount(batch);
+		List<JPAResult> batchResultList = DAOs.BATCHDAO.getByIDwithResults(batch.getId(), constraints.getOffset(), constraints.getMaxResults());
+		int resultCount = DAOs.BATCHDAO.getBatchResultCount(batch);
 
 		List<ResultTableDBRow> resultRows = new ArrayList<ResultTableDBRow>();
 		for (JPAResult result : batchResultList) {

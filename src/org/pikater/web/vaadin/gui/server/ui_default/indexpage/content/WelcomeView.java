@@ -34,7 +34,7 @@ public class WelcomeView extends Label implements IContentComponent {
 			JPAUser user = UserAuth.getUserEntity(VaadinSession.getCurrent());
 			setValue(String.format("Welcome to Pikatorium.</br>Your last visit was: %s", user.getLastLogin()));
 			user.setLastLogin(new Date());
-			DAOs.userDAO.updateEntity(user);
+			DAOs.USERDAO.updateEntity(user);
 		}
 	}
 

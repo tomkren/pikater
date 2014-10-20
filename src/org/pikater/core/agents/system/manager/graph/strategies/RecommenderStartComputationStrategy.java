@@ -128,9 +128,9 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		// request.setReplyByDate(new Date(System.currentTimeMillis() + 200));
 		
 		String trainingSlotName =
-				CoreConstant.SlotContent.TRAINING_DATA.getSlotName();
+				CoreConstant.SlotContent.TRAININGDATA.getSlotName();
 		String tesingSlotName =
-				CoreConstant.SlotContent.TESTING_DATA.getSlotName();
+				CoreConstant.SlotContent.TESTINGDATA.getSlotName();
 		String errorSlotName =
 				CoreConstant.SlotContent.ERRORS.getSlotName();
 		

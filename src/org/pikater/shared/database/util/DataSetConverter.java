@@ -211,8 +211,9 @@ public class DataSetConverter {
 			}
 			return sb.toString();
 		} finally {
-			if (br != null)
+			if (br != null){
 				br.close();
+			}
 		}
 	}
 
@@ -239,8 +240,9 @@ public class DataSetConverter {
 			}
 
 		} finally {
-			if (br != null)
+			if (br != null){
 				br.close();
+			}
 		}
 	}
 

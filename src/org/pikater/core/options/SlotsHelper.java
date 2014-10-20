@@ -24,7 +24,7 @@ public abstract class SlotsHelper {
 	 */
 	public static List<Slot> getIntputSlots_CARecSearchComplex() {
 		
-		Slot comAgentSlot = new Slot(SlotContent.COMPUTATION_AGENT,
+		Slot comAgentSlot = new Slot(SlotContent.COMPUTATIONAGENT,
 				"Data computed by an agent.");
 		Slot comAgentErrorSlot = new Slot(SlotContent.ERRORS,
 				"Errors from computing agent.");
@@ -55,10 +55,10 @@ public abstract class SlotsHelper {
 	 * @return - list of slots
 	 */
 	public static List<Slot> getInputSlots_CA() {
-		Slot trainingSlot = new Slot(SlotContent.TRAINING_DATA);
-		Slot testingSlot = new Slot(SlotContent.TESTING_DATA);
-		Slot validationSlot = new Slot(SlotContent.VALIDATION_DATA);
-		Slot evaluationMethodSlot = new Slot(SlotContent.EVALUATION_METHOD);
+		Slot trainingSlot = new Slot(SlotContent.TRAININGDATA);
+		Slot testingSlot = new Slot(SlotContent.TESTINGDATA);
+		Slot validationSlot = new Slot(SlotContent.VALIDATIONDATA);
+		Slot evaluationMethodSlot = new Slot(SlotContent.EVALUATIONMETHOD);
 		
 		return Arrays.asList(
 				trainingSlot,
@@ -74,7 +74,7 @@ public abstract class SlotsHelper {
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlots_CA() {
-		Slot comAgentDataSlot = new Slot(SlotContent.COMPUTED_DATA,
+		Slot comAgentDataSlot = new Slot(SlotContent.COMPUTEDDATA,
 				"Data computed by an agent."); 
 		Slot comAgentErrorSlot = new Slot(SlotContent.ERRORS,
 				"Errors produced by computing agent."); 
@@ -122,7 +122,7 @@ public abstract class SlotsHelper {
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlots_EvaluationMethod() {
-		Slot evaluationMethodSlot = new Slot(SlotContent.EVALUATION_METHOD);
+		Slot evaluationMethodSlot = new Slot(SlotContent.EVALUATIONMETHOD);
 		return Arrays.asList(evaluationMethodSlot);
 	}
 	
@@ -132,7 +132,7 @@ public abstract class SlotsHelper {
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlot_FileInput() {
-		Slot fileInputSlot = new Slot(SlotContent.FILE_DATA);
+		Slot fileInputSlot = new Slot(SlotContent.FILEDATA);
 		return  Arrays.asList(fileInputSlot);
 	}	
 
@@ -142,7 +142,7 @@ public abstract class SlotsHelper {
 	 * @return - list of slots
 	 */
 	public static List<Slot> getInputSlot_FileSaver() {
-		Slot fileSaverSlot = new Slot(SlotContent.FILE_DATA);
+		Slot fileSaverSlot = new Slot(SlotContent.FILEDATA);
 		return  Arrays.asList(fileSaverSlot);
 	}
 

@@ -26,6 +26,6 @@ public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData {
 	}
 
 	@Transient
-	public static final String EntityName = "AttributeCategoricalMetaData";
+	public static final String ENTITYNAME = "AttributeCategoricalMetaData";
 
 }

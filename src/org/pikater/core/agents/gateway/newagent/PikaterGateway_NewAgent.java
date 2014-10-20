@@ -33,7 +33,7 @@ public class PikaterGateway_NewAgent {
 	public static void newAgent(int externalAgentID) throws PikaterGatewayException {
 		try {
 	        NewAgent newAgent = new NewAgent();
-	        JPAExternalAgent ea = DAOs.externalAgentDAO.getByID(externalAgentID, EmptyResultAction.NULL);
+	        JPAExternalAgent ea = DAOs.EXTERNALAGENTDAO.getByID(externalAgentID, EmptyResultAction.NULL);
 	        
 	        if(ea != null) {
 	        	newAgent.setAgentClassName(ea.getAgentClass());

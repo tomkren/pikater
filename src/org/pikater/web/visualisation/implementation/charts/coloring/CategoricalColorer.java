@@ -29,12 +29,14 @@ public class CategoricalColorer implements Colorer {
 	 */
 	@Override
 	public Color getColor(double value) {
-		if (Double.isNaN(value))
+		if (Double.isNaN(value)){
 			return Color.BLACK;
-		if (Double.isInfinite(value))
+		}else if (Double.isInfinite(value)){
 			return Color.GRAY;
-		return Color.getHSBColor((float) (value / this.numberOfCategories),
-				1.0f, 1.0f);
+		}else{
+			return Color.getHSBColor((float) (value / this.numberOfCategories),
+					1.0f, 1.0f);
+		}
 	}
 
 	/**

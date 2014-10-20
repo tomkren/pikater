@@ -96,6 +96,6 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 
 	@Override
 	public void commitRow() {
-		DAOs.externalAgentDAO.updateEntity(agent);
+		DAOs.EXTERNALAGENTDAO.updateEntity(agent);
 	}
 }

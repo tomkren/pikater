@@ -9,7 +9,7 @@ package org.pikater.core.agents.system.metadata;
  * @author Kuba
  */
 public enum TaskType {
-    Classification,
-    Regression,
-    Clustering;    
+    CLASSIFICATION,
+    REGRESSION,
+    CLUSTERING;    
 }

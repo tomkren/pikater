@@ -61,28 +61,37 @@ public class AttrMapping {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()){
 			return false;
+		}
 		AttrMapping other = (AttrMapping) obj;
 		if (attrTarget == null) {
-			if (other.attrTarget != null)
+			if (other.attrTarget != null){
 				return false;
-		} else if (!attrTarget.equals(other.attrTarget))
+			}
+		} else if (!attrTarget.equals(other.attrTarget)){
 			return false;
+		}
 		if (attrX == null) {
-			if (other.attrX != null)
+			if (other.attrX != null){
 				return false;
-		} else if (!attrX.equals(other.attrX))
+			}
+		} else if (!attrX.equals(other.attrX)){
 			return false;
+		}
 		if (attrY == null) {
-			if (other.attrY != null)
+			if (other.attrY != null){
 				return false;
-		} else if (!attrY.equals(other.attrY))
+			}
+		} else if (!attrY.equals(other.attrY)){
 			return false;
+		}
 		return true;
 	}
 }

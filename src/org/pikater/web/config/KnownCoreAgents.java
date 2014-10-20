@@ -173,8 +173,8 @@ public class KnownCoreAgents implements Iterable<AgentInfo> {
 			options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(3, new ArrayList<IValueData>(Arrays.asList(new IntegerValue(5), new IntegerValue(6), new IntegerValue(9),
 					new IntegerValue(10), new IntegerValue(11))))));
 
-			Slot slotInput_test = new Slot("testSlot", SlotCategory.DATA_GENERAL, "Test input slot.");
-			Slot slotOutput_test = new Slot("testSlot", SlotCategory.DATA_GENERAL, "Test output slot.");
+			Slot slotInput_test = new Slot("testSlot", SlotCategory.DATAGENERAL, "Test input slot.");
+			Slot slotOutput_test = new Slot("testSlot", SlotCategory.DATAGENERAL, "Test output slot.");
 
 			agentInfo.setOptions(options);
 			agentInfo.setInputSlots(Arrays.asList(slotInput_test));

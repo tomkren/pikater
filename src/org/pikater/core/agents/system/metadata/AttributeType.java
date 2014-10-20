@@ -9,7 +9,7 @@ package org.pikater.core.agents.system.metadata;
  * @author Kuba
  */
 public enum AttributeType {
-    Integer,
-    Real,
-    Categorical;   
+    INTEGER,
+    REAL,
+    CATEGORICAL;   
 }

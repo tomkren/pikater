@@ -15,10 +15,10 @@ import org.pikater.shared.logging.IPikaterLogger;
  * @author SkyCrawl
  */
 public class ConsoleLogger extends GeneralPikaterLogger {
-	private static final IPikaterLogger innerLogger = createPikaterLogger(Logger.getAnonymousLogger());
+	private static final IPikaterLogger INNERLOGGER = createPikaterLogger(Logger.getAnonymousLogger());
 
 	public static IPikaterLogger getLogger() {
-		return innerLogger;
+		return INNERLOGGER;
 	}
 
 	public static void logThrowable(String message, Throwable t) {

@@ -61,21 +61,21 @@ public class OptionsHelper {
 		
 		List<IValueData> modeValues = new ArrayList<IValueData>();
 		modeValues.add(
-				new StringValue(CoreConstant.Mode.TRAIN_ONLY.name()));
+				new StringValue(CoreConstant.Mode.TRAINONLY.name()));
 		modeValues.add(
-				new StringValue(CoreConstant.Mode.TEST_ONLY.name()));
+				new StringValue(CoreConstant.Mode.TESTONLY.name()));
 		modeValues.add(
-				new StringValue(CoreConstant.Mode.TRAIN_TEST.name()));
+				new StringValue(CoreConstant.Mode.TRAINTEST.name()));
 
 		NewOption optMode = new NewOption(
 				CoreConstant.Mode.DEFAULT.name(),
-				new StringValue(CoreConstant.Mode.TRAIN_ONLY.name()),
+				new StringValue(CoreConstant.Mode.TRAINONLY.name()),
 				new SetRestriction(false, modeValues));
 		
 		
 		List<IValueData> outputValues = new ArrayList<IValueData>();
 		outputValues.add(
-				new StringValue(CoreConstant.Output.EVALUATION_ONLY.name()));
+				new StringValue(CoreConstant.Output.EVALUATIONONLY.name()));
 		outputValues.add(
 				new StringValue(CoreConstant.Output.PREDICTION.name()));
 

@@ -90,7 +90,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			
 			try {
 				runFile(CoreConfiguration.getKlarasInputsPath() +
-						CoreConstant.INPUT_FILE_NAME);
+						CoreConstant.INPUTFILENAME);
 				
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found.");
@@ -162,7 +162,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 		String defaultFileNameWithPath =
 				CoreConfiguration.getKlarasInputsPath() +
-				CoreConstant.INPUT_FILE_NAME;
+				CoreConstant.INPUTFILENAME;
 		
 		File testFile = new File(defaultFileNameWithPath);
 

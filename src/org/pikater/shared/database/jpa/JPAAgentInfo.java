@@ -91,7 +91,7 @@ public class JPAAgentInfo extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "AgentInfo";
+	public static final String ENTITYNAME = "AgentInfo";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) {

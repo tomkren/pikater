@@ -236,7 +236,7 @@ public class JPAResult extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "Result";
+	public static final String ENTITYNAME = "Result";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) {

@@ -324,7 +324,7 @@ public class Toolbar extends VerticalLayout {
 					// and then actually do something
 					final boolean sourceExperimentExists = activeComponent.getPreviouslyLoadedExperimentID() != null;
 					if (sourceExperimentExists) {
-						sourceExperiment = DAOs.batchDAO.getByID(activeComponent.getPreviouslyLoadedExperimentID());
+						sourceExperiment = DAOs.BATCHDAO.getByID(activeComponent.getPreviouslyLoadedExperimentID());
 					} else {
 						sourceExperiment = null;
 					}
@@ -351,7 +351,7 @@ public class Toolbar extends VerticalLayout {
 								case SAVE_AS_NEW_AND_DELETE_PREVIOUS:
 									saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner), experimentSavedCallback);
 									if (sourceExperimentExists) {
-										DAOs.batchDAO.deleteBatchEntity(sourceExperiment);
+										DAOs.BATCHDAO.deleteBatchEntity(sourceExperiment);
 									}
 									break;
 								default:
@@ -392,12 +392,12 @@ public class Toolbar extends VerticalLayout {
 				}
 
 				private void saveExperiment(JPABatch newExperiment, IOnExperimentSaved experimentSavedCallback) {
-					DAOs.batchDAO.storeEntity(newExperiment);
+					DAOs.BATCHDAO.storeEntity(newExperiment);
 					experimentSavedCallback.experimentSaved(newExperiment);
 				}
 
 				private void updateExperiment(JPABatch experiment, IOnExperimentSaved experimentSavedCallback) {
-					DAOs.batchDAO.updateEntity(experiment);
+					DAOs.BATCHDAO.updateEntity(experiment);
 					experimentSavedCallback.experimentSaved(experiment);
 				}
 			});

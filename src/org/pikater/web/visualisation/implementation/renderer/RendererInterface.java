@@ -10,7 +10,7 @@ import java.awt.Color;
 public interface RendererInterface {
 
 	public enum TextAlignment {
-		Left, Center, Right
+		LEFT, CENTER, RIGHT
 	};
 
 	/**

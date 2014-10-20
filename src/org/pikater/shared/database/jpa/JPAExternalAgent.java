@@ -113,7 +113,7 @@ public class JPAExternalAgent extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "ExternalAgent";
+	public static final String ENTITYNAME = "ExternalAgent";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

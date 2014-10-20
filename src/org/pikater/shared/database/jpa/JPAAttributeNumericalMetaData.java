@@ -80,6 +80,6 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData {
 	}
 
 	@Transient
-	public static final String EntityName = "AttributeNumericalMetaData";
+	public static final String ENTITYNAME = "AttributeNumericalMetaData";
 
 }

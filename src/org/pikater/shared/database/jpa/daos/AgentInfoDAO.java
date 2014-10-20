@@ -16,7 +16,7 @@ public class AgentInfoDAO extends AbstractDAO<JPAAgentInfo> {
 
 	@Override
 	public String getEntityName() {
-		return JPAAgentInfo.EntityName;
+		return JPAAgentInfo.ENTITYNAME;
 	}
 
 	public List<JPAAgentInfo> getByName(String name) {
@@ -54,6 +54,6 @@ public class AgentInfoDAO extends AbstractDAO<JPAAgentInfo> {
 		nai.setName(agentInfoOntology.getName());
 		nai.setCreationTime(new Date());
 		nai.setExternalAgent(externalAgent);
-		DAOs.agentInfoDAO.storeEntity(nai);
+		DAOs.AGENTINFODAO.storeEntity(nai);
 	}
 }

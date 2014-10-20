@@ -87,7 +87,7 @@ public class ExperimentTableDBView extends AbstractTableDBView {
 	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
 		//retrieving new JPABatch object to avoid useing stall objects
 
-		JPABatch localBatch = DAOs.batchDAO.getByID(batch.getId());
+		JPABatch localBatch = DAOs.BATCHDAO.getByID(batch.getId());
 
 		List<JPAExperiment> allExperiments;
 		if (owner == null) {

@@ -273,7 +273,7 @@ public abstract class CustomConfiguredUI extends UI {
 	private void authenticateUser(String login, String password,
 			boolean adminCheck) {
 		if (!WebAppConfiguration.avoidUsingDBForNow()) {
-			JPAUser user = DAOs.userDAO.getByLoginAndPassword(login, password);
+			JPAUser user = DAOs.USERDAO.getByLoginAndPassword(login, password);
 			if (user != null) {
 				if (user.getStatus() != JPAUserStatus.ACTIVE) {
 					throw new IllegalStateException("Account suspended.");

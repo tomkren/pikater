@@ -15,7 +15,7 @@ public class TaskTypeDAO extends AbstractDAO<JPATaskType> {
 
 	@Override
 	public String getEntityName() {
-		return JPATaskType.EntityName;
+		return JPATaskType.ENTITYNAME;
 	}
 
 	public JPATaskType createOrGetByName(String name) {
@@ -29,7 +29,7 @@ public class TaskTypeDAO extends AbstractDAO<JPATaskType> {
 			} else {
 				JPATaskType newTT = new JPATaskType();
 				newTT.setName(name);
-				DAOs.taskTypeDAO.storeEntity(newTT);
+				DAOs.TASKTYPEDAO.storeEntity(newTT);
 				return newTT;
 			}
 		} catch (Exception e) {

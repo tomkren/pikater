@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.io.FilenameUtils;
-import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstant;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPARole;
@@ -30,18 +30,18 @@ import org.pikater.shared.util.DateUtils;
 
 public class DatabaseInitialisation {
 
-	private static final String BEANS_CONFIGBASE = "core/configbase/Beans.xml";
-	private static final String PERSISTENCE_CONFIGBASE = "core/configbase/persistence.xml";
+	private static final String BEANSCONFIGBASE = "core/configbase/Beans.xml";
+	private static final String PERSISTENCECONFIGBASE = "core/configbase/persistence.xml";
 
-	private static final String PERSISTENT_TARGET = "META-INF/persistence.xml";
+	private static final String PERSISTENCETARGET = "META-INF/persistence.xml";
 
 	private void createRoles() {
 		for (PikaterPriviledge priv : PikaterPriviledge.values()) {
-			DAOs.userPrivDAO.storeEntity(new JPAUserPriviledge(priv.name(), priv));
+			DAOs.USERPRIVDAO.storeEntity(new JPAUserPriviledge(priv.name(), priv));
 		}
 
-		JPAUserPriviledge sdsPriv = DAOs.userPrivDAO.getByName(PikaterPriviledge.SAVE_DATA_SET.name());
-		JPAUserPriviledge sbPriv = DAOs.userPrivDAO.getByName(PikaterPriviledge.SAVE_BOX.name());
+		JPAUserPriviledge sdsPriv = DAOs.USERPRIVDAO.getByName(PikaterPriviledge.SAVEDATASET.name());
+		JPAUserPriviledge sbPriv = DAOs.USERPRIVDAO.getByName(PikaterPriviledge.SAVEBOX.name());
 
 		JPARole u = new JPARole(PikaterRole.USER.name(), PikaterRole.USER);
 		u.addPriviledge(sdsPriv);
@@ -50,23 +50,23 @@ public class DatabaseInitialisation {
 		a.addPriviledge(sdsPriv);
 		a.addPriviledge(sbPriv);
 
-		DAOs.roleDAO.storeEntity(u);
-		DAOs.roleDAO.storeEntity(a);
+		DAOs.ROLEDAO.storeEntity(u);
+		DAOs.ROLEDAO.storeEntity(a);
 	}
 
 	private void createAdminUser(String login, String password, String email) {
-		JPARole a = DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN);
+		JPARole a = DAOs.ROLEDAO.getByPikaterRole(PikaterRole.ADMIN);
 		JPAUser u = JPAUser.createAccountForDBInit(login, password, email, a);
-		DAOs.userDAO.storeEntity(u);
+		DAOs.USERDAO.storeEntity(u);
 	}
 
 	public void addExternalAgent(String jar, String name, String desc) {
 		String cls = FilenameUtils.getBaseName(jar).replace(".jar", "").replace("_", ".");
-		if (DAOs.externalAgentDAO.getByAgentClass(cls) != null) {
+		if (DAOs.EXTERNALAGENTDAO.getByAgentClass(cls) != null) {
 			p("External agent " + name + " already in DB.");
 			return;
 		}
-		JPAUser owner = new CustomActionResultFormatter<JPAUser>(DAOs.userDAO.getByLogin("sj")).getSingleResultWithNull();
+		JPAUser owner = new CustomActionResultFormatter<JPAUser>(DAOs.USERDAO.getByLogin("sj")).getSingleResultWithNull();
 
 		JPAExternalAgent e = new JPAExternalAgent();
 		e.setAgentClass(cls);
@@ -83,12 +83,12 @@ public class DatabaseInitialisation {
 			return;
 		}
 		e.setJar(content);
-		DAOs.externalAgentDAO.storeEntity(e);
+		DAOs.EXTERNALAGENTDAO.storeEntity(e);
 		p("Stored external agent " + name);
 	}
 
 	public void listExternalAgents() {
-		List<JPAExternalAgent> agents = DAOs.externalAgentDAO.getAll();
+		List<JPAExternalAgent> agents = DAOs.EXTERNALAGENTDAO.getAll();
 		p("");
 		p("Available external agents: ");
 		for (JPAExternalAgent agent : agents) {
@@ -118,7 +118,7 @@ public class DatabaseInitialisation {
 		try {
 			fw.write(sourceString);
 		} catch (IOException e) {
-			PikaterDBLogger.logThrowable("Can not write to output file: " + output.getAbsolutePath(), e);
+			PikaterDBLogger.logThrowable("Cannot write to output file: " + output.getAbsolutePath(), e);
 		} finally {
 			fw.close();
 		}
@@ -137,24 +137,24 @@ public class DatabaseInitialisation {
 		p("please make sure, they are in correct locations.");
 		p("");
 		p("persistence.xml current target (type new or leave blank) ");
-		p("src" + File.separator + DatabaseInitialisation.PERSISTENT_TARGET);
+		p("src" + File.separator + DatabaseInitialisation.PERSISTENCETARGET);
 		String persistenceTarget = br.readLine();
 		if ((persistenceTarget == null) || persistenceTarget.isEmpty()) {
-			persistenceTarget = "src" + File.separator + DatabaseInitialisation.PERSISTENT_TARGET;
+			persistenceTarget = "src" + File.separator + DatabaseInitialisation.PERSISTENCETARGET;
 		}
 
 		p("Beans.xml current target (type new or leave blank) ");
-		p("src" + File.separator + CoreConfiguration.getConfigurationFileName());
+		p("src" + File.separator + CoreConstant.BEANSLOCATION);
 		String beansTarget = br.readLine();
 		if ((beansTarget == null) || beansTarget.isEmpty()) {
-			beansTarget = "src" + File.separator + CoreConfiguration.getConfigurationFileName();
+			beansTarget = "src" + File.separator + CoreConstant.BEANSLOCATION;
 		}
 
 		p("Generating " + persistenceTarget + " ...");
-		this.generateConfigFile(DatabaseInitialisation.PERSISTENCE_CONFIGBASE, new File(persistenceTarget), dbPath, dbUser, dbPassword);
+		this.generateConfigFile(DatabaseInitialisation.PERSISTENCECONFIGBASE, new File(persistenceTarget), dbPath, dbUser, dbPassword);
 
 		p("Generating " + beansTarget + " ...");
-		this.generateConfigFile(DatabaseInitialisation.BEANS_CONFIGBASE, new File(beansTarget), dbPath, dbUser, dbPassword);
+		this.generateConfigFile(DatabaseInitialisation.BEANSCONFIGBASE, new File(beansTarget), dbPath, dbUser, dbPassword);
 	}
 
 	private void databaseConfiguration() throws IOException {
@@ -173,7 +173,7 @@ public class DatabaseInitialisation {
 		p("this administrator login.");
 		p("Other user accounts can be created using the web interface.");
 	}
-
+	
 	private void configAll() throws IOException {
 		this.configGeneration();
 		this.databaseConfiguration();
@@ -197,12 +197,11 @@ public class DatabaseInitialisation {
 		p("Just DB initialisation : 'd'");
 		String choice = br.readLine();
 		if (choice != null) {
-			choice = choice.toLowerCase();
-			if (choice.equals("c")) {
+			if ("c".equalsIgnoreCase(choice)) {
 				this.configGeneration();
-			} else if (choice.equals("d")) {
+			} else if ("d".equalsIgnoreCase(choice)) {
 				this.databaseConfiguration();
-			} else if (choice.equals("a")) {
+			} else if ("a".equalsIgnoreCase(choice)) {
 				this.configAll();
 			} else {
 				p("Invalid choice...exiting.");

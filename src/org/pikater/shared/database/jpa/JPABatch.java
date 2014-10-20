@@ -243,7 +243,7 @@ public class JPABatch extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "Batch";
+	public static final String ENTITYNAME = "Batch";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

@@ -42,9 +42,9 @@ public class BatchTableDBViewUserScheduled extends BatchTableDBViewUser {
 
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
-		List<JPABatch> resultBatches = DAOs.batchDAO.getByOwnerAndNotStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(),
+		List<JPABatch> resultBatches = DAOs.BATCHDAO.getByOwnerAndNotStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(),
 				constraints.getSortOrder());
-		int allBatchesCount = DAOs.batchDAO.getByOwnerAndNotStatusCount(this.owner, JPABatchStatus.CREATED);
+		int allBatchesCount = DAOs.BATCHDAO.getByOwnerAndNotStatusCount(this.owner, JPABatchStatus.CREATED);
 
 		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
 		for (JPABatch batch : resultBatches) {

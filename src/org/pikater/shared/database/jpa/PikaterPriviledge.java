@@ -1,13 +1,13 @@
 package org.pikater.shared.database.jpa;
 
 public enum PikaterPriviledge {
-	SAVE_DATA_SET, SAVE_BOX;
+	SAVEDATASET, SAVEBOX;
 
 	public String getDescription() {
 		switch (this) {
-		case SAVE_DATA_SET:
+		case SAVEDATASET:
 			return "Save Dataset priviledge";
-		case SAVE_BOX:
+		case SAVEBOX:
 			return "Save Box priviledge";
 		default:
 			return null;

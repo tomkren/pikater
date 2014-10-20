@@ -98,7 +98,7 @@ public class SingleChart extends Chart {
 	private void renderVerticalCaption(String caption) {
 		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption,
 				offsetx + yLabelWidth / 2, offsety + getAreaHeight() / 2,
-				TextAlignment.Center, verticalCaptionColor, -90, captionSize);
+				TextAlignment.CENTER, verticalCaptionColor, -90, captionSize);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class SingleChart extends Chart {
 	private void renderHorizontalCaption(String caption) {
 		renderer.drawText(isCapitalCaption() ? caption.toUpperCase() : caption,
 				offsetx + yLabelWidth + getAreaWidth() / 2, offsety
-						+ chartHeight - xLabelHeight / 3, TextAlignment.Center,
+						+ chartHeight - xLabelHeight / 3, TextAlignment.CENTER,
 				horizontalCaptionColor, 0, captionSize);
 	}
 

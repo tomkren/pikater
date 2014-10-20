@@ -117,12 +117,12 @@ public class ExternalAgentTableDBView extends AbstractTableDBView {
 		int allAgentsCount = 0;
 		if (adminMode()) {
 			//getting all visible external agents
-			agents = DAOs.externalAgentDAO.getByVisibility(constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder(), true);
-			allAgentsCount = DAOs.externalAgentDAO.getByVisibilityCount(true);
+			agents = DAOs.EXTERNALAGENTDAO.getByVisibility(constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder(), true);
+			allAgentsCount = DAOs.EXTERNALAGENTDAO.getByVisibilityCount(true);
 		} else {
 			//getting visible external agents of the user
-			agents = DAOs.externalAgentDAO.getByOwnerAndVisibility(owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder(), true);
-			allAgentsCount = DAOs.externalAgentDAO.getByOwnerAndVisibilityCount(owner, true);
+			agents = DAOs.EXTERNALAGENTDAO.getByOwnerAndVisibility(owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder(), true);
+			allAgentsCount = DAOs.EXTERNALAGENTDAO.getByOwnerAndVisibilityCount(owner, true);
 		}
 
 		List<ExternalAgentTableDBRow> resultRows = new ArrayList<ExternalAgentTableDBRow>();

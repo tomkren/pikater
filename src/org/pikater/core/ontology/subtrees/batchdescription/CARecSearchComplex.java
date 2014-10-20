@@ -166,9 +166,9 @@ public class CARecSearchComplex extends DataProcessing implements
 
 		DataSourceDescription computingAgentSlot = new DataSourceDescription();
 		computingAgentSlot.setInputType(
-				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName());
+				CoreConstant.SlotContent.COMPUTATIONAGENT.getSlotName());
 		computingAgentSlot.setOutputType(
-				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName());
+				CoreConstant.SlotContent.COMPUTATIONAGENT.getSlotName());
 		
 		computingAgentSlot.setDataProvider((IDataProvider) computingAgent);
 
@@ -193,7 +193,7 @@ public class CARecSearchComplex extends DataProcessing implements
 		String recommenderSlot =
 				CoreConstant.SlotContent.RECOMMEND.getSlotName();
 		String comAgentSlot =
-				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName();
+				CoreConstant.SlotContent.COMPUTATIONAGENT.getSlotName();
 
 		for (DataSourceDescription slotI : dataSourceDescriptions) {
 

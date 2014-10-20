@@ -26,7 +26,7 @@ public class UserDAO extends AbstractDAO<JPAUser> {
 
 	@Override
 	public String getEntityName() {
-		return JPAUser.EntityName;
+		return JPAUser.ENTITYNAME;
 	}
 
 	public List<JPAUser> getAll(int offset, int maxQuerySize) {

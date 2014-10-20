@@ -77,7 +77,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 					"Argument trainingData can't be null");
 		}
 		DataSourceDescription trainingDataC = new DataSourceDescription();
-		trainingDataC.setInputType(CoreConstant.SlotContent.TRAINING_DATA
+		trainingDataC.setInputType(CoreConstant.SlotContent.TRAININGDATA
 				.getSlotName());
 		trainingDataC.setOutputType(trainingData.getOutputType());
 		trainingDataC.setDataProvider(trainingData.getDataProvider());
@@ -95,7 +95,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 					"Argument testingData can't be null");
 		}
 		DataSourceDescription testingDataC = new DataSourceDescription();
-		testingDataC.setInputType(CoreConstant.SlotContent.TESTING_DATA
+		testingDataC.setInputType(CoreConstant.SlotContent.TESTINGDATA
 				.getSlotName());
 		testingDataC.setOutputType(testingData.getOutputType());
 		testingDataC.setDataProvider(testingData.getDataProvider());
@@ -113,7 +113,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 					"Argument validationData can't be null");
 		}
 		DataSourceDescription validationDataC = new DataSourceDescription();
-		validationDataC.setInputType(CoreConstant.SlotContent.VALIDATION_DATA
+		validationDataC.setInputType(CoreConstant.SlotContent.VALIDATIONDATA
 				.getSlotName());
 		validationDataC.setOutputType(validationData.getOutputType());
 		validationDataC.setDataProvider(validationData.getDataProvider());
@@ -235,7 +235,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 
 		if (trainingData != null) {
 			DataSourceDescription trainingDataC = new DataSourceDescription();
-			trainingDataC.setInputType(CoreConstant.SlotContent.TRAINING_DATA
+			trainingDataC.setInputType(CoreConstant.SlotContent.TRAININGDATA
 					.getSlotName());
 			trainingDataC.setOutputType(trainingData.getOutputType());
 			trainingDataC.setDataProvider(trainingData.getDataProvider());
@@ -244,7 +244,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 
 		if (testingData != null) {
 			DataSourceDescription testingDataC = new DataSourceDescription();
-			testingDataC.setInputType(CoreConstant.SlotContent.TESTING_DATA
+			testingDataC.setInputType(CoreConstant.SlotContent.TESTINGDATA
 					.getSlotName());
 			testingDataC.setOutputType(testingData.getOutputType());
 			testingDataC.setDataProvider(testingData.getDataProvider());
@@ -254,7 +254,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 		if (validationData != null) {
 			DataSourceDescription validationDataC = new DataSourceDescription();
 			validationDataC
-					.setInputType(CoreConstant.SlotContent.VALIDATION_DATA
+					.setInputType(CoreConstant.SlotContent.VALIDATIONDATA
 							.getSlotName());
 			validationDataC.setOutputType(validationData.getOutputType());
 			validationDataC.setDataProvider(validationData.getDataProvider());
@@ -264,7 +264,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 		if (evaluationMethod != null) {
 			DataSourceDescription evaluationMethodDataC = new DataSourceDescription();
 			evaluationMethodDataC
-					.setInputType(CoreConstant.SlotContent.EVALUATION_METHOD
+					.setInputType(CoreConstant.SlotContent.EVALUATIONMETHOD
 							.getSlotName());
 			evaluationMethodDataC.setOutputType("evaluationMethod");
 			evaluationMethodDataC.setDataProvider(evaluationMethod);
@@ -283,22 +283,22 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 				dataSourceDescriptions);
 
 		DataSourceDescription descriptinTrainingData = descriptions
-				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.TRAINING_DATA
+				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.TRAININGDATA
 						.getSlotName());
 		trainingData = descriptinTrainingData;
 
 		DataSourceDescription descriptinTestingData = descriptions
-				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.TESTING_DATA
+				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.TESTINGDATA
 						.getSlotName());
 		testingData = descriptinTestingData;
 
 		DataSourceDescription descriptinValidationData = descriptions
-				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.VALIDATION_DATA
+				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.VALIDATIONDATA
 						.getSlotName());
 		validationData = descriptinValidationData;
 
 		DataSourceDescription descriptinevaluationMethodData = descriptions
-				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.EVALUATION_METHOD
+				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.EVALUATIONMETHOD
 						.getSlotName());
 		evaluationMethod = (EvaluationMethod) descriptinevaluationMethodData
 				.getDataProvider();

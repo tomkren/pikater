@@ -44,12 +44,14 @@ public class LinearColorer implements Colorer {
 	 */
 	@Override
 	public Color getColor(double value) {
-		if (Double.isNaN(value))
+		if (Double.isNaN(value)){
 			return Color.BLACK;
-		if (Double.isInfinite(value))
+		}else if (Double.isInfinite(value)){
 			return Color.GRAY;
-		float saturation = (float) (0.0 + ((value - min) / (max - min)) * 1.0);
-		return Color.getHSBColor(1.0f, saturation, 1.0f);
+		}else{
+			float saturation = (float) (0.0 + ((value - min) / (max - min)) * 1.0);
+			return Color.getHSBColor(1.0f, saturation, 1.0f);
+		}
 	}
 
 	@Override

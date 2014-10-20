@@ -64,9 +64,9 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob {
 		File convertedFile = null;
 		try {
 			convertedFile = this.convert(uploadedFile, optionalARFFHeaders);
-			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,
+			int newDatasetID = DAOs.DATASETDAO.storeNewDataSet(convertedFile,
 					realFilename, description, owner.getId(),
-					JPADatasetSource.USER_UPLOAD);
+					JPADatasetSource.USERUPLOAD);
 
 			try {
 				WebToCoreEntryPoint.notify_newDataset(newDatasetID);

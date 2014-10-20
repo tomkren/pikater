@@ -130,6 +130,6 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 
 	@Override
 	public void commitRow() {
-		DAOs.batchDAO.updateEntity(batch);
+		DAOs.BATCHDAO.updateEntity(batch);
 	}
 }

@@ -192,7 +192,7 @@ public class JPADataSetLO extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "DataSetLO";
+	public static final String ENTITYNAME = "DataSetLO";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) {
@@ -250,7 +250,7 @@ public class JPADataSetLO extends JPAAbstractEntity {
 	}
 
 	public String getFileName() {
-		return DAOs.filemappingDAO.getSingleExternalFilename(this);
+		return DAOs.FILEMAPPINGDAO.getSingleExternalFilename(this);
 	}
 
 	public boolean hasComputedMetadata() {

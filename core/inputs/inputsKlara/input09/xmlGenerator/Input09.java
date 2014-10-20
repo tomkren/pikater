@@ -45,12 +45,12 @@ public final class Input09 {
 		
 		DataSourceDescription dataSourceSunny = new DataSourceDescription();
 		dataSourceSunny.setOutputType("sunnyOutput");
-		dataSourceSunny.setInputType(CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
+		dataSourceSunny.setInputType(CoreConstant.SlotContent.TRAININGDATA.getSlotName());
 		dataSourceSunny.setDataProvider(processing);
 
 		DataSourceDescription dataSourceRainy = new DataSourceDescription();
 		dataSourceRainy.setOutputType("rainyOutput");
-		dataSourceRainy.setInputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
+		dataSourceRainy.setInputType(CoreConstant.SlotContent.TESTINGDATA.getSlotName());
 		dataSourceRainy.setDataProvider(processing);
 						
         //Create validation method for a computing agent

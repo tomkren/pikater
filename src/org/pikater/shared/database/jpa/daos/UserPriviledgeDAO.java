@@ -11,7 +11,7 @@ public class UserPriviledgeDAO extends AbstractDAO<JPAUserPriviledge> {
 
 	@Override
 	public String getEntityName() {
-		return JPAUserPriviledge.EntityName;
+		return JPAUserPriviledge.ENTITYNAME;
 	}
 
 	public JPAUserPriviledge getByName(String name) {

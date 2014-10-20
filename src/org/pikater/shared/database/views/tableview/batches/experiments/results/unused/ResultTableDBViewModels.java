@@ -18,8 +18,8 @@ public class ResultTableDBViewModels extends ResultTableDBViewExperiment {
 
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
-		List<JPAResult> results = DAOs.resultDAO.getByExperimentWithModel(this.getExperiment(), constraints.getOffset(), constraints.getMaxResults());
-		int resultCount = DAOs.resultDAO.getByExperimentWithModelCount(this.getExperiment());
+		List<JPAResult> results = DAOs.RESULTDAO.getByExperimentWithModel(this.getExperiment(), constraints.getOffset(), constraints.getMaxResults());
+		int resultCount = DAOs.RESULTDAO.getByExperimentWithModelCount(this.getExperiment());
 
 		List<ResultTableDBRow> resultRows = new ArrayList<ResultTableDBRow>();
 		for (JPAResult result : results) {

@@ -47,7 +47,7 @@ public class JPAMetaDataReader {
 		public JPAGlobalMetaData getJPAGlobalMetaData(){
 			JPAGlobalMetaData globMD=new JPAGlobalMetaData();
 			globMD.setNumberofInstances(md.getNumberOfInstances());
-			globMD.setDefaultTaskType(DAOs.taskTypeDAO.createOrGetByName(md.getDefaultTask()));
+			globMD.setDefaultTaskType(DAOs.TASKTYPEDAO.createOrGetByName(md.getDefaultTask()));
 			globMD.setAttributeType(md.getAttributeType());
 			globMD.setLinearRegressionDuration(md.getLinearRegressionDuration());
 			return globMD;

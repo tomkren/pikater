@@ -15,12 +15,12 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 
 	@Override
 	public String getEntityName() {
-		return JPAFilemapping.EntityName;
+		return JPAFilemapping.ENTITYNAME;
 	}
 
 	public String getSingleExternalFilename(JPADataSetLO dslo) {
 		try {
-			return DAOs.filemappingDAO.getByInternalFilename(dslo.getHash()).get(0).getExternalfilename();
+			return DAOs.FILEMAPPINGDAO.getByInternalFilename(dslo.getHash()).get(0).getExternalfilename();
 		} catch (ArrayIndexOutOfBoundsException aioobe) {
 			return null;
 		}
@@ -43,7 +43,7 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 	}
 
 	public List<JPAFilemapping> getByUserID(int userID) {
-		JPAUser user = DAOs.userDAO.getByID(userID);
+		JPAUser user = DAOs.USERDAO.getByID(userID);
 		if (user != null) {
 			return getByTypedNamedQuery("FileMapping.getByUser", "user", user);
 		} else {
@@ -52,7 +52,7 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 	}
 
 	public List<JPAFilemapping> getByUserIDandInternalFilename(int userID, String internalFilename) {
-		JPAUser user = DAOs.userDAO.getByID(userID);
+		JPAUser user = DAOs.USERDAO.getByID(userID);
 		if (user != null) {
 			return getByTypedNamedQueryDouble("FileMapping.getByUserAndInternalFileName", "user", user, "internalFilename", internalFilename);
 		} else {
@@ -61,7 +61,7 @@ public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 	}
 
 	public List<JPAFilemapping> getByUserIDandExternalFilename(int userID, String externalFilename) {
-		JPAUser user = DAOs.userDAO.getByID(userID);
+		JPAUser user = DAOs.USERDAO.getByID(userID);
 		if (user != null) {
 			return getByTypedNamedQueryDouble("FileMapping.getByUserAndExternalFileName", "user", user, "externalFilename", externalFilename);
 		} else {

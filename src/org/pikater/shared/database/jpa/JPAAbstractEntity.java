@@ -25,7 +25,7 @@ import javax.persistence.Transient;
 public abstract class JPAAbstractEntity {
 
 	@Transient
-	public static final String EntityName = "AbstractEntity";
+	public static final String ENTITYNAME = "AbstractEntity";
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected int id;

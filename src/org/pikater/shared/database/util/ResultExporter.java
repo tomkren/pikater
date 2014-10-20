@@ -52,7 +52,7 @@ public class ResultExporter {
 	 */
 	public void export(int batchID) {
 		header(null, null, null);
-		List<Object[]> batchExperimentResultList = DAOs.batchDAO
+		List<Object[]> batchExperimentResultList = DAOs.BATCHDAO
 				.getByIDwithResults(batchID);
 		for (Object[] triplet : batchExperimentResultList) {
 			row((JPABatch) triplet[0], (JPAExperiment) triplet[1],

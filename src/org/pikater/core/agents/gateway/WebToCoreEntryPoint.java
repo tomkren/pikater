@@ -1,8 +1,5 @@
 package org.pikater.core.agents.gateway;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.pikater.core.agents.gateway.batch.PikaterGateway_KillBatch;
 import org.pikater.core.agents.gateway.batch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.batchPriorityChanged.PikaterGatewayBatchPriorityChanged;
@@ -10,10 +7,7 @@ import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
 import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
 import org.pikater.core.agents.gateway.newagent.PikaterGateway_NewAgent;
-import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
-import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
 public class WebToCoreEntryPoint {
 
@@ -85,41 +79,5 @@ public class WebToCoreEntryPoint {
 	{
 		PikaterGateway_GetAgentInfo.getAgentInfosVisibleForUser(-1);
 	}
-
-	/*
-	 * Test
-	 */
-	public static void main(String[] args) throws Exception {
-		
-		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfosVisibleForUser(-1);
-
-		for (AgentInfo agentInfoI : agentInfos.getAgentInfos()) {
-			System.out.println("AgentInfo: " + agentInfoI.getName());
-		}
-		
-		int userID = 5859;
-		
-		WebToCoreEntryPoint.uploadDataset("weather.arff",  userID, "weather");
-		WebToCoreEntryPoint.uploadDataset("iris.arff", userID, "iris");
-		WebToCoreEntryPoint.uploadDataset("glass.arff", userID, "glass");
-		WebToCoreEntryPoint.uploadDataset("autos.arff", userID, "autos");
-		WebToCoreEntryPoint.uploadDataset("mushroom.arff", userID, "mushroom");
-		WebToCoreEntryPoint.uploadDataset("ionosphere.arff", userID, "ionosphere");
-		
-	}
 	
-	private static void uploadDataset(String filename, int userID, String description) throws IOException{
-		
-		int id=DAOs.dataSetDAO.storeNewDataSet(new File("core/datasets/" + filename), filename, description, userID,JPADatasetSource.USER_UPLOAD);
-		System.out.println("Dataset uploaded with ID : "+id);
-		System.out.println("Demanding metadata computation...");
-		try{
-			WebToCoreEntryPoint.notify_newDataset(id);
-			System.out.println("Metadata computation finished");
-			
-		}catch(PikaterGatewayException pgwe){
-			System.err.println("Error during metadata computation");
-		}
-		
-	}
 }

@@ -54,12 +54,14 @@ public class ValueAxis extends Axis {
 
 	@Override
 	public String getTickString(int tick) {
-		if (tick == 0)
+		if (tick == 0){
 			return String.format("%1$,.2f", min);
-		if (tick == tickCount)
+		}else if (tick == tickCount){
 			return String.format("%1$,.2f", max);
-		double inc = (max - min) / (tickCount - 1);
-		return String.format("%1$,.2f", min + tick * inc);
+		}else{
+			double inc = (max - min) / (tickCount - 1);
+			return String.format("%1$,.2f", min + tick * inc);
+		}
 	}
 
 	@Override

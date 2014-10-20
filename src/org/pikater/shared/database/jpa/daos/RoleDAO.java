@@ -12,7 +12,7 @@ public class RoleDAO extends AbstractDAO<JPARole> {
 
 	@Override
 	public String getEntityName() {
-		return JPARole.EntityName;
+		return JPARole.ENTITYNAME;
 	}
 
 	public JPARole getByPikaterRole(PikaterRole role) {

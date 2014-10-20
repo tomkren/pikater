@@ -74,7 +74,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob {
 				throw new JobExecutionException("Unable to open input jar", e);
 			}
 			agent.setJar(content);
-			DAOs.externalAgentDAO.storeEntity(agent);
+			DAOs.EXTERNALAGENTDAO.storeEntity(agent);
 
 			try {
 				WebToCoreEntryPoint.notify_newAgent(agent.getId());

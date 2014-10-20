@@ -12,6 +12,14 @@ import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.postgresql.PGConnection;
 
 public class MyPGConnection {
+	
+	/**
+	 * Constructor to override default constructor
+	 */
+	private MyPGConnection(){
+		//overriding default constructor
+	}
+	
 	/**
 	 * A singleton connection instance. Used (at least) for all large object download/upload tasks.
 	 */
@@ -35,7 +43,7 @@ public class MyPGConnection {
 			return false;
 		}
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
-		Query q = em.createNativeQuery("select count(*) from " + DAOs.userDAO.getEntityName());
+		Query q = em.createNativeQuery("select count(*) from " + DAOs.USERDAO.getEntityName());
 		try {
 			q.getSingleResult();
 		} catch (Exception e) {

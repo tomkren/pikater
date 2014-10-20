@@ -20,7 +20,7 @@ public class ExperimentDAO extends AbstractDAO<JPAExperiment> {
 
 	@Override
 	public String getEntityName() {
-		return JPAExperiment.EntityName;
+		return JPAExperiment.ENTITYNAME;
 	}
 
 	public List<JPAExperiment> getByBatch(JPABatch batch) {

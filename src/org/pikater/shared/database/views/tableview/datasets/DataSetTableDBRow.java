@@ -140,6 +140,6 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 
 	@Override
 	public void commitRow() {
-		DAOs.dataSetDAO.updateEntity(dataset);
+		DAOs.DATASETDAO.updateEntity(dataset);
 	}
 }

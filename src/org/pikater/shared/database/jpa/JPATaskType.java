@@ -36,7 +36,7 @@ public class JPATaskType extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "TaskType";
+	public static final String ENTITYNAME = "TaskType";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

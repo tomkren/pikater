@@ -38,12 +38,12 @@ public class AgentLogger {
 
 	@SuppressWarnings("unused")
 	private enum Severity {
-		Minimal, Normal, Critical
+		MINIMAL, NORMAL, CRITICAL
 	}
 
 	@SuppressWarnings("unused")
 	private enum Verbosity {
-		NO_OUTPUT, MINIMAL, NORMAL, DETAILED
+		NOOUTPUT, MINIMAL, NORMAL, DETAILED
 	}
 
 	/*

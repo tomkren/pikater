@@ -33,7 +33,7 @@ public class CoreConfiguration {
 	 * Get Bean configuration file
 	 */
 	public static String getConfigurationFileName() {
-		return "Beans.xml";
+		return CoreConstant.BEANSLOCATION;
 	}
 
 	/**

@@ -18,7 +18,7 @@ public class ModelDAO extends AbstractDAO<JPAModel> {
 
 	@Override
 	public String getEntityName() {
-		return JPAModel.EntityName;
+		return JPAModel.ENTITYNAME;
 	}
 
 	public List<JPAModel> getByAgentClassName(String agentClassName) {

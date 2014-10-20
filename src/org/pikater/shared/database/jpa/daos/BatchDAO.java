@@ -29,7 +29,7 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 
 	@Override
 	public String getEntityName() {
-		return JPABatch.EntityName;
+		return JPABatch.ENTITYNAME;
 	}
 
 	protected Path<Object> convertColumnToJPAParam(ITableColumn column) {

@@ -377,8 +377,8 @@ public class Agent_DataManager extends PikaterAgent {
 	 * <p>This method is currently only called when the system starts.</p>
 	 */
 	private void cleanupAbortedBatches() {
-		DAOs.batchDAO.cleanUp();
-		DAOs.experimentDAO.cleanUp();
+		DAOs.BATCHDAO.cleanUp();
+		DAOs.EXPERIMENTDAO.cleanUp();
 	}
 
 	/**
@@ -394,7 +394,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		GetUserID getUserID = (GetUserID) a.getAction();
 
-		JPAUser userJPA = DAOs.userDAO.getByLogin(getUserID.getLogin()).get(0);
+		JPAUser userJPA = DAOs.USERDAO.getByLogin(getUserID.getLogin()).get(0);
 		if (userJPA == null) {
 			// received request links to a non-existing user account - respond with a FAILURE message
 			ACLMessage failure = request.createReply();
@@ -432,7 +432,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		GetUser getUser = (GetUser) a.getAction();
 
-		JPAUser userJPA = DAOs.userDAO.getByID(getUser.getUserID());
+		JPAUser userJPA = DAOs.USERDAO.getByID(getUser.getUserID());
 		if (userJPA == null) {
 			// received request links to a non-existing user account - respond with a FAILURE message
 			ACLMessage failure = request.createReply();
@@ -496,7 +496,7 @@ public class Agent_DataManager extends PikaterAgent {
 					translateFile.getExternalFilename());
 
 			List<JPAFilemapping> files = 
-					DAOs.filemappingDAO.getByExternalFilename(
+					DAOs.FILEMAPPINGDAO.getByExternalFilename(
 							translateFile.getExternalFilename());
 			if (!files.isEmpty()) {
 				translatedName = files.get(0).getInternalfilename();
@@ -522,7 +522,7 @@ public class Agent_DataManager extends PikaterAgent {
 					translateFile.getInternalFilename());
 
 			List<JPAFilemapping> files =
-					DAOs.filemappingDAO.getByExternalFilename(
+					DAOs.FILEMAPPINGDAO.getByExternalFilename(
 							translateFile.getInternalFilename());
 			
 			if (!files.isEmpty()) {
@@ -567,7 +567,7 @@ public class Agent_DataManager extends PikaterAgent {
 		reply.setPerformative(ACLMessage.INFORM);
 
 		List<JPAAgentInfo> agentInfoList =
-				DAOs.agentInfoDAO.getByAgentClass(agentClass);
+				DAOs.AGENTINFODAO.getByAgentClass(agentClass);
 		JPAAgentInfo agentInfoJPA = agentInfoList.get(0);
 
 		AgentInfo agentInfo =
@@ -603,10 +603,10 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.FAILURE);
 
-		JPAUser user = DAOs.userDAO.getByID(userID);
+		JPAUser user = DAOs.USERDAO.getByID(userID);
 		
 		List<JPAAgentInfo> agentInfoList =
-				DAOs.agentInfoDAO.getByExternalAgentOwner(user);
+				DAOs.AGENTINFODAO.getByExternalAgentOwner(user);
 
 		AgentInfos agentInfos = new AgentInfos();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
@@ -649,7 +649,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
+		List<JPAAgentInfo> agentInfoList = DAOs.AGENTINFODAO.getAll();
 
 		AgentInfos agentInfos = new AgentInfos();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
@@ -684,7 +684,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		logInfo("getting external agent names");
 
-		List<JPAExternalAgent> externalAgents = DAOs.externalAgentDAO.getAll();
+		List<JPAExternalAgent> externalAgents = DAOs.EXTERNALAGENTDAO.getAll();
 
 		List<AgentClass> agentNames = new ArrayList<AgentClass>();
 		for (JPAExternalAgent jpaAgentI : externalAgents) {
@@ -735,12 +735,12 @@ public class Agent_DataManager extends PikaterAgent {
 
 		String agentClassName = newAgentInfo.getAgentClassName();
 		JPAExternalAgent externalAgent =
-				DAOs.externalAgentDAO.getByAgentClass(agentClassName);
+				DAOs.EXTERNALAGENTDAO.getByAgentClass(agentClassName);
 		
 		ACLMessage reply = request.createReply();
 
 		java.util.List<JPAAgentInfo> agentInfoList =
-				DAOs.agentInfoDAO.getAll();
+				DAOs.AGENTINFODAO.getAll();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
 
 			AgentInfo agentInfoI =
@@ -753,7 +753,7 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 		}
 		
-		DAOs.agentInfoDAO.storeAgentInfoOntology(newAgentInfo, externalAgent);
+		DAOs.AGENTINFODAO.storeAgentInfoOntology(newAgentInfo, externalAgent);
 
 		reply.setPerformative(ACLMessage.INFORM);
 		reply.setContent("OK");
@@ -783,7 +783,7 @@ public class Agent_DataManager extends PikaterAgent {
 		UniversalComputationDescription uDescription =
 				description.exportUniversalComputationDescription();
 
-		JPAUser user = DAOs.userDAO.getByID(batch.getOwnerID());
+		JPAUser user = DAOs.USERDAO.getByID(batch.getOwnerID());
 
 		String batchXml = uDescription.toXML();
 
@@ -796,7 +796,7 @@ public class Agent_DataManager extends PikaterAgent {
 		batchJpa.setOwner(user);
 		batchJpa.setCreated(new Date());
 
-		DAOs.batchDAO.storeEntity(batchJpa);
+		DAOs.BATCHDAO.storeEntity(batchJpa);
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
@@ -831,7 +831,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		LoadBatch loadBatch = (LoadBatch) action.getAction();
 
-		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
+		JPABatch batchJPA = DAOs.BATCHDAO.getByID(loadBatch.getBatchID());
 
 		UniversalComputationDescription uDescription =
 				UniversalComputationDescription.fromXML(batchJPA.getXML());
@@ -948,7 +948,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 
 		JPABatch batchJPA =
-				DAOs.batchDAO.getByID(updateBatchStatus.getBatchID());
+				DAOs.BATCHDAO.getByID(updateBatchStatus.getBatchID());
 		JPABatchStatus batchStatus =
 				JPABatchStatus.valueOf(updateBatchStatus.getStatus());
 		
@@ -964,7 +964,7 @@ public class Agent_DataManager extends PikaterAgent {
 			break;
 		}
 		batchJPA.setStatus(batchStatus);
-		DAOs.batchDAO.updateEntity(batchJPA);
+		DAOs.BATCHDAO.updateEntity(batchJPA);
 
 		if ((batchStatus == JPABatchStatus.FINISHED) &&
 				(batchJPA.isSendEmailAfterFinish())) {
@@ -998,7 +998,7 @@ public class Agent_DataManager extends PikaterAgent {
 				action.getAction();
 		int batchID = getBatchPriority.getBatchID();
 
-		JPABatch batchJPA = DAOs.batchDAO.getByID(batchID);
+		JPABatch batchJPA = DAOs.BATCHDAO.getByID(batchID);
 
 		ACLMessage reply = request.createReply();
 
@@ -1039,7 +1039,7 @@ public class Agent_DataManager extends PikaterAgent {
 		/* Computation begins when experiment is created by Parser
 		 *  and SaveExperiment message is sent. 
 		 */
-		int savedID = DAOs.batchDAO.addExperimentToBatch(experiment);
+		int savedID = DAOs.BATCHDAO.addExperimentToBatch(experiment);
 
 		ACLMessage reply = request.createReply();
 
@@ -1086,7 +1086,7 @@ public class Agent_DataManager extends PikaterAgent {
 				action.getAction();
 
 		JPAExperiment experimentJPA =
-				DAOs.experimentDAO.getByID(
+				DAOs.EXPERIMENTDAO.getByID(
 						updateExperimentStatus.getExperimentID());
 		JPAExperimentStatus experimentStatus =
 				JPAExperimentStatus.valueOf(
@@ -1105,7 +1105,7 @@ public class Agent_DataManager extends PikaterAgent {
 			break;
 		}
 
-		DAOs.experimentDAO.updateEntity(experimentJPA);
+		DAOs.EXPERIMENTDAO.updateEntity(experimentJPA);
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
@@ -1152,7 +1152,7 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 			
 			List<JPADataSetLO> daoSets =
-					DAOs.dataSetDAO.getByHash(dataI.getInternalFileName());
+					DAOs.DATASETDAO.getByHash(dataI.getInternalFileName());
 			ResultFormatter<JPADataSetLO> resultFormartter =
 					new ResultFormatter<JPADataSetLO>(daoSets);
 			
@@ -1178,7 +1178,7 @@ public class Agent_DataManager extends PikaterAgent {
 		for (TaskOutput outputI : task.getOutput()) {
 			
 			List<JPADataSetLO> dataSets =
-					DAOs.dataSetDAO.getByHash(outputI.getName());
+					DAOs.DATASETDAO.getByHash(outputI.getName());
 			ResultFormatter<JPADataSetLO> resultFormatter =
 					new ResultFormatter<JPADataSetLO>(dataSets);
 			
@@ -1216,37 +1216,37 @@ public class Agent_DataManager extends PikaterAgent {
 		Evaluation evaluation = task.getResult();
 
 		Eval errorRateEval = evaluation.exportEvalByName(
-				CoreConstant.Error.ERROR_RATE.name());
+				CoreConstant.Error.ERRORRATE.name());
 		if (errorRateEval != null) {
 			errorRate = errorRateEval.getValue();
 		}
 
 		Eval kappaStatisticEval = evaluation.exportEvalByName(
-				CoreConstant.Error.KAPPA_STATISTIC.name());
+				CoreConstant.Error.KAPPASTATISTIC.name());
 		if (kappaStatisticEval != null) {
 			kappaStatistic = kappaStatisticEval.getValue();
 		}
 
 		Eval meanAbsoluteEval = evaluation.exportEvalByName(
-				CoreConstant.Error.MEAN_ABSOLUTE.name());
+				CoreConstant.Error.MEANABSOLUTE.name());
 		if (meanAbsoluteEval != null) {
 			meanAbsoluteError = meanAbsoluteEval.getValue();
 		}
 
 		Eval rootMeanSquaredEval = evaluation.exportEvalByName(
-				CoreConstant.Error.ROOT_MEAN_SQUARED.name());
+				CoreConstant.Error.ROOTMEANSQUARED.name());
 		if (rootMeanSquaredEval != null) {
 			rootMeanSquaredError = rootMeanSquaredEval.getValue();
 		}
 
 		Eval relativeAbsoluteEval = evaluation.exportEvalByName(
-				CoreConstant.Error.RELATIVE_ABSOLUTE.name());
+				CoreConstant.Error.RELATIVEABSOLUTE.name());
 		if (relativeAbsoluteEval != null) {
 			relativeAbsoluteError = relativeAbsoluteEval.getValue();
 		}
 
 		Eval rootRelativeSquaredEval = evaluation.exportEvalByName(
-				CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
+				CoreConstant.Error.ROOTRELATIVESQUARED.name());
 		if (rootRelativeSquaredEval != null) {
 			rootRelativeSquaredError = rootRelativeSquaredEval.getValue();
 		}
@@ -1292,7 +1292,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		jparesult.setNote(task.getNote());
 		logInfo("JPA Result    " + jparesult.getErrorRate());
-		int resultID = DAOs.experimentDAO.addResultToExperiment(
+		int resultID = DAOs.EXPERIMENTDAO.addResultToExperiment(
 				experimentID, jparesult);
 		if (resultID != -1) {
 			logInfo("Persisted JPAResult for experiment ID " +
@@ -1329,7 +1329,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		try {
 			File file = new File(savedataset.getSourceFile());
-			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(file,
+			int jpadsloID = DAOs.DATASETDAO.storeNewDataSet(file,
 					file.getName(), savedataset.getDescription(),
 					savedataset.getUserID(),JPADatasetSource.EXPERIMENT);
 
@@ -1361,7 +1361,7 @@ public class Agent_DataManager extends PikaterAgent {
 		m.setAgentClassName(task.getAgent().getType());
 		m.setResultID(resultId);
 		m.setSerializedAgent(task.getResult().getObject());
-		int savedModelID = DAOs.resultDAO.setModelForResult(m);
+		int savedModelID = DAOs.RESULTDAO.setModelForResult(m);
 		if (savedModelID == -1) {
 			logSevere("Failed to persist model for result with ID " +
 					resultId);
@@ -1392,12 +1392,12 @@ public class Agent_DataManager extends PikaterAgent {
 
 		JPADataSetLO dslo;
 		try {
-			dslo = DAOs.dataSetDAO.getByID(dataSetID, EmptyResultAction.THROW);
+			dslo = DAOs.DATASETDAO.getByID(dataSetID, EmptyResultAction.THROW);
 
 			String currentHash = dslo.getHash();
 
 			List<JPADataSetLO> equalDataSets =
-					DAOs.dataSetDAO.getByHash(currentHash);
+					DAOs.DATASETDAO.getByHash(currentHash);
 			logInfo("Hash of new dataset: " + currentHash);
 			//we search for a dataset entry with the same hash and with already generated metadata
 			JPADataSetLO dsloWithMetaData = null;
@@ -1418,7 +1418,7 @@ public class Agent_DataManager extends PikaterAgent {
 						dsloWithMetaData.getAttributeMetaData());
 				dslo.setGlobalMetaData(dsloWithMetaData.getGlobalMetaData());
 			}
-			DAOs.dataSetDAO.updateEntity(dslo);
+			DAOs.DATASETDAO.updateEntity(dslo);
 
 		} catch (NoResultException e1) {
 			logException("Dataset for ID " + dataSetID + " doesn't exist.", e1);
@@ -1450,7 +1450,7 @@ public class Agent_DataManager extends PikaterAgent {
 				getMetadata.getInternalFilename());
 		
 		List<JPADataSetLO> dataSets =
-				DAOs.dataSetDAO.getByHash(getMetadata.getInternalFilename());
+				DAOs.DATASETDAO.getByHash(getMetadata.getInternalFilename());
 		ResultFormatter<JPADataSetLO> resultFormatter =
 				new ResultFormatter<JPADataSetLO>(dataSets);
 		JPADataSetLO dslo = resultFormatter.getSingleResultWithNull();
@@ -1538,7 +1538,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Metadata globalMetaData = new Metadata();
 
 		List<JPAFilemapping> fileMappings =
-				DAOs.filemappingDAO.getByInternalFilename(dslo.getHash());
+				DAOs.FILEMAPPINGDAO.getByInternalFilename(dslo.getHash());
 		ResultFormatter<JPAFilemapping> resultFormatter =
 				new ResultFormatter<JPAFilemapping>(fileMappings);
 		JPAFilemapping filemap = resultFormatter.getSingleResultWithNull();
@@ -1602,12 +1602,12 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		if (getMetadata.getResultsRequired()) {
 			logInfo("DataManager.Results Required");
-			datasets = DAOs.dataSetDAO
+			datasets = DAOs.DATASETDAO
 					.getAllWithResultsExcludingHashesWithMetadata(exHash);
 		} else {
 			logInfo("DataManager.Results NOT Required");
 			datasets =
-					DAOs.dataSetDAO.getAllExcludingHashesWithMetadata(exHash);
+					DAOs.DATASETDAO.getAllExcludingHashesWithMetadata(exHash);
 		}
 
 		if (datasets == null) {
@@ -1653,7 +1653,7 @@ public class Agent_DataManager extends PikaterAgent {
 		logInfo("DataManager.GetTheBestAgent for datafile " + datasethash);
 
 		List<JPAResult> results =
-				DAOs.resultDAO.getResultsByDataSetHashAscendingUponErrorRate(
+				DAOs.RESULTDAO.getResultsByDataSetHashAscendingUponErrorRate(
 						datasethash, count);
 
 		ACLMessage reply = request.createReply();
@@ -1697,7 +1697,7 @@ public class Agent_DataManager extends PikaterAgent {
 		SaveModel sm = (SaveModel) a.getAction();
 		ACLMessage reply = request.createReply();
 
-		int savedModelID = DAOs.resultDAO.setModelForResult(sm.getModel());
+		int savedModelID = DAOs.RESULTDAO.setModelForResult(sm.getModel());
 
 		if (savedModelID != -1) {
 			logInfo("Saved Model ID: " + savedModelID);
@@ -1721,7 +1721,7 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage respondToGetModel(ACLMessage request, Action a) {
 		GetModel gm = (GetModel) a.getAction();
 
-		JPAModel savedModel = DAOs.modelDAO.getByID(gm.getModelID());
+		JPAModel savedModel = DAOs.MODELDAO.getByID(gm.getModelID());
 		ACLMessage reply = request.createReply();
 		if (savedModel == null) {
 			reply.setPerformative(ACLMessage.FAILURE);
@@ -1755,7 +1755,7 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage respondToGetModels(ACLMessage request,
 			Action action) {
 		
-		List<JPAModel> savedModels = DAOs.modelDAO.getAll();
+		List<JPAModel> savedModels = DAOs.MODELDAO.getAll();
 
 		Models models = new Models();
 		for (JPAModel modelJPA : savedModels) {
@@ -1805,7 +1805,7 @@ public class Agent_DataManager extends PikaterAgent {
 		logInfo("getting JAR for agent type " + type);
 
 		JPAExternalAgent extAgent =
-				DAOs.externalAgentDAO.getByAgentClass(type);
+				DAOs.EXTERNALAGENTDAO.getByAgentClass(type);
 
 		if (extAgent == null) {
 			throw new FailureException("Agent jar for type " +
@@ -1898,7 +1898,7 @@ public class Agent_DataManager extends PikaterAgent {
 		String hash = ((GetFile) action.getAction()).getHash();
 		logInfo(new Date().toString() + " DataManager.GetFile");
 
-		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getByHash(hash);
+		List<JPADataSetLO> dslos = DAOs.DATASETDAO.getByHash(hash);
 		
 		if (!dslos.isEmpty()) {
 			try {
@@ -1974,7 +1974,7 @@ public class Agent_DataManager extends PikaterAgent {
 	public ACLMessage respondToGetAllDatasetInfo(ACLMessage request,
 			Action action) {
 		
-		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getAllUserUploaded();
+		List<JPADataSetLO> dslos = DAOs.DATASETDAO.getAllUserUploaded();
 		DatasetsInfo datasetsOnto = new DatasetsInfo();
 		
 		for (JPADataSetLO datasetI : dslos) {

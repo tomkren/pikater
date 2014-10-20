@@ -50,7 +50,7 @@ public class JPAFilemapping extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "FileMapping";
+	public static final String ENTITYNAME = "FileMapping";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

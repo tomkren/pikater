@@ -77,7 +77,7 @@ public class JPAUser extends JPAAbstractEntity {
 	 * - passive status (administrator acceptance is needed).  
 	 */
 	public static JPAUser createAccountForGUI(String login, String password, String email) {
-		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.USER), 0, JPAUserStatus.SUSPENDED);
+		return new JPAUser(login, password, email, DAOs.ROLEDAO.getByPikaterRole(PikaterRole.USER), 0, JPAUserStatus.SUSPENDED);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class JPAUser extends JPAAbstractEntity {
 	 * - active status (no administrator acceptance is needed). 
 	 */
 	public static JPAUser createAccountForDBInit(String login, String password, String email, JPARole role) {
-		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN), 9, JPAUserStatus.ACTIVE);
+		return new JPAUser(login, password, email, DAOs.ROLEDAO.getByPikaterRole(PikaterRole.ADMIN), 9, JPAUserStatus.ACTIVE);
 	}
 
 	/**
@@ -185,12 +185,12 @@ public class JPAUser extends JPAAbstractEntity {
 		if (admin) // promote
 		{
 			if (!isAdmin()) {
-				setRole(DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN));
+				setRole(DAOs.ROLEDAO.getByPikaterRole(PikaterRole.ADMIN));
 			}
 		} else // downgrade
 		{
 			if (isAdmin()) {
-				setRole(DAOs.roleDAO.getByPikaterRole(PikaterRole.USER));
+				setRole(DAOs.ROLEDAO.getByPikaterRole(PikaterRole.USER));
 			}
 		}
 	}
@@ -200,7 +200,7 @@ public class JPAUser extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "User";
+	public static final String ENTITYNAME = "User";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

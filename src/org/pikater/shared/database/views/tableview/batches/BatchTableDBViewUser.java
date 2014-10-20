@@ -53,8 +53,8 @@ public class BatchTableDBViewUser extends BatchTableDBViewAll {
 
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints) {
-		List<JPABatch> resultBatches = DAOs.batchDAO.getByOwner(this.owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
-		int allBatchesCount = DAOs.batchDAO.getByOwnerCount(owner);
+		List<JPABatch> resultBatches = DAOs.BATCHDAO.getByOwner(this.owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+		int allBatchesCount = DAOs.BATCHDAO.getByOwnerCount(owner);
 
 		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
 		for (JPABatch batch : resultBatches) {

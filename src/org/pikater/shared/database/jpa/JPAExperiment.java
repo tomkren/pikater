@@ -161,7 +161,7 @@ public class JPAExperiment extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "Experiment";
+	public static final String ENTITYNAME = "Experiment";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

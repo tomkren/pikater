@@ -15,6 +15,13 @@ import org.pikater.shared.logging.database.PikaterDBLogger;
  * @see org.pikater.shared.database.jpa.daos
  */
 public class EntityManagerInstancesCreator {
+	
+	/**
+	 * Constructor to override default constructor
+	 */
+	private EntityManagerInstancesCreator(){
+		//overriding default constructor
+	}
 	/**
 	 * EntityManagerFactory instantiation takes some time so it's best to use a single instance to
 	 * produce EntityManager instances, unless we need several different configurations for various

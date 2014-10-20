@@ -18,7 +18,7 @@ public class ResultDAO extends AbstractDAO<JPAResult> {
 
 	@Override
 	public String getEntityName() {
-		return JPAResult.EntityName;
+		return JPAResult.ENTITYNAME;
 	}
 
 	public List<JPAResult> getByAgentName(String agentName) {

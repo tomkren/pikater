@@ -50,13 +50,13 @@ public class SVGRenderer implements RendererInterface {
 				.replace("{color}", String.format("fill:rgb(%1$d,%2$d,%3$d);", color.getRed(), color.getGreen(), color.getBlue())).replace("{text}", text);
 
 		switch (textAlignment) {
-		case Left:
+		case LEFT:
 			outText = outText.replace("{align}", "start");
 			break;
-		case Center:
+		case CENTER:
 			outText = outText.replace("{align}", "middle");
 			break;
-		case Right:
+		case RIGHT:
 			outText = outText.replace("{align}", "end");
 			break;
 		default:
@@ -87,13 +87,13 @@ public class SVGRenderer implements RendererInterface {
 						.replace("{size}", "font-size:" + size + "px;").replace("{text}", text);
 
 		switch (textAlignment) {
-		case Left:
+		case LEFT:
 			outText = outText.replace("{align}", "start");
 			break;
-		case Center:
+		case CENTER:
 			outText = outText.replace("{align}", "middle");
 			break;
-		case Right:
+		case RIGHT:
 			outText = outText.replace("{align}", "end");
 			break;
 		default:

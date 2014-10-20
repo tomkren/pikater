@@ -22,7 +22,7 @@ public class ExternalAgentDAO extends AbstractDAO<JPAExternalAgent> {
 
 	@Override
 	public String getEntityName() {
-		return JPAExternalAgent.EntityName;
+		return JPAExternalAgent.ENTITYNAME;
 	}
 
 	protected Path<Object> convertColumnToJPAParam(ITableColumn column) {

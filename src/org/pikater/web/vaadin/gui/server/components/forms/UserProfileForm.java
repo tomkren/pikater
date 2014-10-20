@@ -83,7 +83,7 @@ public class UserProfileForm extends CustomFormLayout {
 				if (!WebAppConfiguration.avoidUsingDBForNow()) {
 					currentUser.setPassword(passwordField.getValue());
 					currentUser.setEmail(emailField.getValue());
-					DAOs.userDAO.updateEntity(currentUser);
+					DAOs.USERDAO.updateEntity(currentUser);
 				}
 
 				MyNotifications.showSuccess(null, "Changes were successfully saved.");

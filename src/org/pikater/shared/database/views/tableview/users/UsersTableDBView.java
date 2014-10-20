@@ -92,8 +92,8 @@ public class UsersTableDBView extends AbstractTableDBView {
 
 	@Override
 	public QueryResult queryUninitializedRows(final QueryConstraints constraints) {
-		List<JPAUser> resultUsers = DAOs.userDAO.getAll(constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
-		int allUsersCount = DAOs.userDAO.getAllCount();
+		List<JPAUser> resultUsers = DAOs.USERDAO.getAll(constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+		int allUsersCount = DAOs.USERDAO.getAllCount();
 
 		List<UsersTableDBRow> resultRows = new ArrayList<UsersTableDBRow>();
 		for (JPAUser user : resultUsers) {

@@ -177,12 +177,12 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		List<Eval> evaluations = evaluation.getEvaluations();
 		
 		Eval errorRateEval = new Eval();
-		errorRateEval.setName(CoreConstant.Error.ERROR_RATE.name());
+		errorRateEval.setName(CoreConstant.Error.ERRORRATE.name());
 		errorRateEval.setValue((float) eval.errorRate());
 		evaluations.add(errorRateEval);
 		
 		Eval kappaStatisticEval = new Eval();
-		kappaStatisticEval.setName(CoreConstant.Error.KAPPA_STATISTIC.name());
+		kappaStatisticEval.setName(CoreConstant.Error.KAPPASTATISTIC.name());
 		try {
 			kappaStatisticEval.setValue((float) eval.kappa());
 		} catch (Exception e) {
@@ -191,7 +191,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(kappaStatisticEval);
 
 		Eval meanAbsoluteError = new Eval();
-		meanAbsoluteError.setName(CoreConstant.Error.MEAN_ABSOLUTE.name());
+		meanAbsoluteError.setName(CoreConstant.Error.MEANABSOLUTE.name());
 		try {
 			meanAbsoluteError.setValue((float) eval.meanAbsoluteError());
 		} catch (Exception e) {
@@ -201,7 +201,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		Eval relativeAbsoluteError = new Eval();
 		relativeAbsoluteError.setName(
-				CoreConstant.Error.RELATIVE_ABSOLUTE.name());
+				CoreConstant.Error.RELATIVEABSOLUTE.name());
 		try {
 			relativeAbsoluteError.setValue(
 					(float) eval.relativeAbsoluteError());
@@ -211,7 +211,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(relativeAbsoluteError);
 		
 		Eval meanSquaredEval = new Eval();
-		meanSquaredEval.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());
+		meanSquaredEval.setName(CoreConstant.Error.ROOTMEANSQUARED.name());
 		try {
 			meanSquaredEval.setValue((float) eval.rootMeanSquaredError());
 		} catch (Exception e) {
@@ -221,7 +221,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		Eval relativeSquaredEval = new Eval();
 		relativeSquaredEval.setName(
-				CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
+				CoreConstant.Error.ROOTRELATIVESQUARED.name());
 		try {
 			relativeSquaredEval.setValue(
 					(float) eval.rootRelativeSquaredError());

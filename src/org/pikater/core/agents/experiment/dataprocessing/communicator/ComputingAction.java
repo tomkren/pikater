@@ -123,7 +123,7 @@ public class ComputingAction extends FSMBehaviour {
 					getTrainBehaviour.reset(null);
 				}
 
-				if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.name())) {
+				if (!mode.equals(CoreConstant.Mode.TRAINONLY.name())) {
 					testFn = data.exportInternalTestFileName();
 					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETTESTDATA_STATE);
@@ -312,7 +312,7 @@ public class ComputingAction extends FSMBehaviour {
 								executeAction.getTask().getEvaluationMethod();
 
 						if (! mode.equals(
-								CoreConstant.Mode.TRAIN_ONLY.name())) {
+								CoreConstant.Mode.TRAINONLY.name())) {
 							agent.evaluateCA(evaluationMethod, eval);
 
 							if (output.equals(
@@ -428,9 +428,9 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 				
-				addTaskOutput(InOutType.TEST, CoreConstant.SlotContent.TESTING_DATA.getSlotName(), agent.test);
-				addTaskOutput(InOutType.TRAIN, CoreConstant.SlotContent.TRAINING_DATA.getSlotName(), agent.train);
-				addTaskOutput(InOutType.VALIDATION, CoreConstant.SlotContent.VALIDATION_DATA.getSlotName(), agent.label);
+				addTaskOutput(InOutType.TEST, CoreConstant.SlotContent.TESTINGDATA.getSlotName(), agent.test);
+				addTaskOutput(InOutType.TRAIN, CoreConstant.SlotContent.TRAININGDATA.getSlotName(), agent.train);
+				addTaskOutput(InOutType.VALIDATION, CoreConstant.SlotContent.VALIDATIONDATA.getSlotName(), agent.label);
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);

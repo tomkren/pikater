@@ -49,7 +49,7 @@ public class JPAUserPriviledge extends JPAAbstractEntity {
 	}
 
 	@Transient
-	public static final String EntityName = "UserPriviledge";
+	public static final String ENTITYNAME = "UserPriviledge";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

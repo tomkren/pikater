@@ -111,7 +111,7 @@ public class Agent_Duration extends PikaterAgent {
         		CoreAgents.DURATION_SERVICE.getName(),
         		null);
         
-		this.durationDatasetName = CoreConstant.DURATION_DATASET_NAME;
+		this.durationDatasetName = CoreConstant.DURATIONDATASETNAME;
 		this.durationDatasetHash = DataManagerService.
 				translateExternalFilename(this, -1, durationDatasetName);
 
@@ -406,7 +406,7 @@ public class Agent_Duration extends PikaterAgent {
 						durationDatasetHash,
 						CoreConstant.DataType.TRAIN_DATA.getType()));
 		datas.addData(new Data("xxx", "xxx", CoreConstant.DataType.TEST_DATA.getType()));
-		datas.setMode(CoreConstant.Mode.TRAIN_ONLY.name());
+		datas.setMode(CoreConstant.Mode.TRAINONLY.name());
 		
 		Task task = new Task();		
 		task.setAgent(ag);

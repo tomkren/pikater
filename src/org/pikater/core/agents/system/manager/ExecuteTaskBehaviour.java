@@ -102,7 +102,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator {
 					node.addToOutputAndProcess(labeledData, "file");
 				}
 
-				CoreConstant.SlotContent testingData = CoreConstant.SlotContent.TESTING_DATA;
+				CoreConstant.SlotContent testingData = CoreConstant.SlotContent.TESTINGDATA;
 
 				if (node.containsOutput(testingData.getSlotName())) {
 					TaskOutput test = task.getOutputByType(Task.InOutType.TEST);
@@ -114,7 +114,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator {
 							testingData.getSlotName());
 				}
 
-				CoreConstant.SlotContent trainingData = CoreConstant.SlotContent.TRAINING_DATA;
+				CoreConstant.SlotContent trainingData = CoreConstant.SlotContent.TRAININGDATA;
 
 				if (node.containsOutput(trainingData.getSlotName())) {
 					TaskOutput train = task
