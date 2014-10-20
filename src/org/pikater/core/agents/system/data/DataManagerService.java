@@ -841,7 +841,7 @@ public class DataManagerService extends FIPAService {
 
 		return -1;
 	}
-
+	
 	public static Batch loadBatch(PikaterAgent agent, int batchID) {
 
 		LoadBatch loadBatch = new LoadBatch();
