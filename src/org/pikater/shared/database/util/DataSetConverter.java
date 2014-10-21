@@ -19,7 +19,7 @@ import org.pikater.shared.database.exceptions.DataSetConverterException;
 
 public class DataSetConverter {
 
-	private static final char DELIMINITER = ',';
+	private static final char DELIMITER = ',';
 
 	public enum InputType {
 		INVALID, CSV, XLS, XLSX
@@ -80,7 +80,7 @@ public class DataSetConverter {
 				if (col == lastcell - 1) {
 					out.println();
 				} else {
-					out.print(DataSetConverter.DELIMINITER);
+					out.print(DataSetConverter.DELIMITER);
 				}
 			}
 		}

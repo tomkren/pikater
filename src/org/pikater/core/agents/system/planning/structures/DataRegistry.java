@@ -37,8 +37,7 @@ public class DataRegistry {
 	 * Constructor - initialization
 	 * 
 	 */
-	public DataRegistry(PikaterAgent agent,
-			CPUCoresStructure cpuCoresStructure) {
+	public DataRegistry(PikaterAgent agent) {
 		this.agent = agent;
 		// TODO initial load, currently presumes no data is anywhere initially
 	}

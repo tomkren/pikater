@@ -17,6 +17,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,76 +46,67 @@ import org.pikater.core.ontology.subtrees.task.ExecuteTask;
  * Time: 15:51
  */
 public class ManagerAgentRequestResponder {
-    private Agent_ManagerAgent managerAgent;
+	private Agent_ManagerAgent managerAgent;
 
-    
-    public ManagerAgentRequestResponder(Agent_ManagerAgent managerAgent) {
-        this.managerAgent = managerAgent;
-    }
+	public ManagerAgentRequestResponder(Agent_ManagerAgent managerAgent) {
+		this.managerAgent = managerAgent;
+	}
 
-    public  Object toObject(byte[] bytes) throws IOException, ClassNotFoundException {
-        Object object;
+	public Object toObject(byte[] bytes) throws IOException, ClassNotFoundException {
+		Object object;
 
-        object = new java.io.ObjectInputStream(new
-                java.io.ByteArrayInputStream(bytes)).readObject();
+		object = new ObjectInputStream(new ByteArrayInputStream(bytes)).readObject();
 
-        return object;
-    }
+		return object;
+	}
 
-    public ACLMessage respondToSaveAgent(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException {
-        Action a = (Action) managerAgent.getContentManager().extractContent(request);
-        SaveAgent sa = (SaveAgent) a.getAction();
+	public ACLMessage respondToSaveAgent(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException {
+		Action a = (Action) managerAgent.getContentManager().extractContent(request);
+		SaveAgent sa = (SaveAgent) a.getAction();
 
-        int userID = sa.getUserID();
+		int userID = sa.getUserID();
 
-        org.pikater.core.ontology.subtrees.management.Agent agent = sa.getAgent();
+		org.pikater.core.ontology.subtrees.management.Agent agent = sa.getAgent();
 
-        String name = agent.getName(); // TODO - zajistit unikatni pro konkretniho uzivatele
-        Timestamp currentTimestamp =
-                new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+		String name = agent.getName(); // TODO - zajistit unikatni pro konkretniho uzivatele
+		Timestamp currentTimestamp = new Timestamp(Calendar.getInstance().getTime().getTime());
 
+		String filename = userID + "_" + name + "_" + currentTimestamp.toString().replace(":", "-").replace(" ", "_");
 
-        String filename = userID + "_" + name + "_"
-                + currentTimestamp.toString().replace(":", "-").replace(" ", "_");
+		// save serialized object to file
+		byte[] object = sa.getAgent().getObject();
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CoreConfiguration.getSavedResultsPath() + filename + ".model"));
 
+		oos.writeObject(toObject(object));
+		oos.flush();
+		oos.close();
+		managerAgent.logInfo("Agent " + name + " saved to file" + filename + ".model");
 
-        // save serialized object to file
-        byte [] object = sa.getAgent().getObject();
-        ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(CoreConfiguration.getSavedResultsPath() + filename + ".model"));
+		ACLMessage reply = request.createReply();
+		reply.setContent(filename);
+		reply.setPerformative(ACLMessage.INFORM);
 
+		return reply;
+	}
 
-        oos.writeObject(toObject(object));
-        oos.flush();
-        oos.close();
-        managerAgent.logInfo("Agent " + name + " saved to file" + filename + ".model");
+	public ACLMessage respondToCreateAgent(ACLMessage request) throws OntologyException, CodecException {
 
-        ACLMessage reply = request.createReply();
-        reply.setContent(filename);
-        reply.setPerformative(ACLMessage.INFORM);
+		Action a = (Action) managerAgent.getContentManager().extractContent(request);
+		CreateAgent createAgent = (CreateAgent) a.getAction();
 
-        return reply;
-    }
+		String agentName = createAgent.getName();
+		String agentType = createAgent.getType();
+		Arguments arguments = createAgent.getArguments();
 
-    public ACLMessage respondToCreateAgent(ACLMessage request) throws OntologyException, CodecException {
-    	
-        Action a = (Action) managerAgent.getContentManager().extractContent(request);
-        CreateAgent createAgent = (CreateAgent) a.getAction();
-        
-        String agentName = createAgent.getName();
-        String agentType = createAgent.getType();
-        Arguments arguments = createAgent.getArguments();
-        
-        String agentNameCreated =
-        		managerAgent.createAgentInMyContainer(agentType, agentName, arguments);
+		String agentNameCreated = managerAgent.createAgentInMyContainer(agentType, agentName, arguments);
 
-        ACLMessage reply = request.createReply();
-        reply.setPerformative(ACLMessage.INFORM);
-        reply.setContent(agentNameCreated);
-        managerAgent.logInfo("Agent " + agentNameCreated + " created.");
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent(agentNameCreated);
+		managerAgent.logInfo("Agent " + agentNameCreated + " created.");
 
-        return reply;
-    }
+		return reply;
+	}
 
 	public ACLMessage respondToKillAgent(ACLMessage request) throws OntologyException, CodecException, FIPAException {
 		Action a = (Action) managerAgent.getContentManager().extractContent(request);
@@ -136,9 +128,8 @@ public class ManagerAgentRequestResponder {
 		managerAgent.getContentManager().fillContent(msgToAgent, actionToAgent);
 
 		ACLMessage replyFromAgent = FIPAService.doFipaRequestClient(managerAgent, msgToAgent, 10000);
-		if (replyFromAgent == null)
-		{
-			throw new FailureException("Agent didn't terminate in within 10 sec: "+agentName);
+		if (replyFromAgent == null) {
+			throw new FailureException("Agent didn't terminate in within 10 sec: " + agentName);
 		}
 		managerAgent.logInfo("Terminated " + agentName);
 
@@ -147,136 +138,135 @@ public class ManagerAgentRequestResponder {
 		reply.setContent("OK");
 		return reply;
 	}
-	
-    public ACLMessage respondToLoadAgent(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException, ControllerException {
 
-        Action a = (Action) managerAgent.getContentManager().extractContent(request);
-        LoadAgent la = (LoadAgent) a.getAction();
-        ExecuteTask fa = la.getFirstAction();
+	public ACLMessage respondToLoadAgent(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException, ControllerException {
 
-        Agent newAgent;
+		Action a = (Action) managerAgent.getContentManager().extractContent(request);
+		LoadAgent la = (LoadAgent) a.getAction();
+		ExecuteTask fa = la.getFirstAction();
 
-        if (la.getObject() != null){
-            newAgent = (Agent)toObject(la.getObject());
-        } else {
+		Agent newAgent;
 
-            // read agent from file
-            String filename = CoreConfiguration.getSavedResultsPath() +
-            		la.getFilename() + ".model";
+		if (la.getObject() != null) {
+			newAgent = (Agent) toObject(la.getObject());
+		} else {
 
-            //Construct the ObjectInputStream object
-            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename));
+			// read agent from file
+			String filename = CoreConfiguration.getSavedResultsPath() + la.getFilename() + ".model";
 
-            newAgent = (Agent) inputStream.readObject();
+			//Construct the ObjectInputStream object
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename));
 
-            inputStream.close();
-        }
+			newAgent = (Agent) inputStream.readObject();
 
-        managerAgent.logInfo("Resurrected agent : " + newAgent);
-        // TODO kdyz se ozivuje 2x ten samej -> chyba
+			inputStream.close();
+		}
 
-        String agentName = managerAgent.generateName(la.getFilename());
+		managerAgent.logInfo("Resurrected agent : " + newAgent);
+		// TODO kdyz se ozivuje 2x ten samej -> chyba
 
-        if (newAgent != null){
-            // get a container controller for creating new agents
+		String agentName = managerAgent.generateName(la.getFilename());
 
-            ContainerController container = managerAgent.getContainerController();
-            AgentController controller = container.acceptNewAgent(agentName, newAgent);
-            controller.start();
+		if (newAgent != null) {
+			// get a container controller for creating new agents
 
-        } else {
-            throw new ControllerException("Agent not created.");
-        }
+			ContainerController container = managerAgent.getContainerController();
+			AgentController controller = container.acceptNewAgent(agentName, newAgent);
+			controller.start();
 
-        managerAgent.logInfo("Loaded agent:   " + agentName);
+		} else {
+			throw new ControllerException("Agent not created.");
+		}
 
-        jade.lang.acl.ACLMessage reply;
+		managerAgent.logInfo("Loaded agent:   " + agentName);
 
-        if (fa != null){
-            // send message with fa action to the loaded agent
-            Action ac = new Action();
-            ac.setAction(fa);
-            ac.setActor(request.getSender());
+		ACLMessage reply;
 
-            Ontology ontology = AgentManagementOntology.getInstance();
-            
-            ACLMessage first_message = new ACLMessage(ACLMessage.REQUEST);
-            first_message.setLanguage(managerAgent.getCodec().getName());
-            first_message.setOntology(ontology.getName());
-            first_message.addReceiver(new AID(agentName, AID.ISLOCALNAME));
-            first_message.clearAllReplyTo();
-            first_message.addReplyTo(request.getSender());
-            first_message.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-            first_message.setConversationId(request.getConversationId());
+		if (fa != null) {
+			// send message with fa action to the loaded agent
+			Action ac = new Action();
+			ac.setAction(fa);
+			ac.setActor(request.getSender());
 
-            managerAgent.getContentManager().fillContent(first_message, ac);
-            managerAgent.send(first_message);
-        }
-        reply = request.createReply();
-        reply.setContent(newAgent.getLocalName());
-        reply.setPerformative(ACLMessage.INFORM);
+			Ontology ontology = AgentManagementOntology.getInstance();
 
-        return reply;
-    }
-    
-    public ACLMessage respondToGetComputerInfo(ACLMessage request) throws OntologyException, CodecException {
-    	
-        Action a = (Action) managerAgent.getContentManager().extractContent(request);
-        
-        managerAgent.logInfo("Request to get ComputerInfo");
-        Ontology ontology = AgentManagementOntology.getInstance();
-        Codec codec = managerAgent.getCodec();
-        
-        int cores = Runtime.getRuntime().availableProcessors();
-        String osName = System.getProperty("os.name");
-        
-        ComputerInfo computerInfo = new ComputerInfo();
-        computerInfo.setOperationSystem(osName);
-        computerInfo.setNumberOfCores(cores);
-        
-        ACLMessage reply = request.createReply();
-        reply.setPerformative(ACLMessage.INFORM);
-        reply.setLanguage(codec.getName());
-        reply.setOntology(ontology.getName());
-        
-    	Result result = new Result(a.getAction(), computerInfo);
-    	
-        try {
-        	managerAgent.getContentManager().fillContent(reply, result);	
+			ACLMessage first_message = new ACLMessage(ACLMessage.REQUEST);
+			first_message.setLanguage(managerAgent.getCodec().getName());
+			first_message.setOntology(ontology.getName());
+			first_message.addReceiver(new AID(agentName, AID.ISLOCALNAME));
+			first_message.clearAllReplyTo();
+			first_message.addReplyTo(request.getSender());
+			first_message.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+			first_message.setConversationId(request.getConversationId());
+
+			managerAgent.getContentManager().fillContent(first_message, ac);
+			managerAgent.send(first_message);
+		}
+		reply = request.createReply();
+		reply.setContent(newAgent.getLocalName());
+		reply.setPerformative(ACLMessage.INFORM);
+
+		return reply;
+	}
+
+	public ACLMessage respondToGetComputerInfo(ACLMessage request) throws OntologyException, CodecException {
+
+		Action a = (Action) managerAgent.getContentManager().extractContent(request);
+
+		managerAgent.logInfo("Request to get ComputerInfo");
+		Ontology ontology = AgentManagementOntology.getInstance();
+		Codec codec = managerAgent.getCodec();
+
+		int cores = Runtime.getRuntime().availableProcessors();
+		String osName = System.getProperty("os.name");
+
+		ComputerInfo computerInfo = new ComputerInfo();
+		computerInfo.setOperationSystem(osName);
+		computerInfo.setNumberOfCores(cores);
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setLanguage(codec.getName());
+		reply.setOntology(ontology.getName());
+
+		Result result = new Result(a.getAction(), computerInfo);
+
+		try {
+			managerAgent.getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
 			managerAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
 			managerAgent.logException(e.getMessage(), e);
 		}
-        
-        return reply;
-    }
 
-    public ACLMessage respondToPing(ACLMessage request) throws OntologyException, CodecException {
-    	
-        Action a = (Action) managerAgent.getContentManager().extractContent(request);
+		return reply;
+	}
 
-        managerAgent.logInfo("Request to get Ping");
-        Ontology ontology = AgentManagementOntology.getInstance();
-        Codec codec = managerAgent.getCodec();
+	public ACLMessage respondToPing(ACLMessage request) throws OntologyException, CodecException {
 
-        ACLMessage reply = request.createReply();
-        reply.setPerformative(ACLMessage.INFORM);
-        reply.setLanguage(codec.getName());
-        reply.setOntology(ontology.getName());
-        
-    	Result result = new Result(a.getAction(), new PingReply());
-    	
-        try {
-        	managerAgent.getContentManager().fillContent(reply, result);	
+		Action a = (Action) managerAgent.getContentManager().extractContent(request);
+
+		managerAgent.logInfo("Request to get Ping");
+		Ontology ontology = AgentManagementOntology.getInstance();
+		Codec codec = managerAgent.getCodec();
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setLanguage(codec.getName());
+		reply.setOntology(ontology.getName());
+
+		Result result = new Result(a.getAction(), new PingReply());
+
+		try {
+			managerAgent.getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
 			managerAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
 			managerAgent.logException(e.getMessage(), e);
 		}
-        
-        return reply;
 
-    }
-    
+		return reply;
+
+	}
+
 }

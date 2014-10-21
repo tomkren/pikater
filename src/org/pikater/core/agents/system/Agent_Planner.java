@@ -69,7 +69,7 @@ public class Agent_Planner extends PikaterAgent {
 	private CPUCoresStructure cpuCoresStructure =
 			new CPUCoresStructure();
 	private DataRegistry dataRegistry =
-			new DataRegistry(this, cpuCoresStructure);
+			new DataRegistry(this);
 	
 	/**
 	 * Get ontologies which is using this agent

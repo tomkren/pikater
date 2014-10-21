@@ -12,7 +12,7 @@ public class ExecuteBatchDebug {
 	public ExecuteBatchDebug() {}
 
 	public ExecuteBatchDebug(
-			ComputationDescription description, int batchID, int userID) {
+			ComputationDescription description, int batchID) {
 		this.description = description;
 		this.batchID = batchID;
 	}

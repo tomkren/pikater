@@ -140,7 +140,6 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	 * Ensures {@link AgentInfo} structures initialization,
 	 * obtaining information about agents
 	 * 
-	 */
 	private void initializationAgentInfo() {
 		List<AgentClass> agentClasses =
 				getAllExperimmentAgentClasses();
@@ -155,6 +154,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		Thread shutDownAgents = new ShutDownAgents(this, notSavedAgentClasses);
 		shutDownAgents.start();
 	}
+	 */
 
 	/**
 	 * Wake agents, ask for {@link AgentInfo} structures,

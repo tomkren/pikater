@@ -1,7 +1,5 @@
 package org.pikater.shared.database.jpa.status;
 
-import org.pikater.shared.database.jpa.JPAExperiment;
-
 /**
  * <p>
  * Enum used to mark whether an experiment should use an existing trained model or create a new one.

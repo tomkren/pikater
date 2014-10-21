@@ -16,7 +16,7 @@ public class GetModelTester extends PikaterAgent {
 	private static final long serialVersionUID = 1677484717124329173L;
 
 	@Override
-	public java.util.List<Ontology> getOntologies() {
+	public List<Ontology> getOntologies() {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());

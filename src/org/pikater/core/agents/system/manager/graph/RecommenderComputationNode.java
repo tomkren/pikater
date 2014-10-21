@@ -11,11 +11,8 @@ public class RecommenderComputationNode extends ComputationNode {
 	 * 
 	 * @param executeStrategy
 	 *            the execute strategy
-	 * @param computationGraph
-	 *            the computation graph
 	 */
-	public RecommenderComputationNode(StartComputationStrategy executeStrategy,
-			ComputationGraph computationGraph) {
+	public RecommenderComputationNode(StartComputationStrategy executeStrategy) {
 		super(executeStrategy);
 	}
 

@@ -428,9 +428,9 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 				
-				addTaskOutput(InOutType.TEST, CoreConstant.SlotContent.TESTING_DATA.getSlotName(), agent.test);
-				addTaskOutput(InOutType.TRAIN, CoreConstant.SlotContent.TRAINING_DATA.getSlotName(), agent.train);
-				addTaskOutput(InOutType.VALIDATION, CoreConstant.SlotContent.VALIDATION_DATA.getSlotName(), agent.label);
+				addTaskOutput(InOutType.TEST, agent.test);
+				addTaskOutput(InOutType.TRAIN, agent.train);
+				addTaskOutput(InOutType.VALIDATION, agent.label);
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);
@@ -550,8 +550,7 @@ public class ComputingAction extends FSMBehaviour {
 		return false;
 	}
 	
-	private String addTaskOutput(InOutType type, String dataType,
-			Instances inst) {
+	private String addTaskOutput(InOutType type, Instances inst) {
 		
 		if (inst != null) {
 			String md5 = agent.saveArff(inst);
