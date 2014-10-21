@@ -25,6 +25,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -93,12 +94,12 @@ import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.CategoricalAttributeMetadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.NumericalAttributeMetadata;
-import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.core.ontology.subtrees.model.GetModel;
 import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.model.SaveModel;
+import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
@@ -739,7 +740,7 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		ACLMessage reply = request.createReply();
 
-		java.util.List<JPAAgentInfo> agentInfoList =
+		List<JPAAgentInfo> agentInfoList =
 				DAOs.agentInfoDAO.getAll();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
 
@@ -1593,7 +1594,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		logInfo("Agent_DataManager.respondToGetAllMetadata");
 
-		List<String> exHash = new java.util.LinkedList<String>();
+		List<String> exHash = new LinkedList<String>();
 		for (Metadata metadataI : getMetadata.getExceptions()) {
 			exHash.add(metadataI.getInternalName());
 		}

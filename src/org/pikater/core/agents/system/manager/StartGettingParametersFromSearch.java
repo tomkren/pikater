@@ -17,40 +17,36 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 
 	private Agent_Manager myAgent;
 	private ACLMessage msg;
-	private SearchStartComputationStrategy strategy;	
-	
-	
-	public StartGettingParametersFromSearch(Agent_Manager a, ACLMessage req, ACLMessage msg,
-			SearchStartComputationStrategy cs) {
+	private SearchStartComputationStrategy strategy;
+
+	public StartGettingParametersFromSearch(Agent_Manager a, ACLMessage msg, SearchStartComputationStrategy cs) {
 		super(a, msg);
 		this.myAgent = a;
 		this.strategy = cs;
 		this.msg = msg;
-		
-        myAgent.logSevere("StartGettingParametersFromSearch behavior created.");
+
+		myAgent.logSevere("StartGettingParametersFromSearch behavior created.");
 	}
 
 	protected void handleAgree(ACLMessage agree) {
 		strategy.getComputationNode().computationFinished();
 	}
-			
+
 	protected void handleInform(ACLMessage inform) {
 		// sending of Options have been finished
-		
-		myAgent.logSevere("Agent " + inform.getSender().getName()
-				+ ": sending of Options have been finished.");
-        
-        // send subscription to the original agent after each received task
-        myAgent.sendSubscription(inform, msg);
-        
-        
-        // get Evaluation from inform
-        try {			
 
-			Result r = (Result)myAgent.getContentManager().extractContent(inform);
-			ErrorEdge eo = new ErrorEdge((Evaluation)r.getItems().get(0), 0); // TODO! - search in search
-	        strategy.getComputationNode().addToOutputAndProcess(eo, "error");
-														
+		myAgent.logSevere("Agent " + inform.getSender().getName() + ": sending of Options have been finished.");
+
+		// send subscription to the original agent after each received task
+		myAgent.sendSubscription(inform, msg);
+
+		// get Evaluation from inform
+		try {
+
+			Result r = (Result) myAgent.getContentManager().extractContent(inform);
+			ErrorEdge eo = new ErrorEdge((Evaluation) r.getItems().get(0), 0); // TODO! - search in search
+			strategy.getComputationNode().addToOutputAndProcess(eo, "error");
+
 		} catch (CodecException e) {
 			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
@@ -58,8 +54,8 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
 		}
-														
-        /* prepare results, send them to GUI?, save to xml
+
+		/* prepare results, send them to GUI?, save to xml
 		 * prepareTaskResults(ACLMessage resultmsg, String problemID)
 		 *   - asi jenom pro searche?
 		 * save resutls to xml file
@@ -67,16 +63,14 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 		 if (!no_xml_output){
 			writeXMLResults(results);
 		}
-		*/	        		
+		*/
 	}
-			
+
 	protected void handleRefuse(ACLMessage refuse) {
-        myAgent.logSevere("Agent " + refuse.getSender().getName()
-				+ " refused to perform the requested action.");
+		myAgent.logSevere("Agent " + refuse.getSender().getName() + " refused to perform the requested action.");
 	}
 
 	protected void handleFailure(ACLMessage failure) {
-        myAgent.logSevere("Agent "+ failure.getSender().getName()
-				+ ": failure while performing the requested action");
-	}			
+		myAgent.logSevere("Agent " + failure.getSender().getName() + ": failure while performing the requested action");
+	}
 }

@@ -214,8 +214,6 @@ public class Agent_Manager extends PikaterAgent {
 			} else {
 				block();
 			}
-
-			return;
 		}
 	}
 

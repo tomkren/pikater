@@ -28,8 +28,7 @@ public class AgentDataSourceCommunicator {
 	PikaterAgent initAgent;
 	AID receiverAid;
 
-	public AgentDataSourceCommunicator(PikaterAgent initAgent, boolean localOnly)
-			throws Exception {
+	public AgentDataSourceCommunicator(PikaterAgent initAgent) throws Exception {
 		this.initAgent = initAgent;
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType(AgentDataSource.SERVICE_TYPE);

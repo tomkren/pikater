@@ -135,10 +135,10 @@ public class DataInstances implements Concept {
 			for (int j = 0; j < winst.numValues(); j++) {
 				if (winst.isMissing(j)) {
 					instvalues.add(new Double(0.0));
-					instmis.add(new Boolean(true));
+					instmis.add(Boolean.valueOf(true));
 				} else {
 					instvalues.add(new Double(winst.value(j)));
-					instmis.add(new Boolean(false));
+					instmis.add(Boolean.valueOf(false));
 				}
 			}
 

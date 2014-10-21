@@ -85,7 +85,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy 
 			
 			StartGettingParametersFromSearch startSearch =
 					new StartGettingParametersFromSearch( myAgent,
-							originalRequest, prepareRequest(searchAID), this);
+							prepareRequest(searchAID), this);
 			
 			myAgent.addBehaviour(startSearch);
 			inputs.get("error").unblock();

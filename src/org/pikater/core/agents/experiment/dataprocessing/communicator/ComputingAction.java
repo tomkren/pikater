@@ -350,7 +350,7 @@ public class ComputingAction extends FSMBehaviour {
 				
 				PikaterAgent pikaterAgent = (PikaterAgent) myAgent;
 				AgentDataSourceCommunicator dsCom =
-						new AgentDataSourceCommunicator(pikaterAgent, true);
+						new AgentDataSourceCommunicator(pikaterAgent);
 				
 				dsCom.registerDataSources(
 						resultMsg.getConversationId(),
