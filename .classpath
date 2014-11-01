@@ -1,159 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input09"/>
-	<classpathentry excluding="inputs/inputsKlara/input08/|inputs/inputsKlara/input01/|inputs/inputsKlara/input02/|inputs/inputsKlara/input03/|inputs/inputsKlara/input04/|inputs/inputsKlara/input05/|inputs/inputsKlara/input06/|inputs/inputsKlara/input07/|inputs/inputsKlara/input10/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input09/|inputs/inputsKlara/input09/|inputs/inputsKlara/input01error/" kind="src" path="core"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input08"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input01"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input02"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input03"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input04"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input05"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input06"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input07"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input10"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input01-model"/>
-	<classpathentry kind="lib" path="libraries/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="libraries/forms-1.1.0.jar"/>
-	<classpathentry kind="lib" path="libraries/hsqldb.jar"/>
-	<classpathentry kind="lib" path="libraries/iText-2.1.5.jar"/>
-	<classpathentry kind="lib" path="libraries/jade.jar"/>
-	<classpathentry kind="lib" path="libraries/jcommon-1.0.16.jar"/>
-	<classpathentry kind="lib" path="libraries/jdom.jar"/>
-	<classpathentry kind="lib" path="libraries/jh.jar"/>
-	<classpathentry kind="lib" path="libraries/log4j-1.2.16.jar"/>
-	<classpathentry kind="lib" path="libraries/looks-2.1.4.jar"/>
-	<classpathentry kind="lib" path="libraries/mysql-connector-java-5.1.18-bin.jar"/>
-	<classpathentry kind="lib" path="libraries/remoteExperimentServer.jar"/>
-	<classpathentry kind="lib" path="libraries/servlet.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="libraries/sqltool.jar"/>
-	<classpathentry kind="lib" path="libraries/swtgraphics2d.jar"/>
-	<classpathentry kind="lib" path="libraries/weka.jar"/>
-	<classpathentry kind="lib" path="libraries/weka-src.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aspects-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aspects-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aspects-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-beans-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-beans-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-beans-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-build-src-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-context-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-context-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-context-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-context-support-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-context-support-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-context-support-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-core-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-core-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-core-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-instrument-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-instrument-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-instrument-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-instrument-tomcat-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-instrument-tomcat-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-instrument-tomcat-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-jdbc-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-jdbc-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-jdbc-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-jms-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-jms-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-jms-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-messaging-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-messaging-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-messaging-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-orm-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-orm-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-orm-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-oxm-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-oxm-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-oxm-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-test-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-test-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-test-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-tx-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-tx-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-tx-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-web-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-web-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-web-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-webmvc-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-webmvc-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-webmvc-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-webmvc-portlet-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-webmvc-portlet-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-webmvc-portlet-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-1.1.3.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-1.1.3-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-1.1.3-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-1.1.3-tests.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-1.1.3-test-sources.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-adapters-1.1.3.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-api-1.1.3.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-logging-1.1.3/commons-logging-tests.jar"/>
-	<classpathentry kind="lib" path="libraries/junit/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="libraries/junit/junit-4.11.jar"/>
-	<classpathentry kind="lib" path="libraries/javax.mail.jar"/>
-	<classpathentry kind="lib" path="libraries/postgresql-9.3-1101.jdbc41.jar"/>
-	<classpathentry kind="lib" path="libraries/xstream-1.4.7/lib/xstream-1.4.7.jar"/>
-	<classpathentry kind="lib" path="libraries/jpaEclipseLink/javax.persistence_2.1.0.v201304241213.jar"/>
-	<classpathentry kind="lib" path="libraries/jpaEclipseLink/eclipselink.jar"/>
-	<classpathentry kind="lib" path="libraries/jpaEclipseLink/javax.persistence.source_2.1.0.v201304241213.jar"/>
-	<classpathentry kind="lib" path="libraries/json/java-json.jar"/>
-	<classpathentry kind="lib" path="libraries/reflections/reflections-0.9.9-RC1-uberjar.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-collections4-4.0/commons-collections4-4.0-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/commons-collections4-4.0/commons-collections4-4.0.jar"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/forms-1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="lib/iText-2.1.5.jar"/>
+	<classpathentry kind="lib" path="lib/jade.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/jh.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/looks-2.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.18-bin.jar"/>
+	<classpathentry kind="lib" path="lib/remoteExperimentServer.jar"/>
+	<classpathentry kind="lib" path="lib/servlet.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/sqltool.jar"/>
+	<classpathentry kind="lib" path="lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="lib/weka.jar"/>
+	<classpathentry kind="lib" path="lib/weka-src.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-aspects-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-aspects-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-aspects-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-beans-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-beans-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-beans-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-build-src-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-context-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-context-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-context-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-context-support-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-context-support-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-context-support-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-core-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-core-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-core-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-instrument-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-instrument-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-instrument-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-instrument-tomcat-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-instrument-tomcat-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-instrument-tomcat-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-jdbc-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-jdbc-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-jdbc-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-jms-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-jms-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-jms-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-messaging-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-messaging-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-messaging-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-orm-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-orm-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-orm-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-oxm-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-oxm-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-oxm-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-test-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-test-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-test-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-tx-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-tx-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-tx-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-web-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-web-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-web-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-webmvc-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-webmvc-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-webmvc-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-webmvc-portlet-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-webmvc-portlet-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-webmvc-portlet-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-1.1.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-1.1.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-1.1.3-tests.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-1.1.3-test-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-adapters-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-api-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3/commons-logging-tests.jar"/>
+	<classpathentry kind="lib" path="lib/junit/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/junit/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.3-1101.jdbc41.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.4.7/lib/xstream-1.4.7.jar"/>
+	<classpathentry kind="lib" path="lib/jpaEclipseLink/javax.persistence_2.1.0.v201304241213.jar"/>
+	<classpathentry kind="lib" path="lib/jpaEclipseLink/eclipselink.jar"/>
+	<classpathentry kind="lib" path="lib/jpaEclipseLink/javax.persistence.source_2.1.0.v201304241213.jar"/>
+	<classpathentry kind="lib" path="lib/json/java-json.jar"/>
+	<classpathentry kind="lib" path="lib/reflections/reflections-0.9.9-RC1-uberjar.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections4-4.0/commons-collections4-4.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections4-4.0/commons-collections4-4.0.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.4.7/lib/xstream/kxml2-2.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/quartz-2.2.1/lib/quartz-2.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/quartz-2.2.1/lib/c3p0-0.9.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/quartz-2.2.1/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/quartz-2.2.1/lib/slf4j-api-1.6.6.jar"/>
+	<classpathentry kind="lib" path="lib/quartz-2.2.1/lib/slf4j-log4j12-1.6.6.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-ooxml-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="lib/poi/ooxml-lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi/ooxml-lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi/ooxml-lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="lib/reflections/guava-16.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/reflections/javassist.jar"/>
+	<classpathentry kind="lib" path="lib/jbcrypt-0.3m-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/jbcrypt-0.3m.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="libraries/xstream-1.4.7/lib/xstream/kxml2-2.3.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libraries/commons-io-2.4.jar"/>
-	<classpathentry kind="lib" path="libraries/quartz-2.2.1/lib/quartz-2.2.1.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libraries/quartz-2.2.1/lib/c3p0-0.9.1.1.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libraries/quartz-2.2.1/lib/log4j-1.2.16.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libraries/quartz-2.2.1/lib/slf4j-api-1.6.6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libraries/quartz-2.2.1/lib/slf4j-log4j12-1.6.6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libraries/poi/poi-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="libraries/poi/poi-ooxml-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="libraries/poi/ooxml-lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="libraries/poi/ooxml-lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="libraries/poi/ooxml-lib/xmlbeans-2.3.0.jar"/>
-	<classpathentry kind="lib" path="libraries/poi/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="libraries/reflections/guava-16.0.1.jar"/>
-	<classpathentry kind="lib" path="libraries/reflections/javassist.jar"/>
-	<classpathentry kind="lib" path="libraries/jbcrypt-0.3m-javadoc.jar"/>
-	<classpathentry kind="lib" path="libraries/jbcrypt-0.3m.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
