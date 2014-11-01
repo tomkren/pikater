@@ -2,13 +2,10 @@ package org.pikater.shared.experiment;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 
 import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
-import org.pikater.core.ontology.subtrees.batchdescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.XStreamHelper;
-import org.pikater.shared.logging.core.ConsoleLogger;
 import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 
@@ -164,10 +161,5 @@ public class UniversalComputationDescription {
 
 	public static UniversalComputationDescription fromXML(String xml) {
 		return XStreamHelper.deserializeFromXML(UniversalComputationDescription.class, xml, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
-	}
-
-	public static void main(String[] args) throws CloneNotSupportedException {
-		UniversalComputationDescription uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
-		ConsoleLogger.log(Level.INFO, XStreamHelper.serializeToXML(uDescription, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class)));
 	}
 }

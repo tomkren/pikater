@@ -21,11 +21,11 @@ import java.util.List;
 
 import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
 import org.pikater.core.agents.system.metadata.MetadataService;
+import org.pikater.core.experiments.ITestExperiment;
 import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
@@ -34,6 +34,7 @@ import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
@@ -88,14 +89,16 @@ public class Agent_GUIKlara extends PikaterAgent {
 			
 			System.out.println("GUIKlara agent starts.");
 			
+			ITestExperiment testExperiment = null;
 			try {
-				runFile(CoreConfiguration.getKlarasInputsPath() +
-						CoreConstant.INPUT_FILE_NAME);
+				testExperiment = CoreConfiguration.getCurrentKlaraInput(); 
 				
-			} catch (FileNotFoundException e) {
-				System.out.println("File not found.");
-				logException("File not found.", e);
+			} catch (Exception e) {
+				logException(String.format("Could not load current input from '%s'.", CoreConfiguration.getConfigurationFileName()), e);
+				return;
 			}
+			
+			runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
 			
 		} else {
 			
@@ -160,27 +163,21 @@ public class Agent_GUIKlara extends PikaterAgent {
 		
 		System.out.println(" I welcome you Klara !!!");
 
-		String defaultFileNameWithPath =
-				CoreConfiguration.getKlarasInputsPath() +
-				CoreConstant.INPUT_FILE_NAME;
+		ITestExperiment testExperiment = null;
+		try {
+			testExperiment = CoreConfiguration.getCurrentKlaraInput(); 
+			
+		} catch (Exception e) {
+			logException(String.format("Could not load current input from '%s'.", CoreConfiguration.getConfigurationFileName()), e);
+			return;
+		}
 		
-		File testFile = new File(defaultFileNameWithPath);
+		System.out.println(String.format(" Do you wish to run experiment '%s' ? (y/n)", testExperiment.getClass().getName()));
+		System.out.print(">");
 
-		if (testFile.exists() && !testFile.isDirectory()) {
-
-			System.out.println(" Do you wish to run experiment from file "
-					+ defaultFileNameWithPath + " ? (y/n)");
-			System.out.print(">");
-
-			if (bufferedConsole.readLine().equals("y")) {
-				try {
-					runFile(defaultFileNameWithPath);
-					return;
-				} catch (FileNotFoundException e) {
-					System.out.println(" File not found.");
-				}
-			}
-
+		if (bufferedConsole.readLine().equals("y")) {
+			
+			runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
 		}
 
 		while (true) {
@@ -210,7 +207,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			} else if (input.startsWith("--run")) {
 				int index = input.indexOf("--run") + "--run ".length();
 				String fileName = input.substring(index);
-				runFile(fileName);
+				runFile(fileName, ComputationDescription.importXML(new File(fileName)));
 
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
@@ -227,7 +224,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 
 	}
-
+	
 	/**
 	 * Sends respond to kill all Task from Batch
 	 * 
@@ -299,15 +296,11 @@ public class Agent_GUIKlara extends PikaterAgent {
 	 * @param fileName - name of XML file which contains new {@link Batch}
 	 * @throws FileNotFoundException
 	 */
-	private void runFile(String fileName) throws FileNotFoundException {
-
-		System.out.println("Loading experiment from file: " + fileName);
+	private void runFile(String file, ComputationDescription experiment)
+	{
+		System.out.println("Loading experiment from file: " + file);
 		
-		ComputationDescription comDescription =
-				ComputationDescription.importXML(new File(fileName));
-
-
-		ExecuteBatch executeBatch = new ExecuteBatch(comDescription);
+		ExecuteBatch executeBatch = new ExecuteBatch(experiment);
 
 		// waiting to start of all agents
 		try {

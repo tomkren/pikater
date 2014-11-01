@@ -134,7 +134,6 @@ public class CoreConstant {
 		ERROR_RATE, KAPPA_STATISTIC, MEAN_ABSOLUTE, RELATIVE_ABSOLUTE, ROOT_MEAN_SQUARED, ROOT_RELATIVE_SQUARED;
 	}
 
-	public static final String INPUT_FILE_NAME = "input.xml";
 	public static final String DURATION_DATASET_NAME = "lineardata.arff";
 	public static final String MODEL = "model";
 	public static final String DURATION = "duration";
