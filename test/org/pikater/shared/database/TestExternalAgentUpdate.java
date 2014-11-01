@@ -1,4 +1,4 @@
-package org.pikater.shared.database.util.tests;
+package org.pikater.shared.database;
 
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.daos.DAOs;

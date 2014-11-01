@@ -1,4 +1,4 @@
-package org.pikater.shared.database.util.tests;
+package org.pikater.shared.database;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import org.apache.commons.io.IOUtils;
-import org.jfree.util.Log;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class LargeObjectInputStreamTest {
 
@@ -33,9 +33,9 @@ public class LargeObjectInputStreamTest {
 			fos.close();
 			is.close();
 		} catch (SQLException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} catch (IOException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} finally {
 			IOUtils.closeQuietly(fos);
 			IOUtils.closeQuietly(is);

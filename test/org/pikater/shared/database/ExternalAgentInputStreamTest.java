@@ -1,4 +1,4 @@
-package org.pikater.shared.database.util.tests;
+package org.pikater.shared.database;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.jfree.util.Log;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class ExternalAgentInputStreamTest {
 	public static void main(String[] args) throws IOException {
@@ -30,7 +30,7 @@ public class ExternalAgentInputStreamTest {
 			}
 			System.out.println("Copied " + size + " bytes");
 		} catch (Exception e) {
-			Log.error("Unexpected error occured:", e);
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 			IOUtils.closeQuietly(fos);
 			IOUtils.closeQuietly(is);
 		}

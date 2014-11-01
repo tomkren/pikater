@@ -3,7 +3,6 @@ package org.pikater.core.ontology.subtrees.agentinfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jfree.util.Log;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualNotSpecifiedComputingAgent;
 import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.batchdescription.ComputingAgent;
@@ -13,6 +12,7 @@ import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newoption.base.Value;
 import org.pikater.core.ontology.subtrees.newoption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newoption.values.interfaces.IValueData;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.content.Concept;
 
@@ -84,7 +84,7 @@ public class AgentInfos implements Concept {
 			try {
 				agentClass = Class.forName(agentClassName);
 			} catch (ClassNotFoundException e) {
-				Log.error(e.getMessage(), e);
+				ConsoleLogger.logThrowable(e.getMessage(), e);
 			}
 			
 			List<IValueData> typedValues = models.getModelIDsByAgentType(agentClass);

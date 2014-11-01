@@ -1,4 +1,4 @@
-package org.pikater.shared.database.util.initialisation;
+package org.pikater.shared.database.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +24,6 @@ import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.jpa.PikaterPriviledge;
 import org.pikater.shared.database.jpa.PikaterRole;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.DateUtils;
 

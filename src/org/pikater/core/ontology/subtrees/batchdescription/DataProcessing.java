@@ -5,10 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.newoption.NewOptions;
 import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
 import org.pikater.shared.experiment.UniversalElementOntology;
+import org.pikater.shared.logging.core.ConsoleLogger;
 import org.pikater.shared.util.collections.CollectionUtils;
 
 /**
@@ -143,22 +143,22 @@ public class DataProcessing implements IDataProvider {
 		try {
 			cons = uOntology.getOntologyClass().getConstructor();
 		} catch (NoSuchMethodException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} catch (SecurityException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		}
 
 		Object object = null;
 		try {
 			object = cons.newInstance();
 		} catch (InstantiationException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} catch (IllegalAccessException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} catch (InvocationTargetException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		}
 
 		DataProcessing dataProcess = (DataProcessing) object;

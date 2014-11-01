@@ -1,4 +1,4 @@
-package org.pikater.shared.database.util.tests;
+package org.pikater.shared.database;
 
 import java.io.File;
 
