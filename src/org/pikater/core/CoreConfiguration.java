@@ -1,6 +1,8 @@
 package org.pikater.core;
 
+import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.agents.system.manager.graph.GUIDGenerator;
+import org.pikater.core.experiments.ITestExperiment;
 import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -30,7 +32,7 @@ public class CoreConfiguration {
 
 	/**
 	 * 
-	 * Get Bean configuration file
+	 * Get Bean configuration filename
 	 */
 	public static String getConfigurationFileName() {
 		return "Beans.xml";
@@ -51,6 +53,13 @@ public class CoreConfiguration {
 	public static GUIDGenerator getGUIDGenerator() {
 		return getBean("guidGenerator");
 	}
+	
+	/**
+	 * Gets input class name (fully qualified) for {@link Agent_GUIKlara Klara's GUI agent}. 
+	 */
+	public static ITestExperiment getCurrentKlaraInput() {
+		return getBean("inputKlara");
+	}
 
 	/*
 	 * Other configuration interface
@@ -64,16 +73,6 @@ public class CoreConfiguration {
 
 		return "core" + System.getProperty("file.separator")
 				+ "configurationMaster.xml";
-	}
-
-	/**
-	 * 
-	 * Get a path to input files for {@link Agent_GUIKlara}
-	 */
-	public static String getKlarasInputsPath() {
-
-		return getCorePath("inputs") + "inputsKlara"
-				+ System.getProperty("file.separator");
 	}
 
 	/**

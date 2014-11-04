@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-import org.jfree.util.Log;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 /**
  * Created with IntelliJ IDEA. User: Kuba Date: 9.8.13 Time: 0:04 Provides
@@ -18,7 +18,7 @@ public class PropertiesConfigurationProvider implements ConfigurationProvider {
 		try (FileInputStream stream = new FileInputStream(propertiesPath)) {
 			configuration.load(stream);
 		} catch (IOException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		}
 	}
 

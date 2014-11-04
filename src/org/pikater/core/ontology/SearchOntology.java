@@ -1,12 +1,12 @@
 package org.pikater.core.ontology;
 
-import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.newoption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchitems.SearchItem;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -40,7 +40,7 @@ public class SearchOntology extends BeanOntology {
             add(Evaluation.class);
 
         } catch (Exception e) {
-            Log.error("Unexpected error occured:", e);
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

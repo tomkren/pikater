@@ -218,7 +218,6 @@
             <exclude name="net/**"/>
             <exclude name="org/pikater/shared/ssh/**"/>
             <exclude name="org/pikater/shared/quartz/**"/>
-            <exclude name="org/pikater/shared/experiment/webformat/**"/>
             <exclude name="org/pikater/shared/utilities/pikaterDatabase/tests/DatasetConverterTest.java"/>
             <exclude name="org/pikater/shared/database/utils/DataSetConverter.java"/>
             <exclude name="org/pikater/shared/database/security/bcrypt/TestBCrypt.java"/>

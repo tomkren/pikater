@@ -4,7 +4,6 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
-import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.batchdescription.duration.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
@@ -55,7 +54,7 @@ public class ResultOntology extends BeanOntology {
             add(valuePackage);
 
         } catch (Exception e) {
-            Log.error("Unexpected error occured:", e);
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

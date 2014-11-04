@@ -29,5 +29,7 @@
     <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
          <property name="persistenceUnitName" value="pikaterDataModel"/>
     </bean>
+    
+    <bean id="inputKlara" class="org.pikater.core.experiments.Input01" scope="singleton"/>
 
 </beans>

@@ -1,81 +1,37 @@
-<!-- --- title: GitHub overview -->
+This project revises the original [Pikater](https://github.com/peskk3am/pikater4) project:
 
-This project extends the [Pikater](https://github.com/peskk3am/pikater4) project with multi-user support, web based GUI and distributed infrastructure to allow simultaneous computation of many individual tasks. For that purpose, the following principal technologies are used:
-* [Jade](http://jade.tilab.com/) multi-agent system. Required by the original Pikater project.
-* [Vaadin](https://vaadin.com/book/-/page/preface.html) framework based on [Google Web Toolkit (GWT)](http://www.gwtproject.org/) to build the aforementioned GUI.
-* [Java persistence API (JPA)](http://en.wikipedia.org/wiki/Java_Persistence_API). This way, we can make sure the project could be rewritten to support various relational databases with minimum effort.
-* [KineticJS](https://github.com/ericdrowell/KineticJS) to draw experiments on the client (see main features) and [KineticGWT](https://github.com/neothemachine/KineticGWT) for easy integration in GWT.
-
-
-
-
-## Main features
-
-Client:
-* 2D editor to define experiments (boxes and edges style).
-* Potentially many experiments may be scheduled to execution.
-* Displaying the experiment results and converting/downloading them into a human-readable format, such as CSV.
-* Uploading custom data sets and computation methods.
-
-Server:
-* Many features of the original Pikater project, such as computation method recommendation.
-* Experiments planning and execution.
-* Saving of trained models which can then be used in further experiments.
-* Administrator functions, such as supervision of all scheduled experiments.
-
-
-
+1. Previous database access was rewritten into a DBMS independent (almost) framework using JPA.
+2. Logging has been rewritten and centralized.
+3. Ivy dependency management was added to tame dependencies and to allow their easy integration in other projects building upon this one.
+4. Allows external manipulation via the JPA framework mentioned above and the following "RPC services":  
+`org.pikater.core.agents.gateway.WebToCoreEntryPoint.java`
 
 ## How to use
 
-### Deployment
+### Requirements
 
-1. Install and prepare the database (currently only PostGRE is supported). Change the following files accordingly:
+* Java 7
+* Apache Ivy.
+* A SMTP server running locally.
+
+### Installation & deployment
+
+1. Install and prepare the database (currently only PostgreSQL is supported).
+2. Clone the project.
+3. Change the following files accordingly:
 	* `src/beans.xml`
 	* `src/META-INF/persistence.xml`
-2. Edit files in the `WebContent/WEB-INF/conf` directory:
-	* `appServer.properties` is used to configure the web application.
-	* `jadeTopology1.xml` is used to provide directives to additional machines - one master machine to coordinate the application's core and other slave machines to do the work.
-3. Install and prepare a servlet container (e.g. Apache Tomcat), deploy the application into it and start it.
+4. Resolve Ivy dependencies.
+5. Run `org.pikater.shared.database.util.DatabaseInitialisation.java`.
 
 ### Launching
 
-#### From a servlet container
+Run the `Pikater-core.launch` launch configuration.
 
-1. Access the page, e.g. go to `http://localhost:8080/Pikater` (for Apache Tomcat) or `http://my.domain/Pikater`. A login dialog will appear.
-2. Enter the default login and password (from `WebContent/WEB-INF/conf/appServer.properties` - see above) and follow the launch wizard.
+## <font color="red">TODO</font>
 
-#### From the command line
-
-<font color="red">// TODO: make this properly</font>
-
-`-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl
--Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl`
-
-Tj. např.:
-
-`java -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl -cp jade.jar jade.Boot -local-host localhost -gui -agents mailAgent:pikater.agents.utility.MailAgent;mailTester:org.pikater.core.agents.system.mailing.MailAgentTester`
-
-Pro spuštění InitiatorAgenta co spustí výpočet:  
-Nejlepší použít soubory `/core/runPikaterMaster.sh` a `/core/runPikaterSlave.sh`
-
-Centralni bod:
-`java -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl -cp jade.jar jade.Boot -local-host localhost -gui -local-host localhost -agents initiator:org.pikater.core.agents.system.Agent_Initiator(core/configurationMaster.xml)`
-
-Jeden vypocetni server:
-`java -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl -cp jade.jar jade.Boot -local-host localhost -gui -local-host localhost -agents initiator:org.pikater.core.agents.system.Agent_Initiator(core/configurationSlave.xml)`
-
-
-
-
-## Information about this repository
-
-<font color="red">// TODO: information/description/commentaries to individual files/folders</font>
-
-
-
-
-## Documentation
-
-* <a href="docs/Documentation.md">Open documentation overview</a>
-
+1. Offer to bundle the project, including all dependencies. Best use maven since it's available as a command line tool on many platforms. This effectively gets rid of the "build*.xml" files which need to be maintained manually.
+2. Provide information about this repository.
+3. Documentation - move related things from Vaadin extension in here.
+4. Rewrite "tests" into proper JUnit tests and integrate them in suites.
+5. Get rid of all the "core" folder insanity. Clean and organize it.

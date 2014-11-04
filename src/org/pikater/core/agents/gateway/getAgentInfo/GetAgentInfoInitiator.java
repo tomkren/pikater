@@ -9,10 +9,10 @@ import jade.content.onto.UngroundedException;
 import jade.lang.acl.ACLMessage;
 import jade.content.onto.basic.Result;
 
-import org.jfree.util.Log;
 import org.pikater.core.agents.gateway.Initiator;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfos;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class GetAgentInfoInitiator extends Initiator {
 	
@@ -43,11 +43,11 @@ public class GetAgentInfoInitiator extends Initiator {
 		try {
 			result = (Result) contentManager.extractContent(response);
 		} catch (UngroundedException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} catch (CodecException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		} catch (OntologyException e) {
-			Log.error(e.getMessage(), e);
+			ConsoleLogger.logThrowable(e.getMessage(), e);
 		}
 
 		AgentInfos agentInfos = null;
