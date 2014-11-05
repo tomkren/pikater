@@ -28,6 +28,10 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 
 Run the `Pikater-core.launch` launch configuration.
 
+## Other extending projects
+
+* [Vaadin GUI frontend](https://github.com/SkyCrawl/pikater-vaadin)
+
 ## <font color="red">TODO</font>
 
 1. Offer to bundle the project, including all dependencies. Best use maven since it's available as a command line tool on many platforms. This effectively gets rid of the "build*.xml" files which need to be maintained manually.
