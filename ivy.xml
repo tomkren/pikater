@@ -3,7 +3,7 @@
 	<!ENTITY spring.version "4.0.0.RELEASE">
 ]>
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="org.pikater" module=“pikater-core" revision="1.0.0" />
+	<info organisation="org.pikater" module="pikater-core" revision="1.0.0" />
 	<configurations>
 		<!-- The default configuration -->
 		<conf name="default" />
