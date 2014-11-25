@@ -34,6 +34,12 @@ Run the `Pikater-core.launch` launch configuration.
 
 * [Vaadin GUI frontend](https://github.com/SkyCrawl/pikater-vaadin)
 
+## Database schema
+
+It can be generated (along with other useful information) by the `db-schema-gen.sh` script.
+
+Our compliments to [SchemaSpy](http://schemaspy.sourceforge.net/) to make this happen. SchemaSpy's `.jar` distribution file can be located in the `lib` folder.
+
 ## <font color="red">TODO</font>
 
 1. Offer to bundle the project, including all dependencies. Best use maven since it's available as a command line tool on many platforms. This effectively gets rid of the "build*.xml" files which need to be maintained manually.
