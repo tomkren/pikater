@@ -12,17 +12,19 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 
 * Java 7
 * Apache Ivy.
+* JPA-compatible database (at this moment, only PostgreSQL is supported) running locally or externally.
 * A SMTP server running locally.
 
 ### Installation & deployment
 
-1. Install and prepare the database (currently only PostgreSQL is supported).
-2. Clone the project.
-3. Change the following files accordingly:
+1. Install PostgreSQL database. Use a package manager or download [here](http://www.postgresql.org/download/). Pikater was developed with version 9.3 and we highly recommended using it.
+2. Create a new database in PostgreSQL. Using UTF-8 character encoding is recommended.
+3. Clone the project.
+4. Change the following files accordingly:
 	* `src/beans.xml`
 	* `src/META-INF/persistence.xml`
-4. Resolve Ivy dependencies.
-5. Run `org.pikater.shared.database.util.DatabaseInitialisation.java`.
+5. Resolve Ivy dependencies.
+6. Run `org.pikater.shared.database.util.DatabaseInitialisation.java` to generate configuration files and your first Pikater administrator account.
 
 ### Launching
 
