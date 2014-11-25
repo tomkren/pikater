@@ -158,7 +158,7 @@ public class Agent_Mailing extends PikaterAgent {
 
 	/**
 	 * A help function for conversion Enum values
-	 * ​​corresponding to the desired type of mail
+	 * corresponding to the desired type of mail
 	 * 
 	 * @throws NotUnderstoodException
 	 */

@@ -6,7 +6,7 @@ import jade.content.AgentAction;
 
 /**
  * When an experiment has successfully finished executing, an instance of
- * this message should be sent to {@łink Agent_DataManager}. For more
+ * this message should be sent to {@link Agent_DataManager}. For more
  * information about what data this message contains, refer to {@link Task}. 
  * 
  * @author stepan

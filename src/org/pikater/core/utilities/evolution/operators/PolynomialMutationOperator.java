@@ -9,8 +9,8 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 /**
  * Performs the polynomial mutation as described in:
  * 
- * Deb, Kalyanmoy and Mayank Goyal (1996). �A combined genetic adaptive search (GeneAS) for
- * engineering design.� In: Computer Science and Informatics 26.4, pp. 30�45
+ * Deb, Kalyanmoy and Mayank Goyal (1996). Combined genetic adaptive search (GeneAS) for
+ * engineering design. In: Computer Science and Informatics 26.4, pp. 3045
  * 
  * @author Martin Pilat
  *

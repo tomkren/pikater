@@ -11,8 +11,8 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
  * 
  * Performs the crossover operation described in:
  * 
- * Deb, Kalyanmoy and Ram B Agrawal (1994). �Simulated Binary Crossover for Continuous
- * Search Space.� In: Complex Systems 9, pp. 1�34
+ * Deb, Kalyanmoy and Ram B Agrawal (1994). Simulated Binary Crossover for Continuous
+ * Search Space. In: Complex Systems 9, pp. 134
  * 
  * @author Martin Pilat
  */
