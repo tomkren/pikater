@@ -16,7 +16,7 @@
 
     <bean id="defaultConnection" class="org.pikater.shared.database.connection.PostgreSQLConnectionProvider" scope="singleton">
         <constructor-arg index="0">  <!-- url -->
-              <value>jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater</value>
+              <value>jdbc:postgresql://pikater.cs.cas.cz:5432/pikater</value>
         </constructor-arg>
         <constructor-arg index="1">  <!-- username -->
               <value>pikater</value>
