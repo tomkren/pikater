@@ -10,7 +10,7 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 
 ### Requirements
 
-* Java 7
+* Java 7 (Java 8 may be supported too but noone has tested it yet).
 * Apache Ivy.
 * JPA-compatible database (at this moment, only PostgreSQL is supported) running locally or externally.
 * A SMTP server running locally.
@@ -28,7 +28,8 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 
 ### Launching
 
-Run the `Pikater-core.launch` launch configuration.
+Install Apache Ant command line utility and execute:
+`ant -f pikater-core.xml -lib lib/ivy-2.4.0.jar build`
 
 ## Other extending projects
 
@@ -42,8 +43,7 @@ Our compliments to [SchemaSpy](http://schemaspy.sourceforge.net/) to make this h
 
 ## <font color="red">TODO</font>
 
-1. Offer to bundle the project, including all dependencies. Best use maven since it's available as a command line tool on many platforms. This effectively gets rid of the "build*.xml" files which need to be maintained manually.
-2. Provide information about this repository.
-3. Documentation - move related things from Vaadin extension in here.
-4. Rewrite "tests" into proper JUnit tests and integrate them in suites.
-5. Get rid of all the "core" folder insanity. Clean and organize it.
+1. Provide information about this repository.
+2. Documentation - move related things from Vaadin extension in here.
+3. Rewrite "tests" into proper JUnit tests and integrate them in suites.
+4. Get rid of all the "core" folder insanity. Clean and organize it.
