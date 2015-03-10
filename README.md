@@ -11,7 +11,7 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 ### Requirements
 
 * Java 7 (Java 8 may be supported too but noone has tested it yet).
-* Apache Ant.
+* Apache Ant command line utility.
 * A JPA-compatible database (at this moment, only PostgreSQL is supported) running locally or externally.
 * A SMTP server running locally.
 
@@ -19,12 +19,12 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 
 1. Install PostgreSQL database. Use a package manager or download [here](http://www.postgresql.org/download/). Pikater was developed with version 9.3 and we highly recommended using it.
 2. Create a new database in PostgreSQL. Using UTF-8 character encoding is recommended.
-3. Clone the project.
-4. Change the following files accordingly:
+3. Install Apache Ant command line utility.
+4. Clone the project.
+5. Change the following files accordingly:
 	* `src/beans.xml`
 	* `src/META-INF/persistence.xml`
-5. Install Apache Ant command line utility.
-6. Execute: `ant -f pikater-core.xml -lib lib/ivy-2.4.0.jar build`.
+6. Go to the cloned repository and execute: `ant -f pikater-core.xml -lib lib/ivy-2.4.0.jar build`.
 7. <font color="red">TODO:</font> Run `org.pikater.shared.database.util.DatabaseInitialisation.java` to generate configuration files and your first Pikater administrator account.
 8. <font color="red">TODO:</font> launch
 
