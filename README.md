@@ -11,8 +11,8 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 ### Requirements
 
 * Java 7 (Java 8 may be supported too but noone has tested it yet).
-* Apache Ivy.
-* JPA-compatible database (at this moment, only PostgreSQL is supported) running locally or externally.
+* Apache Ant.
+* A JPA-compatible database (at this moment, only PostgreSQL is supported) running locally or externally.
 * A SMTP server running locally.
 
 ### Installation & deployment
@@ -23,13 +23,14 @@ This project revises the original [Pikater](https://github.com/peskk3am/pikater4
 4. Change the following files accordingly:
 	* `src/beans.xml`
 	* `src/META-INF/persistence.xml`
-5. Resolve Ivy dependencies.
-6. Run `org.pikater.shared.database.util.DatabaseInitialisation.java` to generate configuration files and your first Pikater administrator account.
+5. Install Apache Ant command line utility.
+6. Execute: `ant -f pikater-core.xml -lib lib/ivy-2.4.0.jar build`.
+7. <font color="red">TODO:</font> Run `org.pikater.shared.database.util.DatabaseInitialisation.java` to generate configuration files and your first Pikater administrator account.
+8. <font color="red">TODO:</font> launch
 
 ### Launching
 
-Install Apache Ant command line utility and execute:
-`ant -f pikater-core.xml -lib lib/ivy-2.4.0.jar build`
+
 
 ## Other extending projects
 
