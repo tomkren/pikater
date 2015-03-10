@@ -9,7 +9,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=pikater-core&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=ivysettings.xml&amp;loadSettingsOnDemand=false&amp;ivyUserDir=&amp;propertyFiles="/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jade-4.3.2/lib/commons-codec/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/jade-4.3.2/lib/jade.jar"/>
 	<classpathentry kind="output" path="bin"/>
