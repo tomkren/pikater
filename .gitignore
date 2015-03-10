@@ -1,6 +1,7 @@
-# Ignore compiled binaries.
+# Ignore compiled/downloaded binaries.
 bin
 build
+lib/ivy
 
 # Ignore junk generated at runtime.
 core/data/files
