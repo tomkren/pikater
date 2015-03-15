@@ -39,6 +39,9 @@
         
         <agent type="org.pikater.core.agents.system.Agent_Mailing" name="Mailing">
         </agent>
+        
+        <agent type="org.pikater.core.agents.system.Agent_OpenML" name="OpenML">
+        </agent>
         <!--
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>

@@ -14,7 +14,7 @@ public enum CoreAgents {
 			"GUIKlaraAgent"), GATEWAY("Gateway"), AGENTINFO_MANAGER(
 			"AgentInfoManager"), VIRTUAL_BOX_PROVIDER("VirtualBoxProvider"), METADATA_QUEEN(
 			"MetadataQueen"), MAILING("Mailing"), DURATION("Duration"), DURATION_SERVICE(
-			"DurationServiceRegression");
+			"DurationServiceRegression"), OpenMLAgent("OpenML");
 
 	private final String name;
 

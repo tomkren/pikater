@@ -25,6 +25,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
 import org.pikater.core.agents.system.metadata.MetadataService;
+import org.pikater.core.agents.system.openml.OpenMLAgentService;
 import org.pikater.core.experiments.ITestExperiment;
 import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentInfoOntology;
@@ -33,6 +34,7 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
+import org.pikater.core.ontology.OpenMLOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
@@ -40,6 +42,7 @@ import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
+import org.pikater.core.ontology.subtrees.openml.Dataset;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.shared.database.exceptions.DataSetConverterException;
 import org.pikater.shared.database.util.DataSetConverter;
@@ -53,7 +56,7 @@ import org.pikater.shared.database.util.DataSetConverter;
 public class Agent_GUIKlara extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
-	private static final boolean DEBUG_MODE = true;
+	private static final boolean DEBUG_MODE = false;
 	private BufferedReader bufferedConsole = null;
 
 	/**
@@ -70,6 +73,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		ontologies.add(DurationOntology.getInstance());
 		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(ModelOntology.getInstance());
+		ontologies.add(OpenMLOntology.getInstance());
 		
 		return ontologies;
 	}
@@ -194,7 +198,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 						" Add dataset      --add-dataset [username] "
 						+ "[description] <path>\n" +
 						" Get duration     --dura\n"+
-						" For test purposes --test "+
+						" For test purposes --test \n"+
+						" OpenML interaction openml [list|import|export|help]\n" +
 						" Run Experiment   --run <file.xml>\n"
 						);
 			
@@ -215,6 +220,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 			} else if (input.startsWith("--kill")) {
 				killBatch(input);
 				
+			} else if (input.startsWith("openml")) {
+				openmlCommands(input);
+				
 			} else {
 				System.out.println(
 						"Sorry, I don't understand you. \n" +
@@ -225,6 +233,99 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 	}
 	
+	private void openmlCommands(String command) {
+		String[] commands = command.split(" ");
+		
+		if(commands.length<2){
+		   System.out.println("Not enough parameters");
+		   return;
+		}
+		
+		String cmd = commands[1]; // list or import or export
+		if("list".equals(cmd)){
+			System.out.println("Getting list of available datasets at OpenMl.org");
+			
+			List<Dataset> availableDatasets = OpenMLAgentService.getDatasets(this);
+			
+			if(availableDatasets == null){
+				System.out.println("No datasets were found");
+				return;
+			}
+			System.out.println("Found "+availableDatasets.size()+" datasets");
+			System.out.println(String.format("%-5s %-40s %-7s %-20s","DID","Name","Type","Date"));
+			for(Dataset d : availableDatasets){
+				System.out.println(String.format("%-5s %-40s %-7s %-20s",d.getDid(),d.getName(),d.getType(),d.getDate()));
+			}
+			
+			return;
+		}else if("import".equals(cmd)){
+			
+			if(commands.length<4){
+				System.out.println("You must define dataset ID (did) and destination file of the OpenMl.org dataset you wish to retrieve");
+				return;
+			}
+			
+			
+			String sDid = commands[2];
+			int did = -1;
+			try{
+				did = Integer.parseInt(sDid);
+			}catch(NumberFormatException nfe){
+				System.out.println(sDid + " is not a valid number");
+			}
+			
+			String dst = commands[3];
+	
+			String downloadedPath = OpenMLAgentService.importDataset(this, did, dst);
+			
+			if(downloadedPath == null){
+				System.out.println("Something went wrong. You may check the DID you entered");
+			}else{
+				System.out.println("Dataset with DID " + did + " was downloaded to " + downloadedPath);
+			}
+			
+		}else if("help".equals(cmd)){
+			System.out.println("List available datasets: openml list");
+			System.out.println("Export dataset to OpenML.org: openml export <path> [name] [description] [type]");
+			System.out.println("Import dataset from OpenML.org: openml import <did> <destination>");
+			
+		}else if("export".equals(cmd)){
+			
+			if(commands.length<3){
+				System.out.println("You must at least define path to the local filename");
+				return;
+			}
+			
+			String path = commands[2];
+			
+			String name = "";
+			//if user added at least 4 commands openml+export+path+something, them we set name as the 4th parameter
+			if(commands.length>=4){
+				name = commands[3];
+			}
+			
+			String description = "";
+			if(commands.length>=5){
+				description = commands[4];
+			}
+			
+			String type = "";
+			if(commands.length>=6){
+				type = commands[5];
+			}
+			
+			int uploaded = OpenMLAgentService.exportDataset(this, name, description, path, type);
+			if(uploaded == -1){
+				System.out.println("Something went wrong, when we tried to upload your file. Sorry :(");
+			}else{
+				System.out.println("OpenML ID of your dataset: " + uploaded);
+			}
+			
+		}else{
+			System.out.println("\""+cmd+"\" is invalid command for OpenML interaction.");
+		}
+	}
+
 	/**
 	 * Sends respond to kill all Task from Batch
 	 * 
