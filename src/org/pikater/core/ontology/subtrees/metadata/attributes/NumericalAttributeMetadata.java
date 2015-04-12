@@ -17,6 +17,11 @@ public class NumericalAttributeMetadata extends AttributeMetadata {
 	private double avg;
 	private double median;
 	private double standardDeviation;
+	private double variation;
+	private double mean;
+	private double q1;
+	private double q2;
+	private double q3;
 
 	public double getStandardDeviation() {
 		return standardDeviation;
@@ -58,9 +63,50 @@ public class NumericalAttributeMetadata extends AttributeMetadata {
 		this.min = min;
 	}
 
+	public void setVariation(double variation) {
+		this.variation = variation;
+	}
+	
+	public double getVariation() {
+		return variation;
+	}
+	
+	public double getMean() {
+		return mean;
+	}
+
+	public void setMean(double mean) {
+		this.mean = mean;
+	}
+
+	public double getQ1() {
+		return q1;
+	}
+
+	public void setQ1(double q1) {
+		this.q1 = q1;
+	}
+
+	public double getQ2() {
+		return q2;
+	}
+
+	public void setQ2(double q2) {
+		this.q2 = q2;
+	}
+
+	public double getQ3() {
+		return q3;
+	}
+
+	public void setQ3(double q3) {
+		this.q3 = q3;
+	}
+
 	@Override
 	public String getType() {
 		return "Numerical";
 	}
+
 
 }

@@ -83,7 +83,11 @@ public class JPAMetaDataReader {
 	            	///IMPORTANT!!!!   Getting mode value is not implemented yet!!!
 	            	((JPAAttributeNumericalMetaData)jpaam).setMode(Double.NaN);
 	            	((JPAAttributeNumericalMetaData)jpaam).setReal(true);
-	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getStandardDeviation());
+	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getVariation());
+	            	((JPAAttributeNumericalMetaData)jpaam).setStandardDeviation(ram.getStandardDeviation());
+	            	((JPAAttributeNumericalMetaData)jpaam).setQ1(ram.getQ1());
+	            	((JPAAttributeNumericalMetaData)jpaam).setQ2(ram.getQ2());
+	            	((JPAAttributeNumericalMetaData)jpaam).setQ3(ram.getQ3());
 	            	
 	            }else if(att instanceof IntegerAttributeMetadata){
 	            	IntegerAttributeMetadata ram = (IntegerAttributeMetadata) att;
@@ -96,7 +100,11 @@ public class JPAMetaDataReader {
 	            	///IMPORTANT!!!!   Getting mode value is not implemented yet!!!
 	            	((JPAAttributeNumericalMetaData)jpaam).setMode(Double.NaN);
 	            	((JPAAttributeNumericalMetaData)jpaam).setReal(false);
-	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getStandardDeviation());
+	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getVariation());
+	            	((JPAAttributeNumericalMetaData)jpaam).setStandardDeviation(ram.getStandardDeviation());
+	            	((JPAAttributeNumericalMetaData)jpaam).setQ1(ram.getQ1());
+	            	((JPAAttributeNumericalMetaData)jpaam).setQ2(ram.getQ2());
+	            	((JPAAttributeNumericalMetaData)jpaam).setQ3(ram.getQ3());
 	            }else{
 	            	ConsoleLogger.log(Level.INFO, att.toString());
 	            }

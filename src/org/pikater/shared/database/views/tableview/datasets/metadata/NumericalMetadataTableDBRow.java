@@ -49,6 +49,14 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getRatioOfMissingValues()));
 		case VARIANCE:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getVariance()));
+		case STD_DEVIATION:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getStandardDeviation()));
+		case QUARTILE_1:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getQ1()));
+		case QUARTILE_2:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getQ2()));
+		case QUARTILE_3:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getQ3()));
 		case ENTROPY:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getEntropy()));
 		case CLASS_ENTROPY:

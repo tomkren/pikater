@@ -199,6 +199,21 @@ public class MetadataReader {
         double variation=squareaverage-(average*average);
         met.setAvg(average);
         met.setStandardDeviation(Math.sqrt(variation));
+        met.setVariation(variation);
+        
+        double mean = average;
+        met.setMean(mean);
+        
+        int iq1 = values.size()/4;//index of first quartil
+        double q1 = values.get(iq1);
+        met.setQ1(q1);
+        int iq2 = values.size()/2;//index of second quartil
+        double q2 = values.get(iq2);
+        met.setQ2(q2);
+        int iq3 =3*values.size()/4;//index of third quartil
+        double q3=values.get(iq3);
+        met.setQ3(q3);
+        
         int half=(int)Math.floor(values.size()/2.0);
         
         if (!values.isEmpty()) {

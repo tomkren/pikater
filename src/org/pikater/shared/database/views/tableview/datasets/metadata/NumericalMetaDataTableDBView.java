@@ -31,7 +31,8 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView {
 		 */
 		NAME, IS_TARGET, IS_REAL, MINIMUM, MAXIMUM, AVERAGE,
 		// MODE,
-		MEDIAN, VARIANCE, RATIO_OF_MISSING_VALUES, ENTROPY, CLASS_ENTROPY;
+		MEDIAN, STD_DEVIATION, VARIANCE, QUARTILE_1, QUARTILE_2, QUARTILE_3,
+		RATIO_OF_MISSING_VALUES, ENTROPY, CLASS_ENTROPY;
 
 		@Override
 		public String getDisplayName() {
@@ -44,6 +45,14 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView {
 				return "MAX";
 			case AVERAGE:
 				return "AVG";
+			case QUARTILE_1:
+				return "1st Quartile";
+			case QUARTILE_2:
+				return "2nd Quartile";
+			case QUARTILE_3:
+				return "3rd Quartile";
+			case STD_DEVIATION:
+				return "STD. Deviation";
 			default:
 				return name();
 			}
@@ -63,6 +72,10 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView {
 				// case MODE:
 			case MEDIAN:
 			case VARIANCE:
+			case QUARTILE_1:
+			case QUARTILE_2:
+			case QUARTILE_3:
+			case STD_DEVIATION:
 			case RATIO_OF_MISSING_VALUES:
 			case ENTROPY:
 			case CLASS_ENTROPY:
