@@ -4,10 +4,18 @@
  */
 package org.pikater.core.agents.system.metadata;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MaxCountExceededException;
+import org.apache.commons.math3.exception.NotPositiveException;
+import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.stat.inference.ChiSquareTest;
+import org.apache.commons.math3.stat.inference.GTest;
 import org.pikater.core.ontology.subtrees.attribute.Attribute;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
@@ -155,26 +163,110 @@ public class MetadataReader {
         metadata.setAttributeClassEntropy(classEntropy);
     }
     
-    private void setCategoricalAttributeProperties(DataInstances data,
-    		AttributeMetadata metadata, int attributeNumber) {
-    	
-        Attribute att = (Attribute)data.getAttributes().get(attributeNumber);
-        CategoricalAttributeMetadata met = (CategoricalAttributeMetadata)metadata;
-        met.setNumberOfCategories(att.getValues().size());
-    }
-    
-    private void setNumericalAttributeProperties(DataInstances data,
-    		AttributeMetadata metadata, int attributeNumber) {
-        List<Double> values=new ArrayList<Double>();        
-        NumericalAttributeMetadata met=(NumericalAttributeMetadata)metadata;
+    @SuppressWarnings("unchecked")
+	private <TReturn> List<TReturn> getAttributeData(
+    		DataInstances data,
+    		int attributeNumber)
+    		{
+    	List<TReturn> values=new ArrayList<TReturn>();       
         
 		for (Instance instanceI : data.getInstances()) {
 		List<Boolean> missingList = instanceI.getMissing();
             if ((boolean)missingList.get(attributeNumber)) {
                 continue;
             }
-            values.add((Double)instanceI.getValues().get(attributeNumber));
+            values.add((TReturn)instanceI.getValues().get(attributeNumber));
         }
+		
+		return values;
+    }
+    
+    private void setCategoricalAttributeProperties(DataInstances data,
+    		AttributeMetadata metadata, int attributeNumber) {
+    	
+        Attribute att = (Attribute)data.getAttributes().get(attributeNumber);
+        CategoricalAttributeMetadata met = (CategoricalAttributeMetadata)metadata;
+        
+        int categoryCount = att.getValues().size();
+        
+        met.setNumberOfCategories(categoryCount);
+        
+        
+        List<Double> values=getAttributeData(data, attributeNumber);
+        
+        
+        Map<Integer,Integer> groupMap =new HashMap<Integer,Integer>();
+        
+        for(Double value : values){
+        	
+        	int key = value.intValue();
+        	
+        	if(groupMap.containsKey(key)){
+        		int count = groupMap.get(key);
+        		groupMap.put(key, count+1);
+        	}else{
+        		groupMap.put(key, 1);
+        	}
+        }
+        
+        Object[] observeda = groupMap.values().toArray();
+        
+        
+        long[] observed =  new long[observeda.length];
+        for(int i=0;i<observed.length;i++){
+        	observed[i] = ((Integer)observeda[i]).longValue();
+        }
+        
+        
+        double[] expected = new double[categoryCount];
+        for(int i=0;i<expected.length;i++){
+        	expected[i] = values.size() / (double)categoryCount;
+        }
+        
+        ChiSquareTest cst = new ChiSquareTest();
+        try{
+        	double chiSquareValue = cst.chiSquare(expected, observed);
+        	met.setChiSquare(chiSquareValue);
+        }catch(
+        		NotPositiveException|
+        		NotStrictlyPositiveException|
+        		DimensionMismatchException ex){
+        	met.setChiSquare(Double.NaN);
+        }
+        
+        try{
+        	double chiSquareTestValue = cst.chiSquareTest(expected, observed);
+        	met.setChiSquareTest(chiSquareTestValue);
+        }catch(
+        		NotPositiveException|
+        		NotStrictlyPositiveException|
+        		DimensionMismatchException|
+        		MaxCountExceededException ex)
+        {
+        	met.setChiSquareTest(Double.NaN);
+        }
+        
+        GTest gt=new GTest();
+        
+        try{
+        	double gTestValue = gt.gTest(expected, observed);
+        	met.setGTest(gTestValue);
+        }catch(
+        		NotPositiveException|
+        		NotStrictlyPositiveException|
+        		DimensionMismatchException|
+        		MaxCountExceededException ex)
+        {
+        	met.setGTest(Double.NaN);
+        }
+        
+    }
+    
+    private void setNumericalAttributeProperties(DataInstances data,
+    		AttributeMetadata metadata, int attributeNumber) {
+        List<Double> values = getAttributeData(data, attributeNumber);      
+        NumericalAttributeMetadata met=(NumericalAttributeMetadata)metadata;
+		
         Collections.sort(values);
         if (!values.isEmpty()) {
         	met.setMin(values.get(0));

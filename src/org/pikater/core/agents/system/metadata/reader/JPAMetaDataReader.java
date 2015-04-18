@@ -72,6 +72,15 @@ public class JPAMetaDataReader {
 	            	jpaam=new JPAAttributeCategoricalMetaData();
 	            	((JPAAttributeCategoricalMetaData)jpaam).setNumberOfCategories(numberOfCategories);
 	            	
+	            	double chiSquare = ((CategoricalAttributeMetadata)att).getChiSquare();
+	            	((JPAAttributeCategoricalMetaData)jpaam).setChiSquare(chiSquare);
+	            	
+	            	double chiSquareTest = ((CategoricalAttributeMetadata)att).getChiSquareTest();
+	            	((JPAAttributeCategoricalMetaData)jpaam).setChiSquareTest(chiSquareTest);
+	            	
+	            	double gTest = ((CategoricalAttributeMetadata)att).getGTest();
+	            	((JPAAttributeCategoricalMetaData)jpaam).setGTest(gTest);
+	            	
 	            }else if(att instanceof RealAttributeMetadata){
 	            	RealAttributeMetadata ram = (RealAttributeMetadata) att;
 	            	

@@ -16,6 +16,9 @@ import javax.persistence.Transient;
 public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData {
 
 	private int numberOfCategories;
+	private double chiSquare;
+	private double chiSquareTest;
+	private double gTest;
 
 	public int getNumberOfCategories() {
 		return numberOfCategories;
@@ -23,6 +26,30 @@ public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData {
 
 	public void setNumberOfCategories(int numberOfCategories) {
 		this.numberOfCategories = numberOfCategories;
+	}
+
+	public double getChiSquare() {
+		return chiSquare;
+	}
+
+	public void setChiSquare(double chiSquare) {
+		this.chiSquare = chiSquare;
+	}
+
+	public double getChiSquareTest() {
+		return chiSquareTest;
+	}
+
+	public void setChiSquareTest(double chiSquareTest) {
+		this.chiSquareTest = chiSquareTest;
+	}
+
+	public double getGTest() {
+		return gTest;
+	}
+
+	public void setGTest(double gTest) {
+		this.gTest = gTest;
 	}
 
 	@Transient
