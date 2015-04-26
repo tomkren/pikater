@@ -51,6 +51,12 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getVariance()));
 		case STD_DEVIATION:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getStandardDeviation()));
+		case CHI_SQUARE_NORM:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getChiSquareNormalD()));
+		case CHI_SQUARE_NORM_T:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getChiSquareTestNormalD()));
+		case G_TEST:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getgTestNormalD()));
 		case QUARTILE_1:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getQ1()));
 		case QUARTILE_2:

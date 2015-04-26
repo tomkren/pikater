@@ -22,6 +22,9 @@ public class NumericalAttributeMetadata extends AttributeMetadata {
 	private double q1;
 	private double q2;
 	private double q3;
+	private double chiSquareNormalD;
+	private double chiSquareTestNormalD;
+	private double gTestnormalD;
 
 	public double getStandardDeviation() {
 		return standardDeviation;
@@ -103,10 +106,32 @@ public class NumericalAttributeMetadata extends AttributeMetadata {
 		this.q3 = q3;
 	}
 
+	public double getChiSquareNormalD() {
+		return chiSquareNormalD;
+	}
+
+	public void setChiSquareNormalD(double chiSquareNormalD) {
+		this.chiSquareNormalD = chiSquareNormalD;
+	}
+
+	public double getChiSquareTestNormalD() {
+		return chiSquareTestNormalD;
+	}
+
+	public void setChiSquareTestNormalD(double chiSquareTestNormalD) {
+		this.chiSquareTestNormalD = chiSquareTestNormalD;
+	}
+
+	public double getgTestnormalD() {
+		return gTestnormalD;
+	}
+
+	public void setgTestnormalD(double gTestnormalD) {
+		this.gTestnormalD = gTestnormalD;
+	}
+
 	@Override
 	public String getType() {
 		return "Numerical";
 	}
-
-
 }

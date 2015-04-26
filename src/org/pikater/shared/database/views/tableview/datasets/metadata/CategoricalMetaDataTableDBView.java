@@ -29,7 +29,7 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView {
 		/*
 		 * First the read-only properties.
 		 */
-		NAME, IS_TARGET, CATEGORY_COUNT, RATIO_OF_MISSING_VALUES, ENTROPY, CLASS_ENTROPY,CHI_SQAURE,CHI_SQUARE_TEST, G_TEST;
+		NAME, IS_TARGET, CATEGORY_COUNT, RATIO_OF_MISSING_VALUES, ENTROPY, CLASS_ENTROPY,CHI_SQUARE,CHI_SQUARE_TEST, G_TEST;
 
 		@Override
 		public String getDisplayName() {
@@ -38,6 +38,12 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView {
 				return "MISSING_VALUES_%";
 			case CATEGORY_COUNT:
 				return "CATEGORIES";
+			case CHI_SQUARE:
+				return "χ²";
+			case CHI_SQUARE_TEST:
+				return "χ² Test";
+			case G_TEST:
+				return "G Test";
 			default:
 				return name();
 			}
@@ -54,7 +60,7 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView {
 			case RATIO_OF_MISSING_VALUES:
 			case ENTROPY:
 			case CLASS_ENTROPY:
-			case CHI_SQAURE:
+			case CHI_SQUARE:
 			case CHI_SQUARE_TEST:
 			case G_TEST:
 				return DBViewValueType.STRING;

@@ -31,7 +31,7 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView {
 		 */
 		NAME, IS_TARGET, IS_REAL, MINIMUM, MAXIMUM, AVERAGE,
 		// MODE,
-		MEDIAN, STD_DEVIATION, VARIANCE, QUARTILE_1, QUARTILE_2, QUARTILE_3,
+		MEDIAN, STD_DEVIATION, VARIANCE, CHI_SQUARE_NORM, CHI_SQUARE_NORM_T, G_TEST, QUARTILE_1, QUARTILE_2, QUARTILE_3,
 		RATIO_OF_MISSING_VALUES, ENTROPY, CLASS_ENTROPY;
 
 		@Override
@@ -53,6 +53,12 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView {
 				return "3rd Quartile";
 			case STD_DEVIATION:
 				return "STD. Deviation";
+			case CHI_SQUARE_NORM:
+				return "χ² Normal";
+			case CHI_SQUARE_NORM_T:
+				return "χ² N.Test";
+			case G_TEST:
+				return "G Test";
 			default:
 				return name();
 			}
@@ -79,6 +85,9 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView {
 			case RATIO_OF_MISSING_VALUES:
 			case ENTROPY:
 			case CLASS_ENTROPY:
+			case CHI_SQUARE_NORM:
+			case CHI_SQUARE_NORM_T:
+			case G_TEST:
 				return DBViewValueType.STRING;
 			default:
 				throw new IllegalStateException("Unknown state: " + name());

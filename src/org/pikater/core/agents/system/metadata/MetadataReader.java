@@ -181,6 +181,77 @@ public class MetadataReader {
 		return values;
     }
     
+    private double[] getAverageBins(int binCount, int overallItemCount){
+    	double[] values = new double[binCount];
+        for(int i=0;i<values.length;i++){
+        	values[i] = overallItemCount / (double)binCount;
+        }
+        return values;
+    }
+    
+    private double[] getNormalBins(int overalItemCount){
+    	double[] values= new double[]
+    			{
+    			0.001*overalItemCount,
+    			0.005*overalItemCount,
+    			0.017*overalItemCount,
+    			0.044*overalItemCount,
+    			0.092*overalItemCount,
+    			0.150*overalItemCount,
+    			0.191*overalItemCount,
+    			0.191*overalItemCount,
+    			0.150*overalItemCount,
+    			0.092*overalItemCount,
+    			0.044*overalItemCount,
+    			0.017*overalItemCount,
+    			0.005*overalItemCount,
+    			0.001*overalItemCount
+    			};
+    	return values;
+    }
+    
+    private long[] getHistogram(double[] items, double mean, double estimatedStandardDeviation){
+    	long[] histogram = new long[14];
+    	
+    	double[] barriers=new double[]{
+    			mean - 3 * estimatedStandardDeviation,
+    			mean - 2.5 * estimatedStandardDeviation,
+    			mean - 2 * estimatedStandardDeviation,
+    			mean - 1.5 * estimatedStandardDeviation,
+    			mean - 1 * estimatedStandardDeviation,
+    			mean - 0.5 * estimatedStandardDeviation,
+    			mean ,
+    			mean + 0.5 * estimatedStandardDeviation,
+    			mean + estimatedStandardDeviation,
+    			mean + 1.5 * estimatedStandardDeviation,
+    			mean + 2 * estimatedStandardDeviation,
+    			mean + 2.5 * estimatedStandardDeviation,
+    			mean + 3 * estimatedStandardDeviation,
+    	};
+    	
+    	for(int i=0;i<items.length;i++){
+    		double item = items[i];
+    		
+    		//we check item, to which interval it belongs
+    		for(int j=0;j<barriers.length; j++) {
+    			double barJ =barriers[j];    		
+    	   		
+    			if(item < barJ){
+        			histogram[j]++;
+        			break;
+        		}
+    		}
+    		//the last subinterval is checked for >=
+    		if(item >= barriers[12]){
+    			histogram[13]++;
+    		}
+    		
+    	}
+    	
+    	return histogram;
+    	
+    }
+    
     private void setCategoricalAttributeProperties(DataInstances data,
     		AttributeMetadata metadata, int attributeNumber) {
     	
@@ -217,50 +288,61 @@ public class MetadataReader {
         	observed[i] = ((Integer)observeda[i]).longValue();
         }
         
+        double[] expected = getAverageBins(categoryCount,values.size());
         
-        double[] expected = new double[categoryCount];
-        for(int i=0;i<expected.length;i++){
-        	expected[i] = values.size() / (double)categoryCount;
-        }
+        double chiSquareValue = computeChiSquareValue(expected, observed);
+        met.setChiSquare(chiSquareValue);
         
-        ChiSquareTest cst = new ChiSquareTest();
+        double chiSquareTestValue = computeChiSquareTestValue(expected, observed);
+        met.setChiSquareTest(chiSquareTestValue);
+        
+        double gTestValue = computeGTestValue(expected, observed);
+        met.setGTest(gTestValue);
+        
+    }
+    
+    private double computeChiSquareValue(double[] expected, long[] observed){
+    	ChiSquareTest cst = new ChiSquareTest();
         try{
         	double chiSquareValue = cst.chiSquare(expected, observed);
-        	met.setChiSquare(chiSquareValue);
+        	return chiSquareValue;
         }catch(
         		NotPositiveException|
         		NotStrictlyPositiveException|
         		DimensionMismatchException ex){
-        	met.setChiSquare(Double.NaN);
+        	return Double.NaN;
         }
-        
+    }
+    
+    private double computeChiSquareTestValue(double[] expected, long[] observed){
+    	ChiSquareTest cst = new ChiSquareTest();
         try{
         	double chiSquareTestValue = cst.chiSquareTest(expected, observed);
-        	met.setChiSquareTest(chiSquareTestValue);
+        	return chiSquareTestValue;
         }catch(
         		NotPositiveException|
         		NotStrictlyPositiveException|
-        		DimensionMismatchException|
-        		MaxCountExceededException ex)
-        {
-        	met.setChiSquareTest(Double.NaN);
+        		DimensionMismatchException ex){
+        	return Double.NaN;
         }
-        
-        GTest gt=new GTest();
+    }
+    
+    private double computeGTestValue(double[] expected, long[] observed){
+    	GTest gt=new GTest();
         
         try{
         	double gTestValue = gt.gTest(expected, observed);
-        	met.setGTest(gTestValue);
+        	return gTestValue;
         }catch(
         		NotPositiveException|
         		NotStrictlyPositiveException|
         		DimensionMismatchException|
         		MaxCountExceededException ex)
         {
-        	met.setGTest(Double.NaN);
+        	return Double.NaN;
         }
-        
     }
+    
     
     private void setNumericalAttributeProperties(DataInstances data,
     		AttributeMetadata metadata, int attributeNumber) {
@@ -290,7 +372,9 @@ public class MetadataReader {
         }
         double variation=squareaverage-(average*average);
         met.setAvg(average);
-        met.setStandardDeviation(Math.sqrt(variation));
+        
+        double stdDeviation = Math.sqrt(variation);
+        met.setStandardDeviation(stdDeviation);
         met.setVariation(variation);
         
         double mean = average;
@@ -313,6 +397,24 @@ public class MetadataReader {
         } else {
         	met.setMedian(defValue);
         }
+        
+        double[] items= new double[values.size()];
+        for(int i=0;i<items.length;i++){
+        	items[i] = (double)values.get(i);
+        }
+        
+        long[] observed = getHistogram(items, mean, stdDeviation);
+        
+        double[] expected = getNormalBins(items.length);
+        
+        double chiSquareNormalD = computeChiSquareValue(expected, observed);
+        met.setChiSquareNormalD(chiSquareNormalD);
+        
+        double chiSquareTestNormalD = computeChiSquareTestValue(expected, observed);
+        met.setChiSquareTestNormalD(chiSquareTestNormalD);
+        
+        double gTestnormalD = computeGTestValue(expected, observed);
+        met.setgTestnormalD(gTestnormalD);
     }
     
     private void setRatioMissingValues(DataInstances data,

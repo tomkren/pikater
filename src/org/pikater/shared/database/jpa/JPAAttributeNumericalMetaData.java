@@ -27,6 +27,9 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData {
 	private double q1;
 	private double q2;
 	private double q3;
+	private double chiSquareNormalD;
+	private double chiSquareTestNormalD;
+	private double gTestNormalD;
 
 	public void setReal(boolean isReal) {
 		this.isReal = isReal;
@@ -122,6 +125,30 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData {
 
 	public void setQ3(double q3) {
 		this.q3 = q3;
+	}
+
+	public double getChiSquareNormalD() {
+		return chiSquareNormalD;
+	}
+
+	public void setChiSquareNormalD(double chiSquareNormalD) {
+		this.chiSquareNormalD = chiSquareNormalD;
+	}
+
+	public double getChiSquareTestNormalD() {
+		return chiSquareTestNormalD;
+	}
+
+	public void setChiSquareTestNormalD(double chiSquareTestNormalD) {
+		this.chiSquareTestNormalD = chiSquareTestNormalD;
+	}
+
+	public double getgTestNormalD() {
+		return gTestNormalD;
+	}
+
+	public void setgTestNormalD(double gTestNormalD) {
+		this.gTestNormalD = gTestNormalD;
 	}
 
 	@Transient
