@@ -63,6 +63,10 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getQ2()));
 		case QUARTILE_3:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getQ3()));
+		case SKEWNESS:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getSkewness()));
+		case KURTOSIS:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getKurtosis()));	
 		case ENTROPY:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getEntropy()));
 		case CLASS_ENTROPY:

@@ -14,6 +14,8 @@ import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.stat.descriptive.moment.Kurtosis;
+import org.apache.commons.math3.stat.descriptive.moment.Skewness;
 import org.apache.commons.math3.stat.inference.ChiSquareTest;
 import org.apache.commons.math3.stat.inference.GTest;
 import org.pikater.core.ontology.subtrees.attribute.Attribute;
@@ -343,6 +345,15 @@ public class MetadataReader {
         }
     }
     
+    private double getKurtosisValue(double[] items){
+    	Kurtosis kurtosis=new Kurtosis();
+    	return kurtosis.evaluate(items,0,items.length);
+    }
+    
+    private double getSkewnessValue(double[] items){
+    	Skewness skewness = new Skewness();
+    	return skewness.evaluate(items, 0, items.length);
+    }
     
     private void setNumericalAttributeProperties(DataInstances data,
     		AttributeMetadata metadata, int attributeNumber) {
@@ -415,6 +426,13 @@ public class MetadataReader {
         
         double gTestnormalD = computeGTestValue(expected, observed);
         met.setgTestnormalD(gTestnormalD);
+        
+        double skewness = getSkewnessValue(items);
+        met.setSkewness(skewness);
+        
+        double kurtosis = getKurtosisValue(items);
+        met.setKurtosis(kurtosis);
+        
     }
     
     private void setRatioMissingValues(DataInstances data,

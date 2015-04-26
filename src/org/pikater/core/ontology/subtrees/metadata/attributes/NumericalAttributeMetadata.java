@@ -25,6 +25,8 @@ public class NumericalAttributeMetadata extends AttributeMetadata {
 	private double chiSquareNormalD;
 	private double chiSquareTestNormalD;
 	private double gTestnormalD;
+	private double skewness;
+	private double kurtosis;
 
 	public double getStandardDeviation() {
 		return standardDeviation;
@@ -130,8 +132,25 @@ public class NumericalAttributeMetadata extends AttributeMetadata {
 		this.gTestnormalD = gTestnormalD;
 	}
 
+	public double getSkewness() {
+		return skewness;
+	}
+
+	public void setSkewness(double skewness) {
+		this.skewness = skewness;
+	}
+
+	public double getKurtosis() {
+		return kurtosis;
+	}
+
+	public void setKurtosis(double kurtosis) {
+		this.kurtosis = kurtosis;
+	}
+
 	@Override
 	public String getType() {
 		return "Numerical";
 	}
+
 }

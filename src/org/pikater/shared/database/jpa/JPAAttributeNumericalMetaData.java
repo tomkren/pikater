@@ -27,6 +27,8 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData {
 	private double q1;
 	private double q2;
 	private double q3;
+	private double skewness;
+	private double kurtosis;
 	private double chiSquareNormalD;
 	private double chiSquareTestNormalD;
 	private double gTestNormalD;
@@ -125,6 +127,22 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData {
 
 	public void setQ3(double q3) {
 		this.q3 = q3;
+	}
+
+	public double getSkewness() {
+		return skewness;
+	}
+
+	public void setSkewness(double skewness) {
+		this.skewness = skewness;
+	}
+
+	public double getKurtosis() {
+		return kurtosis;
+	}
+
+	public void setKurtosis(double kurtosis) {
+		this.kurtosis = kurtosis;
 	}
 
 	public double getChiSquareNormalD() {

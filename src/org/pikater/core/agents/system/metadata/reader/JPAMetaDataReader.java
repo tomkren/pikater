@@ -102,6 +102,9 @@ public class JPAMetaDataReader {
 	            	((JPAAttributeNumericalMetaData)jpaam).setChiSquareNormalD(ram.getChiSquareNormalD());
 	            	((JPAAttributeNumericalMetaData)jpaam).setChiSquareTestNormalD(ram.getChiSquareTestNormalD());
 	            	
+	            	((JPAAttributeNumericalMetaData)jpaam).setSkewness(ram.getSkewness());
+	            	((JPAAttributeNumericalMetaData)jpaam).setKurtosis(ram.getKurtosis());
+	            	
 	            }else if(att instanceof IntegerAttributeMetadata){
 	            	IntegerAttributeMetadata ram = (IntegerAttributeMetadata) att;
 	            	
@@ -122,7 +125,9 @@ public class JPAMetaDataReader {
 	            	((JPAAttributeNumericalMetaData)jpaam).setgTestNormalD(ram.getgTestnormalD());
 	            	((JPAAttributeNumericalMetaData)jpaam).setChiSquareNormalD(ram.getChiSquareNormalD());
 	            	((JPAAttributeNumericalMetaData)jpaam).setChiSquareTestNormalD(ram.getChiSquareTestNormalD());
-	            	
+
+	            	((JPAAttributeNumericalMetaData)jpaam).setSkewness(ram.getSkewness());
+	            	((JPAAttributeNumericalMetaData)jpaam).setKurtosis(ram.getKurtosis());
 	            }else{
 	            	ConsoleLogger.log(Level.INFO, att.toString());
 	            }
