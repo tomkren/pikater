@@ -19,6 +19,7 @@ import org.apache.commons.math3.exception.NoDataException;
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.exception.TooManyIterationsException;
 import org.apache.commons.math3.stat.correlation.Covariance;
 import org.apache.commons.math3.stat.descriptive.moment.Kurtosis;
 import org.apache.commons.math3.stat.descriptive.moment.Skewness;
@@ -197,7 +198,7 @@ public class MetadataReader {
 			
 			return kst.kolmogorovSmirnovTest(valuesArray, classValuesArray);
 			
-		}catch(InsufficientDataException | NullArgumentException e){
+		}catch(TooManyIterationsException | InsufficientDataException | NullArgumentException e){
 			
 			return 0.0;
 		}

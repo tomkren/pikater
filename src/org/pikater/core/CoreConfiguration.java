@@ -84,6 +84,10 @@ public class CoreConfiguration {
 		return getCorePath("data") + "files"
 				+ System.getProperty("file.separator");
 	}
+	
+	public static String getOpenmlTempFilesPath(){
+		return getCorePath("openml");
+	}
 
 	/**
 	 * 

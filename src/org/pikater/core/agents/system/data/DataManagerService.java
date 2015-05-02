@@ -14,6 +14,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 
 import java.io.File;
 import java.util.Date;
@@ -21,6 +22,7 @@ import java.util.Date;
 import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
@@ -50,6 +52,7 @@ import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
 import org.pikater.core.ontology.subtrees.dataset.GetAllDatasetInfo;
+import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
@@ -1156,6 +1159,50 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
+	/**
+	 * Sends a request to save dataset by using {@link Agent_DataManager}
+	 * @param filename - name of the dataset file to save
+	 * @param userID - user who is storing file to the database
+	 * @return int dataSetID
+	 */
+	public static int sendRequestSaveDataSet(PikaterAgent agent, String filename, int userID, String description){
+		try {
+        	AID dataManager = new AID(CoreAgents.DATA_MANAGER.getName(), false);
+    		Ontology ontology = DataOntology.getInstance();
+    		SaveDataset sd = new SaveDataset();
+    		sd.setUserID(userID);
+    		sd.setSourceFile(filename);
+    		sd.setDescription(description);
+            ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+            request.addReceiver(dataManager);
+            request.setLanguage(agent.getCodec().getName());
+            request.setOntology(ontology.getName());
+            agent.getContentManager().fillContent(request, new Action(dataManager, sd));
+           
+            ACLMessage reply = FIPAService.doFipaRequestClient(agent, request, 10000);
+            if (reply == null) {
+            	agent.logSevere("Reply not received.");
+                return -1;
+            
+            } else {
+            	agent.logInfo("Reply received: " +
+                		ACLMessage.getPerformative(reply.getPerformative()) +
+                		" " + reply.getContent());
+                
+            	return (Integer)reply.getContentObject();
+            }
+        } catch (CodecException e) {
+        	agent.logException("Codec error occurred: " + e.getMessage(), e);
+        } catch (OntologyException e) {
+        	agent.logException("Ontology error occurred: " + e.getMessage(), e);
+        } catch (FIPAException e) {
+        	agent.logException("FIPA error occurred: " + e.getMessage(), e);
+        } catch (UnreadableException e) {
+        	agent.logException(e.getMessage(), e);
+		}
+		return -1;
+	}
+	
 	@Deprecated
 	public static jade.util.leap.ArrayList getFilesInfo(PikaterAgent agent,
 			GetFileInfo gfi) {

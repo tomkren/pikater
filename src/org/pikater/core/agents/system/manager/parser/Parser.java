@@ -1,5 +1,6 @@
 package org.pikater.core.agents.system.manager.parser;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -18,6 +19,8 @@ import org.pikater.core.agents.system.manager.graph.strategies.CAStartComputatio
 import org.pikater.core.agents.system.manager.graph.strategies.DataProcessingStrategy;
 import org.pikater.core.agents.system.manager.graph.strategies.RecommenderStartComputationStrategy;
 import org.pikater.core.agents.system.manager.graph.strategies.SearchStartComputationStrategy;
+import org.pikater.core.agents.system.metadata.MetadataService;
+import org.pikater.core.agents.system.openml.OpenMLAgentService;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
@@ -124,7 +127,10 @@ public class Parser {
             agent.logInfo("Ontology Matched - FileDataProvider");
 
             FileDataProvider fileData = (FileDataProvider) dataProvider;
-            this.parseFileDataProvider(fileData, child, connectionName);
+            
+            
+            
+            this.parseFileDataProvider(fileData, child, connectionName, userID);
             return;
         }  else if (dataProvider instanceof ComputingAgent) {
             agent.logInfo("Ontology Matched - ComputingAgent");
@@ -214,9 +220,41 @@ public class Parser {
      * @param connectionName Name of the buffer
      */
     private void parseFileDataProvider(FileDataProvider file,
-    		ComputationNode child, String connectionName) {
+    		ComputationNode child, String connectionName, int userID) {
 
         agent.logInfo("Ontology Parser - FileDataProvider");
+        
+              
+        
+        String fileURI = file.getFileURI();
+        
+        String internalName
+        		= DataManagerService.translateExternalFilename(agent, userID, fileURI);
+        
+        
+        String PREFIX = "openml:";
+        if ("error".equals(internalName) && fileURI.startsWith(PREFIX)) {
+        	
+        	String dID = fileURI.substring(PREFIX.length());
+        	
+        	try{
+        		int did = Integer.parseInt(dID);
+        	
+        		String dst = CoreConfiguration.getOpenmlTempFilesPath() + fileURI;
+        		String downloadedPath = OpenMLAgentService.importDataset(agent, did, dst);
+        		
+        		int dataSetID = 
+        				DataManagerService
+        				.sendRequestSaveDataSet(agent, downloadedPath, userID, "ID = "+did+" OpenML import");
+
+        		MetadataService.requestMetadataForDataset(agent, dataSetID, userID);
+        	}catch(NumberFormatException nfe){
+        		agent.logSevere("Invalid number format for OpenML Dataset ID : "+dID);
+        	}
+        }
+        
+        
+        
         if (!alreadyProcessed.containsKey(file.getId())) {
             alreadyProcessed.put(file.getId(), null);
 

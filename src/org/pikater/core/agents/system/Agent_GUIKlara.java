@@ -552,7 +552,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			if (filename == null) {
 				return;
 			}
-			dataSetID = this.sendRequestSaveDataSet(
+			dataSetID = DataManagerService.sendRequestSaveDataSet(this,
 					filename, userID, description);
 			
 		} else if (cmdA.length == 3) {
@@ -565,7 +565,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			if (filename == null) {
 				return;
 			}
-			dataSetID = this.sendRequestSaveDataSet(
+			dataSetID = DataManagerService.sendRequestSaveDataSet(this,
 					filename, userID, description);
 			
 		} else if (cmdA.length == 2) {
@@ -577,7 +577,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			if (filename == null) {
 				return;
 			}
-			dataSetID = this.sendRequestSaveDataSet(
+			dataSetID = DataManagerService.sendRequestSaveDataSet(this,
 					filename, userID, description);
 		} else {
 			System.err.println("Wrong parameters");
@@ -588,48 +588,5 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 	}
 	
-	/**
-	 * Sends a request to save dataset by using {@link Agent_DataManager}
-	 * @param filename - name of the dataset file to save
-	 * @param userID - user who is storing file to the database
-	 * @return int dataSetID
-	 */
-	private int sendRequestSaveDataSet(String filename, int userID, String description){
-		try {
-        	AID dataManager = new AID(CoreAgents.DATA_MANAGER.getName(), false);
-    		Ontology ontology = DataOntology.getInstance();
-    		SaveDataset sd = new SaveDataset();
-    		sd.setUserID(userID);
-    		sd.setSourceFile(filename);
-    		sd.setDescription(description);
-            ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-            request.addReceiver(dataManager);
-            request.setLanguage(getCodec().getName());
-            request.setOntology(ontology.getName());
-            getContentManager().fillContent(request, new Action(dataManager, sd));
-           
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
-            if (reply == null) {
-                logSevere("Reply not received.");
-                return -1;
-            
-            } else {
-                logInfo("Reply received: " +
-                		ACLMessage.getPerformative(reply.getPerformative()) +
-                		" " + reply.getContent());
-                
-            	return (Integer)reply.getContentObject();
-            }
-        } catch (CodecException e) {
-            logException("Codec error occurred: " + e.getMessage(), e);
-        } catch (OntologyException e) {
-            logException("Ontology error occurred: " + e.getMessage(), e);
-        } catch (FIPAException e) {
-            logException("FIPA error occurred: " + e.getMessage(), e);
-        } catch (UnreadableException e) {
-        	logException(e.getMessage(), e);
-		}
-		return -1;
-	}
 }
 

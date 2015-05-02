@@ -86,6 +86,9 @@ public class Agent_Manager extends PikaterAgent {
 		ontologies.add(FilenameTranslationOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(ResultOntology.getInstance());
+		ontologies.add(OpenMLOntology.getInstance());
+		ontologies.add(DataOntology.getInstance());
+		ontologies.add(MetadataOntology.getInstance());
 		
 		return ontologies;
 	}
