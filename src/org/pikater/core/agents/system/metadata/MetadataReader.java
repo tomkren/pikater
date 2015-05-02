@@ -10,14 +10,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.InsufficientDataException;
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
+import org.apache.commons.math3.exception.NoDataException;
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.stat.correlation.Covariance;
 import org.apache.commons.math3.stat.descriptive.moment.Kurtosis;
 import org.apache.commons.math3.stat.descriptive.moment.Skewness;
 import org.apache.commons.math3.stat.inference.ChiSquareTest;
 import org.apache.commons.math3.stat.inference.GTest;
+import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
+import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
+import org.apache.commons.math3.stat.inference.OneWayAnova;
 import org.pikater.core.ontology.subtrees.attribute.Attribute;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
@@ -112,6 +121,8 @@ public class MetadataReader {
     	
         AttributeType type = getAttributeType(data, attributeNumber);
         AttributeMetadata attributeMetadata = getAttributeMetadataInstance(type);
+        
+        
         setBaseAttributeProperties(data, attributeMetadata, attributeNumber);
         
         if (type!=AttributeType.Categorical) {
@@ -130,14 +141,133 @@ public class MetadataReader {
     private void setBaseAttributeProperties(DataInstances data,
     		AttributeMetadata metadata, int attributeNumber) {
     	
-        Attribute att = (Attribute)data.getAttributes().get(attributeNumber);
+        Attribute actualAttribute = (Attribute)data.getAttributes().get(attributeNumber);        
+        
+        metadata.setKolmogorovSmirnov(computeKolmogorovSmirnovPValue(data, attributeNumber));
+        metadata.setMannWhitneyU(computeMannWhitneyUTestPValue(data, attributeNumber));
+        metadata.setCovariance(computeCovariance(data, attributeNumber));
+        
         metadata.setOrder(attributeNumber);  
-        metadata.setName(att.getName());
+        metadata.setName(actualAttribute.getName());
         
         if (attributeNumber == data.getClassIndex()) {
         	metadata.setIsTarget(true);
         }
         setRatioMissingValues(data, attributeNumber, metadata);
+    }
+    
+    private double[] getValuesArray(DataInstances data, int attributeNumber, int missingAttrIndex){
+    	List<Double> values = new ArrayList<Double>();    
+    	
+    	for (Instance instanceI : data.getInstances()) {
+    		List<Boolean> missingList = instanceI.getMissing();
+                if ((boolean)missingList.get(missingAttrIndex)) {
+                    continue;
+                }
+                values.add((Double)instanceI.getValues().get(attributeNumber));
+            }
+    	
+    	return listToArray(values);
+    }
+    
+    private double computeCovariance(DataInstances data, int attributeNumber){
+    	Covariance cov = new Covariance();
+    	
+    	double[] valuesArray = getValuesArray(data, attributeNumber, attributeNumber);
+		double[] classValuesArray = getValuesArray(data, data.getClassIndex(), attributeNumber);
+		
+		try{
+			
+			return cov.covariance(valuesArray, classValuesArray);
+			
+		}catch(MathIllegalArgumentException e){
+			
+			return 0.0;
+		}
+    }
+    
+    private double computeKolmogorovSmirnovPValue(DataInstances data, int attributeNumber){
+    	
+        KolmogorovSmirnovTest kst = new KolmogorovSmirnovTest();
+		
+		double[] valuesArray = getValuesArray(data, attributeNumber, attributeNumber);
+		double[] classValuesArray = getValuesArray(data, data.getClassIndex(), attributeNumber);
+		
+		try{
+			
+			return kst.kolmogorovSmirnovTest(valuesArray, classValuesArray);
+			
+		}catch(InsufficientDataException | NullArgumentException e){
+			
+			return 0.0;
+		}
+    }
+    
+    private double computeMannWhitneyUTestPValue(DataInstances data, int attributeNumber){
+    	
+        MannWhitneyUTest utest = new MannWhitneyUTest();
+		
+		double[] valuesArray = getValuesArray(data, attributeNumber, attributeNumber);
+		double[] classValuesArray = getValuesArray(data, data.getClassIndex(), attributeNumber);
+		
+		try{
+			
+			return utest.mannWhitneyU(valuesArray, classValuesArray);
+			
+		}catch(NoDataException | NullArgumentException e){
+			
+			return 0.0;
+		}
+    }
+    
+    private double computeAnovaValue(DataInstances data, int attributeNumber){
+    	int classIdx = data.getClassIndex();
+    	
+    	if(attributeNumber == classIdx)
+    		return 0.0;
+    	
+    	HashMap<Object, ArrayList<Double>> valuesByCategory = new HashMap<>();
+
+        for (int i = 0; i < data.getInstances().size(); i++) {
+            Instance inst = data.getInstances().get(i);
+            Object key = inst.getValues().get(attributeNumber);
+
+            if (!valuesByCategory.containsKey(key)) {
+                valuesByCategory.put(key, new ArrayList<Double>());
+            }
+
+            valuesByCategory.get(key).add(inst.getValues().get(classIdx));
+        }
+
+        ArrayList<double[]> values = new ArrayList<>();
+
+        for (Object key : valuesByCategory.keySet()) {
+            values.add(listToArray(valuesByCategory.get(key)));
+        }
+
+        OneWayAnova anova = new OneWayAnova();
+ 
+        try {
+            return anova.anovaPValue(values);
+        } catch (
+        		DimensionMismatchException | 
+        		NullArgumentException | 
+        		ConvergenceException | 
+        		MaxCountExceededException e) {
+        	
+            return 0.0;//TODO: anova selhala, nevim, kolik nastavit... rozhodli jsme pro nulu
+        }
+    }
+    
+    static double[] listToArray(List<Double> list) {
+
+        double[] arr = new double[list.size()];
+
+        for (int i = 0; i < list.size(); i++) {
+            arr[i] = list.get(i);
+        }
+
+        return arr;
     }
     
     /**
@@ -300,6 +430,9 @@ public class MetadataReader {
         
         double gTestValue = computeGTestValue(expected, observed);
         met.setGTest(gTestValue);
+        
+        double anovaPValue = computeAnovaValue(data, attributeNumber);
+        met.setAnovaPValue(anovaPValue);
         
     }
     

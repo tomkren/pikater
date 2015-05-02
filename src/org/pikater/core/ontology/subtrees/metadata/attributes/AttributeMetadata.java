@@ -21,6 +21,9 @@ public class AttributeMetadata implements Concept {
 	private int order;
 	private double entropy = 0;
 	private double attributeClassEntropy = 0;
+	private double kolmogorovSmirnov;
+	private double mannWhitneyU;
+	private double covariance;
 
 
 	public String getName() {
@@ -76,6 +79,30 @@ public class AttributeMetadata implements Concept {
 	}
 
 	
+	public double getKolmogorovSmirnov() {
+		return kolmogorovSmirnov;
+	}
+
+	public void setKolmogorovSmirnov(double kolmogorovSmirnov) {
+		this.kolmogorovSmirnov = kolmogorovSmirnov;
+	}
+
+	public double getMannWhitneyU() {
+		return mannWhitneyU;
+	}
+
+	public void setMannWhitneyU(double mannWhitneyU) {
+		this.mannWhitneyU = mannWhitneyU;
+	}
+
+	public double getCovariance() {
+		return covariance;
+	}
+
+	public void setCovariance(double covariance) {
+		this.covariance = covariance;
+	}
+
 	public String getType() {
 		return "Base";
 	}

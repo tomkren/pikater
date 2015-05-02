@@ -16,6 +16,7 @@ public class CategoricalAttributeMetadata extends AttributeMetadata {
 	private double chiSquare;
 	private double chiSquareTest;
 	private double gTest;
+	private double anovaPValue;
 
 	public int getNumberOfCategories() {
 		return numberOfCategories;
@@ -47,6 +48,14 @@ public class CategoricalAttributeMetadata extends AttributeMetadata {
 
 	public void setGTest(double gTest) {
 		this.gTest = gTest;
+	}
+
+	public double getAnovaPValue() {
+		return anovaPValue;
+	}
+
+	public void setAnovaPValue(double anovaPValue) {
+		this.anovaPValue = anovaPValue;
 	}
 
 	@Override

@@ -45,7 +45,15 @@ public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getChiSquareTest()));
 		case G_TEST:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getGTest()));
-
+		case KS_TEST:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getKolmogorovSmirnov()));
+		case U_TEST:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getMannWhitney()));
+		case COVARIANCE:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getCovariance()));
+		case ANOVA:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrCat.getAnova()));
+			
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}

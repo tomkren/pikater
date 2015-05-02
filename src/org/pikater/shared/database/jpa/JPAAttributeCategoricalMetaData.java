@@ -19,6 +19,7 @@ public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData {
 	private double chiSquare;
 	private double chiSquareTest;
 	private double gTest;
+	private double anova;
 
 	public int getNumberOfCategories() {
 		return numberOfCategories;
@@ -50,6 +51,14 @@ public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData {
 
 	public void setGTest(double gTest) {
 		this.gTest = gTest;
+	}
+
+	public double getAnova() {
+		return anova;
+	}
+
+	public void setAnova(double anova) {
+		this.anova = anova;
 	}
 
 	@Transient

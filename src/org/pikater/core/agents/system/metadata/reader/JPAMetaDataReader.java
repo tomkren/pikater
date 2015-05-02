@@ -81,6 +81,9 @@ public class JPAMetaDataReader {
 	            	double gTest = ((CategoricalAttributeMetadata)att).getGTest();
 	            	((JPAAttributeCategoricalMetaData)jpaam).setGTest(gTest);
 	            	
+	            	double anova = ((CategoricalAttributeMetadata)att).getAnovaPValue();
+	            	((JPAAttributeCategoricalMetaData)jpaam).setAnova(anova);
+	            	
 	            }else if(att instanceof RealAttributeMetadata){
 	            	RealAttributeMetadata ram = (RealAttributeMetadata) att;
 	            	
@@ -138,6 +141,10 @@ public class JPAMetaDataReader {
 	            jpaam.setClassEntropy(att.getAttributeClassEntropy());
 	            jpaam.setEntropy(att.getEntropy());
 	            jpaam.setOrder(att.getOrder());
+	            
+	            jpaam.setKolmogorovSmirnov(att.getKolmogorovSmirnov());
+	            jpaam.setMannWhitney(att.getMannWhitneyU());
+	            jpaam.setCovariance(att.getCovariance());
 	            
 	            attrs.add(jpaam);
 	        }

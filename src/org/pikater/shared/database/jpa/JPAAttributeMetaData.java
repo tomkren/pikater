@@ -26,6 +26,9 @@ public class JPAAttributeMetaData extends JPAAbstractEntity implements Comparabl
 	private double classEntropy;
 	private double entropy;
 	private int attrOrder;
+	private double mannWhitney;
+	private double kolmogorovSmirnov;
+	private double covariance;
 
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;
@@ -73,6 +76,30 @@ public class JPAAttributeMetaData extends JPAAbstractEntity implements Comparabl
 
 	public void setEntropy(double entropy) {
 		this.entropy = entropy;
+	}
+
+	public double getMannWhitney() {
+		return mannWhitney;
+	}
+
+	public void setMannWhitney(double mannWhitney) {
+		this.mannWhitney = mannWhitney;
+	}
+
+	public double getKolmogorovSmirnov() {
+		return kolmogorovSmirnov;
+	}
+
+	public void setKolmogorovSmirnov(double kolmogorovSmirnov) {
+		this.kolmogorovSmirnov = kolmogorovSmirnov;
+	}
+
+	public double getCovariance() {
+		return covariance;
+	}
+
+	public void setCovariance(double covariance) {
+		this.covariance = covariance;
 	}
 
 	@Override
