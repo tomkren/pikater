@@ -60,7 +60,7 @@ public class CoreConfiguration {
 	public static ITestExperiment getCurrentKlaraInput() {
 		return getBean("inputKlara");
 	}
-
+			
 	/*
 	 * Other configuration interface
 	 */
@@ -84,7 +84,13 @@ public class CoreConfiguration {
 		return getCorePath("data") + "files"
 				+ System.getProperty("file.separator");
 	}
-	
+
+	public static String getCurrentKlaraInputPath() {
+		
+		return "core" + System.getProperty("file.separator") +
+			"klaraguiagent" + System.getProperty("file.separator");
+	}
+			
 	public static String getOpenmlTempFilesPath(){
 		return getCorePath("openml");
 	}

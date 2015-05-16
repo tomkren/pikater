@@ -212,7 +212,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 			} else if (input.startsWith("--run")) {
 				int index = input.indexOf("--run") + "--run ".length();
 				String fileName = input.substring(index);
-				runFile(fileName, ComputationDescription.importXML(new File(fileName)));
+				String filePath = CoreConfiguration.getCurrentKlaraInputPath() + fileName;
+				
+				runFile(filePath, ComputationDescription.importXML(new File(filePath)));
 
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
@@ -236,31 +238,31 @@ public class Agent_GUIKlara extends PikaterAgent {
 	private void openmlCommands(String command) {
 		String[] commands = command.split(" ");
 		
-		if(commands.length<2){
+		if (commands.length < 2) {
 		   System.out.println("Not enough parameters");
 		   return;
 		}
 		
 		String cmd = commands[1]; // list or import or export
-		if("list".equals(cmd)){
+		if("list".equals(cmd)) {
 			System.out.println("Getting list of available datasets at OpenMl.org");
 			
 			List<Dataset> availableDatasets = OpenMLAgentService.getDatasets(this);
 			
-			if(availableDatasets == null){
+			if(availableDatasets == null) {
 				System.out.println("No datasets were found");
 				return;
 			}
 			System.out.println("Found "+availableDatasets.size()+" datasets");
 			System.out.println(String.format("%-5s %-40s %-7s %-20s","DID","Name","Type","Date"));
-			for(Dataset d : availableDatasets){
+			for(Dataset d : availableDatasets) {
 				System.out.println(String.format("%-5s %-40s %-7s %-20s",d.getDid(),d.getName(),d.getType(),d.getDate()));
 			}
 			
 			return;
-		}else if("import".equals(cmd)){
+		} else if("import".equals(cmd)) {
 			
-			if(commands.length<4){
+			if(commands.length < 4) {
 				System.out.println("You must define dataset ID (did) and destination file of the OpenMl.org dataset you wish to retrieve");
 				return;
 			}
@@ -268,9 +270,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 			
 			String sDid = commands[2];
 			int did = -1;
-			try{
+			try {
 				did = Integer.parseInt(sDid);
-			}catch(NumberFormatException nfe){
+			} catch(NumberFormatException nfe){
 				System.out.println(sDid + " is not a valid number");
 			}
 			
@@ -278,20 +280,20 @@ public class Agent_GUIKlara extends PikaterAgent {
 	
 			String downloadedPath = OpenMLAgentService.importDataset(this, did, dst);
 			
-			if(downloadedPath == null){
+			if (downloadedPath == null) {
 				System.out.println("Something went wrong. You may check the DID you entered");
-			}else{
+			} else {
 				System.out.println("Dataset with DID " + did + " was downloaded to " + downloadedPath);
 			}
 			
-		}else if("help".equals(cmd)){
+		} else if("help".equals(cmd)) {
 			System.out.println("List available datasets: openml list");
 			System.out.println("Export dataset to OpenML.org: openml export <path> [name] [description] [type]");
 			System.out.println("Import dataset from OpenML.org: openml import <did> <destination>");
 			
-		}else if("export".equals(cmd)){
+		} else if("export".equals(cmd)) {
 			
-			if(commands.length<3){
+			if (commands.length < 3) {
 				System.out.println("You must at least define path to the local filename");
 				return;
 			}
@@ -300,28 +302,28 @@ public class Agent_GUIKlara extends PikaterAgent {
 			
 			String name = "";
 			//if user added at least 4 commands openml+export+path+something, them we set name as the 4th parameter
-			if(commands.length>=4){
+			if (commands.length>=4){
 				name = commands[3];
 			}
 			
 			String description = "";
-			if(commands.length>=5){
+			if (commands.length >=5 ) {
 				description = commands[4];
 			}
 			
 			String type = "";
-			if(commands.length>=6){
+			if (commands.length >= 6) {
 				type = commands[5];
 			}
 			
 			int uploaded = OpenMLAgentService.exportDataset(this, name, description, path, type);
-			if(uploaded == -1){
+			if (uploaded == -1) {
 				System.out.println("Something went wrong, when we tried to upload your file. Sorry :(");
-			}else{
+			} else {
 				System.out.println("OpenML ID of your dataset: " + uploaded);
 			}
 			
-		}else{
+		} else {
 			System.out.println("\""+cmd+"\" is invalid command for OpenML interaction.");
 		}
 	}
@@ -397,8 +399,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	 * @param fileName - name of XML file which contains new {@link Batch}
 	 * @throws FileNotFoundException
 	 */
-	private void runFile(String file, ComputationDescription experiment)
-	{
+	private void runFile(String file, ComputationDescription experiment) {
 		System.out.println("Loading experiment from file: " + file);
 		
 		ExecuteBatch executeBatch = new ExecuteBatch(experiment);

@@ -235,21 +235,22 @@ public class Parser {
         String PREFIX = "openml:";
         if ("error".equals(internalName) && fileURI.startsWith(PREFIX)) {
         	
-        	String dID = fileURI.substring(PREFIX.length());
+        	String datasetStringID = fileURI.substring(PREFIX.length());
         	
         	try{
-        		int did = Integer.parseInt(dID);
+        		int dID = Integer.parseInt(datasetStringID);
         	
         		String dst = CoreConfiguration.getOpenmlTempFilesPath() + fileURI;
-        		String downloadedPath = OpenMLAgentService.importDataset(agent, did, dst);
+        		String downloadedPath = OpenMLAgentService.importDataset(agent, dID, dst);
         		
         		int dataSetID = 
         				DataManagerService
-        				.sendRequestSaveDataSet(agent, downloadedPath, userID, "ID = "+did+" OpenML import");
+        				.sendRequestSaveDataSet(agent, downloadedPath, userID, "ID = "+dID+" OpenML import");
 
         		MetadataService.requestMetadataForDataset(agent, dataSetID, userID);
+        		
         	}catch(NumberFormatException nfe){
-        		agent.logSevere("Invalid number format for OpenML Dataset ID : "+dID);
+        		agent.logSevere("Invalid number format for OpenML Dataset ID : "+datasetStringID);
         	}
         }
         

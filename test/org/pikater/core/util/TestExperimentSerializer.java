@@ -10,31 +10,24 @@ import org.pikater.shared.logging.core.ConsoleLogger;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.shared.util.ReflectionUtils;
 
-public class TestExperimentSerializer
-{
-	public static void main(String[] args) throws FileNotFoundException, InstantiationException, IllegalAccessException
-	{
-		if(args.length > 0)
-		{
+public class TestExperimentSerializer {
+	
+	public static void main(String[] args) throws FileNotFoundException, InstantiationException, IllegalAccessException {
+		
+		if(args.length > 0) {
 			File outputDir = new File(args[0]);
-			if(outputDir.isDirectory())
-			{
+			if(outputDir.isDirectory()) {
 				Set<Class<? extends ITestExperiment>> inputClasses = ReflectionUtils.getSubtypesFromSamePackage(ITestExperiment.class);
-				for(Class<? extends ITestExperiment> inputClass : inputClasses)
-				{
+				for(Class<? extends ITestExperiment> inputClass : inputClasses) {
 					ConsoleLogger.log(Level.INFO, "Attempting to serialize: " + inputClass.getName());
 					String outputFileName = IOUtils.joinPathComponents(outputDir.getAbsolutePath(), inputClass.getSimpleName());
 					inputClass.newInstance().createDescription().exportXML(outputFileName);
 				}
 				ConsoleLogger.log(Level.INFO, "SUCCESS!");
-			}
-			else
-			{
+			} else {
 				throw new IllegalArgumentException("Not a directory: " + args[0]);
 			}
-		}
-		else
-		{
+		} else {
 			throw new IllegalStateException("An argument denoting path for output XML files is expected.");
 		}
 	}

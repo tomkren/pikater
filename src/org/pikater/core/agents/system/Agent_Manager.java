@@ -156,7 +156,7 @@ public class Agent_Manager extends PikaterAgent {
 				MessageTemplate.MatchOntology(ontology.getName()))));
 
 		
-		public ReceiveQuery(Agent agent) {			
+		public ReceiveQuery(Agent agent) {
 			super(agent);
 		}
 

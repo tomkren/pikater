@@ -424,15 +424,27 @@ public class MetadataReader {
         double[] expected = getAverageBins(categoryCount,values.size());
         
         double chiSquareValue = computeChiSquareValue(expected, observed);
+        if (Double.isNaN(chiSquareValue)) {
+        	chiSquareValue = 0;
+        }
         met.setChiSquare(chiSquareValue);
         
         double chiSquareTestValue = computeChiSquareTestValue(expected, observed);
+        if (Double.isNaN(chiSquareTestValue)) {
+        	chiSquareTestValue = 0;
+        }
         met.setChiSquareTest(chiSquareTestValue);
         
         double gTestValue = computeGTestValue(expected, observed);
+        if (Double.isNaN(gTestValue)) {
+        	gTestValue = 0;
+        }
         met.setGTest(gTestValue);
         
         double anovaPValue = computeAnovaValue(data, attributeNumber);
+        if (Double.isNaN(anovaPValue)) {
+        	anovaPValue = 0;
+        }
         met.setAnovaPValue(anovaPValue);
         
     }
@@ -441,6 +453,9 @@ public class MetadataReader {
     	ChiSquareTest cst = new ChiSquareTest();
         try{
         	double chiSquareValue = cst.chiSquare(expected, observed);
+            if (Double.isNaN(chiSquareValue)) {
+            	chiSquareValue = 0;
+            }
         	return chiSquareValue;
         }catch(
         		NotPositiveException|
@@ -454,6 +469,9 @@ public class MetadataReader {
     	ChiSquareTest cst = new ChiSquareTest();
         try{
         	double chiSquareTestValue = cst.chiSquareTest(expected, observed);
+            if (Double.isNaN(chiSquareTestValue)) {
+            	chiSquareTestValue = 0;
+            }
         	return chiSquareTestValue;
         }catch(
         		NotPositiveException|
@@ -464,10 +482,13 @@ public class MetadataReader {
     }
     
     private double computeGTestValue(double[] expected, long[] observed){
-    	GTest gt=new GTest();
+    	GTest gt = new GTest();
         
         try{
         	double gTestValue = gt.gTest(expected, observed);
+            if (Double.isNaN(gTestValue)) {
+            	gTestValue = 0;
+            }
         	return gTestValue;
         }catch(
         		NotPositiveException|
@@ -525,15 +546,22 @@ public class MetadataReader {
         double mean = average;
         met.setMean(mean);
         
-        int iq1 = values.size()/4;//index of first quartil
-        double q1 = values.get(iq1);
-        met.setQ1(q1);
-        int iq2 = values.size()/2;//index of second quartil
-        double q2 = values.get(iq2);
-        met.setQ2(q2);
-        int iq3 =3*values.size()/4;//index of third quartil
-        double q3=values.get(iq3);
-        met.setQ3(q3);
+        
+        double q1 = 0;
+        double q2 = 0;
+        double q3 = 0;
+        
+        if (values.size() > 0) {
+	        int iq1 = values.size()/4;//index of first quartil
+	        q1 = values.get(iq1);
+	        met.setQ1(q1);
+	        int iq2 = values.size()/2;//index of second quartil
+	        q2 = values.get(iq2);
+	        met.setQ2(q2);
+	        int iq3 = 3*values.size()/4;//index of third quartil
+	        q3 = values.get(iq3);
+	        met.setQ3(q3);
+        }
         
         int half=(int)Math.floor(values.size()/2.0);
         
@@ -543,8 +571,8 @@ public class MetadataReader {
         	met.setMedian(defValue);
         }
         
-        double[] items= new double[values.size()];
-        for(int i=0;i<items.length;i++){
+        double[] items = new double[values.size()];
+        for(int i = 0; i < items.length; i++){
         	items[i] = (double)values.get(i);
         }
         
@@ -553,18 +581,33 @@ public class MetadataReader {
         double[] expected = getNormalBins(items.length);
         
         double chiSquareNormalD = computeChiSquareValue(expected, observed);
+        if (Double.isNaN(chiSquareNormalD)) {
+        	chiSquareNormalD = 0;
+        }
         met.setChiSquareNormalD(chiSquareNormalD);
         
         double chiSquareTestNormalD = computeChiSquareTestValue(expected, observed);
+        if (Double.isNaN(chiSquareTestNormalD)) {
+        	chiSquareTestNormalD = 0;
+        }
         met.setChiSquareTestNormalD(chiSquareTestNormalD);
         
         double gTestnormalD = computeGTestValue(expected, observed);
+        if (Double.isNaN(gTestnormalD)) {
+        	gTestnormalD = 0;
+        }
         met.setgTestnormalD(gTestnormalD);
         
         double skewness = getSkewnessValue(items);
+        if (Double.isNaN(skewness)) {
+        	skewness = 0;
+        }
         met.setSkewness(skewness);
         
         double kurtosis = getKurtosisValue(items);
+        if (Double.isNaN(kurtosis)) {
+        	kurtosis = 0;
+        }
         met.setKurtosis(kurtosis);
         
     }
