@@ -178,8 +178,12 @@ public class MetadataReader {
 		double[] classValuesArray = getValuesArray(data, data.getClassIndex(), attributeNumber);
 		
 		try{
-			
-			return cov.covariance(valuesArray, classValuesArray);
+			double val = cov.covariance(valuesArray, classValuesArray);
+			if(Double.isNaN(val)){
+				return 0.0;
+			}else{
+				return val;
+			}
 			
 		}catch(MathIllegalArgumentException e){
 			
@@ -196,7 +200,12 @@ public class MetadataReader {
 		
 		try{
 			
-			return kst.kolmogorovSmirnovTest(valuesArray, classValuesArray);
+			double val = kst.kolmogorovSmirnovTest(valuesArray, classValuesArray);
+			if(Double.isNaN(val)){
+				return 0.0;
+			}else{
+				return val;
+			}
 			
 		}catch(TooManyIterationsException | InsufficientDataException | NullArgumentException e){
 			
@@ -213,7 +222,12 @@ public class MetadataReader {
 		
 		try{
 			
-			return utest.mannWhitneyU(valuesArray, classValuesArray);
+			double val = utest.mannWhitneyU(valuesArray, classValuesArray);
+			if(Double.isNaN(val)){
+				return 0.0;
+			}else{
+				return val;
+			}
 			
 		}catch(NoDataException | NullArgumentException e){
 			
@@ -249,7 +263,12 @@ public class MetadataReader {
         OneWayAnova anova = new OneWayAnova();
  
         try {
-            return anova.anovaPValue(values);
+            double val = anova.anovaPValue(values);
+            if(Double.isNaN(val)){
+				return 0.0;
+			}else{
+				return val;
+			}
         } catch (
         		DimensionMismatchException | 
         		NullArgumentException | 
