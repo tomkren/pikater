@@ -79,6 +79,7 @@ import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
 /**
@@ -1158,14 +1159,26 @@ public class DataManagerService extends FIPAService {
 			return null;
 		}
 	}
-
+	
 	/**
 	 * Sends a request to save dataset by using {@link Agent_DataManager}
+	 * This function stores with DatasetSource flag as JPADatasetSource.EXPERIMENT
 	 * @param filename - name of the dataset file to save
 	 * @param userID - user who is storing file to the database
 	 * @return int dataSetID
 	 */
 	public static int sendRequestSaveDataSet(PikaterAgent agent, String filename, int userID, String description){
+		return sendRequestSaveDataSet(agent, filename, userID, description, JPADatasetSource.EXPERIMENT);
+	}
+
+	/**
+	 * Sends a request to save dataset by using {@link Agent_DataManager}
+	 * @param filename - name of the dataset file to save
+	 * @param userID - user who is storing file to the database
+	 * @param source - flag defining dataset's origin
+	 * @return int dataSetID
+	 */
+	public static int sendRequestSaveDataSet(PikaterAgent agent, String filename, int userID, String description, JPADatasetSource source){
 		try {
         	AID dataManager = new AID(CoreAgents.DATA_MANAGER.getName(), false);
     		Ontology ontology = DataOntology.getInstance();
@@ -1173,6 +1186,7 @@ public class DataManagerService extends FIPAService {
     		sd.setUserID(userID);
     		sd.setSourceFile(filename);
     		sd.setDescription(description);
+    		sd.setDatasetSource(source);
             ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
             request.addReceiver(dataManager);
             request.setLanguage(agent.getCodec().getName());

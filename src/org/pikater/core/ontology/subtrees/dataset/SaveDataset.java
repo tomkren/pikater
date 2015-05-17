@@ -1,6 +1,8 @@
 package org.pikater.core.ontology.subtrees.dataset;
 
 
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
+
 import jade.content.AgentAction;
 
 public class SaveDataset implements AgentAction {
@@ -10,6 +12,7 @@ public class SaveDataset implements AgentAction {
 	private int userID;
 	private String description;
 	private String sourceFile;
+	private JPADatasetSource source;
 	
 	public int getUserID() {
 		return userID;
@@ -28,6 +31,12 @@ public class SaveDataset implements AgentAction {
 	}
 	public void setSourceFile(String sourceFile) {
 		this.sourceFile = sourceFile;
+	}
+	public JPADatasetSource getDatasetSource() {
+		return source;
+	}
+	public void setDatasetSource(JPADatasetSource source) {
+		this.source = source;
 	}
 	
 }

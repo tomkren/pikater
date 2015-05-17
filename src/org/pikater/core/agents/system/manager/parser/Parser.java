@@ -24,6 +24,7 @@ import org.pikater.core.agents.system.openml.OpenMLAgentService;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.newoption.base.NewOption;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 import java.util.HashMap;
@@ -245,7 +246,7 @@ public class Parser {
         		
         		int dataSetID = 
         				DataManagerService
-        				.sendRequestSaveDataSet(agent, downloadedPath, userID, "ID = "+dID+" OpenML import");
+        				.sendRequestSaveDataSet(agent, downloadedPath, userID, "ID = "+dID+" OpenML import",JPADatasetSource.USER_UPLOAD);
 
         		MetadataService.requestMetadataForDataset(agent, dataSetID, userID);
         		

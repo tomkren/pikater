@@ -9,7 +9,6 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,12 +38,12 @@ import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
 import org.pikater.core.ontology.subtrees.openml.Dataset;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.shared.database.exceptions.DataSetConverterException;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.util.DataSetConverter;
 
 
@@ -554,7 +553,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				return;
 			}
 			dataSetID = DataManagerService.sendRequestSaveDataSet(this,
-					filename, userID, description);
+					filename, userID, description, JPADatasetSource.USER_UPLOAD);
 			
 		} else if (cmdA.length == 3) {
 			
@@ -567,7 +566,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				return;
 			}
 			dataSetID = DataManagerService.sendRequestSaveDataSet(this,
-					filename, userID, description);
+					filename, userID, description, JPADatasetSource.USER_UPLOAD);
 			
 		} else if (cmdA.length == 2) {
 			String username="klara";
@@ -579,7 +578,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				return;
 			}
 			dataSetID = DataManagerService.sendRequestSaveDataSet(this,
-					filename, userID, description);
+					filename, userID, description, JPADatasetSource.USER_UPLOAD);
 		} else {
 			System.err.println("Wrong parameters");
 		}

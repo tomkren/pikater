@@ -1328,11 +1328,15 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
+		JPADatasetSource source = savedataset.getDatasetSource();
+		if(source==null)
+			source = JPADatasetSource.EXPERIMENT;
+		
 		try {
 			File file = new File(savedataset.getSourceFile());
 			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(file,
 					file.getName(), savedataset.getDescription(),
-					savedataset.getUserID(),JPADatasetSource.EXPERIMENT);
+					savedataset.getUserID(),source);
 
 			reply.setContentObject(new Integer(jpadsloID));
 			logInfo("Saved Dataset with ID: " + jpadsloID +
