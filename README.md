@@ -2,7 +2,7 @@
 
 1. mějte IntelliJ IDEA (testováno na verzi 14.1.3, de studentská licence zadarmo pro ulitamte version) (Java 8)
 2. check out from version control (možnost při čerstvym installu) -> github 
-nebo file -> new -> project from version control -> GitHub.
+    * nebo file -> new -> project from version control -> GitHub.
     * přihlásit atd 
     * https://github.com/tomkren/pikater.git
 3. file -> settings -> plugins
