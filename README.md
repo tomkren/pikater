@@ -5,7 +5,8 @@
     * nebo file -> new -> project from version control -> GitHub.
     * přihlásit atd 
     * https://github.com/tomkren/pikater.git
-3. file -> settings -> plugins
+3. Instalace pluginu IvyIDEA pro stažení dependencies
+    * file -> settings -> plugins
     * vyhledat ivy, napíše nothing to show
     * click na browse 
     * IvyIDEA (to s nejvíc staženíma)
@@ -17,7 +18,7 @@
 5. run -> edit configurations
     * +átko -> application
     * pojmenovat..
-    * main class: Jade.Boot
+    * main class: jade.Boot
     * program arguments: -gui -agents "mama:org.pikater.core.agents.system.Agent_Initiator"
 
 
