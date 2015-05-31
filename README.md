@@ -1,17 +1,17 @@
 # Jak to rychle rozchodit v IntelliJ
 
-1. mějte IntelliJ IDEA (testováno na verzi 14.1.3, de studentská licence zadarmo pro ulitamte version) (Java 8)
-2. check out from version control (možnost při čerstvym installu) -> github 
-    * nebo file -> new -> project from version control -> GitHub.
-    * přihlásit atd 
-    * https://github.com/tomkren/pikater.git
-3. Instalace pluginu IvyIDEA pro stažení dependencies
+1. Mějte IntelliJ IDEA (testováno na verzi 14.1.3, de studentská licence zadarmo pro ulitamte version) (Java 8)
+2. Instalace pluginu IvyIDEA pro stažení dependencies (klidně prohodit s následujícím krokem, ale takle patrně hladší)
     * file -> settings -> plugins
     * vyhledat ivy, napíše nothing to show
-    * click na browse 
+    * click na browse
     * IvyIDEA (to s nejvíc staženíma)
     * install plugin (zelený tlačítko na pravo)
     * a budechtít restartovat, tak restarovat
+3. check out from version control (tak se jmenuje možnost při čerstvym installu) -> github
+    * jinak lze doklikat v: file -> new -> project from version control -> GitHub.
+    * přihlásit atd 
+    * https://github.com/tomkren/pikater.git
 4. file -> project structure
     * Project SDK: New.. -> JDK
     * najít cestu k něco jako C:\Program Files\Java\jdk1.8.0_25 
