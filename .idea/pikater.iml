@@ -18,7 +18,7 @@
       </configuration>
     </facet>
     <facet type="IvyIDEA" name="IvyIDEA">
-      <configuration ivyFile="$MODULE_DIR$/ivy.xml" useProjectSettings="false" useCustomIvySettings="true" ivySettingsFile="C:\Users\user\Documents\pikater\ivysettings.xml" onlyResolveSelectedConfigs="false">
+      <configuration ivyFile="$MODULE_DIR$/ivy.xml" useProjectSettings="false" useCustomIvySettings="false" ivySettingsFile="C:\Users\user\Documents\pikater\ivysettings.xml" onlyResolveSelectedConfigs="false">
         <propertiesSettings>
           <propertiesFiles includeProjectLevelPropertiesFiles="true" />
         </propertiesSettings>

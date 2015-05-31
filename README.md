@@ -8,6 +8,7 @@
     * IvyIDEA (to s nejvíc staženíma)
     * install plugin (zelený tlačítko na pravo)
     * a budechtít restartovat, tak restarovat
+    * možná bude problém s ivysettings.xml (ted skoušim nechat na default), pak ručně předělat na ten v pikater/ivysettings.xml pomocí: file -> project structure
 3. check out from version control (tak se jmenuje možnost při čerstvym installu) -> github
     * jinak lze doklikat v: file -> new -> project from version control -> GitHub.
     * přihlásit atd 
