@@ -1,6 +1,7 @@
 package org.pikater.shared.database.views.tableview.users;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -62,7 +63,12 @@ public class UsersTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case STATUS:
-			return new RepresentativeDBViewValue(CollectionUtils.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name()) {
+
+			EnumSet<JPAUserStatus> enumSet = EnumSet.allOf(JPAUserStatus.class);
+			Set<String> vals   = CollectionUtils.enumSetToStringSet(enumSet);
+			String selectedVal = user.getStatus().name();
+
+			return new RepresentativeDBViewValue(vals, selectedVal) {
 				@Override
 				protected void updateEntities(String newValue) {
 					user.setStatus(JPAUserStatus.valueOf(newValue));
