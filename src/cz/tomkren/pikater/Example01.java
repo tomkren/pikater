@@ -8,8 +8,6 @@ import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /** Created by tom on 1.6.2015.*/
@@ -41,13 +39,17 @@ public class Example01 {
         }
 
         public static void ca_setSources(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
-            ComputingAgent ca = (ComputingAgent) dataProcessing;
             DataSourceDescription source = sources.get(0);
-
+            ComputingAgent ca = (ComputingAgent) dataProcessing;
             ca.setTrainingData(source);
             ca.setTestingData(source);
             ca.setValidationData(source);
             // TODO ca.setDataToLabel(dataSourceKMeans1);
+        }
+
+        public static void setSources_binar(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
+            dataProcessing.addDataSources(sources.get(0));
+            dataProcessing.addDataSources(sources.get(1));
         }
 
 
@@ -56,33 +58,43 @@ public class Example01 {
     public static void main(String[] args) {
         Checker ch = new Checker();
 
-        // Datasource
-        FileDataProvider fileDataProvider = new FileDataProvider();
-        fileDataProvider.setFileURI("weather.arff");
-        DataSourceDescription fileDataSource = new DataSourceDescription();
-        fileDataSource.setDataProvider(fileDataProvider);
+
 
         // TODO napojit na zbytek se musí
 
 
         // Jednotlivý krabièky
+
+        BoxPrototype input = new BoxPrototype("input", null, at->null, (dp,sources)->{}, (i,dp)-> {
+            FileDataProvider fileDataProvider = new FileDataProvider();
+            fileDataProvider.setFileURI("weather.arff");
+            DataSourceDescription fileDataSource = new DataSourceDescription();
+            fileDataSource.setDataProvider(fileDataProvider);
+            return fileDataSource;
+        });
+
         BoxPrototype pca    = new BoxPrototype("PCA", /*TODO Agent_PCA.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput0);
         BoxPrototype kmeans = new BoxPrototype("k-means", /*TODO Agent_KMeans.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput_i);
         BoxPrototype rbf    = new BoxPrototype("RBF", Agent_WekaRBFNetworkCA.class, BoxUtils::ca_MkDataProcessing, BoxUtils::ca_setSources, BoxUtils::mkOutput0);
         BoxPrototype mlp    = new BoxPrototype("MLP", Agent_WekaMultilayerPerceptronCA.class, BoxUtils::ca_MkDataProcessing, BoxUtils::ca_setSources, BoxUtils::mkOutput0);
+        BoxPrototype u      = new BoxPrototype("U", /*TODO Agent_RomanovoU.class*/ Agent_WekaRBFNetworkCA.class, BoxPrototype::mkDataProcessing_default, BoxUtils::setSources_binar, BoxUtils::mkOutput0);
+
+        BoxPrototype output = new BoxPrototype("output", null, at -> new FileDataSaver(), (dp,sources)-> ((FileDataSaver)dp).setDataSource(sources.get(0)), (i,dp)-> null);
 
 
 
         // Vytvoøíme konvertor nadiktováním knihovny krabièek
-        Converter converter = new Converter(pca, kmeans, rbf, mlp);
+        Converter converter = new Converter(input, pca, kmeans, rbf, mlp, u, output);
 
         // Popíšem gráfek
         List<SimpleVertex> graph = SimpleVertex.readLines(
-            "0 PCA 1 1 1:0",
-            "1 k-means 1 2 2:0 3:0",
-            "2 RBF 1 1 4:0",
-            "3 MLP 1 1 4:1"
-            //"4 U 2 1"
+            "0 input 0 1 1:0",
+            "1 PCA 1 1 2:0",
+            "2 k-means 1 2 3:0 4:0",
+            "3 RBF 1 1 5:0",
+            "4 MLP 1 1 5:1",
+            "5 U 2 1 6:0",
+            "6 output 1 0"
         );
 
         Log.list(graph);
@@ -90,7 +102,10 @@ public class Example01 {
         try {
 
 
-            converter.convert(graph);
+            ComputationDescription cd = converter.convert(graph);
+
+            Log.it(cd.exportXML());
+
 
 
         } catch (Converter.ConverterError converterError) {

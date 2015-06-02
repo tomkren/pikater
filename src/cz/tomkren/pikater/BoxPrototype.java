@@ -23,7 +23,7 @@ public class BoxPrototype {
                         BiConsumer<DataProcessing,List<DataSourceDescription>> setSourcesFun,
                         BiFunction<Integer,DataProcessing,DataSourceDescription> mkOutputFun) {
         this.name = name;
-        this.agentType = agentClass.getName();
+        this.agentType = agentClass == null ? null : agentClass.getName();
         this.mkDataProcessingFun = mkDataProcessingFun;
         this.setSourcesFun = setSourcesFun;
         this.mkOutputFun = mkOutputFun;
@@ -47,17 +47,10 @@ public class BoxPrototype {
 
     public List<DataSourceDescription> mkOutputs(DataProcessing dataProcessing, int numOut) {
         List<DataSourceDescription> outputs = new ArrayList<>(numOut);
-
         for (int i = 0; i < numOut; i++) {
-
-            /*DataSourceDescription output = new DataSourceDescription();
-            output.setOutputType("out_"+i);
-            output.setDataProvider(dataProcessing);*/
-
             DataSourceDescription output = mkOutputFun.apply(i,dataProcessing);
             outputs.add(output);
         }
-
         return outputs;
     }
 

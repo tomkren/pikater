@@ -1,6 +1,7 @@
 package cz.tomkren.pikater;
 
 import cz.tomkren.helpers.F;
+import cz.tomkren.helpers.Log;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 
 import cz.tomkren.helpers.TODO;
@@ -71,6 +72,8 @@ public class Converter {
                     int toPort = t.getPort();
                     BoxInstance toBox = idToBox.get(toId);
 
+                    if (toBox == null) {throw ConverterError.absentBox(toId);}
+
                     List<DataSourceDescription> inputSources = inputSourcesForTargets.get(toId);
                     if (inputSources == null) {
                         int n = toBox.getNumIn();
@@ -98,8 +101,25 @@ public class Converter {
 
 
 
+        //Our requirements for the description are ready, lets create new computation description
 
-        throw new TODO();
+
+        SimpleVertex lastVertex = graph.get(graph.size() - 1);
+        BoxInstance lastBox = idToBox.get(lastVertex.getId());
+        DataProcessing lastDataProcessing = lastBox.getDataProcessing();
+
+        if (lastDataProcessing instanceof FileDataSaver) {
+
+            List<FileDataSaver> roots = F.singleton((FileDataSaver)lastDataProcessing);
+            ComputationDescription comDescription = new ComputationDescription();
+            comDescription.setRootElements(roots);
+
+            return comDescription;
+
+        } else {
+            throw ConverterError.wrongLast(lastDataProcessing);
+        }
+
     }
 
 
@@ -109,6 +129,14 @@ public class Converter {
 
         public static ConverterError unknownName(String name) {
             return new ConverterError("There is no BoxPrototype with name: "+name);
+        }
+
+        public static ConverterError absentBox(int id) {
+            return new ConverterError("There is no BoxInstance with id: "+id);
+        }
+
+        public static ConverterError wrongLast(DataProcessing last) {
+            return new ConverterError("Last DataProcessing must be instance of FileDataSaver: "+last);
         }
 
         public static ConverterError unexpectedFail(String msg) {
