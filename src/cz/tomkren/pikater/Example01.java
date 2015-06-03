@@ -4,6 +4,8 @@ import cz.tomkren.helpers.Checker;
 
 import cz.tomkren.helpers.Log;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
+import org.pikater.core.experiments.Rucni;
+import org.pikater.core.experiments.Rucni_simple;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 
@@ -28,6 +30,11 @@ public class Example01 {
             return mkOutput(i, dataProcessing, j -> "Data");
         }
 
+        public static DataSourceDescription err_mkOutput(Integer i, DataProcessing dataProcessing) {
+            if (i != 0) {throw new Error("Expected only one output.");}
+            return mkOutput(i, dataProcessing, j -> "Error");
+        }
+
         public static DataSourceDescription mkOutput_i(Integer i, DataProcessing dataProcessing) {
             return mkOutput(i, dataProcessing, j -> "Data_"+j);
         }
@@ -45,6 +52,17 @@ public class Example01 {
             ca.setTestingData(source);
             ca.setValidationData(source);
             // TODO ca.setDataToLabel(dataSourceKMeans1);
+        }
+
+        public static void err_setSources(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
+            DataSourceDescription labeledDataSourceAll = sources.get(0);
+            DataSourceDescription fileDataSource = sources.get(1);
+
+            ComputingAgent err = (ComputingAgent) dataProcessing;
+
+            err.setTrainingData(labeledDataSourceAll);
+            err.setTestingData(labeledDataSourceAll);
+            err.setValidationData(fileDataSource);
         }
 
         public static void setSources_binar(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
@@ -65,7 +83,11 @@ public class Example01 {
 
         // Jednotlivý krabièky
 
-        BoxPrototype input = new BoxPrototype("input", null, at->null, (dp,sources)->{}, (i,dp)-> {
+        BoxPrototype input = new InputPrototype();
+
+        BoxPrototype err = new BoxPrototype("err", /*TODO Err.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::ca_MkDataProcessing,  BoxUtils::err_setSources, BoxUtils::err_mkOutput);
+
+        BoxPrototype input_old = new BoxPrototype("input_old", null, at->null, (dp,sources)->{}, (i,dp)-> {
             FileDataProvider fileDataProvider = new FileDataProvider();
             fileDataProvider.setFileURI("weather.arff");
             DataSourceDescription fileDataSource = new DataSourceDescription();
@@ -84,27 +106,34 @@ public class Example01 {
 
 
         // Vytvoøíme konvertor nadiktováním knihovny krabièek
-        Converter converter = new Converter(input, pca, kmeans, rbf, mlp, u, output);
+        Converter converter = new Converter(input, pca, kmeans, rbf, mlp, u, err, output);
 
-        // Popíšem gráfek
-        List<SimpleVertex> graph = SimpleVertex.readLines(
-            "0 input 0 1 1:0",
-            "1 PCA 1 1 2:0",
-            "2 k-means 1 2 3:0 4:0",
-            "3 RBF 1 1 5:0",
-            "4 MLP 1 1 5:1",
-            "5 U 2 1 6:0",
-            "6 output 1 0"
-        );
-
-        Log.list(graph);
 
         try {
 
 
-            ComputationDescription cd = converter.convert(graph);
 
-            Log.it(cd.exportXML());
+            List<SimpleVertex> graph_simple = SimpleVertex.readLines(
+                "0 input  0 2 1:0 1:1",
+                "1 err    2 1 2:0",
+                "2 output 1 0"
+            );
+
+            ch.eqStrSilent(converter.convert(graph_simple).exportXML(), new Rucni_simple().createDescription().exportXML());
+
+            List<SimpleVertex> graph_goal = SimpleVertex.readLines(
+                "0 input    0 2 1:0 6:1",
+                "1 PCA      1 1 2:0",
+                "2 k-means  1 2 3:0 4:0",
+                "3 RBF      1 1 5:0",
+                "4 MLP      1 1 5:1",
+                "5 U        2 1 6:0",
+                "6 err      2 1 7:0",
+                "7 output   1 0"
+            );
+
+            ch.eqStrSilent(converter.convert(graph_goal).exportXML(), new Rucni().createDescription().exportXML());
+
 
 
 
