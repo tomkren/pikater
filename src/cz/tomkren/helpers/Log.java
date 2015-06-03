@@ -24,7 +24,7 @@ public class Log {
         startTime = System.nanoTime();
     }
     public static void stop() {
-        Log.it("It took " + (System.nanoTime() - startTime) / 1E9 + " seconds...");
+        Log.it("It took "+(System.nanoTime()-startTime)/1E9 +" seconds...");
     }
 
     public static String date(Date d) {

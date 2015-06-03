@@ -2,11 +2,11 @@ package cz.tomkren.helpers;
 
 public class TODO extends Error {
 
-    public TODO() {
+    public TODO () {
         super("TODO");
     }
 
-    public TODO(String str) {
+    public TODO (String str) {
         super("TODO : "+str);
     }
 
