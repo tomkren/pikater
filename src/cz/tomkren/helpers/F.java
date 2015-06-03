@@ -264,7 +264,6 @@ public class F {
         return ret;
     }
 
-    // todo import back to omega4
     public static <A> List<A> fill(int n, A val) {
         List<A> ret = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
