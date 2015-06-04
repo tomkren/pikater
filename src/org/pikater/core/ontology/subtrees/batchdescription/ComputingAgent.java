@@ -33,6 +33,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 	private DataSourceDescription trainingData;
 	private DataSourceDescription testingData;
 	private DataSourceDescription validationData;
+	private DataSourceDescription dataToLabel;
 
 	public ComputingAgent() {
 
@@ -101,6 +102,24 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 		testingDataC.setDataProvider(testingData.getDataProvider());
 
 		this.testingData = testingDataC;
+	}
+
+	public DataSourceDescription getDataToLabel() {
+		return dataToLabel;
+	}
+
+	public void setDataToLabel(DataSourceDescription dataToLabel) {
+		if (dataToLabel == null) {
+			throw new IllegalArgumentException(
+					"Argument dataToLabel can't be null");
+		}
+		DataSourceDescription dataToLabelC = new DataSourceDescription();
+		dataToLabelC.setInputType(CoreConstant.SlotContent.DATA_TO_LABEL
+				.getSlotName());
+		dataToLabelC.setOutputType(dataToLabel.getOutputType());
+		dataToLabelC.setDataProvider(dataToLabel.getDataProvider());
+
+		this.validationData = dataToLabelC;
 	}
 
 	public DataSourceDescription getValidationData() {

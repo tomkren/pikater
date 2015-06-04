@@ -1,4 +1,4 @@
-package org.pikater.core.agents.experiment.dataprocessing.communicator;
+package org.pikater.core.agents.experiment.computing.communicator;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
@@ -139,8 +139,8 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 
-				if (data.exportData(CoreConstant.DataType.VALID_DATA.getType()) != null) {
-					labelFn = data.exportInternalValidFileName();
+				if (data.exportData(CoreConstant.DataType.LABEL_DATA.getType()) != null) {
+					labelFn = data.exportInternalLabelFileName();
 					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETLABELDATA_STATE);
 					
@@ -315,8 +315,8 @@ public class ComputingAction extends FSMBehaviour {
 								CoreConstant.Mode.TRAIN_ONLY.name())) {
 							agent.evaluateCA(evaluationMethod, eval);
 
-							if (output.equals(
-									CoreConstant.Output.PREDICTION.name())) {
+							if ( (output.equals(CoreConstant.Output.EVALUATION_LABEL.name()))
+								|| (output.equals(CoreConstant.Output.LABEL_ONLY.name()))) {
 								saveDataSource(labeledData);
 							}
 						}
@@ -430,7 +430,9 @@ public class ComputingAction extends FSMBehaviour {
 				
 				addTaskOutput(InOutType.TEST, agent.test);
 				addTaskOutput(InOutType.TRAIN, agent.train);
-				addTaskOutput(InOutType.VALIDATION, agent.label);
+				addTaskOutput(InOutType.LABELED, agent.label);
+
+				// TODO add error
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);

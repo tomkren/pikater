@@ -7,20 +7,14 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
-import jade.domain.FIPAException;
-import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;
+import jade.domain.FIPAException;
+import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.pikater.core.CoreConstant;
-import org.pikater.core.agents.experiment.errorcomputing.Agent_Error;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -30,16 +24,28 @@ import org.pikater.core.ontology.subtrees.agentinfo.Slot;
 import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
-import org.pikater.core.ontology.subtrees.task.*;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
+import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.Task.InOutType;
-
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class Agent_WeatherSplitter extends Agent_DataProcessing {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/*
+	gets weka instances on inputs, merges them, returns them as one output
+
+ */
+public class Agent_RomanovoU extends Agent_DataProcessing {
 
 	private static final long serialVersionUID = 4679962419249103511L;
+
+	// TODO read from options
+	private int numberOfInputs = 3;
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -57,24 +63,23 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		agentInfo.importAgentClass(this.getClass());
 		agentInfo.importOntologyClass(DataProcessing.class);
 
-		agentInfo.setName("WeatherSplitter");
-		agentInfo.setDescription("Splits weather data by prediction.");
+		agentInfo.setName("RomanovoU");
+		agentInfo.setDescription("Merges all inputs into one output.");
 
-		Slot i1 = new Slot("firstInput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "First weather input.");
-		Slot i2 = new Slot("secondInput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Second weather input.");
+		// get all inputs
+		ArrayList inputs = new ArrayList();
+		for (int i=0; i<numberOfInputs; i++){
+			Slot input = new Slot("Input_"+Integer.toString(i),
+					CoreConstant.SlotCategory.DATA_GENERAL, "Input "+Integer.toString(i)+".");
+			inputs.add(input);
+		}
 
-		agentInfo.setInputSlots(Arrays.asList(i1, i2));
+		agentInfo.setInputSlots(inputs);
 
-		Slot sunny = new Slot("sunnyOutput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
-		Slot overcast = new Slot("overcastOutput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
-		Slot rainy = new Slot("rainyOutput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
+		Slot output = new Slot("Output",
+				CoreConstant.SlotCategory.DATA_GENERAL, "Output.");
 
-		agentInfo.setOutputSlots(Arrays.asList(sunny, overcast, rainy));
+		agentInfo.setOutputSlots(Arrays.asList(output));
 
 		return agentInfo;
 	}
@@ -174,47 +179,26 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		return t;
 	}
 
-	private Instances mergeInputs(List<DataInstances> weatherData) {
-		Instances res = new Instances(weatherData.get(0).toWekaInstances());
-		Instances second = weatherData.get(1).toWekaInstances();
-		for (int i = 0; i < second.numInstances(); ++i) {
-			res.add(second.instance(i));
-		}
-		return res;
-	}
+	private Instances mergeInputs(List<DataInstances> data) {
+		Instances res = new Instances(data.get(0).toWekaInstances());
 
-	private List<TaskOutput> processData(List<DataInstances> weatherData) {
-		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances input = mergeInputs(weatherData);
+		List<DataInstances> mergedData = new ArrayList();
 
-		Instances sunny = new Instances(input, 0);
-		Instances overcast = new Instances(input, 0);
-		Instances rainy = new Instances(input, 0);
-
-		Attribute forecast = input.attribute(0);
-
-		for (int i = 0; i < input.numInstances(); ++i) {
-			Instance instance = input.instance(i);
-			String value = instance.stringValue(forecast);
-			switch (value) {
-				case "rainy":
-					rainy.add(instance);
-					break;
-				case "overcast":
-					overcast.add(instance);
-					break;
-				case "sunny":
-					sunny.add(instance);
-					break;
-				default:
-					throw new IllegalArgumentException("Unknown weather data: "
-							+ value);
+		// Instances res = new Instances(data.get(0).toWekaInstances());
+		for (int in=1; in<data.size(); in++){
+			for (int i=0; i< data.get(in).getInstances().size(); i++) {
+				res.add(data.get(in).toWekaInstances().instance(i));
 			}
 		}
 
-		res.add(makeOutput(sunny, "sunnyOutput"));
-		res.add(makeOutput(overcast, "overcastOutput"));
-		res.add(makeOutput(rainy, "rainyOutput"));
+		return res;
+	}
+
+	private List<TaskOutput> processData(List<DataInstances> data) {
+		List<TaskOutput> res = new ArrayList<TaskOutput>();
+		Instances output = mergeInputs(data);
+
+		res.add(makeOutput(output, "Output"));
 		return res;
 	}
 

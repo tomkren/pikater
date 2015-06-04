@@ -1,4 +1,4 @@
-package org.pikater.core.agents.experiment.dataprocessing.communicator;
+package org.pikater.core.agents.experiment.computing.communicator;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;

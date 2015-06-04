@@ -22,7 +22,7 @@ public class Task implements Concept {
 	private static final long serialVersionUID = -8242598855481511427L;
 
 	public enum InOutType {
-		TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA
+		TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA, LABELED
 	}
 
 	// administrative:

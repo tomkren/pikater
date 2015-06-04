@@ -164,7 +164,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 			return;
 		}
 		
-		System.out.println(" I welcome you Klara !!!");
+		System.out.println(" I welcome you Klara !!! " +
+				"Do you welcome me? ");
 
 		ITestExperiment testExperiment = null;
 		try {
@@ -395,7 +396,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	 * Loads a XML file, converts the XML structure to
 	 * {@link ComputationDescription}, sends request to run this batch
 	 * 
-	 * @param fileName - name of XML file which contains new {@link Batch}
+	 * @param file - name of XML file which contains new {@link Batch}
 	 * @throws FileNotFoundException
 	 */
 	private void runFile(String file, ComputationDescription experiment) {

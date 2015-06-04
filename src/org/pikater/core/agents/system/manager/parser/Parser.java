@@ -580,6 +580,7 @@ public class Parser {
         DataSourceDescription trainingData = compAgent.getTrainingData();
         DataSourceDescription testingData = compAgent.getTestingData();
         DataSourceDescription validationData = compAgent.getValidationData();
+        DataSourceDescription dataToLabel = compAgent.getDataToLabel();
 
         if (trainingData != null) {
             parseDataSourceDescription(trainingData, batchID, userID, node,
@@ -593,6 +594,11 @@ public class Parser {
             parseDataSourceDescription(validationData, batchID, userID, node,
             		validationData.getInputType(),
             		validationData.getOutputType());
+        }
+        if (dataToLabel != null) {
+            parseDataSourceDescription(dataToLabel, batchID, userID, node,
+                    dataToLabel.getInputType(),
+                    dataToLabel.getOutputType());
         }
     }
 

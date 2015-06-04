@@ -13,6 +13,14 @@ public class Instance implements Concept {
 	private static final long serialVersionUID = -767943628175500132L;
 	private List<Double> values;
 	private List<Boolean> missing;
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return the values

@@ -3,7 +3,7 @@ package org.pikater.core.agents.system;
 import java.util.Date;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
-import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingCommunicator;
+import org.pikater.core.agents.experiment.computing.communicator.ComputingCommunicator;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 /**

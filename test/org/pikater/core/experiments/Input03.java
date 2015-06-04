@@ -33,13 +33,14 @@ public final class Input03 implements ITestExperiment {
 		comAgent1.setModel(null);
 		comAgent1.setEvaluationMethod(evaluationMethod1);
 		
-		NewOption optionOutput1 = new NewOption(
-				CoreConstant.Output.DEFAULT.name(), CoreConstant.Output.EVALUATION_ONLY.name()); 
+		/* NewOption optionOutput1 = new NewOption(
+				CoreConstant.Output.DEFAULT.name(), CoreConstant.Output.EVALUATION_ONLY.name());
+				 */
 
 		CARecSearchComplex complex1 = new CARecSearchComplex();
 		complex1.setComputingAgent(comAgent1);
 
-		complex1.addOption(optionOutput1);
+		// complex1.addOption(optionOutput1);
 
 		DataSourceDescription computingDataSource1 = new DataSourceDescription();
 		computingDataSource1.setOutputType("Data");
@@ -63,12 +64,14 @@ public final class Input03 implements ITestExperiment {
 		comAgent2.setModel(null);
 		comAgent2.setEvaluationMethod(evaluationMethod2);
 
+		/*
 		NewOption optionOutput2 = new NewOption(
 				CoreConstant.Output.DEFAULT.name(), CoreConstant.Output.EVALUATION_ONLY.name());
+		*/
 
 		CARecSearchComplex complex2 = new CARecSearchComplex();
 		complex2.setComputingAgent(comAgent2);
-		complex2.addOption(optionOutput2);
+		// complex2.addOption(optionOutput2);
 
 		DataSourceDescription computingDataSource2 = new DataSourceDescription();
 		computingDataSource2.setOutputType("Data");

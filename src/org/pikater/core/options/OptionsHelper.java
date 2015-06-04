@@ -68,7 +68,7 @@ public class OptionsHelper {
 				new StringValue(CoreConstant.Mode.TRAIN_TEST.name()));
 
 		NewOption optMode = new NewOption(
-				CoreConstant.Mode.DEFAULT.name(),
+				CoreConstant.Mode.TRAIN_TEST.name(),
 				new StringValue(CoreConstant.Mode.TRAIN_ONLY.name()),
 				new SetRestriction(false, modeValues));
 		
@@ -77,11 +77,11 @@ public class OptionsHelper {
 		outputValues.add(
 				new StringValue(CoreConstant.Output.EVALUATION_ONLY.name()));
 		outputValues.add(
-				new StringValue(CoreConstant.Output.PREDICTION.name()));
+				new StringValue(CoreConstant.Output.LABEL_ONLY.name()));
 
 		NewOption optOutput = new NewOption(
-				CoreConstant.Output.DEFAULT.name(),
-				new StringValue(CoreConstant.Output.PREDICTION.name()),
+				CoreConstant.Output.EVALUATION_ONLY.name(),
+				new StringValue(CoreConstant.Output.LABEL_ONLY.name()),
 				new SetRestriction(false, outputValues));
 
 		List<NewOption> options = new ArrayList<NewOption>();
