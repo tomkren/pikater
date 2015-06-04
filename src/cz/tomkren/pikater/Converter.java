@@ -2,6 +2,7 @@ package cz.tomkren.pikater;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
+import cz.tomkren.typewars.TypedDag;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 
 import cz.tomkren.helpers.TODO;
@@ -36,6 +37,49 @@ public class Converter {
         idToBox = new HashMap<>();
     }
 
+
+    public ComputationDescription convert(TypedDag dag) throws ConverterError {
+
+        List<SimpleVertex> graph = new ArrayList<>();
+
+        List<SimpleVertex> coreGraph = dag.toSimpleGraph();
+
+        int minId = Integer.MAX_VALUE;
+        int maxId = -Integer.MAX_VALUE;
+
+        for (SimpleVertex sv : coreGraph) {
+            int id = sv.getId();
+            if (id > maxId) {maxId = id;}
+            if (id < minId) {minId = id;}
+        }
+
+        SimpleVertex begin = coreGraph.get(0);
+        SimpleVertex end = coreGraph.get(coreGraph.size()-1);
+
+
+        SimpleVertex output = new SimpleVertex(maxId+2, "output", 1, 0, new ArrayList<>(0));
+
+        SimpleVertex err    = new SimpleVertex(maxId+1, "err", 2, 1,
+                F.mkSingleton(new SimpleVertex.LinkTarget(output.getId(),0)
+                ));
+
+        end.addTarget(new SimpleVertex.LinkTarget(err.getId(),0));
+
+        SimpleVertex input  = new SimpleVertex(minId-1,"input", 0, 2,
+                Arrays.asList(new SimpleVertex.LinkTarget(begin.getId(),0),
+                              new SimpleVertex.LinkTarget(err.getId(),1)
+                ));
+
+
+        graph.add(input);
+        graph.addAll(coreGraph);
+        graph.add(err);
+        graph.add(output);
+
+        Log.list(graph);
+
+        return convert(graph);
+    }
 
     public ComputationDescription convert(List<SimpleVertex> graph) throws ConverterError {
 

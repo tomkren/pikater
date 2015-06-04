@@ -52,12 +52,11 @@ public class TypedDagGeneratorMacro {
         for (TypedDag dag : dags) {
 
             Int2D pos = new Int2D(x, 3*okraj);
-
-            Log.it( "width: "+dag.getWidth() );
-
             x += dag.getPxWidth() + okraj;
 
             sb.append( dag.toKutilXML(pos) ).append("\n");
+
+
 
             Log.it(trees.get(i) + "\n");
             Log.it(dag.toString());

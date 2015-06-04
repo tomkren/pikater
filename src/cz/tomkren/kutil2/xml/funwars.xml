@@ -9,7 +9,7 @@
 
 
             <macro type="TypedDagGenerator" id="$pokus3" title="Basic para seri" off="!true" size="2500 2000" pos="4 4">
-                <n>300-500</n>
+                <n>0-5</n>
                 <goal>D => LD</goal>
                 <lib>
                     TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b ;

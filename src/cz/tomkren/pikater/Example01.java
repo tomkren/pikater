@@ -3,7 +3,11 @@ package cz.tomkren.pikater;
 import cz.tomkren.helpers.Checker;
 
 import cz.tomkren.helpers.Log;
+import cz.tomkren.typewars.CodeLib;
+import cz.tomkren.typewars.TypedDag;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_CCIPercentage;
+import org.pikater.core.experiments.Input_Tom1;
 import org.pikater.core.experiments.Rucni;
 import org.pikater.core.experiments.Rucni_simple;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
@@ -51,18 +55,15 @@ public class Example01 {
             ca.setTrainingData(source);
             ca.setTestingData(source);
             ca.setValidationData(source);
-            // TODO ca.setDataToLabel(dataSourceKMeans1);
+            ca.setDataToLabel(source);
         }
 
-        public static void err_setSources(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
-            DataSourceDescription labeledDataSourceAll = sources.get(0);
+        public static void err_setSources(DataProcessing err, List<DataSourceDescription> sources) {
+            DataSourceDescription labeledDataSource = sources.get(0);
             DataSourceDescription fileDataSource = sources.get(1);
 
-            ComputingAgent err = (ComputingAgent) dataProcessing;
-
-            err.setTrainingData(labeledDataSourceAll);
-            err.setTestingData(labeledDataSourceAll);
-            err.setValidationData(fileDataSource);
+            err.addDataSources(labeledDataSource);
+            err.addDataSources(fileDataSource);
         }
 
         public static void setSources_binar(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
@@ -83,17 +84,9 @@ public class Example01 {
 
         // Jednotlivý krabièky
 
-        BoxPrototype input = new InputPrototype();
+        BoxPrototype input = new InputPrototype("weather.arff");
 
-        BoxPrototype err = new BoxPrototype("err", /*TODO Err.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::ca_MkDataProcessing,  BoxUtils::err_setSources, BoxUtils::err_mkOutput);
-
-        BoxPrototype input_old = new BoxPrototype("input_old", null, at->null, (dp,sources)->{}, (i,dp)-> {
-            FileDataProvider fileDataProvider = new FileDataProvider();
-            fileDataProvider.setFileURI("weather.arff");
-            DataSourceDescription fileDataSource = new DataSourceDescription();
-            fileDataSource.setDataProvider(fileDataProvider);
-            return fileDataSource;
-        });
+        BoxPrototype err = new BoxPrototype("err", Agent_CCIPercentage.class, BoxPrototype::mkDataProcessing_default, BoxUtils::err_setSources, BoxUtils::err_mkOutput);
 
         BoxPrototype pca    = new BoxPrototype("PCA", /*TODO Agent_PCA.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput0);
         BoxPrototype kmeans = new BoxPrototype("k-means", /*TODO Agent_KMeans.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput_i);
@@ -110,8 +103,6 @@ public class Example01 {
 
 
         try {
-
-
 
             List<SimpleVertex> graph_simple = SimpleVertex.readLines(
                 "0 input  0 2 1:0 1:1",
@@ -134,6 +125,36 @@ public class Example01 {
 
             ch.eqStrSilent(converter.convert(graph_goal).exportXML(), new Rucni().createDescription().exportXML());
 
+            CodeLib.mk(
+                    "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
+                    "TypedDag.split( TypedDag: a => (V a n) , MyList: V (a => b) n ) : a => (V b n)",
+                    "MyList.cons( Object: a , MyList: V a n ) : V a (S n)",
+                    "MyList.nil : V a 0",
+                    "PCA : D => D",
+                    "k-means : D => (V D (S(S n)))",
+                    "RBF : D => LD",
+                    "U : (V LD (S(S n))) => LD"
+            ).generate("D => LD", 1).forEach(tree -> {
+
+                TypedDag dag = (TypedDag) tree.computeValue();
+
+                ch.itln("...").itln(tree).itln(tree.showWithTypes()).it(dag);
+
+                ch.list(dag.toSimpleGraph()).ln();
+
+                try {
+
+                    ch.eqStrSilent(
+                            converter.convert(dag).exportXML(),
+                            new Input_Tom1().createDescription().exportXML()
+                    );
+
+                } catch (Converter.ConverterError converterError) {
+                    converterError.printStackTrace();
+                }
+
+
+            });
 
 
 

@@ -64,6 +64,11 @@ public class Checker {
         return this;
     }
 
+    public Checker ln() {
+        Log.it();
+        return this;
+    }
+
     public Checker list(List<?> xs) {
         Log.list(xs);
         return this;
