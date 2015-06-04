@@ -5,7 +5,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_KMeans;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_PCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_RomanovoU;
-import org.pikater.core.agents.experiment.dataprocessing.Agent_CCIPercentage;
+import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 
 /**
@@ -99,7 +99,7 @@ public final class Input_Tom implements ITestExperiment {
 
 
 		ComputingAgent err = new ComputingAgent();
-		err.setAgentType(Agent_CCIPercentage.class.getName());
+		err.setAgentType(Agent_Accuracy.class.getName());
 		err.setTrainingData(labeledDataSourceAll);
 		err.setValidationData(fileDataSource);
 

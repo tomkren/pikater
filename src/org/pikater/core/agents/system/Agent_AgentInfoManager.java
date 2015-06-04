@@ -9,7 +9,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaAbstractCA;
-import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
+import org.pikater.core.agents.experiment.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
 import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
@@ -53,9 +53,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	
 	/**
 	 * Get {@link List<Ontology>} that utilizes this agent
-	 * 
-	 * @param agentClasses list of {@link AgentClass}
-	 *        represents {@link PikaterAgent} to wake
+	 *
 	 */
 	public List<Ontology> getOntologies() {
 
@@ -394,8 +392,6 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	/**
 	 * New {@link PikaterAgent} was added to system
 	 * 
-	 * @param agent {@link PikaterAgent} which sends request
-	 * @param agentName - name of {@link PikaterAgent} which receive request
 	 * @return {@link ACLMessage} - OK information message
 	 * 
 	 */

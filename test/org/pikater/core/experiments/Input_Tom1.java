@@ -1,7 +1,7 @@
 package org.pikater.core.experiments;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
-import org.pikater.core.agents.experiment.dataprocessing.Agent_CCIPercentage;
+import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 
 /**
@@ -42,7 +42,7 @@ public final class Input_Tom1 implements ITestExperiment {
 
 		// compute error
 		DataProcessing err = new DataProcessing();
-		err.setAgentType(Agent_CCIPercentage.class.getName());
+		err.setAgentType(Agent_Accuracy.class.getName());
 		err.addDataSources(labeledDataSourceRBF);
 		err.addDataSources(fileDataSource);
 

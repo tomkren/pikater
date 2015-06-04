@@ -2,11 +2,10 @@ package cz.tomkren.pikater;
 
 import cz.tomkren.helpers.Checker;
 
-import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.TypedDag;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
-import org.pikater.core.agents.experiment.dataprocessing.Agent_CCIPercentage;
+import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.experiments.Input_Tom1;
 import org.pikater.core.experiments.Rucni;
 import org.pikater.core.experiments.Rucni_simple;
@@ -86,7 +85,7 @@ public class Example01 {
 
         BoxPrototype input = new InputPrototype("weather.arff");
 
-        BoxPrototype err = new BoxPrototype("err", Agent_CCIPercentage.class, BoxPrototype::mkDataProcessing_default, BoxUtils::err_setSources, BoxUtils::err_mkOutput);
+        BoxPrototype err = new BoxPrototype("err", Agent_Accuracy.class, BoxPrototype::mkDataProcessing_default, BoxUtils::err_setSources, BoxUtils::err_mkOutput);
 
         BoxPrototype pca    = new BoxPrototype("PCA", /*TODO Agent_PCA.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput0);
         BoxPrototype kmeans = new BoxPrototype("k-means", /*TODO Agent_KMeans.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput_i);

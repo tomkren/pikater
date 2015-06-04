@@ -25,8 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.pikater.core.CoreAgents;
-import org.pikater.core.CoreConstant;
-import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
+import org.pikater.core.agents.experiment.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.computing.communicator.ComputingAction;
 import org.pikater.core.agents.experiment.computing.communicator.ComputingCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;

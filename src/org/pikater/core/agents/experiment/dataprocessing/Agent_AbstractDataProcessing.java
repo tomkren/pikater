@@ -2,7 +2,7 @@ package org.pikater.core.agents.experiment.dataprocessing;
 
 import jade.content.Concept;
 import jade.content.ContentException;
-import jade.content.lang.Codec.CodecException;
+import jade.content.lang.Codec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
@@ -14,37 +14,27 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.Agent_DataProcessing;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentinfo.Slot;
-import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
-import org.pikater.core.ontology.subtrees.task.Task.InOutType;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import weka.core.Instances;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-/*
-	gets weka instances on inputs, merges them, returns them as one output
-
+/**
+ * Created by Martin on 4.6.2015.
  */
-public class Agent_VotingAggregator extends Agent_DataProcessing {
-
+public abstract class Agent_AbstractDataProcessing extends Agent_DataProcessing {
 	private static final long serialVersionUID = 4679962419249103511L;
-
-	// TODO read from options
-	private int numberOfInputs = 3;
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -57,31 +47,7 @@ public class Agent_VotingAggregator extends Agent_DataProcessing {
 	}
 
 	@Override
-	protected AgentInfo getAgentInfo() {
-		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.importAgentClass(this.getClass());
-		agentInfo.importOntologyClass(DataProcessing.class);
-
-		agentInfo.setName("RomanovoU");
-		agentInfo.setDescription("Merges all inputs into one output.");
-
-		// get all inputs
-		ArrayList inputs = new ArrayList();
-		for (int i=0; i<numberOfInputs; i++){
-			Slot input = new Slot("Input_"+Integer.toString(i),
-					CoreConstant.SlotCategory.DATA_GENERAL, "Input "+Integer.toString(i)+".");
-			inputs.add(input);
-		}
-
-		agentInfo.setInputSlots(inputs);
-
-		Slot output = new Slot("Output",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Output.");
-
-		agentInfo.setOutputSlots(Arrays.asList(output));
-
-		return agentInfo;
-	}
+	protected abstract AgentInfo getAgentInfo();
 
 	@Override
 	protected void setup() {
@@ -106,7 +72,7 @@ public class Agent_VotingAggregator extends Agent_DataProcessing {
 					} else {
 						throw new RefuseException("Invalid action requested");
 					}
-				} catch (CodecException e) {
+				} catch (Codec.CodecException e) {
 					logException("Unknown codec: ", e);
 					throw new FailureException("Unknown codec: "
 							+ e.getMessage());
@@ -135,9 +101,10 @@ public class Agent_VotingAggregator extends Agent_DataProcessing {
 		final ExecuteTask content;
 		Task performed;
 		try {
-			content = (ExecuteTask) ((Action) getContentManager().extractContent(request)).getAction();
+			content = (ExecuteTask) ((Action) getContentManager()
+					.extractContent(request)).getAction();
 			performed = performTask(content.getTask());
-		} catch (CodecException e) {
+		} catch (Codec.CodecException e) {
 			logException("Failed to extract task", e);
 			throw e;
 		} catch (OntologyException e) {
@@ -169,43 +136,21 @@ public class Agent_VotingAggregator extends Agent_DataProcessing {
 	private Task performTask(Task t) throws FIPAException {
 		logInfo("getting data");
 
-		List<DataInstances> weatherData = getDataForTask(t);
+		List<DataInstances> data = getDataForTask(t);
 		logInfo("processing data");
-		List<TaskOutput> outputs = processData(weatherData);
+		List<TaskOutput> outputs = processData(data);
 		logInfo("returning outputs");
 		t.setOutput(outputs);
 		return t;
 	}
 
-	private Instances mergeInputs(List<DataInstances> data) {
-		Instances res = new Instances(data.get(0).toWekaInstances());
+	protected abstract List<TaskOutput> processData(List<DataInstances> data);
 
-		List<DataInstances> mergedData = new ArrayList();
-
-		// Instances res = new Instances(data.get(0).toWekaInstances());
-		for (int in=1; in<data.size(); in++){
-			for (int i=0; i< data.get(in).getInstances().size(); i++) {
-				res.add(data.get(in).toWekaInstances().instance(i));
-			}
-		}
-
-		return res;
-	}
-
-	private List<TaskOutput> processData(List<DataInstances> data) {
-		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances output = mergeInputs(data);
-
-		res.add(makeOutput(output, "Output"));
-		return res;
-	}
-
-	private TaskOutput makeOutput(Instances instances, String dataType) {
+	protected TaskOutput makeOutput(Instances instances, String dataType) {
 		TaskOutput res = new TaskOutput();
 		res.setName(saveArff(instances));
-		res.setType(InOutType.DATA);
+		res.setType(Task.InOutType.DATA);
 		res.setDataType(dataType);
 		return res;
 	}
-
 }
