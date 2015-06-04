@@ -18,9 +18,12 @@ public class Datas implements Concept {
 	private List<Data> datas;
 	private Metadata metadata;
 	
-	private String output = CoreConstant.Output.EVALUATION_ONLY.name();
-	private String mode = CoreConstant.Mode.TRAIN_TEST.name();
-	
+	// private String output = CoreConstant.Output.EVALUATION_ONLY.name();
+	// private String mode = CoreConstant.Mode.TRAIN_TEST.name();
+
+	private String output = CoreConstant.Output.EVALUATION_LABEL.name();
+	private String mode = CoreConstant.Mode.TRAIN_TEST_LABEL.name();
+
 	public Datas() {
 		this.datas = new ArrayList<Data>();
 	}
@@ -162,5 +165,37 @@ public class Datas implements Concept {
 	}
 	public String exportExternalValidFileName() {
 		return exportData(CoreConstant.DataType.VALID_DATA.getType()).getExternalFileName();
+	}
+
+	public void importInternalLabelFileName(String internalLabelFileName) {
+		Data dataTolabel = exportData(CoreConstant.DataType.LABEL_DATA.getType());
+		if (dataTolabel == null) {
+			dataTolabel = new Data("",
+					internalLabelFileName,
+					CoreConstant.DataType.LABEL_DATA.getType()
+			);
+			addData(dataTolabel);
+		} else {
+			dataTolabel.setInternalFileName(internalLabelFileName);
+		}
+	}
+	public String exportInternalLabelFileName() {
+		return exportData(CoreConstant.DataType.LABEL_DATA.getType()).getInternalFileName();
+	}
+
+	public void importExternalLabelFileName(String externalLabelFileName) {
+		Data dataTolabel = exportData(CoreConstant.DataType.LABEL_DATA.getType());
+		if (dataTolabel == null) {
+			dataTolabel = new Data(externalLabelFileName,
+					"",
+					CoreConstant.DataType.LABEL_DATA.getType()
+			);
+			addData(dataTolabel);
+		} else {
+			dataTolabel.setExternalFileName(externalLabelFileName);
+		}
+	}
+	public String exportExternalLabelFileName() {
+		return exportData(CoreConstant.DataType.LABEL_DATA.getType()).getExternalFileName();
 	}
 }

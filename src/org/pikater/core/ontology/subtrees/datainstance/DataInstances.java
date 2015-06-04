@@ -124,10 +124,15 @@ public class DataInstances implements Concept {
 		}
 		setAttributes(ontoAttrs);
 
+
 		// set instances
 		List<Instance> ontoInsts = new ArrayList<Instance>();
 		for (int i = 0; i < winsts.numInstances(); i++) {
 			Instance inst = new Instance();
+
+			// add id
+			inst.setId(i);
+
 			weka.core.Instance winst = winsts.instance(i);
 
 			List<Double> instvalues = new ArrayList<Double>();
@@ -177,5 +182,14 @@ public class DataInstances implements Concept {
 		}
 		Instance inst = (Instance) instances.get(row);
 		return inst.toString(this, index);
+	}
+
+	public Instance getInstanceById(int id){
+		for (Instance inst: instances){
+			if (inst.getId() == id){
+				return inst;
+			}
+		}
+		return null;
 	}
 }

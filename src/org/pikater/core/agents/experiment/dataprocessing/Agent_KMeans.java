@@ -7,20 +7,14 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
-import jade.domain.FIPAException;
-import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;
+import jade.domain.FIPAException;
+import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.pikater.core.CoreConstant;
-import org.pikater.core.agents.experiment.errorcomputing.Agent_Error;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -30,16 +24,25 @@ import org.pikater.core.ontology.subtrees.agentinfo.Slot;
 import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
-import org.pikater.core.ontology.subtrees.task.*;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
+import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.Task.InOutType;
-
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
+import weka.clusterers.SimpleKMeans;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class Agent_WeatherSplitter extends Agent_DataProcessing {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Agent_KMeans extends Agent_DataProcessing {
 
 	private static final long serialVersionUID = 4679962419249103511L;
+
+	// TODO nacist z nastaveni
+	private int k = 3;
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -57,24 +60,23 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		agentInfo.importAgentClass(this.getClass());
 		agentInfo.importOntologyClass(DataProcessing.class);
 
-		agentInfo.setName("WeatherSplitter");
-		agentInfo.setDescription("Splits weather data by prediction.");
+		agentInfo.setName("K-Means");
+		agentInfo.setDescription("Weka Simple K-Means algorithm.");
 
-		Slot i1 = new Slot("firstInput",
+		Slot i1 = new Slot("Input",
 				CoreConstant.SlotCategory.DATA_GENERAL, "First weather input.");
-		Slot i2 = new Slot("secondInput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Second weather input.");
 
-		agentInfo.setInputSlots(Arrays.asList(i1, i2));
+		agentInfo.setInputSlots(Arrays.asList(i1));
 
-		Slot sunny = new Slot("sunnyOutput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
-		Slot overcast = new Slot("overcastOutput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
-		Slot rainy = new Slot("rainyOutput",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
 
-		agentInfo.setOutputSlots(Arrays.asList(sunny, overcast, rainy));
+		ArrayList outputSlots = new ArrayList();
+		for (int i=0; i< k; i++){
+			Slot slot = new Slot("Output_"+Integer.toString(i),
+					CoreConstant.SlotCategory.DATA_GENERAL, "Output "+Integer.toString(i)+".");
+			outputSlots.add(slot);
+		}
+
+		agentInfo.setOutputSlots(outputSlots);
 
 		return agentInfo;
 	}
@@ -166,55 +168,49 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	private Task performTask(Task t) throws FIPAException {
 		logInfo("getting data");
 
-		List<DataInstances> weatherData = getDataForTask(t);
+		List<DataInstances> data = getDataForTask(t);
 		logInfo("processing data");
-		List<TaskOutput> outputs = processData(weatherData);
+		List<TaskOutput> outputs = processData(data);
 		logInfo("returning outputs");
 		t.setOutput(outputs);
 		return t;
 	}
 
-	private Instances mergeInputs(List<DataInstances> weatherData) {
-		Instances res = new Instances(weatherData.get(0).toWekaInstances());
-		Instances second = weatherData.get(1).toWekaInstances();
-		for (int i = 0; i < second.numInstances(); ++i) {
-			res.add(second.instance(i));
-		}
-		return res;
-	}
-
-	private List<TaskOutput> processData(List<DataInstances> weatherData) {
+	private List<TaskOutput> processData(List<DataInstances> data) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances input = mergeInputs(weatherData);
+		Instances input = data.get(0).toWekaInstances();
 
-		Instances sunny = new Instances(input, 0);
-		Instances overcast = new Instances(input, 0);
-		Instances rainy = new Instances(input, 0);
+		// create the model
 
-		Attribute forecast = input.attribute(0);
+		SimpleKMeans kMeans = new SimpleKMeans();
+		try {
+			kMeans.setPreserveInstancesOrder(true);
+			kMeans.setNumClusters(k);
+			kMeans.buildClusterer(input);
 
-		for (int i = 0; i < input.numInstances(); ++i) {
-			Instance instance = input.instance(i);
-			String value = instance.stringValue(forecast);
-			switch (value) {
-				case "rainy":
-					rainy.add(instance);
-					break;
-				case "overcast":
-					overcast.add(instance);
-					break;
-				case "sunny":
-					sunny.add(instance);
-					break;
-				default:
-					throw new IllegalArgumentException("Unknown weather data: "
-							+ value);
+			int[] assignments = kMeans.getAssignments();
+
+			// create arraylist of cluster clustered[cluster_number][instance]
+			ArrayList clustered = new ArrayList();
+
+			for (int i=0; i < k; i++){
+				clustered.add(new ArrayList());
 			}
+
+			for (int i=0; i<input.numInstances(); i++){
+				((ArrayList) clustered.get(assignments[i])).add(input.instance(i));
+			}
+
+
+			// create outputs
+			for (int i=0; i < k; i++){
+				res.add(makeOutput(((DataInstances)clustered.get(i)).toWekaInstances(), "Output_"+Integer.toString(i)));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		res.add(makeOutput(sunny, "sunnyOutput"));
-		res.add(makeOutput(overcast, "overcastOutput"));
-		res.add(makeOutput(rainy, "rainyOutput"));
 		return res;
 	}
 

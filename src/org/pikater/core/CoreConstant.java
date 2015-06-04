@@ -14,7 +14,7 @@ public class CoreConstant {
 	}
 
 	public static enum DataType {
-		TRAIN_DATA("Train"), TEST_DATA("Test"), VALID_DATA("Valid");
+		TRAIN_DATA("Train"), TEST_DATA("Test"), VALID_DATA("Valid"),  LABEL_DATA("Label");
 
 		private final String type;
 
@@ -63,8 +63,8 @@ public class CoreConstant {
 	public static enum SlotContent {
 
 		DATA("data"), FILE_DATA("fileData"), TRAINING_DATA("trainingData"), TESTING_DATA(
-				"testingData"), VALIDATION_DATA("validationData"), COMPUTED_DATA(
-				"computedData"),
+				"testingData"), VALIDATION_DATA("validationData"), DATA_TO_LABEL("dataToLabel"),
+		COMPUTED_DATA("computedData"),
 
 		COMPUTATION_AGENT("computingAgent"), ERRORS("error"), EVALUATION_METHOD(
 				"evaluationMethod"), RECOMMEND("recommender"), SEARCH("search");
@@ -88,6 +88,7 @@ public class CoreConstant {
 				case TESTING_DATA:
 				case TRAINING_DATA:
 				case VALIDATION_DATA:
+				case DATA_TO_LABEL:
 					return SlotCategory.DATA_GENERAL;
 
 				case COMPUTATION_AGENT:
@@ -113,7 +114,7 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum Mode {
-		DEFAULT, TRAIN_ONLY, TEST_ONLY, TRAIN_TEST,
+		TRAIN_ONLY, TEST_ONLY, LABEL_ONLY, TRAIN_TEST, TRAIN_TEST_LABEL, TRAIN_LABEL
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class CoreConstant {
 	 * 
 	 */
 	public static enum Output {
-		DEFAULT, EVALUATION_ONLY, PREDICTION;
+		EVALUATION_ONLY, LABEL_ONLY, EVALUATION_LABEL;
 	}
 
 	/**
