@@ -35,6 +35,10 @@ public class SimpleVertex {
         this.targets = targets;
     }
 
+    public void addTarget(LinkTarget target) {
+        targets.add(target);
+    }
+
     public static SimpleVertex read(String str) {
         String[] parts = str.trim().split("\\s+");
 

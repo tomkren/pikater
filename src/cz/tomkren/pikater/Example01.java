@@ -3,6 +3,8 @@ package cz.tomkren.pikater;
 import cz.tomkren.helpers.Checker;
 
 import cz.tomkren.helpers.Log;
+import cz.tomkren.typewars.CodeLib;
+import cz.tomkren.typewars.TypedDag;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.experiments.Rucni;
 import org.pikater.core.experiments.Rucni_simple;
@@ -134,6 +136,35 @@ public class Example01 {
 
             ch.eqStrSilent(converter.convert(graph_goal).exportXML(), new Rucni().createDescription().exportXML());
 
+            CodeLib.mk(
+                    "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
+                    "TypedDag.split( TypedDag: a => (V a n) , MyList: V (a => b) n ) : a => (V b n)",
+                    "MyList.cons( Object: a , MyList: V a n ) : V a (S n)",
+                    "MyList.nil : V a 0",
+                    "PCA : D => D",
+                    "k-means : D => (V D (S(S n)))",
+                    "RBF : D => LD",
+                    "U : (V LD (S(S n))) => LD"
+            ).generate("D => LD", 1).forEach(tree -> {
+
+                TypedDag dag = (TypedDag) tree.computeValue();
+
+                ch.itln("...").itln(tree).itln(tree.showWithTypes()).it(dag);
+
+                ch.list(dag.toSimpleGraph()).ln();
+
+                try {
+
+
+                    ComputationDescription cd = converter.convert(dag);
+
+
+                } catch (Converter.ConverterError converterError) {
+                    converterError.printStackTrace();
+                }
+
+
+            });
 
 
 

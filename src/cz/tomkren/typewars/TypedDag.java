@@ -8,6 +8,7 @@ import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.TriFun;
 import cz.tomkren.kutil2.items.Int2D;
+import cz.tomkren.pikater.SimpleVertex;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -385,6 +386,36 @@ public class TypedDag {
         catch (NoSuchMethodException e) {throw new Error("NoSuchMethodException !");}
     }
 
+
+    public List<SimpleVertex> toSimpleGraph() {
+
+        // TODO retardně implementováno, ale mělo by stačit, dyštak pak odretardnit
+
+        List<SimpleVertex> begin  = new ArrayList<>();
+        List<SimpleVertex> middle = new ArrayList<>();
+        List<SimpleVertex> end    = new ArrayList<>();
+
+        forEachVertex(v -> {
+            AB<SimpleVertex, Vertex.Info> p =  v.toSimpleVertex();
+            SimpleVertex sv = p._1();
+            Vertex.Info vInfo = p._2();
+
+            switch (vInfo) {
+                case BEGIN  : begin.add(sv); break;
+                case MIDDLE : middle.add(sv); break;
+                case END : end.add(sv); break;
+            }
+
+        });
+
+        if (begin.size() != 1) {throw new Error("There should be exactly one begin.");}
+        if (end.size() > 1) {throw new Error("There should be at most one end.");}
+
+        begin.addAll(middle);
+        begin.addAll(end);
+
+        return begin;
+    }
 
     public String toKutilXML(Int2D pos) {
         StringBuilder sb = new StringBuilder();

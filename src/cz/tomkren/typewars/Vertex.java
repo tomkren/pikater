@@ -3,6 +3,7 @@ package cz.tomkren.typewars;
 import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.F;
 import cz.tomkren.kutil2.items.Int2D;
+import cz.tomkren.pikater.SimpleVertex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,9 +71,22 @@ public class Vertex {
     @Override
     public String toString() {return name+"("+id+")";}
 
+    public enum Info { BEGIN, END, MIDDLE }
+
+    public AB<SimpleVertex,Info> toSimpleVertex() {
+
+        Info info = nextFreeSlot == 0 ? Info.BEGIN : (successors.isEmpty() ? Info.END : Info.MIDDLE);
+
+        int numInputs  = Math.max(1, nextFreeSlot);
+        int numOutputs = Math.max(1, successors.size());
+
+        List<SimpleVertex.LinkTarget> targets = F.map(successors, p-> new SimpleVertex.LinkTarget(p._1().getId(), p._2()) );
+
+        return new AB<>(new SimpleVertex(id, name, numInputs, numOutputs, targets), info);
+    }
+
     public static final int X_1SIZE = 64;
     public static final int Y_1SIZE = 64;
-
 
     public void toKutilXML(StringBuilder sb, Int2D pos) { //, int x, int y) {
 
