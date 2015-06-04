@@ -253,8 +253,9 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances labelDataInstances =
+					DataInstances labelDataInstances =
 						agent.processGetDataResponse(inform);
+
 				if (labelDataInstances != null) {
 					agent.labelFileName = labelFn;
 					agent.ontoLabel = labelDataInstances;
@@ -337,10 +338,10 @@ public class ComputingAction extends FSMBehaviour {
 			private void saveDataSource (List<DataInstances> labeledData) throws Exception {
 				
 				DataInstances dataInstance = new DataInstances();
-				dataInstance.fillWekaInstances(agent.test);
+				dataInstance.fillWekaInstances(agent.label);
 				
 				DataInstances labeledTest =
-						agent.getPredictions(agent.test, dataInstance);
+						agent.getPredictions(agent.label, dataInstance);
 				labeledData.add(labeledTest);
 				
 				// Save datasource and inform datasource
