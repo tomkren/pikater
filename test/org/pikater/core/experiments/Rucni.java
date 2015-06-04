@@ -3,6 +3,7 @@ package org.pikater.core.experiments;
 import cz.tomkren.helpers.Log;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_CCIPercentage;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 
 
@@ -101,14 +102,16 @@ public final class Rucni implements ITestExperiment {
         labeledDataSourceAll.setOutputType("Data");
         labeledDataSourceAll.setDataProvider(u);
 
-
-
-
-        ComputingAgent err = new ComputingAgent();
+        /*ComputingAgent err = new ComputingAgent();
         err.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         err.setTrainingData(labeledDataSourceAll);
         err.setTestingData(labeledDataSourceAll);
-        err.setValidationData(fileDataSource);
+        err.setValidationData(fileDataSource);*/
+
+        DataProcessing err = new DataProcessing();
+        err.setAgentType(Agent_CCIPercentage.class.getName());
+        err.addDataSources(labeledDataSourceAll);
+        err.addDataSources(fileDataSource);
 
         // error output is the new datasource
         DataSourceDescription errDataSource = new DataSourceDescription();
