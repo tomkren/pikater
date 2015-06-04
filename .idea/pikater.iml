@@ -18,7 +18,7 @@
       </configuration>
     </facet>
     <facet type="IvyIDEA" name="IvyIDEA">
-      <configuration ivyFile="$MODULE_DIR$/ivy.xml" useProjectSettings="false" useCustomIvySettings="true" ivySettingsFile="C:\Users\user\Documents\pikater\ivysettings.xml" onlyResolveSelectedConfigs="false">
+      <configuration ivyFile="$MODULE_DIR$/ivy.xml" useProjectSettings="false" useCustomIvySettings="false" ivySettingsFile="C:\Users\user\Documents\pikater\ivysettings.xml" onlyResolveSelectedConfigs="false">
         <propertiesSettings>
           <propertiesFiles includeProjectLevelPropertiesFiles="true" />
         </propertiesSettings>
@@ -32,6 +32,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib/jade-4.3.2/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lib/phys2d/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lib/jfreechart/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -171,5 +173,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="jar-libs" level="project" />
   </component>
 </module>

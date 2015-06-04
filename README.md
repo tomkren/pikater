@@ -1,3 +1,34 @@
+# Jak to rychle rozchodit v IntelliJ
+
+1. Mějte IntelliJ IDEA (testováno na verzi 14.1.3, de studentská licence zadarmo pro ulitamte version) (Java 8)
+2. Instalace pluginu IvyIDEA pro stažení dependencies (klidně prohodit s následujícím krokem, ale takle patrně hladší)
+    * file -> settings -> plugins
+    * vyhledat ivy, napíše nothing to show
+    * click na browse
+    * IvyIDEA (to s nejvíc staženíma)
+    * install plugin (zelený tlačítko na pravo)
+    * a budechtít restartovat, tak restarovat
+    * možná bude problém s ivysettings.xml (ted skoušim nechat na default), pak ručně předělat na ten v pikater/ivysettings.xml pomocí: file -> project structure
+3. check out from version control (tak se jmenuje možnost při čerstvym installu) -> github
+    * jinak lze doklikat v: file -> new -> project from version control -> GitHub.
+    * přihlásit atd 
+    * https://github.com/tomkren/pikater.git
+4. file -> project structure
+    * Project SDK: New.. -> JDK
+    * najít cestu k něco jako C:\Program Files\Java\jdk1.8.0_25 
+5. run -> edit configurations
+    * +átko -> application
+    * pojmenovat..
+    * main class: jade.Boot
+    * program arguments: -gui -agents "mama:org.pikater.core.agents.system.Agent_Initiator"
+
+
+
+
+
+
+# Old README
+
 This project revises the original [Pikater](https://github.com/peskk3am/pikater4) project:
 
 1. Previous database access was rewritten into a DBMS independent (almost) framework using JPA.
