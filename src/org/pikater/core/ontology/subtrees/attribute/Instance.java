@@ -29,6 +29,10 @@ public class Instance implements Concept {
 		return values;
 	}
 
+	public Double getValue(int i) {
+		return values.get(i);
+	}
+
 	/**
 	 * the values to set
 	 */
@@ -44,6 +48,7 @@ public class Instance implements Concept {
 		this.missing = missing;
 	}
 
+	//TODO: repair in case we use different class index
 	public void setPrediction(double v) {
 		values.remove(values.size() - 1);
 		values.add(v);

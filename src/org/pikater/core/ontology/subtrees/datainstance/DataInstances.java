@@ -3,6 +3,8 @@ package org.pikater.core.ontology.subtrees.datainstance;
 import jade.content.Concept;
 import weka.core.FastVector;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,6 +19,18 @@ public class DataInstances implements Concept {
 	private List<Instance> instances;
 	private String name;
 	private int classIndex;
+
+	public List<Double> getColumn(int i) {
+		List<Double> values = new ArrayList<Double>();
+		for (Instance ins : instances) {
+			values.add(ins.getValue(i));
+		}
+		return values;
+	}
+
+	public List<Double> getClassColumn() {
+		return getColumn(classIndex);
+	}
 
 	/**
 	 * @return the name
@@ -191,5 +205,14 @@ public class DataInstances implements Concept {
 			}
 		}
 		return null;
+	}
+
+	public void sortById() {
+		Collections.sort(instances, new Comparator<Instance>() {
+			@Override
+			public int compare(Instance o1, Instance o2) {
+				return Integer.compare(o1.getId(), o2.getId());
+			}
+		});
 	}
 }
