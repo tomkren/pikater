@@ -6,6 +6,8 @@ import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.TypedDag;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_CCIPercentage;
+import org.pikater.core.experiments.Input_Tom1;
 import org.pikater.core.experiments.Rucni;
 import org.pikater.core.experiments.Rucni_simple;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
@@ -53,18 +55,15 @@ public class Example01 {
             ca.setTrainingData(source);
             ca.setTestingData(source);
             ca.setValidationData(source);
-            // TODO ca.setDataToLabel(dataSourceKMeans1);
+            ca.setDataToLabel(source);
         }
 
-        public static void err_setSources(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
-            DataSourceDescription labeledDataSourceAll = sources.get(0);
+        public static void err_setSources(DataProcessing err, List<DataSourceDescription> sources) {
+            DataSourceDescription labeledDataSource = sources.get(0);
             DataSourceDescription fileDataSource = sources.get(1);
 
-            ComputingAgent err = (ComputingAgent) dataProcessing;
-
-            err.setTrainingData(labeledDataSourceAll);
-            err.setTestingData(labeledDataSourceAll);
-            err.setValidationData(fileDataSource);
+            err.addDataSources(labeledDataSource);
+            err.addDataSources(fileDataSource);
         }
 
         public static void setSources_binar(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
@@ -85,17 +84,9 @@ public class Example01 {
 
         // Jednotlivý krabièky
 
-        BoxPrototype input = new InputPrototype();
+        BoxPrototype input = new InputPrototype("weather.arff");
 
-        BoxPrototype err = new BoxPrototype("err", /*TODO Err.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::ca_MkDataProcessing,  BoxUtils::err_setSources, BoxUtils::err_mkOutput);
-
-        BoxPrototype input_old = new BoxPrototype("input_old", null, at->null, (dp,sources)->{}, (i,dp)-> {
-            FileDataProvider fileDataProvider = new FileDataProvider();
-            fileDataProvider.setFileURI("weather.arff");
-            DataSourceDescription fileDataSource = new DataSourceDescription();
-            fileDataSource.setDataProvider(fileDataProvider);
-            return fileDataSource;
-        });
+        BoxPrototype err = new BoxPrototype("err", Agent_CCIPercentage.class, BoxPrototype::mkDataProcessing_default, BoxUtils::err_setSources, BoxUtils::err_mkOutput);
 
         BoxPrototype pca    = new BoxPrototype("PCA", /*TODO Agent_PCA.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput0);
         BoxPrototype kmeans = new BoxPrototype("k-means", /*TODO Agent_KMeans.class*/ Agent_WekaRBFNetworkCA.class, BoxUtils::mkOutput_i);
@@ -112,8 +103,6 @@ public class Example01 {
 
 
         try {
-
-
 
             List<SimpleVertex> graph_simple = SimpleVertex.readLines(
                 "0 input  0 2 1:0 1:1",
@@ -155,9 +144,10 @@ public class Example01 {
 
                 try {
 
-
-                    ComputationDescription cd = converter.convert(dag);
-
+                    ch.eqStrSilent(
+                            converter.convert(dag).exportXML(),
+                            new Input_Tom1().createDescription().exportXML()
+                    );
 
                 } catch (Converter.ConverterError converterError) {
                     converterError.printStackTrace();

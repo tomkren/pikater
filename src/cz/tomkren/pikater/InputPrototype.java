@@ -14,9 +14,11 @@ import java.util.function.Function;
 /** Created by tom on 3. 6. 2015.*/
 public class InputPrototype extends BoxPrototype {
 
+    private final String filename;
 
-    public InputPrototype() {
+    public InputPrototype(String filename) {
         super("input", null, at->null, (dp,sources)->{}, null );
+        this.filename = filename;
     }
 
 
@@ -24,7 +26,7 @@ public class InputPrototype extends BoxPrototype {
     public List<DataSourceDescription> mkOutputs(DataProcessing dataProcessing, int numOut) {
 
         FileDataProvider fileDataProvider = new FileDataProvider();
-        fileDataProvider.setFileURI("weather.arff");
+        fileDataProvider.setFileURI(filename);
         DataSourceDescription fileDataSource = new DataSourceDescription();
         fileDataSource.setDataProvider(fileDataProvider);
 
