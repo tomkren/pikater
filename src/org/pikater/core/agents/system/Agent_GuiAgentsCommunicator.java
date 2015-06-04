@@ -4,6 +4,7 @@ package org.pikater.core.agents.system;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.tomkren.helpers.Log;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -128,7 +129,21 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 				batchNote = "Inputed by GuiKlara Agent";
 				batchOwnerID = DataManagerService.getUserID(this, "klara");
 				batchPriority = 9;
+
+			} else if ("tomAgent".equals(senderName)) {
+
+				Log.it("Bond here, senderName: "+senderName);
+
+				batchName = "Tom's Batch";
+				batchNote = "evoluce DAGu";
+				batchOwnerID = DataManagerService.getUserID(this, "tom");
+				batchPriority = 9;
+
+
+
 			} else {
+
+				Log.it("senderName: "+senderName);
 				
 				logSevere("Not permitted sender");
 				ACLMessage failure = request.createReply();
