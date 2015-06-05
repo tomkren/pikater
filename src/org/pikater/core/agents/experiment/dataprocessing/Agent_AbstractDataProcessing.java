@@ -146,7 +146,8 @@ public abstract class Agent_AbstractDataProcessing extends Agent_DataProcessing 
 
 	protected abstract List<TaskOutput> processData(List<DataInstances> data);
 
-	protected TaskOutput makeOutput(Instances instances, String dataType) {
+	protected TaskOutput makeOutput(DataInstances dataInstances, String dataType) {
+		Instances instances = dataInstances.toWekaInstances(true);
 		TaskOutput res = new TaskOutput();
 		res.setName(saveArff(instances));
 		res.setType(Task.InOutType.DATA);
