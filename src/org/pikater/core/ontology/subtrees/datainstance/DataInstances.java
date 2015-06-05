@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.attribute.Attribute;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
+import weka.core.Instances;
 
 public class DataInstances implements Concept {
 
@@ -20,6 +21,19 @@ public class DataInstances implements Concept {
 	private List<Instance> instances;
 	private String name;
 	private int classIndex;
+
+	public DataInstances createEmptyCopy() {
+		DataInstances res = new DataInstances();
+		res.attributes = attributes;
+		res.privateAttributes = privateAttributes;
+		res.name = name;
+		res.classIndex = classIndex;
+		return res;
+	}
+
+	public void add(Instance inst) {
+		instances.add(inst);
+	}
 
 	public List<Double> extractColumn(int i) {
 		List<Double> values = new ArrayList<Double>();
@@ -53,6 +67,18 @@ public class DataInstances implements Concept {
 		}
 
 		return null;
+	}
+
+	public void mergePublicData(Instances winst) {
+		DataInstances tmp = new DataInstances();
+		tmp.fillWekaInstances(winst);
+
+		assert this.instances.size() == tmp.instances.size();
+
+		attributes = tmp.attributes;
+		for (int i = 0; i < instances.size(); i++) {
+			instances.get(i).setValues(tmp.instances.get(i).getValues());
+		}
 	}
 
 	public boolean hasColumn(String name) {

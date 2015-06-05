@@ -61,20 +61,19 @@ public class Agent_KMeans extends Agent_AbstractDataProcessing {
 			int[] assignments = kMeans.getAssignments();
 
 			// create arraylist of cluster clustered[cluster_number][instance]
-			ArrayList clustered = new ArrayList();
+			ArrayList<DataInstances> clustered = new ArrayList<>();
 
 			for (int i=0; i < k; i++){
-				clustered.add(new ArrayList());
+				clustered.add(data.get(0).createEmptyCopy());
 			}
 
 			for (int i=0; i<input.numInstances(); i++){
-				((ArrayList) clustered.get(assignments[i])).add(input.instance(i));
+				clustered.get(assignments[i]).add(data.get(0).getInstances().get(i));
 			}
-
 
 			// create outputs
 			for (int i=0; i < k; i++){
-				res.add(makeOutput(((DataInstances)clustered.get(i)).toWekaInstances(), "Output_"+Integer.toString(i)));
+				res.add(makeOutput((clustered.get(i)), "Output_"+Integer.toString(i)));
 			}
 
 		} catch (Exception e) {

@@ -51,7 +51,7 @@ public class Agent_VotingAggregator extends Agent_AbstractDataProcessing {
 		return agentInfo;
 	}
 
-	private Instances mergeInputs(List<DataInstances> data) {
+	private DataInstances mergeInputs(List<DataInstances> data) {
 		Instances res = new Instances(data.get(0).toWekaInstances());
 		ArrayList<List<Double>> predictions = new ArrayList<>();
 
@@ -72,12 +72,14 @@ public class Agent_VotingAggregator extends Agent_AbstractDataProcessing {
 			voted.add(StatUtils.mode(preds)[0]);    //TODO: this is probably biased towards lower classes
 		}
 
-		return res;
+		data.get(0).insertClassColumn(voted);
+
+		return data.get(0);
 	}
 
 	protected List<TaskOutput> processData(List<DataInstances> data) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances output = mergeInputs(data);
+		DataInstances output = mergeInputs(data);
 
 		res.add(makeOutput(output, "Output"));
 		return res;
