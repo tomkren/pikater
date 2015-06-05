@@ -79,7 +79,7 @@ public class Agent_Accuracy extends Agent_AbstractDataProcessing {
 
     private TaskOutput makeOutput(double error, String dataType) {
         Eval ev = new Eval();
-        ev.setName("CCIPercentage");
+        ev.setName("Accuracy");
         ev.setValue((float)error);
         List evs = new ArrayList();
         evs.add(ev);
