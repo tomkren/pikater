@@ -3,6 +3,9 @@ package org.pikater.core.experiments;
 import cz.tomkren.helpers.Log;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_KMeans;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_PCA;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_RomanovoU;
 import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 
@@ -35,7 +38,7 @@ public final class Rucni implements ITestExperiment {
 
         // PCA
         DataProcessing pca = new DataProcessing();
-        pca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
+        pca.setAgentType(Agent_PCA.class.getName());
         pca.addDataSources(fileDataSource);
 
         // Data processed by pca are the new datasource
@@ -46,7 +49,7 @@ public final class Rucni implements ITestExperiment {
 
         // k-means
         DataProcessing kmeans = new DataProcessing();
-        kmeans.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
+        kmeans.setAgentType(Agent_KMeans.class.getName());
         kmeans.addDataSources(dataSourcePCA);
 
         // Data processed by k-means are the new datasource
@@ -93,7 +96,7 @@ public final class Rucni implements ITestExperiment {
         labeledDataSourceMLP.setDataProvider(mlp);
 
         DataProcessing u = new DataProcessing();
-        u.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
+        u.setAgentType(Agent_RomanovoU.class.getName());
         u.addDataSources(labeledDataSourceRBF);
         u.addDataSources(labeledDataSourceMLP);
 

@@ -9,7 +9,7 @@
 
 
             <macro type="TypedDagGenerator" id="$pokus3" title="Basic para seri" off="!true" size="2500 2000" pos="4 4">
-                <n>0-5</n>
+                <n>100-300</n>
                 <goal>D => LD</goal>
                 <lib>
                     TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b ;
@@ -35,7 +35,7 @@
 
 
             <macro type="DAG-generator" id="$pokus1" title="Jednoduchá sada jen s MLP" off="true" size="2500 2000" pos="4 4">
-                <n>0-100</n>
+                <n>100-300</n>
                 <goal>D -> LD</goal>
                 <lib>
                     DIA     , x1 -> x2        ,  x1 -> x1             ,  x1 -> (List x2)   ,   (List x2) -> x2 ;
