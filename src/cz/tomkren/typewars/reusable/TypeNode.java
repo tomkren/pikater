@@ -47,7 +47,7 @@ public class TypeNode {
         return parent.getTreeTree();
     }
 
-    public int getN() {
-        return parent.getN();
+    public int getTreeSize() {
+        return parent.getTreeSize();
     }
 }

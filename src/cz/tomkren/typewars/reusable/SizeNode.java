@@ -27,7 +27,7 @@ public class SizeNode {
         return parent;
     }
 
-    public int getN() {
+    public int getTreeSize() {
         return n;
     }
 }

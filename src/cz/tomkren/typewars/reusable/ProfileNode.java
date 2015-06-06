@@ -17,10 +17,12 @@ public class ProfileNode {
     // private List<PolyTree> trees;
 
 
-    public ProfileNode(RootNode parent) {
+    public ProfileNode(RootNode parent, List<AB<Integer,Type>> signatures) {
         this.parent = parent;
 
-        signatures = new ArrayList<>(parent.getArity());
+        this.signatures = signatures;
+
+        assert signatures.size() == parent.getArity();
 
         // TODO
 
