@@ -1,53 +1,41 @@
 package cz.tomkren.typewars.reusable;
 
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TypeNode {
 
     private final SizeNode parent;
-
     private final List<RootNode> roots;
-    private int num;
+    private BigInteger num;
 
-    public TypeNode(SizeNode parent) {
-        this.parent = parent;
+    public BigInteger getNum() {return num;}
 
-        roots = new ArrayList<>();
+    public static TypeNode mk(SizeNode parent) {
+
+        List<RootNode> roots = new ArrayList<>();
 
         // TODO
-        for (SmartSym sym : getTreeTree().getLib().getSyms()) {
-
-            tryToAddRoot(sym);
-
+        for (SmartSym sym : parent.getTreeTree().getLib().getSyms()) {
+            RootNode rn = RootNode.mk(sym, parent);
+            if (rn != null) {roots.add(rn);}
         }
 
-
+        if (roots.isEmpty()) {return null;}
+        return new TypeNode(parent, roots);
     }
 
-
-    boolean tryToAddRoot(SmartSym sym) {
-
-        if (true) {     // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-            RootNode rn = RootNode.mk(sym, this);
-            if (rn != null) {
-                roots.add(rn);
-            }
-        }
-
-        return true;
+    private TypeNode(SizeNode parent, List<RootNode> roots) {
+        this.parent = parent;
+        this.roots  = roots;
     }
 
 
 
 
-    public TreeTree getTreeTree() {
-        return parent.getTreeTree();
-    }
+    //public TreeTree getTreeTree() {return parent.getTreeTree();}
+    // public int getTreeSize() {return parent.getTreeSize();}
 
-    public int getN() {
-        return parent.getN();
-    }
 }
