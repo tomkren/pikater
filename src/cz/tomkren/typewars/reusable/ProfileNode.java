@@ -16,16 +16,27 @@ public class ProfileNode {
 
     // private List<PolyTree> trees;
 
+    public static ProfileNode mk(RootNode parent, List<AB<Integer,Type>> signatures) {
+
+        boolean fail = false;
+        for (AB<Integer,Type> signature :signatures) {
+            if (F.isZero(parent.getTreeTree().getTypeNode(signature).getNum())) {
+                fail = true;
+                break;
+            }
+        }
+
+        // pokud existuje pro kazdou ze signatur aspon jeden strom tak ok, jinak jsme dali null
+        if (fail) {return null;}
+        return new ProfileNode(parent, signatures);
+    }
+
+
 
     public ProfileNode(RootNode parent, List<AB<Integer,Type>> signatures) {
         this.parent = parent;
-
         this.signatures = signatures;
-
         assert signatures.size() == parent.getArity();
-
-        // TODO
-
     }
 
     // TODO projít a znovu pochopit, pokud jde tak zjednodušit (možná by stačil jen ten else, ale nevim zatim)
@@ -57,8 +68,6 @@ public class ProfileNode {
 
         return ret;
     }
-
-
 
 
 

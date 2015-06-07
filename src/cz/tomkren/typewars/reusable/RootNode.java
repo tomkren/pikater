@@ -5,22 +5,36 @@ import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.F;
 import cz.tomkren.typewars.Type;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RootNode {
 
-    private final TypeNode parent;
+    private final SizeNode grandpa;
 
     private final SmartSym sym;
     private List<ProfileNode> profiles;
     private int num;
 
-    public RootNode(SmartSym sym, TypeNode parent) {
+    public static RootNode mk(SmartSym sym, SizeNode grandpa) {
+        List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(sym, grandpa);
+
+        if (allSimpleProfiles.size() == 0) {return null;}
+
+        List<List<AB<Integer,Type>>> allSignatures = F.map(allSimpleProfiles, sp -> F.zip(sp, sym.getArgTypes()));
+
+        return new RootNode(sym, grandpa, allSignatures);
+    }
+
+    private RootNode(SmartSym sym, SizeNode grandpa, List<List<AB<Integer,Type>>> allSignatures) {
+        this.sym = sym;
+        this.grandpa = grandpa;
+        this.profiles = F.map(allSignatures, signatures -> new ProfileNode(this, signatures) );
+    }
+
+
+    /*private RootNode(SmartSym sym, TypeNode parent, List<List<Integer>> allSimpleProfiles) {
         this.sym = sym;
         this.parent = parent;
-
-        List<List<Integer>> allSimpleProfiles = ProfileNode.possibleSimpleProfiles(getTreeSize(), getArity());
         this.profiles = F.map(allSimpleProfiles, this::mkProfile);
     }
 
@@ -29,19 +43,15 @@ public class RootNode {
 
         List<AB<Integer,Type>> signatures = F.zip(simpleProfile, sym.getArgTypes());
         return new ProfileNode(this, signatures);
+    }*/
+
+
+    private static List<List<Integer>> possibleSimpleProfiles(SmartSym sym, SizeNode grandpa) {
+        return ProfileNode.possibleSimpleProfiles(grandpa.getTreeSize(), sym.getArity());
     }
 
-    public static RootNode mk(SmartSym sym, TypeNode parent) {
-
-        // todo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return null;
-    }
-
-    public TreeTree getTreeTree() {return parent.getTreeTree();}
+    public TreeTree getTreeTree() {return grandpa.getTreeTree();}
 
     public int getArity() {return sym.getArity();}
-    public int getTreeSize() {
-        return parent.getTreeSize();
-    }
+    //public int getTreeSize() {return grandpa.getTreeSize();}
 }

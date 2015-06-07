@@ -2,6 +2,7 @@ package cz.tomkren.helpers;
 
 import com.mysql.fabric.xmlrpc.base.Array;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -286,6 +287,11 @@ public class F {
         }
 
         return ret;
+    }
+
+
+    public static boolean isZero(BigInteger big) {
+        return big.compareTo(BigInteger.ZERO) == 0;
     }
 
 
