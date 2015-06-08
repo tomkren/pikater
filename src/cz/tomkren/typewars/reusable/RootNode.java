@@ -1,34 +1,57 @@
 package cz.tomkren.typewars.reusable;
 
 
-import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.F;
+import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.Type;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public class RootNode {
 
-    private final SizeNode grandpa;
+    private final QueryResult parent;
 
     private final SmartSym sym;
     private List<ProfileNode> profiles;
-    private int num;
+    private BigInteger num;
 
-    public static RootNode mk(SmartSym sym, SizeNode grandpa) {
-        List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(sym, grandpa);
+    public BigInteger getNum() {return num;}
+
+    public Type getRootType() {
+        throw new TODO();
+    }
+
+    public static RootNode mk(SmartSym sym, QueryResult parent) {
+        List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(sym, parent);
 
         if (allSimpleProfiles.size() == 0) {return null;}
 
-        List<List<AB<Integer,Type>>> allSignatures = F.map(allSimpleProfiles, sp -> F.zip(sp, sym.getArgTypes()));
+        List<List<Query>> allSignatures = F.map(allSimpleProfiles, sp -> F.zipWith(sym.getArgTypes(), sp, Query::new));
 
-        return new RootNode(sym, grandpa, allSignatures);
+
+
+        RootNode rn = new RootNode(sym, parent, allSignatures);
+
+        if (F.isZero(rn.getNum())) {return null;}
+
+        return rn;
     }
 
-    private RootNode(SmartSym sym, SizeNode grandpa, List<List<AB<Integer,Type>>> allSignatures) {
+    private RootNode(SmartSym sym, QueryResult parent, List<List<Query>> allSignatures) {
         this.sym = sym;
-        this.grandpa = grandpa;
+        this.parent = parent;
         this.profiles = F.map(allSignatures, signatures -> new ProfileNode(this, signatures) );
+
+        num = BigInteger.ZERO;
+
+        // TODO odfiltrovat signatury, ktery maj aspon jeden prazný query
+        // TODO pokud žádná nezbyde tak vrátit null
+
+        // TODO aktualizovat num
+
+
+
     }
 
 
@@ -46,11 +69,11 @@ public class RootNode {
     }*/
 
 
-    private static List<List<Integer>> possibleSimpleProfiles(SmartSym sym, SizeNode grandpa) {
-        return ProfileNode.possibleSimpleProfiles(grandpa.getTreeSize(), sym.getArity());
+    private static List<List<Integer>> possibleSimpleProfiles(SmartSym sym, QueryResult parent) {
+        return ProfileNode.possibleSimpleProfiles(parent.getTreeSize(), sym.getArity());
     }
 
-    public TreeTree getTreeTree() {return grandpa.getTreeTree();}
+    public QuerySolver getSolver() {return parent.getSolver();}
 
     public int getArity() {return sym.getArity();}
     //public int getTreeSize() {return grandpa.getTreeSize();}
