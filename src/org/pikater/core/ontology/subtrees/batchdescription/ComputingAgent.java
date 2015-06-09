@@ -280,6 +280,16 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 			slots.add(validationDataC);
 		}
 
+		if (dataToLabel != null) {
+			DataSourceDescription dataToLabelC = new DataSourceDescription();
+			dataToLabelC
+					.setInputType(CoreConstant.SlotContent.DATA_TO_LABEL
+							.getSlotName());
+			dataToLabelC.setOutputType(dataToLabel.getOutputType());
+			dataToLabelC.setDataProvider(dataToLabel.getDataProvider());
+			slots.add(dataToLabelC);
+		}
+
 		if (evaluationMethod != null) {
 			DataSourceDescription evaluationMethodDataC = new DataSourceDescription();
 			evaluationMethodDataC
@@ -315,6 +325,11 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.VALIDATION_DATA
 						.getSlotName());
 		validationData = descriptinValidationData;
+
+		DataSourceDescription descriptinDataToLabel = descriptions
+				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.DATA_TO_LABEL
+						.getSlotName());
+		dataToLabel = descriptinDataToLabel;
 
 		DataSourceDescription descriptinevaluationMethodData = descriptions
 				.getDataSourceDescriptionIBynputType(CoreConstant.SlotContent.EVALUATION_METHOD

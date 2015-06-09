@@ -248,10 +248,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 				datas.importExternalTestFileName(dataToLabelEdge.getDataSourceId());
 				String fileName = DataManagerService
 						.translateExternalFilename(myAgent, userID, dataToLabelEdge.getDataSourceId());
-				datas.importInternalTestFileName(fileName);
+				datas.importInternalLabelFileName(fileName);
 			} else {
-				datas.importExternalTestFileName(dataToLabelEdge.getDataSourceId());
-				datas.importInternalTestFileName(dataToLabelEdge.getDataSourceId());
+				datas.importExternalLabelFileName(dataToLabelEdge.getDataSourceId());
+				datas.importInternalLabelFileName(dataToLabelEdge.getDataSourceId());
 			}
 		}
 		else{

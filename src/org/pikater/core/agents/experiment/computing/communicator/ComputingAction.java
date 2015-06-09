@@ -347,7 +347,7 @@ public class ComputingAction extends FSMBehaviour {
 				// Save datasource and inform datasource
 				// manager about this particular datasource
 				AgentDataSource.SerializeFile(labeledTest,
-						resultMsg.getConversationId() + ".labeledtest");
+						incomingRequest.getConversationId() + ".labeledtest");
 				
 				PikaterAgent pikaterAgent = (PikaterAgent) myAgent;
 				AgentDataSourceCommunicator dsCom =

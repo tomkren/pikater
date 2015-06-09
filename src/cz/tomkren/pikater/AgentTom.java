@@ -210,7 +210,14 @@ public class AgentTom extends PikaterAgent {
 
 	private void askPresetExample() throws IOException {
 
-		ITestExperiment testExperiment = new Net01();
+		ITestExperiment testExperiment = null;
+		try {
+			testExperiment = CoreConfiguration.getCurrentKlaraInput();
+
+		} catch (Exception e) {
+			logException(String.format("Could not load current input from '%s'.", CoreConfiguration.getConfigurationFileName()), e);
+			return;
+		}
 
 		System.out.println(String.format(" Do you wish to run experiment '%s' ? (y/n)", testExperiment.getClass().getName()));
 		System.out.print(">");

@@ -19,7 +19,6 @@ public abstract class SlotsHelper {
 	
 	/**
 	 * Get the input slots definition for the ontology
-	 * {@link CARecSearchComplex}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getIntputSlots_CARecSearchComplex() {
@@ -42,7 +41,6 @@ public abstract class SlotsHelper {
 
 	/**
 	 * Get the output slots definition for the ontology
-	 * {@link CARecSearchComplex}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlots_CARecSearchComplex() {
@@ -51,26 +49,26 @@ public abstract class SlotsHelper {
 	
 	/**
 	 * Get the input slots definition for the ontology
-	 * {@link ComputingAgent}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getInputSlots_CA() {
 		Slot trainingSlot = new Slot(SlotContent.TRAINING_DATA);
 		Slot testingSlot = new Slot(SlotContent.TESTING_DATA);
 		Slot validationSlot = new Slot(SlotContent.VALIDATION_DATA);
+		Slot dataToLabelSlot = new Slot(SlotContent.DATA_TO_LABEL);
 		Slot evaluationMethodSlot = new Slot(SlotContent.EVALUATION_METHOD);
 		
 		return Arrays.asList(
 				trainingSlot,
 				testingSlot,
 				validationSlot,
+				dataToLabelSlot,
 				evaluationMethodSlot
 		);
 	}
 
 	/**
 	 * Get the output slots definition for the ontology
-	 * {@link ComputingAgent}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlots_CA() {
@@ -83,7 +81,6 @@ public abstract class SlotsHelper {
 
 	/**
 	 * Get the output slots definition for the ontology
-	 * {@link Search}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlots_Search() {
@@ -96,7 +93,6 @@ public abstract class SlotsHelper {
 
 	/**
 	 * Get the input slots definition for the ontology
-	 * {@link Recommend}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getInputSlots_Recommend() {
@@ -107,7 +103,6 @@ public abstract class SlotsHelper {
 
 	/**
 	 * Get the output slots definition for the ontology
-	 * {@link Recommend}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlots_Recommend() {
@@ -118,7 +113,6 @@ public abstract class SlotsHelper {
 	
 	/**
 	 * Get the output slots definition for the ontology
-	 * {@link EvaluationMethod}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlots_EvaluationMethod() {
@@ -128,7 +122,6 @@ public abstract class SlotsHelper {
 	
 	/**
 	 * Get the output slots definition for the ontology
-	 * {@link FileInput}
 	 * @return - list of slots
 	 */
 	public static List<Slot> getOutputSlot_FileInput() {
