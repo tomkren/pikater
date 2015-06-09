@@ -1,33 +1,41 @@
 package cz.tomkren.typewars.reusable;
 
 
-import java.util.List;
+import cz.tomkren.typewars.Type;
 
+import java.util.Map;
+
+
+// TODO promyslet jestli slouèit SizeNode a TypeNode do SignatureNode, a misto AB<Integer,Type> to zabalit do Signature
+
+@Deprecated
 public class SizeNode {
 
-    private final TreeTree parent;
+    private final QuerySolver parent;
 
     private final int n;
-    private List<TypeNode> types;
+    private Map<String, TypeNode> types;
     private int num;
 
-    public SizeNode(int n, TreeTree parent) {
+    public SizeNode(int n, QuerySolver parent) {
         this.n = n;
         this.parent = parent;
 
 
-
+        // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     }
 
+    public TypeNode getTypeNode(Type type) {
+        return types.get(type.toString());
+    }
 
 
-
-    public TreeTree getTreeTree() {
+    public QuerySolver getTreeTree() {
         return parent;
     }
 
-    public int getN() {
+    public int getTreeSize() {
         return n;
     }
 }

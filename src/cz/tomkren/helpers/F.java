@@ -1,5 +1,8 @@
 package cz.tomkren.helpers;
 
+import com.mysql.fabric.xmlrpc.base.Array;
+
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -272,6 +275,39 @@ public class F {
         return ret;
     }
 
+    public static <A,B> List<AB<A,B>> zip(List<A> xs, List<B> ys) {
+        int len = Math.min(xs.size(), ys.size());
+        List<AB<A,B>> ret = new ArrayList<>(len);
+
+        Iterator<A> xsIt = xs.iterator();
+        Iterator<B> ysIt = ys.iterator();
+
+        while (xsIt.hasNext() && ysIt.hasNext()) {
+            ret.add( new AB<>(xsIt.next(),ysIt.next()) );
+        }
+
+        return ret;
+    }
+
+    public static <A,B,C> List<C> zipWith(List<A> xs, List<B> ys, BiFunction<A,B,C> f) {
+        int len = Math.min(xs.size(), ys.size());
+        List<C> ret = new ArrayList<>(len);
+
+        Iterator<A> xsIt = xs.iterator();
+        Iterator<B> ysIt = ys.iterator();
+
+        while (xsIt.hasNext() && ysIt.hasNext()) {
+            ret.add(  f.apply(xsIt.next(), ysIt.next()) );
+        }
+
+        return ret;
+    }
+
+
+    public static boolean isZero(BigInteger big) {
+        return big.compareTo(BigInteger.ZERO) == 0;
+    }
+
 
     public static void main(String[] args) {
 
@@ -329,6 +365,15 @@ public class F {
 
         check.it( F.reduce(new ArrayList<Integer>(), (x, y) -> x + y) , "null" );
         check.it( F.reduce(Arrays.asList(1, 2, 3, 4, 5), (x, y) -> x + y) , "15" );
+
+
+        check.it( F.zip(Arrays.asList(1,2,3),Arrays.asList(3,2,1)) ,"[<1,3>, <2,2>, <3,1>]" );
+        check.it( F.zip(Arrays.asList(1,2,3),Arrays.asList(0,0)) ,"[<1,0>, <2,0>]" );
+        check.it( F.zip(Arrays.asList(1,2,3), Collections.emptyList()) ,"[]" );
+        check.it( F.zip(Collections.emptyList(), Collections.emptyList()) ,"[]" );
+        check.it( F.zip(Collections.singletonList(1),Arrays.asList(6,6,6)) ,"[<1,6>]" );
+
+        check.it( F.zipWith(Arrays.asList(1,2,3),Arrays.asList(0,0),AB::new) ,"[<1,0>, <2,0>]" );
 
 
         check.results();

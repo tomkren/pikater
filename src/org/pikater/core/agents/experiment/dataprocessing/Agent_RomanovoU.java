@@ -50,16 +50,15 @@ public class Agent_RomanovoU extends Agent_AbstractDataProcessing {
 		return agentInfo;
 	}
 
-	private Instances mergeInputs(List<DataInstances> data) {
-		Instances res = new Instances(data.get(0).toWekaInstances());
+	private DataInstances mergeInputs(List<DataInstances> data) {
+		DataInstances res = data.get(0);
 
-		List<DataInstances> mergedData = new ArrayList();
+		List<DataInstances> mergedData = new ArrayList<>();
 
 		// Instances res = new Instances(data.get(0).toWekaInstances());
 		for (int in=1; in<data.size(); in++){
-			for (int i=0; i< data.get(in).getInstances().size(); i++) {
-				res.add(data.get(in).toWekaInstances().instance(i));
-			}
+			DataInstances d = data.get(in);
+			res.getInstances().addAll(d.getInstances());
 		}
 
 		return res;
@@ -67,7 +66,7 @@ public class Agent_RomanovoU extends Agent_AbstractDataProcessing {
 
 	protected List<TaskOutput> processData(List<DataInstances> data) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances output = mergeInputs(data);
+		DataInstances output = mergeInputs(data);
 
 		res.add(makeOutput(output, "Output"));
 		return res;

@@ -1,5 +1,6 @@
 package cz.tomkren.pikater;
 
+import cz.tomkren.pikater.tests.Net01;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -51,7 +52,7 @@ public class AgentTom extends PikaterAgent {
 	 */
 	@Override
 	public List<Ontology> getOntologies() {
-		
+
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
@@ -61,7 +62,7 @@ public class AgentTom extends PikaterAgent {
 		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(ModelOntology.getInstance());
 		ontologies.add(OpenMLOntology.getInstance());
-		
+
 		return ontologies;
 	}
 	
@@ -113,64 +114,17 @@ public class AgentTom extends PikaterAgent {
 	 * @throws DataSetConverterException 
 	 */
 	private void runAutomat() throws IOException, DataSetConverterException {
-		
-		System.out.println(
-				"---------------------------------------------"
-				+ "-----------------------------------\n" +
-						
-				"| System Pikater: Multiagents system         "
-				+ "                                  |\n" +
-				
-				"---------------------------------------------"
-				+ "-----------------------------------\n" +
-				"  Hi I'm Klara's GUI console Agent ..." +
-				"\n"
-				);
 
-		if (bufferedConsole == null) {
+		System.out.println("Bond here!");
 
-			System.out.println("Error, console not found.");
+		if (!checkConsole()) {return;}
 
-			try {
-				DFService.deregister(this);
-				
-				System.out.println("Agent, will be termined.");
-				doDelete();
-				
-			} catch (FIPAException e) {
-				logException(e.getMessage(), e);
-			}
-			return;
-		}
+		//if (!checkPassword("123")) {return;}
 
-		System.out.println("Please enter your password: ");
-		String inputPassword = bufferedConsole.readLine();
-		String correctPassword = "123";
-		
-		if(!inputPassword.equals(correctPassword)){
-			System.err.println("Sorry, you're not Klara");
-			return;
-		}
-		
-		System.out.println(" I welcome you Klara !!! " +
-				"Do you welcome me? ");
+		System.out.println(" I welcome you Klara !!! " + "Do you welcome me? ");
 
-		ITestExperiment testExperiment = null;
-		try {
-			testExperiment = CoreConfiguration.getCurrentKlaraInput(); 
-			
-		} catch (Exception e) {
-			logException(String.format("Could not load current input from '%s'.", CoreConfiguration.getConfigurationFileName()), e);
-			return;
-		}
-		
-		System.out.println(String.format(" Do you wish to run experiment '%s' ? (y/n)", testExperiment.getClass().getName()));
-		System.out.print(">");
-
-		if (bufferedConsole.readLine().equals("y")) {
-			
-			runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
-		}
+		doWait(8000);
+		askPresetExample();
 
 		while (true) {
 
@@ -221,6 +175,68 @@ public class AgentTom extends PikaterAgent {
 			}
 		}
 
+	}
+
+	private boolean checkConsole() {
+		if (bufferedConsole == null) {
+
+			System.out.println("Error, console not found.");
+
+			try {
+				DFService.deregister(this);
+
+				System.out.println("Agent, will be termined.");
+				doDelete();
+
+			} catch (FIPAException e) {
+				logException(e.getMessage(), e);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkPassword(String correctPassword) throws IOException {
+		System.out.println("Please enter your password: ");
+		String inputPassword = bufferedConsole.readLine();
+
+		if(!inputPassword.equals(correctPassword)){
+			System.err.println("Sorry, you're not Klara");
+			return false;
+		}
+
+		return true;
+	}
+
+	private void askPresetExample() throws IOException {
+
+		ITestExperiment testExperiment = new Net01();
+
+		System.out.println(String.format(" Do you wish to run experiment '%s' ? (y/n)", testExperiment.getClass().getName()));
+		System.out.print(">");
+
+		if (bufferedConsole.readLine().equals("y")) {
+			runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
+		}
+	}
+
+	private void askPresetExample_old() throws IOException {
+
+		ITestExperiment testExperiment;
+		try {
+			testExperiment = CoreConfiguration.getCurrentKlaraInput();
+
+		} catch (Exception e) {
+			logException(String.format("Could not load current input from '%s'.", CoreConfiguration.getConfigurationFileName()), e);
+			return;
+		}
+
+		System.out.println(String.format(" Do you wish to run experiment '%s' ? (y/n)", testExperiment.getClass().getName()));
+		System.out.print(">");
+
+		if (bufferedConsole.readLine().equals("y")) {
+			runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
+		}
 	}
 	
 	private void openmlCommands(String command) {

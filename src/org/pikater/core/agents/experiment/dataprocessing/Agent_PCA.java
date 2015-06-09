@@ -43,7 +43,8 @@ public class Agent_PCA extends Agent_AbstractDataProcessing {
 
 	protected List<TaskOutput> processData(List<DataInstances> data) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances input = data.get(0).toWekaInstances();
+		DataInstances dinst = data.get(0);
+		Instances input = dinst.toWekaInstances();
 
 		PrincipalComponents pca = new PrincipalComponents();
 
@@ -54,7 +55,8 @@ public class Agent_PCA extends Agent_AbstractDataProcessing {
 			pca.setMaximumAttributes(maxiumAttributes); // TODO nacist z nastaveni
 
 			output = Filter.useFilter(input, pca);
-			res.add(makeOutput(output, "Output"));
+			dinst.mergePublicData(output);
+			res.add(makeOutput(dinst, "Output"));
 
 		} catch (Exception e) {
 			e.printStackTrace();

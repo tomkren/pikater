@@ -48,37 +48,39 @@ public class Agent_WeatherSplitter extends Agent_AbstractDataProcessing {
 	}
 
 
-	private Instances mergeInputs(List<DataInstances> weatherData) {
-		Instances res = new Instances(weatherData.get(0).toWekaInstances());
-		Instances second = weatherData.get(1).toWekaInstances();
-		for (int i = 0; i < second.numInstances(); ++i) {
-			res.add(second.instance(i));
-		}
+	private DataInstances mergeInputs(List<DataInstances> weatherData) {
+		DataInstances res = weatherData.get(0);
+		for (int i = 1; i < weatherData.size(); i++) {
+            res.getInstances().addAll(weatherData.get(i).getInstances());
+        }
 		return res;
 	}
 
 	protected List<TaskOutput> processData(List<DataInstances> weatherData) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances input = mergeInputs(weatherData);
+		DataInstances input = mergeInputs(weatherData);
 
-		Instances sunny = new Instances(input, 0);
-		Instances overcast = new Instances(input, 0);
-		Instances rainy = new Instances(input, 0);
+		DataInstances sunny = input.createEmptyCopy();
+		DataInstances overcast = input.createEmptyCopy();
+		DataInstances rainy = input.createEmptyCopy();
 
-		Attribute forecast = input.attribute(0);
+        Instances winput = input.toWekaInstances();
+
+
+		Attribute forecast = winput.attribute(0);
 
 		for (int i = 0; i < input.numInstances(); ++i) {
-			Instance instance = input.instance(i);
+			Instance instance = winput.instance(i);
 			String value = instance.stringValue(forecast);
 			switch (value) {
 				case "rainy":
-					rainy.add(instance);
+					rainy.add(input.getInstances().get(i));
 					break;
 				case "overcast":
-					overcast.add(instance);
+					overcast.add(input.getInstances().get(i));
 					break;
 				case "sunny":
-					sunny.add(instance);
+					sunny.add(input.getInstances().get(i));
 					break;
 				default:
 					throw new IllegalArgumentException("Unknown weather data: "

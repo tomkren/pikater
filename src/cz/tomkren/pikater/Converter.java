@@ -81,6 +81,11 @@ public class Converter {
         return convert(graph);
     }
 
+    public ComputationDescription convert(String... graphLines) throws ConverterError {
+        List<SimpleVertex> graph = SimpleVertex.readLines(graphLines);
+        return convert(graph);
+    }
+
     public ComputationDescription convert(List<SimpleVertex> graph) throws ConverterError {
 
         reset();

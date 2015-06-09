@@ -13,16 +13,32 @@ public class Instance implements Concept {
 	private static final long serialVersionUID = -767943628175500132L;
 	private List<Double> values;
 	private List<Boolean> missing;
-	private int id;
 
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+    private List<Double> privateValues;
 
-	/**
+    private int Id;
+
+    private int IDIdx;
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int ID) {
+        this.Id = ID;
+        if (this.privateValues != null)                //should be null only while reconstructing from ontology
+            this.privateValues.set(IDIdx, 1.0 * ID);
+    }
+
+    public int getIDIdx() {
+        return IDIdx;
+    }
+
+    public void setIDIdx(int IDIdx) {
+        this.IDIdx = IDIdx;
+    }
+
+    /**
 	 * @return the values
 	 */
 	public List<Double> getValues() {
@@ -33,12 +49,24 @@ public class Instance implements Concept {
 		return values.get(i);
 	}
 
+    public List<Double> getPrivateValues() {
+        return privateValues;
+    }
+
+    public Double getPrivateValue(int i) {
+        return privateValues.get(i);
+    }
+
 	/**
 	 * the values to set
 	 */
 	public void setValues(List<Double> values) {
 		this.values = values;
 	}
+
+    public void setPrivateValues(List<Double> values) {
+        this.privateValues = values;
+    }
 
 	public List<Boolean> getMissing() {
 		return missing;
