@@ -429,9 +429,9 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 				
-				addTaskOutput(InOutType.TEST, agent.test);
-				addTaskOutput(InOutType.TRAIN, agent.train);
-				addTaskOutput(InOutType.LABELED, agent.label);
+				addTaskOutput(InOutType.TEST, agent.test == null ? null :agent.ontoTest.toWekaInstances(DataInstances.Export.ALL));
+				addTaskOutput(InOutType.TRAIN, agent.train == null ? null : agent.ontoTrain.toWekaInstances(DataInstances.Export.ALL));
+				addTaskOutput(InOutType.LABELED, agent.label == null ? null : agent.ontoLabel.toWekaInstances(DataInstances.Export.ALL));
 
 				// TODO add error
 

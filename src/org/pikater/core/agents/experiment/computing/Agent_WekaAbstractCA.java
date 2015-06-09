@@ -15,10 +15,7 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.functions.RBFNetwork;
 import weka.core.Instances;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 
@@ -237,21 +234,16 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	public DataInstances getPredictions(Instances test,
 			DataInstances ontoTest) {
 
-		double[] pre = new double[test.numInstances()];
+		Double[] pre = new Double[test.numInstances()];
 		for (int i = 0; i < test.numInstances(); i++) {
 			try {
 				pre[i] = classifier.classifyInstance(test.instance(i));
 			} catch (Exception e) {
-				pre[i] = Integer.MAX_VALUE;
+				pre[i] = Double.NaN;
 			}
 		}
 
-		// copy results to the DataInstancs
-		int i = 0;
-		for (Instance instanceI : ontoTest.getInstances()) {
-			instanceI.setPrediction(pre[i]);
-			i++;
-		}
+		ontoTest.insertClassColumn(Arrays.asList(pre));
 
 		return ontoTest;
 	}
