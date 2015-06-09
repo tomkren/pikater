@@ -48,7 +48,7 @@ public class Agent_KMeans extends Agent_AbstractDataProcessing {
 	@Override
 	protected List<TaskOutput> processData(List<DataInstances> data) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
-		Instances input = data.get(0).toWekaInstances();
+		Instances input = data.get(0).toWekaInstances(DataInstances.Export.PUBLIC_WITHOUT_CLASS);
 
 		// create the model
 

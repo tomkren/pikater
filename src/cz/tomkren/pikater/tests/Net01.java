@@ -11,7 +11,7 @@ public class Net01 implements ITestExperiment {
 
     @Override
     public ComputationDescription createDescription() {
-        return BoxUtils.mkComputationDescription(
+        return BoxUtils.mkComputationDescription( "iris.arff", //"weather.arff",
                 "0 input    0 2 1:0 5:1",
                 "1 k-means  1 2 2:0 3:0",
                 "2 RBF      1 1 4:0",

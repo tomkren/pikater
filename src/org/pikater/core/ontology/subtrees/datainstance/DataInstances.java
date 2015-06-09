@@ -14,6 +14,8 @@ import weka.core.Instances;
 
 public class DataInstances implements Concept {
 
+	public enum Export {PUBLIC, ALL, PUBLIC_WITHOUT_CLASS};
+
 	private static final long serialVersionUID = 4166896666680482675L;
 	
 	private List<Attribute> attributes;
@@ -32,6 +34,9 @@ public class DataInstances implements Concept {
 	}
 
 	public void add(Instance inst) {
+		if (instances == null)
+			instances = new ArrayList<>();
+
 		instances.add(inst);
 	}
 
@@ -188,20 +193,24 @@ public class DataInstances implements Concept {
 	}
 
 	public weka.core.Instances toWekaInstances() {
-		return toWekaInstances(true);
+		return toWekaInstances(Export.PUBLIC);
 	}
 
-	public weka.core.Instances toWekaInstances(boolean ignorePrivate) {
+	public weka.core.Instances toWekaInstances(Export export) {
 		// attributes
 		FastVector wattrs = new FastVector();
 
-		if (!ignorePrivate) {
+		if (export == Export.ALL) {
 			for (Attribute attr : privateAttributes) {
 				wattrs.addElement(attr.toWekaAttribute());
 			}
 		}
 
-		for (Attribute attr : attributes) {
+		for (int i =0; i < attributes.size(); i++) {
+			if (i == classIndex && export == Export.PUBLIC_WITHOUT_CLASS) {
+				continue;
+			}
+			Attribute attr = attributes.get(i);
 			wattrs.addElement(attr.toWekaAttribute());
 		}
 
@@ -213,7 +222,7 @@ public class DataInstances implements Concept {
 
 			ArrayList<Double> vals = new ArrayList<>();
 
-			if (!ignorePrivate) {
+			if (export == Export.ALL) {
 				for (int i = 0; i < privateAttributes.size(); i++) {
 					double val = instanceI.getPrivateValues().get(i);
 					vals.add(val);
@@ -221,6 +230,9 @@ public class DataInstances implements Concept {
 			}
 
 			for (int i = 0; i < attributes.size(); i++) {
+				if (i == classIndex && export == Export.PUBLIC_WITHOUT_CLASS) {
+					continue;
+				}
 				double val = instanceI.getValues().get(i);
 				if ( instanceI.getMissing().get(i) ) {
 					vals.add(weka.core.Instance.missingValue());
@@ -233,7 +245,8 @@ public class DataInstances implements Concept {
 			winst.setDataset(winsts);
 			winsts.add(winst);
 		}
-		winsts.setClassIndex(this.classIndex);
+		if (export != Export.PUBLIC_WITHOUT_CLASS)
+			winsts.setClassIndex(this.classIndex);
 		return winsts;
 	}
 
