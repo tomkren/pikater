@@ -11,15 +11,20 @@ import org.pikater.core.ontology.subtrees.batchdescription.*;
 import java.util.List;
 import java.util.function.Function;
 
+// TODO udìlat to nestatický !!!!!!!!!!!!!!!!!!!!
+
+
 /** Created by tom on 5. 6. 2015. */
 public class BoxUtils {
 
     public static final Converter CONVERTER;
 
+    public static final InputPrototype input = new InputPrototype("weather.arff");
+
+
     static {
 
         // Jednotlivý krabièky
-        BoxPrototype input = new InputPrototype("weather.arff");
 
         BoxPrototype err = new BoxPrototype("err", Agent_Accuracy.class, BoxPrototype::mkDataProcessing_default, BoxUtils::err_setSources, BoxUtils::err_mkOutput);
 
@@ -39,7 +44,13 @@ public class BoxUtils {
         return CONVERTER;
     }
 
-    public static ComputationDescription mkComputationDescription(String... graphLines) {
+    public static ComputationDescription mkComputationDescription(String filename, String... graphLines) {
+        input.setFilename(filename);
+        return mkComputationDescription_(graphLines);
+    }
+
+
+    public static ComputationDescription mkComputationDescription_(String... graphLines) {
         try {
             return BoxUtils.getConverter().convert(graphLines);
         } catch (Converter.ConverterError converterError) {
@@ -49,7 +60,7 @@ public class BoxUtils {
     }
 
 
-    public static ComputationDescription mkComputationDescription(ComputationDescription ifThisNull, String... graphLines) {
+    public static ComputationDescription mkComputationDescription_(ComputationDescription ifThisNull, String... graphLines) {
         if (ifThisNull == null) {
             try {
                 return BoxUtils.getConverter().convert(graphLines);

@@ -2,10 +2,13 @@ package cz.tomkren.typewars.reusable;
 
 
 import cz.tomkren.helpers.F;
+import cz.tomkren.typewars.Sub;
+import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProfileNode {
 
@@ -23,18 +26,36 @@ public class ProfileNode {
 
         num = BigInteger.ZERO;
 
-        for (Query query : signatures) {
+        Sub sub = new Sub();
+
+        for (Query preQuery : signatures) {
 
             // TODO před dotazem musíme na query aplikovat substituci
 
+            Query query = new Query(sub, preQuery);
+
             QueryResult qResult = parent.getSolver().query(query);
+
+
 
             if (F.isZero(qResult.getNum())) {
                 num = BigInteger.ZERO;
                 break;
             }
 
-            List<BigInteger> qNums = qResult.getNums();
+
+            for (Map.Entry<Type,SubResult> e : qResult.getSubResultMap().entrySet()) {
+                SubResult subResult = e.getValue();
+
+                Sub subResultSub = subResult.getSub();
+
+                subResultSub.dot(sub);
+                sub = subResultSub;
+
+                // TODO
+
+            }
+
 
             // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
