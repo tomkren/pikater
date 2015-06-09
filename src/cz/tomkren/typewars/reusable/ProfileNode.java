@@ -1,42 +1,49 @@
 package cz.tomkren.typewars.reusable;
 
 
-import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.F;
-import cz.tomkren.typewars.Type;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileNode {
 
     private final RootNode parent;
-    private final List<AB<Integer,Type>> signatures;
-    private int num;
+    private final List<Query> signatures;
+    private BigInteger num;
 
-    // private List<PolyTree> trees;
-
-    public static ProfileNode mk(RootNode parent, List<AB<Integer,Type>> signatures) {
-
-        boolean fail = false;
-        for (AB<Integer,Type> signature :signatures) {
-            if (F.isZero(parent.getTreeTree().getTypeNode(signature).getNum())) {
-                fail = true;
-                break;
-            }
-        }
-
-        // pokud existuje pro kazdou ze signatur aspon jeden strom tak ok, jinak jsme dali null
-        if (fail) {return null;}
-        return new ProfileNode(parent, signatures);
-    }
+    // private Map<?,PolyTree> trees;
 
 
-
-    public ProfileNode(RootNode parent, List<AB<Integer,Type>> signatures) {
+    public ProfileNode(RootNode parent, List<Query> signatures) {
         this.parent = parent;
         this.signatures = signatures;
         assert signatures.size() == parent.getArity();
+
+        num = BigInteger.ZERO;
+
+        for (Query query : signatures) {
+
+            // TODO před dotazem musíme na query aplikovat substituci
+
+            QueryResult qResult = parent.getSolver().query(query);
+
+            if (F.isZero(qResult.getNum())) {
+                num = BigInteger.ZERO;
+                break;
+            }
+
+            List<BigInteger> qNums = qResult.getNums();
+
+            // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            // todo: hlavně to nepude timdle forcyklem, protože se to větví
+
+        }
+
+
+
     }
 
     // TODO projít a znovu pochopit, pokud jde tak zjednodušit (možná by stačil jen ten else, ale nevim zatim)
@@ -71,7 +78,7 @@ public class ProfileNode {
 
 
 
-    public TreeTree getTreeTree() {return parent.getTreeTree();}
+    public QuerySolver getTreeTree() {return parent.getSolver();}
 
 
 }

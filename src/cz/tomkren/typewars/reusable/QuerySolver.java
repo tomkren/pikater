@@ -1,20 +1,43 @@
 package cz.tomkren.typewars.reusable;
 
 
-import cz.tomkren.helpers.AB;
-import cz.tomkren.typewars.Type;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TreeTree {
+public class QuerySolver {
 
     private SmartLib lib;
+    private Map<String,QueryResult> queries;
+
+    public QuerySolver(SmartLib lib) {
+        this.lib = lib;
+        queries = new HashMap<>();
+    }
+
+    public QueryResult query(Query q) {
+        String qKey = q.toString();
+        QueryResult qNode = queries.get(qKey);
+        if (qNode == null) {
+            qNode = new QueryResult(q, this);
+        }
+        return qNode;
+    }
+
+
+    public SmartLib getLib() {
+        return lib;
+    }
+
+}
+
+
+    /*
     private List<SizeNode> sizes;
 
     public TreeTree(SmartLib lib) {
         this.lib = lib;
-        sizes = new ArrayList<>();
+        //sizes = new ArrayList<>();
+        queries = new HashMap<>();
     }
 
     public int addSize() {
@@ -39,9 +62,5 @@ public class TreeTree {
         SizeNode sizeNode = getSizeNode(treeSize);
         if (sizeNode == null) {return null;}
         return sizeNode.getTypeNode(type);
-    }
+    }*/
 
-    public SmartLib getLib() {
-        return lib;
-    }
-}

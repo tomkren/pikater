@@ -289,6 +289,20 @@ public class F {
         return ret;
     }
 
+    public static <A,B,C> List<C> zipWith(List<A> xs, List<B> ys, BiFunction<A,B,C> f) {
+        int len = Math.min(xs.size(), ys.size());
+        List<C> ret = new ArrayList<>(len);
+
+        Iterator<A> xsIt = xs.iterator();
+        Iterator<B> ysIt = ys.iterator();
+
+        while (xsIt.hasNext() && ysIt.hasNext()) {
+            ret.add(  f.apply(xsIt.next(), ysIt.next()) );
+        }
+
+        return ret;
+    }
+
 
     public static boolean isZero(BigInteger big) {
         return big.compareTo(BigInteger.ZERO) == 0;
@@ -358,6 +372,9 @@ public class F {
         check.it( F.zip(Arrays.asList(1,2,3), Collections.emptyList()) ,"[]" );
         check.it( F.zip(Collections.emptyList(), Collections.emptyList()) ,"[]" );
         check.it( F.zip(Collections.singletonList(1),Arrays.asList(6,6,6)) ,"[<1,6>]" );
+
+        check.it( F.zipWith(Arrays.asList(1,2,3),Arrays.asList(0,0),AB::new) ,"[<1,0>, <2,0>]" );
+
 
         check.results();
     }

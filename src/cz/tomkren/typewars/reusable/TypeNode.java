@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class TypeNode {
 
     private final SizeNode parent;
@@ -18,10 +19,10 @@ public class TypeNode {
         List<RootNode> roots = new ArrayList<>();
 
         // TODO
-        for (SmartSym sym : parent.getTreeTree().getLib().getSyms()) {
+        /*for (SmartSym sym : parent.getTreeTree().getLib().getSyms()) {
             RootNode rn = RootNode.mk(sym, parent);
             if (rn != null) {roots.add(rn);}
-        }
+        }*/
 
         if (roots.isEmpty()) {return null;}
         return new TypeNode(parent, roots);
@@ -35,7 +36,7 @@ public class TypeNode {
 
 
 
-    //public TreeTree getTreeTree() {return parent.getTreeTree();}
+    //public TreeTree getSolver() {return parent.getSolver();}
     // public int getTreeSize() {return parent.getTreeSize();}
 
 }
