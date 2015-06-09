@@ -1,5 +1,9 @@
 package cz.tomkren.pikater;
 
+import cz.tomkren.helpers.AB;
+import cz.tomkren.helpers.F;
+import cz.tomkren.helpers.Log;
+import cz.tomkren.pikater.tests.CommentedExperiment;
 import cz.tomkren.pikater.tests.Net01;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -33,6 +37,7 @@ import org.pikater.shared.database.util.DataSetConverter;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -42,6 +47,24 @@ import java.util.List;
  *
  */
 public class AgentTom extends PikaterAgent {
+
+	private List<CommentedExperiment> presetExperiments;
+	private void addPresetExperiments() {
+		presetExperiments = Arrays.asList(
+				new CommentedExperiment(oldSchoolKlaraInput(),"klářin oblíbený experiment"),
+				new CommentedExperiment(new Net01(),"2-means 2xRBF U")
+		);
+	}
+
+	private ITestExperiment oldSchoolKlaraInput() {
+		try {
+			return CoreConfiguration.getCurrentKlaraInput();
+		} catch (Exception e) {
+			logException(String.format("Could not load current input from '%s'.", CoreConfiguration.getConfigurationFileName()), e);
+			return null;
+		}
+	}
+
 
 	private static final long serialVersionUID = -3908734088006529947L;
 	private static final boolean DEBUG_MODE = false;
@@ -123,7 +146,7 @@ public class AgentTom extends PikaterAgent {
 
 		System.out.println(" I welcome you Klara !!! " + "Do you welcome me? ");
 
-		doWait(8000);
+		doWait(1000);
 		askPresetExample();
 
 		while (true) {
@@ -210,21 +233,38 @@ public class AgentTom extends PikaterAgent {
 
 	private void askPresetExample() throws IOException {
 
-		ITestExperiment testExperiment = null;
-		try {
-			testExperiment = CoreConfiguration.getCurrentKlaraInput();
+		Log.it("Input experiment number to run:");
 
-		} catch (Exception e) {
-			logException(String.format("Could not load current input from '%s'.", CoreConfiguration.getConfigurationFileName()), e);
-			return;
+		addPresetExperiments();
+
+		for (int i = 0; i < presetExperiments.size(); i++) {
+			CommentedExperiment ce = presetExperiments.get(i);
+			Log.it("  " + i + "\t" + ce.getExperiment().getClass().getName() + "\t\t a.k.a. " + ce.getComment());
 		}
 
-		System.out.println(String.format(" Do you wish to run experiment '%s' ? (y/n)", testExperiment.getClass().getName()));
 		System.out.print(">");
 
-		if (bufferedConsole.readLine().equals("y")) {
-			runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
+		String inputStr = bufferedConsole.readLine();
+
+		try {
+			int iExperiment = Integer.parseInt(inputStr);
+
+			if (iExperiment < 0 || iExperiment >= presetExperiments.size()) {
+				Log.it(inputStr + " is not in range {0,...,"+(presetExperiments.size()-1)+"}.");
+				askPresetExample();
+			} else {
+				ITestExperiment testExperiment = presetExperiments.get(iExperiment).getExperiment();
+				runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
+			}
+
+		}catch (NumberFormatException e) {
+			Log.it(inputStr + " is not an integer...");
+			askPresetExample();
 		}
+
+
+
+
 	}
 
 	private void askPresetExample_old() throws IOException {

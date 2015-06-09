@@ -17,16 +17,17 @@ import java.util.function.Function;
 /** Created by tom on 5. 6. 2015. */
 public class BoxUtils {
 
-    public static final Converter CONVERTER;
-
-    public static final InputPrototype input = new InputPrototype("weather.arff");
 
 
-    static {
+    private final Converter converter;
+
+
+    public BoxUtils(String filename) {
 
         // Jednotlivý krabièky
 
-        BoxPrototype err = new BoxPrototype("err", Agent_Accuracy.class, BoxPrototype::mkDataProcessing_default, BoxUtils::err_setSources, BoxUtils::err_mkOutput);
+        BoxPrototype input = new InputPrototype("weather.arff");
+
 
         BoxPrototype pca    = new BoxPrototype("PCA", Agent_PCA.class, BoxUtils::mkOutput0);
         BoxPrototype kmeans = new BoxPrototype("k-means", Agent_KMeans.class, BoxUtils::mkOutput_i);
@@ -34,25 +35,27 @@ public class BoxUtils {
         BoxPrototype mlp    = new BoxPrototype("MLP", Agent_WekaMultilayerPerceptronCA.class, BoxUtils::ca_MkDataProcessing, BoxUtils::ca_setSources, BoxUtils::mkOutput0);
         BoxPrototype u      = new BoxPrototype("U",   Agent_RomanovoU.class, BoxPrototype::mkDataProcessing_default, BoxUtils::setSources_binar, BoxUtils::mkOutput0);
 
+        BoxPrototype err = new BoxPrototype("err", Agent_Accuracy.class, BoxPrototype::mkDataProcessing_default, BoxUtils::err_setSources, BoxUtils::err_mkOutput);
         BoxPrototype output = new BoxPrototype("output", null, at -> new FileDataSaver(), (dp,sources)-> ((FileDataSaver)dp).setDataSource(sources.get(0)), (i,dp)-> null);
 
         // Vytvoøíme konvertor nadiktováním knihovny krabièek
-        CONVERTER = new Converter(input, pca, kmeans, rbf, mlp, u, err, output);
+        converter = new Converter(input, pca, kmeans, rbf, mlp, u, err, output);
     }
 
-    public static Converter getConverter() {
-        return CONVERTER;
+    public Converter getConverter() {
+        return converter;
     }
 
     public static ComputationDescription mkComputationDescription(String filename, String... graphLines) {
-        input.setFilename(filename);
-        return mkComputationDescription_(graphLines);
+        BoxUtils bu = new BoxUtils(filename);
+
+        return bu.mkComputationDescription_(graphLines);
     }
 
 
-    public static ComputationDescription mkComputationDescription_(String... graphLines) {
+    private ComputationDescription mkComputationDescription_(String... graphLines) {
         try {
-            return BoxUtils.getConverter().convert(graphLines);
+            return getConverter().convert(graphLines);
         } catch (Converter.ConverterError converterError) {
             converterError.printStackTrace();
             return null;
@@ -60,10 +63,10 @@ public class BoxUtils {
     }
 
 
-    public static ComputationDescription mkComputationDescription_(ComputationDescription ifThisNull, String... graphLines) {
+    private ComputationDescription mkComputationDescription_(ComputationDescription ifThisNull, String... graphLines) {
         if (ifThisNull == null) {
             try {
-                return BoxUtils.getConverter().convert(graphLines);
+                return getConverter().convert(graphLines);
             } catch (Converter.ConverterError converterError) {
                 converterError.printStackTrace();
                 return null;

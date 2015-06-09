@@ -25,8 +25,10 @@ public class Tests01 {
     public static void main(String[] args) {
         Checker ch = new Checker();
 
+        BoxUtils boxUtils = new BoxUtils("weather.arff");
 
-        Converter converter = BoxUtils.getConverter();
+
+        Converter converter = boxUtils.getConverter();
 
         try {
 
