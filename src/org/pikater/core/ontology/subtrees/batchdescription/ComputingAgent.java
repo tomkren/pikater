@@ -119,7 +119,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 		dataToLabelC.setOutputType(dataToLabel.getOutputType());
 		dataToLabelC.setDataProvider(dataToLabel.getDataProvider());
 
-		this.validationData = dataToLabelC;
+		this.dataToLabel = dataToLabelC;
 	}
 
 	public DataSourceDescription getValidationData() {
@@ -337,6 +337,8 @@ public class ComputingAgent extends DataProcessing implements IDataProvider,
 		result.setTestingData(testingData != null ? testingData.clone() : null);
 		result.setValidationData(validationData != null ? validationData
 				.clone() : null);
+		result.setDataToLabel(dataToLabel != null ? dataToLabel.clone() : null);
+
 		return result;
 	}
 

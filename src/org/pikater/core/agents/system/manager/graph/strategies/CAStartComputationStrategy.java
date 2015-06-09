@@ -98,6 +98,12 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
     	computationNode.addToOutputAndProcess(dse, "validation");
     }
 
+	public void processDataToLabel(String dataSourceName){
+		DataSourceEdge dse = new DataSourceEdge();
+		dse.setDataSourceId(dataSourceName);
+		computationNode.addToOutputAndProcess(dse, "label");
+	}
+
     /**
      * Prepare request for the manager
      * @return Message for manager
@@ -212,6 +218,13 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 			testingEdge = ((DataSourceEdge) inputs.get(CoreConstant.SlotContent.TESTING_DATA.getSlotName()).getNext());
 		}
 
+		DataSourceEdge dataToLabelEdge;
+		if( inputs.get(CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName()) == null){
+			dataToLabelEdge=null;
+		} else {
+			dataToLabelEdge = ((DataSourceEdge) inputs.get(CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName()).getNext());
+		}
+
         if (trainingEdge.isFile()) {
             datas.importExternalTrainFileName(training);
             String internalTrainFileName = DataManagerService
@@ -230,7 +243,20 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
             datas.importExternalTestFileName(testingEdge.getDataSourceId());
             datas.importInternalTestFileName(testingEdge.getDataSourceId());
         }
-
+		if (dataToLabelEdge != null) {
+			if (dataToLabelEdge.isFile()) {
+				datas.importExternalTestFileName(dataToLabelEdge.getDataSourceId());
+				String fileName = DataManagerService
+						.translateExternalFilename(myAgent, userID, dataToLabelEdge.getDataSourceId());
+				datas.importInternalTestFileName(fileName);
+			} else {
+				datas.importExternalTestFileName(dataToLabelEdge.getDataSourceId());
+				datas.importInternalTestFileName(dataToLabelEdge.getDataSourceId());
+			}
+		}
+		else{
+			// TODO
+		}
 		ExpectedDuration duration = computationNode.getExpectedDuration();
 		
 		task.setBatchID(batchID);
