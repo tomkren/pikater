@@ -318,7 +318,7 @@ public class ComputingAction extends FSMBehaviour {
 
 							if ( (output.equals(CoreConstant.Output.EVALUATION_LABEL.name()))
 								|| (output.equals(CoreConstant.Output.LABEL_ONLY.name()))) {
-								saveDataSource(labeledData);
+								agent.getPredictions(agent.label, agent.ontoLabel);
 							}
 						}
 					}
@@ -330,56 +330,6 @@ public class ComputingAction extends FSMBehaviour {
 				}
 			}
 
-			/**
-			 * Save DataSources
-			 * 
-			 * @throws Exception
-			 */
-			private void saveDataSource (List<DataInstances> labeledData) throws Exception {
-				
-				DataInstances dataInstance = new DataInstances();
-				dataInstance.fillWekaInstances(agent.label);
-				
-				DataInstances labeledTest =
-						agent.getPredictions(agent.label, dataInstance);
-				labeledData.add(labeledTest);
-				
-				// Save datasource and inform datasource
-				// manager about this particular datasource
-				AgentDataSource.SerializeFile(labeledTest,
-						incomingRequest.getConversationId() + ".labeledtest");
-				
-				PikaterAgent pikaterAgent = (PikaterAgent) myAgent;
-				AgentDataSourceCommunicator dsCom =
-						new AgentDataSourceCommunicator(pikaterAgent);
-				
-				dsCom.registerDataSources(
-						resultMsg.getConversationId(),
-						new String[] { "labeledtest" });
-				
-				if (!agent.labelFileName.equals("")) {
-					dataInstance = new DataInstances();
-					dataInstance.fillWekaInstances(agent.label);
-					
-					DataInstances labeledPredictions =
-							agent.getPredictions(agent.label, dataInstance);
-					
-					// Save dataSource and inform dataSource manager about
-					// this particular DataSource
-					
-					AgentDataSource.SerializeFile(
-							labeledPredictions,
-							resultMsg.getConversationId()
-									+ ".labeledpredictions");
-					
-					dsCom.registerDataSources(
-							resultMsg.getConversationId(),
-							new String[] { "labeledpredictions" });
-					labeledData.add(labeledPredictions);
-				}
-				
-				eval.setLabeledData(labeledData);
-			}
 			
 			@Override
 			public boolean done() {
