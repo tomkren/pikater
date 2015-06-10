@@ -8,6 +8,7 @@ import org.pikater.core.agents.experiment.dataprocessing.Agent_PCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_RomanovoU;
 import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.Standard;
 
 
 /**
@@ -72,6 +73,8 @@ public final class Rucni implements ITestExperiment {
         rbf.setTestingData(dataSourceKMeans1);
         rbf.setValidationData(dataSourceKMeans1);
         rbf.setDataToLabel(dataSourceKMeans1);
+        rbf.setEvaluationMethod(new EvaluationMethod(Standard.class.getName()));
+
 
         // TODO
 		//rbf.setEvaluationMethod(new EvaluationMethod(CrossValidation.class.getName()));
@@ -84,6 +87,8 @@ public final class Rucni implements ITestExperiment {
         mlp.setTestingData(dataSourceKMeans2);
         mlp.setValidationData(dataSourceKMeans2);
         mlp.setDataToLabel(dataSourceKMeans2);
+        mlp.setEvaluationMethod(new EvaluationMethod(Standard.class.getName()));
+
 
 
         // Labeled data labeled by our CA are the new datasource

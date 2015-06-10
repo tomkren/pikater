@@ -6,6 +6,7 @@ import org.pikater.core.agents.experiment.dataprocessing.Agent_PCA;
 import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.experiments.ITestExperiment;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.Standard;
 
 /**
  * Single datasource -> single computing agent -> single save.
@@ -50,6 +51,8 @@ public final class Net_PCA_RBF_onto implements ITestExperiment {
         rbf.setTestingData   (dataSourcePCA);
         rbf.setValidationData(dataSourcePCA);
         rbf.setDataToLabel   (dataSourcePCA);
+        rbf.setEvaluationMethod(new EvaluationMethod(Standard.class.getName()));
+
 
         // TODO
 		/* rbf.setEvaluationMethod(new EvaluationMethod(

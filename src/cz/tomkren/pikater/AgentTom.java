@@ -1,5 +1,6 @@
 package cz.tomkren.pikater;
 
+import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.pikater.tests.CommentedExperiment;
 import cz.tomkren.pikater.tests.Net_2means_2RBF_U_gen;
@@ -148,10 +149,18 @@ public class AgentTom extends PikaterAgent {
 
 		System.out.println(" I welcome you Klara !!! " + "Do you welcome me? ");
 
-		doWait(1000);
-		askPresetExample();
+		int waitTime = 1000;
+
+		addPresetExperiments();
+		doWait(waitTime);
+		printExperimentTable();
 
 		while (true) {
+			askPresetExample();
+			doWait(waitTime);
+		}
+
+		/*while (true) {
 
 			System.out.print(">");
 			
@@ -198,7 +207,7 @@ public class AgentTom extends PikaterAgent {
 						" --help"
 						);
 			}
-		}
+		}*/
 
 	}
 
@@ -235,38 +244,39 @@ public class AgentTom extends PikaterAgent {
 
 	private void askPresetExample() throws IOException {
 
-		Log.it("Input experiment number to run:");
-
-		addPresetExperiments();
-
-		for (int i = 0; i < presetExperiments.size(); i++) {
-			CommentedExperiment ce = presetExperiments.get(i);
-			Log.it("  " + i + "\t" + ce.getExperiment().getClass().getName() + "\t\t ... " + ce.getComment());
-		}
-
-		System.out.print(">");
+		System.out.print("> ");
 
 		String inputStr = bufferedConsole.readLine();
 
 		try {
 			int iExperiment = Integer.parseInt(inputStr);
 
-			if (iExperiment < 0 || iExperiment >= presetExperiments.size()) {
-				Log.it(inputStr + " is not in range {0,...,"+(presetExperiments.size()-1)+"}.");
-				askPresetExample();
+			if (iExperiment == 0) {
+				printExperimentTable();
+			} else if (iExperiment < 0 || iExperiment > presetExperiments.size()) {
+				Log.it(inputStr + " is not in range {0,...," + (presetExperiments.size()) + "}.");
 			} else {
-				ITestExperiment testExperiment = presetExperiments.get(iExperiment).getExperiment();
+				ITestExperiment testExperiment = presetExperiments.get(iExperiment-1).getExperiment();
 				runFile(testExperiment.getClass().getName(), testExperiment.createDescription());
 			}
 
+
 		}catch (NumberFormatException e) {
-			Log.it(inputStr + " is not an integer...");
-			askPresetExample();
+			if (inputStr != null) {
+				Log.it("\'"+ inputStr + "\' is not an integer...");
+			}
 		}
+	}
 
-
-
-
+	private void printExperimentTable() {
+		int dotsLen = 70;
+		Log.it("Input experiment number to run:");
+		Log.it("  0 "+ F.fillStr(dotsLen,".") +" Prints this table.");
+		for (int i = 0; i < presetExperiments.size(); i++) {
+			CommentedExperiment ce = presetExperiments.get(i);
+			String className = ce.getExperiment().getClass().getName();
+			Log.it("  " + (i+1) + "\t" + className + F.fillStr(dotsLen-className.length(),".") + " " + ce.getComment());
+		}
 	}
 
 	private void askPresetExample_old() throws IOException {

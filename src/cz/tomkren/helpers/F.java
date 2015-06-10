@@ -275,6 +275,14 @@ public class F {
         return ret;
     }
 
+    public static String fillStr(int n, String strToRepeatNTimes) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(strToRepeatNTimes);
+        }
+        return sb.toString();
+    }
+
     public static <A,B> List<AB<A,B>> zip(List<A> xs, List<B> ys) {
         int len = Math.min(xs.size(), ys.size());
         List<AB<A,B>> ret = new ArrayList<>(len);

@@ -8,6 +8,7 @@ import org.pikater.core.agents.experiment.dataprocessing.Agent_RomanovoU;
 import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.experiments.ITestExperiment;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.Standard;
 
 import java.util.List;
 import java.util.function.Function;
@@ -116,6 +117,8 @@ public class BoxUtils {
         ca.setTestingData(source);
         ca.setValidationData(source);
         ca.setDataToLabel(source);
+        ca.setEvaluationMethod(new EvaluationMethod(Standard.class.getName()));
+
     }
 
     public static void err_setSources(DataProcessing err, List<DataSourceDescription> sources) {
