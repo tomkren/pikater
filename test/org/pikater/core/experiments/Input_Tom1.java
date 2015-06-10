@@ -53,18 +53,22 @@ public final class Input_Tom1 implements ITestExperiment {
 		// Data processed by pca are the new datasource
 		DataSourceDescription dataSourcePCA1 = new DataSourceDescription();
 		dataSourcePCA1.setOutputType(CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
+		dataSourcePCA1.setInputType(CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
 		dataSourcePCA1.setDataProvider(pca);
 
 		DataSourceDescription dataSourcePCA2 = new DataSourceDescription();
 		dataSourcePCA2.setOutputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
+		dataSourcePCA2.setInputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
 		dataSourcePCA2.setDataProvider(pca);
 
 		DataSourceDescription dataSourcePCA3 = new DataSourceDescription();
 		dataSourcePCA3.setOutputType(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
+		dataSourcePCA2.setInputType(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
 		dataSourcePCA3.setDataProvider(pca);
 
 		DataSourceDescription dataSourcePCA4 = new DataSourceDescription();
 		dataSourcePCA4.setOutputType(CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName());
+		dataSourcePCA4.setInputType(CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName());
 		dataSourcePCA4.setDataProvider(pca);
 
 
