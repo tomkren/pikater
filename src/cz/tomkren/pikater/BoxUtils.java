@@ -25,9 +25,7 @@ public class BoxUtils {
     public BoxUtils(String filename) {
 
         // Jednotlivý krabièky
-
-        BoxPrototype input = new InputPrototype("weather.arff");
-
+        BoxPrototype input = new InputPrototype(filename);
 
         BoxPrototype pca    = new BoxPrototype("PCA", Agent_PCA.class, BoxUtils::mkOutput0);
         BoxPrototype kmeans = new BoxPrototype("k-means", Agent_KMeans.class, BoxUtils::mkOutput_i);

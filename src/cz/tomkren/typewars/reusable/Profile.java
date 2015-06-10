@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ProfileNode {
+public class Profile {
 
     private final RootNode parent;
     private final List<Query> signatures;
@@ -19,7 +19,7 @@ public class ProfileNode {
     // private Map<?,PolyTree> trees;
 
 
-    public ProfileNode(RootNode parent, List<Query> signatures) {
+    public Profile(RootNode parent, List<Query> signatures) {
         this.parent = parent;
         this.signatures = signatures;
         assert signatures.size() == parent.getArity();

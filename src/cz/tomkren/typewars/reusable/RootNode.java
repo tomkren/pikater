@@ -13,7 +13,7 @@ public class RootNode {
     private final QueryResult parent;
 
     private final SmartSym sym;
-    private List<ProfileNode> profiles;
+    private List<Profile> profiles;
     private BigInteger num;
 
     public BigInteger getNum() {return num;}
@@ -41,7 +41,7 @@ public class RootNode {
     private RootNode(SmartSym sym, QueryResult parent, List<List<Query>> allSignatures) {
         this.sym = sym;
         this.parent = parent;
-        this.profiles = F.map(allSignatures, signatures -> new ProfileNode(this, signatures) );
+        this.profiles = F.map(allSignatures, signatures -> new Profile(this, signatures) );
 
         num = BigInteger.ZERO;
 
@@ -70,7 +70,7 @@ public class RootNode {
 
 
     private static List<List<Integer>> possibleSimpleProfiles(SmartSym sym, QueryResult parent) {
-        return ProfileNode.possibleSimpleProfiles(parent.getTreeSize(), sym.getArity());
+        return Profile.possibleSimpleProfiles(parent.getTreeSize(), sym.getArity());
     }
 
     public QuerySolver getSolver() {return parent.getSolver();}

@@ -10,13 +10,13 @@ public class Query {
     private final Type type;
     private final int treeSize;
 
-    public Query(Sub sub, Query preQuery) {
-        this(sub.apply(preQuery.type),preQuery.treeSize);
-    }
-
     public Query(Type type, int treeSize) {
         this.type = type;
         this.treeSize = treeSize;
+    }
+
+    public Query(Sub sub, Query preQuery) {
+        this(sub.apply(preQuery.type),preQuery.treeSize);
     }
 
     @Override
