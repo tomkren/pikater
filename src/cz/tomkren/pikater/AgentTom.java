@@ -1,10 +1,10 @@
 package cz.tomkren.pikater;
 
-import cz.tomkren.helpers.AB;
-import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.pikater.tests.CommentedExperiment;
-import cz.tomkren.pikater.tests.Net01;
+import cz.tomkren.pikater.tests.Net_2means_2RBF_U_gen;
+import cz.tomkren.pikater.tests.Net_PCA_RBF_gen;
+import cz.tomkren.pikater.tests.Net_PCA_RBF_onto;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -51,8 +51,10 @@ public class AgentTom extends PikaterAgent {
 	private List<CommentedExperiment> presetExperiments;
 	private void addPresetExperiments() {
 		presetExperiments = Arrays.asList(
-				new CommentedExperiment(oldSchoolKlaraInput(),"klářin oblíbený experiment"),
-				new CommentedExperiment(new Net01(),"2-means 2xRBF U")
+				new CommentedExperiment("klářin oblíbený experiment", oldSchoolKlaraInput()),
+				new CommentedExperiment("2-means 2xRBF U [gen]", new Net_2means_2RBF_U_gen()),
+				new CommentedExperiment("PCA RBF [gen]", new Net_PCA_RBF_gen()),
+				new CommentedExperiment("PCA RBF [onto]", new Net_PCA_RBF_onto())
 		);
 	}
 
@@ -102,7 +104,7 @@ public class AgentTom extends PikaterAgent {
 
 		if (DEBUG_MODE) {
 			
-			System.out.println("GUIKlara agent starts.");
+			System.out.println("AgentTom starts.");
 			
 			ITestExperiment testExperiment = null;
 			try {
@@ -239,7 +241,7 @@ public class AgentTom extends PikaterAgent {
 
 		for (int i = 0; i < presetExperiments.size(); i++) {
 			CommentedExperiment ce = presetExperiments.get(i);
-			Log.it("  " + i + "\t" + ce.getExperiment().getClass().getName() + "\t\t a.k.a. " + ce.getComment());
+			Log.it("  " + i + "\t" + ce.getExperiment().getClass().getName() + "\t\t ... " + ce.getComment());
 		}
 
 		System.out.print(">");

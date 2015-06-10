@@ -19,11 +19,11 @@ public class SubResult {
     private BigInteger num;
 
 
-    public SubResult(Type queryType, Type rootType) {
+    public SubResult(Query query, Type rootType) {
         roots = new ArrayList<>();
         num = BigInteger.ZERO;
-        sub = Sub.mgu(queryType, rootType); // TODO: vhodný místo proèek, protože tu sub už sem musel zpoèíst pøi konstrukci rootType
-                                            // todo  ale tady se mi zda že je nìco na tom to takle znovuspoèíst
+        sub = Sub.mgu(query.getType(), rootType); // TODO: vhodný místo proèek, protože tu sub už sem musel zpoèíst pøi konstrukci rootType
+                                                  // todo  ale tady se mi zda že je nìco na tom to takle znovuspoèíst
     }
 
     public void addRoot(RootNode rn) {

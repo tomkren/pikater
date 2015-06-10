@@ -1,20 +1,14 @@
 package cz.tomkren.pikater.tests;
 
 import cz.tomkren.helpers.Checker;
-
 import cz.tomkren.pikater.BoxUtils;
 import cz.tomkren.pikater.Converter;
 import cz.tomkren.pikater.SimpleVertex;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.TypedDag;
-import net.phys2d.raw.shapes.Box;
-import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
-import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.experiments.Input_Tom1;
 import org.pikater.core.experiments.Rucni;
 import org.pikater.core.experiments.Rucni_simple;
-import org.pikater.core.ontology.subtrees.batchdescription.*;
-import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 
 import java.util.List;
 
@@ -52,6 +46,12 @@ public class Tests01 {
             );
 
             ch.eqStrSilent(converter.convert(graph_goal).exportXML(), new Rucni().createDescription().exportXML());
+
+            ch.eqStrSilent(
+                    new Net_PCA_RBF_gen().createDescription().exportXML(),
+                    new Net_PCA_RBF_onto().createDescription().exportXML()
+            );
+
 
             CodeLib.mk(
                     "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",

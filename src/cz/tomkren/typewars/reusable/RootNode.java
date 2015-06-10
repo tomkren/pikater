@@ -6,11 +6,11 @@ import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RootNode {
 
-    private final QueryResult parent;
 
     private final SmartSym sym;
     private List<Profile> profiles;
@@ -22,28 +22,23 @@ public class RootNode {
         throw new TODO();
     }
 
-    public static RootNode mk(SmartSym sym, QueryResult parent) {
-        List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(sym, parent);
+    public RootNode(SmartSym sym, Query query) {
 
-        if (allSimpleProfiles.size() == 0) {return null;}
-
-        List<List<Query>> allSignatures = F.map(allSimpleProfiles, sp -> F.zipWith(sym.getArgTypes(), sp, Query::new));
-
-
-
-        RootNode rn = new RootNode(sym, parent, allSignatures);
-
-        if (F.isZero(rn.getNum())) {return null;}
-
-        return rn;
-    }
-
-    private RootNode(SmartSym sym, QueryResult parent, List<List<Query>> allSignatures) {
         this.sym = sym;
-        this.parent = parent;
-        this.profiles = F.map(allSignatures, signatures -> new Profile(this, signatures) );
+        this.num = BigInteger.ZERO;
+        this.profiles = new ArrayList<>();
 
-        num = BigInteger.ZERO;
+        List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(sym, query);
+
+        if (allSimpleProfiles.size() == 0) {return;}
+
+        List<Type> argTypes = sym.getArgTypes();
+
+        for (List<Integer> simpleProfile : allSimpleProfiles) {
+            List<Query> queryList = F.zipWith(argTypes, simpleProfile, Query::new);
+            profiles.add(new Profile(query, queryList));
+        }
+
 
         // TODO odfiltrovat signatury, ktery maj aspon jeden prazný query
         // TODO pokud žádná nezbyde tak vrátit null
@@ -53,6 +48,7 @@ public class RootNode {
 
 
     }
+
 
 
     /*private RootNode(SmartSym sym, TypeNode parent, List<List<Integer>> allSimpleProfiles) {
@@ -69,11 +65,10 @@ public class RootNode {
     }*/
 
 
-    private static List<List<Integer>> possibleSimpleProfiles(SmartSym sym, QueryResult parent) {
-        return Profile.possibleSimpleProfiles(parent.getTreeSize(), sym.getArity());
+    private static List<List<Integer>> possibleSimpleProfiles(SmartSym sym, Query query) {
+        return Profile.possibleSimpleProfiles(query.getTreeSize(), sym.getArity());
     }
 
-    public QuerySolver getSolver() {return parent.getSolver();}
 
     public int getArity() {return sym.getArity();}
     //public int getTreeSize() {return grandpa.getTreeSize();}

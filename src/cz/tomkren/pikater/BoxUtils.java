@@ -6,6 +6,7 @@ import org.pikater.core.agents.experiment.dataprocessing.Agent_KMeans;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_PCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_RomanovoU;
 import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
+import org.pikater.core.experiments.ITestExperiment;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
 
 import java.util.List;
@@ -42,6 +43,10 @@ public class BoxUtils {
 
     public Converter getConverter() {
         return converter;
+    }
+
+    public static ITestExperiment mkITestExperiment(String filename, String... graphLines) {
+        return () -> mkComputationDescription(filename, graphLines);
     }
 
     public static ComputationDescription mkComputationDescription(String filename, String... graphLines) {

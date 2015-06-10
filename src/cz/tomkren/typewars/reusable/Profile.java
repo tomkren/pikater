@@ -12,17 +12,16 @@ import java.util.Map;
 
 public class Profile {
 
-    private final RootNode parent;
     private final List<Query> signatures;
     private BigInteger num;
 
     // private Map<?,PolyTree> trees;
 
 
-    public Profile(RootNode parent, List<Query> signatures) {
-        this.parent = parent;
+    public Profile(Query oldQuery, List<Query> signatures) {
         this.signatures = signatures;
-        assert signatures.size() == parent.getArity();
+
+        //assert signatures.size() == parent.getArity();
 
         num = BigInteger.ZERO;
 
@@ -32,9 +31,9 @@ public class Profile {
 
             // TODO před dotazem musíme na query aplikovat substituci
 
-            Query query = new Query(sub, preQuery);
+            Query newQuery = new Query(sub, preQuery);
 
-            QueryResult qResult = parent.getSolver().query(query);
+            QueryResult qResult = oldQuery.getSolver().query(newQuery);
 
 
 
@@ -96,10 +95,6 @@ public class Profile {
 
         return ret;
     }
-
-
-
-    public QuerySolver getTreeTree() {return parent.getSolver();}
 
 
 }

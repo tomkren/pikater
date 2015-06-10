@@ -15,10 +15,11 @@ public class QuerySolver {
     }
 
     public QueryResult query(Query q) {
+        q.setSolver(this);
         String qKey = q.toString();
         QueryResult qNode = queries.get(qKey);
         if (qNode == null) {
-            qNode = new QueryResult(q, this);
+            qNode = new QueryResult(q);
         }
         return qNode;
     }

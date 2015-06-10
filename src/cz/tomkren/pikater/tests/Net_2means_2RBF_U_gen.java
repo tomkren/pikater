@@ -7,11 +7,11 @@ import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescriptio
 
 /** Created by tom on 5. 6. 2015. */
 
-public class Net01 implements ITestExperiment {
+public class Net_2means_2RBF_U_gen implements ITestExperiment {
 
     @Override
     public ComputationDescription createDescription() {
-        return BoxUtils.mkComputationDescription( "iris.arff", //"weather.arff",
+        return BoxUtils.mkComputationDescription("iris.arff",
                 "0 input    0 2 1:0 5:1",
                 "1 k-means  1 2 2:0 3:0",
                 "2 RBF      1 1 4:0",
@@ -21,5 +21,7 @@ public class Net01 implements ITestExperiment {
                 "6 output   1 0"
         );
     }
+
+
 
 }

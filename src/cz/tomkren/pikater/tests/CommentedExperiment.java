@@ -13,6 +13,11 @@ public class CommentedExperiment {
         this.comment = comment;
     }
 
+    public CommentedExperiment(String comment, ITestExperiment experiment) {
+        this.experiment = experiment;
+        this.comment = comment;
+    }
+
     public ITestExperiment getExperiment() {
         return experiment;
     }

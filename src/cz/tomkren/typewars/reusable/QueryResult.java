@@ -1,5 +1,6 @@
 package cz.tomkren.typewars.reusable;
 
+import cz.tomkren.helpers.F;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
@@ -12,29 +13,24 @@ import java.util.Map;
 
 public class QueryResult {
 
-    private final QuerySolver solver;
-    private final Query query;
-
     private final Map<Type,SubResult> result;
-
     private BigInteger num;
 
-    public QueryResult(Query query, QuerySolver solver) {
-        this.solver = solver;
-        this.query = query;
+    public QueryResult(Query query) {
+
 
         result = new HashMap<>();
         num = BigInteger.ZERO;
 
-        for (SmartSym sym : solver.getLib().getSyms()) { // TODO tady pak nahradit lokalnì pro parentSym v query
-            RootNode rn = RootNode.mk(sym, this);
-            if (rn != null) {
+        for (SmartSym sym : query.getAllSyms()) { // TODO tady pak nahradit lokalnì pro parentSym v query
+            RootNode rn = new RootNode(sym, query);
+            if (!F.isZero(rn.getNum())) {
 
                 Type rootType = rn.getRootType();
                 SubResult subResult = result.get(rootType);
 
                 if (subResult == null) {
-                    subResult = new SubResult(query.getType(), rootType);
+                    subResult = new SubResult(query, rootType);
                     result.put(rootType, subResult);
                 }
 
@@ -48,15 +44,6 @@ public class QueryResult {
     public Map<Type, SubResult> getSubResultMap() {return result;}
 
     public BigInteger getNum() {return num;}
-
-    public int getTreeSize() {
-        return query.getTreeSize();
-    }
-    public Type getType() {return query.getType();}
-
-    public QuerySolver getSolver() {
-        return solver;
-    }
 
 
 }
