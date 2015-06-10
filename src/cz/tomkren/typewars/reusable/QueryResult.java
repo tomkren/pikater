@@ -1,6 +1,8 @@
 package cz.tomkren.typewars.reusable;
 
 import cz.tomkren.helpers.F;
+import cz.tomkren.helpers.TODO;
+import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
@@ -19,14 +21,19 @@ public class QueryResult {
     public QueryResult(Query query) {
 
 
+        //  pozor !!! pro jeden sym dostanu víc RootNodes
+
         result = new HashMap<>();
-        num = BigInteger.ZERO;
 
         for (SmartSym sym : query.getAllSyms()) { // TODO tady pak nahradit lokalnì pro parentSym v query
-            RootNode rn = new RootNode(sym, query);
-            if (!F.isZero(rn.getNum())) {
 
-                Type rootType = rn.getRootType();
+            Map<Type,List<RootNode>> rootsMapForSym = mkRootNodesForSym(sym, query);
+
+            for (Map.Entry<Type,List<RootNode>> e : rootsMapForSym.entrySet()) {
+
+                Type rootType = e.getKey();
+                List<RootNode> rootsForSym = e.getValue();
+
                 SubResult subResult = result.get(rootType);
 
                 if (subResult == null) {
@@ -34,10 +41,30 @@ public class QueryResult {
                     result.put(rootType, subResult);
                 }
 
-                subResult.addRoot(rn);
-                num = num.add(rn.getNum());
+                subResult.addRoots(rootsForSym);
+
             }
+
+            num = BigInteger.ZERO;
+
+            // a ještì spoètem num
+            for (Map.Entry<Type,SubResult> e : result.entrySet()) {
+                num = num.add(e.getValue().getNum());
+            }
+
         }
+    }
+
+    private Map<Type,List<RootNode>> mkRootNodesForSym(SmartSym sym, Query query) {
+        Map<Type,List<RootNode>> rootsMap = new HashMap<>();
+
+
+
+        // TODO zajistit aby nevracelo žádny prázdný rootNody v tom seznamu.....
+
+        // TODO !!!
+
+        throw new TODO();
     }
 
 
