@@ -242,7 +242,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 			}
 		}
 
-		ontoLabel.insertClassColumn(Arrays.asList(pre));
+		ontoLabel.replaceClassColumn(Arrays.asList(pre));
 
 		return ontoLabel;
 	}

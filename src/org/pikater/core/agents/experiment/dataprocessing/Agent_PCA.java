@@ -3,6 +3,7 @@ package org.pikater.core.agents.experiment.dataprocessing;
 import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.agentinfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentinfo.Slot;
+import org.pikater.core.ontology.subtrees.attribute.Attribute;
 import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
@@ -44,10 +45,12 @@ public class Agent_PCA extends Agent_AbstractDataProcessing {
 	protected List<TaskOutput> processData(List<DataInstances> data) {
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
 		DataInstances dinst = data.get(0);
-		Instances input = dinst.toWekaInstances();
+		Instances input = dinst.toWekaInstances(DataInstances.Export.PUBLIC_WITHOUT_CLASS);
 
 		PrincipalComponents pca = new PrincipalComponents();
 
+		List<Double> classes = dinst.extractClassColumn();
+		Attribute classAttr = dinst.getClassAttribute();
 		Instances output;
 
 		try {
@@ -56,6 +59,7 @@ public class Agent_PCA extends Agent_AbstractDataProcessing {
 
 			output = Filter.useFilter(input, pca);
 			dinst.mergePublicData(output);
+			dinst.appendClassColumn(classes, classAttr);
 			res.add(makeOutput(dinst, "Output"));
 
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.subtrees.datainstance;
 
 import jade.content.Concept;
+import org.w3c.dom.Attr;
 import weka.core.FastVector;
 
 import java.util.Collections;
@@ -83,6 +84,7 @@ public class DataInstances implements Concept {
 		attributes = tmp.attributes;
 		for (int i = 0; i < instances.size(); i++) {
 			instances.get(i).setValues(tmp.instances.get(i).getValues());
+			instances.get(i).setMissing(tmp.instances.get(i).getMissing());
 		}
 	}
 
@@ -109,10 +111,23 @@ public class DataInstances implements Concept {
 		return extractColumn(classIndex);
 	}
 
-	public void insertClassColumn(List<Double> predictions) {
+	public void replaceClassColumn(List<Double> predictions) {
 		for (int i = 0; i < numInstances(); i++) {
 			instances.get(i).setPrediction(predictions.get(i));
 		}
+	}
+
+	public void appendClassColumn(List<Double> predictions, Attribute a) {
+		attributes.add(a);
+		this.classIndex = attributes.size()-1;
+		for (int i = 0; i < numInstances(); i++) {
+			instances.get(i).getValues().add(predictions.get(i));
+			instances.get(i).getMissing().add(Boolean.FALSE);
+		}
+	}
+
+	public Attribute getClassAttribute() {
+		return attributes.get(classIndex);
 	}
 
 	public List<Attribute> getPrivateAttributes() {

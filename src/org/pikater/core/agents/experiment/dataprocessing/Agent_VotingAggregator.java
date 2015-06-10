@@ -72,7 +72,7 @@ public class Agent_VotingAggregator extends Agent_AbstractDataProcessing {
 			voted.add(StatUtils.mode(preds)[0]);    //TODO: this is probably biased towards lower classes
 		}
 
-		data.get(0).insertClassColumn(voted);
+		data.get(0).replaceClassColumn(voted);
 
 		return data.get(0);
 	}
