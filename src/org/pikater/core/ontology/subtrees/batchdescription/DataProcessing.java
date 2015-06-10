@@ -80,6 +80,14 @@ public class DataProcessing implements IDataProvider {
 		this.dataSources.add(dataSources);
 	}
 
+	public void addOption(NewOption option) {
+
+		if (option == null) {
+			throw new NullPointerException("Argument option can't be null");
+		}
+		this.options.add(option);
+	}
+
 	@Override
 	public List<NewOption> exportAllOptions() {
 		return this.options;

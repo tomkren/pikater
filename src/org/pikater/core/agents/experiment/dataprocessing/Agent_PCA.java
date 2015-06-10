@@ -55,7 +55,7 @@ public class Agent_PCA extends Agent_AbstractDataProcessing {
 
 		try {
 			pca.setInputFormat(input);
-			pca.setMaximumAttributes(maxiumAttributes); // TODO nacist z nastaveni
+			pca.setMaximumAttributes(maxiumAttributes);  // TODO z ontologii
 
 			output = Filter.useFilter(input, pca);
 			dinst.mergePublicData(output);
