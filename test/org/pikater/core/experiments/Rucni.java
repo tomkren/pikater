@@ -71,7 +71,7 @@ public final class Rucni implements ITestExperiment {
         rbf.setTrainingData(dataSourceKMeans1);
         rbf.setTestingData(dataSourceKMeans1);
         rbf.setValidationData(dataSourceKMeans1);
-        //rbf.setDataToLabel(dataSourceKMeans1);
+        rbf.setDataToLabel(dataSourceKMeans1);
 
         // TODO
 		//rbf.setEvaluationMethod(new EvaluationMethod(CrossValidation.class.getName()));
@@ -83,7 +83,7 @@ public final class Rucni implements ITestExperiment {
         mlp.setTrainingData(dataSourceKMeans2);
         mlp.setTestingData(dataSourceKMeans2);
         mlp.setValidationData(dataSourceKMeans2);
-        //mlp.setDataToLabel(dataSourceKMeans2);
+        mlp.setDataToLabel(dataSourceKMeans2);
 
 
         // Labeled data labeled by our CA are the new datasource
