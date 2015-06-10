@@ -60,6 +60,7 @@ public final class Input06 implements ITestExperiment {
 				
 		DataProcessing dp = new DataProcessing();
 		dp.setAgentType(Agent_WeatherSplitter.class.getName());
+		dp.setId(2938544);
 		dp.addDataSources(fileDataSource1);
 		dp.addDataSources(fileDataSource2);
 

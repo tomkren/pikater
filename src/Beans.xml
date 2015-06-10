@@ -30,6 +30,6 @@
          <property name="persistenceUnitName" value="pikaterDataModel"/>
     </bean>
     
-    <bean id="inputKlara" class="org.pikater.core.experiments.Input06" scope="singleton"/>
+    <bean id="inputKlara" class="org.pikater.core.experiments.Input_Tom1" scope="singleton"/>
 
 </beans>

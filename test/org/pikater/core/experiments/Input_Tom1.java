@@ -42,6 +42,7 @@ public final class Input_Tom1 implements ITestExperiment {
 		// PCA
 
 		DataProcessing pca = new DataProcessing();
+		pca.setId(255645436);
 		pca.setAgentType(Agent_PCA.class.getName());
 		pca.addOption(new NewOption("M",3)); // Maximum number of PC attributes to retain (-1 = include all, default: -1)
 
