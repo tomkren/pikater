@@ -72,7 +72,7 @@ public final class Input06 implements ITestExperiment {
 		dataSourceSunny.setDataProvider(dp);
 
 		DataSourceDescription dataSourceRainy = new DataSourceDescription();
-		dataSourceRainy.setOutputType("sunnyOutput");
+		dataSourceRainy.setOutputType("rainyOutput");
 		dataSourceRainy.setInputType(CoreConstant.SlotContent.TESTING_DATA.getSlotName());
 		dataSourceRainy.setDataProvider(dp);
 		
@@ -85,6 +85,7 @@ public final class Input06 implements ITestExperiment {
 		comAgent.setTrainingData(dataSourceSunny);
 		comAgent.setTestingData(dataSourceRainy);
 		comAgent.setValidationData(dataSourceRainy);
+		comAgent.setDataToLabel(dataSourceRainy);
 		comAgent.setEvaluationMethod(evaluationMethod);
 
 		DataSourceDescription computingAgentDataSource = new DataSourceDescription();

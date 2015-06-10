@@ -29,20 +29,25 @@ public class Agent_PCA extends Agent_AbstractDataProcessing {
 		agentInfo.setName("PCA");
 		agentInfo.setDescription("Weka Principal Component Analysis.");
 
-		Slot i1 = new Slot("Input",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Input data.");
+		Slot trainingSlot = new Slot(CoreConstant.SlotContent.TRAINING_DATA);
+		Slot testingSlot = new Slot(CoreConstant.SlotContent.TESTING_DATA);
+		Slot validationSlot = new Slot(CoreConstant.SlotContent.VALIDATION_DATA);
+		Slot dataToLabelSlot = new Slot(CoreConstant.SlotContent.DATA_TO_LABEL);
 
-		agentInfo.setInputSlots(Arrays.asList(i1));
+		agentInfo.setInputSlots(Arrays.asList(trainingSlot, testingSlot, validationSlot, dataToLabelSlot));
 
-		Slot o1 = new Slot("Output",
-				CoreConstant.SlotCategory.DATA_GENERAL, "Transformed data.");
+		Slot o1 = new Slot(CoreConstant.SlotContent.TRAINING_DATA.getSlotName(), CoreConstant.SlotCategory.DATA_GENERAL);
+		Slot o2 = new Slot(CoreConstant.SlotContent.TESTING_DATA.getSlotName(), CoreConstant.SlotCategory.DATA_GENERAL);
+		Slot o3 = new Slot(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName(), CoreConstant.SlotCategory.DATA_GENERAL);
+		Slot o4 = new Slot(CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName(), CoreConstant.SlotCategory.DATA_GENERAL);
 
-		agentInfo.setOutputSlots(Arrays.asList(o1));
+		agentInfo.setOutputSlots(Arrays.asList(o1, o2, o3, o4));
 
 		return agentInfo;
 	}
 
 	protected List<TaskOutput> processData(List<DataInstances> data) {
+
 		List<TaskOutput> res = new ArrayList<TaskOutput>();
 		DataInstances dinst = data.get(0);
 		Instances input = dinst.toWekaInstances(DataInstances.Export.PUBLIC_WITHOUT_CLASS);
@@ -60,7 +65,34 @@ public class Agent_PCA extends Agent_AbstractDataProcessing {
 			output = Filter.useFilter(input, pca);
 			dinst.mergePublicData(output);
 			dinst.appendClassColumn(classes, classAttr);
-			res.add(makeOutput(dinst, "Output"));
+			res.add(makeOutput(dinst, CoreConstant.SlotContent.TRAINING_DATA.getSlotName()));
+
+			dinst = data.get(1);
+			input = dinst.toWekaInstances(DataInstances.Export.PUBLIC_WITHOUT_CLASS);
+			classes = dinst.extractClassColumn();
+			classAttr = dinst.getClassAttribute();
+			output = Filter.useFilter(input, pca);
+			dinst.mergePublicData(output);
+			dinst.appendClassColumn(classes, classAttr);
+			res.add(makeOutput(dinst, CoreConstant.SlotContent.TESTING_DATA.getSlotName()));
+
+			dinst = data.get(2);
+			input = dinst.toWekaInstances(DataInstances.Export.PUBLIC_WITHOUT_CLASS);
+			classes = dinst.extractClassColumn();
+			classAttr = dinst.getClassAttribute();
+			output = Filter.useFilter(input, pca);
+			dinst.mergePublicData(output);
+			dinst.appendClassColumn(classes, classAttr);
+			res.add(makeOutput(dinst, CoreConstant.SlotContent.VALIDATION_DATA.getSlotName()));
+
+			dinst = data.get(3);
+			input = dinst.toWekaInstances(DataInstances.Export.PUBLIC_WITHOUT_CLASS);
+			classes = dinst.extractClassColumn();
+			classAttr = dinst.getClassAttribute();
+			output = Filter.useFilter(input, pca);
+			dinst.mergePublicData(output);
+			dinst.appendClassColumn(classes, classAttr);
+			res.add(makeOutput(dinst, CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName()));
 
 		} catch (Exception e) {
 			e.printStackTrace();
