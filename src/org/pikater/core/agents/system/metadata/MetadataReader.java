@@ -45,7 +45,9 @@ public class MetadataReader {
      * Constructor
      */
 	public Metadata computeMetadata(DataInstances data) {
-		
+
+		System.out.println("Metadata computation started");
+
 		Metadata metadata = new Metadata();		
 							
         // number of instances
@@ -86,6 +88,8 @@ public class MetadataReader {
         //int c=metadata.getNumberOfCategorical();
         //int r=metadata.getNumberOfReal();
         //int i=metadata.getNumberOfInteger();
+		System.out.println("Metadata computed");
+
         return metadata;
     }
     
@@ -193,24 +197,26 @@ public class MetadataReader {
     
     private double computeKolmogorovSmirnovPValue(DataInstances data, int attributeNumber){
     	
-        KolmogorovSmirnovTest kst = new KolmogorovSmirnovTest();
-		
-		double[] valuesArray = getValuesArray(data, attributeNumber, attributeNumber);
-		double[] classValuesArray = getValuesArray(data, data.getClassIndex(), attributeNumber);
-		
-		try{
-			
-			double val = kst.kolmogorovSmirnovTest(valuesArray, classValuesArray);
-			if(Double.isNaN(val)){
-				return 0.0;
-			}else{
-				return val;
-			}
-			
-		}catch(TooManyIterationsException | InsufficientDataException | NullArgumentException e){
-			
-			return 0.0;
-		}
+        return 0.0;
+
+//		KolmogorovSmirnovTest kst = new KolmogorovSmirnovTest();
+//
+//		double[] valuesArray = getValuesArray(data, attributeNumber, attributeNumber);
+//		double[] classValuesArray = getValuesArray(data, data.getClassIndex(), attributeNumber);
+//
+//		try{
+//
+//			double val = kst.kolmogorovSmirnovTest(valuesArray, classValuesArray);
+//			if(Double.isNaN(val)){
+//				return 0.0;
+//			}else{
+//				return val;
+//			}
+//
+//		}catch(TooManyIterationsException | InsufficientDataException | NullArgumentException e){
+//
+//			return 0.0;
+//		}
     }
     
     private double computeMannWhitneyUTestPValue(DataInstances data, int attributeNumber){

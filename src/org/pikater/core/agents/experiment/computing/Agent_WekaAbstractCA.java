@@ -1,7 +1,6 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.CoreConstant;
-import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchdescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.datainstance.DataInstances;
@@ -231,20 +230,20 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	}
 
 	@Override
-	public DataInstances getPredictions(Instances test,
-			DataInstances ontoTest) {
+	public DataInstances getPredictions(Instances dataToLabel,
+			DataInstances ontoLabel) {
 
-		Double[] pre = new Double[test.numInstances()];
-		for (int i = 0; i < test.numInstances(); i++) {
+		Double[] pre = new Double[dataToLabel.numInstances()];
+		for (int i = 0; i < dataToLabel.numInstances(); i++) {
 			try {
-				pre[i] = classifier.classifyInstance(test.instance(i));
+				pre[i] = classifier.classifyInstance(dataToLabel.instance(i));
 			} catch (Exception e) {
 				pre[i] = Double.NaN;
 			}
 		}
 
-		ontoTest.insertClassColumn(Arrays.asList(pre));
+		ontoLabel.insertClassColumn(Arrays.asList(pre));
 
-		return ontoTest;
+		return ontoLabel;
 	}
 }
