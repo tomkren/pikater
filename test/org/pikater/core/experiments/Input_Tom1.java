@@ -3,6 +3,7 @@ package org.pikater.core.experiments;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.experiment.dataprocessing.errorcomputing.Agent_Accuracy;
 import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.evaluationmethod.Standard;
 
 /**
  * Single datasource -> single computing agent -> single save.
@@ -29,11 +30,8 @@ public final class Input_Tom1 implements ITestExperiment {
 		rbf.setValidationData(fileDataSource);
 		rbf.setDataToLabel(fileDataSource);
 
-		// TODO
-		/* rbf.setEvaluationMethod(new EvaluationMethod(
-				CrossValidation.class.getName()));
-		rbf.setEvaluationMethod(evaluationMethod);
-		*/
+
+		rbf.setEvaluationMethod(new EvaluationMethod(Standard.class.getName()));
 
 		// Labeled data labeled by our CA are the new datasource
 		DataSourceDescription labeledDataSourceRBF = new DataSourceDescription();
