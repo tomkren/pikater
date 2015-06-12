@@ -31,15 +31,13 @@ public class Agent_Accuracy extends Agent_AbstractDataProcessing {
         agentInfo.setName("CCIPercentage");
         agentInfo.setDescription("Computes percent of correctly classified instances.");
 
-        Slot labeled = new Slot("Labeled",
-                CoreConstant.SlotCategory.DATA_GENERAL, "Labeled data.");
-        Slot original = new Slot("Original",
-                CoreConstant.SlotCategory.DATA_GENERAL, "Original data.");
+        Slot labeled = new Slot(CoreConstant.SlotContent.DATA_TO_LABEL);
+        Slot original = new Slot(CoreConstant.SlotContent.TRAINING_DATA);
 
         agentInfo.setInputSlots(Arrays.asList(labeled, original));
 
         Slot CCIpercent = new Slot("Error",
-                CoreConstant.SlotCategory.DATA_GENERAL, "Percent of correctly classified instances.");
+                CoreConstant.SlotCategory.ERROR, "Percent of correctly classified instances.");
 
         agentInfo.setOutputSlots(Arrays.asList(CCIpercent));
 
@@ -72,6 +70,7 @@ public class Agent_Accuracy extends Agent_AbstractDataProcessing {
 
         // count percentage
         double error = correct / (size/100);
+        System.out.println("ERROR: " + error);
         res.add(makeOutput(error, "Output"));
 
         return res;

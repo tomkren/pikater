@@ -1,5 +1,6 @@
 package org.pikater.core.experiments;
 
+import org.apache.poi.hssf.util.HSSFColor;
 import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_PCA;
@@ -18,6 +19,7 @@ public final class Input_Tom1 implements ITestExperiment {
 	public ComputationDescription createDescription() {
 
 		FileDataProvider fileDataProvider = new FileDataProvider();
+		fileDataProvider.setId(37);
 		fileDataProvider.setFileURI("weather.arff");
 
 		// Specify a datasource
@@ -86,8 +88,8 @@ public final class Input_Tom1 implements ITestExperiment {
 
 		// Labeled data labeled by our CA are the new datasource
 		DataSourceDescription labeledDataSourceRBF = new DataSourceDescription();
-		labeledDataSourceRBF.setInputType(CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName());
-		labeledDataSourceRBF.setOutputType("Data");
+		labeledDataSourceRBF.setInputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
+		labeledDataSourceRBF.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
 		labeledDataSourceRBF.setDataProvider(rbf);
 
 		// compute error
@@ -103,7 +105,7 @@ public final class Input_Tom1 implements ITestExperiment {
 
 		// Save labeled data
 		FileDataSaver saver = new FileDataSaver();
-		saver.setDataSource(labeledDataSourceRBF);
+		saver.setDataSource(errDataSource);
 
 		ComputationDescription comDescription = new ComputationDescription();
 		comDescription.addRootElement(saver);
