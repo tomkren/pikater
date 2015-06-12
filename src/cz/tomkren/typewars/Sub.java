@@ -18,6 +18,13 @@ public class Sub implements Function<Type,Type> {
         failMsg = null;
     }
 
+    public Sub copy() {return new Sub(this);}
+
+    private Sub(Sub subToCopy) {
+        table = new TreeMap<>(subToCopy.table);
+        failMsg = subToCopy.failMsg;
+    }
+
     public void setFail(String error) {
         failMsg = error;
     }
@@ -85,6 +92,12 @@ public class Sub implements Function<Type,Type> {
                 table.put(varId,updated);
             }
         }
+    }
+
+    public static Sub dot(Sub g, Sub f) {
+        Sub ret = g.copy();
+        ret.dot(f);
+        return ret;
     }
 
 

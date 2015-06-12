@@ -2,7 +2,6 @@ package cz.tomkren.typewars.reusable;
 
 
 import cz.tomkren.helpers.F;
-import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
@@ -11,47 +10,76 @@ import java.util.List;
 
 public class RootNode {
 
-
     private final SmartSym sym;
     private List<Profile> profiles;
     private BigInteger num;
 
-    public BigInteger getNum() {return num;}
-
-    public Type getRootType() {
-        throw new TODO();
+    public BigInteger getNum() {
+        return num;
     }
 
-    public RootNode(SmartSym sym, Query query) {
+    public RootNode(SmartSym sym, Query dadQuery) {
 
         this.sym = sym;
         this.num = BigInteger.ZERO;
         this.profiles = new ArrayList<>();
 
-        List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(sym, query);
+        List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(dadQuery.getTreeSize(), sym.getArity());
 
-        if (allSimpleProfiles.size() == 0) {return;}
+        if (allSimpleProfiles.size() == 0) {
+            return;
+        }
 
         List<Type> argTypes = sym.getArgTypes();
 
         for (List<Integer> simpleProfile : allSimpleProfiles) {
-            List<Query> queryList = F.zipWith(argTypes, simpleProfile, Query::new);
-            profiles.add(new Profile(query, queryList));
+            List<Query> sonQueries = F.zipWith(argTypes, simpleProfile, Query::new);
+            profiles.add(new Profile(dadQuery, sonQueries));
         }
-
-
-        // TODO odfiltrovat signatury, ktery maj aspon jeden prazný query
-        // TODO pokud žádná nezbyde tak vrátit null
-
-        // TODO aktualizovat num
-
-
 
     }
 
+    // TODO projít a znovu pochopit, pokud jde tak zjednodušit (možná by staèil jen ten else, ale nevim zatim)
+    public static List<List<Integer>> possibleSimpleProfiles(int fatherSize, int numArgs) {
 
+        int size = fatherSize - 1;
+        List<List<Integer>> ret = new ArrayList<>();
 
-    /*private RootNode(SmartSym sym, TypeNode parent, List<List<Integer>> allSimpleProfiles) {
+        if (numArgs == 0 || size < numArgs) {
+            return ret;
+        }
+
+        if (numArgs == 1) {
+            ret.add(F.singleton(size));
+        } else {
+
+            int n = size - (numArgs - 1);
+            for (int i = 1; i <= n; i++) {
+
+                List<List<Integer>> subResults = possibleSimpleProfiles(size - i + 1, numArgs - 1);
+
+                for (List<Integer> subResult : subResults) {
+                    List<Integer> newResult = new ArrayList<>();
+                    newResult.add(i);
+                    newResult.addAll(subResult);
+                    ret.add(newResult);
+                }
+            }
+
+        }
+
+        return ret;
+    }
+
+}
+
+    /*
+
+    public Type getRootType() {
+        throw new TODO();
+    }
+
+    private RootNode(SmartSym sym, TypeNode parent, List<List<Integer>> allSimpleProfiles) {
         this.sym = sym;
         this.parent = parent;
         this.profiles = F.map(allSimpleProfiles, this::mkProfile);
@@ -65,11 +93,9 @@ public class RootNode {
     }*/
 
 
-    private static List<List<Integer>> possibleSimpleProfiles(SmartSym sym, Query query) {
-        return Profile.possibleSimpleProfiles(query.getTreeSize(), sym.getArity());
-    }
 
 
-    public int getArity() {return sym.getArity();}
+
+    //public int getArity() {return sym.getArity();}
     //public int getTreeSize() {return grandpa.getTreeSize();}
-}
+

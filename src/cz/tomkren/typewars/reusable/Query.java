@@ -19,13 +19,17 @@ public class Query {
         this.treeSize = treeSize;
     }
 
-    public Query(Sub sub, Query preQuery) {
-        this(sub.apply(preQuery.type),preQuery.treeSize);
-        setSolver(preQuery.getSolver());
+    public Query(Sub sub, Query sonQuery) {
+        this(sub.apply(sonQuery.type), sonQuery.treeSize);
+        setSolver(sonQuery.getSolver());
     }
 
     public void setSolver(QuerySolver solver) {this.solver = solver;}
     public QuerySolver getSolver() {return solver;}
+
+    public QueryResult query(Query q) {
+        return getSolver().query(q);
+    }
 
     public List<SmartSym> getAllSyms() {
         return solver.getLib().getSyms();
