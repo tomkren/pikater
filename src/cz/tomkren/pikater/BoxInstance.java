@@ -11,7 +11,7 @@ public class BoxInstance {
     private final int id;
     private final BoxPrototype prototype;
     private final int numIn;
-    private final int numOut;
+    //private final int numOut;
 
     private DataProcessing dataProcessing;
     private List<DataSourceDescription> outputs;
@@ -20,9 +20,9 @@ public class BoxInstance {
         this.id = id;
         this.prototype = prototype;
         this.numIn = numIn;
-        this.numOut = numOut;
+        //this.numOut = numOut;
 
-        dataProcessing = prototype.mkDataProcessing();
+        dataProcessing = prototype.mkDataProcessing(id);
         outputs = prototype.mkOutputs(dataProcessing, numOut);
     }
 
@@ -36,10 +36,11 @@ public class BoxInstance {
 
 
     public int getId() {return id;}
-    public BoxPrototype getPrototype() {return prototype;}
-    public DataProcessing getDataProcessing() {return dataProcessing;}
     public List<DataSourceDescription> getOutputs() {return outputs;}
-
     public int getNumIn() {return numIn;}
-    public int getNumOut() {return numOut;}
+
+    public DataProcessing getDataProcessing() {return dataProcessing;}
+
+    //public BoxPrototype getPrototype() {return prototype;}
+    //public int getNumOut() {return numOut;}
 }

@@ -3,13 +3,12 @@ package cz.tomkren.pikater;
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.TypedDag;
-import org.pikater.core.ontology.subtrees.batchdescription.*;
+import org.pikater.core.ontology.subtrees.batchdescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.DataProcessing;
+import org.pikater.core.ontology.subtrees.batchdescription.DataSourceDescription;
+import org.pikater.core.ontology.subtrees.batchdescription.FileDataSaver;
 
-import cz.tomkren.helpers.TODO;
-
-import javax.activation.DataSource;
 import java.util.*;
-
 
 /** Created by tom on 1.6.2015. */
 
