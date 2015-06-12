@@ -36,10 +36,10 @@ public class Agent_Accuracy extends Agent_AbstractDataProcessing {
 
         agentInfo.setInputSlots(Arrays.asList(labeled, original));
 
-        Slot CCIpercent = new Slot("Error",
-                CoreConstant.SlotCategory.ERROR, "Percent of correctly classified instances.");
+        Slot CCIpercent = new Slot(CoreConstant.SlotContent.ERRORS);
+        Slot labeledSlot = new Slot(CoreConstant.SlotContent.COMPUTED_DATA);
 
-        agentInfo.setOutputSlots(Arrays.asList(CCIpercent));
+        agentInfo.setOutputSlots(Arrays.asList(CCIpercent, labeledSlot));
 
         return agentInfo;
     }
@@ -72,6 +72,7 @@ public class Agent_Accuracy extends Agent_AbstractDataProcessing {
         double error = correct / (size/100);
         System.out.println("ERROR: " + error);
         res.add(makeOutput(error, "Output"));
+        res.add(makeOutput(data.get(0), "Labeled data"));
 
         return res;
     }

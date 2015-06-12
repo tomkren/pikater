@@ -66,7 +66,7 @@ public final class Input_Tom1 implements ITestExperiment {
 
 		DataSourceDescription dataSourcePCA3 = new DataSourceDescription();
 		dataSourcePCA3.setOutputType(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
-		dataSourcePCA2.setInputType(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
+		dataSourcePCA3.setInputType(CoreConstant.SlotContent.VALIDATION_DATA.getSlotName());
 		dataSourcePCA3.setDataProvider(pca);
 
 		DataSourceDescription dataSourcePCA4 = new DataSourceDescription();
