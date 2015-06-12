@@ -71,8 +71,8 @@ public class Agent_Accuracy extends Agent_AbstractDataProcessing {
         // count percentage
         double error = correct / (size/100);
         System.out.println("ERROR: " + error);
-        res.add(makeOutput(error, "Output"));
-        res.add(makeOutput(data.get(0), "Labeled data"));
+        res.add(makeOutput(error, CoreConstant.SlotContent.ERRORS.getSlotName()));
+        res.add(makeOutput(data.get(0), CoreConstant.SlotContent.COMPUTED_DATA.getSlotName()));
 
         return res;
     }
