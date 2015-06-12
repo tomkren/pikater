@@ -50,7 +50,7 @@ public class Agent_Accuracy extends Agent_AbstractDataProcessing {
         // compare class attribute of the two datasets
         DataInstances d1 = data.get(0);
         DataInstances d2 = data.get(1);
-        int classIndex = d1.getClassIndex(); // same for both datasets
+        int classIndex = d1.getClassIndex(); // same for both data-seta
 
         int correct = 0;
         for (int i=0; i < Math.max(d1.getInstances().size(), d2.getInstances().size()); i++){
