@@ -13,13 +13,13 @@ public class BoxPrototype {
     private String name;
     private String agentType;
 
-    private final Function<String,DataProcessing> mkDataProcessingFun;
+    private final BiFunction<String,Integer,DataProcessing> mkDataProcessingFun;
     private final BiConsumer<DataProcessing,List<DataSourceDescription>> setSourcesFun;
     private final BiFunction<Integer,DataProcessing,DataSourceDescription> mkOutputFun;
 
 
     public BoxPrototype(String name, Class<?> agentClass,
-                        Function<String,DataProcessing> mkDataProcessingFun,
+                        BiFunction<String,Integer,DataProcessing> mkDataProcessingFun,
                         BiConsumer<DataProcessing,List<DataSourceDescription>> setSourcesFun,
                         BiFunction<Integer,DataProcessing,DataSourceDescription> mkOutputFun) {
         this.name = name;
@@ -36,8 +36,8 @@ public class BoxPrototype {
     public String getName() {return name;}
 
 
-    public DataProcessing mkDataProcessing() {
-        return mkDataProcessingFun.apply(agentType);
+    public DataProcessing mkDataProcessing(int id) {
+        return mkDataProcessingFun.apply(agentType, id);
     }
 
     public void setSources(DataProcessing dataProcessing, List<DataSourceDescription> sources) {
@@ -55,8 +55,9 @@ public class BoxPrototype {
     }
 
 
-    public static DataProcessing mkDataProcessing_default(String agentType) {
+    public static DataProcessing mkDataProcessing_default(String agentType, int id) {
         DataProcessing dataProcessing = new DataProcessing();
+        dataProcessing.setId(id);
         dataProcessing.setAgentType(agentType);
         return dataProcessing;
     }
