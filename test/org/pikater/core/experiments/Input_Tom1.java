@@ -86,21 +86,20 @@ public final class Input_Tom1 implements ITestExperiment {
 
 		// Labeled data labeled by our CA are the new datasource
 		DataSourceDescription labeledDataSourceRBF = new DataSourceDescription();
+		labeledDataSourceRBF.setInputType(CoreConstant.SlotContent.DATA_TO_LABEL.getSlotName());
 		labeledDataSourceRBF.setOutputType("Data");
 		labeledDataSourceRBF.setDataProvider(rbf);
 
-		/*
 		// compute error
 		DataProcessing err = new DataProcessing();
 		err.setAgentType(Agent_Accuracy.class.getName());
 		err.addDataSources(labeledDataSourceRBF);
-		err.addDataSources(fileDataSource);
+		err.addDataSources(fileDataSource4);
 
 		// error output is the new datasource
 		DataSourceDescription errDataSource = new DataSourceDescription();
 		errDataSource.setOutputType("Error");
 		errDataSource.setDataProvider(err);
-		*/
 
 		// Save labeled data
 		FileDataSaver saver = new FileDataSaver();
