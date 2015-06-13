@@ -27,10 +27,6 @@ public class QuerySolver {
         return qNode;
     }
 
-    public TMap<PolyTree> generateAll(Query q) {
-        throw new TODO();
-    }
-
 
     public SmartLib getLib() {
         return lib;

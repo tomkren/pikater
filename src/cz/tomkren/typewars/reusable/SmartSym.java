@@ -22,6 +22,8 @@ public class SmartSym {
         return new PolyTree(codeNode.getName(), rootType, sons, codeNode.getCode());
     }
 
+    public Type getOutputType() {return codeNode.getOut();}
+
     public List<Type> getArgTypes() {
         return codeNode.getIns();
     }
@@ -30,6 +32,8 @@ public class SmartSym {
         return codeNode.getArity();
     }
 
-
-
+    @Override
+    public String toString() {
+        return codeNode.toString();
+    }
 }

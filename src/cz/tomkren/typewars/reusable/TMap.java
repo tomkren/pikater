@@ -61,5 +61,29 @@ public class TMap<A> {
         return map.entrySet();
     }
 
+    public int size() {
+        int size = 0;
+        for (Map.Entry<Type,List<A>> e : map.entrySet()) {
+            size += e.getValue().size();
+        }
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Type,List<A>> e : map.entrySet()) {
+            Type type  = e.getKey();
+            List<A> xs = e.getValue();
+
+            sb.append(type.toString()).append(" :\n");
+
+            for (A x : xs) {
+                sb.append("  ").append(x.toString()).append("\n");
+            }
+
+        }
+        return sb.toString();
+    }
 }
 

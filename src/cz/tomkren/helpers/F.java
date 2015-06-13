@@ -31,6 +31,10 @@ public class F {
             return stream.collect(Collectors.toList());
         }
 
+        public <B> B reduce(Function<List<T>,B> f) {
+            return f.apply(get());
+        }
+
         public <B> ListResult<B> map(Function<? super T,B> f) {
             return new ListResult<>( stream.map(f) );
         }
