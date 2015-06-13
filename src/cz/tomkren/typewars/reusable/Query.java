@@ -12,6 +12,8 @@ public class Query {
     private final Type type;
     private final int treeSize;
 
+    private SmartSym sym;
+
     private QuerySolver solver;
 
     public Query(Type type, int treeSize) {
@@ -26,6 +28,12 @@ public class Query {
 
     public void setSolver(QuerySolver solver) {this.solver = solver;}
     public QuerySolver getSolver() {return solver;}
+
+    public void setSym(SmartSym sym) {this.sym = sym;}
+    public SmartSym getSym() {
+        if (sym == null) {throw new Error("Sym is null!");}
+        return sym;
+    }
 
     public QueryResult query(Query q) {
         return getSolver().query(q);

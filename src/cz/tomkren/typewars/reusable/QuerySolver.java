@@ -1,6 +1,9 @@
 package cz.tomkren.typewars.reusable;
 
 
+import cz.tomkren.helpers.TODO;
+import cz.tomkren.typewars.PolyTree;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,10 @@ public class QuerySolver {
             qNode = new QueryResult(q);
         }
         return qNode;
+    }
+
+    public TMap<PolyTree> generateAll(Query q) {
+        throw new TODO();
     }
 
 
