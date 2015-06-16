@@ -87,7 +87,7 @@ public class Fun {
             return ret;
         }
 
-        Query sonQuery = new Query(sub, sonQueries.getHead());
+        Query sonQuery = new Query(sub, sonQueries.getHead()); // TODO tady možná potøeba nìjaká normalizace
         TMap<PolyTree> sonResult = generateAll(lib, sonQuery);
 
         TMap<PolyTree> ret = new TMap<>();
