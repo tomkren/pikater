@@ -22,6 +22,10 @@ public class SmartSym {
         return new PolyTree(codeNode.getName(), rootType, sons, codeNode.getCode());
     }
 
+    public String getName() {
+        return codeNode.getName();
+    }
+
     public Type getOutputType() {return codeNode.getOut();}
 
     public List<Type> getArgTypes() {

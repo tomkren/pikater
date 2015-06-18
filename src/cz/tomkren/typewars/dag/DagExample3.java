@@ -42,6 +42,8 @@ public class DagExample3 {
 
         ch.it("\n");
 
+        codeLib.generate("D => LD", 10).forEach(ch::it);
+        Log.it();
 
 
         int num = 9;
@@ -62,7 +64,14 @@ public class DagExample3 {
         checkQuery("D => D", 1); // OK
         checkQuery("(V LD (S (S 0))) => LD", 1); // OK
 
+
+        Fun.setDoLog(true);
+
         checkQuery("D => LD", 10); // todo tadfy se to teda rozbije
+
+        // TODO tady to dela shit : sonQuery.getType() = (D => (V LD x2)) ; sonResult.size() = 0
+
+        // TODO !!!!!!!! Skoro jistì je chyba v neofrešovávání typovejch promìnnejch
 
         ch.results();
     }
