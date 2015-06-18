@@ -238,10 +238,19 @@ public class Dag {
     public String toKutilXML(Int2D pos) {
         StringBuilder sb = new StringBuilder();
 
-
-
         forEachVertex( v -> {
             v.toKutilXML(sb, pos);
+            sb.append('\n');
+        });
+
+        return sb.toString();
+    }
+
+    public String toJson() {
+        StringBuilder sb = new StringBuilder();
+
+        forEachVertex( v -> {
+            v.toJson(sb);
             sb.append('\n');
         });
 

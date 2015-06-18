@@ -428,6 +428,28 @@ public class TypedDag {
         return sb.toString();
     }
 
+    public String toJson() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{\n");
+
+        sb.append("  ");
+        Vertex.toJson_input(sb, ins);
+        sb.append(",\n");
+
+        forEachVertex(v -> {
+            sb.append("  ");
+            v.toJson(sb);
+            sb.append(",\n");
+        });
+
+        sb.delete(sb.length()-2,sb.length());
+
+        sb.append("\n}\n");
+
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         return toKutilXML(new Int2D(0,0));

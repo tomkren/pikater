@@ -88,6 +88,56 @@ public class Vertex {
     public static final int X_1SIZE = 64;
     public static final int Y_1SIZE = 64;
 
+    public static void toJson_input(StringBuilder sb, List<Vertex> ins) {
+        String id   = "_input";
+        String name = "_input";
+
+
+        int numOutputs = ins.size();
+
+        sb.append("\"").append(id).append("\" : [ [], \"").append(name).append("\", [");
+
+        int i = 0;
+        for (Vertex s : ins) {
+            sb.append('\"').append(s.id).append(':').append(i).append("\"");
+            if (i < numOutputs-1) {
+                sb.append(", ");
+            }
+            i++;
+        }
+
+        sb.append("] ]");
+    }
+
+    public void toJson(StringBuilder sb) {
+        int numInputs  = Math.max(1, nextFreeSlot);
+        int numOutputs = Math.max(1, successors.size());
+
+        sb.append("\"").append(id).append("\" : [ [");
+
+        for (int i = 0; i < numInputs; i++) {
+            sb.append('\"').append(id).append(':').append(i).append("\"");
+            if (i < numInputs-1) {
+                sb.append(", ");
+            }
+        }
+
+        sb.append("], \"").append(name).append("\", [");
+
+        int i = 0;
+        for (AB<Vertex,Integer> p : successors) {
+            Vertex s = p._1();
+            int port = p._2();
+            sb.append('\"').append(s.id).append(':').append(port).append("\"");
+            if (i < numOutputs-1) {
+                sb.append(", ");
+            }
+            i++;
+        }
+
+        sb.append("] ]");
+    }
+
     public void toKutilXML(StringBuilder sb, Int2D pos) { //, int x, int y) {
 
         int xPos = (int)((0.6+x) * X_1SIZE ) + pos.getX();

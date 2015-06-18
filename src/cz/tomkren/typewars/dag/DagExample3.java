@@ -4,6 +4,7 @@ import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.TypedDag;
 import cz.tomkren.typewars.reusable.Fun;
 import cz.tomkren.typewars.reusable.SmartLib;
 import cz.tomkren.typewars.reusable.TMap;
@@ -59,6 +60,16 @@ public class DagExample3 {
         checkQuery("D => LD", 10); // todo tadfy se to teda rozbije
 
 
+        codeLib.generate("D => LD", 10).forEach(tree -> {
+            ch.itln("...");
+            ch.itln(tree);
+            ch.itln(tree.showWithTypes());
+
+            TypedDag dag = (TypedDag) tree.computeValue();
+
+            ch.itln(dag.toString());
+            ch.itln(dag.toJson());
+        });
 
         ch.results();
     }
