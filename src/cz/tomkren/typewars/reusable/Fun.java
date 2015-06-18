@@ -46,6 +46,8 @@ public class Fun {
 
     public static TMap<PolyTree> generateAll(SmartLib lib, Query query, SmartSym sym, Sub sub) {
 
+        //if (sym)
+
         List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(query.getTreeSize(), sym.getArity());
 
         TMap<PolyTree> ret = new TMap<>();

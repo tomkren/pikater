@@ -14,16 +14,33 @@ public class DagExample4 {
         Checker ch = new Checker();
 
         String goalType = "D => LD";
-        int numTrees = 10;
+        int numTrees = 100;
         String[] libStrs = {
-            "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
-            "TypedDag.split( TypedDag: a => (V a n) , MyList: V (a => b) n ) : a => (V b n)",
-            "MyList.cons( Object: a , MyList: V a n ) : V a (S n)",
-            "MyList.nil : V a 0",
-            "PCA : D => D",
-            "k-means : D => (V D (S(S n)))",
-            "MLP : D => LD",
-            "U : (V LD (S(S n))) => LD"
+                "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
+                "TypedDag.split( TypedDag: a => (V a n) , MyList: V (a => b) n ) : a => (V b n)",
+                "MyList.cons( Object: a , MyList: V a n ) : V a (S n)",
+                "MyList.nil : V a 0",
+
+                "PCA : D => D", // PCA, kBest
+                "kMeans : D => (V D (S(S n)))", // kMeans, copy
+                "SVC : D => LD", // SVC, logR, gaussianNB, DT
+                "union : (V LD (S(S n))) => LD" // union, vote
+
+                //"pre : D => D", // PCA, kBest
+                //"spliter : D => (V D (S(S n)))", // kMeans, copy
+                //"model : D => LD", // SVC, logR, gaussianNB, DT
+                //"merger : (V LD (S(S n))) => LD" // union, vote
+
+                //"PCA   : (D a) => (D a)",
+                //"kBest : (D a) => (D a)",
+                //"kMeans : (D a) => (V (D Dis) (S(S n)))",
+                //"copy   : (D a) => (V (D Con) (S(S n)))",
+                //"SVC        : (D a) => (LD a)",
+                //"logR       : (D a) => (LD a)",
+                //"gaussianNB : (D a) => (LD a)",
+                //"DT         : (D a) => (LD a)",
+                //"union : (V (LD Dis) (S(S n))) => (LD Dis)",
+                //"vote  : (V (LD Con) (S(S n))) => (LD Dis)"
         };
 
         CodeLib codeLib1 = CodeLib.mk(libStrs);
