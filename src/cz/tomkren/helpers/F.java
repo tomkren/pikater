@@ -2,6 +2,9 @@ package cz.tomkren.helpers;
 
 import com.mysql.fabric.xmlrpc.base.Array;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.function.*;
@@ -318,6 +321,22 @@ public class F {
 
     public static boolean isZero(BigInteger big) {
         return big.compareTo(BigInteger.ZERO) == 0;
+    }
+
+    public static void deleteLast(StringBuilder sb, int n) {
+        int len = sb.length();
+        sb.delete(len-n, len);
+    }
+
+    public static void writeFile(String filename, String str) {
+        try {
+            PrintWriter writer = new PrintWriter(filename, "UTF-8");
+            writer.println(str);
+            writer.close();
+            Log.it("File "+filename+" written..");
+        } catch (Exception e) {
+            throw new Error(e);
+        }
     }
 
 

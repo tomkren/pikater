@@ -428,12 +428,18 @@ public class TypedDag {
         return sb.toString();
     }
 
+    public static String toJson(List<TypedDag> dags) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        dags.forEach(dag -> sb.append(dag.toJson()).append(",\n"));
+        F.deleteLast(sb,2);
+        sb.append("]");
+        return sb.toString();
+    }
+
     public String toJson() {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("{\n");
-
-        sb.append("  ");
+        sb.append("{\n  ");
         Vertex.toJson_input(sb, ins);
         sb.append(",\n");
 
@@ -442,11 +448,9 @@ public class TypedDag {
             v.toJson(sb);
             sb.append(",\n");
         });
+        F.deleteLast(sb,2);
 
-        sb.delete(sb.length()-2,sb.length());
-
-        sb.append("\n}\n");
-
+        sb.append("\n}");
         return sb.toString();
     }
 

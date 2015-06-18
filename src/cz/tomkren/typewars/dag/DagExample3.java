@@ -29,11 +29,16 @@ public class DagExample3 {
 
     public static void main(String[] args) {
 
+        codeLib.generate("D => LD", 10).forEach(tree -> {
+            ch.itln("...");
+            ch.itln(tree);
+            ch.itln(tree.showWithTypes());
 
-        codeLib.generate("D => LD", 10).forEach(tree ->
-            ch.it(tree)
-            //ch.itln("...").itln(tree).itln(tree.showWithTypes()).it(tree.computeValue())
-        );
+            TypedDag dag = (TypedDag) tree.computeValue();
+
+            ch.itln(dag.toString());
+            ch.itln(dag.toJson());
+        });
 
         ch.it("\n");
 
@@ -58,18 +63,6 @@ public class DagExample3 {
         checkQuery("(V LD (S (S 0))) => LD", 1); // OK
 
         checkQuery("D => LD", 10); // todo tadfy se to teda rozbije
-
-
-        codeLib.generate("D => LD", 10).forEach(tree -> {
-            ch.itln("...");
-            ch.itln(tree);
-            ch.itln(tree.showWithTypes());
-
-            TypedDag dag = (TypedDag) tree.computeValue();
-
-            ch.itln(dag.toString());
-            ch.itln(dag.toJson());
-        });
 
         ch.results();
     }

@@ -89,9 +89,8 @@ public class Vertex {
     public static final int Y_1SIZE = 64;
 
     public static void toJson_input(StringBuilder sb, List<Vertex> ins) {
-        String id   = "_input";
-        String name = "_input";
-
+        String id   = "input";
+        String name = "input";
 
         int numOutputs = ins.size();
 
