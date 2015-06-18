@@ -14,7 +14,7 @@ public class DagExample4 {
         Checker ch = new Checker();
 
         String goalType = "D => LD";
-        int numTrees = 100;
+        int numTrees = 500;
         String[] libStrs = {
                 "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
                 "TypedDag.split( TypedDag: a => (V a n) , MyList: V (a => b) n ) : a => (V b n)",
@@ -22,8 +22,12 @@ public class DagExample4 {
                 "MyList.nil : V a 0",
 
                 "PCA : D => D", // PCA, kBest
+                //"kBest : D => D",
                 "kMeans : D => (V D (S(S n)))", // kMeans, copy
-                "SVC : D => LD", // SVC, logR, gaussianNB, DT
+                "SVC : D => LD",
+                //"logR       : D => LD",
+                //"gaussianNB : D => LD",
+                "DT : D => LD",
                 "union : (V LD (S(S n))) => LD" // union, vote
 
                 //"pre : D => D", // PCA, kBest
