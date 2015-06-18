@@ -60,4 +60,10 @@ public class PolyTree {
         return isTerminal() ? showHead() : "("+ showHead() +" "+ Joiner.on(' ').join( F.map(sons, PolyTree::showWithTypes) ) +")";
     }
 
+    public int getSize() {
+        int sum = 0;
+        for (PolyTree son : sons) {sum += son.getSize();}
+        return 1 + sum;
+        // return 1 + F.list(sons).map(PolyTree::getSize).foldr(0,(x,y)->x+y);
+    }
 }

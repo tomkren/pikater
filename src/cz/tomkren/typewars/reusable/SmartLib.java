@@ -20,6 +20,11 @@ public class SmartLib {
         return symLib;
     }
 
+    public SmartSym getSym(int i){
+        return symLib.get(i);
+    }
+
+
 
 
 

@@ -1,9 +1,9 @@
 package cz.tomkren.typewars.reusable;
 
 
-import cz.tomkren.typewars.CodeNode;
-import cz.tomkren.typewars.PolyTree;
-import cz.tomkren.typewars.Type;
+import cz.tomkren.helpers.AB;
+import cz.tomkren.helpers.ABC;
+import cz.tomkren.typewars.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,29 @@ public class SmartSym {
         this.codeNode = codeNode;
         applicableSons = new ArrayList<>(codeNode.getIns().size());
     }
+
+
+    public ABC<Type,List<Type>,Integer> freshenTypeVars(int startVarId) {
+
+        List<Type> typeList = new ArrayList<>(getArity()+1);
+        typeList.add(getOutputType());
+        typeList.addAll(getArgTypes());
+
+        TypeTerm helperTerm = new TypeTerm(typeList);
+        AB<Type,Integer> p = helperTerm.freshenVars(startVarId, new Sub());
+
+        TypeTerm freshHelperTerm = (TypeTerm) p._1();
+        int nextVarId = p._2();
+
+        List<Type> freshTypeList = freshHelperTerm.getArgs();
+
+        Type       freshOutType = freshTypeList.get(0);
+        List<Type> freshInTypes = freshTypeList.subList(1,freshTypeList.size());
+
+        return new ABC<>(freshOutType, freshInTypes, nextVarId);
+    }
+
+
 
     public PolyTree mkTree(Type rootType, List<PolyTree> sons) {
         return new PolyTree(codeNode.getName(), rootType, sons, codeNode.getCode());

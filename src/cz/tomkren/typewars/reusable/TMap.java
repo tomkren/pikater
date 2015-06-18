@@ -69,6 +69,14 @@ public class TMap<A> {
         return size;
     }
 
+    public List<A> flatten() {
+        List<A> ret = new ArrayList<>();
+        for (Map.Entry<Type,List<A>> e : map.entrySet()) {
+            ret.addAll(e.getValue());
+        }
+        return ret;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
