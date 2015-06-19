@@ -21,6 +21,7 @@ public class Fun2 {
         List<PolyTree> ret = new ArrayList<>();
         for (int i = 1; i <= treeSize; i++) {
             ret.addAll( generateAll(lib, goalType, i).flatten() );
+            Log.it("Generating size "+i);
         }
         return ret;
     }

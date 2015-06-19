@@ -1,5 +1,6 @@
 package cz.tomkren.typewars.reusable;
 
+import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
 
 import java.util.*;
@@ -12,10 +13,12 @@ public class GeneratorChecker {
 
     private Map<Integer,Set<String>> checkMap;
     private int maxSizeSoFar;
+    private boolean isWholeSizes;
 
-    public GeneratorChecker(List<PolyTree> trees) {
+    public GeneratorChecker(List<PolyTree> trees, boolean isWholeSizes) {
         checkMap = new HashMap<>();
         maxSizeSoFar = 0;
+        this.isWholeSizes = isWholeSizes;
 
         trees.forEach(this::add);
     }
@@ -33,6 +36,53 @@ public class GeneratorChecker {
         }
 
         set.add(tree.toString());
+    }
+
+    public List<String> toNormalizedList() {
+        List<String> ret = new ArrayList<>();
+
+        // maxSizeSoFar nebereme, protože mùže být nekompletní:
+        for (int i = 1; i < (isWholeSizes ? maxSizeSoFar+1 : maxSizeSoFar); i++) {
+            Set<String> set = checkMap.get(i);
+            if (set != null) {
+                for (String treeStr : set) {
+                    ret.add(treeStr);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    public boolean check(List<PolyTree> trees, boolean isWholeSizes) {
+        boolean isOk = true;
+
+
+        GeneratorChecker tempChecker = new GeneratorChecker(trees, isWholeSizes);
+
+        List<String> shouldBeList = toNormalizedList();
+        List<String> resultList   = tempChecker.toNormalizedList();
+
+        /*if (shouldBeList.size() != resultList.size()) {
+            Log.it("GeneratorChecker: Sizes do not match: " + shouldBeList.size() +" != "+ resultList.size());
+            return false;
+        }*/
+
+        int minLen = Math.min(shouldBeList.size() , resultList.size());
+
+        Log.it("Num trees to be checked: " + minLen +" = min("+shouldBeList.size() +","+ resultList.size()+")" );
+
+        for (int i = 0; i < minLen; i++) {
+            if (!shouldBeList.get(i).equals(resultList.get(i))) {
+                isOk = false;
+                Log.it("  GeneratorChecker: Trees do not match:\n    " + shouldBeList.get(i) +"\n    "+ resultList.get(i));
+            }
+        }
+
+        Log.it( "RESULT : " +(isOk ? "OK" : "KO") );
+
+
+        return isOk;
     }
 
 

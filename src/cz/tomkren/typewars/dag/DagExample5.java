@@ -7,6 +7,8 @@ import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.reusable.*;
 
+import java.util.List;
+
 /** Created by tom on 18.6.2015. */
 
 public class DagExample5 {
@@ -46,7 +48,15 @@ public class DagExample5 {
         checkQuery("D => LD", 12, 1);
 
 
-        Log.list( F.list(Fun2.generateAllUpTo_naive(lib, "D => LD", 20)).map(PolyTree::toString).get() );
+        //Log.list( F.list(Fun2.generateAllUpTo_naive(lib, "D => LD", 20)).map(PolyTree::toString).get() );
+
+        List<PolyTree> oldMethodTrees = codeLib.generate("D => LD", 100);
+        List<PolyTree> newMethodTrees = Fun2.generateAllUpTo_naive(lib, "D => LD", 20); //25
+
+        GeneratorChecker genCheck = new GeneratorChecker(oldMethodTrees, false);
+        genCheck.check(newMethodTrees, true);
+
+        //Log.list(genCheck.toNormalizedList());
 
         ch.results();
     }
