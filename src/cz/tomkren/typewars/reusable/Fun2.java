@@ -37,7 +37,7 @@ public class Fun2 {
         for (SmartSym sym : lib.getSyms()) {
 
             ABC<Type,List<Type>,Integer> freshResult = sym.freshenTypeVars(nextVarId);
-            Type symOutType        = freshResult._1();
+                        Type symOutType        = freshResult._1();
             List<Type> symArgTypes = freshResult._2();
             nextVarId              = freshResult._3();
 
@@ -71,9 +71,9 @@ public class Fun2 {
             TMap<PolyTree> ret = new TMap<>();
 
             Type originalType = dadQuery.getType();
+            Type rootType = sub.apply(originalType);
 
             for (Listek<PolyTree> sons : Listek.toList(acc)) {
-                Type rootType = sub.apply(originalType);
                 PolyTree newTree = sym.mkTree(rootType, Listek.toReverseList(sons) );
                 ret.add(rootType, newTree);
             }
@@ -81,7 +81,7 @@ public class Fun2 {
             return ret;
         }
 
-        Query sonQuery = new Query(sub, sonQueries.getHead()); // TODO tady možná potřeba nějaká normalizace
+        Query sonQuery = new Query(sub, sonQueries.getHead());
 
         TMap<PolyTree> sonResult = generateAll(lib, sonQuery);
 
@@ -125,7 +125,7 @@ public class Fun2 {
             return ret;
         }
 
-        // todo tady sem to dal novÄ›
+        // todo tady sem to dal nově
         if (numArgs == 0) {
             if (size == 0) {
                 ret.add(Collections.emptyList());

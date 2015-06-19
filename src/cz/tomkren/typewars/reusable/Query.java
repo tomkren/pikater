@@ -1,6 +1,5 @@
 package cz.tomkren.typewars.reusable;
 
-import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 
@@ -24,6 +23,11 @@ public class Query {
         this.treeSize = treeSize;
     }
 
+    public Query(Type type, int treeSize, Query dadQuery) {
+        this(type,treeSize);
+        setSolver(dadQuery.getSolver());
+    }
+
     public Query(Sub sub, Query sonQuery) {
         this(sub.apply(sonQuery.type), sonQuery.treeSize);
         setSolver(sonQuery.getSolver());
@@ -43,8 +47,8 @@ public class Query {
         return sym;
     }
 
-    public QueryResult query(Query q) {
-        return getSolver().query(q);
+    public QueryResult_old query(Query q) {
+        return getSolver().query_old(q);
     }
 
     public List<SmartSym> getAllSyms() {

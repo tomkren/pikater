@@ -1,8 +1,7 @@
 package cz.tomkren.typewars.reusable;
 
 
-import cz.tomkren.helpers.TODO;
-import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.Types;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,19 +9,48 @@ import java.util.Map;
 public class QuerySolver {
 
     private SmartLib lib;
+    private Map<String,QueryResult_old> queries_old;
     private Map<String,QueryResult> queries;
+
+    private int nextVarId;
 
     public QuerySolver(SmartLib lib) {
         this.lib = lib;
+
+        nextVarId = 0;
+        queries_old = new HashMap<>();
         queries = new HashMap<>();
+
+    }
+
+    public int getNextVarId() {return nextVarId;}
+    public void setNextVarId(int nextVarId) {this.nextVarId = nextVarId;}
+
+    public QueryResult query(String type, int treeSize) {
+        return query(new Query(Types.parse(type),treeSize));
     }
 
     public QueryResult query(Query q) {
         q.setSolver(this);
         String qKey = q.toString();
-        QueryResult qNode = queries.get(qKey);
+        QueryResult qResult = queries.get(qKey);
+        if (qResult == null) {
+            qResult = new QueryResult(q);
+            queries.put(qKey, qResult);
+        }
+        return qResult;
+    }
+
+
+
+
+    public QueryResult_old query_old(Query q) {
+        q.setSolver(this);
+        String qKey = q.toString();
+        QueryResult_old qNode = queries_old.get(qKey);
         if (qNode == null) {
-            qNode = new QueryResult(q);
+            qNode = new QueryResult_old(q);
+            queries_old.put(qKey,qNode);
         }
         return qNode;
     }

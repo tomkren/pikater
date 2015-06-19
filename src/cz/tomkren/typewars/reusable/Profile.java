@@ -3,13 +3,10 @@ package cz.tomkren.typewars.reusable;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
-import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +28,7 @@ public class Profile {
 
         if (sonQueries == null) {return num;}
 
-        QueryResult sonResult = dadQuery.query(new Query(sub, sonQueries.getHead()));
+        QueryResult_old sonResult = dadQuery.query(new Query(sub, sonQueries.getHead()));
 
         BigInteger sum = BigInteger.ZERO;
 

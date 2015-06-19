@@ -47,16 +47,32 @@ public class DagExample4 {
                 //"vote  : (V (LD Con) (S(S n))) => (LD Dis)"
         };
 
+        String[] libStrs2 = {
+                "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
+                "TypedDag.split( TypedDag: a => (V a n) , MyList: V (a => b) n ) : a => (V b n)",
+                "MyList.cons( Object: a , MyList: V a n ) : V a (S n)",
+                "MyList.nil : V a 0",
+                "kBest : D => D",
+                "copy : D => (V D (S(S n)))",
+                "logR       : D => LD",
+                "gaussianNB : D => LD",
+                "vote : (V LD (S(S n))) => LD"
+        };
+
         CodeLib codeLib1 = CodeLib.mk(libStrs);
+        CodeLib codeLib2 = CodeLib.mk(libStrs2);
 
         String popJson = mkPopJson(codeLib1, goalType, numTrees);
+        String popJson2 = mkPopJson(codeLib2, goalType, numTrees);
         ch.it(popJson);
+        ch.it(popJson2);
 
         F.writeFile("population.json", popJson);
+        F.writeFile("population2.json", popJson2);
 
         ch.results();
 
-        KutilMain.starLib(libStrs,goalType,numTrees);
+        KutilMain.starLib(libStrs2,goalType,numTrees);
     }
 
     public static String mkPopJson(CodeLib lib, String type, int n) {

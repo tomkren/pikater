@@ -1,76 +1,106 @@
 package cz.tomkren.typewars.reusable;
 
+import cz.tomkren.helpers.ABC;
 import cz.tomkren.helpers.F;
+import cz.tomkren.helpers.Listek;
 import cz.tomkren.helpers.TODO;
+import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-/** Created by tom on 7. 6. 2015. */
+/** Created by tom on 19. 6. 2015. */
 
 public class QueryResult {
 
-    private final Map<Type,SubResult> result;
+    private List<AndGadget> andGadgets;
+
+    private Map<Type,BigInteger> nums;
     private BigInteger num;
+
 
     public QueryResult(Query query) {
 
+        andGadgets = new ArrayList<>();
+        nums = new HashMap<>();
 
-        //  pozor !!! pro jeden sym dostanu víc RootNodes
+        for (SmartSym sym : query.getAllSyms()) {
 
-        result = new HashMap<>();
+            int nextVarId = query.getSolver().getNextVarId();
+            ABC<Type,List<Type>,Integer> freshResult = sym.freshenTypeVars(nextVarId);
+            Type symOutType        = freshResult._1();
+            List<Type> symArgTypes = freshResult._2();
+            query.getSolver().setNextVarId(freshResult._3());
 
-        for (SmartSym sym : query.getAllSyms()) { // TODO tady pak nahradit lokalnì pro parentSym v query
+            Type goalType = query.getType();
+            Sub sub = Sub.mgu(goalType, symOutType);
 
-            Map<Type,List<RootNode>> rootsMapForSym = mkRootNodesForSym(sym, query);
+            if (!sub.isFail()) {
+                List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(query.getTreeSize(), sym.getArity());
 
-            for (Map.Entry<Type,List<RootNode>> e : rootsMapForSym.entrySet()) {
 
-                Type rootType = e.getKey();
-                List<RootNode> rootsForSym = e.getValue();
+                for (List<Integer> simpleProfile : allSimpleProfiles) {
+                    Listek<Query> sonQueries = Listek.fromList( F.zipWith(symArgTypes, simpleProfile, (t,n)->new Query(t,n,query)) );
 
-                SubResult subResult = result.get(rootType);
+                    AndGadget ag = new AndGadget(query, sym, sonQueries, sub);
 
-                if (subResult == null) {
-                    subResult = new SubResult(query, rootType);
-                    result.put(rootType, subResult);
+                    if (!F.isZero(ag.getNum())) {
+                        andGadgets.add(ag);
+                        AndGadget.mergeAllByAdd(nums,ag.getNums());
+                    }
+
                 }
-
-                subResult.addRoots(rootsForSym);
-
             }
+        }
 
-            num = BigInteger.ZERO;
+        num = AndGadget.sum(nums);
+    }
 
-            // a ještì spoètem num
-            for (Map.Entry<Type,SubResult> e : result.entrySet()) {
-                num = num.add(e.getValue().getNum());
+
+    public BigInteger getNum() {return num;}
+    public Map<Type,BigInteger> getNums() {return nums;}
+
+
+    public static List<List<Integer>> possibleSimpleProfiles(int fatherSize, int numArgs) {
+
+        int size = fatherSize - 1;
+        List<List<Integer>> ret = new ArrayList<>();
+
+        if (size < numArgs) {
+            return ret;
+        }
+
+        // todo tady sem to dal novì
+        if (numArgs == 0) {
+            if (size == 0) {
+                ret.add(Collections.emptyList());
+            }
+            return ret;
+        }
+
+        if (numArgs == 1) {
+            ret.add(F.singleton(size));
+        } else {
+
+            int n = size - (numArgs - 1);
+            for (int i = 1; i <= n; i++) {
+
+                List<List<Integer>> subResults = possibleSimpleProfiles(size - i + 1, numArgs - 1);
+
+                for (List<Integer> subResult : subResults) {
+                    List<Integer> newResult = new ArrayList<>();
+                    newResult.add(i);
+                    newResult.addAll(subResult);
+                    ret.add(newResult);
+                }
             }
 
         }
+
+        return ret;
     }
-
-    private Map<Type,List<RootNode>> mkRootNodesForSym(SmartSym sym, Query query) {
-        Map<Type,List<RootNode>> rootsMap = new HashMap<>();
-
-
-
-        // TODO zajistit aby nevracelo žádny prázdný rootNody v tom seznamu.....
-
-        // TODO !!!
-
-        throw new TODO();
-    }
-
-
-    public Map<Type, SubResult> getSubResultMap() {return result;}
-
-    public BigInteger getNum() {return num;}
 
 
 }

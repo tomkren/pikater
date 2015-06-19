@@ -128,6 +128,11 @@ public class TypedDag {
         return dag1.copy().seri(dag2.copy()).seri(dag3.copy());
     }
 
+    public static TypedDag dia0(TypedDag dag1, TypedDag dag2) {
+        return dag1.copy().seri(dag2.copy());
+    }
+
+
     public static TypedDag split(TypedDag dag, MyList dagList) {
         return dag.copy().seri( fromMyList(dagList) );
     }

@@ -38,6 +38,15 @@ public class GeneratorChecker {
         set.add(tree.toString());
     }
 
+    public List<Integer> getNumsForSizes() {
+        List<Integer> ret = new ArrayList<>();
+        for (int i = 1; i < (isWholeSizes ? maxSizeSoFar+1 : maxSizeSoFar); i++) {
+            Set<String> set = checkMap.get(i);
+            ret.add( set == null ? 0 : set.size() );
+        }
+        return ret;
+    }
+
     public List<String> toNormalizedList() {
         List<String> ret = new ArrayList<>();
 
