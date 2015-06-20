@@ -18,8 +18,9 @@ public class DagExample07 {
 
     static Checker ch = new Checker();
 
-    static CodeLib codeLib = CodeLib.mk(
+    static CodeLib codeLib_pokus1 = CodeLib.mk(
             "TypedDag.dia( TypedDag: a => a , TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
+            //"TypedDag.dia0( TypedDag: a => (V b n) , TypedDag: (V b n) => b ) : a => b",
             "TypedDag.split( TypedDag: a => (V a n) , MyList: V (a => b) n ) : a => (V b n)",
             "MyList.cons( Object: a , MyList: V a n ) : V a (S n)",
             "MyList.nil : V a 0",
@@ -29,7 +30,7 @@ public class DagExample07 {
             "U : (V LD (S(S n))) => LD"
     );
 
-    static CodeLib codeLib_pokus = CodeLib.mk(
+    static CodeLib codeLib_pokus2 = CodeLib.mk(
             "TypedDag.dia( TypedDag: D => D , TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",
             "TypedDag.dia0( TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",
             "TypedDag.split( TypedDag: D => (V D n) , MyList: V (D => LD) n ) : D => (V LD n)",
@@ -51,6 +52,8 @@ public class DagExample07 {
             "vote : (V LD (S(S n))) => LD"
     );
 
+    static CodeLib codeLib_pokus = codeLib_pokus2;
+
     static SmartLib lib = new SmartLib(codeLib_pokus); //(codeLib);
 
     static QuerySolver solver = new QuerySolver(lib);
@@ -68,7 +71,7 @@ public class DagExample07 {
         //checkQuery("D => LD", 12, 1);
 
 
-        List<PolyTree> oldMethodTrees = codeLib_pokus.generate("D => LD", 10000);
+        List<PolyTree> oldMethodTrees = codeLib_pokus.generate("D => LD", 65536);
         //List<PolyTree> newMethodTrees = Fun2.generateAllUpTo_naive(lib, "D => LD", 20); //25
 
         GeneratorChecker genCheck = new GeneratorChecker(oldMethodTrees, false);
@@ -82,11 +85,14 @@ public class DagExample07 {
         for (int treeSize = 1; treeSize <= n; treeSize++) {
             int num = solver.query("D => LD", treeSize).getNum().intValue();
             nums_newMethod.add(num);
-            Log.it(treeSize+"/"+n+": "+num +" ["+(num == nums_oldMethod.get(treeSize-1) ? "OK":"KO!!!!!!")+"]");
+            Log.it(treeSize+"/"+n+": "+num +" ["+(num == nums_oldMethod.get(treeSize-1) ? "OK":"KO!!!!!!")+"]"
+            +"  reuse-ratio: "+solver.getReuseRatio());
         }
 
         Log.it("nums [sizes: 1..."+n+"] = \n"+ nums_oldMethod );
         Log.it(nums_newMethod);
+
+        Log.it( "reuse ratio: "+solver.getReuseRatio() );
 
 
         //QueryResult qRes = solver.query("D => LD", 1);

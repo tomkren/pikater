@@ -47,9 +47,9 @@ public class Query {
         return sym;
     }
 
-    public QueryResult_old query(Query q) {
+    /*public QueryResult_old query(Query q) {
         return getSolver().query_old(q);
-    }
+    }*/
 
     public List<SmartSym> getAllSyms() {
         return solver.getLib().getSyms();

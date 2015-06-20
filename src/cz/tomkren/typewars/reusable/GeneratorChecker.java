@@ -7,8 +7,6 @@ import java.util.*;
 
 /** Created by tom on 19.6.2015. */
 
-// TODO !!! dodìlat
-
 public class GeneratorChecker {
 
     private Map<Integer,Set<String>> checkMap;

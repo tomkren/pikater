@@ -34,6 +34,8 @@ public class AndGadget {
 
     private Map<Type,BigInteger> computeNums(Listek<Query> queries, Sub sub, BigInteger acc) {
 
+        if (F.isZero(acc)) {throw new Error("acc should never be zero!");}
+
         if (queries == null) {
             Type originalType = dadQuery.getType();
             Type rootType = sub.apply(originalType);

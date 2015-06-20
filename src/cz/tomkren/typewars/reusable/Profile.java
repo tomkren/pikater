@@ -28,7 +28,7 @@ public class Profile {
 
         if (sonQueries == null) {return num;}
 
-        QueryResult_old sonResult = dadQuery.query(new Query(sub, sonQueries.getHead()));
+        QueryResult_old sonResult = null; // TODO hax aby šlo zkompilovat //dadQuery.query(new Query(sub, sonQueries.getHead()));
 
         BigInteger sum = BigInteger.ZERO;
 

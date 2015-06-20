@@ -9,18 +9,21 @@ import java.util.Map;
 public class QuerySolver {
 
     private SmartLib lib;
-    private Map<String,QueryResult_old> queries_old;
     private Map<String,QueryResult> queries;
 
     private int nextVarId;
+
+    private int numQueryCalls;
+    private int numQueryResults;
 
     public QuerySolver(SmartLib lib) {
         this.lib = lib;
 
         nextVarId = 0;
-        queries_old = new HashMap<>();
         queries = new HashMap<>();
 
+        numQueryCalls = 0;
+        numQueryResults = 0;
     }
 
     public int getNextVarId() {return nextVarId;}
@@ -37,14 +40,22 @@ public class QuerySolver {
         if (qResult == null) {
             qResult = new QueryResult(q);
             queries.put(qKey, qResult);
+            numQueryResults ++;
         }
+        numQueryCalls ++;
         return qResult;
     }
 
 
+    public SmartLib getLib() {return lib;}
 
+    public String getReuseRatio() {
+        return numQueryResults+"/"+numQueryCalls;
+    }
 
-    public QueryResult_old query_old(Query q) {
+}
+
+    /*public QueryResult_old query_old(Query q) {
         q.setSolver(this);
         String qKey = q.toString();
         QueryResult_old qNode = queries_old.get(qKey);
@@ -53,14 +64,7 @@ public class QuerySolver {
             queries_old.put(qKey,qNode);
         }
         return qNode;
-    }
-
-
-    public SmartLib getLib() {
-        return lib;
-    }
-
-}
+    }*/
 
 
     /*

@@ -72,7 +72,7 @@ public class DagExample4 {
 
         ch.results();
 
-        KutilMain.starLib(libStrs2,goalType,numTrees);
+        KutilMain.starLib(libStrs,goalType,numTrees);
     }
 
     public static String mkPopJson(CodeLib lib, String type, int n) {
