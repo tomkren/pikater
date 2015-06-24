@@ -72,7 +72,7 @@ public class QueryResult {
             return ret;
         }
 
-        // todo tady sem to dal novì
+        // todo tady sem to dal novÄ›
         if (numArgs == 0) {
             if (size == 0) {
                 ret.add(Collections.emptyList());

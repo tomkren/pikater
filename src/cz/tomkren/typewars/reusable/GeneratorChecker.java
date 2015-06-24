@@ -48,7 +48,7 @@ public class GeneratorChecker {
     public List<String> toNormalizedList() {
         List<String> ret = new ArrayList<>();
 
-        // maxSizeSoFar nebereme, protože mùže být nekompletní:
+        // maxSizeSoFar nebereme, protoÅ¾e mÅ¯Å¾e bÃ½t nekompletnÃ­:
         for (int i = 1; i < (isWholeSizes ? maxSizeSoFar+1 : maxSizeSoFar); i++) {
             Set<String> set = checkMap.get(i);
             if (set != null) {
