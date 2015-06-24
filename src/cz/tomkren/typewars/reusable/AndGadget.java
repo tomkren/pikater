@@ -2,11 +2,13 @@ package cz.tomkren.typewars.reusable;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
+import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -22,6 +24,8 @@ public class AndGadget {
     private Map<Type,BigInteger> nums;
     private BigInteger num;
 
+    private TMap<PolyTree> trees;
+
     public AndGadget(Query dadQuery, SmartSym sym, Listek<Query> sonQueries, Sub sub) {
         this.dadQuery = dadQuery;
         this.sym = sym;
@@ -30,6 +34,8 @@ public class AndGadget {
 
         nums = computeNums(sonQueries, sub, BigInteger.ONE);
         num = sum(nums);
+
+        trees = null;
     }
 
     private Map<Type,BigInteger> computeNums(Listek<Query> queries, Sub sub, BigInteger acc) {
@@ -64,6 +70,62 @@ public class AndGadget {
 
             Map<Type,BigInteger> subRet = computeNums(queries.getTail(), newSub, newAcc);
             mergeAllByAdd(ret,subRet);
+        }
+
+        return ret;
+    }
+
+    public TMap<PolyTree> generateAll() {
+        if (trees == null) {
+            trees = generateAll(sonQueries, sub, Listek.mkSingleton(null));
+        }
+        return trees;
+    }
+
+    private TMap<PolyTree> generateAll(Listek<Query> locSonQueries, Sub locSub, Listek<Listek<PolyTree>> acc) {
+
+        if (locSonQueries == null) {
+
+            TMap<PolyTree> ret = new TMap<>();
+
+            Type originalType = dadQuery.getType();
+            Type rootType = locSub.apply(originalType);
+
+            for (Listek<PolyTree> sons : Listek.toList(acc)) {
+                PolyTree newTree = sym.mkTree(rootType, Listek.toReverseList(sons) );
+                ret.add(rootType, newTree);
+            }
+
+            return ret;
+        }
+
+        Query sonQuery = new Query(locSub, locSonQueries.getHead());
+
+        TMap<PolyTree> sonResult = getSolver().query(sonQuery).generateAll();  // generateAll(lib, sonQuery);
+
+        TMap<PolyTree> ret = new TMap<>();
+
+        if (sonResult.isEmpty()) {return ret;}
+
+        for (Map.Entry<Type,List<PolyTree>> e : sonResult.entrySet()) {
+
+            Type moreSpecificType = e.getKey();
+            List<PolyTree> sonTrees = e.getValue();
+
+            Sub sonSpecificSub = Sub.mgu( moreSpecificType, sonQuery.getType() );
+            Sub newSub = Sub.dot(sonSpecificSub, locSub);
+
+            // newAcc vznikne obohacením acc o sonTrees
+            Listek<Listek<PolyTree>> newAcc = null;
+            for (Listek<PolyTree> preArgs : acc.toList()) {
+                for (PolyTree sonTree : sonTrees) {
+                    newAcc = Listek.mk( Listek.mk(sonTree,preArgs) , newAcc);
+                }
+            }
+
+            TMap<PolyTree> subRet = generateAll(locSonQueries.getTail(), newSub, newAcc);
+
+            ret.add(subRet);
         }
 
         return ret;

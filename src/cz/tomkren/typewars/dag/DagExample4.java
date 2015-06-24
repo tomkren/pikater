@@ -6,6 +6,8 @@ import cz.tomkren.kutil2.KutilMain;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.TypedDag;
 
+import java.util.List;
+
 /** Created by tom on 18. 6. 2015. */
 
 public class DagExample4 {
@@ -72,7 +74,15 @@ public class DagExample4 {
 
         ch.results();
 
-        KutilMain.starLib(libStrs,goalType,numTrees);
+        List<TypedDag> dags = mkDags(codeLib1, goalType, numTrees);
+
+        KutilMain.showTypedDag(dags.get(125));
+
+        //KutilMain.startLib(libStrs, goalType, numTrees);
+    }
+
+    public static List<TypedDag> mkDags(CodeLib lib, String type, int n) {
+        return F.list(lib.generate(type,n)).map(tree ->(TypedDag) tree.computeValue()).get();
     }
 
     public static String mkPopJson(CodeLib lib, String type, int n) {

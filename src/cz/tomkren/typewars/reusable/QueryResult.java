@@ -59,6 +59,19 @@ public class QueryResult {
     }
 
 
+    public TMap<PolyTree> generateAll() {
+
+        // TODO promyslet, jen naznačeno
+
+        TMap<PolyTree> ret = new TMap<>();
+
+        for (AndGadget andGadget : andGadgets) {
+            ret.add(andGadget.generateAll());
+        }
+
+        return ret;
+    }
+
     public BigInteger getNum() {return num;}
     public Map<Type,BigInteger> getNums() {return nums;}
 

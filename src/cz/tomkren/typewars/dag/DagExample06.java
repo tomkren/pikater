@@ -6,6 +6,8 @@ import cz.tomkren.kutil2.KutilMain;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.TypedDag;
 
+import java.util.List;
+
 /** Created by tom on 18. 6. 2015. */
 
 public class DagExample06 {
@@ -14,7 +16,7 @@ public class DagExample06 {
         Checker ch = new Checker();
 
         String goalType = "D => LD";
-        int numTrees = 65536; //500;
+        int numTrees = 18000; //65536; //500;
         String[] libStrs = {
                 "TypedDag.dia( TypedDag: D => D , TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",
                 "TypedDag.dia0( TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",
@@ -40,18 +42,28 @@ public class DagExample06 {
 
         CodeLib codeLib1 = CodeLib.mk(libStrs);
 
-        String popJson = mkPopJson(codeLib1, goalType, numTrees);
+
+        List<TypedDag> dags = mkDags(codeLib1, goalType, numTrees);
+        String popJson = mkPopJson(dags);
         ch.it(popJson);
 
         F.writeFile("population_"+numTrees+".json", popJson);
 
+        int winnerId = 17572;
+
         ch.results();
 
-        //KutilMain.starLib(libStrs,goalType,numTrees);
+        KutilMain.showTypedDag(dags.get(winnerId));
+
+        //KutilMain.startLib(libStrs,goalType,numTrees);
     }
 
-    public static String mkPopJson(CodeLib lib, String type, int n) {
-        return F.list(lib.generate(type,n)).map(t->(TypedDag)t.computeValue()).reduce(TypedDag::toJson);
+    public static String mkPopJson(List<TypedDag> dags) {
+        return F.list(dags).reduce(TypedDag::toJson);
+    }
+
+    public static List<TypedDag> mkDags(CodeLib lib, String type, int n) {
+        return F.list(lib.generate(type,n)).map(tree ->(TypedDag) tree.computeValue()).get();
     }
 
 }
