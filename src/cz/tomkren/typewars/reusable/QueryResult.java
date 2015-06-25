@@ -1,10 +1,8 @@
 package cz.tomkren.typewars.reusable;
 
-import com.sun.org.apache.xpath.internal.operations.And;
 import cz.tomkren.helpers.ABC;
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
-import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
@@ -44,7 +42,6 @@ public class QueryResult {
             if (!sub.isFail()) {
                 List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(query.getTreeSize(), sym.getArity());
 
-
                 for (List<Integer> simpleProfile : allSimpleProfiles) {
                     Listek<Query> sonQueries = Listek.fromList( F.zipWith(symArgTypes, simpleProfile, (t,n)->new Query(t,n,query)) );
 
@@ -54,7 +51,6 @@ public class QueryResult {
                         andGadgets.add(ag);
                         AndGadget.mergeAllByAdd(nums,ag.getNums());
                     }
-
                 }
             }
         }
@@ -67,6 +63,8 @@ public class QueryResult {
         if (F.isZero(num)) {return null;}
 
         BigInteger index = F.nextBigInteger(num, query.getRand());
+
+        if (index == null) {throw new Error("Should be unreachable.");}
 
         for (AndGadget andGadget : andGadgets) {
             BigInteger numTrees = andGadget.getNum();

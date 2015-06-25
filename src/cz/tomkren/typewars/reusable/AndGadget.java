@@ -7,6 +7,7 @@ import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,38 +76,37 @@ public class AndGadget {
         return ret;
     }
 
+    public PolyTree generateOne() {
+
+        List<Query> sonQs = Listek.toList(sonQueries);
+        List<PolyTree> sons = new ArrayList<>(sonQs.size());
+
+        Sub locSub = sub;
+
+        for (Query sq : sonQs) {
+            Query sonQuery = new Query(locSub, sq);
+            PolyTree sonTree = getSolver().query(sonQuery).generateOne();
+
+            if (sonTree == null) {throw new Error("Should be unreachable!");}
+
+            Type moreSpecificType = sonTree.getType();
+            Sub sonSpecificSub = Sub.mgu(moreSpecificType, sonQuery.getType());
+            locSub = Sub.dot(sonSpecificSub, locSub);
+
+            sons.add(sonTree);
+        }
+
+        PolyTree newTree = sym.mkTree(dadQuery.getType(), sons);
+        newTree.applySub(locSub);
+        return newTree;
+    }
+
+
     public TMap<PolyTree> generateAll() {
         if (allTrees == null) {
             allTrees = generateAll(sonQueries, sub, Listek.mkSingleton(null));
         }
         return allTrees;
-    }
-
-    public PolyTree generateOne() {
-        return generateOne(sonQueries, sub, null);
-    }
-
-    public PolyTree generateOne(Listek<Query> locSonQueries, Sub locSub, Listek<PolyTree> acc) {
-
-        if (locSonQueries == null) {
-            PolyTree newTree = sym.mkTree(dadQuery.getType(), Listek.toReverseList(acc));
-            newTree.applySub(locSub);
-            return newTree;
-        }
-
-        Query sonQuery = new Query(locSub, locSonQueries.getHead());
-        PolyTree sonResult = getSolver().query(sonQuery).generateOne();
-
-        if (sonResult == null) {return null;}
-
-        Type moreSpecificType = sonResult.getType();
-
-        Sub sonSpecificSub = Sub.mgu( moreSpecificType, sonQuery.getType() );
-        Sub newSub = Sub.dot(sonSpecificSub, locSub);
-
-        Listek<PolyTree> newAcc = Listek.mk(sonResult, acc);
-
-        return generateOne(locSonQueries.getTail(), newSub, newAcc);
     }
 
     private TMap<PolyTree> generateAll(Listek<Query> locSonQueries, Sub locSub, Listek<Listek<PolyTree>> acc) {

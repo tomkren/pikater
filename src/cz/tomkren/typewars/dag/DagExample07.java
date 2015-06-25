@@ -98,9 +98,9 @@ public class DagExample07 {
         uniformityChecker.test(goalType,1);
         uniformityChecker.test(goalType,2);
         uniformityChecker.test(goalType,9);
-        //uniformityChecker.test(goalType,10);
-        //uniformityChecker.test(goalType,11);
-        //uniformityChecker.test(goalType,12);
+        uniformityChecker.test(goalType,10);
+        uniformityChecker.test(goalType,11);
+        uniformityChecker.test(goalType,12);
         Log.it(uniformityChecker);
 
         Log.itln("Unsystematic generating started..");
