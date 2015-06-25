@@ -76,7 +76,7 @@ public class DagExample4 {
 
         List<TypedDag> dags = mkDags(codeLib1, goalType, numTrees);
 
-        KutilMain.showTypedDag(dags.get(125));
+        KutilMain.showDag(dags.get(125));
 
         //KutilMain.startLib(libStrs, goalType, numTrees);
     }

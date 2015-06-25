@@ -16,6 +16,10 @@ public class SmartLib {
         symLib = F.map(codeLib.getCodeNodes() , SmartSym::new);
     }
 
+    public static SmartLib mk(String... codeNodeLines) {
+        return new SmartLib(CodeLib.mk(codeNodeLines));
+    }
+
     public List<SmartSym> getSyms(){
         return symLib;
     }

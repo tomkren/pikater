@@ -104,6 +104,15 @@ public class F {
         return new ListResult<>(Arrays.asList(xs));
     }
 
+    public static <T> ListResult<T> list(Collection<T> xs) {
+        return new ListResult<T>(xs.stream());
+    }
+
+    public static <T> ListResult<T> set(Set<T> set) {
+        return new ListResult<T>(set.stream());
+    }
+
+
     public static <T> void each(List<T> xs, Consumer<? super T> f) {
         xs.stream().forEach(f);
     }
@@ -324,6 +333,9 @@ public class F {
     }
 
     public static BigInteger nextBigInteger(BigInteger exclusiveUpperBound, Random rand) {
+
+        if (F.isZero(exclusiveUpperBound)) {return null;}
+
         BigInteger result;
         do {
             result = new BigInteger(exclusiveUpperBound.bitLength(), rand);
@@ -349,6 +361,9 @@ public class F {
 
 
 
+    public static int plus(int x,int y) {
+        return x+y;
+    }
 
     public static void main(String[] args) {
 

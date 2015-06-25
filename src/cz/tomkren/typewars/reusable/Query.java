@@ -2,6 +2,7 @@ package cz.tomkren.typewars.reusable;
 
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.Types;
 
 import java.util.List;
 import java.util.Random;
@@ -22,6 +23,10 @@ public class Query {
     public Query(Type type, int treeSize) {
         this.type = type;
         this.treeSize = treeSize;
+    }
+
+    public Query(String type, int treeSize) {
+        this(Types.parse(type), treeSize);
     }
 
     public Query(Type type, int treeSize, Query dadQuery) {

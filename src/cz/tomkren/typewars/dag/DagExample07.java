@@ -4,13 +4,9 @@ import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.PolyTree;
-import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.reusable.*;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** Created by tom on 18.6.2015. */
 
@@ -56,7 +52,7 @@ public class DagExample07 {
 
     static SmartLib lib = new SmartLib(codeLib_pokus); //(codeLib);
 
-    static QuerySolver solver = new QuerySolver(lib);
+    static QuerySolver solver = new QuerySolver(lib, ch.getRandom());
 
     public static void main(String[] args) {
 
@@ -72,7 +68,7 @@ public class DagExample07 {
 
         String goalType = "D => LD";
 
-        List<PolyTree> oldMethodTrees = codeLib_pokus.generate(goalType, 10000);  //40000 65536;
+        List<PolyTree> oldMethodTrees = codeLib_pokus.generate(goalType, 1000);  //40000 65536;
 
         GeneratorChecker genCheck = new GeneratorChecker(oldMethodTrees, false);
 
@@ -95,14 +91,25 @@ public class DagExample07 {
         Log.it("nums [sizes: 1..."+upToTreeSize+"] = \n"+ nums_oldMethod );
         Log.it(nums_newMethod);
 
-        Log.it( "reuse ratio: "+solver.getReuseRatio() );
+        Log.it("reuse ratio: " + solver.getReuseRatio());
 
 
-        //QueryResult qRes = solver.query("D => LD", 1);
-        //ch.it("qRes.getNum() = " + qRes.getNum());
+        UniformityChecker uniformityChecker = new UniformityChecker(solver, 10000);
+        uniformityChecker.test(goalType,1);
+        uniformityChecker.test(goalType,2);
+        uniformityChecker.test(goalType,9);
+        //uniformityChecker.test(goalType,10);
+        //uniformityChecker.test(goalType,11);
+        //uniformityChecker.test(goalType,12);
+        Log.it(uniformityChecker);
+
+        Log.itln("Unsystematic generating started..");
+
+        Log.list( solver.uniformGenerate(goalType, 25, 100) );
 
         ch.results();
     }
+
 
     public static void checkQuery(String type, int n) {
         checkQuery(type, n, null);

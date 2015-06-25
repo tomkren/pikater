@@ -83,15 +83,15 @@ public class AndGadget {
     }
 
     public PolyTree generateOne() {
-        return generateOne(sonQueries, sub, Listek.mkSingleton(null));
+        return generateOne(sonQueries, sub, null);
     }
 
     public PolyTree generateOne(Listek<Query> locSonQueries, Sub locSub, Listek<PolyTree> acc) {
 
         if (locSonQueries == null) {
-            Type originalType = dadQuery.getType();
-            Type rootType = locSub.apply(originalType);
-            return sym.mkTree(rootType, Listek.toReverseList(acc));
+            PolyTree newTree = sym.mkTree(dadQuery.getType(), Listek.toReverseList(acc));
+            newTree.applySub(locSub);
+            return newTree;
         }
 
         Query sonQuery = new Query(locSub, locSonQueries.getHead());

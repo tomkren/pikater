@@ -10,7 +10,7 @@ import java.util.List;
 public class PolyTree {
 
     private final String name;
-    private final Type type;
+    private Type type;
     private final List<PolyTree> sons;
     private final Comb0 code;
 
@@ -45,6 +45,12 @@ public class PolyTree {
 
     public boolean isTerminal() {
         return sons.isEmpty();
+    }
+
+    // TODO otazka zda to stojí za porušení immutability, ale slouží to k dopøesnìní typù pøi reusable generování
+    public void applySub(Sub sub) {
+        type = sub.apply(type);
+        sons.forEach(s->s.applySub(sub));
     }
 
     @Override

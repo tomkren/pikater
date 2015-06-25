@@ -7,6 +7,8 @@ import cz.tomkren.kutil2.core.XmlLoader;
 import cz.tomkren.kutil2.items.Int2D;
 import cz.tomkren.typewars.TypedDag;
 
+import java.util.List;
+
 /**
  * KUTIL V2
  * V2 started by Tomáš Křen on 31. 10. 2014.
@@ -29,12 +31,56 @@ public class KutilMain {
         Log.it("Good bye!");
     }
 
-    public static String wrapLibInKutil(String[] lib, String goalType, String numTrees) {
-        return wrapLibInKutil(mkLibMacro(lib, goalType, numTrees));
+
+
+    public static void startLib(String[] lib, String goalType, Integer numTrees) {
+        new Kutil().start(XmlLoader.LoadMethod.STRING, wrapInKutilShower(lib, goalType, numTrees.toString()));
+    }
+
+    public static void showDag(TypedDag dag) {
+        new Kutil().start(XmlLoader.LoadMethod.STRING, wrapInKutilShower(mkFrameWith(dag.toKutilXML(new Int2D(64, 64)))));
+    }
+
+    public static void showDags(List<TypedDag> dags) {
+        StringBuilder sb = new StringBuilder();
+
+        int width = 16000;
+        int okraj = 20;
+        int init  = 3*okraj;
+
+        int x = init;
+        int y = init;
+
+        int maxHeight = 0;
+
+        for (TypedDag dag : dags) {
+            sb.append( dag.toKutilXML(new Int2D(x,y)) ).append("\n");
+
+            x += dag.getPxWidth() + okraj;
+
+            if (dag.getPxHeight() > maxHeight) {
+                maxHeight = dag.getPxHeight();
+            }
+
+            if (x > width) {
+                x = init;
+                y += maxHeight + okraj;
+
+            }
+        }
+
+        String xml = wrapInKutilShower(mkFrameWith(sb.toString()));
+        new Kutil().start(XmlLoader.LoadMethod.STRING, xml);
     }
 
 
-    public static String wrapLibInKutil(String xml) {
+
+    private static String wrapInKutilShower(String[] lib, String goalType, String numTrees) {
+        return wrapInKutilShower(mkLibMacro(lib, goalType, numTrees));
+    }
+
+
+    private static String wrapInKutilShower(String xml) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<kutil>\n" +
                 "    <o type=\"time\" ups=\"80\">\n" +
@@ -55,7 +101,7 @@ public class KutilMain {
 
     // id:
 
-    public static String mkLibMacro(String[] lib, String goalType, String numTrees) {
+    private static String mkLibMacro(String[] lib, String goalType, String numTrees) {
         return  "            <macro type=\"TypedDagGenerator\" id=\"$pokus3\" title=\"Title...\" size=\"2500 2000\" pos=\"4 4\">\n" +
                 "                <n>"+numTrees+"</n>\n" +
                 "                <goal>"+goalType+"</goal>\n" +
@@ -63,22 +109,10 @@ public class KutilMain {
                 "            </macro>\n" ;
     }
 
-    public static String mkFrameWith(String innerXML) {
+    private static String mkFrameWith(String innerXML) {
         return  "<o type=\"frame\" id=\"$pokus3\" title=\"Title...\" size=\"2500 2000\" pos=\"4 4\">\n" +
                 innerXML+
                 "</o>\n" ;
-    }
-
-    public static void startLib(String[] lib, String goalType, String numTrees) {
-        new Kutil().start(XmlLoader.LoadMethod.STRING, wrapLibInKutil(lib,goalType,numTrees));
-    }
-
-    public static void startLib(String[] lib, String goalType, Integer numTrees) {
-        startLib(lib,goalType,numTrees.toString());
-    }
-
-    public static void showTypedDag(TypedDag typedDag) {
-        new Kutil().start(XmlLoader.LoadMethod.STRING, wrapLibInKutil( mkFrameWith(typedDag.toKutilXML(new Int2D(64,64))) ));
     }
 
 

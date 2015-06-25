@@ -7,10 +7,7 @@ import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.Types;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class QuerySolver {
 
@@ -56,8 +53,43 @@ public class QuerySolver {
         return qResult;
     }
 
-    public List<PolyTree> generate(String goalType, int treeSize, int numToGenerate) {
-        throw new TODO();
+    /*public static int compareStrs(String s1, String s2) {
+        int len1 = s1.length();
+        int len2 = s2.length();
+        if (len1 == len2) {return s1.compareTo(s2);}
+        return Integer.compare(len1, len2);
+    }*/
+
+    public static final Comparator<String> compareStrs = (s1, s2) -> {
+        int len1 = s1.length();
+        int len2 = s2.length();
+        if (len1 == len2) {return s1.compareTo(s2);}
+        return Integer.compare(len1, len2);
+    };
+
+    public static final Comparator<PolyTree> compareTrees = (t1, t2) -> {
+        int size1 = t1.getSize();
+        int size2 = t2.getSize();
+        if (size1 == size2) {return compareStrs.compare(t1.toString(), t2.toString());}
+        return Integer.compare(size1, size2);
+    };
+
+    public List<PolyTree> uniformGenerate(String goalType, int maxTreeSize, int numToGenerate) {
+        Set<PolyTree> codeSet = new TreeSet<>(compareTrees);
+
+        while (codeSet.size() < numToGenerate) {
+
+            int treeSize = rand.nextInt(maxTreeSize + 1);
+            PolyTree tree = generateOne(goalType, treeSize);
+
+            if (tree != null) {
+                if (!codeSet.contains(tree)) {
+                    codeSet.add(tree);
+                }
+            }
+        }
+
+        return new ArrayList<>(codeSet);
     }
 
     public PolyTree generateOne(String goalType, int treeSize) {

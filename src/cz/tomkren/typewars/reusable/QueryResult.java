@@ -63,6 +63,9 @@ public class QueryResult {
     }
 
     public PolyTree generateOne() {
+
+        if (F.isZero(num)) {return null;}
+
         BigInteger index = F.nextBigInteger(num, query.getRand());
 
         for (AndGadget andGadget : andGadgets) {
