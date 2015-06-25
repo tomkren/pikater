@@ -1,5 +1,6 @@
 package cz.tomkren.typewars.reusable;
 
+import com.sun.org.apache.xpath.internal.operations.And;
 import cz.tomkren.helpers.ABC;
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
@@ -15,6 +16,8 @@ import java.util.*;
 
 public class QueryResult {
 
+    private Query query;
+
     private List<AndGadget> andGadgets;
 
     private Map<Type,BigInteger> nums;
@@ -22,6 +25,7 @@ public class QueryResult {
 
 
     public QueryResult(Query query) {
+        this.query = query;
 
         andGadgets = new ArrayList<>();
         nums = new HashMap<>();
@@ -58,6 +62,21 @@ public class QueryResult {
         num = AndGadget.sum(nums);
     }
 
+    public PolyTree generateOne() {
+        BigInteger index = F.nextBigInteger(num, query.getRand());
+
+        for (AndGadget andGadget : andGadgets) {
+            BigInteger numTrees = andGadget.getNum();
+
+            if (index.compareTo(numTrees) < 0) {
+                return andGadget.generateOne();
+            }
+
+            index = index.subtract(numTrees);
+        }
+
+        throw new Error("QueryResult.generateOne : This place should be unreachable!");
+    }
 
     public TMap<PolyTree> generateAll() {
 

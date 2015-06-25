@@ -1,14 +1,22 @@
 package cz.tomkren.typewars.reusable;
 
 
+import cz.tomkren.helpers.Log;
+import cz.tomkren.helpers.TODO;
+import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.Types;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class QuerySolver {
 
     private SmartLib lib;
+    private Random rand;
+
     private Map<String,QueryResult> queries;
 
     private int nextVarId;
@@ -16,8 +24,9 @@ public class QuerySolver {
     private int numQueryCalls;
     private int numQueryResults;
 
-    public QuerySolver(SmartLib lib) {
+    public QuerySolver(SmartLib lib, Random rand) {
         this.lib = lib;
+        this.rand = rand;
 
         nextVarId = 0;
         queries = new HashMap<>();
@@ -28,6 +37,7 @@ public class QuerySolver {
 
     public int getNextVarId() {return nextVarId;}
     public void setNextVarId(int nextVarId) {this.nextVarId = nextVarId;}
+    public Random getRand() {return rand;}
 
     public QueryResult query(String type, int treeSize) {
         return query(new Query(Types.parse(type),treeSize));
@@ -44,6 +54,25 @@ public class QuerySolver {
         }
         numQueryCalls ++;
         return qResult;
+    }
+
+    public List<PolyTree> generate(String goalType, int treeSize, int numToGenerate) {
+        throw new TODO();
+    }
+
+    public PolyTree generateOne(String goalType, int treeSize) {
+        return query(goalType, treeSize).generateOne();
+    }
+
+    public TMap<PolyTree> generateAllUpTo(String goalType, int upToTreeSize) {
+        Log.it("generateAllUpTo("+goalType+", "+upToTreeSize+")");
+        TMap<PolyTree> ret = new TMap<>();
+        for (int treeSize = 1; treeSize <= upToTreeSize; treeSize++) {
+            QueryResult qRes = query(goalType, treeSize);
+            Log.it("  treeSize = " + treeSize + ", num = " + qRes.getNum() + "\t\t" + "reuse-ratio: " + getReuseRatio());
+            ret.add(qRes.generateAll());
+        }
+        return ret;
     }
 
 

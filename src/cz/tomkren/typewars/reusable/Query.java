@@ -4,6 +4,7 @@ import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 
 import java.util.List;
+import java.util.Random;
 
 /** Created by tom on 7. 6. 2015 */
 
@@ -38,7 +39,9 @@ public class Query {
     public QuerySolver getSolver() {return solver;}
     public void setSym(SmartSym sym) {this.sym = sym;}
 
-
+    public Random getRand() {
+        return solver.getRand();
+    }
 
 
 

@@ -1,5 +1,7 @@
 package cz.tomkren.helpers;
 
+// TODO | myslim že tu je debilně udělaný něco možná, občas tam naběhne stackOverflow když to je extra velký,
+// todo | tak nějak nezávisle otestovat a dyštak najít oficiální alternativu jak se má dělat když člověk chce funkcionální seznamy
 
 import com.google.common.collect.Lists;
 
@@ -8,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-// nil pomoc� null
+// nil pomocí null
 
 public class Listek <T> {
     private T head;

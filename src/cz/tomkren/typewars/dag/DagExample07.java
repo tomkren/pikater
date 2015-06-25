@@ -70,26 +70,29 @@ public class DagExample07 {
         //checkQuery("D => LD", 10, 1);
         //checkQuery("D => LD", 12, 1);
 
+        String goalType = "D => LD";
 
-        List<PolyTree> oldMethodTrees = codeLib_pokus.generate("D => LD", 65536);
-        //List<PolyTree> newMethodTrees = Fun2.generateAllUpTo_naive(lib, "D => LD", 20); //25
+        List<PolyTree> oldMethodTrees = codeLib_pokus.generate(goalType, 10000);  //40000 65536;
 
         GeneratorChecker genCheck = new GeneratorChecker(oldMethodTrees, false);
-        //genCheck.check(newMethodTrees, true);
 
         List<Integer> nums_oldMethod = genCheck.getNumsForSizes();
-        int n = nums_oldMethod.size();
+        int upToTreeSize = nums_oldMethod.size();
 
         List<Integer> nums_newMethod = new ArrayList<>();
 
-        for (int treeSize = 1; treeSize <= n; treeSize++) {
-            int num = solver.query("D => LD", treeSize).getNum().intValue();
+        TMap<PolyTree> newMethodTrees = solver.generateAllUpTo(goalType, upToTreeSize); //25
+
+        genCheck.check(newMethodTrees, true);
+
+        for (int treeSize = 1; treeSize <= upToTreeSize; treeSize++) {
+            int num = solver.query(goalType, treeSize).getNum().intValue();
             nums_newMethod.add(num);
-            Log.it(treeSize+"/"+n+": "+num +" ["+(num == nums_oldMethod.get(treeSize-1) ? "OK":"KO!!!!!!")+"]"
+            Log.it(treeSize+"/"+upToTreeSize+": "+num +" ["+(num == nums_oldMethod.get(treeSize-1) ? "OK":"KO!!!!!!")+"]"
             +"  reuse-ratio: "+solver.getReuseRatio());
         }
 
-        Log.it("nums [sizes: 1..."+n+"] = \n"+ nums_oldMethod );
+        Log.it("nums [sizes: 1..."+upToTreeSize+"] = \n"+ nums_oldMethod );
         Log.it(nums_newMethod);
 
         Log.it( "reuse ratio: "+solver.getReuseRatio() );

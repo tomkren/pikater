@@ -61,11 +61,17 @@ public class GeneratorChecker {
         return ret;
     }
 
+    public boolean check(TMap<PolyTree> treesMap, boolean isWholeSizes) {
+        return check(new GeneratorChecker(treesMap.flatten(), isWholeSizes));
+    }
+
     public boolean check(List<PolyTree> trees, boolean isWholeSizes) {
+        return check(new GeneratorChecker(trees, isWholeSizes));
+    }
+
+    public boolean check(GeneratorChecker tempChecker) {
+
         boolean isOk = true;
-
-
-        GeneratorChecker tempChecker = new GeneratorChecker(trees, isWholeSizes);
 
         List<String> shouldBeList = toNormalizedList();
         List<String> resultList   = tempChecker.toNormalizedList();

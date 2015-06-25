@@ -24,7 +24,7 @@ public class AndGadget {
     private Map<Type,BigInteger> nums;
     private BigInteger num;
 
-    private TMap<PolyTree> trees;
+    private TMap<PolyTree> allTrees;
 
     public AndGadget(Query dadQuery, SmartSym sym, Listek<Query> sonQueries, Sub sub) {
         this.dadQuery = dadQuery;
@@ -35,7 +35,7 @@ public class AndGadget {
         nums = computeNums(sonQueries, sub, BigInteger.ONE);
         num = sum(nums);
 
-        trees = null;
+        allTrees = null;
     }
 
     private Map<Type,BigInteger> computeNums(Listek<Query> queries, Sub sub, BigInteger acc) {
@@ -76,10 +76,37 @@ public class AndGadget {
     }
 
     public TMap<PolyTree> generateAll() {
-        if (trees == null) {
-            trees = generateAll(sonQueries, sub, Listek.mkSingleton(null));
+        if (allTrees == null) {
+            allTrees = generateAll(sonQueries, sub, Listek.mkSingleton(null));
         }
-        return trees;
+        return allTrees;
+    }
+
+    public PolyTree generateOne() {
+        return generateOne(sonQueries, sub, Listek.mkSingleton(null));
+    }
+
+    public PolyTree generateOne(Listek<Query> locSonQueries, Sub locSub, Listek<PolyTree> acc) {
+
+        if (locSonQueries == null) {
+            Type originalType = dadQuery.getType();
+            Type rootType = locSub.apply(originalType);
+            return sym.mkTree(rootType, Listek.toReverseList(acc));
+        }
+
+        Query sonQuery = new Query(locSub, locSonQueries.getHead());
+        PolyTree sonResult = getSolver().query(sonQuery).generateOne();
+
+        if (sonResult == null) {return null;}
+
+        Type moreSpecificType = sonResult.getType();
+
+        Sub sonSpecificSub = Sub.mgu( moreSpecificType, sonQuery.getType() );
+        Sub newSub = Sub.dot(sonSpecificSub, locSub);
+
+        Listek<PolyTree> newAcc = Listek.mk(sonResult, acc);
+
+        return generateOne(locSonQueries.getTail(), newSub, newAcc);
     }
 
     private TMap<PolyTree> generateAll(Listek<Query> locSonQueries, Sub locSub, Listek<Listek<PolyTree>> acc) {
@@ -100,8 +127,7 @@ public class AndGadget {
         }
 
         Query sonQuery = new Query(locSub, locSonQueries.getHead());
-
-        TMap<PolyTree> sonResult = getSolver().query(sonQuery).generateAll();  // generateAll(lib, sonQuery);
+        TMap<PolyTree> sonResult = getSolver().query(sonQuery).generateAll();
 
         TMap<PolyTree> ret = new TMap<>();
 

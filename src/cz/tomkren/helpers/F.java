@@ -323,6 +323,14 @@ public class F {
         return big.compareTo(BigInteger.ZERO) == 0;
     }
 
+    public static BigInteger nextBigInteger(BigInteger exclusiveUpperBound, Random rand) {
+        BigInteger result;
+        do {
+            result = new BigInteger(exclusiveUpperBound.bitLength(), rand);
+        } while (result.compareTo(exclusiveUpperBound) >= 0);
+        return result;
+    }
+
     public static void deleteLast(StringBuilder sb, int n) {
         int len = sb.length();
         sb.delete(len-n, len);
@@ -338,6 +346,8 @@ public class F {
             throw new Error(e);
         }
     }
+
+
 
 
     public static void main(String[] args) {
