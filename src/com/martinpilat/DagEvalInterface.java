@@ -41,7 +41,7 @@ public class DagEvalInterface {
      * @throws XmlRpcException
      */
     @SuppressWarnings("unchecked")
-    public ArrayList<double[]> eval(String jsonString, String dataFile) throws XmlRpcException{
+    public ArrayList<double[]> eval(String jsonString, String dataFile) throws XmlRpcException {
 
         Vector params = new Vector();
         params.addElement(jsonString);
@@ -62,19 +62,29 @@ public class DagEvalInterface {
         return res;
     }
 
+    @SuppressWarnings("unchecked")
+    public String getMethodParams(String dataFile) throws XmlRpcException {
+        Vector params = new Vector();
+        params.addElement(dataFile);
+
+        return (String) this.server.execute("get_param_sets", params);
+    }
+
     public static void main(String[] args) {
 
         try {
-            DagEvalInterface evaluator = new DagEvalInterface("http://localhost:8080");
+            DagEvalInterface evaluator = new DagEvalInterface("http://127.0.0.1:8080");
+
+            System.out.println(evaluator.getMethodParams("wilt.csv"));
 
             String dagStr   =  "[";
-            dagStr          += "{\"input\" : [ [], \"input\", [\"1:0\"] ], \"1\" : [ [\"1:0\"], \"SVC\", [] ]},";
-            dagStr          += "{\"input\" : [ [], \"input\", [\"1:0\"] ], \"1\" : [ [\"1:0\"], \"lsdfogR\", [] ]},";
+            dagStr          += "{\"input\" : [ [], \"input\", [\"1:0\"] ], \"1\" : [ [\"1:0\"], [\"SVC\", {\"C\": 8, \"gamma\": 0.0001}], [] ]},";
+            dagStr          += "{\"input\" : [ [], \"input\", [\"1:0\"] ], \"1\" : [ [\"1:0\"], [\"lsdfogR\", {}], [] ]},"; //this should fail
             dagStr          += "{\"input\" : [ [], \"input\", [\"1:0\"] ], \"1\" : [ [\"1:0\"], \"DT\", [] ]},";
-            dagStr          += "{\"input\" : [ [], \"input\", [\"1:0\"] ], \"1\" : [ [\"1:0\"], \"gaussianNB\", [] ]}";
+            dagStr          += "{\"input\" : [ [], \"input\", [\"1:0\"] ], \"1\" : [ [\"1:0\"], [\"gaussianNB\", {}], [] ]}";
             dagStr          += "]";
 
-            ArrayList<double[]> scores = evaluator.eval(dagStr, "winequality-white.csv");
+            ArrayList<double[]> scores = evaluator.eval(dagStr, "wilt.csv");
 
             for (double[] darr : scores) {
                 if (darr.length == 0)
