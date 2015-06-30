@@ -47,9 +47,9 @@ public class DagExample06 {
         String popJson = mkPopJson(dags);
         ch.it(popJson);
 
-        F.writeFile("population_"+numTrees+".json", popJson);
+        F.writeFile("population_" + numTrees + ".json", popJson);
 
-        int winnerId = 17572;
+        int winnerId = 478 ; //17572;
 
         ch.results();
 
