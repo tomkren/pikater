@@ -6,6 +6,7 @@ import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.Types;
+import cz.tomkren.typewars.eva.IndivGenerator;
 
 import java.util.*;
 
@@ -40,6 +41,10 @@ public class QuerySolver {
         return query(new Query(Types.parse(type),treeSize));
     }
 
+    public QueryResult query(Type type, int treeSize) {
+        return query(new Query(type,treeSize));
+    }
+
     public QueryResult query(Query q) {
         q.setSolver(this);
         String qKey = q.toString();
@@ -53,12 +58,6 @@ public class QuerySolver {
         return qResult;
     }
 
-    /*public static int compareStrs(String s1, String s2) {
-        int len1 = s1.length();
-        int len2 = s2.length();
-        if (len1 == len2) {return s1.compareTo(s2);}
-        return Integer.compare(len1, len2);
-    }*/
 
     public static final Comparator<String> compareStrs = (s1, s2) -> {
         int len1 = s1.length();
@@ -115,49 +114,4 @@ public class QuerySolver {
     }
 
 }
-
-    /*public QueryResult_old query_old(Query q) {
-        q.setSolver(this);
-        String qKey = q.toString();
-        QueryResult_old qNode = queries_old.get(qKey);
-        if (qNode == null) {
-            qNode = new QueryResult_old(q);
-            queries_old.put(qKey,qNode);
-        }
-        return qNode;
-    }*/
-
-
-    /*
-    private List<SizeNode> sizes;
-
-    public TreeTree(SmartLib lib) {
-        this.lib = lib;
-        //sizes = new ArrayList<>();
-        queries = new HashMap<>();
-    }
-
-    public int addSize() {
-        int n = getMaxSize() + 1;
-        sizes.add(new SizeNode(n, this));
-        return n;
-    }
-
-    public SizeNode getSizeNode(int treeSize) {
-        if (treeSize > getMaxSize()) {return null;}
-        return sizes.get(treeSize-1);
-    }
-
-    public int getMaxSize() {
-        return sizes.size();
-    }
-
-    public TypeNode getTypeNode(AB<Integer,Type> signature) {
-        int treeSize = signature._1();
-        Type type    = signature._2();
-
-        SizeNode sizeNode = getSizeNode(treeSize);
-        if (sizeNode == null) {return null;}
-        return sizeNode.getTypeNode(type);
-    }*/
 

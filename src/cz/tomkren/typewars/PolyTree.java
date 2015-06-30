@@ -1,24 +1,31 @@
 package cz.tomkren.typewars;
 
 import com.google.common.base.Joiner;
-import cz.tomkren.helpers.Comb0;
-import cz.tomkren.helpers.F;
+import cz.tomkren.helpers.*;
+import cz.tomkren.typewars.eva.FitFun;
+import cz.tomkren.typewars.eva.FitIndiv;
+import cz.tomkren.typewars.eva.FitVal;
+import cz.tomkren.typewars.reusable.QuerySolver;
+import cz.tomkren.typewars.reusable.SmartLib;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PolyTree {
+public class PolyTree implements FitIndiv {
 
     private final String name;
     private Type type;
     private final List<PolyTree> sons;
     private final Comb0 code;
 
+    private FitVal fitVal;
+
     public PolyTree(String name, Type type, List<PolyTree> sons, Comb0 code) {
         this.name = name;
         this.type = type;
         this.sons = sons;
         this.code = code;
+        this.fitVal = null;
     }
 
     public PolyTree(String name, Type type, List<PolyTree> sons) {
@@ -47,7 +54,48 @@ public class PolyTree {
         return sons.isEmpty();
     }
 
-    // TODO otazka zda to stojí za porušení immutability, ale slouží to k dopøesnìní typù pøi reusable generování
+    public List<SubtreePos> getAllSubtreePoses() {
+
+        List<SubtreePos> ret = new ArrayList<>();
+
+        ret.add( SubtreePos.root() );
+
+        int sonIndex = 0;
+        for (PolyTree son : sons) {
+            List<SubtreePos> sonSubtreePoses = son.getAllSubtreePoses();
+            for (SubtreePos subtreePosInSon : sonSubtreePoses) {
+                ret.add(SubtreePos.step(sonIndex, subtreePosInSon));
+            }
+            sonIndex++;
+        }
+
+        return ret;
+    }
+
+    public PolyTree getSubtree(SubtreePos pos) {
+        if (pos.isRoot()) {
+            return this;
+        } else {
+            return sons.get(pos.getSonIndex()).getSubtree(pos.getTail());
+        }
+    }
+
+    public PolyTree changeSubtree(SubtreePos pos, PolyTree newSubtree) {
+        if (pos.isRoot()) {
+            return newSubtree;
+        } else {
+            List<PolyTree> newSons = new ArrayList<>(sons.size());
+            int sonIndex = pos.getSonIndex();
+            int i = 0;
+            for (PolyTree son : sons) {
+                newSons.add( i == sonIndex ? son.changeSubtree(pos.getTail(),newSubtree) : son );
+                i++;
+            }
+            return  new PolyTree(name,type,newSons,code);
+        }
+    }
+
+    // TODO otÃ¡zka zda to stojÃ­ za poruÅ¡enÃ­ immutability, ale slouÅ¾Ã­ to k do-upÅ™esnÄ›nÃ­ typÅ¯ pÅ™i reusable generovÃ¡nÃ­
     public void applySub(Sub sub) {
         type = sub.apply(type);
         sons.forEach(s->s.applySub(sub));
@@ -71,5 +119,37 @@ public class PolyTree {
         for (PolyTree son : sons) {sum += son.getSize();}
         return 1 + sum;
         // return 1 + F.list(sons).map(PolyTree::getSize).foldr(0,(x,y)->x+y);
+    }
+
+
+    @Override
+    public FitVal evaluate(FitFun fitness) {
+        if (fitVal == null || fitness.doRecomputeFitVal()) {
+            fitVal = fitness.getFitVal(computeValue());
+        }
+        return fitVal;
+    }
+
+    @Override
+    public double getProbability() {
+        if (fitVal == null) {throw new Error("fitVal must be not-null!");}
+        return fitVal.getVal();
+    }
+
+    public static void main(String[] args) {
+        Checker ch = new Checker();
+
+        SmartLib lib = SmartLib.EXAMPLE01;
+        List<PolyTree> trees = new QuerySolver(lib, ch.getRandom()).uniformGenerate("D => LD", 20, 1000);
+
+        for (PolyTree tree : trees) {
+            List<SubtreePos> allPoses = tree.getAllSubtreePoses();
+            ch.eq(tree.getSize(), allPoses.size());
+            SubtreePos randomPos = F.randomElement(allPoses,ch.getRandom());
+            Log.it(randomPos);
+            ch.eqStr(tree.toString(), tree.changeSubtree(randomPos, tree.getSubtree(randomPos)));
+        }
+
+        ch.results();
     }
 }

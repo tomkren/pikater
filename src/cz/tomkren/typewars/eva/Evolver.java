@@ -26,6 +26,10 @@ public class Evolver<Indiv extends FitIndiv> implements PopulationSolver<Indiv> 
             this.operators = operators;
             this.logger = logger;
         }
+
+        public Evolver<Ind> mk() {
+            return new Evolver<>(this);
+        }
     }
 
     @Override
