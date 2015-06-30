@@ -62,6 +62,15 @@ public class DagEvalInterface {
         return res;
     }
 
+
+    /**
+     * Returns a JSON string with the possible values of parameters of all supported methods. Some parameters depend
+     * on the dataset for which the methods will be applied.
+     *
+     * @param dataFile The name of the dataset for which the parameters should be generated.
+     * @return The JSON string with the description of parameters.
+     * @throws XmlRpcException
+     */
     @SuppressWarnings("unchecked")
     public String getMethodParams(String dataFile) throws XmlRpcException {
         Vector params = new Vector();
