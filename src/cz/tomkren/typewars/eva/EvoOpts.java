@@ -16,6 +16,10 @@ public class EvoOpts {
         this.saveBest = saveBest;
     }
 
+    public EvoOpts(int numGens, int popSize, boolean saveBest) {
+        this(1, numGens, popSize, saveBest);
+    }
+
     public int getNumRuns() {
         return numRuns;
     }

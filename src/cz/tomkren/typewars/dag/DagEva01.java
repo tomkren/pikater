@@ -3,11 +3,10 @@ package cz.tomkren.typewars.dag;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
-import cz.tomkren.typewars.TypedDag;
 import cz.tomkren.typewars.eva.*;
 import cz.tomkren.typewars.reusable.PolyTreeGenerator;
 import cz.tomkren.typewars.reusable.QuerySolver;
-import cz.tomkren.typewars.reusable.SameSizeSubtreeMutation;
+import cz.tomkren.typewars.eva.SameSizeSubtreeMutation;
 import cz.tomkren.typewars.reusable.SmartLib;
 
 import java.util.Arrays;
@@ -18,17 +17,21 @@ import java.util.Random;
 public class DagEva01 {
 
     public static void main(String[] args) {
-        Checker ch = new Checker();
-        Random rand = ch.getRandom();
 
+        // 3265394041486059844L - cenej seed na kerym to haže martinovi warning, z piety zatím nesmazáno
+        Checker ch = new Checker();
+
+        TogetherFitFun fitness = new DataScientistFitness("http://127.0.0.1:8080", "winequality-white.csv");
+        //FitFun fitness = o -> new FitVal.Basic(((TypedDag)o).getHeight());
 
         String goalType = "D => LD";
-        SmartLib lib = SmartLib.EXAMPLE01;
+        SmartLib lib = SmartLib.DATA_SCIENTIST_01;
         int generatingMaxTreeSize = 35;
-        FitFun fitness = o -> new FitVal.Basic(((TypedDag)o).getHeight());
 
+
+        Random rand = ch.getRandom();
         QuerySolver querySolver = new QuerySolver(lib, rand);
-        EvoOpts evoOpts = new EvoOpts(1,51,500,true);
+        EvoOpts evoOpts = new EvoOpts(10,8,true);
         IndivGenerator<PolyTree> gen = new PolyTreeGenerator(goalType, generatingMaxTreeSize, querySolver);
         Distribution<Operator<PolyTree>> operators = new Distribution<>(Arrays.asList(
                 new SameSizeSubtreeMutation(querySolver, 0.9),
@@ -37,7 +40,7 @@ public class DagEva01 {
 
         Logger<PolyTree> logger = new SimpleLogger();
 
-        Evolver<PolyTree> evolver = new Evolver.Opts<>(gen, fitness, evoOpts, rand, operators, logger).mk();
+        Evolver<PolyTree> evolver = new Evolver.Opts<>(fitness, evoOpts, gen, operators, logger, rand).mk();
 
         evolver.startRun();
 
@@ -50,6 +53,7 @@ public class DagEva01 {
         public void logPop(int run, int generation, EvaledPop<PolyTree> pop) {
             PolyTree best = pop.getBestIndividual();
             Log.it("gen" + generation + " \t best: ["+best.getProbability()+"] " +best);
+            Log.it( pop );
         }
 
 

@@ -1,6 +1,5 @@
 package cz.tomkren.typewars.eva;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,18 +12,39 @@ public class Evolver<Indiv extends FitIndiv> implements PopulationSolver<Indiv> 
     public static class Opts<Ind extends FitIndiv> {
         private final IndivGenerator<Ind> generator;
         private final FitFun fitness;
+        private final TogetherFitFun tFitness;
         private final EvoOpts evoOpts;
         private final Random rand;
         private final Distribution<Operator<Ind>> operators;
         private final Logger<Ind> logger;
 
-        public Opts(IndivGenerator<Ind> generator, FitFun fitness, EvoOpts evoOpts, Random rand, Distribution<Operator<Ind>> operators, Logger<Ind> logger) {
+        private Opts(FitFun fitness, TogetherFitFun tFitness, EvoOpts evoOpts, IndivGenerator<Ind> generator,
+                    Distribution<Operator<Ind>> operators, Logger<Ind> logger, Random rand) {
             this.generator = generator;
             this.fitness = fitness;
+            this.tFitness = tFitness;
             this.evoOpts = evoOpts;
             this.rand = rand;
             this.operators = operators;
             this.logger = logger;
+
+            if (fitness == null && tFitness == null) {
+                throw new Error("At least one of the fitness or together-fitness must be not-null!");
+            }
+        }
+
+        public Opts(FitFun fitness, EvoOpts evoOpts, IndivGenerator<Ind> generator,
+                    Distribution<Operator<Ind>> operators, Logger<Ind> logger, Random rand) {
+            this(fitness, null, evoOpts, generator, operators, logger, rand);
+        }
+
+        public Opts(TogetherFitFun tFitness, EvoOpts evoOpts, IndivGenerator<Ind> generator,
+                    Distribution<Operator<Ind>> operators, Logger<Ind> logger, Random rand) {
+            this(null, tFitness, evoOpts, generator, operators, logger, rand);
+        }
+
+        public boolean isFitnessTogether() {
+            return tFitness != null;
         }
 
         public Evolver<Ind> mk() {
@@ -39,31 +59,11 @@ public class Evolver<Indiv extends FitIndiv> implements PopulationSolver<Indiv> 
 
     @Override
     public EvaledPop<Indiv> evalPop(List<Indiv> pop, int gen) {
-        return new EPop(pop, gen);
-    }
-
-    private class EPop implements EvaledPop<Indiv> {
-
-        private Distribution<Indiv> popDist;
-        private List<Indiv> terminators;
-
-        public EPop(List<Indiv> pop, int gen) {
-            FitFun fitness = opts.fitness;
-            fitness.initGeneration(gen);
-            terminators = new ArrayList<>();
-            for (Indiv ind : pop) {
-                FitVal fitVal = ind.evaluate(fitness);
-                if (fitVal.isOK()) {
-                    terminators.add( ind );
-                }
-            }
-            popDist = new Distribution<>(pop);
+        if (opts.isFitnessTogether()) {
+            return new TogetherEvaledPop<>(pop, opts.tFitness, gen);
+        } else {
+            return new BasicEvaledPop<>(pop, opts.fitness, gen);
         }
-
-        @Override public boolean isTerminating() {return !terminators.isEmpty();}
-        @Override public Indiv getBestIndividual() {return popDist.getBest();}
-        @Override public Distribution<Indiv> getIndividuals() {return popDist;}
-        @Override public List<Indiv> getTerminators() {return terminators;}
     }
 
     @Override public int     getNumRuns() {return opts.evoOpts.getNumRuns();}

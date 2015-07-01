@@ -29,7 +29,7 @@ public class SmartLib {
     }
 
 
-    public static final SmartLib EXAMPLE01 = SmartLib.mk(
+    public static final SmartLib DATA_SCIENTIST_01 = SmartLib.mk(
             "TypedDag.dia( TypedDag: D => D , TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",
             "TypedDag.dia0( TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",
             "TypedDag.split( TypedDag: D => (V D n) , MyList: V (D => LD) n ) : D => (V LD n)",

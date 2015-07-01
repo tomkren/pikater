@@ -1,18 +1,20 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.eva;
 
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
-import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.SubtreePos;
 import cz.tomkren.typewars.Type;
-import cz.tomkren.typewars.eva.Operator;
+import cz.tomkren.typewars.reusable.QuerySolver;
+import cz.tomkren.typewars.reusable.SmartLib;
 
 import java.util.List;
 import java.util.Random;
 
 /** Created by tom on 30. 6. 2015. */
+
+// TODO kontrolovat zda se fakt strom změnil (třeba na 5 pokusů)
 
 public class SameSizeSubtreeMutation implements Operator<PolyTree> {
 
@@ -28,7 +30,7 @@ public class SameSizeSubtreeMutation implements Operator<PolyTree> {
 
     public PolyTree mutate(PolyTree tree) {
         // select subtree
-        SubtreePos subtreePos = F.randomElement(tree.getAllSubtreePoses(), rand);
+        SubtreePos subtreePos = tree.getRandomSubtreePos(rand);
         PolyTree subTree = tree.getSubtree(subtreePos);
 
         // generate new subtree with same size and type
@@ -55,7 +57,7 @@ public class SameSizeSubtreeMutation implements Operator<PolyTree> {
     public static void main(String[] args) {
         Checker ch = new Checker();
 
-        SmartLib lib = SmartLib.EXAMPLE01;
+        SmartLib lib = SmartLib.DATA_SCIENTIST_01;
         QuerySolver querySolver = new QuerySolver(lib, ch.getRandom());
         List<PolyTree> trees = querySolver.uniformGenerate("D => LD", 35, 100);
 

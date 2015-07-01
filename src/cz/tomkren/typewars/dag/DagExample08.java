@@ -18,7 +18,7 @@ public class DagExample08 {
     public static void main(String[] args) {
         Checker ch = new Checker();
 
-        SmartLib lib = SmartLib.EXAMPLE01;
+        SmartLib lib = SmartLib.DATA_SCIENTIST_01;
 
         QuerySolver solver = new QuerySolver(lib, ch.getRandom());
 

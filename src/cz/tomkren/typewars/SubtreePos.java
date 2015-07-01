@@ -8,17 +8,21 @@ import java.util.List;
 public class SubtreePos {
 
     private final Listek<Integer> path;
+    private final Type type;
 
-    private SubtreePos() {
+    private SubtreePos(Type type) {
         path = null;
+        this.type = type;
     }
 
     private SubtreePos(int sonIndex, SubtreePos subtreePosInSon) {
         path = new Listek<>(sonIndex, subtreePosInSon.path);
+        type = subtreePosInSon.getType();
     }
 
-    private SubtreePos(Listek<Integer> path) {
+    private SubtreePos(Listek<Integer> path, Type type) {
         this.path = path;
+        this.type = type;
     }
 
     public boolean isRoot() {
@@ -32,15 +36,19 @@ public class SubtreePos {
 
     public SubtreePos getTail() {
         if (path == null) {throw new Error("Empty path has tail!");}
-        return new SubtreePos(path.getTail());
+        return new SubtreePos(path.getTail(), type);
     }
 
     public List<Integer> getPath() {
         return Listek.toList(path);
     }
 
-    public static SubtreePos root() {
-        return new SubtreePos();
+    public Type getType() {
+        return type;
+    }
+
+    public static SubtreePos root(Type type) {
+        return new SubtreePos(type);
     }
 
     public static SubtreePos step(int sonIndex, SubtreePos subtreePosInSon) {

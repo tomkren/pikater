@@ -2,14 +2,15 @@ package cz.tomkren.typewars;
 
 import com.google.common.base.Joiner;
 import cz.tomkren.helpers.*;
-import cz.tomkren.typewars.eva.FitFun;
 import cz.tomkren.typewars.eva.FitIndiv;
 import cz.tomkren.typewars.eva.FitVal;
 import cz.tomkren.typewars.reusable.QuerySolver;
 import cz.tomkren.typewars.reusable.SmartLib;
+import cz.tomkren.typewars.reusable.TMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PolyTree implements FitIndiv {
 
@@ -32,6 +33,7 @@ public class PolyTree implements FitIndiv {
         this(name, type, sons, null);
     }
 
+    @Override
     public Object computeValue() {
         if (code == null) {throw new Error("Null-code in computeValue().");}
 
@@ -58,7 +60,7 @@ public class PolyTree implements FitIndiv {
 
         List<SubtreePos> ret = new ArrayList<>();
 
-        ret.add( SubtreePos.root() );
+        ret.add( SubtreePos.root(type) );
 
         int sonIndex = 0;
         for (PolyTree son : sons) {
@@ -70,6 +72,15 @@ public class PolyTree implements FitIndiv {
         }
 
         return ret;
+    }
+
+    public TMap<SubtreePos> getAllSubtreePoses_byTypes() {
+        return new TMap<>(getAllSubtreePoses(), SubtreePos::getType);
+    }
+
+    // TODO asi by bylo slušný udělat efektivnějc
+    public SubtreePos getRandomSubtreePos(Random rand) {
+        return F.randomElement(getAllSubtreePoses(), rand);
     }
 
     public PolyTree getSubtree(SubtreePos pos) {
@@ -93,6 +104,12 @@ public class PolyTree implements FitIndiv {
             }
             return  new PolyTree(name,type,newSons,code);
         }
+    }
+
+    public static AA<PolyTree> xover(PolyTree mum, PolyTree dad, SubtreePos mumPos, SubtreePos dadPos) {
+        PolyTree daughter = mum.changeSubtree(mumPos, dad.getSubtree(dadPos));
+        PolyTree son      = dad.changeSubtree(dadPos, mum.getSubtree(mumPos));
+        return new AA<>(daughter,son);
     }
 
     // TODO otázka zda to stojí za porušení immutability, ale slouží to k do-upřesnění typů při reusable generování
@@ -122,12 +139,16 @@ public class PolyTree implements FitIndiv {
     }
 
 
+
+
     @Override
-    public FitVal evaluate(FitFun fitness) {
-        if (fitVal == null || fitness.doRecomputeFitVal()) {
-            fitVal = fitness.getFitVal(computeValue());
-        }
+    public FitVal getFitVal() {
         return fitVal;
+    }
+
+    @Override
+    public void setFitVal(FitVal fitVal) {
+        this.fitVal = fitVal;
     }
 
     @Override
@@ -139,7 +160,7 @@ public class PolyTree implements FitIndiv {
     public static void main(String[] args) {
         Checker ch = new Checker();
 
-        SmartLib lib = SmartLib.EXAMPLE01;
+        SmartLib lib = SmartLib.DATA_SCIENTIST_01;
         List<PolyTree> trees = new QuerySolver(lib, ch.getRandom()).uniformGenerate("D => LD", 20, 1000);
 
         for (PolyTree tree : trees) {

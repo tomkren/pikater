@@ -121,7 +121,9 @@ public class Vertex {
             }
         }
 
-        sb.append("], \"").append(name).append("\", [");
+        String params = "{}"; // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        sb.append("], [\"").append(name).append("\", ").append(params).append("], [");
 
         int i = 0;
         for (AB<Vertex,Integer> p : successors) {

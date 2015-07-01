@@ -21,6 +21,18 @@ public class Distribution<T extends Probable> {
     private List<Consumer<T>> bestListeners;
 
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        List<T> xsSorted = F.sort(xs, x -> -x.getProbability() );
+
+        for (T x : xsSorted) {
+            sb.append("  ").append(x.getProbability()).append("\t").append(x.toString()).append("\n");
+        }
+
+        return sb.toString();
+    }
 
     public void addBestListener(Consumer<T> bestListener) {
         if (bestListeners == null) {

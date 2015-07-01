@@ -1,8 +1,10 @@
 package cz.tomkren.typewars.reusable;
 
+import cz.tomkren.helpers.AA;
 import cz.tomkren.typewars.Type;
 
 import java.util.*;
+import java.util.function.Function;
 
 
 /** Created by tom on 13. 6. 2015. */
@@ -15,10 +17,17 @@ public class TMap<A> {
         map = new HashMap<>();
     }
 
+    public TMap(List<A> xs, Function<A,Type> f) {
+        this();
+        for (A x : xs) {
+            add(f.apply(x), x);
+        }
+    }
+
     // singleton
     public TMap(Type t, A x) {
         this();
-        add(t,x);
+        add(t, x);
     }
 
     public void add(Type t, A x) {
@@ -52,9 +61,30 @@ public class TMap<A> {
         return ret;
     }
 
+    public static <A> Map<Type,AA<List<A>>> intersection(TMap<A> tMap1, TMap<A> tMap2) {
+
+        Map<Type,AA<List<A>>> ret = new TreeMap<>();
+
+        for (Map.Entry<Type,List<A>> e : tMap1.entrySet()) {
+
+            Type type = e.getKey();
+            List<A> list = tMap2.get(type);
+
+            if (list != null) {
+                ret.put(type, new AA<>(e.getValue(),list));
+            }
+        }
+
+        return ret;
+    }
+
+
+    public List<A> get(Type t) {
+        return map.get(t);
+    }
 
     public boolean isEmpty() {
-        return map.isEmpty();  // dÌky tomu ûe se jen p¯id·v·, tak jde jednoduöe, ale pozor na to !!!
+        return map.isEmpty();  // d√≠ky tomu ≈æe se jen p≈ôid√°v√°, tak jde jednodu≈°e, ale pozor na to !!!
     }
 
     public Set<Map.Entry<Type,List<A>>> entrySet() {
