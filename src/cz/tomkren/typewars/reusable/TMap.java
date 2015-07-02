@@ -63,15 +63,15 @@ public class TMap<A> {
 
     public static <A> Map<Type,AA<List<A>>> intersection(TMap<A> tMap1, TMap<A> tMap2) {
 
-        Map<Type,AA<List<A>>> ret = new TreeMap<>();
+        Map<Type,AA<List<A>>> ret = new HashMap<>();
 
         for (Map.Entry<Type,List<A>> e : tMap1.entrySet()) {
 
             Type type = e.getKey();
-            List<A> list = tMap2.get(type);
+            List<A> list2 = tMap2.get(type);
 
-            if (list != null) {
-                ret.put(type, new AA<>(e.getValue(),list));
+            if (list2 != null) {
+                ret.put(type, new AA<>(e.getValue(),list2));
             }
         }
 

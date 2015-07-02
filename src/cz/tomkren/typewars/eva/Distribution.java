@@ -21,11 +21,28 @@ public class Distribution<T extends Probable> {
     private List<Consumer<T>> bestListeners;
 
 
+
+
+
+    public T tournamentGet(double pReturnWinner, Random rand) {
+
+        T x1 = F.randomElement(xs, rand);
+        T x2 = F.randomElement(xs, rand);
+
+        boolean x1wins = x1.getProbability() > x2.getProbability();
+
+        if (rand.nextDouble() <= pReturnWinner) {
+            return x1wins ? x1 : x2;
+        } else {
+            return x1wins ? x2 : x1;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        List<T> xsSorted = F.sort(xs, x -> -x.getProbability() );
+        List<T> xsSorted = F.sort(xs, x -> -x.getProbability());
 
         for (T x : xsSorted) {
             sb.append("  ").append(x.getProbability()).append("\t").append(x.toString()).append("\n");

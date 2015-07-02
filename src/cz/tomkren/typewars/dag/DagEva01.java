@@ -3,6 +3,7 @@ package cz.tomkren.typewars.dag;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.TypedDag;
 import cz.tomkren.typewars.eva.*;
 import cz.tomkren.typewars.reusable.PolyTreeGenerator;
 import cz.tomkren.typewars.reusable.QuerySolver;
@@ -22,7 +23,7 @@ public class DagEva01 {
         Checker ch = new Checker();
 
         TogetherFitFun fitness = new DataScientistFitness("http://127.0.0.1:8080", "winequality-white.csv");
-        //FitFun fitness = o -> new FitVal.Basic(((TypedDag)o).getHeight());
+        //FitFun fitness = o -> {TypedDag dag = (TypedDag)o; return new FitVal.Basic( ((double)dag.getHeight()) / ((double)dag.getWidth()) ); };
 
         String goalType = "D => LD";
         SmartLib lib = SmartLib.DATA_SCIENTIST_01;
@@ -31,17 +32,25 @@ public class DagEva01 {
 
         Random rand = ch.getRandom();
         QuerySolver querySolver = new QuerySolver(lib, rand);
+
         EvoOpts evoOpts = new EvoOpts(10,8,true);
+        //EvoOpts evoOpts = new EvoOpts(100,8,true);
+
         IndivGenerator<PolyTree> gen = new PolyTreeGenerator(goalType, generatingMaxTreeSize, querySolver);
         Distribution<Operator<PolyTree>> operators = new Distribution<>(Arrays.asList(
-                new SameSizeSubtreeMutation(querySolver, 0.9),
+                new BasicTypedXover(rand, 0.5),
+                new SameSizeSubtreeMutation(querySolver,generatingMaxTreeSize, 0.4),
                 new CopyOp<>(0.1)
         ));
 
+        //Selection<PolyTree> selection = new Selection.Roulette<>(rand);
+        Selection<PolyTree> selection = new Selection.Tournament<>(0.8, rand);
+
         Logger<PolyTree> logger = new SimpleLogger();
 
-        Evolver<PolyTree> evolver = new Evolver.Opts<>(fitness, evoOpts, gen, operators, logger, rand).mk();
+        Evolver<PolyTree> evolver = new Evolver.Opts<>(fitness, evoOpts, gen, operators, selection, logger, rand).mk();
 
+        Log.it("Generating initial population...");
         evolver.startRun();
 
         ch.results();

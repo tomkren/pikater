@@ -2,6 +2,7 @@ package cz.tomkren.typewars.dag;
 
 import com.martinpilat.DagEvalInterface;
 import cz.tomkren.helpers.F;
+import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.TypedDag;
 import cz.tomkren.typewars.eva.FitVal;
 import cz.tomkren.typewars.eva.TogetherFitFun;
@@ -39,7 +40,10 @@ public class DataScientistFitness implements TogetherFitFun {
         String populationInJson = F.list(os).map(o->(TypedDag)o).reduce(TypedDag::toJson);
 
         try {
+
+            Log.it("Evaluating ...");
             List<double[]> scores = evaluator.eval(populationInJson, datasetFile);
+            Log.it("Evolution operations ...");
 
             return F.map(scores, scoreArr -> {
 

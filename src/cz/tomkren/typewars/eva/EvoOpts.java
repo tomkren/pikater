@@ -7,13 +7,25 @@ public class EvoOpts {
     private final int numRuns;
     private final int numGens;
     private final int popSize;
+
     private final boolean saveBest;
 
-    public EvoOpts(int numRuns, int numGens, int popSize, boolean saveBest) {
+    private final boolean performUniqueCheck;
+    private final int maxNumUniqueCheckFails;
+
+
+
+    public EvoOpts(int numRuns, int numGens, int popSize, boolean saveBest, boolean performUniqueCheck, int maxNumUniqueCheckFails) {
         this.numRuns = numRuns;
         this.numGens = numGens;
         this.popSize = popSize;
         this.saveBest = saveBest;
+        this.performUniqueCheck = performUniqueCheck;
+        this.maxNumUniqueCheckFails = maxNumUniqueCheckFails;
+    }
+
+    public EvoOpts(int numRuns, int numGens, int popSize, boolean saveBest) {
+        this(numRuns, numGens, popSize, saveBest, true, popSize);
     }
 
     public EvoOpts(int numGens, int popSize, boolean saveBest) {
@@ -31,6 +43,13 @@ public class EvoOpts {
     }
     public boolean isSaveBest() {
         return saveBest;
+    }
+
+    boolean isUniqueCheckPerformed() {
+        return performUniqueCheck;
+    }
+    int getMaxNumUniqueCheckFails() {
+        return maxNumUniqueCheckFails;
     }
 
 }
