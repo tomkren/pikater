@@ -82,11 +82,11 @@ public class DagExample4 {
     }
 
     public static List<TypedDag> mkDags(CodeLib lib, String type, int n) {
-        return F.list(lib.generate(type,n)).map(tree ->(TypedDag) tree.computeValue()).get();
+        return F.list(lib.basicGenerate(type, n)).map(tree ->(TypedDag) tree.computeValue()).get();
     }
 
     public static String mkPopJson(CodeLib lib, String type, int n) {
-        return F.list(lib.generate(type,n)).map(t->(TypedDag)t.computeValue()).reduce(TypedDag::toJson);
+        return F.list(lib.basicGenerate(type, n)).map(t->(TypedDag)t.computeValue()).reduce(TypedDag::toJson);
     }
 
 }

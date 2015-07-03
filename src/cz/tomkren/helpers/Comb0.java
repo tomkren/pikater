@@ -5,6 +5,7 @@ import cz.tomkren.typewars.TypedDag;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -16,6 +17,10 @@ public interface Comb0 {
 
     default Object compute0() {
         return compute( null );
+    }
+
+    default Object compute1(Object x){
+        return compute(Collections.singletonList(x));
     }
 
     default Object compute2(Object x, Object y){

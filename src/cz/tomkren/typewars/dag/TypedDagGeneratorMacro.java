@@ -8,7 +8,6 @@ import cz.tomkren.kutil2.core.XmlLoader;
 import cz.tomkren.kutil2.items.Int2D;
 import cz.tomkren.typewars.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TypedDagGeneratorMacro {
@@ -32,7 +31,7 @@ public class TypedDagGeneratorMacro {
             to = Integer.parseInt( ps[0].trim() );
         }
 
-        List<PolyTree> trees = lib.generate(goal, to).subList(from, to);
+        List<PolyTree> trees = lib.basicGenerate(goal, to).subList(from, to);
         List<TypedDag> dags = F.map(trees, t -> (TypedDag) t.computeValue());
 
         StringBuilder sb = new StringBuilder();

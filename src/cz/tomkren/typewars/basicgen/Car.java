@@ -70,12 +70,12 @@ public class Car {
     private PolyTree mkPolyTree(int i, List<CreationLog.Row> rows, CodeLib lib) {
         CreationLog.Row row = rows.get(i);
         ProtoNode node = row.getNode();
-        List<PolyTree> sons = F.map( row.getSuccIs() , j -> mkPolyTree(j,rows, lib)  );
+        List<PolyTree> sons = F.map(row.getSuccIs(), j -> mkPolyTree(j, rows, lib));
 
         String name = node.getName();
-        Comb0 code = lib == null ? null : lib.getCode(name);
+        CodeNode codeNode = lib == null ? null : lib.getCodeNode(name);
 
-        return new PolyTree(name, sub.apply(node.getOut()) , sons, code);
+        return new PolyTree(codeNode, sub.apply(node.getOut()) , sons);
     }
 
     @Override

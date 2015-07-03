@@ -62,7 +62,7 @@ public class Tests01 {
                     "k-means : D => (V D (S(S n)))",
                     "RBF : D => LD",
                     "U : (V LD (S(S n))) => LD"
-            ).generate("D => LD", 1).forEach(tree -> {
+            ).basicGenerate("D => LD", 1).forEach(tree -> {
 
                 TypedDag dag = (TypedDag) tree.computeValue();
 

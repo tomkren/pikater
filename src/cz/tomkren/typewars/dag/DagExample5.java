@@ -49,7 +49,7 @@ public class DagExample5 {
 
         //Log.list( F.list(Fun2.generateAllUpTo_naive(lib, "D => LD", 20)).map(PolyTree::toString).get() );
 
-        List<PolyTree> oldMethodTrees = codeLib.generate("D => LD", 100);
+        List<PolyTree> oldMethodTrees = codeLib.basicGenerate("D => LD", 100);
         List<PolyTree> newMethodTrees = Fun2.generateAllUpTo_naive(lib, "D => LD", 20); //25
 
         GeneratorChecker genCheck = new GeneratorChecker(oldMethodTrees, false);

@@ -7,11 +7,11 @@ import java.util.List;
 
 public class SmartLib {
 
-    private final CodeLib codeLib;
+    //private final CodeLib codeLib;
     private final List<SmartSym> symLib;
 
     public SmartLib(CodeLib codeLib) {
-        this.codeLib = codeLib;
+        //this.codeLib = codeLib;
         symLib = F.map(codeLib.getCodeNodes() , SmartSym::new);
     }
 

@@ -4,11 +4,9 @@ import com.martinpilat.DagEvalInterface;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
-import cz.tomkren.kutil2.KutilMain;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.TypedDag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /** Created by tom on 18. 6. 2015. */
@@ -106,7 +104,7 @@ public class DagExample06 {
     }
 
     public static List<TypedDag> mkDags(CodeLib lib, String type, int n) {
-        return F.list(lib.generate(type,n)).map(tree ->(TypedDag) tree.computeValue()).get();
+        return F.list(lib.basicGenerate(type, n)).map(tree ->(TypedDag) tree.computeValue()).get();
     }
 
 }

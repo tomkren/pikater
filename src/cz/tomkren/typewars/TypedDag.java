@@ -9,12 +9,14 @@ import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.TriFun;
 import cz.tomkren.kutil2.items.Int2D;
 import cz.tomkren.pikater.SimpleVertex;
+import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class TypedDag {
 
@@ -23,12 +25,12 @@ public class TypedDag {
     private int width, height;
 
 
-    public TypedDag(String name, Type inType, Type outType) {
+    public TypedDag(String name, Type inType, Type outType, JSONObject params) {
 
         this.inType = inType;
         this.outType = outType;
 
-        Vertex v = new Vertex(name);
+        Vertex v = new Vertex(name, params);
 
         ins  = makeInterfaceList(inType, v);
         outs = makeInterfaceList(outType, v);
@@ -36,6 +38,11 @@ public class TypedDag {
         width  = 1;
         height = 1;
     }
+
+    public TypedDag(String name, Type inType, Type outType) {
+        this(name, inType, outType, new JSONObject());
+    }
+
 
     public TypedDag copy() {
         return new TypedDag(this);
@@ -134,7 +141,7 @@ public class TypedDag {
 
 
     public static TypedDag split(TypedDag dag, MyList dagList) {
-        return dag.copy().seri( fromMyList(dagList) );
+        return dag.copy().seri(fromMyList(dagList));
     }
 
     public static TypedDag fromMyList(MyList dagList) {
@@ -159,7 +166,7 @@ public class TypedDag {
     }
 
     public static TypedDag fromMyList_noCopy(MyList dagList) {
-        List<TypedDag> dags = F.map(dagList.toList(), o->(TypedDag)o );
+        List<TypedDag> dags = F.map(dagList.toList(), o -> (TypedDag) o);
         return paraList_noCopy(dags);
     }
 
@@ -277,18 +284,30 @@ public class TypedDag {
 
 
 
-    public static CodeNode mkAtomicDagNode(String name, String inType, String outType) {
-        return mkAtomicDagNode(name, Types.parse(inType), Types.parse(outType));
+    public static CodeNode mkAtomicDagNode(String name, String inType, String outType, JSONObject paramsInfo) {
+        return mkAtomicDagNode(name, Types.parse(inType), Types.parse(outType), paramsInfo);
     }
 
-    public static CodeNode mkAtomicDagNode(String name, Type inType, Type outType) {
-        Comb0 comb = haxTypeInput -> {
+    public static CodeNode mkAtomicDagNode(String name, Type inType, Type outType, JSONObject paramsInfo) {
+
+
+        /*Comb0 comb = haxTypeInput -> {
             Type t = (Type) haxTypeInput.get(0);
             AA<Type> p = getBoxInOutTypes(t);
             return new TypedDag(name, p._1(), p._2());
-        };
+        };*/
+
+        Function<JSONObject,Comb0> params2comb = params -> (haxTypeInput -> {
+            Type t = (Type) haxTypeInput.get(0);
+            AA<Type> p = TypedDag.getBoxInOutTypes(t);
+            return new TypedDag(name, p._1(), p._2(), params);
+        });
+
         ProtoNode protoNode = new ProtoNode(name, inType + " => " + outType);
-        return new CodeNode(protoNode, comb);
+
+
+        //return new CodeNode(protoNode, comb);
+        return new CodeNodeWithParams(protoNode, params2comb, paramsInfo, null);
     }
 
     public static AA<Type> getBoxInOutTypes(Type type) {
@@ -325,7 +344,7 @@ public class TypedDag {
     }
 
 
-    public static CodeNode mkCodeNode(String... args) {
+    public static CodeNode mkCodeNode(JSONObject paramsInfo, String... args) {
         if (args.length < 2) {throw new Error("Too few arguments.");}
 
         String name    = args[0].trim();
@@ -334,10 +353,14 @@ public class TypedDag {
         if (args.length == 2) {
             String[] ps = outType.split("=>");
             if (ps.length != 2) {throw new Error("Atom type must have 2 parts (split by =>).");}
-            return mkAtomicDagNode(name, ps[0].trim(), ps[1].trim());
+            return mkAtomicDagNode(name, ps[0].trim(), ps[1].trim(), paramsInfo);
         } else {
             return mkDagOperationNode(name, outType, Arrays.copyOfRange(args,2,args.length) );
         }
+    }
+
+    public static CodeNode mkCodeNode(String... args) {
+        return mkCodeNode(new JSONObject(), args);
     }
 
     public static CodeNode mkDagOperationNode(String name, String outType, String... inTypes) {

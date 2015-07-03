@@ -15,6 +15,9 @@ import java.util.*;
 
 /** Created by tom on 18.6.2015. */
 
+
+// TODO jsou tu sice fikany testy, ale musej se kontrolovat očně, checkovat automaticky !!!!!!!!!!!!!!!!!
+
 public class DagExample07 {
 
     static Checker ch = new Checker();
@@ -73,7 +76,7 @@ public class DagExample07 {
 
         String goalType = "D => LD";
 
-        List<PolyTree> oldMethodTrees = codeLib_pokus.generate(goalType, 1000);  //40000 65536;
+        List<PolyTree> oldMethodTrees = codeLib_pokus.basicGenerate(goalType, 1000);  //40000 65536;
 
         GeneratorChecker genCheck = new GeneratorChecker(oldMethodTrees, false);
 

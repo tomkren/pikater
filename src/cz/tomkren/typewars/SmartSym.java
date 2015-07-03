@@ -6,15 +6,16 @@ import cz.tomkren.helpers.ABC;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class SmartSym {
 
     private final CodeNode codeNode;
-    private final List<List<SmartSym>> applicableSons;
+    //private final List<List<SmartSym>> applicableSons; // TODO ......................
 
     public SmartSym(CodeNode codeNode) {
         this.codeNode = codeNode;
-        applicableSons = new ArrayList<>(codeNode.getIns().size());
+        //applicableSons = new ArrayList<>(codeNode.getIns().size());
     }
 
 
@@ -41,7 +42,7 @@ public class SmartSym {
 
 
     public PolyTree mkTree(Type rootType, List<PolyTree> sons) {
-        return new PolyTree(codeNode.getName(), rootType, sons, codeNode.getCode());
+        return new PolyTree(codeNode, rootType, sons);
     }
 
     public String getName() {

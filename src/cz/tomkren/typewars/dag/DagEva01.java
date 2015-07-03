@@ -22,7 +22,11 @@ public class DagEva01 {
         // 3265394041486059844L - cenej seed na kerym to haže martinovi warning, z piety zatím nesmazáno
         Checker ch = new Checker();
 
-        TogetherFitFun fitness = new DataScientistFitness("http://127.0.0.1:8080", "winequality-white.csv");
+        //String datasetFile = "winequality-white.csv";
+        String datasetFile = "wilt.csv";
+
+
+        TogetherFitFun fitness = new DataScientistFitness("http://127.0.0.1:8080", datasetFile);
         //FitFun fitness = o -> {TypedDag dag = (TypedDag)o; return new FitVal.Basic( ((double)dag.getHeight()) / ((double)dag.getWidth()) ); };
 
         String goalType = "D => LD";

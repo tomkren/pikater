@@ -29,7 +29,7 @@ public class DagExample3 {
 
     public static void main(String[] args) {
 
-        codeLib.generate("D => LD", 10).forEach(tree -> {
+        codeLib.basicGenerate("D => LD", 10).forEach(tree -> {
             ch.itln("...");
             ch.itln(tree);
             ch.itln(tree.showWithTypes());
@@ -42,7 +42,7 @@ public class DagExample3 {
 
         ch.it("\n");
 
-        codeLib.generate("D => LD", 10).forEach(ch::it);
+        codeLib.basicGenerate("D => LD", 10).forEach(ch::it);
         Log.it();
 
 

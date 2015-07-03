@@ -4,6 +4,7 @@ import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.F;
 import cz.tomkren.kutil2.items.Int2D;
 import cz.tomkren.pikater.SimpleVertex;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Vertex {
 
     private final int id;
     private final String name;
+    private final JSONObject params;
     private final List<AB<Vertex,Integer>> successors;
     private int nextFreeSlot;
     private double x, y;
@@ -19,10 +21,11 @@ public class Vertex {
     private static int nextId = 1; // todo pak udělat míň haxově
 
 
-
-    public Vertex(String boxName) {
+    public Vertex(String boxName, JSONObject params) {
         id = nextId++;
         name = boxName;
+
+        this.params = params;
 
         successors = new ArrayList<>();
         nextFreeSlot = 0;
@@ -31,11 +34,17 @@ public class Vertex {
         y = 0;
     }
 
+    public Vertex(String boxName) {
+        this(boxName, new JSONObject());
+    }
+
     public Vertex pseudoCopy() {return new Vertex(this);}
 
     private Vertex(Vertex v) {
         id = nextId++;
         name = v.name;
+
+        params = v.params;  // TODO může bejt nebezpečný, kdyby někdo měnil ty parametry!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         int n = v.successors.size();
         successors = new ArrayList<>(n); // ty nekopírujeme, pač tam chceme hluboký kopie
@@ -121,9 +130,9 @@ public class Vertex {
             }
         }
 
-        String params = "{}"; // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        String paramsStr = params.toString(); //"{}"; // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        sb.append("], [\"").append(name).append("\", ").append(params).append("], [");
+        sb.append("], [\"").append(name).append("\", ").append(paramsStr).append("], [");
 
         int i = 0;
         for (AB<Vertex,Integer> p : successors) {

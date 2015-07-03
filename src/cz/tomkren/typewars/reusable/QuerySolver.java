@@ -87,6 +87,16 @@ public class QuerySolver {
         return new ArrayList<>(codeSet);
     }
 
+
+    public PolyTree generateOneWithParams(Type goalType, int treeSize) {
+        PolyTree treeWithDefaultParams = query(goalType, treeSize).generateOne();
+        return treeWithDefaultParams.randomizeParams(rand);
+    }
+
+    public PolyTree generateOne(Type goalType, int treeSize) {
+        return query(goalType, treeSize).generateOne();
+    }
+
     public PolyTree generateOne(String goalType, int treeSize) {
         return query(goalType, treeSize).generateOne();
     }

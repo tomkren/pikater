@@ -12,43 +12,41 @@ import java.util.Random;
 
 public class PolyTree implements FitIndiv {
 
-    private final String name;
+
+    private final CodeNode codeNode;
     private Type type;
     private final List<PolyTree> sons;
-    private final Comb0 code;
 
-    private FitVal fitVal;
+    private FitVal fitVal; // TODO - zbytečně i v podstromech, chtělo by udělat nějakej individual wrapper, kterej by měl PolyTree jako položku !!!!!!!!!!!
 
-    public PolyTree(String name, Type type, List<PolyTree> sons, Comb0 code) {
-        this.name = name;
+    public PolyTree(CodeNode codeNode, Type type, List<PolyTree> sons) {
+        //this.name = name;
+        this.codeNode = codeNode;
         this.type = type;
         this.sons = sons;
-        this.code = code;
         this.fitVal = null;
     }
 
-    public PolyTree(String name, Type type, List<PolyTree> sons) {
-        this(name, type, sons, null);
+    public PolyTree randomizeParams(Random rand) {
+        CodeNode newCodeNode = codeNode instanceof CodeNodeWithParams ? ((CodeNodeWithParams)codeNode).randomCopy(rand) : codeNode;
+        return new PolyTree(newCodeNode, type, F.map(sons,s->s.randomizeParams(rand)));
     }
 
     @Override
     public Object computeValue() {
-        if (code == null) {throw new Error("Null-code in computeValue().");}
+        if (getCode() == null) {throw new Error("Null-code in computeValue().");}
 
         if (isTerminal()) {
-            List<Object> haxTypeInput = new ArrayList<>(1);
-            haxTypeInput.add(type);
-            return code.compute(haxTypeInput);
-        }
-        else {
-            return code.compute(F.map(sons, PolyTree::computeValue));
+            return getCode().compute(F.singleton(type));
+        } else {
+            return getCode().compute(F.map(sons, PolyTree::computeValue));
         }
     }
 
-    public String getName() {return name;}
+    public String getName() {return codeNode.getName();}
     public Type getType() {return type;}
     public List<PolyTree> getSons() {return sons;}
-    public Comb0 getCode() {return code;}
+    public Comb0 getCode() {return codeNode.getCode();}
 
     public boolean isTerminal() {
         return sons.isEmpty();
@@ -100,7 +98,7 @@ public class PolyTree implements FitIndiv {
                 newSons.add( i == sonIndex ? son.changeSubtree(pos.getTail(),newSubtree) : son );
                 i++;
             }
-            return  new PolyTree(name,type,newSons,code);
+            return  new PolyTree(codeNode,type,newSons);
         }
     }
 
@@ -118,11 +116,11 @@ public class PolyTree implements FitIndiv {
 
     @Override
     public String toString() {
-        return isTerminal() ? name : "("+ name +" "+ Joiner.on(' ').join( sons ) +")";
+        return isTerminal() ? getName() : "("+ getName() +" "+ Joiner.on(' ').join( sons ) +")";
     }
 
     private String showHead() {
-        return "<"+name+":"+type+">";
+        return "<"+getName()+":"+type+">";
     }
 
     public String showWithTypes() {
@@ -141,7 +139,6 @@ public class PolyTree implements FitIndiv {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         return toString().equals(o.toString());
     }
 
