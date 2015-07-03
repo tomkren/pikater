@@ -1,4 +1,4 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.archiv;
 
 
 import java.math.BigInteger;

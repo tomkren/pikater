@@ -2,9 +2,7 @@ package cz.tomkren.typewars.reusable;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
-import cz.tomkren.typewars.PolyTree;
-import cz.tomkren.typewars.Sub;
-import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

@@ -1,7 +1,11 @@
-package cz.tomkren.typewars;
+package cz.tomkren.typewars.basicgen;
 
 
 import cz.tomkren.helpers.Log;
+import cz.tomkren.typewars.NodeLib;
+import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.Types;
 import cz.tomkren.typewars.dag.Dag;
 
 import java.util.ArrayList;

@@ -5,9 +5,9 @@ import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.TypedDag;
-import cz.tomkren.typewars.reusable.Fun;
-import cz.tomkren.typewars.reusable.SmartLib;
-import cz.tomkren.typewars.reusable.TMap;
+import cz.tomkren.typewars.archiv.Fun;
+import cz.tomkren.typewars.SmartLib;
+import cz.tomkren.typewars.TMap;
 
 public class DagExample3 {
 
@@ -51,7 +51,7 @@ public class DagExample3 {
             checkQuery(n);
         }
 
-        checkQuery(10); // TODO : tady òáká chyba, mìlo by dát 1 strom !!!!!!!!!!!
+        checkQuery(10); // TODO : tady ï¿½ï¿½kï¿½ chyba, mï¿½lo by dï¿½t 1 strom !!!!!!!!!!!
 
         Log.it("\n----------------------------------------\n");
 
@@ -71,7 +71,7 @@ public class DagExample3 {
 
         // TODO tady to dela shit : sonQuery.getType() = (D => (V LD x2)) ; sonResult.size() = 0
 
-        // TODO !!!!!!!! Skoro jistì je chyba v neofrešovávání typovejch promìnnejch
+        // TODO !!!!!!!! Skoro jistï¿½ je chyba v neofreï¿½ovï¿½vï¿½nï¿½ typovejch promï¿½nnejch
 
         ch.results();
     }

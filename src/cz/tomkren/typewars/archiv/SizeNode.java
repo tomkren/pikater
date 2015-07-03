@@ -1,12 +1,13 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.archiv;
 
 
 import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.reusable.QuerySolver;
 
 import java.util.Map;
 
 
-// TODO promyslet jestli slou�it SizeNode a TypeNode do SignatureNode, a misto AB<Integer,Type> to zabalit do Signature
+// TODO promyslet jestli sloučit SizeNode a TypeNode do SignatureNode, a místo AB<Integer,Type> to zabalit do Signature
 
 @Deprecated
 public class SizeNode {

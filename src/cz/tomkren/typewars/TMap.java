@@ -1,7 +1,6 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars;
 
 import cz.tomkren.helpers.AA;
-import cz.tomkren.typewars.Type;
 
 import java.util.*;
 import java.util.function.Function;

@@ -1,4 +1,6 @@
-package cz.tomkren.typewars;
+package cz.tomkren.typewars.basicgen;
+
+import cz.tomkren.typewars.ProtoNode;
 
 import java.util.ArrayList;
 import java.util.List;

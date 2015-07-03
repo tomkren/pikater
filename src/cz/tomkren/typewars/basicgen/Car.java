@@ -1,9 +1,10 @@
-package cz.tomkren.typewars;
+package cz.tomkren.typewars.basicgen;
 
 import cz.tomkren.helpers.Comb0;
 import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.ABC;
 import cz.tomkren.helpers.F;
+import cz.tomkren.typewars.*;
 
 import java.util.*;
 

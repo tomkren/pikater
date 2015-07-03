@@ -6,6 +6,8 @@ import cz.tomkren.kutil2.core.KAtts;
 import cz.tomkren.kutil2.core.XmlLoader;
 import cz.tomkren.kutil2.items.Int2D;
 import cz.tomkren.typewars.*;
+import cz.tomkren.typewars.basicgen.Generator;
+import cz.tomkren.typewars.ProtoNode;
 
 import java.util.ArrayList;
 import java.util.List;

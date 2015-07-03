@@ -6,6 +6,8 @@ import cz.tomkren.helpers.Comb0;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.*;
+import cz.tomkren.typewars.basicgen.Generator;
+import cz.tomkren.typewars.ProtoNode;
 
 
 public class DagExample2 {
@@ -73,7 +75,7 @@ public class DagExample2 {
         // TODO !!!!! pozor pak při křížení potřeba dodělat seri a para co pracuje s kopiema !!!!!
 
 
-        Generator.printGenerateSequence("D => LD", lib1, 2,2,1,2,1,1);// todo ,1 udělá chybu protože ešte nefunguje trasform do dagu
+        Generator.printGenerateSequence("D => LD", lib1, 2, 2, 1, 2, 1, 1);// todo ,1 udělá chybu protože ešte nefunguje trasform do dagu
 
         Generator.generate("D => LD", lib1, 10).forEach(tree->{
             Log.itln("................................................");

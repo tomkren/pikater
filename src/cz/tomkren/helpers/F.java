@@ -108,9 +108,9 @@ public class F {
         return new ListResult<T>(xs.stream());
     }
 
-    public static <T> ListResult<T> set(Set<T> set) {
+    /*public static <T> ListResult<T> set(Set<T> set) {
         return new ListResult<T>(set.stream());
-    }
+    }*/
 
 
     public static <T> void each(List<T> xs, Consumer<? super T> f) {

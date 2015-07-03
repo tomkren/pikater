@@ -1,7 +1,8 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.eva;
 
 import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.eva.IndivGenerator;
+import cz.tomkren.typewars.reusable.QuerySolver;
 
 import java.util.List;
 

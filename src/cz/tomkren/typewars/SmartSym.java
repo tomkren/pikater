@@ -1,9 +1,8 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars;
 
 
 import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.ABC;
-import cz.tomkren.typewars.*;
 
 import java.util.ArrayList;
 import java.util.List;

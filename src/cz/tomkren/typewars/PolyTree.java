@@ -5,8 +5,6 @@ import cz.tomkren.helpers.*;
 import cz.tomkren.typewars.eva.FitIndiv;
 import cz.tomkren.typewars.eva.FitVal;
 import cz.tomkren.typewars.reusable.QuerySolver;
-import cz.tomkren.typewars.reusable.SmartLib;
-import cz.tomkren.typewars.reusable.TMap;
 
 import java.util.ArrayList;
 import java.util.List;

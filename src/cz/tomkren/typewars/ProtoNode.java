@@ -3,7 +3,6 @@ package cz.tomkren.typewars;
 import cz.tomkren.helpers.ABC;
 import cz.tomkren.helpers.F;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class ProtoNode {

@@ -1,15 +1,17 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.archiv;
 
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.reusable.Query;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class Profile {
 
     private BigInteger num;
@@ -28,7 +30,7 @@ public class Profile {
 
         if (sonQueries == null) {return num;}
 
-        QueryResult_old sonResult = null; // TODO hax aby šlo zkompilovat //dadQuery.query(new Query(sub, sonQueries.getHead()));
+        QueryResult_old sonResult = null; // TODO hax aby Å¡lo zkompilovat //dadQuery.query(new Query(sub, sonQueries.getHead()));
 
         BigInteger sum = BigInteger.ZERO;
 

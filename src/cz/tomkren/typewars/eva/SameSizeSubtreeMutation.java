@@ -7,7 +7,7 @@ import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.SubtreePos;
 import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.reusable.QuerySolver;
-import cz.tomkren.typewars.reusable.SmartLib;
+import cz.tomkren.typewars.SmartLib;
 
 import java.util.List;
 import java.util.Random;

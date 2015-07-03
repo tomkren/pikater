@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+@Deprecated
 public class Sub_old {
 
     private Map<Integer,Type> table;

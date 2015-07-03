@@ -2,11 +2,7 @@ package cz.tomkren.typewars.reusable;
 
 
 import cz.tomkren.helpers.Log;
-import cz.tomkren.helpers.TODO;
-import cz.tomkren.typewars.PolyTree;
-import cz.tomkren.typewars.Type;
-import cz.tomkren.typewars.Types;
-import cz.tomkren.typewars.eva.IndivGenerator;
+import cz.tomkren.typewars.*;
 
 import java.util.*;
 

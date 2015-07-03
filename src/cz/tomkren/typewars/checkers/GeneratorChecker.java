@@ -1,9 +1,12 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.checkers;
 
+import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.TMap;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /** Created by tom on 19.6.2015. */
 
@@ -52,9 +55,7 @@ public class GeneratorChecker {
         for (int i = 1; i < (isWholeSizes ? maxSizeSoFar+1 : maxSizeSoFar); i++) {
             Set<String> set = checkMap.get(i);
             if (set != null) {
-                for (String treeStr : set) {
-                    ret.add(treeStr);
-                }
+                ret.addAll(F.list(set).get());
             }
         }
 

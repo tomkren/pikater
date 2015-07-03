@@ -1,8 +1,9 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.archiv;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.reusable.Query;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -10,8 +11,9 @@ import java.util.List;
 
 /** Created by tom on 9. 6. 2015. */
 
-// To co pøedtim dìlal TypeNode vlastnì..
+// To co pÅ™edtim dÄ›lal TypeNode vlastnÄ›..
 
+@Deprecated
 public class SubResult {
 
     private final List<RootNode> roots;
@@ -23,8 +25,8 @@ public class SubResult {
     public SubResult(Query query, Type rootType) {
         roots = new ArrayList<>();
         num = BigInteger.ZERO;
-        sub = Sub.mgu(query.getType(), rootType); // TODO: vhodný místo proèek, protože tu sub už sem musel zpoèíst pøi konstrukci rootType
-                                                  // todo  ale tady se mi zda že je nìco na tom to takle znovuspoèíst
+        sub = Sub.mgu(query.getType(), rootType); // TODO: vhodnï¿½ mï¿½sto proï¿½ek, protoï¿½e tu sub uï¿½ sem musel zpoï¿½ï¿½st pï¿½i konstrukci rootType
+                                                  // todo  ale tady se mi zda ï¿½e je nï¿½co na tom to takle znovuspoï¿½ï¿½st
     }
 
     public void addRoot(RootNode rn) {
@@ -36,7 +38,7 @@ public class SubResult {
 
         for (RootNode rn : rns) {
             BigInteger howMany = rn.getNum();
-            if (!F.isZero(howMany)) {   // TODO opravdu je to tady nejlíp kontrolovat?
+            if (!F.isZero(howMany)) {   // TODO opravdu je to tady nejlï¿½p kontrolovat?
                 roots.add(rn);
                 num = num.add(howMany);
             }

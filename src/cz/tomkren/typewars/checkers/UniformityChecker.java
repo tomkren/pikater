@@ -1,7 +1,9 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.checkers;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.reusable.Query;
+import cz.tomkren.typewars.reusable.QuerySolver;
 
 import java.util.HashMap;
 import java.util.Map;

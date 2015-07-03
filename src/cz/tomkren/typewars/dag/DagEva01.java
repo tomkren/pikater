@@ -5,10 +5,10 @@ import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.TypedDag;
 import cz.tomkren.typewars.eva.*;
-import cz.tomkren.typewars.reusable.PolyTreeGenerator;
+import cz.tomkren.typewars.eva.PolyTreeGenerator;
 import cz.tomkren.typewars.reusable.QuerySolver;
 import cz.tomkren.typewars.eva.SameSizeSubtreeMutation;
-import cz.tomkren.typewars.reusable.SmartLib;
+import cz.tomkren.typewars.SmartLib;
 
 import java.util.Arrays;
 import java.util.Random;

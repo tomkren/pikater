@@ -1,4 +1,4 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.archiv;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
@@ -7,6 +7,10 @@ import cz.tomkren.typewars.PolyTree;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.Types;
+import cz.tomkren.typewars.reusable.Query;
+import cz.tomkren.typewars.SmartLib;
+import cz.tomkren.typewars.SmartSym;
+import cz.tomkren.typewars.TMap;
 
 import java.util.*;
 

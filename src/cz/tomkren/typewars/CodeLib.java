@@ -3,6 +3,7 @@ package cz.tomkren.typewars;
 
 import cz.tomkren.helpers.Comb0;
 import cz.tomkren.helpers.F;
+import cz.tomkren.typewars.basicgen.Generator;
 
 import java.util.*;
 

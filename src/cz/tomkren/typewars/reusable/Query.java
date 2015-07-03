@@ -1,5 +1,6 @@
 package cz.tomkren.typewars.reusable;
 
+import cz.tomkren.typewars.SmartSym;
 import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.Types;

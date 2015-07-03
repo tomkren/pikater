@@ -1,8 +1,7 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars;
 
 
 import cz.tomkren.helpers.F;
-import cz.tomkren.typewars.CodeLib;
 
 import java.util.List;
 

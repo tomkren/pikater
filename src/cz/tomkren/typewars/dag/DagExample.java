@@ -3,6 +3,8 @@ package cz.tomkren.typewars.dag;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.*;
+import cz.tomkren.typewars.basicgen.Generator;
+import cz.tomkren.typewars.ProtoNode;
 
 import java.util.List;
 import java.util.function.Consumer;

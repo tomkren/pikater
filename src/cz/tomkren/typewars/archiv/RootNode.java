@@ -1,13 +1,16 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.archiv;
 
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.reusable.Query;
+import cz.tomkren.typewars.SmartSym;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class RootNode {
 
     private final SmartSym sym;
@@ -39,7 +42,7 @@ public class RootNode {
 
     }
 
-    // TODO projÌt a znovu pochopit, pokud jde tak zjednoduöit (moûn· by staËil jen ten else, ale nevim zatim)
+    // TODO proj√≠t a znovu pochopit, pokud jde tak zjednodu≈°it (mo≈æn√° by staƒçil jen ten else, ale nevim zatim)
     public static List<List<Integer>> possibleSimpleProfiles(int fatherSize, int numArgs) {
 
         int size = fatherSize - 1;

@@ -1,18 +1,18 @@
-package cz.tomkren.typewars.reusable;
+package cz.tomkren.typewars.archiv;
 
-import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.TODO;
-import cz.tomkren.typewars.Sub;
 import cz.tomkren.typewars.Type;
+import cz.tomkren.typewars.reusable.Query;
+import cz.tomkren.typewars.SmartSym;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /** Created by tom on 7. 6. 2015. */
 
+@Deprecated
 public class QueryResult_old {
 
     private final Map<Type,SubResult> result;
@@ -22,11 +22,11 @@ public class QueryResult_old {
     public QueryResult_old(Query query) {
 
 
-        //  pozor !!! pro jeden sym dostanu vÌc RootNodes
+        //  pozor !!! pro jeden sym dostanu v√≠c RootNodes
 
         result = new HashMap<>();
 
-        for (SmartSym sym : query.getAllSyms()) { // TODO tady pak nahradit lokalnÏ pro parentSym v query
+        for (SmartSym sym : query.getAllSyms()) { // TODO tady pak nahradit lokalnƒõ pro parentSym v query
 
             Map<Type,List<RootNode>> rootsMapForSym = mkRootNodesForSym(sym, query);
 
@@ -48,7 +48,7 @@ public class QueryResult_old {
 
             num = BigInteger.ZERO;
 
-            // a jeötÏ spoËtem num
+            // a je≈°tƒõ spoƒçtem num
             for (Map.Entry<Type,SubResult> e : result.entrySet()) {
                 num = num.add(e.getValue().getNum());
             }
@@ -61,7 +61,7 @@ public class QueryResult_old {
 
 
 
-        // TODO zajistit aby nevracelo û·dny pr·zdn˝ rootNody v tom seznamu.....
+        // TODO zajistit aby nevracelo ≈æ√°dny pr√°zdn√Ω rootNody v tom seznamu.....
 
         // TODO !!!
 

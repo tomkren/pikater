@@ -4,6 +4,11 @@ import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.CodeLib;
 import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.SmartLib;
+import cz.tomkren.typewars.TMap;
+import cz.tomkren.typewars.archiv.Fun2;
+import cz.tomkren.typewars.checkers.GeneratorChecker;
+import cz.tomkren.typewars.checkers.UniformityChecker;
 import cz.tomkren.typewars.reusable.*;
 
 import java.util.*;

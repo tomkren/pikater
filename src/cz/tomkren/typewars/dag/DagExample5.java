@@ -1,11 +1,10 @@
 package cz.tomkren.typewars.dag;
 
 import cz.tomkren.helpers.Checker;
-import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Log;
-import cz.tomkren.typewars.CodeLib;
-import cz.tomkren.typewars.PolyTree;
-import cz.tomkren.typewars.reusable.*;
+import cz.tomkren.typewars.*;
+import cz.tomkren.typewars.archiv.Fun2;
+import cz.tomkren.typewars.checkers.GeneratorChecker;
 
 import java.util.List;
 
