@@ -23,7 +23,7 @@ public class CodeNode extends ProtoNode {
         return mk(nodeLine, new JSONObject());
     }
 
-    public static CodeNode mk(String nodeLine, JSONObject paramsInfo) {
+    public static CodeNode mk(String nodeLine, JSONObject allParamsInfo) {
 
         int colonPos = nodeLine.lastIndexOf(':');
         String rest = nodeLine.substring(0,colonPos).trim();
@@ -57,7 +57,7 @@ public class CodeNode extends ProtoNode {
         }
 
         if (isTerminal) {
-            return fromStatic0(outTypeStr, homeClassStr, methodName, paramsInfo);
+            return fromStatic0(outTypeStr, homeClassStr, methodName, allParamsInfo);
         }
 
         ps = rest.split(",");
@@ -92,9 +92,9 @@ public class CodeNode extends ProtoNode {
     }
 
 
-    public static CodeNode fromStatic0(String outTypeStr, String homeClassStr, String methodName,  JSONObject paramsInfo) {
+    public static CodeNode fromStatic0(String outTypeStr, String homeClassStr, String methodName,  JSONObject allParamsInfo) {
 
-        if (homeClassStr == null) {return fromStatic0(outTypeStr, methodName, paramsInfo);}
+        if (homeClassStr == null) {return fromStatic0(outTypeStr, methodName, allParamsInfo);}
 
         try {
             Type outType = Types.parse(outTypeStr);
@@ -109,10 +109,10 @@ public class CodeNode extends ProtoNode {
         }
     }
 
-    private static CodeNode fromStatic0(String outTypeStr, String methodName, JSONObject paramsInfo) {
+    private static CodeNode fromStatic0(String outTypeStr, String methodName, JSONObject allParamsInfo) {
 
         // TODO dočasný, zobecnit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return TypedDag.mkCodeNode(paramsInfo, methodName, outTypeStr);
+        return TypedDag.mkCodeNode(allParamsInfo, methodName, outTypeStr);
     }
 
     /**

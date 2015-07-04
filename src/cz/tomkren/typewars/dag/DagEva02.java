@@ -3,7 +3,10 @@ package cz.tomkren.typewars.dag;
 import com.martinpilat.DagEvalInterface;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
-import org.json.JSONArray;
+import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.SmartLib;
+import cz.tomkren.typewars.TypedDag;
+import cz.tomkren.typewars.reusable.QuerySolver;
 import org.json.JSONObject;
 
 /** Created by tom on 3.7.2015. */
@@ -21,23 +24,19 @@ public class DagEva02 {
             String datasetFile = "winequality-white.csv";
             //String datasetFile = "wilt.csv";
 
-            JSONObject allParams = new JSONObject(evaluator.getMethodParams(datasetFile));
+            JSONObject allParamsInfo = new JSONObject(evaluator.getMethodParams(datasetFile));
 
-            JSONObject pcaParams = allParams.getJSONObject("PCA");
-
-            JSONArray oneParamValues = pcaParams.getJSONArray("n_components");
-
-            //pcaParams.
-
-            oneParamValues.length();
+            Log.it(allParamsInfo.toString(2) + "\n\n");
 
 
-            Log.it(allParams.toString());
-            Log.it(pcaParams.toString(2));
-            Log.it(oneParamValues.toString(2));
+            SmartLib lib = SmartLib.mkDataScientistLib01FromParamsInfo(allParamsInfo);
 
+            QuerySolver qs = new QuerySolver(lib, ch.getRandom());
 
+            PolyTree tree = qs.generateOneWithRandomizedParams("D => LD", 20);
+            TypedDag dag = (TypedDag)tree.computeValue();
 
+            Log.it( dag.toJson() );
 
 
 

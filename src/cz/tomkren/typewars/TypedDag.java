@@ -2,11 +2,7 @@ package cz.tomkren.typewars;
 
 
 import com.google.common.base.Joiner;
-import cz.tomkren.helpers.Comb0;
-import cz.tomkren.helpers.AA;
-import cz.tomkren.helpers.AB;
-import cz.tomkren.helpers.F;
-import cz.tomkren.helpers.TriFun;
+import cz.tomkren.helpers.*;
 import cz.tomkren.kutil2.items.Int2D;
 import cz.tomkren.pikater.SimpleVertex;
 import org.json.JSONObject;
@@ -344,7 +340,7 @@ public class TypedDag {
     }
 
 
-    public static CodeNode mkCodeNode(JSONObject paramsInfo, String... args) {
+    public static CodeNode mkCodeNode(JSONObject allParamsInfo, String... args) {
         if (args.length < 2) {throw new Error("Too few arguments.");}
 
         String name    = args[0].trim();
@@ -353,6 +349,11 @@ public class TypedDag {
         if (args.length == 2) {
             String[] ps = outType.split("=>");
             if (ps.length != 2) {throw new Error("Atom type must have 2 parts (split by =>).");}
+
+            //Log.it(allParamsInfo);
+
+            JSONObject paramsInfo = allParamsInfo.has(name) ? allParamsInfo.getJSONObject(name) : new JSONObject();
+
             return mkAtomicDagNode(name, ps[0].trim(), ps[1].trim(), paramsInfo);
         } else {
             return mkDagOperationNode(name, outType, Arrays.copyOfRange(args,2,args.length) );

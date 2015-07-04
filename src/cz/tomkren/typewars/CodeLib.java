@@ -44,12 +44,12 @@ public class CodeLib extends NodeLib {
         return mk(new JSONObject(), codeNodeLines);
     }
 
-    public static CodeLib mk(JSONObject paramsInfo, String... codeNodeLines) {
+    public static CodeLib mk(JSONObject allParamsInfo, String... codeNodeLines) {
         List<CodeNode> libList = new ArrayList<>(codeNodeLines.length);
         for (String line : codeNodeLines) {
             String trimLine = line.trim();
             if (!"".equals(trimLine)) {
-                libList.add(CodeNode.mk(trimLine, paramsInfo));
+                libList.add(CodeNode.mk(trimLine, allParamsInfo));
             }
         }
         return new CodeLib(libList);

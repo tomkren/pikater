@@ -29,7 +29,7 @@ public class CodeNodeWithParams extends CodeNode {
     @Override
     public Comb0 getCode() {
         JSONObject params = getParams();
-        Log.it("BOND HERE 2! "+params);
+        //Log.it("BOND HERE 2! "+params);
         return params2code.apply(params);
     }
 
@@ -88,7 +88,7 @@ public class CodeNodeWithParams extends CodeNode {
         Function<JSONObject,Comb0> params2comb = params -> (haxTypeInput -> {
             Type t = (Type) haxTypeInput.get(0);
             AA<Type> p = TypedDag.getBoxInOutTypes(t);
-            Log.it("BOND HERE! "+params);
+            //Log.it("BOND HERE! "+params);
             return new TypedDag(name, p._1(), p._2(), params);
         });
 
