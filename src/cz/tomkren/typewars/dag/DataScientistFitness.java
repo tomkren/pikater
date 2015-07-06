@@ -8,6 +8,7 @@ import cz.tomkren.typewars.eva.FitVal;
 import cz.tomkren.typewars.eva.TogetherFitFun;
 import javassist.bytecode.stackmap.TypeData;
 import org.apache.xmlrpc.XmlRpcException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
@@ -50,6 +51,8 @@ public class DataScientistFitness implements TogetherFitFun {
 
         String populationInJson = F.list(os).map(o->(TypedDag)o).reduce(TypedDag::toJson);
 
+        //Log.it(populationInJson); // TODO logovat do souboru zde asi
+
         try {
 
             Log.it("Evaluating ...");
@@ -74,6 +77,13 @@ public class DataScientistFitness implements TogetherFitFun {
 
                 } else {
                     score = scoreArr[0];
+                }
+
+                if (score < 0.0) {
+                    System.err.println("Warning: Score < 0 ... "+score);
+                    TypedDag dag = (TypedDag) os.get(i);
+                    System.err.println( dag.toJson() );
+                    score = 0.0;
                 }
 
                 fitVals.add(new FitVal.Basic(score));

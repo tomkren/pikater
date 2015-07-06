@@ -90,6 +90,12 @@ public class F {
             return (T) best;
         }
 
+        public T randomElement(Random r) {
+            List<T> xs = get();
+            return xs.get(r.nextInt(xs.size()));
+        }
+
+
         @Override
         public String toString() {
             return "<"+ get().toString() +">";

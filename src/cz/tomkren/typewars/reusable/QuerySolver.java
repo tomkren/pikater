@@ -113,7 +113,7 @@ public class QuerySolver {
 
     public PolyTree generateOneWithRandomizedParams(Type goalType, int treeSize) {
         PolyTree treeWithDefaultParams = query(goalType, treeSize).generateOne();
-        return treeWithDefaultParams == null ? null : treeWithDefaultParams.randomizeParams(rand);
+        return treeWithDefaultParams == null ? null : treeWithDefaultParams.randomizeAllParams(rand);
     }
 
     public PolyTree generateOneWithRandomizedParams(String goalType, int treeSize) {

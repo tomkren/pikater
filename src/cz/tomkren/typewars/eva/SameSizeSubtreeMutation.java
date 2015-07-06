@@ -18,29 +18,20 @@ import java.util.Random;
 
 // TODO kontrolovat zda se fakt strom změnil (třeba na 5 pokusů)
 
-public class SameSizeSubtreeMutation implements Operator<PolyTree> {
+public class SameSizeSubtreeMutation extends PolyTreeMutation {
 
     private final QuerySolver querySolver;
     private final int maxSubtreeSize;
-    private double operatorProbability;
     private final Random rand;
 
     public static final int MAX_TRIES = 10;
 
-    public SameSizeSubtreeMutation(QuerySolver querySolver, int maxSubtreeSize, double operatorProbability) {
+    public SameSizeSubtreeMutation(double operatorProbability, QuerySolver querySolver, int maxSubtreeSize) {
+        super(operatorProbability);
         this.querySolver = querySolver;
         this.maxSubtreeSize = maxSubtreeSize;
-        this.operatorProbability = operatorProbability;
         rand = querySolver.getRand();
     }
-
-    @Override
-    public List<PolyTree> operate(List<PolyTree> parents) {
-        return F.singleton(mutate(parents.get(0)));
-    }
-
-    @Override public int getNumInputs() {return 1;}
-    @Override public double getProbability() {return operatorProbability;}
 
 
     public PolyTree mutate(PolyTree tree) {
@@ -55,8 +46,8 @@ public class SameSizeSubtreeMutation implements Operator<PolyTree> {
     }
 
     public PolyTree mutate_oneTry(PolyTree tree) {
-        // select subtree
 
+        // select subtree
         SubtreePos subtreePos;
         PolyTree subTree;
         do {
@@ -67,7 +58,7 @@ public class SameSizeSubtreeMutation implements Operator<PolyTree> {
         // generate new subtree with same size and type
         Type goalType = subTree.getType();
         int treeSize  = subTree.getSize();
-        PolyTree newSubtree = querySolver.generateOne(goalType, treeSize);
+        PolyTree newSubtree = querySolver.generateOneWithRandomizedParams(goalType, treeSize);
 
         //Log.it("sub: "+subTree);
         //Log.it("new: "+newSubtree);
@@ -84,7 +75,7 @@ public class SameSizeSubtreeMutation implements Operator<PolyTree> {
         QuerySolver querySolver = new QuerySolver(lib, ch.getRandom());
         List<PolyTree> trees = querySolver.simpleUniformGenerate("D => LD", 35, 100);
 
-        SameSizeSubtreeMutation mut = new SameSizeSubtreeMutation(querySolver,35,1.0);
+        SameSizeSubtreeMutation mut = new SameSizeSubtreeMutation(1.0, querySolver,35);
 
         for (PolyTree tree : trees) {
             PolyTree mutant = mut.mutate_oneTry(tree);

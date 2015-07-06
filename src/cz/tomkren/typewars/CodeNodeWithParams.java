@@ -1,9 +1,7 @@
 package cz.tomkren.typewars;
 
-import cz.tomkren.helpers.AA;
-import cz.tomkren.helpers.Checker;
-import cz.tomkren.helpers.Comb0;
-import cz.tomkren.helpers.Log;
+import cz.tomkren.helpers.*;
+import cz.tomkren.typewars.eva.Distribution;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -39,7 +37,7 @@ public class CodeNodeWithParams extends CodeNode {
         this.selectedParamIndices = selectedParamIndices;
     }*/
 
-    public CodeNodeWithParams randomCopy(Random rand) {
+    public CodeNodeWithParams randomizeAllParams(Random rand) {
 
         Map<String,Integer> newIndices = new HashMap<>();
 
@@ -53,6 +51,48 @@ public class CodeNodeWithParams extends CodeNode {
         }
 
         return new CodeNodeWithParams(this, params2code, paramsInfo, newIndices );
+    }
+
+    public CodeNodeWithParams randomlyShiftOneParam(Random rand, List<AB<Integer,Double>> shiftsWithProbabilities) {
+
+        if (selectedParamIndices.isEmpty()) {return this;}
+
+        String paramName = F.list(selectedParamIndices.entrySet()).randomElement(rand).getKey();
+
+        //Log.it(" >>>>>>>>>> "+getName()+" -> "+ paramName);
+
+        Map<String,Integer> newIndices = new HashMap<>(selectedParamIndices);
+
+        newIndices.compute(paramName, (k,currentIndex)-> {
+            int numValues =  paramsInfo.getJSONArray(paramName).length();
+            Distribution<AB<Integer,Double>> shiftDist = mkShiftDistribution(shiftsWithProbabilities, currentIndex, numValues);
+            return currentIndex + (shiftDist.isEmpty() ? 0 : shiftDist.get(rand)._1());
+        });
+
+        return new CodeNodeWithParams(this, params2code, paramsInfo, newIndices);
+    }
+
+
+    private static Distribution<AB<Integer,Double>> mkShiftDistribution(List<AB<Integer,Double>> shiftsWithProbabilities, int currentIndex, int numValues) {
+        Distribution<AB<Integer,Double>> ret = new Distribution<>();
+
+        for (AB<Integer,Double> shiftWithProbability: shiftsWithProbabilities) {
+            int resultIndex = currentIndex + shiftWithProbability._1();
+            if (resultIndex >= 0 && resultIndex < numValues) {
+                ret.add(shiftWithProbability);
+            }
+        }
+
+        return ret;
+    }
+
+    public int numParams() {
+        return  selectedParamIndices == null ? 0 : selectedParamIndices.size();
+    }
+
+    @Override
+    public String getNameWithParams() {
+        return getName() + getParams().toString();
     }
 
     public JSONObject getParams() {
@@ -101,7 +141,7 @@ public class CodeNodeWithParams extends CodeNode {
 
         for (int i = 0; i < 10; i++) {
             Log.it("---------------------------------------------------------");
-            CodeNodeWithParams node2 = node.randomCopy(r);
+            CodeNodeWithParams node2 = node.randomizeAllParams(r);
             ch.it(node2.getParams() );
             ch.it( ((TypedDag)node2.getCode().compute1(type)).toJson() );
         }

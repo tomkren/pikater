@@ -1,8 +1,9 @@
-package cz.tomkren.typewars.dag;
+package cz.tomkren.typewars.mains;
 
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
+import cz.tomkren.typewars.dag.DataScientistFitness;
 import cz.tomkren.typewars.eva.*;
 import cz.tomkren.typewars.eva.SimplePolyTreeGenerator;
 import cz.tomkren.typewars.reusable.QuerySolver;
@@ -41,8 +42,8 @@ public class DagEva01 {
 
         IndivGenerator<PolyTree> gen = new SimplePolyTreeGenerator(goalType, generatingMaxTreeSize, querySolver);
         Distribution<Operator<PolyTree>> operators = new Distribution<>(Arrays.asList(
-                new BasicTypedXover(rand, 0.5),
-                new SameSizeSubtreeMutation(querySolver,generatingMaxTreeSize, 0.4),
+                new BasicTypedXover(0.5, rand),
+                new SameSizeSubtreeMutation(0.4, querySolver,generatingMaxTreeSize),
                 new CopyOp<>(0.1)
         ));
 

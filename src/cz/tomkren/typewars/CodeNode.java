@@ -15,6 +15,10 @@ public class CodeNode extends ProtoNode {
         this.code = code;
     }
 
+    public String getNameWithParams() {
+        return getName();
+    }
+
     public Comb0 getCode() {return code;}
 
     public static final String CLASS_PREFIX = "cz.tomkren.typewars.";

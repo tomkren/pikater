@@ -1,6 +1,7 @@
-package cz.tomkren.typewars.eva;
+package cz.tomkren.typewars.mains;
 
 
+import cz.tomkren.helpers.AB;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
@@ -8,8 +9,8 @@ import cz.tomkren.typewars.SmartLib;
 import cz.tomkren.typewars.Type;
 import cz.tomkren.typewars.Types;
 import cz.tomkren.typewars.dag.DataScientistFitness;
+import cz.tomkren.typewars.eva.*;
 import cz.tomkren.typewars.reusable.QuerySolver;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -19,6 +20,9 @@ import java.util.Random;
 public class DagEva02 {
 
     public static void main(String[] args) {
+
+        // seed : 3798799110567534523L .... Probability for dist mus be >= 0, was -4.066709679942271E-4
+
         Checker ch = new Checker();
         Random rand = ch.getRandom();
 
@@ -31,14 +35,20 @@ public class DagEva02 {
         int populationSize = 8;
         boolean saveBest = true;
 
-        int generatingMaxTreeSize = 35;
-        int mutationMaxSubtreeSize = 20;
+        int generatingMaxTreeSize  = 20;
+        int mutationMaxSubtreeSize = 15;
 
         IndivGenerator<PolyTree> generator = new RandomParamsPolyTreeGenerator(goalType, generatingMaxTreeSize, querySolver);
         Selection<PolyTree> selection = new Selection.Tournament<>(0.8, rand);
         Distribution<Operator<PolyTree>> operators = new Distribution<>(Arrays.asList(
-                new BasicTypedXover(rand, 0.5),
-                new SameSizeSubtreeMutation(querySolver, mutationMaxSubtreeSize, 0.4),
+                new BasicTypedXover(0.3, rand),
+                new SameSizeSubtreeMutation(0.3, querySolver, mutationMaxSubtreeSize),
+                new OneParamMutation(0.3, ch.getRandom(), Arrays.asList(
+                        AB.mk(-2,0.1),
+                        AB.mk(-1,0.4),
+                        AB.mk( 1,0.4),
+                        AB.mk( 2,0.1)
+                )),
                 new CopyOp<>(0.1)
         ));
 

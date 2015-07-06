@@ -22,7 +22,9 @@ public class Distribution<T extends Probable> {
 
 
 
-
+    public List<T> getList() {
+        return xs;
+    }
 
     public T tournamentGet(double pReturnWinner, Random rand) {
 
@@ -92,7 +94,9 @@ public class Distribution<T extends Probable> {
         return len;
     }
 
-
+    public boolean isEmpty() {
+        return len == 0;
+    }
 
     public void forEach(Consumer<T> f) {
         xs.forEach(f::accept);

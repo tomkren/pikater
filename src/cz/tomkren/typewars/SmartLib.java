@@ -33,6 +33,12 @@ public class SmartLib {
     }
 
 
+
+
+    public static SmartLib mkDataScientistLib01FromParamsInfo(String paramsInfo) {
+        return mkDataScientistLib01FromParamsInfo(new JSONObject(paramsInfo));
+    }
+
     public static SmartLib mkDataScientistLib01FromParamsInfo(JSONObject paramsInfo) {
         return SmartLib.mk(paramsInfo,
                 "TypedDag.dia( TypedDag: D => D , TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",
@@ -51,6 +57,8 @@ public class SmartLib {
                 "vote : (V LD (S(S n))) => LD"
         );
     }
+
+    public static final SmartLib DATA_SCIENTIST_WITH_PARAMS_01 = mkDataScientistLib01FromParamsInfo("{\"DT\":{\"max_features\":[0.05,0.1,0.25,0.5,0.75,1],\"criterion\":[\"gini\",\"entropy\"],\"min_samples_split\":[1,2,5,10,20],\"max_depth\":[1,2,5,10,15,25,50,100],\"min_samples_leaf\":[1,2,5,10,20]},\"SVC\":{\"tol\":[1.0E-4,0.001,0.01],\"C\":[0.1,0.5,1,2,5,10,15],\"gamma\":[0,1.0E-4,0.001,0.01,0.1,0.5]},\"kMeans\":{},\"union\":{},\"copy\":{},\"kBest\":{\"k\":[1,3,6,9,12]},\"gaussianNB\":{},\"logR\":{\"tol\":[1.0E-4,0.001,0.01],\"C\":[0.1,0.5,1,2,5,10,15],\"penalty\":[\"l1\",\"l2\"],\"solver\":[\"newton-cg\",\"lbfgs\",\"liblinear\"]},\"vote\":{},\"PCA\":{\"n_components\":[1,3,6,9,12],\"whiten\":[false,true]}}");
 
     public static final SmartLib DATA_SCIENTIST_01 = SmartLib.mk(
             "TypedDag.dia( TypedDag: D => D , TypedDag: D => (V LD n) , TypedDag: (V LD n) => LD ) : D => LD",

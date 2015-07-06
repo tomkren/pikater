@@ -9,6 +9,7 @@ import cz.tomkren.typewars.reusable.QuerySolver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class PolyTree implements FitIndiv {
 
@@ -27,9 +28,18 @@ public class PolyTree implements FitIndiv {
         this.fitVal = null;
     }
 
-    public PolyTree randomizeParams(Random rand) {
-        CodeNode newCodeNode = codeNode instanceof CodeNodeWithParams ? ((CodeNodeWithParams)codeNode).randomCopy(rand) : codeNode;
-        return new PolyTree(newCodeNode, type, F.map(sons,s->s.randomizeParams(rand)));
+    public PolyTree randomizeAllParams(Random rand) {
+        CodeNode newCodeNode = codeNode instanceof CodeNodeWithParams ? ((CodeNodeWithParams)codeNode).randomizeAllParams(rand) : codeNode;
+        return new PolyTree(newCodeNode, type, F.map(sons,s->s.randomizeAllParams(rand)));
+    }
+
+    public PolyTree randomlyShiftOneParam(Random rand, List<AB<Integer,Double>> shiftsWithProbabilities) {
+        if (codeNode instanceof CodeNodeWithParams) {
+            CodeNode newCodeNode = ((CodeNodeWithParams) codeNode).randomlyShiftOneParam(rand, shiftsWithProbabilities);
+            return new PolyTree(newCodeNode, type, sons);
+        } else {
+            throw new Error("Method randomizeOneParam can be applied only to tree with CodeNodeWithParams as codeNode.");
+        }
     }
 
     @Override
@@ -44,23 +54,30 @@ public class PolyTree implements FitIndiv {
     }
 
     public String getName() {return codeNode.getName();}
+
+    public String getNameWithParams() {
+        return codeNode.getNameWithParams();
+    }
+
     public Type getType() {return type;}
     public List<PolyTree> getSons() {return sons;}
     public Comb0 getCode() {return codeNode.getCode();}
+    public CodeNode getCodeNode() {return codeNode;}
 
     public boolean isTerminal() {
         return sons.isEmpty();
     }
 
-    public List<SubtreePos> getAllSubtreePoses() {
-
+    public List<SubtreePos> getAllSubtreePosesWhere(Predicate<PolyTree> isTrue) {
         List<SubtreePos> ret = new ArrayList<>();
 
-        ret.add( SubtreePos.root(type) );
+        if (isTrue.test(this)) {
+            ret.add(SubtreePos.root(type));
+        }
 
         int sonIndex = 0;
         for (PolyTree son : sons) {
-            List<SubtreePos> sonSubtreePoses = son.getAllSubtreePoses();
+            List<SubtreePos> sonSubtreePoses = son.getAllSubtreePosesWhere(isTrue);
             for (SubtreePos subtreePosInSon : sonSubtreePoses) {
                 ret.add(SubtreePos.step(sonIndex, subtreePosInSon));
             }
@@ -68,6 +85,10 @@ public class PolyTree implements FitIndiv {
         }
 
         return ret;
+    }
+
+    public List<SubtreePos> getAllSubtreePoses() {
+        return getAllSubtreePosesWhere(t->true);
     }
 
     public TMap<SubtreePos> getAllSubtreePoses_byTypes() {
@@ -116,7 +137,7 @@ public class PolyTree implements FitIndiv {
 
     @Override
     public String toString() {
-        return isTerminal() ? getName() : "("+ getName() +" "+ Joiner.on(' ').join( sons ) +")";
+        return isTerminal() ? getNameWithParams() : "("+ getNameWithParams() +" "+ Joiner.on(' ').join( sons ) +")";
     }
 
     private String showHead() {

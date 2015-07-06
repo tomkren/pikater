@@ -12,6 +12,11 @@ public class PolyTreeEvolutionLogger implements Logger<PolyTree> {
         PolyTree best = pop.getBestIndividual();
         Log.it("gen" + generation + " \t best: [" + best.getProbability() + "] " + best);
         Log.it(pop);
+
+        /*for (PolyTree tree : pop.getIndividuals().getList()) {
+            Log.it(  );
+        }*/
+
     }
 
 

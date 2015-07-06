@@ -23,7 +23,7 @@ public class BasicTypedXover implements Operator<PolyTree> {
     private final Random rand;
 
 
-    public BasicTypedXover(Random rand, double operatorProbability) {
+    public BasicTypedXover(double operatorProbability, Random rand) {
         this.operatorProbability = operatorProbability;
         this.rand = rand;
     }
@@ -124,7 +124,7 @@ public class BasicTypedXover implements Operator<PolyTree> {
 
         int numTries = 100000;
 
-        BasicTypedXover xOver = new BasicTypedXover(ch.getRandom(), 1.0);
+        BasicTypedXover xOver = new BasicTypedXover(1.0, ch.getRandom());
 
         Map<String,Integer> combos = new TreeMap<>(QuerySolver.compareStrs);
 
