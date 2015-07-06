@@ -22,7 +22,7 @@ public class DagExample08 {
 
         QuerySolver solver = new QuerySolver(lib, ch.getRandom());
 
-        List<PolyTree> trees = solver.uniformGenerate("D => LD", 35, 1000);
+        List<PolyTree> trees = solver.simpleUniformGenerate("D => LD", 35, 1000);
         Log.list(trees);
 
         List<TypedDag> dags = F.map(trees, t->(TypedDag)t.computeValue());

@@ -92,7 +92,7 @@ public class BasicTypedXover implements Operator<PolyTree> {
 
         QuerySolver qs = new QuerySolver(SmartLib.DATA_SCIENTIST_01, ch.getRandom());
 
-        List<PolyTree> trees = qs.uniformGenerate("D => LD", 20, 100);
+        List<PolyTree> trees = qs.simpleUniformGenerate("D => LD", 20, 100);
 
         Log.list(trees);
         Log.it();

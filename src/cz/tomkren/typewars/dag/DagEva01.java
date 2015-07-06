@@ -3,9 +3,8 @@ package cz.tomkren.typewars.dag;
 import cz.tomkren.helpers.Checker;
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.PolyTree;
-import cz.tomkren.typewars.TypedDag;
 import cz.tomkren.typewars.eva.*;
-import cz.tomkren.typewars.eva.PolyTreeGenerator;
+import cz.tomkren.typewars.eva.SimplePolyTreeGenerator;
 import cz.tomkren.typewars.reusable.QuerySolver;
 import cz.tomkren.typewars.eva.SameSizeSubtreeMutation;
 import cz.tomkren.typewars.SmartLib;
@@ -40,7 +39,7 @@ public class DagEva01 {
         EvoOpts evoOpts = new EvoOpts(10,8,true);
         //EvoOpts evoOpts = new EvoOpts(100,8,true);
 
-        IndivGenerator<PolyTree> gen = new PolyTreeGenerator(goalType, generatingMaxTreeSize, querySolver);
+        IndivGenerator<PolyTree> gen = new SimplePolyTreeGenerator(goalType, generatingMaxTreeSize, querySolver);
         Distribution<Operator<PolyTree>> operators = new Distribution<>(Arrays.asList(
                 new BasicTypedXover(rand, 0.5),
                 new SameSizeSubtreeMutation(querySolver,generatingMaxTreeSize, 0.4),
@@ -50,7 +49,7 @@ public class DagEva01 {
         //Selection<PolyTree> selection = new Selection.Roulette<>(rand);
         Selection<PolyTree> selection = new Selection.Tournament<>(0.8, rand);
 
-        Logger<PolyTree> logger = new SimpleLogger();
+        Logger<PolyTree> logger = new PolyTreeEvolutionLogger();
 
         Evolver<PolyTree> evolver = new Evolver.Opts<>(fitness, evoOpts, gen, operators, selection, logger, rand).mk();
 
@@ -58,19 +57,6 @@ public class DagEva01 {
         evolver.startRun();
 
         ch.results();
-    }
-
-    public static class SimpleLogger implements Logger<PolyTree> {
-
-        @Override
-        public void logPop(int run, int generation, EvaledPop<PolyTree> pop) {
-            PolyTree best = pop.getBestIndividual();
-            Log.it("gen" + generation + " \t best: ["+best.getProbability()+"] " +best);
-            Log.it( pop );
-        }
-
-
-
     }
 
 }

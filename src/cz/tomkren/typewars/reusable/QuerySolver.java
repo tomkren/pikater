@@ -5,6 +5,7 @@ import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.*;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 public class QuerySolver {
 
@@ -69,28 +70,50 @@ public class QuerySolver {
         return Integer.compare(size1, size2);
     };
 
-    public List<PolyTree> uniformGenerate(String goalType, int maxTreeSize, int numToGenerate) {
-        Set<PolyTree> codeSet = new TreeSet<>(compareTrees);
+    public List<PolyTree> simpleUniformGenerate(Type goalType, int maxTreeSize, int numToGenerate) {
+        return uniformGenerate(this::generateOne, goalType, maxTreeSize, numToGenerate);
+    }
 
-        while (codeSet.size() < numToGenerate) {
+    public List<PolyTree> simpleUniformGenerate(String goalType, int maxTreeSize, int numToGenerate) {
+        return simpleUniformGenerate(Types.parse(goalType), maxTreeSize, numToGenerate);
+    }
+
+    public List<PolyTree> uniformGenerateWithRandomizedParams(String goalType, int maxTreeSize, int numToGenerate) {
+        return uniformGenerate(this::generateOneWithRandomizedParams, goalType, maxTreeSize, numToGenerate);
+    }
+
+    public List<PolyTree> uniformGenerateWithRandomizedParams(Type goalType, int maxTreeSize, int numToGenerate) {
+        return uniformGenerate(this::generateOneWithRandomizedParams, goalType, maxTreeSize, numToGenerate);
+    }
+
+    // TODO přidat limit po kterym to nebude čekovat unikátnost !!!!!!!!!!!!!
+
+    public List<PolyTree> uniformGenerate(BiFunction<Type,Integer,PolyTree> genOneFun, Type goalType, int maxTreeSize, int numToGenerate) {
+        Set<PolyTree> treeSet = new TreeSet<>(compareTrees);
+
+        while (treeSet.size() < numToGenerate) {
 
             int treeSize = rand.nextInt(maxTreeSize + 1);
-            PolyTree tree = generateOne(goalType, treeSize);
+            PolyTree tree = genOneFun.apply(goalType, treeSize);
 
             if (tree != null) {
-                if (!codeSet.contains(tree)) {
-                    codeSet.add(tree);
+                if (!treeSet.contains(tree)) {
+                    treeSet.add(tree);
                 }
             }
         }
 
-        return new ArrayList<>(codeSet);
+        return new ArrayList<>(treeSet);
+    }
+
+    public List<PolyTree> uniformGenerate(BiFunction<Type,Integer,PolyTree> genOneFun, String goalType, int maxTreeSize, int numToGenerate) {
+        return uniformGenerate(genOneFun, Types.parse(goalType), maxTreeSize, numToGenerate);
     }
 
 
     public PolyTree generateOneWithRandomizedParams(Type goalType, int treeSize) {
         PolyTree treeWithDefaultParams = query(goalType, treeSize).generateOne();
-        return treeWithDefaultParams.randomizeParams(rand);
+        return treeWithDefaultParams == null ? null : treeWithDefaultParams.randomizeParams(rand);
     }
 
     public PolyTree generateOneWithRandomizedParams(String goalType, int treeSize) {
@@ -102,7 +125,7 @@ public class QuerySolver {
     }
 
     public PolyTree generateOne(String goalType, int treeSize) {
-        return query(goalType, treeSize).generateOne();
+        return generateOne(Types.parse(goalType), treeSize);
     }
 
     public TMap<PolyTree> generateAllUpTo(String goalType, int upToTreeSize) {

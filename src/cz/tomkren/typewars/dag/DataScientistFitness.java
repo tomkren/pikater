@@ -6,9 +6,12 @@ import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.TypedDag;
 import cz.tomkren.typewars.eva.FitVal;
 import cz.tomkren.typewars.eva.TogetherFitFun;
+import javassist.bytecode.stackmap.TypeData;
 import org.apache.xmlrpc.XmlRpcException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /** Created by tom on 1. 7. 2015. */
@@ -34,6 +37,14 @@ public class DataScientistFitness implements TogetherFitFun {
 
     }
 
+    public JSONObject getAllParamsInfo() {
+        try {
+            return new JSONObject(evaluator.getMethodParams(datasetFile));
+        } catch (XmlRpcException e) {
+            throw new Error(e);
+        }
+    }
+
     @Override
     public List<FitVal> getFitVals(List<Object> os) {
 
@@ -45,7 +56,34 @@ public class DataScientistFitness implements TogetherFitFun {
             List<double[]> scores = evaluator.eval(populationInJson, datasetFile);
             Log.it("Evolution operations ...");
 
-            return F.map(scores, scoreArr -> {
+            for (int i = 0; i < scores.size(); i++) {
+
+                double[] scoreArr = scores.get(i);
+
+            }
+
+            List<FitVal> fitVals = new ArrayList<>(scores.size());
+            int i = 0;
+            for (double[] scoreArr : scores) {
+
+                double score = 0.0;
+                if (scoreArr.length == 0) {
+                    System.err.println("Evaluation error !!!");
+                    TypedDag dag = (TypedDag) os.get(i);
+                    System.err.println( dag.toJson() );
+
+                } else {
+                    score = scoreArr[0];
+                }
+
+                fitVals.add(new FitVal.Basic(score));
+
+                i++;
+            }
+
+            return fitVals;
+
+            /*return F.map(scores, scoreArr -> {
 
                 double score = 0.0;
                 if (scoreArr.length == 0) {
@@ -55,7 +93,7 @@ public class DataScientistFitness implements TogetherFitFun {
                 }
 
                 return new FitVal.Basic(score);
-            });
+            });*/
 
 
         } catch (XmlRpcException e) {

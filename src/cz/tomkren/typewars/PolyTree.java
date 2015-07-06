@@ -17,10 +17,10 @@ public class PolyTree implements FitIndiv {
     private Type type;
     private final List<PolyTree> sons;
 
-    private FitVal fitVal; // TODO - zbytečně i v podstromech, chtělo by udělat nějakej individual wrapper, kterej by měl PolyTree jako položku !!!!!!!!!!!
+    private FitVal fitVal; // TODO | zbytečně i v podstromech, chtělo by udělat nějakej individual wrapper, kterej by měl PolyTree jako položku !!!!!!!!!!!
+                           // TODO | Ideálně asi jako Individual<Genotype, Phenotype> ...
 
     public PolyTree(CodeNode codeNode, Type type, List<PolyTree> sons) {
-        //this.name = name;
         this.codeNode = codeNode;
         this.type = type;
         this.sons = sons;
@@ -167,7 +167,7 @@ public class PolyTree implements FitIndiv {
         Checker ch = new Checker();
 
         SmartLib lib = SmartLib.DATA_SCIENTIST_01;
-        List<PolyTree> trees = new QuerySolver(lib, ch.getRandom()).uniformGenerate("D => LD", 20, 1000);
+        List<PolyTree> trees = new QuerySolver(lib, ch.getRandom()).simpleUniformGenerate("D => LD", 20, 1000);
 
         for (PolyTree tree : trees) {
             List<SubtreePos> allPoses = tree.getAllSubtreePoses();

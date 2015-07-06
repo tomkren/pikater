@@ -82,7 +82,7 @@ public class SameSizeSubtreeMutation implements Operator<PolyTree> {
 
         SmartLib lib = SmartLib.DATA_SCIENTIST_01;
         QuerySolver querySolver = new QuerySolver(lib, ch.getRandom());
-        List<PolyTree> trees = querySolver.uniformGenerate("D => LD", 35, 100);
+        List<PolyTree> trees = querySolver.simpleUniformGenerate("D => LD", 35, 100);
 
         SameSizeSubtreeMutation mut = new SameSizeSubtreeMutation(querySolver,35,1.0);
 

@@ -113,7 +113,7 @@ public class DagExample07 {
 
         Log.itln("Unsystematic generating started..");
 
-        Log.list( solver.uniformGenerate(goalType, 25, 100) );
+        Log.list( solver.simpleUniformGenerate(goalType, 25, 100) );
 
         ch.results();
     }
