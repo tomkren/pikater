@@ -14,6 +14,10 @@ public class SmartLib {
     public SmartLib(CodeLib codeLib) {
         //this.codeLib = codeLib;
         symLib = F.map(codeLib.getCodeNodes() , SmartSym::new);
+
+        for (SmartSym smartSym : symLib) {
+            smartSym.initApplicableSons(symLib);
+        }
     }
 
     public static SmartLib mk(JSONObject paramsInfo, String... codeNodeLines) {
@@ -33,7 +37,22 @@ public class SmartLib {
     }
 
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
+        sb.append("sym \t -> \t applicableSons\n");
+        sb.append("-------------------------------------------------------------------------------\n");
+
+
+        for (SmartSym smartSym : symLib) {
+
+            String asStr = F.list(smartSym.getApplicableSons()).foldr("",(symList,str)-> F.list(symList).foldr(" ",(sym,s)-> sym.getName() +" "+s ) +"| "+ str );
+
+            sb.append( smartSym.getName() ).append(" \t -> \t ").append(asStr).append("\n");
+        }
+        return sb.toString();
+    }
 
     public static SmartLib mkDataScientistLib01FromParamsInfo(String paramsInfo) {
         return mkDataScientistLib01FromParamsInfo(new JSONObject(paramsInfo));

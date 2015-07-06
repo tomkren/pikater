@@ -26,7 +26,9 @@ public class QueryResult {
         andGadgets = new ArrayList<>();
         nums = new HashMap<>();
 
-        for (SmartSym sym : query.getAllSyms()) {
+        List<SmartSym> symbols = query.getDadSym() == null ? query.getAllSyms() : query.getDadSym().getApplicableSons().get( query.getSonIndexInDad() );
+
+        for (SmartSym sym : symbols) { // zde bývalo neefektivní: query.getAllSyms()
 
             int nextVarId = query.getSolver().getNextVarId();
             ABC<Type,List<Type>,Integer> freshResult = sym.freshenTypeVars(nextVarId);
@@ -41,9 +43,19 @@ public class QueryResult {
                 List<List<Integer>> allSimpleProfiles = possibleSimpleProfiles(query.getTreeSize(), sym.getArity());
 
                 for (List<Integer> simpleProfile : allSimpleProfiles) {
-                    Listek<Query> sonQueries = Listek.fromList( F.zipWith(symArgTypes, simpleProfile, (t,n)->new Query(t,n,query)) );
 
-                    AndGadget ag = new AndGadget(query, sym, sonQueries, sub);
+                    int numArgs = symArgTypes.size();
+                    if (simpleProfile.size() != numArgs) {throw new Error("simpleProfile must have numArgs elements.");}
+
+                    List<Query> sonQueries = new ArrayList<>(numArgs);
+                    for (int i = 0; i < numArgs; i++) {
+                        sonQueries.add(new Query(symArgTypes.get(i), simpleProfile.get(i), query, sym, i));
+                    }
+
+
+                    //Listek<Query> sonQueries = Listek.fromList( F.zipWith(symArgTypes, simpleProfile, (t,n)->new Query(t,n,query)) );
+
+                    AndGadget ag = new AndGadget(query, sym, Listek.fromList(sonQueries), sub);
 
                     if (!F.isZero(ag.getNum())) {
                         andGadgets.add(ag);
@@ -78,8 +90,6 @@ public class QueryResult {
     }
 
     public TMap<PolyTree> generateAll() {
-
-        // TODO promyslet, jen naznačeno
 
         TMap<PolyTree> ret = new TMap<>();
 

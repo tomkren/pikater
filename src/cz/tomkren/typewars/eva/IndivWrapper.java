@@ -1,6 +1,6 @@
 package cz.tomkren.typewars.eva;
 
-/** Created by pejsek on 6.7.2015. */
+/** Created by tom on 6.7.2015. */
 
 // TODO něco takovýho udělat aby nemusel bejt fitval ve stromě... zatím jen naznačeno
 

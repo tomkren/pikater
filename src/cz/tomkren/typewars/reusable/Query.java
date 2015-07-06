@@ -15,7 +15,8 @@ public class Query {
     private final Type type;
     private final int treeSize;
 
-    private SmartSym sym;
+    private SmartSym dadSym;
+    private Integer  sonIndexInDad;
 
     private QuerySolver solver;
 
@@ -24,26 +25,41 @@ public class Query {
     public Query(Type type, int treeSize) {
         this.type = type;
         this.treeSize = treeSize;
+        dadSym = null;
+        sonIndexInDad = null;
     }
 
     public Query(String type, int treeSize) {
         this(Types.parse(type), treeSize);
     }
 
-    public Query(Type type, int treeSize, Query dadQuery) {
+    public Query(Type type, int treeSize, Query dadQuery, SmartSym dadSym, int sonIndexInDad) {
         this(type,treeSize);
         setSolver(dadQuery.getSolver());
+        setDadSymAndSonIndex(dadSym, sonIndexInDad);
     }
 
     public Query(Sub sub, Query sonQuery) {
         this(sub.apply(sonQuery.type), sonQuery.treeSize);
         setSolver(sonQuery.getSolver());
-        //setLib(sonQuery.getLib());
+        setDadSymAndSonIndex( sonQuery.dadSym, sonQuery.sonIndexInDad );
     }
     public void setSolver(QuerySolver solver) {this.solver = solver;}
 
     public QuerySolver getSolver() {return solver;}
-    public void setSym(SmartSym sym) {this.sym = sym;}
+
+
+    public void setDadSymAndSonIndex(SmartSym dadSym, int sonIndexInDad) {
+        this.dadSym = dadSym;
+        this.sonIndexInDad = sonIndexInDad;
+    }
+    public SmartSym getDadSym() {
+        return dadSym;
+    }
+    public Integer getSonIndexInDad() {
+        return sonIndexInDad;
+    }
+
 
     public Random getRand() {
         return solver.getRand();
@@ -51,10 +67,7 @@ public class Query {
 
 
 
-    public SmartSym getSym() {
-        if (sym == null) {throw new Error("Sym is null!");}
-        return sym;
-    }
+
 
     /*public QueryResult_old query(Query q) {
         return getSolver().query_old(q);

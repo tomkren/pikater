@@ -64,6 +64,8 @@ public class DagExample07 {
 
     public static void main(String[] args) {
 
+        Log.it(lib);
+
         //checkQuery("D => LD", 1, 1);
         //checkQuery("V a 0", 1, 1);
         //checkQuery("V (D => LD) (S 0)", 3, 1);

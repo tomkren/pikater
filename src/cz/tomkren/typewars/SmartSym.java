@@ -6,22 +6,53 @@ import cz.tomkren.helpers.ABC;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class SmartSym {
 
     private final CodeNode codeNode;
-    //private final List<List<SmartSym>> applicableSons; // TODO ......................
+    private List<List<SmartSym>> applicableSons; // TODO ......................
 
     public SmartSym(CodeNode codeNode) {
         this.codeNode = codeNode;
-        //applicableSons = new ArrayList<>(codeNode.getIns().size());
+    }
+    protected void initApplicableSons(List<SmartSym> allLibSymbols) {
+
+        applicableSons = new ArrayList<>(getArgTypes().size());
+
+        ABC<Type,List<Type>,Integer> freshResult = freshenTypeVars(0);
+
+        //Type freshOutType = freshResult._1();
+        List<Type> freshInTypes = freshResult._2();
+        int nextVarId = freshResult._3();
+
+
+        for (Type freshArgType : freshInTypes) {
+
+            List<SmartSym> applicableSonsForThisArg = new ArrayList<>();
+
+            for (SmartSym smartSym : allLibSymbols) {
+
+                AB<Type,Integer> innerFreshResult = smartSym.getOutputType().freshenVars(nextVarId, new Sub());
+                Type freshOutType = innerFreshResult._1();
+                nextVarId = innerFreshResult._2();
+
+                Sub maybeMgu = Sub.mgu(freshArgType, freshOutType);  // TODO vyplatí se tuto substituci nezahodit, ale pak jí používat aby se nepočítala furt nanovo  !!! !!! !!! !!!!
+
+                if (!maybeMgu.isFail()) {
+                    applicableSonsForThisArg.add(smartSym);
+                }
+
+            }
+
+            applicableSons.add(applicableSonsForThisArg);
+        }
+
     }
 
 
     public ABC<Type,List<Type>,Integer> freshenTypeVars(int startVarId) {
 
-        List<Type> typeList = new ArrayList<>(getArity()+1);
+        List<Type> typeList = new ArrayList<>(1+getArity());
         typeList.add(getOutputType());
         typeList.addAll(getArgTypes());
 
@@ -40,6 +71,9 @@ public class SmartSym {
     }
 
 
+    public List<List<SmartSym>> getApplicableSons() {
+        return applicableSons;
+    }
 
     public PolyTree mkTree(Type rootType, List<PolyTree> sons) {
         return new PolyTree(codeNode, rootType, sons);
