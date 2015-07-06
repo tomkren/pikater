@@ -21,18 +21,19 @@ public class DagEva02 {
 
     public static void main(String[] args) {
 
-        // seed : 3798799110567534523L .... Probability for dist mus be >= 0, was -4.066709679942271E-4
+        //Ok už.. 3798799110567534523L .... Probability for dist mus be >= 0, was -4.066709679942271E-4
+        //Ok už.. 7293879928187169227L Warning: Score < 0 ... -0.0015471911547373818
 
         Checker ch = new Checker();
         Random rand = ch.getRandom();
 
-        DataScientistFitness fitness = new DataScientistFitness("http://127.0.0.1:8080", "wilt.csv"); // "winequality-white.csv";
+        DataScientistFitness fitness = new DataScientistFitness("http://127.0.0.1:8080", "winequality-white.csv");// "wilt.csv");
         SmartLib lib = SmartLib.mkDataScientistLib01FromParamsInfo(fitness.getAllParamsInfo());
         QuerySolver querySolver = new QuerySolver(lib, rand);
         Type goalType = Types.parse("D => LD");
 
-        int numGenerations = 10;
-        int populationSize = 8;
+        int numGenerations = 16;  //10;
+        int populationSize = 32;  //8;
         boolean saveBest = true;
 
         int generatingMaxTreeSize  = 20;

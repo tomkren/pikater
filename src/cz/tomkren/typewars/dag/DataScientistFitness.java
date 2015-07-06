@@ -57,13 +57,14 @@ public class DataScientistFitness implements TogetherFitFun {
 
             Log.it("Evaluating ...");
             List<double[]> scores = evaluator.eval(populationInJson, datasetFile);
+
+
+            if (scores.size() != os.size()) {
+                throw new Error("There must be same number of individuals and fitness values! "+ scores.size() +" != "+ os.size()  );
+            }
+
             Log.it("Evolution operations ...");
 
-            for (int i = 0; i < scores.size(); i++) {
-
-                double[] scoreArr = scores.get(i);
-
-            }
 
             List<FitVal> fitVals = new ArrayList<>(scores.size());
             int i = 0;
@@ -72,8 +73,7 @@ public class DataScientistFitness implements TogetherFitFun {
                 double score = 0.0;
                 if (scoreArr.length == 0) {
                     System.err.println("Evaluation error !!!");
-                    TypedDag dag = (TypedDag) os.get(i);
-                    System.err.println( dag.toJson() );
+                    System.err.println(((TypedDag) os.get(i)).toJson());
 
                 } else {
                     score = scoreArr[0];
@@ -81,8 +81,7 @@ public class DataScientistFitness implements TogetherFitFun {
 
                 if (score < 0.0) {
                     System.err.println("Warning: Score < 0 ... "+score);
-                    TypedDag dag = (TypedDag) os.get(i);
-                    System.err.println( dag.toJson() );
+                    //System.err.println(((TypedDag) os.get(i)).toJson());
                     score = 0.0;
                 }
 

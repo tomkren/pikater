@@ -22,7 +22,10 @@ public class TogetherEvaledPop<Indiv extends FitIndiv> implements EvaledPop<Indi
         List<FitVal> fitVals = tFitness.getFitVals(objs);
 
         int popSize = pop.size();
-        if (popSize != fitVals.size()) {throw new Error("There must be same number of individuals and fitness values!");}
+        if (popSize != fitVals.size()) {
+
+            throw new Error("There must be same number of individuals and fitness values! "+popSize +" != "+ fitVals.size());
+        }
 
         for (int i = 0; i < popSize; i++) {
 
