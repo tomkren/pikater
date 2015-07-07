@@ -27,7 +27,7 @@ public class DagEva02 {
         Checker ch = new Checker();
         Random rand = ch.getRandom();
 
-        DataScientistFitness fitness = new DataScientistFitness("http://127.0.0.1:8080", "winequality-white.csv");// "wilt.csv");
+        DataScientistFitness fitness = new DataScientistFitness("http://127.0.0.1:8080", "winequality-white.csv", true);// "wilt.csv");
         SmartLib lib = SmartLib.mkDataScientistLib01FromParamsInfo(fitness.getAllParamsInfo());
         QuerySolver querySolver = new QuerySolver(lib, rand);
         Type goalType = Types.parse("D => LD");

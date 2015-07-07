@@ -3,6 +3,7 @@ package cz.tomkren.typewars.reusable;
 
 import cz.tomkren.helpers.Log;
 import cz.tomkren.typewars.*;
+import cz.tomkren.typewars.phalanx.SkeletonTree;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -86,6 +87,10 @@ public class QuerySolver {
         return uniformGenerate(this::generateOneWithRandomizedParams, goalType, maxTreeSize, numToGenerate);
     }
 
+    public List<PolyTree> uniformGenerateWithParams(SkeletonTree skeletonTree, Type goalType, int maxTreeSize, int numToGenerate) {
+        return uniformGenerate( (type,treeSize) -> this.generateOneWithParams(skeletonTree, type, treeSize) , goalType, maxTreeSize, numToGenerate);
+    }
+
     // TODO přidat limit po kterym to nebude čekovat unikátnost !!!!!!!!!!!!!
 
     public List<PolyTree> uniformGenerate(BiFunction<Type,Integer,PolyTree> genOneFun, Type goalType, int maxTreeSize, int numToGenerate) {
@@ -110,6 +115,11 @@ public class QuerySolver {
         return uniformGenerate(genOneFun, Types.parse(goalType), maxTreeSize, numToGenerate);
     }
 
+
+    public PolyTree generateOneWithParams(SkeletonTree skeletonTree, Type goalType, int treeSize) {
+        PolyTree treeWithDefaultParams = query(goalType, treeSize).generateOne(skeletonTree);
+        return treeWithDefaultParams == null ? null : treeWithDefaultParams.randomizeAllParams(rand);
+    }
 
     public PolyTree generateOneWithRandomizedParams(Type goalType, int treeSize) {
         PolyTree treeWithDefaultParams = query(goalType, treeSize).generateOne();

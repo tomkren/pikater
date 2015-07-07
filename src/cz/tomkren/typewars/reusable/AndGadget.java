@@ -2,7 +2,9 @@ package cz.tomkren.typewars.reusable;
 
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
+import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.*;
+import cz.tomkren.typewars.phalanx.SkeletonTree;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class AndGadget {
     private BigInteger num;
 
     private TMap<PolyTree> allTrees;
+
+    public SmartSym getSym() {return sym;}
+
 
     public AndGadget(Query dadQuery, SmartSym sym, Listek<Query> sonQueries, Sub sub) {
         this.dadQuery = dadQuery;
@@ -92,6 +97,41 @@ public class AndGadget {
             locSub = Sub.dot(sonSpecificSub, locSub);
 
             sons.add(sonTree);
+        }
+
+        PolyTree newTree = sym.mkTree(dadQuery.getType(), sons);
+        newTree.applySub(locSub);
+        return newTree;
+    }
+
+    public PolyTree generateOne(SkeletonTree skeletonTree) {
+
+        List<Query> sonQs = Listek.toList(sonQueries);
+        List<PolyTree> sons = new ArrayList<>(sonQs.size());
+
+        Sub locSub = sub;
+
+        int i = 0;
+        for (Query sq : sonQs) {
+            Query sonQuery = new Query(locSub, sq);
+
+            PolyTree sonTree;
+            List<SkeletonTree> skeletonSons = skeletonTree.getSons();
+            if (skeletonSons.isEmpty()) {
+                sonTree = getSolver().query(sonQuery).generateOne();
+            } else {
+                sonTree = getSolver().query(sonQuery).generateOne(skeletonSons.get(i));
+            }
+
+            if (sonTree == null) {return null;}
+
+            Type moreSpecificType = sonTree.getType();
+            Sub sonSpecificSub = Sub.mgu(moreSpecificType, sonQuery.getType());
+            locSub = Sub.dot(sonSpecificSub, locSub);
+
+            sons.add(sonTree);
+
+            i++;
         }
 
         PolyTree newTree = sym.mkTree(dadQuery.getType(), sons);

@@ -26,7 +26,7 @@ public class DagEva01 {
         String datasetFile = "wilt.csv";
 
 
-        TogetherFitFun fitness = new DataScientistFitness("http://127.0.0.1:8080", datasetFile);
+        TogetherFitFun fitness = new DataScientistFitness("http://127.0.0.1:8080", datasetFile, true);
         //FitFun fitness = o -> {TypedDag dag = (TypedDag)o; return new FitVal.Basic( ((double)dag.getHeight()) / ((double)dag.getWidth()) ); };
 
         String goalType = "D => LD";

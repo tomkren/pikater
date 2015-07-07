@@ -21,12 +21,14 @@ public class DataScientistFitness implements TogetherFitFun {
 
     private final DagEvalInterface evaluator;
     private final String datasetFile;
+    private final boolean onlyNonNegative;
 
 
-    public DataScientistFitness(String datasetFile) {this("http://127.0.0.1:8080", datasetFile);}
+    public DataScientistFitness(String datasetFile) {this("http://127.0.0.1:8080", datasetFile,true);}
 
-    public DataScientistFitness(String url, String datasetFile) {
+    public DataScientistFitness(String url, String datasetFile, boolean onlyNonNegative) {
         this.datasetFile = datasetFile;
+        this.onlyNonNegative = onlyNonNegative;
 
         try {
 
@@ -57,7 +59,7 @@ public class DataScientistFitness implements TogetherFitFun {
 
         try {
 
-            Log.it("Evaluating ...");
+            Log.it_noln("Evaluating ...");
             List<double[]> scores = evaluator.eval(populationInJson, datasetFile);
 
 
@@ -65,7 +67,7 @@ public class DataScientistFitness implements TogetherFitFun {
                 throw new Error("There must be same number of individuals and fitness values! "+ scores.size() +" != "+ os.size()  );
             }
 
-            Log.it("Evolution operations ...");
+            Log.itln("... [OK]");
 
 
             List<FitVal> fitVals = new ArrayList<>(scores.size());
@@ -81,7 +83,7 @@ public class DataScientistFitness implements TogetherFitFun {
                     score = scoreArr[0];
                 }
 
-                if (score < 0.0) {
+                if (onlyNonNegative && score < 0.0) {
                     System.err.println("Warning: Score < 0 ... "+score);
                     //System.err.println(((TypedDag) os.get(i)).toJson());
                     score = 0.0;

@@ -79,6 +79,12 @@ public class Checker {
         return this;
     }
 
+    public Checker itln(Object o, String shouldBe) {
+        check(shouldBe, o);
+        Log.it();
+        return this;
+    }
+
     public Checker it(Object o, int shouldBe) {
         check(Integer.toString(shouldBe), o);
         return this;

@@ -174,7 +174,7 @@ public class F {
         return xs.stream().sorted().collect(Collectors.toList());
     }
 
-    public static <T> List<T> sort(List<T> xs, Function<T,Double> f) {
+    public static <T> List<T> sort(Collection<T> xs, Function<T,Double> f) {
         return xs.stream().sorted( (a,b)-> Double.compare(f.apply(a),f.apply(b)) ).collect(Collectors.toList());
     }
 
@@ -239,6 +239,12 @@ public class F {
     public static <T> T randomElement(List<T> xs, Random r) {
         return xs.get(r.nextInt(xs.size()));
     }
+
+    public static <T> T removeRandomElement(List<T> xs, Random r) {
+        int i = r.nextInt(xs.size());
+        return xs.remove(i);
+    }
+
 
     public static <T> List<T> nTimes(int n, Supplier<T> f) {
         List<T> ret = new ArrayList<>(n);

@@ -2,7 +2,9 @@ package cz.tomkren.typewars;
 
 
 import cz.tomkren.helpers.Listek;
+import cz.tomkren.helpers.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SubtreePos {
@@ -51,12 +53,33 @@ public class SubtreePos {
         return new SubtreePos(type);
     }
 
-    public static SubtreePos step(int sonIndex, SubtreePos subtreePosInSon) {
+    public static SubtreePos reverseStep(int sonIndex, SubtreePos subtreePosInSon) {
         return new SubtreePos(sonIndex, subtreePosInSon);
     }
+
+
+    // TODO neefektivní ale halt ve spěchu :)
+    public static SubtreePos classicStep(SubtreePos subtreePosHere, int nextSonIndex, Type type) {
+        List<Integer> path = new ArrayList<>(subtreePosHere.getPath());
+        path.add(nextSonIndex);
+        return new SubtreePos(Listek.fromList(path), type);
+    }
+
 
     @Override
     public String toString() {
         return Listek.toList(path).toString();
+    }
+
+
+    public static void main(String[] args) {
+
+        SubtreePos pos = reverseStep(1, reverseStep(2, reverseStep(3, root(null))));
+
+        Log.it(pos);
+
+        Log.it( pos = classicStep(pos, 4, null) );
+
+        Log.it( pos = reverseStep(0, pos) );
     }
 }

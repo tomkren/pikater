@@ -3,7 +3,9 @@ package cz.tomkren.typewars.reusable;
 import cz.tomkren.helpers.ABC;
 import cz.tomkren.helpers.F;
 import cz.tomkren.helpers.Listek;
+import cz.tomkren.helpers.TODO;
 import cz.tomkren.typewars.*;
+import cz.tomkren.typewars.phalanx.SkeletonTree;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -87,6 +89,39 @@ public class QueryResult {
         }
 
         throw new Error("QueryResult.generateOne : This place should be unreachable!");
+    }
+
+
+    public PolyTree generateOne(SkeletonTree skeletonTree) {
+
+
+        // TODO udělat ještě SymGadget at nemusí tolik sčítat
+        BigInteger smallSum = BigInteger.ZERO;
+        for (AndGadget andGadget : andGadgets)  {
+            if (skeletonTree.isInRoot(andGadget.getSym().getName())) {
+                smallSum = smallSum.add(andGadget.getNum());
+            }
+        }
+
+        if (F.isZero(smallSum)) {return null;}
+
+        BigInteger index = F.nextBigInteger(smallSum, query.getRand());
+        if (index == null) {throw new Error("Should be unreachable.");}
+
+        for (AndGadget andGadget : andGadgets) {
+            BigInteger numTrees = andGadget.getNum();
+
+            if (skeletonTree.isInRoot(andGadget.getSym().getName())) {
+                if(index.compareTo(numTrees) < 0) {
+                    return andGadget.generateOne(skeletonTree);
+                }
+
+                index = index.subtract(numTrees); // jen při OK symbolu
+            }
+        }
+
+
+        throw new Error("QueryResult.generateOne("+skeletonTree+") : This place should be unreachable!");
     }
 
     public TMap<PolyTree> generateAll() {

@@ -11,8 +11,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
-public class PolyTree implements FitIndiv {
+public class PolyTree implements FitIndiv, Comparable<PolyTree> {
 
+
+    @Override
+    public int compareTo(PolyTree o) {
+        return QuerySolver.compareTrees.compare(this, o);
+    }
 
     private final CodeNode codeNode;
     private Type type;
@@ -79,7 +84,7 @@ public class PolyTree implements FitIndiv {
         for (PolyTree son : sons) {
             List<SubtreePos> sonSubtreePoses = son.getAllSubtreePosesWhere(isTrue);
             for (SubtreePos subtreePosInSon : sonSubtreePoses) {
-                ret.add(SubtreePos.step(sonIndex, subtreePosInSon));
+                ret.add(SubtreePos.reverseStep(sonIndex, subtreePosInSon));
             }
             sonIndex++;
         }
@@ -138,6 +143,10 @@ public class PolyTree implements FitIndiv {
     @Override
     public String toString() {
         return isTerminal() ? getNameWithParams() : "("+ getNameWithParams() +" "+ Joiner.on(' ').join( sons ) +")";
+    }
+
+    public String toStringWithoutParams() {
+        return isTerminal() ? getName() : "("+ getName() +" "+ Joiner.on(' ').join( F.map(sons, PolyTree::toStringWithoutParams) ) +")";
     }
 
     private String showHead() {

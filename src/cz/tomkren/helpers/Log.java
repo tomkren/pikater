@@ -43,6 +43,11 @@ public class Log {
         return log;
     }
 
+    public static Log it_noln (Object o) {
+        System.out.print( o );
+        return log;
+    }
+
     public static Log itln (Object o) {
         System.out.println( o );
         System.out.println();
