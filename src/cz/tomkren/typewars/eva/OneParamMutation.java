@@ -68,7 +68,7 @@ public class OneParamMutation extends PolyTreeMutation {
 
             Log.it(tree);
             PolyTree mutant = oneParamMutation.mutate(tree);
-            ch.eqStrSilent(tree, mutant); // TODO předělat vypisování aby todle neplatilo
+            //ch.eqStrSilent(tree, mutant); //  předělat vypisování aby todle neplatilo -- hotovo
 
             ch.it(((TypedDag) tree.computeValue()).toJson());
             ch.it( ((TypedDag)mutant.computeValue()).toJson() );

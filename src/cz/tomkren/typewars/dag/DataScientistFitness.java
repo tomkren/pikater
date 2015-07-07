@@ -40,7 +40,9 @@ public class DataScientistFitness implements TogetherFitFun {
 
     public JSONObject getAllParamsInfo() {
         try {
-            return new JSONObject(evaluator.getMethodParams(datasetFile));
+            String json = evaluator.getMethodParams(datasetFile);
+            Log.it(json);
+            return new JSONObject(json);
         } catch (XmlRpcException e) {
             throw new Error(e);
         }

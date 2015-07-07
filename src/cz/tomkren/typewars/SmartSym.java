@@ -36,7 +36,9 @@ public class SmartSym {
                 Type freshOutType = innerFreshResult._1();
                 nextVarId = innerFreshResult._2();
 
-                Sub maybeMgu = Sub.mgu(freshArgType, freshOutType);  // TODO vyplatí se tuto substituci nezahodit, ale pak jí používat aby se nepočítala furt nanovo  !!! !!! !!! !!!!
+                // TODO šlo by dělat fikanějc, např pro cons první arg se chytne všchno, ale nemá to pak podporu v druhym a vystupnim typu
+
+                Sub maybeMgu = Sub.mgu(freshArgType, freshOutType);  // todo.. možná se vyplatí tuto substituci nezahodit, ale pak jí používat aby se nepočítala furt nanovo
 
                 if (!maybeMgu.isFail()) {
                     applicableSonsForThisArg.add(smartSym);
@@ -49,6 +51,9 @@ public class SmartSym {
 
     }
 
+    public CodeNode getCodeNode() {
+        return codeNode;
+    }
 
     public ABC<Type,List<Type>,Integer> freshenTypeVars(int startVarId) {
 

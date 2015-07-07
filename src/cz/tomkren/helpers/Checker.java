@@ -23,7 +23,7 @@ public class Checker {
 
         rand = new Random(this.seed);
 
-        Log.it("seed : "+this.seed+"L");
+        Log.it("seed : "+this.seed+"L\n");
 
         startTime();
     }
