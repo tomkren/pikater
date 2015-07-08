@@ -4,6 +4,7 @@ package com.martinpilat;
  * Created by Martin on 25.6.2015.
  */
 
+import cz.tomkren.kutil2.items.Xml;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -79,6 +80,13 @@ public class DagEvalInterface {
         return (String) this.server.execute("get_param_sets", params);
     }
 
+    public void killServer() {
+        try {
+            Vector params = new Vector();
+            this.server.execute("quit", params);
+        } catch (Exception e) { }
+    }
+
     public static void main(String[] args) {
 
         try {
@@ -94,6 +102,8 @@ public class DagEvalInterface {
             dagStr          += "]";
 
             ArrayList<double[]> scores = evaluator.eval(dagStr, "wilt.csv");
+
+            evaluator.killServer();
 
             for (double[] darr : scores) {
                 if (darr.length == 0)
