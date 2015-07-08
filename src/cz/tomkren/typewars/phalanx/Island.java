@@ -197,7 +197,7 @@ public class Island {
 
         int i=0;
         for (SkeletonCar car : skeletonCars) {
-            sb.append("  car #").append(++i).append(" ").append(car).append("\n");
+            sb.append("  skeleton #").append(++i).append(" ").append(car).append("\n");
             sb.append(car.showPopulation(!archipelago.isSomethingWaitingToEvaluate()));
         }
 

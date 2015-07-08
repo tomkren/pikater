@@ -149,9 +149,21 @@ public class Archipelago {
 
         List<Island> islandList = new ArrayList<>(islands);
 
-        Island island1 = removeRandomSplittableIsland(islandList);
-        Island island2 = removeRandomSplittableIsland(islandList);
-        Island island3 = removeRandomSplittableIsland(islandList);
+        List<Island> splittableIslands = F.filter(islandList, Island::isSplittable);
+
+        if (splittableIslands.size() < 3) {
+            Log.it("Less than 3 splittable islands, aborting island operations.");
+            return;
+        }
+
+        Island island1 = F.removeRandomElement(splittableIslands, getRand());
+        Island island2 = F.removeRandomElement(splittableIslands, getRand());
+        Island island3 = F.removeRandomElement(splittableIslands, getRand());
+
+        islandList.remove(island1);
+        islandList.remove(island2);
+        islandList.remove(island3);
+
 
         List<Island> sortedResult = F.sort(Arrays.asList(island1, island2, island3), isl -> -isl.getBestFitVal());
 
@@ -172,24 +184,8 @@ public class Archipelago {
 
         islands = new ArrayDeque<>(islandList);
 
-        //throw new TODO();
     }
 
-    private Island removeRandomSplittableIsland(List<Island> islandList) {
-
-        while (true) {
-
-            Island ret = F.removeRandomElement(islandList, getRand());
-
-            if (ret.isSplittable()) {
-                return ret;
-            } else {
-                islandList.add(ret);
-            }
-
-        }
-
-    }
 
     public Deque<Island> getIslands() {return islands;}
     public Type getGoalType() {return goalType;}
@@ -225,6 +221,8 @@ public class Archipelago {
     }
 
     public static void main(String[] args) {
+
+        // TODO na tomhle seedu se to rozzseká při splitu !!!
         Checker ch = new Checker(4081111614699016120L);
 
         DataScientistFitness fitness = new DataScientistFitness("http://127.0.0.1:8080", "wilt.csv", false); // "winequality-white.csv");
@@ -232,7 +230,7 @@ public class Archipelago {
         Type goalType = Types.parse("D => LD");
         SmartLib lib  = SmartLib.DATA_SCIENTIST_WITH_PARAMS_01;
 
-        int numIslands = 4;
+        int numIslands = 8; //4;
         int numTreesForOneIslandPerGeneration = 2;
         int numGenerations = 8;
 
