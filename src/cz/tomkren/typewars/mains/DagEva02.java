@@ -27,6 +27,7 @@ public class DagEva02 {
         Checker ch = new Checker();
         Random rand = ch.getRandom();
 
+
         DataScientistFitness fitness = new DataScientistFitness("http://127.0.0.1:8080", "winequality-white.csv", true);// "wilt.csv");
         SmartLib lib = SmartLib.mkDataScientistLib01FromParamsInfo(fitness.getAllParamsInfo());
         QuerySolver querySolver = new QuerySolver(lib, rand);
@@ -36,8 +37,8 @@ public class DagEva02 {
         int populationSize = 32;  //8;
         boolean saveBest = true;
 
-        int generatingMaxTreeSize  = 20;
-        int mutationMaxSubtreeSize = 15;
+        int generatingMaxTreeSize  = 15;
+        int mutationMaxSubtreeSize = 10;
 
         IndivGenerator<PolyTree> generator = new RandomParamsPolyTreeGenerator(goalType, generatingMaxTreeSize, querySolver);
         Selection<PolyTree> selection = new Selection.Tournament<>(0.8, rand);

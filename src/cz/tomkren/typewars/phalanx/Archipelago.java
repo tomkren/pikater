@@ -223,7 +223,7 @@ public class Archipelago {
     public static void main(String[] args) {
 
         // TODO na tomhle seedu se to rozzseká při splitu !!!
-        Checker ch = new Checker(4081111614699016120L);
+        Checker ch = new Checker(); //(4081111614699016120L);
 
         DataScientistFitness fitness = new DataScientistFitness("http://127.0.0.1:8080", "wilt.csv", false); // "winequality-white.csv");
 
